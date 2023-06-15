@@ -7,7 +7,9 @@ const tag = `v${localVersion}`
 console.log(`Adding Git tag '${tag}'`)
 
 let buffer
-buffer = require('child_process').execSync('git branch')
+buffer = require('child_process').execSync('git checkout main')
 console.log('aki result A:', buffer.toString())
-buffer = require('child_process').execSync(`git tag -a ${tag} -m "Published version ${localVersion}"`)
+buffer = require('child_process').execSync('git branch')
 console.log('aki result B:', buffer.toString())
+buffer = require('child_process').execSync(`git tag -a ${tag} -m "Published version ${localVersion}"`)
+console.log('aki result C:', buffer.toString())
