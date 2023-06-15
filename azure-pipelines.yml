@@ -9,21 +9,22 @@ jobs:
    - checkout: self
      persistCredentials: true
 
-   - script: |
+  - template: azure-pipelines-build.yml
+
+  - script: |
+      npm run pipeline:validate-version
+    displayName: 'Validate version'
+
+  - task: Npm@1
+    inputs:
+      command: 'publish'
+      verbose: true
+      publishEndpoint: 'Npm public registry - Khanon.js'
+    displayName: 'Npm publish'
+
+  - script: |
       git config user.name "development@khanon3d.com"
       git config user.email "development@khanon3d.com"
       npm run pipeline:create-version-tag
-     displayName: 'Tag test'
-#  - template: azure-pipelines-build.yml
-#
-#  - script: |
-#      npm run pipeline:validate-version
-#    displayName: 'Validate version'
-
-#  - task: Npm@1
-#    inputs:
-#      command: 'publish'
-#      verbose: true
-#      publishEndpoint: 'Npm public registry - Khanon.js'
-#    displayName: 'Npm publish'
+    displayName: 'Git tag'
 
