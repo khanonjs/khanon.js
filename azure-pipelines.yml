@@ -5,7 +5,7 @@ jobs:
 - job: Build_and_deploy
   pool:
     vmImage: ubuntu-latest
-    workingDirectory: '$(Build.SourcesDirectory)'
+    
   steps:
   - template: azure-pipelines-build.yml
   - checkout: self
