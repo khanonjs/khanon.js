@@ -6,10 +6,9 @@ jobs:
   pool:
     vmImage: ubuntu-latest
   steps:
-   - checkout: self
-     persistCredentials: true
-
   - template: azure-pipelines-build.yml
+  - checkout: self
+    persistCredentials: true
 
   - script: |
       npm run pipeline:validate-version
