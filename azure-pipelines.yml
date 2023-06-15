@@ -14,6 +14,7 @@ jobs:
        git config user.name "development@khanon3d.com"
        git config user.email "development@khanon3d.com"
        git tag -a TEST -m "MESSAGE"
+       npm run pipeline:create-version-tag
      displayName: 'Git tag'
 
 #   - template: azure-pipelines-build.yml
