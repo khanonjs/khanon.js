@@ -11,8 +11,9 @@ jobs:
      persistCredentials: true
   
    - script: |
-        git tag -a TEST
-#       npm run pipeline:create-version-tag
+       git config user.name "development@khanon3d.com"
+       git config user.email "development@khanon3d.com"
+       git tag -a TEST
      displayName: 'Git tag'
 
 #   - template: azure-pipelines-build.yml
