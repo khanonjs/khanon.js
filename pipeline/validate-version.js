@@ -11,6 +11,7 @@ const registryVersion = registryBuffer.toString()
 console.log('Registry version:', registryVersion)
 
 if (semver.gt(localVersion, registryVersion)) {
+  console.log('Version is higher, OK!')
   process.exit(0)
 } else {
   console.log('Local version is lower than registry, won\'t deploy!')
