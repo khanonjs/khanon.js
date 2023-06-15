@@ -13,7 +13,7 @@ jobs:
    - script: |
        git config user.name "development@khanon3d.com"
        git config user.email "development@khanon3d.com"
-       git tag -a TEST
+       git tag -a TEST -m "MESSAGE"
      displayName: 'Git tag'
 
 #   - template: azure-pipelines-build.yml
