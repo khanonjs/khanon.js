@@ -7,6 +7,7 @@ jobs:
     vmImage: ubuntu-latest
 
   steps:  
+   - checkout: main
    - script: |
        git config user.name "development@khanon3d.com"
        git config user.email "development@khanon3d.com"
