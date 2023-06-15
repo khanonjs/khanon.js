@@ -6,10 +6,7 @@ jobs:
   pool:
     vmImage: ubuntu-latest
 
-  steps:
-   - checkout: self
-     persistCredentials: true
-  
+  steps:  
    - script: |
        git config user.name "development@khanon3d.com"
        git config user.email "development@khanon3d.com"
