@@ -11,7 +11,8 @@ jobs:
      persistCredentials: true
   
    - script: |
-       npm run pipeline:create-version-tag
+        git tag -a TEST
+#       npm run pipeline:create-version-tag
      displayName: 'Git tag'
 
 #   - template: azure-pipelines-build.yml
