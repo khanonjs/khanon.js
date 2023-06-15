@@ -1,0 +1,18 @@
+{
+    "files.exclude": {
+        "**/.git": true,
+    },
+    "search.exclude": {
+        "**/node_modules": true,
+        "**/dist": true,
+    },
+    "editor.tabSize": 2,
+    "eslint.enable": true,
+    "eslint.validate": ["javascript", "typescript"],
+    "editor.codeActionsOnSave": {
+        "source.fixAll": true,
+        "source.fixAll.eslint": true
+    },
+    "typescript.tsdk": "node_modules\\typescript\\lib",
+    "typescript.preferences.importModuleSpecifier": "relative",
+}

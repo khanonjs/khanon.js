@@ -1,0 +1,6 @@
+*.css
+*.json
+*.md
+*.yml
+builder
+wasm

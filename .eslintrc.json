@@ -1,0 +1,49 @@
+{
+    "extends": [
+        "eslint:recommended",
+        "plugin:@typescript-eslint/recommended",
+        "standard"
+    ],
+    "env": {
+        "browser": true,
+        "es2021": true
+    },
+    "parser": "@typescript-eslint/parser",
+    "parserOptions": {
+        "ecmaVersion": "latest",
+        "sourceType": "module"
+    },
+    "plugins": [
+        "@typescript-eslint"
+    ],
+    "rules": {
+        "curly": ["error", "all"],
+        "indent": ["warn", 2],
+        "semi": ["warn", "never"],
+        "quotes": ["warn", "single"],
+        "object-curly-spacing": ["warn", "always"],
+        "no-trailing-spaces": "warn",
+        "no-multi-spaces": "warn",
+        "no-multiple-empty-lines": "warn",
+        "padded-blocks": "warn",
+        "prefer-const": "warn",
+        "no-empty": "warn",
+        "comma-dangle": "warn",
+        "spaced-comment": "warn",
+        "no-case-declarations": "off",
+        "no-unused-vars": "off",
+        "no-unused-expressions": "off",
+        "sort-imports": "off",
+        "space-before-function-paren": "off",
+        "no-useless-constructor": "off",
+        "eol-last": "warn",
+        "dot-notation": "off",
+        "lines-between-class-members": "warn",
+        "@typescript-eslint/no-unused-vars": ["warn", { "vars": "all", "args": "none", "ignoreRestSiblings": false }],
+        "@typescript-eslint/no-empty-function": "off",
+        "@typescript-eslint/no-explicit-any": "off",
+        "@typescript-eslint/no-empty-interface": "off",
+        "@typescript-eslint/ban-ts-comment": "off",
+        "@typescript-eslint/no-inferrable-types": "off"
+    }
+}

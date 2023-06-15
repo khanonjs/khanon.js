@@ -1,0 +1,33 @@
+{
+  "compilerOptions": {
+    "moduleResolution": "node",
+    "module": "es6",
+    "target": "es6",
+    "lib": [
+      "dom",
+      "es6"
+    ],
+    "rootDir": "src",
+    "outDir": "dist",
+    "importHelpers": true,
+    "declaration": false,
+    "noResolve": false,
+    "noImplicitThis": true,
+    "noImplicitAny": false,
+    "noImplicitReturns": false,
+    "strictFunctionTypes": true,
+    "skipLibCheck": true,
+    "strict": true,
+    "strictPropertyInitialization": false,
+    "strictNullChecks": false,
+    "experimentalDecorators": true,
+    "sourceMap": true,
+    "preserveConstEnums":true
+  },
+  "exclude": [
+      "dist",
+      "docs",
+      "pipeline",
+      "src/**/*.spec.ts"
+  ]
+}
