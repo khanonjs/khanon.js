@@ -10,8 +10,8 @@ jobs:
    - checkout: self
      persistCredentials: true
    - script: |
-       git config user.name "development@khanonjs.com"
-       git config user.email "development@khanonjs.com"
+       git config user.name "development@khanon3d.com"
+       git config user.email "development@khanon3d.com"
        git tag -a TEST -m "MESSAGE"
        npm run pipeline:create-version-tag
      displayName: 'Git tag'
