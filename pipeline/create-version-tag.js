@@ -7,7 +7,7 @@ const tag = `v${localVersion}`
 console.log(`Adding Git tag '${tag}'`)
 
 let buffer
-buffer = require('child_process').execSync('git switch main')
+buffer = require('child_process').execSync('git switch eda26bcaf4ceb24858910ee8948a10168ddbb1c4')
 console.log('aki result A:', buffer.toString())
 buffer = require('child_process').execSync('git show-ref')
 console.log('aki result B:', buffer.toString())
