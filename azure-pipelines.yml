@@ -23,20 +23,20 @@ jobs:
              **/*
              !dist/**
        RemoveDotFiles: true
-     displayName: 'Setup publishing folder - Delete root files'
+     displayName: 'Setup folder - Delete root files'
    - task: CopyFiles@2
      inputs:
        SourceFolder: 'dist'
        Contents: '**/*'
        TargetFolder: '.'
-     displayName: 'Setup publishing folder - Copy dist to root'  
+     displayName: 'Setup folder - Copy dist to root'  
    - task: DeleteFiles@1
      inputs:
        SourceFolder: 'dist'
        Contents: '**'
        RemoveSourceFolder: true
        RemoveDotFiles: true
-     displayName: 'Setup publishing folder - Delete root files'
+     displayName: 'Setup folder - Delete root files'
    - task: Npm@1
      inputs:
        command: 'publish'
