@@ -10,11 +10,14 @@ jobs:
    - checkout: self
      persistCredentials: true
    - script: |
-       git config user.name "development@khanon3d.com"
-       git config user.email "development@khanon3d.com"
-       git tag -a TEST a3480e871407b8e0da71fd7322c4792d0c2d296b -m "MESSAGE"
-       git push origin HEAD:main
+       git tag $(GitVersion.NugetVersionV2)
+       git push origin $(GitVersion.NugetVersionV2)
+#       git config user.name "development@khanon3d.com"
+#       git config user.email "development@khanon3d.com"
+#       git tag -a TEST a3480e871407b8e0da71fd7322c4792d0c2d296b -m "MESSAGE"
+#       git push origin HEAD:main
 #       npm run pipeline:create-version-tag
+     workingDirectory: $(Build.SourcesDirectory)
      displayName: 'Git tag'
 
 #   - template: azure-pipelines-build.yml
