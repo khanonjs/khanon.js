@@ -11,21 +11,20 @@ jobs:
     value: tagTest
 
   steps:  
-   - checkout: self
-     persistCredentials: true
+   - template: azure-pipelines-build.yml
+
    - script: |
-       npm -v
-       git config user.name "development@khanon3d.com"
-       git config user.email "development@khanon3d.com"
-       git tag -a TEST -m "MESSAGE"
-       git diff
-       git push origin HEAD:main --force
-     workingDirectory: $(Build.SourcesDirectory)   
-     displayName: 'test'
+       npm run pipeline:validate-version
+     displayName: 'Validate version'
+   - task: Npm@1
+     inputs:
+       command: 'publish'
+       verbose: true
+       publishEndpoint: 'Npm public registry - Khanon.js'
+     displayName: 'Npm publish'
    - bash: 
        echo "##vso[task.setvariable variable=tagRelease;]$(node -p "require('./package.json').version")"
-     displayName: 'bash'
-
+     displayName: 'Get version'
    - task: GitHubRelease@1
      inputs:
        gitHubConnection: 'khanon-js - access token'
@@ -37,17 +36,5 @@ jobs:
        tag: 'v$(tagRelease)'
        changeLogCompareToRelease: 'lastFullRelease'
        changeLogType: 'commitBased'
-#   - template: azure-pipelines-build.yml
-#
-#   - script: |
-#       npm run pipeline:validate-version
-#     displayName: 'Validate version'
-#
-#   - task: Npm@1
-#     inputs:
-#       command: 'publish'
-#       verbose: true
-#       publishEndpoint: 'Npm public registry - Khanon.js'
-#     displayName: 'Npm publish'
 
 
