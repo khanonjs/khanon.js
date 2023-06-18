@@ -13,7 +13,7 @@
   },
   "main": "index.js",
   "scripts": {
-    "build": "npm run clean && tsc",
+    "build": "npm run clean && tsc && cpy package.json ./dist",
     "build:docs": "typedoc ./src",
     "test": "cross-env TS_NODE_PROJECT='./tsconfig.mocha.json' mocha -r ./mocha-setup.js -r ts-node/register 'src/**/*.spec.ts'",
     "link": "cpy package.json ./src && cd ./src && npm link",
