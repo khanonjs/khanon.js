@@ -11,6 +11,7 @@ jobs:
      persistCredentials: true
    - script: |
        npm -v
+       hola
      displayName: 'test'
 
 #   - template: azure-pipelines-build.yml
