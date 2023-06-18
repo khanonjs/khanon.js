@@ -14,7 +14,9 @@ jobs:
        git config user.name "development@khanon3d.com"
        git config user.email "development@khanon3d.com"
        git tag -a TEST -m "MESSAGE"
+       git tag $(resources.pipeline.MyBuild.runName)
        git diff
+       git push origin $(resources.pipeline.MyBuild.runName)       
      displayName: 'test'
 
 #   - template: azure-pipelines-build.yml
