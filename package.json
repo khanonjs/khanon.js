@@ -12,9 +12,6 @@
     "url": "https://github.com/Khanon-js/khanon.js.git"
   },
   "main": "index.js",
-  "files": [
-    "dist/**/*"
-  ],
   "scripts": {
     "build": "npm run clean && tsc && cpy package.json ./dist",
     "build:docs": "typedoc ./src",
