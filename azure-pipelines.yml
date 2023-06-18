@@ -34,6 +34,15 @@ jobs:
    - bash: |
        dir
      displayName: 'DIR'
+   - task: DeleteFiles@1
+     inputs:
+       SourceFolder: 'dist'
+       Contents: '**'
+       RemoveSourceFolder: true
+       RemoveDotFiles: true
+   - bash: |
+       dir
+     displayName: 'DIR'    
    - script: |
        hola
      displayName: 'STOP TEST'
