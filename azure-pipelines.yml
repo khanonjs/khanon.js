@@ -20,7 +20,7 @@ jobs:
        git tag -a TEST -m "MESSAGE"
        git diff
        git push origin HEAD:main --force
-       tagRelease=$(node -p "require('./package.json').version")
+       ${tagRelease}=$(node -p "require('./package.json').version")
      workingDirectory: $(Build.SourcesDirectory)   
      displayName: 'test'
    - task: GitHubRelease@1
