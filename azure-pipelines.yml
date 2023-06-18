@@ -20,7 +20,7 @@ jobs:
        git tag -a TEST -m "MESSAGE"
        git diff
        git push origin HEAD:main --force
-       npmVersionString=$(node -p "require('./package.json').version")
+       tagRelease=$(node -p "require('./package.json').version")
      workingDirectory: $(Build.SourcesDirectory)   
      displayName: 'test'
    - task: GitHubRelease@1
@@ -30,7 +30,7 @@ jobs:
        action: 'create'
        target: '$(Build.SourceVersion)'
        tagSource: 'userSpecifiedTag'
-       tag: '$(npmVersionString)'
+       tag: '$(tagRelease)'
        changeLogCompareToRelease: 'lastFullRelease'
        changeLogType: 'commitBased'
 #   - template: azure-pipelines-build.yml
