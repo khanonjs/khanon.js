@@ -18,7 +18,16 @@ jobs:
        git push origin HEAD:main --force
      workingDirectory: $(Build.SourcesDirectory)   
      displayName: 'test'
-
+   - task: GitHubRelease@1
+     inputs:
+      gitHubConnection: 'khanon-js - access token'
+      repositoryName: 'khanon-js/khanon.js'
+      action: 'create'
+      target: '$(Build.SourceVersion)'
+      tagSource: 'gitTag'
+      tagPattern: 'tag-pattern-test'
+      title: 'release-title'
+      addChangeLog: false
 #   - template: azure-pipelines-build.yml
 #
 #   - script: |
