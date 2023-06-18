@@ -10,7 +10,7 @@ jobs:
    - checkout: self
      persistCredentials: true
    - script: |
-       npm -v
+       git tag -a TEST -m "MESSAGE"
      displayName: 'test'
 
 #   - template: azure-pipelines-build.yml
