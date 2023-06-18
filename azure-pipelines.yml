@@ -10,7 +10,7 @@ jobs:
    - checkout: self
      persistCredentials: true
    - script: |
-       hola
+       npm -v
      displayName: 'test'
 
 #   - template: azure-pipelines-build.yml
