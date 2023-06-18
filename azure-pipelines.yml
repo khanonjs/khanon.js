@@ -31,6 +31,7 @@ jobs:
        gitHubConnection: 'khanon-js - access token'
        repositoryName: 'khanon-js/khanon.js'
        action: 'create'
+       title: 'Version $(tagRelease)'
        target: '$(Build.SourceVersion)'
        tagSource: 'userSpecifiedTag'
        tag: 'v$(tagRelease)'
