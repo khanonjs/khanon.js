@@ -12,8 +12,8 @@ jobs:
    - script: |
        git config user.name "development@khanon3d.com"
        git config user.email "development@khanon3d.com"
-       git tag -a TEST 76ca1458b64c48dc8f04bb30502a9546a1325dc1 -m "MESSAGE"
-       git push
+       git tag -a TEST -m "MESSAGE"
+       git push origin HEAD:main
 #       npm run pipeline:create-version-tag
      displayName: 'Git tag'
 
