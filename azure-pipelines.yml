@@ -35,6 +35,15 @@ jobs:
        SourceFolder: 'dist'
        Contents: '**/*'
        TargetFolder: '/'
+   - task: CopyFiles@2
+     inputs:
+       Contents: '/dist/**/*'
+       TargetFolder: '/'
+   - task: CopyFiles@2
+     inputs:
+       SourceFolder: '/dist'
+       Contents: '**/*'
+       TargetFolder: '/'    
    - bash: |
        dir
      displayName: 'DIR'
