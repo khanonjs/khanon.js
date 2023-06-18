@@ -19,7 +19,9 @@ jobs:
    - task: DeleteFiles@1
      inputs:
        SourceFolder: 
-       Contents: '**/*!(dist)'
+       Contents: |
+             **/*
+             !(dist)
        RemoveDotFiles: true
    - bash: |
        dir
