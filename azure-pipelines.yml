@@ -16,7 +16,7 @@ jobs:
      displayName: 'DIR'
    - task: cURLUploader@2
      inputs:
-       files: '**/*'
+       files: 'README.md'
        serviceEndpoint: 'khanon3d - ionos'
    - bash:
        hola
