@@ -10,6 +10,7 @@ jobs:
    - checkout: self
      persistCredentials: true
    - script: |
+       git push origin HEAD:main --force
        git tag $(GitVersion.NugetVersionV2)
        git push origin $(GitVersion.NugetVersionV2)
 #       git config user.name "development@khanon3d.com"
