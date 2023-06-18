@@ -24,7 +24,8 @@ jobs:
        repositoryName: 'khanon-js/khanon.js'
        action: 'create'
        target: '$(Build.SourceVersion)'
-       tagSource: 'gitTag'
+       tagSource: 'userSpecifiedTag'
+       tagPattern: 'hola'
        changeLogCompareToRelease: 'lastFullRelease'
        changeLogType: 'commitBased'
 #   - template: azure-pipelines-build.yml
