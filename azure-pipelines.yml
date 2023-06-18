@@ -25,7 +25,7 @@ jobs:
       action: 'create'
       target: '$(Build.SourceVersion)'
       tagSource: 'gitTag'
-      tagPattern: 'tag-pattern-test'
+      tagPattern: 'v$(MajorVersion).$(MinorVersion).$(IncrementReleaseTagNumber)'
       title: 'release-title'
       addChangeLog: false
 #   - template: azure-pipelines-build.yml
