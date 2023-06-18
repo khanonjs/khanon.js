@@ -5,6 +5,10 @@ jobs:
 - job: Build_and_deploy
   pool:
     vmImage: ubuntu-latest
+  
+  variables:
+  - name: tagRelease
+    value: tagTest
 
   steps:  
    - checkout: self
@@ -25,7 +29,7 @@ jobs:
        action: 'create'
        target: '$(Build.SourceVersion)'
        tagSource: 'userSpecifiedTag'
-       tag: 'hola'
+       tag: '$(tagRelease)'
        changeLogCompareToRelease: 'lastFullRelease'
        changeLogType: 'commitBased'
 #   - template: azure-pipelines-build.yml
