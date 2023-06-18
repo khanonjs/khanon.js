@@ -28,14 +28,19 @@ jobs:
      displayName: 'DIR'         
    - task: CopyFiles@2
      inputs:
-       Contents: 'dist/**/*'
+       Contents: 'dist/**'
+       TargetFolder: '/'
+   - task: CopyFiles@2
+     inputs:
+       SourceFolder: 'dist'
+       Contents: '**'
        TargetFolder: '/'
    - bash: |
        dir
-     displayName: 'DIR'     
+     displayName: 'DIR'
    - script: |
        hola
-     displayName: 'STOP TEST'  
+     displayName: 'STOP TEST'
 
    - task: Npm@1
      inputs:
