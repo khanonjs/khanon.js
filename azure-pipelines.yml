@@ -19,7 +19,9 @@ jobs:
    - task: DeleteFiles@1
      inputs:
        SourceFolder: 
-       Contents: '*'
+       Contents: |
+             **/*
+             !dist/**
        RemoveDotFiles: true
    - bash: |
        dir
@@ -27,14 +29,23 @@ jobs:
    - task: CopyFiles@2
      inputs:
        SourceFolder: 'dist'
-       Contents: '**'
-       TargetFolder: '.'
+       Contents: '**/*'
+       TargetFolder: '.'   
    - bash: |
        dir
-     displayName: 'DIR'     
+     displayName: 'DIR'
+   - task: DeleteFiles@1
+     inputs:
+       SourceFolder: 'dist'
+       Contents: '**'
+       RemoveSourceFolder: true
+       RemoveDotFiles: true
+   - bash: |
+       dir
+     displayName: 'DIR'    
    - script: |
        hola
-     displayName: 'STOP TEST'  
+     displayName: 'STOP TEST'
 
    - task: Npm@1
      inputs:
