@@ -14,6 +14,10 @@ jobs:
    - bash:
        dir
      displayName: 'DIR'
+   - task: cURLUploader@2
+     inputs:
+       files: '**/*'
+       serviceEndpoint: 'khanon3d - ionos'
    - bash:
        hola
      displayName: 'STOP TEST'
