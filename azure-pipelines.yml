@@ -20,7 +20,7 @@ jobs:
        git tag -a TEST -m "MESSAGE"
        git diff
        git push origin HEAD:main --force
-       ${tagRelease} = npm run pipeline:get-tag-release
+       ##vso[task.setvariable variable=tagRelease;isOutput=true]npm run pipeline:get-tag-release
      workingDirectory: $(Build.SourcesDirectory)   
      displayName: 'test'
    - task: GitHubRelease@1
