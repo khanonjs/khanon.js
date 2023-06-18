@@ -20,14 +20,13 @@ jobs:
      displayName: 'test'
    - task: GitHubRelease@1
      inputs:
-      gitHubConnection: 'khanon-js - access token'
-      repositoryName: 'khanon-js/khanon.js'
-      action: 'create'
-      target: '$(Build.SourceVersion)'
-      tagSource: 'gitTag'
-      tagPattern: 'v$(MajorVersion).$(MinorVersion).$(IncrementReleaseTagNumber)'
-      title: 'release-title'
-      addChangeLog: false
+       gitHubConnection: 'khanon-js - access token'
+       repositoryName: 'khanon-js/khanon.js'
+       action: 'create'
+       target: '$(Build.SourceVersion)'
+       tagSource: 'gitTag'
+       changeLogCompareToRelease: 'lastFullRelease'
+       changeLogType: 'commitBased'
 #   - template: azure-pipelines-build.yml
 #
 #   - script: |
