@@ -28,12 +28,12 @@ jobs:
      displayName: 'DIR'         
    - task: CopyFiles@2
      inputs:
-       Contents: 'dist/**'
+       Contents: 'dist/**/*'
        TargetFolder: '/'
    - task: CopyFiles@2
      inputs:
        SourceFolder: 'dist'
-       Contents: '**'
+       Contents: '**/*'
        TargetFolder: '/'
    - bash: |
        dir
