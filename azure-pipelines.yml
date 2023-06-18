@@ -19,7 +19,7 @@ jobs:
    - task: DeleteFiles@1
      inputs:
        SourceFolder: 
-       Contents: '*.*'
+       Contents: '*'
        RemoveDotFiles: true
    - bash: |
        dir
