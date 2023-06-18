@@ -21,6 +21,9 @@ jobs:
        SourceFolder: 
        Contents: '*.*'
        RemoveDotFiles: true
+   - bash: |
+       dir
+     displayName: 'DIR'         
    - task: CopyFiles@2
      inputs:
        SourceFolder: 'dist'
@@ -28,7 +31,7 @@ jobs:
        TargetFolder: '.'
    - bash: |
        dir
-     displayName: 'STOP TEST'     
+     displayName: 'DIR'     
    - script: |
        hola
      displayName: 'STOP TEST'  
