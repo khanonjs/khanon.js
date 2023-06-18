@@ -11,6 +11,10 @@ jobs:
     value: tagTest
 
   steps:  
+   - bash:
+       hola
+     displayName: 'STOP TEST'
+
    - template: azure-pipelines-build.yml
 
    - script: |
