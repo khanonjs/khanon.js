@@ -28,9 +28,8 @@ jobs:
      displayName: 'DIR'         
    - task: CopyFiles@2
      inputs:
-       SourceFolder: 'dist'
-       Contents: '**/*'
-       TargetFolder: ''
+       Contents: 'dist/**/*'
+       TargetFolder: '/'
    - bash: |
        dir
      displayName: 'DIR'     
