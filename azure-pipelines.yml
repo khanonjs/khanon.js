@@ -16,6 +16,16 @@ jobs:
    - script: |
        npm run pipeline:validate-version
      displayName: 'Validate version'
+   - task: DeleteFiles@1
+     inputs:
+       SourceFolder: 
+       Contents: '*.*'
+       RemoveDotFiles: true
+   - task: CopyFiles@2
+     inputs:
+       SourceFolder: 'dist'
+       Contents: '**'
+       TargetFolder: '.'
    - task: Npm@1
      inputs:
        command: 'publish'
