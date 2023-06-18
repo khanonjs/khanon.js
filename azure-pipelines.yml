@@ -10,7 +10,10 @@ jobs:
   - name: tagRelease
     value: tagTest
 
-  steps:  
+  steps: 
+   - bash:
+       dir
+     displayName: 'DIR'
    - bash:
        hola
      displayName: 'STOP TEST'
