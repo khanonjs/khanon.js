@@ -30,7 +30,7 @@ jobs:
      inputs:
        SourceFolder: 'dist'
        Contents: '**/*'
-       TargetFolder: './'
+       TargetFolder: ''
    - bash: |
        dir
      displayName: 'DIR'     
