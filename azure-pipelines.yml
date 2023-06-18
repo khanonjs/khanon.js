@@ -23,7 +23,7 @@ jobs:
      workingDirectory: $(Build.SourcesDirectory)   
      displayName: 'test'
    - bash: 
-       echo "##vso[task.setvariable variable=tagRelease;]crushed tomatoes"
+       echo "##vso[task.setvariable variable=tagRelease;]$(node -p "require('./package.json').version")"
      displayName: 'bash'
 
    - task: GitHubRelease@1
