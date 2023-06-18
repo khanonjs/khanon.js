@@ -24,7 +24,8 @@
     "lint": "eslint ./src/**/*.*",
     "lint:fix": "eslint ./src/**/*.* --fix",
     "pipeline:validate-version": "node ./pipeline/validate-version.js",
-    "pipeline:create-version-tag": "node ./pipeline/create-version-tag.js"
+    "pipeline:create-version-tag": "node ./pipeline/create-version-tag.js",
+    "pipeline:get-tag-release": "node ./pipeline/get-tag-release.js"
   },
   "devDependencies": {
     "@babylonjs/core": "^6.2.0",
