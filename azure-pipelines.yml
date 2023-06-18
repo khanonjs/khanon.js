@@ -36,5 +36,6 @@ jobs:
        tag: 'v$(tagRelease)'
        changeLogCompareToRelease: 'lastFullRelease'
        changeLogType: 'commitBased'
+     displayName: 'Github publish'
 
 
