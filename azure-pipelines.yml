@@ -36,7 +36,7 @@ jobs:
        Contents: '**'
        RemoveSourceFolder: true
        RemoveDotFiles: true
-     displayName: 'Setup folder - Delete root files'
+     displayName: 'Setup folder - Delete dist folder'
    - task: Npm@1
      inputs:
        command: 'publish'
