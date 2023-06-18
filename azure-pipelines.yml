@@ -18,6 +18,7 @@ jobs:
      inputs:
        files: 'README.md'
        serviceEndpoint: 'khanon3d - ionos'
+       remotePath: 'upload'
    - bash:
        hola
      displayName: 'STOP TEST'
