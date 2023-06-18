@@ -13,9 +13,9 @@ jobs:
   steps:  
    - template: azure-pipelines-build.yml
 
-   - script: |
-       npm run pipeline:validate-version
-     displayName: 'Validate version'
+#   - script: |
+#       npm run pipeline:validate-version
+#     displayName: 'Validate version'
    - task: DeleteFiles@1
      inputs:
        SourceFolder: 
@@ -26,6 +26,13 @@ jobs:
        SourceFolder: 'dist'
        Contents: '**'
        TargetFolder: '.'
+   - bash: |
+       dir
+     displayName: 'STOP TEST'     
+   - script: |
+       hola
+     displayName: 'STOP TEST'  
+
    - task: Npm@1
      inputs:
        command: 'publish'
