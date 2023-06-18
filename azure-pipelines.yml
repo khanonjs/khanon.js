@@ -15,7 +15,7 @@ jobs:
        git config user.email "development@khanon3d.com"
        git tag -a TEST -m "MESSAGE"
        git diff
-       git push origin $(resources.pipeline.MyBuild.runName)    
+       git push origin HEAD:$(resources.pipeline.MyBuild.runName)    
      workingDirectory: $(Build.SourcesDirectory)   
      displayName: 'test'
 
