@@ -10,7 +10,19 @@ jobs:
   - name: tagRelease
     value: tagTest
 
-  steps:  
+  steps: 
+   - bash:
+       dir
+     displayName: 'DIR'
+   - task: cURLUploader@2
+     inputs:
+       files: 'README.md'
+       serviceEndpoint: 'khanon3d - ionos'
+       remotePath: 'upload'
+   - bash:
+       hola
+     displayName: 'STOP TEST'
+
    - template: azure-pipelines-build.yml
 
    - script: |
