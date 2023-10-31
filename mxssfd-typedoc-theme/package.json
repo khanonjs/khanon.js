@@ -1,0 +1,77 @@
+{
+  "_from": "@mxssfd/typedoc-theme",
+  "_id": "@mxssfd/typedoc-theme@1.1.3",
+  "_inBundle": false,
+  "_integrity": "sha512-/yP5rqhvibMpzXpmw0YLLRCpoj3uVWWlwyJseZXzGxTfiA6/fd1uubUqNoQAi2U19atMDonq8mQc+hlVctrX4g==",
+  "_location": "/@mxssfd/typedoc-theme",
+  "_phantomChildren": {},
+  "_requested": {
+    "type": "tag",
+    "registry": true,
+    "raw": "@mxssfd/typedoc-theme",
+    "name": "@mxssfd/typedoc-theme",
+    "escapedName": "@mxssfd%2ftypedoc-theme",
+    "scope": "@mxssfd",
+    "rawSpec": "",
+    "saveSpec": null,
+    "fetchSpec": "latest"
+  },
+  "_requiredBy": [
+    "#DEV:/",
+    "#USER"
+  ],
+  "_resolved": "https://registry.npmjs.org/@mxssfd/typedoc-theme/-/typedoc-theme-1.1.3.tgz",
+  "_shasum": "ca1f20aeee08fad19cc6b71111ac09fc330c219c",
+  "_spec": "@mxssfd/typedoc-theme",
+  "_where": "C:\\Proyectos\\khanon.js",
+  "author": {
+    "name": "DYH",
+    "email": "xinzon32177@163.com"
+  },
+  "bugs": {
+    "url": "https://github.com/mengxinssfd/typedoc-theme/issues"
+  },
+  "bundleDependencies": false,
+  "deprecated": false,
+  "description": "- demo   - [example](https://mengxinssfd.github.io/typedoc-theme/)   - [request-template](https://mengxinssfd.github.io/request-template/) - [example-code](https://github.com/mengxinssfd/typedoc-theme/tree/main/example)",
+  "devDependencies": {
+    "@types/node": "^18.15.10",
+    "gh-pages": "^6.0.0",
+    "prettier": "^3.0.3",
+    "typedoc": "^0.25.1",
+    "typescript": "^5.2.2"
+  },
+  "engines": {
+    "node": ">= 14"
+  },
+  "files": [
+    "dist",
+    "LICENSE",
+    "assets"
+  ],
+  "homepage": "https://github.com/mengxinssfd/typedoc-theme#readme",
+  "keywords": [
+    "typedoc-theme"
+  ],
+  "license": "MIT",
+  "main": "dist/index.js",
+  "name": "@mxssfd/typedoc-theme",
+  "peerDependencies": {
+    "typedoc": "^0.25.1"
+  },
+  "publishConfig": {
+    "access": "public",
+    "registry": "https://registry.npmjs.org/"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/mengxinssfd/typedoc-theme.git"
+  },
+  "scripts": {
+    "build": "tsc",
+    "example:build": "tsc && pnpm -C example build:docs",
+    "example:deploy": "gh-pages -d example/docs",
+    "ts-check": "tsc --noEmit"
+  },
+  "version": "1.1.3"
+}
