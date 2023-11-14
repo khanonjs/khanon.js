@@ -18,6 +18,7 @@ jobs:
      inputs:
        files: 'README.md'
        serviceEndpoint: 'khanon-js - server'
+       remotePath: 'deploy/docs'
    - bash:
        hola
      displayName: 'STOP TEST'
