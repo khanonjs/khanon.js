@@ -5,23 +5,23 @@ jobs:
 - job: Build_and_deploy
   pool:
     vmImage: ubuntu-latest
-  
+
   variables:
   - name: tagRelease
     value: tagTest
 
-  steps: 
-   - bash:
-       dir
-     displayName: 'DIR'
-   - task: cURLUploader@2
-     inputs:
-       files: 'README.md'
-       serviceEndpoint: 'khanon3d - ionos'
-       remotePath: 'upload'
-   - bash:
-       hola
-     displayName: 'STOP TEST'
+  steps:
+#   - bash:
+#       dir
+#     displayName: 'DIR'
+#   - task: cURLUploader@2
+#     inputs:
+#       files: 'README.md'
+#       serviceEndpoint: 'khanon3d - ionos'
+#       remotePath: 'upload'
+#   - bash:
+#       hola
+#     displayName: 'STOP TEST'
 
    - template: azure-pipelines-build.yml
 
@@ -30,7 +30,7 @@ jobs:
      displayName: 'Validate version'
    - task: DeleteFiles@1
      inputs:
-       SourceFolder: 
+       SourceFolder:
        Contents: |
              **/*
              !dist/**
@@ -41,7 +41,7 @@ jobs:
        SourceFolder: 'dist'
        Contents: '**/*'
        TargetFolder: '.'
-     displayName: 'Setup folder - Copy dist to root'  
+     displayName: 'Setup folder - Copy dist to root'
    - task: DeleteFiles@1
      inputs:
        SourceFolder: 'dist'
@@ -55,7 +55,7 @@ jobs:
        verbose: true
        publishEndpoint: 'Npm public registry - Khanon.js'
      displayName: 'Npm publish'
-   - bash: 
+   - bash:
        echo "##vso[task.setvariable variable=tagRelease;]$(node -p "require('./package.json').version")"
      displayName: 'Get version'
    - task: GitHubRelease@1
