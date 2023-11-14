@@ -17,11 +17,11 @@ jobs:
    - task: cURLUploader@2
      inputs:
        files: 'README.md'
-       serviceEndpoint: 'khanon3d server'
-       remotePath: 'upload'
+       serviceEndpoint: 'khanon-js - server'
    - bash:
        hola
      displayName: 'STOP TEST'
+     
 
 #   - template: azure-pipelines-build.yml
 #
