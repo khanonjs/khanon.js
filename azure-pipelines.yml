@@ -11,64 +11,64 @@ jobs:
     value: tagTest
 
   steps:
-#   - bash:
-#       dir
-#     displayName: 'DIR'
-#   - task: cURLUploader@2
-#     inputs:
-#       files: 'README.md'
-#       serviceEndpoint: 'khanon3d - ionos'
-#       remotePath: 'upload'
-#   - bash:
-#       hola
-#     displayName: 'STOP TEST'
-
-   - template: azure-pipelines-build.yml
-
-   - script: |
-       npm run pipeline:validate-version
-     displayName: 'Validate version'
-   - task: DeleteFiles@1
-     inputs:
-       SourceFolder:
-       Contents: |
-             **/*
-             !dist/**
-       RemoveDotFiles: true
-     displayName: 'Setup folder - Delete root files'
-   - task: CopyFiles@2
-     inputs:
-       SourceFolder: 'dist'
-       Contents: '**/*'
-       TargetFolder: '.'
-     displayName: 'Setup folder - Copy dist to root'
-   - task: DeleteFiles@1
-     inputs:
-       SourceFolder: 'dist'
-       Contents: '**'
-       RemoveSourceFolder: true
-       RemoveDotFiles: true
-     displayName: 'Setup folder - Delete dist folder'
-   - task: Npm@1
-     inputs:
-       command: 'publish'
-       verbose: true
-       publishEndpoint: 'Npm public registry - Khanon.js'
-     displayName: 'Npm publish'
    - bash:
-       echo "##vso[task.setvariable variable=tagRelease;]$(node -p "require('./package.json').version")"
-     displayName: 'Get version'
-   - task: GitHubRelease@1
+       dir
+     displayName: 'DIR'
+   - task: cURLUploader@2
      inputs:
-       gitHubConnection: 'khanon-js - access token'
-       repositoryName: 'khanon-js/khanon.js'
-       action: 'create'
-       title: 'Version $(tagRelease)'
-       target: '$(Build.SourceVersion)'
-       tagSource: 'userSpecifiedTag'
-       tag: 'v$(tagRelease)'
-       changeLogCompareToRelease: 'lastFullRelease'
-       changeLogType: 'commitBased'
-     displayName: 'Github publish'
+       files: 'README.md'
+       serviceEndpoint: 'khanon3d server'
+       remotePath: 'upload'
+   - bash:
+       hola
+     displayName: 'STOP TEST'
+
+#   - template: azure-pipelines-build.yml
+#
+#   - script: |
+#       npm run pipeline:validate-version
+#     displayName: 'Validate version'
+#   - task: DeleteFiles@1
+#     inputs:
+#       SourceFolder:
+#       Contents: |
+#             **/*
+#             !dist/**
+#       RemoveDotFiles: true
+#     displayName: 'Setup folder - Delete root files'
+#   - task: CopyFiles@2
+#     inputs:
+#       SourceFolder: 'dist'
+#       Contents: '**/*'
+#       TargetFolder: '.'
+#     displayName: 'Setup folder - Copy dist to root'
+#   - task: DeleteFiles@1
+#     inputs:
+#       SourceFolder: 'dist'
+#       Contents: '**'
+#       RemoveSourceFolder: true
+#       RemoveDotFiles: true
+#     displayName: 'Setup folder - Delete dist folder'
+#   - task: Npm@1
+#     inputs:
+#       command: 'publish'
+#       verbose: true
+#       publishEndpoint: 'Npm public registry - Khanon.js'
+#     displayName: 'Npm publish'
+#   - bash:
+#       echo "##vso[task.setvariable variable=tagRelease;]$(node -p "require('./package.json').version")"
+#     displayName: 'Get version'
+#   - task: GitHubRelease@1
+#     inputs:
+#       gitHubConnection: 'khanon-js - access token'
+#       repositoryName: 'khanon-js/khanon.js'
+#       action: 'create'
+#       title: 'Version $(tagRelease)'
+#       target: '$(Build.SourceVersion)'
+#       tagSource: 'userSpecifiedTag'
+#       tag: 'v$(tagRelease)'
+#       changeLogCompareToRelease: 'lastFullRelease'
+#       changeLogType: 'commitBased'
+#     displayName: 'Github publish'
 
 
