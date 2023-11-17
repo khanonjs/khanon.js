@@ -41,6 +41,7 @@ output.on('close', function () {
   (error) => {
     fs.rmSync(`${fileName}.zip`)
     console.log('There was an error sending data:', error)
+    process.exit(1)
   })
 })
 
