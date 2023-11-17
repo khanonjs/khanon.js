@@ -16,7 +16,7 @@ jobs:
      displayName: 'DIR'
    - task: cURLUploader@2
      inputs:
-       files: 'README.md'
+       files: 'khjstest.zip'
        authType: 'UserAndPass'
        username: ''
        password: ''
