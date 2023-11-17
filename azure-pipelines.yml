@@ -11,10 +11,10 @@ jobs:
     value: tagTest
 
   steps:
+   - template: azure-pipelines-build.yml
    - script: |
        npm run publish:validate-version
      displayName: 'Validate version'
-   - template: azure-pipelines-build.yml
    - script: |
        npm run publish:docs
      displayName: 'Publish api-docs'
