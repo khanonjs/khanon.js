@@ -14,7 +14,7 @@ jobs:
    - template: azure-pipelines-build.yml
 
    - script: |
-       npm run pipeline:validate-version
+       npm run publish:validate-version
      displayName: 'Validate version'
    - task: DeleteFiles@1
      inputs:

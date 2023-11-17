@@ -16,6 +16,7 @@
     "build": "npm run clean && tsc && cpy package.json ./dist",
     "build:docs": "typedoc --options typedoc.json",
     "publish:docs": "node ./publish/publish-docs.mjs",
+    "publish:validate-version": "node ./publish/validate-version.js",
     "test": "cross-env TS_NODE_PROJECT='./tsconfig.mocha.json' mocha -r ./mocha-setup.js -r ts-node/register 'src/**/*.spec.ts'",
     "link": "cpy package.json ./src && cd ./src && npm link",
     "unlink": "cd ./src && rimraf node_modules && rimraf package.json && rimraf package-lock.json && npm unlink",
@@ -23,8 +24,7 @@
     "webpack-bundle-analyze": "webpack --profile --json > bundle-stats.json && webpack-bundle-analyzer bundle-stats.json",
     "check-circular-refs": "dpdm ./src/index.ts",
     "lint": "eslint ./src/**/*.*",
-    "lint:fix": "eslint ./src/**/*.* --fix",
-    "publish:validate-version": "node ./publish/validate-version.js"
+    "lint:fix": "eslint ./src/**/*.* --fix"
   },
   "devDependencies": {
     "@babylonjs/core": "^6.27.1",
