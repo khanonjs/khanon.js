@@ -10,30 +10,30 @@ export class Http {
   /**
    * Public methods
    */
-  static get<T>(host: string, port: number, path: string, options?: RequestOptions, onDone?: (data: T) => void, onError?: (error) => void) {
+  static get<T>(host: string, port: number, path: string, options?: RequestOptions, onDone?: (statusCode: number, data: T) => void, onError?: (error) => void) {
     Http.call(HttpProtocol.GET, host, port, path, options, onDone, onError)
   }
 
-  static post<T>(host: string, port: number, path: string, options?: RequestOptions, onDone?: (data: T) => void, onError?: (error) => void) {
+  static post<T>(host: string, port: number, path: string, options?: RequestOptions, onDone?: (statusCode: number, data: T) => void, onError?: (error) => void) {
     Http.call(HttpProtocol.POST, host, port, path, options, onDone, onError)
   }
 
-  static put<T>(host: string, port: number, path: string, options?: RequestOptions, onDone?: (data: T) => void, onError?: (error) => void) {
+  static put<T>(host: string, port: number, path: string, options?: RequestOptions, onDone?: (statusCode: number, data: T) => void, onError?: (error) => void) {
     Http.call(HttpProtocol.PUT, host, port, path, options, onDone, onError)
   }
 
-  static patch<T>(host: string, port: number, path: string, options?: RequestOptions, onDone?: (data: T) => void, onError?: (error) => void) {
+  static patch<T>(host: string, port: number, path: string, options?: RequestOptions, onDone?: (statusCode: number, data: T) => void, onError?: (error) => void) {
     Http.call(HttpProtocol.PATCH, host, port, path, options, onDone, onError)
   }
 
-  static delete<T>(host: string, port: number, path: string, options?: RequestOptions, onDone?: (data: T) => void, onError?: (error) => void) {
+  static delete<T>(host: string, port: number, path: string, options?: RequestOptions, onDone?: (statusCode: number, data: T) => void, onError?: (error) => void) {
     Http.call(HttpProtocol.DELETE, host, port, path, options, onDone, onError)
   }
 
   /**
    * Private methods
    */
-  private static call<T>(protocol: HttpProtocol, host: string, port: number, path: string, options?: RequestOptions, onDone?: (data: T) => void, onError?: (error) => void) {
+  private static call<T>(protocol: HttpProtocol, host: string, port: number, path: string, options?: RequestOptions, onDone?: (statusCode: number, data: T) => void, onError?: (error) => void) {
     if (path[0] !== '/') {
       path = '/' + path
     }
@@ -79,7 +79,7 @@ export class Http {
     }).then((data) => {
       console.log(`Request successful: '${url}'`) // 8a8f use logger
       if (onDone) {
-        onDone(data.data)
+        onDone(data.status, data.data)
       }
     }).catch(error => {
       const errorStr = `Request response error - '${url}' - ${error.response?.data ? Utils.objectToString(error.response?.data) : Utils.objectToString(error)}`

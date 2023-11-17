@@ -47,7 +47,7 @@ export const httpCall = (protocol, url, options, headers, onDone, onError) => {
   }).then((data) => {
     console.log(`Request successful: '${url}'`)
     if (onDone) {
-      onDone(data.data)
+      onDone(data.status, data.data)
     }
   }).catch(error => {
     const errorStr = `Request response error - '${url}' - ${error.response?.data ? error.response?.data : error}`

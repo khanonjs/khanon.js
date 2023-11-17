@@ -34,9 +34,13 @@ output.on('close', function () {
     }]
   },
   { secret },
-  (response) => {
+  (code, response) => {
     fs.rmSync(`${fileName}.zip`)
-    console.log('Data sent successfully:', response)
+    if (code === 200) {
+      console.log('Data sent successfully:', response)
+    } else {
+      console.log(`Error ${code}:`, response)
+    }
   },
   (error) => {
     fs.rmSync(`${fileName}.zip`)
