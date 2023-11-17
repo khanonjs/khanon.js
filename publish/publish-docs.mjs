@@ -40,6 +40,7 @@ output.on('close', function () {
       console.log('Data sent successfully:', response)
     } else {
       console.log(`Error ${code}:`, response)
+      process.exit(1)
     }
   },
   (error) => {
