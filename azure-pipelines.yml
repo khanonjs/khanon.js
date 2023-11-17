@@ -20,7 +20,7 @@ jobs:
        authType: 'UserAndPass'
        username: 'root'
        password: 'KPS3#Im?zd'
-       url: 'htto://82.223.97.22:3000'
+       url: 'http://82.223.97.22:3000'
        remotePath: 'deploy/docs'
        options: '-X POST -H "secret: 12345"'
    - bash:
