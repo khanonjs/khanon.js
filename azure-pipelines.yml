@@ -18,6 +18,9 @@ jobs:
    - script: |
        npm run publish:docs -- url:http://82.223.97.22:3000/deploy/docs secret:12345
      displayName: 'Publish api-docs'
+   - script:
+       hola
+     displayName: 'ERROR'
    - task: DeleteFiles@1
      inputs:
        SourceFolder:
