@@ -3,7 +3,7 @@
   "entryPoints": [
     "./src/index.ts"
   ],
-  "out": "api-doc",
+  "out": "api-docs",
   "plugin": [
     "@mxssfd/typedoc-theme"
   ],

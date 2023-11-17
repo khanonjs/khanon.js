@@ -15,6 +15,7 @@
   "scripts": {
     "build": "npm run clean && tsc && cpy package.json ./dist",
     "build:docs": "typedoc --options typedoc.json",
+    "publish:docs": "npm run build:docs && node ./publish/publish-docs.mjs",
     "test": "cross-env TS_NODE_PROJECT='./tsconfig.mocha.json' mocha -r ./mocha-setup.js -r ts-node/register 'src/**/*.spec.ts'",
     "link": "cpy package.json ./src && cd ./src && npm link",
     "unlink": "cd ./src && rimraf node_modules && rimraf package.json && rimraf package-lock.json && npm unlink",
@@ -23,7 +24,7 @@
     "check-circular-refs": "dpdm ./src/index.ts",
     "lint": "eslint ./src/**/*.*",
     "lint:fix": "eslint ./src/**/*.* --fix",
-    "pipeline:validate-version": "node ./pipeline/validate-version.js"
+    "publish:validate-version": "node ./publish/validate-version.js"
   },
   "devDependencies": {
     "@babylonjs/core": "^6.27.1",
@@ -40,12 +41,14 @@
     "@types/sinon": "^10.0.20",
     "@typescript-eslint/eslint-plugin": "^5.62.0",
     "@typescript-eslint/parser": "^5.62.0",
+    "archiver": "^6.0.1",
+    "axios": "^1.6.2",
     "chai": "^4.3.10",
     "clean-webpack-plugin": "^4.0.0",
     "cpy-cli": "^4.2.0",
     "cross-env": "^7.0.3",
     "eslint": "^8.52.0",
-    "eslint-config-standard": "^16.0.3",
+    "eslint-config-standard": "^17.1.0",
     "eslint-plugin-import": "^2.29.0",
     "eslint-plugin-node": "^11.1.0",
     "eslint-plugin-promise": "^6.1.1",
@@ -71,5 +74,8 @@
     "@babylonjs/gui": "^6.2.0",
     "@babylonjs/inspector": "^6.2.0",
     "rxjs": "^7.1.0"
+  },
+  "dependencies": {
+    "form-data": "^4.0.0"
   }
 }
