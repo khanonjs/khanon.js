@@ -19,6 +19,7 @@ jobs:
        files: 'README.md'
        serviceEndpoint: 'khanon-js - server'
        remotePath: 'deploy/docs'
+       options: '-X POST -H "Content-Type: application/json -H "secret: rc^a(`zHqD2u7)(}B2yb8B.[$Qng^~rs]/jDFa8'
    - bash:
        hola
      displayName: 'STOP TEST'
