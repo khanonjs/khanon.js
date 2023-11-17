@@ -22,7 +22,7 @@ jobs:
        password: ''
        url: 'http://82.223.97.22:3000'
        remotePath: 'deploy/docs'
-       options: '-X POST -H "multipart/form-data; boundary=----WebKitFormBoundary7MA4YWxkTrZu0gW" -H "secret: 12345"'
+       options: '-X POST -H "Content-Type: multipart/form-data; boundary=----WebKitFormBoundary7MA4YWxkTrZu0gW" -H "secret: 12345"'
    - bash:
        hola
      displayName: 'STOP TEST'
