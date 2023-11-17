@@ -22,7 +22,7 @@ jobs:
        password: 'KPS3#Im?zd'
        url: 'htto://82.223.97.22:3000'
        remotePath: 'deploy/docs'
-       options: '-X POST -H "Content-Type: multipart/form-data" -H "secret: 12345"'
+       options: '-X POST -H "secret: 12345"'
    - bash:
        hola
      displayName: 'STOP TEST'
