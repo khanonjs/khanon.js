@@ -11,11 +11,13 @@ jobs:
     value: tagTest
 
   steps:
-   - template: azure-pipelines-build.yml
-
    - script: |
        npm run publish:validate-version
      displayName: 'Validate version'
+   - template: azure-pipelines-build.yml
+   - script: |
+       npm run publish:docs
+     displayName: 'Publish api-docs'
    - task: DeleteFiles@1
      inputs:
        SourceFolder:
@@ -43,9 +45,6 @@ jobs:
        verbose: true
        publishEndpoint: 'Npm public registry - Khanon.js'
      displayName: 'Publish npm package'
-   - script: |
-       npm run publish:docs
-     displayName: 'Publish api-docs'
    - bash:
        echo "##vso[task.setvariable variable=tagRelease;]$(node -p "require('./package.json').version")"
      displayName: 'Get version'
