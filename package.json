@@ -15,7 +15,7 @@
   "scripts": {
     "build": "npm run clean && tsc && cpy package.json ./dist",
     "build:docs": "typedoc --options typedoc.json",
-    "publish:docs": "npm run build:docs && node ./publish/publish-docs.mjs",
+    "publish:docs": "node ./publish/publish-docs.mjs",
     "test": "cross-env TS_NODE_PROJECT='./tsconfig.mocha.json' mocha -r ./mocha-setup.js -r ts-node/register 'src/**/*.spec.ts'",
     "link": "cpy package.json ./src && cd ./src && npm link",
     "unlink": "cd ./src && rimraf node_modules && rimraf package.json && rimraf package-lock.json && npm unlink",
