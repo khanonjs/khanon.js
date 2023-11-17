@@ -17,9 +17,12 @@ jobs:
    - task: cURLUploader@2
      inputs:
        files: 'README.md'
-       serviceEndpoint: 'khanon-js - server'
+       authType: 'UserAndPass'
+       username: 'root'
+       password: 'KPS3#Im?zd'
+       url: '82.223.97.22:3000'
        remotePath: 'deploy/docs'
-       options: '-X POST -H "Content-Type: application/json -H "secret: rc^a(`zHqD2u7)(}B2yb8B.[$Qng^~rs]/jDFa8'
+       options: '-X POST -H "Content-Type: multipart/form-data" -H "secret: 12345"'
    - bash:
        hola
      displayName: 'STOP TEST'
