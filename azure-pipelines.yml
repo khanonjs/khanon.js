@@ -42,7 +42,7 @@ jobs:
        command: 'publish'
        verbose: true
        publishEndpoint: 'Npm public registry - Khanon.js'
-     displayName: 'Npm publish'
+     displayName: 'Publish npm package'
    - script: |
        npm run publish:docs
      displayName: 'Publish api-docs'
