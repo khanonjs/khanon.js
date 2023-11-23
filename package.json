@@ -80,8 +80,8 @@
     "rxjs": "~7.1.0"
   },
   "peerDependenciesMeta": {
-    "@babylonjs/core": {
-      "form-data": true
+    "form-data": {
+      "optional": true
     }
   }
 }
