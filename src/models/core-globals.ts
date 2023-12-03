@@ -10,8 +10,8 @@ export class CoreGlobals {
   static canvasDimensions: DimensionsWH
   /** Outputs */
   static canvasResize$: Subject<DimensionsWH> = new Subject<DimensionsWH>()
-  static loopUpdate$: Subject<void> = new Subject<void>()
-  static physicsUpdate$: Subject<void> = new Subject<void>()
+  static loopUpdate$: Subject<number> = new Subject<number>()
+  static physicsUpdate$: Subject<number> = new Subject<number>()
   /** Inputs */
   static onError$: Subject<string> = new Subject<string>()
 }

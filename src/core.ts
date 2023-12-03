@@ -17,8 +17,9 @@ export class Core {
 
   // Loop update
   private static loopUpdateLastMs: number
-  private static loopUpdateFPS: number
+  private static loopUpdateFPS: number // Number of logical steps per frame
   private static loopUpdateLag: number
+  private static loopUpdateDeltaTime: number // Time acceleration factor
 
   // Engine
   private static engine: Engine
@@ -141,8 +142,8 @@ export class Core {
         Core.loopUpdateLag += currentMs - Core.loopUpdateLastMs
         while (Core.loopUpdateLag > Core.loopUpdateFPS) {
           Core.loopUpdateLastMs = currentMs
-          CoreGlobals.loopUpdate$.next()
-          CoreGlobals.physicsUpdate$.next()
+          CoreGlobals.loopUpdate$.next(Core.loopUpdateDeltaTime)
+          CoreGlobals.physicsUpdate$.next(Core.loopUpdateDeltaTime)
           Core.loopUpdateLag -= Core.loopUpdateFPS
         }
       },
