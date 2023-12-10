@@ -1,8 +1,11 @@
 import { Vector3 } from '@babylonjs/core/Maths/math.vector'
 import { Sprite as BabylonJsSprite } from '@babylonjs/core/Sprites/sprite'
 
-import { DisplayObject } from '../../models/display-object'
-import { Interval, Timeout } from '../../types/timers'
+import { DisplayObject } from '../../base/display-object'
+import {
+  Interval,
+  Timeout
+} from '../../types/timers'
 import { Logger } from '../logger/logger'
 import { SpriteAnimation } from './sprite-animation'
 import { SpriteProperties } from './sprite-properties'

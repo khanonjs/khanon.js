@@ -6,7 +6,6 @@ export function Actor(props: ActorProps): any {
     const _class = class extends constructor implements ActorCore {
       props = props
     }
-    // const actor = new _class()
     return _class
   }
 }

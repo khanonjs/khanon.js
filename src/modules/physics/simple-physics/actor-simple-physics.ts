@@ -1,7 +1,10 @@
-import { Matrix, Vector3 } from '@babylonjs/core/Maths/math.vector'
+import {
+  Matrix,
+  Vector3
+} from '@babylonjs/core/Maths/math.vector'
 
+import { DisplayObject } from '../../../base/display-object'
 import * as Misc from '../../../misc'
-import { DisplayObject } from '../../../models/display-object'
 import { PhysicsUpdateable } from '../../../models/physics-updatable'
 
 export class ActorSimplePhysics extends PhysicsUpdateable {

@@ -1,7 +1,7 @@
 import { Vector3 } from '@babylonjs/core/Maths/math.vector'
 import { Mesh as BabylonJsMesh } from '@babylonjs/core/Meshes/mesh'
 
-import { DisplayObject } from '../../models/display-object'
+import { DisplayObject } from '../../base/display-object'
 import { MeshAnimation } from './mesh-animation'
 
 export class Mesh extends DisplayObject {

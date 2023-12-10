@@ -1,6 +1,6 @@
 import { Scene as BabylonJsScene } from '@babylonjs/core/scene'
 
-import { DisplayObject } from '../../models/display-object'
+import { DisplayObject } from '../../base/display-object'
 import { LoopUpdateable } from '../../models/loop-updateable'
 import { AssetsManager } from '../assets-manager/assets-manager'
 import { MeshesManager } from '../mesh/meshes-manager'

@@ -1,4 +1,4 @@
-import { DisplayObject } from '../../models/display-object'
+import { DisplayObject } from '../../base/display-object'
 import { LoopUpdateable } from '../../models/loop-updateable'
 import { MotionEndCriteria } from './motion-end-criteria'
 import { MotionProperties } from './motion-properties'

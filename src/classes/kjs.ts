@@ -1,6 +1,4 @@
-/* eslint-disable no-inner-declarations */
-/* eslint-disable @typescript-eslint/no-namespace */
-import { SceneController } from '../controllers/scene-controller'
+import { ScenesController } from '../controllers/scenes-controller'
 
 /* export class KJS {
   public Scene = new SceneController()
@@ -9,8 +7,7 @@ import { SceneController } from '../controllers/scene-controller'
 export namespace KJS {
   export namespace Scene { // ControllerScene
     export function load(/* scene: SceneConstructor */)/*: Observable<LoadingProgress> */ {
-      console.log('aki JODER')
-      SceneController.load()
+      ScenesController.load()
       // return 1
     }
     // function unload(scene: SceneConstructor): void
