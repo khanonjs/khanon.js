@@ -4,7 +4,7 @@ import { ScenesController } from '../controllers/scenes-controller'
   public Scene = new SceneController()
 } */
 
-export namespace KJS {
+namespace KJS {
   export namespace Scene { // ControllerScene
     export function load(/* scene: SceneConstructor */)/*: Observable<LoadingProgress> */ {
       ScenesController.load()
@@ -15,3 +15,5 @@ export namespace KJS {
     // function stop(scene: SceneConstructor, effect: TransitionEffect): void
   }
 }
+
+export default KJS

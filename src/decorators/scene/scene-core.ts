@@ -1,5 +1,3 @@
-import { SceneProps } from './scene-props'
-
-export class SceneCore {
-  props: SceneProps
+export interface SceneCore {
+  // Core methods, only to be used within KhanonJs
 }

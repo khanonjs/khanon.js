@@ -19,8 +19,8 @@
     "publish:docs": "node ./publish/publish-docs.mjs",
     "publish:validate-version": "node ./publish/validate-version.js",
     "test": "jest",
-    "link": "cpy package.json ./src && cd ./src && npm link",
-    "unlink": "cd ./src && rimraf node_modules && rimraf package.json && rimraf package-lock.json && npm unlink",
+    "link": "cpy package.json ./src && cd ./src && npm link && npm i",
+    "unlink": "cd ./src && npm uninstall --global && rimraf node_modules && rimraf package.json && rimraf package-lock.json",
     "clean": "rimraf dist",
     "webpack-bundle-analyze": "webpack --profile --json > bundle-stats.json && webpack-bundle-analyzer bundle-stats.json",
     "check-circular-refs": "dpdm ./src/index.ts",
@@ -29,13 +29,13 @@
     "lint:fix": "eslint ./src/**/*.* --fix"
   },
   "devDependencies": {
-    "@babylonjs/core": "~6.31.0",
-    "@babylonjs/gui": "~6.31.0",
-    "@babylonjs/gui-editor": "~6.31.0",
-    "@babylonjs/inspector": "~6.31.0",
-    "@babylonjs/loaders": "~6.31.0",
-    "@babylonjs/materials": "~6.31.0",
-    "@babylonjs/serializers": "~6.31.0",
+    "@babylonjs/core": "~6.38.0",
+    "@babylonjs/gui": "~6.38.0",
+    "@babylonjs/gui-editor": "~6.38.0",
+    "@babylonjs/inspector": "~6.38.0",
+    "@babylonjs/loaders": "~6.38.0",
+    "@babylonjs/materials": "~6.38.0",
+    "@babylonjs/serializers": "~6.38.0",
     "@jest/globals": "^29.7.0",
     "@mxssfd/typedoc-theme": "file:mxssfd-typedoc-theme",
     "@types/chai": "^4.3.11",
@@ -76,9 +76,9 @@
     "webpack-dev-server": "^4.15.1"
   },
   "peerDependencies": {
-    "@babylonjs/core": "~6.31.0",
-    "@babylonjs/gui": "~6.31.0",
-    "@babylonjs/inspector": "~6.31.0",
+    "@babylonjs/core": "~6.38.0",
+    "@babylonjs/gui": "~6.38.0",
+    "@babylonjs/inspector": "~6.38.0",
     "form-data": "~4.0.0"
   },
   "peerDependenciesMeta": {

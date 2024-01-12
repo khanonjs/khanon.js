@@ -4,4 +4,4 @@ export * from './modules'
 export { Core } from './core'
 
 // NEW **********************************
-export { KJS } from './classes/kjs'
+export * from './classes/kjs'
