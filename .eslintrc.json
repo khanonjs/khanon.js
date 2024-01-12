@@ -35,6 +35,7 @@
         "no-unused-expressions": "off",
         "sort-imports": "off",
         "space-before-function-paren": "off",
+        "space-before-blocks": "warn",
         "no-useless-constructor": "off",
         "eol-last": "warn",
         "dot-notation": "off",

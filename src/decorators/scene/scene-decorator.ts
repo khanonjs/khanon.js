@@ -3,6 +3,7 @@ import { ParticleSourceConstructor } from '../particle-source/particle-source-co
 import { ParticleConstructor } from '../particle/particle-constructor'
 import { StateConstructor } from '../state/state-constructor'
 import { SceneCore } from './scene-core'
+import { SceneInterface } from './scene-interface'
 import { SceneProps } from './scene-props'
 
 // 8a8f can those methods be added to index.d.ts decorator declaration?
@@ -10,9 +11,14 @@ import { SceneProps } from './scene-props'
 // Should the methods be added to the function return as a type?
 
 export function Scene(props: SceneProps): any {
-  return function <T extends { new (...args: any[]): any }>(constructor: T & SceneCore, context: ClassDecoratorContext) {
-    const _class = class extends constructor implements SceneCore {
+  return function <T extends { new (...args: any[]): any }>(constructor: T & SceneCore & SceneInterface, context: ClassDecoratorContext) {
+    const _class = class extends constructor {
       props = props
+
+      start(): void {}
+      stop(): void {}
+      load(): void {}
+      unload(): void {}
 
       setState(state: StateConstructor): void {
 
@@ -26,7 +32,6 @@ export function Scene(props: SceneProps): any {
 
       }
     }
-    // const scene = new _class()
     return _class
   }
 }

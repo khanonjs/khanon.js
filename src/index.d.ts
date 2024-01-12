@@ -5,11 +5,14 @@ import { SceneConstructor } from './decorators/scene/scene-constructor'
 import { LoadingProgress } from './models/loading-progress'
 
 export * from './models'
-export * from './modules'
+// export * from './modules'
 
 export { Core } from './core'
 
 // ****** NEW DECORATOR BASED ENGINE ***********
+
+export { Scene } from './decorators/scene/scene-decorator'
+export { SceneInterface } from './decorators/scene/scene-interface'
 
 declare enum ETransitionEffect {
   FADE
