@@ -13,7 +13,7 @@ import { SceneProps } from './scene-props'
 export function Scene(props: SceneProps): any {
   return function <T extends { new (...args: any[]): any }>(constructor: T & SceneCore & SceneInterface, context: ClassDecoratorContext) {
     const _class = class extends constructor {
-      props = props
+      props = props // 8a8f can I remove the equality?
 
       start(): void {}
       stop(): void {}
@@ -25,10 +25,6 @@ export function Scene(props: SceneProps): any {
       }
 
       spawn(entity: ActorConstructor | ParticleConstructor | ParticleSourceConstructor): void {
-
-      }
-
-      applyConfiguration(): void {
 
       }
     }

@@ -1,30 +1,35 @@
+import chalk from 'chalk'
+
+import { LoggerLevels } from './logger-levels'
+
 export class Logger {
-  static info(msg: string, ...params: any[]): void {
-    console.log(this.msgParams(msg, params))
+  private static _level: LoggerLevels = LoggerLevels.DEBUG
+  private static boldStyle = 'font-weight: bold; padding: 2px 5px 2px 5px; border-radius: 5px'
+
+  static get level(): LoggerLevels { return this._level }
+  static set level(value: LoggerLevels) { this._level = value }
+
+  static error(msg: string, ...params: any[]) {
+    if (Logger.level >= LoggerLevels.ERROR) {
+      console.log.apply(console, ['%c' + chalk.red(msg), 'background: #ffc2c2; color: #550000;' + Logger.boldStyle, ...params])
+    }
   }
 
-  static warn(msg: string, ...params: any[]): void {
-    console.log('Warning!! - ' + this.msgParams(msg, params))
+  static warn(msg: string, ...params: any[]) {
+    if (Logger.level >= LoggerLevels.WARNING) {
+      console.log.apply(console, ['%c' + chalk.yellow(msg), 'color: #f5f102', ...params])
+    }
   }
 
-  static error(msg: string, ...params: any[]): void {
-    console.log('Error!! - ' + this.msgParams(msg, params))
+  static info(msg: string, ...params: any[]) {
+    if (Logger.level >= LoggerLevels.INFO) {
+      console.log.apply(console, [msg, ...params])
+    }
   }
 
-  static strFromData(data?: any, stringfy = true): string {
-    return data
-      ? (data instanceof Error
-        ? data.message
-        : (typeof data === 'object' && stringfy
-          ? JSON.stringify(data)
-          : data))
-      : ''
-  }
-
-  private static msgParams(msg: string, params: any[]): string {
-    params.forEach((param) => {
-      msg += ' ' + param
-    })
-    return msg
+  static debug(msg: string, ...params: any[]) {
+    if (Logger.level >= LoggerLevels.DEBUG) {
+      console.log.apply(console, ['%c' + chalk.green(msg), 'background: #d7ffd6; color: #014001;' + Logger.boldStyle, ...params])
+    }
   }
 }
