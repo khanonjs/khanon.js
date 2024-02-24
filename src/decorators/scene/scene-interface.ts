@@ -1,16 +1,16 @@
-import { Scene as BabylonJsScene } from '@babylonjs/core/scene'
+import { Scene as BabylonScene } from '@babylonjs/core/scene'
 
-import { ObservablesContainer } from '../../_OLD-models/observables-container'
-import { ActorConstructor } from '../actor/actor-constructor'
-import { ParticleSourceConstructor } from '../particle-source/particle-source-constructor'
-import { ParticleConstructor } from '../particle/particle-constructor'
-import { StateConstructor } from '../state/state-constructor'
+import { ActorConstructor } from '../../constructors/actor-constructor'
+import { ParticleConstructor } from '../../constructors/particle-constructor'
+import { ParticleSourceConstructor } from '../../constructors/particle-source-constructor'
+import { StateConstructor } from '../../constructors/state-constructor'
+import { LoadingProgress } from '../../models/loading-progress'
 
 export declare abstract class SceneInterface {
   /**
    * Babylon.js scene instance.
    */
-  babylonjs: BabylonJsScene
+  babylon: BabylonScene
 
   /**
    * Indicates if the scene has been loaded.
@@ -21,11 +21,6 @@ export declare abstract class SceneInterface {
    * Indicates if the scene is started and is currently running.
    */
   started: boolean
-
-  /**
-   * Observables container.
-   */
-  observables: ObservablesContainer
 
   /**
    * Start the scene.
@@ -55,13 +50,13 @@ export declare abstract class SceneInterface {
   setState(state: StateConstructor): void
 
   /**
-   * Spawn an Actor, Particle, or Particle Source.
+   * Spawns an Actor, Particle, or Particle Source.
    * @param entity
    */
   spawn(entity: ActorConstructor | ParticleConstructor | ParticleSourceConstructor): void
 
   /**
-   * Callback called before the scene has been started.
+   * Callback invoked before the scene has been started.
    */
   protected onStart?(): void
 
@@ -71,17 +66,17 @@ export declare abstract class SceneInterface {
   protected onStop?(): void
 
   /**
-   * Callback before after the scene has been loaded.
+   * Callback invoked on scene load.
    */
-  protected onLoad?(): void
+  protected onLoad?(progress: LoadingProgress): void
 
   /**
-   * Callback called after the scene has been unloaded.
+   * Callback invoked on scene unload.
    */
   protected onUnload?(): void
 
   /**
-   * Callback called on scene error. This error could happen at any point of the scene lifetime.
+   * Callback invoked on scene error. This error could happen at any point of the scene lifetime.
    */
-  protected abstract onError?(errorMsg: string): void
+  protected onError?(errorMsg: string): void
 }

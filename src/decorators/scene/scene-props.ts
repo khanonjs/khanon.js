@@ -1,12 +1,13 @@
-import { ActorConstructor } from '../actor/actor-constructor'
-import { CameraConstructor } from '../camera/camera-constructor'
-import { StateConstructor } from '../state/state-constructor'
-import { SceneConfiguration } from './scene-configuration'
+import { SceneConfiguration } from '../../babylon-configurations/scene-configuration'
+import { ActorConstructor } from '../../constructors/actor-constructor'
+import { CameraConstructor } from '../../constructors/camera-constructor'
+import { SceneMapConstructor } from '../../constructors/scenemap-constructor'
+import { StateConstructor } from '../../constructors/state-constructor'
 
 export interface SceneProps {
-    assets: any
-    states: StateConstructor[]
-    cameras: CameraConstructor[]
-    actors: ActorConstructor[]
+    cameras?: CameraConstructor[]
+    maps?: SceneMapConstructor[]
+    states?: StateConstructor[]
+    actors?: ActorConstructor[]
     configuration?: SceneConfiguration
 }

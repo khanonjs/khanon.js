@@ -4,7 +4,7 @@ import '@babylonjs/core/Materials/PBR/pbrMaterial'
 
 import { Engine } from '@babylonjs/core/Engines/engine'
 
-import { AppConstructor } from '../decorators/app/app-constructor'
+import { AppConstructor } from '../constructors/app-constructor'
 // import { CoreGlobals } from './_OLD-models/core-globals'
 // import { CoreProperties } from './_OLD-models/core-properties'
 // import { DimensionsWH } from './_OLD-models/dimensions-wh'
@@ -75,6 +75,12 @@ export class Core {
     Logger.level = (Core.app.props.debugLog || process.env.NODE_ENV === 'development') ? LoggerLevels.DEBUG : LoggerLevels.INFO
     Logger.debug('App instance created:', Core.app.props)
 
+    // Avoid canvas scale error 8a8f TODO??
+    /*setTimeout(
+      () => {
+      }, 0
+    )*/
+
     this.initializeHTMLLayers()
     this.initializeBabylon()
     this.initializeLoopUpdate()
@@ -84,17 +90,11 @@ export class Core {
     // Manage resize
     window.addEventListener('resize', () => {
       Core.updateCanvasRect()
-      Core.engine.resize()
+      Core.engine.resize()  // TODO: Test this besides 'Core.app.props.engineConfiguration.adaptToDeviceRatio = true'
       // CoreGlobals.canvasResize$.next(canvasDimensions) // 8a8f
     })
 
     Core.app.onStart()
-
-    // Avoid canvas scale error 8a8f TODO??
-    /*setTimeout(
-      () => {
-      }, 0
-    )*/
   }
 
   static throw(error?: any) {

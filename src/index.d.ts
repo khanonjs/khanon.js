@@ -1,39 +1,44 @@
+import { throwError } from 'rxjs'
+
 import { Observable } from '@babylonjs/core'
 
-/*import { LoadingProgress } from './_OLD-models/loading-progress'
-import { GUIConstructor } from './decorators/gui/gui-constructor'
-import { SceneConstructor } from './decorators/scene/scene-constructor'*/
-import { AppProps } from '../../lorenzo.portillo-website/rkhanonjs/decorators/app/app-props'
-import { LoadingProgress } from '../qkhanonjsold/_OLD-models/loading-progress'
-import { SceneController } from './controllers/scene-controller'
-
-// export * from './_OLD-models'
-// export * from './modules'
-
-// export { Core } from './core'
-
-// ****** NEW DECORATOR BASED ENGINE ***********
+import { SceneConstructor } from './constructors/scene-constructor'
+import { AppProps } from './decorators/app/app-props'
+import { SceneProps } from './decorators/scene/scene-props'
+import { LoadingProgress } from './models/loading-progress'
 
 // App decorator
 export declare function App(props: AppProps): any
+export { AppProps } from './decorators/app/app-props'
 export { AppInterface } from './decorators/app/app-interface'
 
+// Scene decorator
+export declare function Scene(props: SceneProps): any
+export { SceneProps } from './decorators/scene/scene-props'
+export { SceneInterface } from './decorators/scene/scene-interface'
+
+declare interface _KJS {
+  throw: () => void
+  hola(): void
+}
+
 // Khanonjs global controller
-export declare class KJS {
+export declare namespace KJS {
   /**
    * Throws critical error and stops the application.
    * @param error
    */
-  static throw(error?: any): void
+  function _throw(): void
 
   /**
    * Scene controller
    */
-  static get Scene(): {
-    start(): void
-    stop(): void
-    load(): LoadingProgress
-    unload(): void
+  export namespace Scene {
+    function load(scene: SceneConstructor): LoadingProgress
+    function load(scene: SceneConstructor[]): LoadingProgress
+    function unload(): void
+    function start(): void
+    function stop(): void
   }
 }
 

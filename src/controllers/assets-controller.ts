@@ -1,6 +1,6 @@
 import { LoadingProgress } from '../models'
 
-// Sprite
+// Image
 // Mesh
 // Sound
 // Music
@@ -14,11 +14,11 @@ interface CachedFile {
 export class AssetsController {
   private cachedFiles: CachedFile[]
 
-  public loadScene(): LoadingProgress {
+  /*public loadScene(): LoadingProgress {
     return null
   }
 
   public loadGUI(): LoadingProgress {
     return null
-  }
+  }*/
 }

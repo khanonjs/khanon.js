@@ -1,7 +1,3 @@
-import { ActorConstructor } from '../actor/actor-constructor'
-import { ParticleSourceConstructor } from '../particle-source/particle-source-constructor'
-import { ParticleConstructor } from '../particle/particle-constructor'
-import { StateConstructor } from '../state/state-constructor'
 import { SceneCore } from './scene-core'
 import { SceneInterface } from './scene-interface'
 import { SceneProps } from './scene-props'
@@ -20,13 +16,13 @@ export function Scene(props: SceneProps): any {
       load(): void {}
       unload(): void {}
 
-      setState(state: StateConstructor): void {
+      /*setState(state: StateConstructor): void {
 
       }
 
       spawn(entity: ActorConstructor | ParticleConstructor | ParticleSourceConstructor): void {
 
-      }
+      }*/
     }
     return _class
   }
