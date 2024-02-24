@@ -1,4 +1,4 @@
-import { Core } from '../../classes/core'
+import { Core } from '../../core'
 import { applyDefaults } from '../../helpers/utils'
 import { AppCore } from './app-core'
 import { AppProps } from './app-props'

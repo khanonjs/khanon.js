@@ -4,18 +4,18 @@ import '@babylonjs/core/Materials/PBR/pbrMaterial'
 
 import { Engine } from '@babylonjs/core/Engines/engine'
 
-import { AppConstructor } from '../constructors/app-constructor'
+import { AppConstructor } from './constructors/app-constructor'
 // import { CoreGlobals } from './_OLD-models/core-globals'
 // import { CoreProperties } from './_OLD-models/core-properties'
 // import { DimensionsWH } from './_OLD-models/dimensions-wh'
 // import * as Misc from './misc'
 // import { Engine } from './modules/engine/engine'
 // import { Scene } from './modules/scene/scene'
-import { AppCore } from '../decorators/app/app-core'
-import { AppInterface } from '../decorators/app/app-interface'
-import { Rect } from '../models'
-import { Logger } from '../modules/logger/logger'
-import { LoggerLevels } from '../modules/logger/logger-levels'
+import { AppCore } from './decorators/app/app-core'
+import { AppInterface } from './decorators/app/app-interface'
+import { Rect } from './models'
+import { Logger } from './modules/logger/logger'
+import { LoggerLevels } from './modules/logger/logger-levels'
 
 // type SceneFunctionArg = (scene: Scene) => void
 

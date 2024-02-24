@@ -15,8 +15,8 @@ export interface SpriteProps {
   celHeight?: number
 
   /**
-   * Converts the url image file to a dynamic texture and calls (false by default)
-   * If true, this option creates a DynamicTexture from the image file and calls 'fomDynamicTexture' method with the image file texture as argument.
+   * Converts the url image file to a dynamic texture and calls fromDynamicTexture (false by default)
+   * If true, this option creates a DynamicTexture from the image file and calls 'fomDynamicTexture' method with the image file argument as a DynamicTexture.
    * In that way the image can be modified manually.
    */
   toDynamicTexture?: boolean

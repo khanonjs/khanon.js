@@ -28,7 +28,7 @@ export declare namespace KJS {
    * Throws critical error and stops the application.
    * @param error
    */
-  function _throw(): void
+  function throw_(error?: any): void
 
   /**
    * Scene controller

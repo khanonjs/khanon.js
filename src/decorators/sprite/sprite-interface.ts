@@ -2,7 +2,7 @@ import { DynamicTexture } from '@babylonjs/core/Materials/Textures/dynamicTextur
 
 export declare interface SpriteInterface {
   /**
-   * Used to assign a Babylon.js DynamicTexture to the Sprite.
+   * Used to assign a Babylon DynamicTexture to the Sprite.
    */
-  fromDynamicTexture?(texture: DynamicTexture): DynamicTexture
+  fromDynamicTexture?(texture?: DynamicTexture): DynamicTexture
 }

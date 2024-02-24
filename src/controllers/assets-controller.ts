@@ -11,7 +11,7 @@ interface CachedFile {
   data: Buffer
 }
 
-export class AssetsController {
+export class AssetController {
   private cachedFiles: CachedFile[]
 
   /*public loadScene(): LoadingProgress {
