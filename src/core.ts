@@ -4,7 +4,7 @@ import '@babylonjs/core/Materials/PBR/pbrMaterial'
 
 import { Engine } from '@babylonjs/core/Engines/engine'
 
-import { AppConstructor } from './constructors/app-constructor'
+import { AppConstructor } from './constructors'
 // import { CoreGlobals } from './_OLD-models/core-globals'
 // import { CoreProperties } from './_OLD-models/core-properties'
 // import { DimensionsWH } from './_OLD-models/dimensions-wh'

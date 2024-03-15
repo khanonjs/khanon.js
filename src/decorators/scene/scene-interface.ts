@@ -1,10 +1,12 @@
 import { Scene as BabylonScene } from '@babylonjs/core/scene'
 
-import { ActorConstructor } from '../../constructors/actor-constructor'
-import { ParticleConstructor } from '../../constructors/particle-constructor'
-import { ParticleSourceConstructor } from '../../constructors/particle-source-constructor'
-import { StateConstructor } from '../../constructors/state-constructor'
-import { LoadingProgress } from '../../models/loading-progress'
+import {
+  ActorConstructor,
+  ParticleConstructor,
+  ParticleSourceConstructor,
+  StateConstructor
+} from '../../constructors'
+import { LoadingProgress } from '../../models'
 
 export declare abstract class SceneInterface {
   /**

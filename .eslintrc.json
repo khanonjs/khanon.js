@@ -37,6 +37,8 @@
         "space-before-function-paren": "off",
         "space-before-blocks": "warn",
         "no-useless-constructor": "off",
+        "array-bracket-spacing": "warn",
+        "space-in-parens": "warn",
         "eol-last": ["warn", "always"],
         "dot-notation": "off",
         "lines-between-class-members": "warn",

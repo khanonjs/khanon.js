@@ -2,10 +2,10 @@ import { throwError } from 'rxjs'
 
 import { Observable } from '@babylonjs/core'
 
-import { SceneConstructor } from './constructors/scene-constructor'
+import { SceneConstructor } from './constructors'
 import { AppProps } from './decorators/app/app-props'
 import { SceneProps } from './decorators/scene/scene-props'
-import { LoadingProgress } from './models/loading-progress'
+import { LoadingProgress } from './models'
 
 // App decorator
 export declare function App(props: AppProps): any
@@ -29,6 +29,11 @@ export declare namespace KJS {
    * @param error
    */
   function throw_(error?: any): void
+
+  /**
+   * Clears cache.
+   */
+  function clearCache(): void
 
   /**
    * Scene controller

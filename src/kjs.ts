@@ -1,14 +1,16 @@
-import { Core } from './classes/core'
-import { SceneController } from './controllers/scene-controller'
+import { SceneController } from './controllers/scenes-controller'
+import { Core } from './core'
 
 export class KJS {
-  static _throw(error?: any): void {
+  static throw_(error?: any): void {
     Core.throw(error)
   }
 
-  static get Scene(): SceneController {
-    return SceneController
+  static clearCache(): void {
+    // TODO 8a8f
   }
+
+  static get Scene(): SceneController { return SceneController }
 }
 
 export default KJS

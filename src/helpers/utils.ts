@@ -4,5 +4,5 @@ export function applyDefaults<O, D extends ExtractOptional<O>>(object: O, defaul
   return {
     ...defaults,
     ...object
-  } as O & D
+  }
 }
