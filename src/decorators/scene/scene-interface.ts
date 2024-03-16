@@ -8,7 +8,7 @@ import {
 } from '../../constructors'
 import { LoadingProgress } from '../../models'
 
-export declare abstract class SceneInterface {
+export abstract class SceneInterface {
   /**
    * Babylon.js scene instance.
    */
@@ -28,34 +28,34 @@ export declare abstract class SceneInterface {
    * Start the scene.
    * @param state Initial state.
    */
-  start(state: StateConstructor): void
+  start(state: StateConstructor): void {}
 
   /**
    * Stop the scene.
    */
-  stop(): void
+  stop(): void {}
 
   /**
    * Load the scene's assets.
    */
-  load(): void
+  load(): void {}
 
   /**
    * Unload assets.
    */
-  unload(): void
+  unload(): void {}
 
   /**
    * Set the state.
    * @param state
    */
-  setState(state: StateConstructor): void
+  setState(state: StateConstructor): void {}
 
   /**
    * Spawns an Actor, Particle, or Particle Source.
    * @param entity
    */
-  spawn(entity: ActorConstructor | ParticleConstructor | ParticleSourceConstructor): void
+  spawn(entity: ActorConstructor | ParticleConstructor | ParticleSourceConstructor): void {}
 
   /**
    * Callback invoked before the scene has been started.

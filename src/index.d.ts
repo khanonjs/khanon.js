@@ -1,8 +1,15 @@
 import { throwError } from 'rxjs'
 
 import { Observable } from '@babylonjs/core'
+import { Scene as BabylonScene } from '@babylonjs/core/scene'
 
-import { SceneConstructor } from './constructors'
+import {
+  ActorConstructor,
+  ParticleConstructor,
+  ParticleSourceConstructor,
+  SceneConstructor,
+  StateConstructor
+} from './constructors'
 import { AppProps } from './decorators/app/app-props'
 import { SceneProps } from './decorators/scene/scene-props'
 import { LoadingProgress } from './models'
@@ -51,7 +58,7 @@ export declare namespace KJS {
 export { Logger } from './modules/logger/logger'
 export { LoggerLevels } from './modules/logger/logger-levels'
 
-/*export { Scene } from './decorators/scene/scene-decorator'
+/* export { Scene } from './decorators/scene/scene-decorator'
 export { SceneInterface } from './decorators/scene/scene-interface'
 // export { SceneConfiguration } from './decorators/scene/scene-configuration'
 
@@ -62,9 +69,9 @@ declare enum ETransitionEffect {
 interface TransitionEffect {
   effect: ETransitionEffect
   factor: number
-}*/
+} */
 
-/*export declare namespace KJS {
+/* export declare namespace KJS {
   export type SceneInterface = string
 
   export function clearCache(): void
@@ -82,4 +89,4 @@ interface TransitionEffect {
     function show(gui: GUIConstructor): void
     function hide(gui: GUIConstructor): void
   }
-}*/
+} */

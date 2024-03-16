@@ -16,6 +16,7 @@ import { AppInterface } from './decorators/app/app-interface'
 import { Rect } from './models'
 import { Logger } from './modules/logger/logger'
 import { LoggerLevels } from './modules/logger/logger-levels'
+import { Timeout } from './types'
 
 // type SceneFunctionArg = (scene: Scene) => void
 
@@ -25,7 +26,7 @@ export class Core {
   // HTML Layers
   private static htmlContainer: HTMLElement
   private static htmlCanvas: HTMLCanvasElement
-  private static htmlGui: HTMLDivElement  // 8a8f
+  private static htmlGui: HTMLDivElement // 8a8f
 
   // Babylon
   private static engine: Engine
@@ -34,7 +35,7 @@ export class Core {
   private static canvasRect: Rect
 
   // Loop update
-  private static loopUpdateInterval: NodeJS.Timeout
+  private static loopUpdateInterval: Timeout
   private static loopUpdateLastMs: number
   private static loopUpdateMps: number // Number of logical steps per frame
   private static loopUpdateLag: number
@@ -76,10 +77,10 @@ export class Core {
     Logger.debug('App instance created:', Core.app.props)
 
     // Avoid canvas scale error 8a8f TODO??
-    /*setTimeout(
+    /* setTimeout(
       () => {
       }, 0
-    )*/
+    ) */
 
     this.initializeHTMLLayers()
     this.initializeBabylon()
@@ -90,7 +91,7 @@ export class Core {
     // Manage resize
     window.addEventListener('resize', () => {
       Core.updateCanvasRect()
-      Core.engine.resize()  // TODO: Test this besides 'Core.app.props.engineConfiguration.adaptToDeviceRatio = true'
+      Core.engine.resize() // TODO: Test this besides 'Core.app.props.engineConfiguration.adaptToDeviceRatio = true'
       // CoreGlobals.canvasResize$.next(canvasDimensions) // 8a8f
     })
 
@@ -122,7 +123,7 @@ export class Core {
     //  - Show error page
   }
 
-  /*static loadScene(scene: Scene, onLoaded?: (scene: Scene) => void): Scene {
+  /* static loadScene(scene: Scene, onLoaded?: (scene: Scene) => void): Scene {
     Core.engine.registerScene(scene)
     Core.loadSceneQueue.add(scene, onLoaded)
     if (Core.loadSceneQueue.getKeys().length === 1) {
@@ -135,7 +136,7 @@ export class Core {
       )
     }
     return scene
-  }*/
+  } */
 
   private static initializeHTMLLayers(): void {
     const parentId = Core.app.props.htmlCanvasContainerId
@@ -161,11 +162,11 @@ export class Core {
       // TODO 8a8f: add render scenes here
       // TODO 8a8f: add FPS updater here
 
-      /*this.renderScenes.getValues().forEach((scene) => scene.babylonjs.render())
+      /* this.renderScenes.getValues().forEach((scene) => scene.babylonjs.render())
       if (this.properties?.fpsContainer) {
         const divFps = document.getElementById(this.properties.fpsContainer)
         divFps.innerHTML = this.babylon.getFps().toFixed() + ' fps'
-      }*/
+      } */
     })
   }
 
@@ -193,7 +194,7 @@ export class Core {
     Logger.debug('Canvas size:', Math.floor(Core.canvasRect.width), Math.floor(Core.canvasRect.height))
   }
 
-  /*private static loadSceneQueueNext(sceneLoaded: Scene, onLoaded?: ( scene: Scene) => void): void {
+  /* private static loadSceneQueueNext(sceneLoaded: Scene, onLoaded?: ( scene: Scene) => void): void {
     Core.loadSceneQueue.del(sceneLoaded)
     if (onLoaded) {
       onLoaded(sceneLoaded)
@@ -202,5 +203,5 @@ export class Core {
       const nextScene = Core.loadSceneQueue.getPairs()[0]
       setTimeout(() => nextScene.key.load(() => Core.loadSceneQueueNext(nextScene.key, nextScene.value)), 1)
     }
-  }*/
+  } */
 }

@@ -40,7 +40,6 @@
     "@mxssfd/typedoc-theme": "file:mxssfd-typedoc-theme",
     "@types/chai": "^4.3.11",
     "@types/jest": "^29.5.10",
-    "@types/node": "^20.9.4",
     "@types/sinon": "^17.0.2",
     "@typescript-eslint/eslint-plugin": "^6.12.0",
     "@typescript-eslint/parser": "^6.12.0",
