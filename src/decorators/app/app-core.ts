@@ -1,6 +1,6 @@
 import { AppProps } from './app-props'
 import { AppPropsDefault } from './app.props.deafult'
 
-export class AppCore {
+export abstract class AppCore {
   props: AppProps & AppPropsDefault
 }

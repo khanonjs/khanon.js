@@ -19,10 +19,11 @@ import { SceneProps } from './scene-props'
 export function Scene(props: SceneProps): any {
   return function <T extends { new (...args: any[]): any }>(constructor: T & SceneCore & SceneInterface, context: ClassDecoratorContext) {
     const _class = class extends constructor implements SceneCore, SceneInterface {
+      props = props
       babylonEngine: BabylonEngine
       renderStart: (id: string) => void
       renderStop: (id: string) => void
-      babylon: BabylonScene
+      babylonScene: BabylonScene
       loaded: boolean
       started: boolean
 

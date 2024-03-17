@@ -9,7 +9,7 @@ import {
 import { LoadingProgress } from '../../models'
 
 export abstract class SceneInterface {
-  babylon: BabylonScene
+  babylonScene: BabylonScene
   loaded: boolean
   started: boolean
   abstract start(state: StateConstructor): void

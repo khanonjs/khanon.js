@@ -1,8 +1,7 @@
-import { ParticleConstructor } from '@khanonjs/engine/constructors/particle-constructor'
-import { ParticleSourceConstructor } from '@khanonjs/engine/constructors/particle-source-constructor'
-
 import {
   ActionConstructor,
+  ParticleConstructor,
+  ParticleSourceConstructor,
   StateConstructor
 } from '../../constructors'
 

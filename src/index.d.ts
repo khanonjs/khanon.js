@@ -1,4 +1,5 @@
 import { Observable } from '@babylonjs/core'
+import { DynamicTexture } from '@babylonjs/core/Materials/Textures/dynamicTexture'
 import { Scene as BabylonScene } from '@babylonjs/core/scene'
 
 import {
@@ -8,8 +9,11 @@ import {
   SceneConstructor,
   StateConstructor
 } from './constructors'
+import { Actor2DProps } from './decorators/actor/actor2d/actor2d-props'
+import { Actor3DProps } from './decorators/actor/actor3d/actor3d-props'
 import { AppProps } from './decorators/app/app-props'
 import { SceneProps } from './decorators/scene/scene-props'
+import { SpriteProps } from './decorators/sprite/sprite-props'
 import { LoadingProgress } from './models'
 
 // **************
@@ -22,7 +26,27 @@ export * from './constructors'
 // **************
 export declare function App(props: AppProps): any
 export { AppProps } from './decorators/app/app-props'
-export { AppInterface } from './decorators/app/app-interface'
+export declare abstract class AppInterface {
+  /**
+   * Entry point of the application.
+   * Called after the application has been properly configured and started.
+   * At this point, the first scene and/or GUI should be started.
+   */
+  abstract onStart(): void
+
+  /**
+   * Called on browser tab closed (Optional).
+   * Release any app resource.
+   * The application progress should be saved at this point.
+   */
+  onClose?(): void
+
+  /**
+   * Called on any app error.
+   * App errors are critical and the application is closed at this point.
+   */
+  onError?(error?: any): void
+}
 
 // ****************
 // Scene decorator
@@ -33,7 +57,7 @@ export declare abstract class SceneInterface {
   /**
    * Babylon.js scene instance.
    */
-  babylon: BabylonScene
+  babylonScene: BabylonScene
 
   /**
    * Indicates if the scene has been loaded.
@@ -104,9 +128,41 @@ export declare abstract class SceneInterface {
   onError?(errorMsg: string): void
 }
 
-// ********************
-// Khanonjs controller
-// ********************
+// ****************
+// Actor decorator
+// ****************
+export { ActorProps } from './decorators/actor/actor-props'
+export declare abstract class ActorInterface {
+
+}
+
+export declare function Actor2D(props: Actor2DProps): any
+export { Actor2DProps } from './decorators/actor/actor2d/actor2d-props'
+export declare abstract class Actor2DInterface {
+
+}
+
+export declare function Actor3D(props: Actor3DProps): any
+export { Actor3DProps } from './decorators/actor/actor3d/actor3d-props'
+export declare abstract class Actor3DInterface {
+
+}
+
+// ****************
+// Sprite decorator
+// ****************
+export declare function Sprite(props: SpriteProps): any
+export { SpriteProps } from './decorators/sprite/sprite-props'
+export declare abstract class SpriteInterface {
+  /**
+   * Used to assign a Babylon DynamicTexture to the Sprite.
+   */
+  fromDynamicTexture?(texture?: DynamicTexture): DynamicTexture
+}
+
+// *********
+// Khanonjs
+// *********
 export declare namespace KJS {
   /**
    * Throws critical error and stops the application.
