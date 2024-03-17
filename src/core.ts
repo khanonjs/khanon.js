@@ -73,7 +73,7 @@ export class Core {
 
     Core.app = app
     Logger.info('Environment mode:', process.env.NODE_ENV)
-    Logger.level = (Core.app.props.debugLog || process.env.NODE_ENV === 'development') ? LoggerLevels.DEBUG : LoggerLevels.INFO
+    Logger.level = (Core.app.props.debugLog || process.env.NODE_ENV === 'development') ? LoggerLevels.TRACE : LoggerLevels.INFO
     Logger.debug('App instance created:', Core.app.props)
 
     // Avoid canvas scale error 8a8f TODO??

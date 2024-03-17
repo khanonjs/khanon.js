@@ -1,3 +1,13 @@
+import { Engine as BabylonEngine } from '@babylonjs/core/Engines/engine'
+import { Scene as BabylonScene } from '@babylonjs/core/scene'
+
+import {
+  ActorConstructor,
+  ParticleConstructor,
+  ParticleSourceConstructor,
+  StateConstructor
+} from '../../constructors'
+import { SceneController } from '../../controllers/scenes-controller'
 import { SceneCore } from './scene-core'
 import { SceneInterface } from './scene-interface'
 import { SceneProps } from './scene-props'
@@ -8,22 +18,44 @@ import { SceneProps } from './scene-props'
 
 export function Scene(props: SceneProps): any {
   return function <T extends { new (...args: any[]): any }>(constructor: T & SceneCore & SceneInterface, context: ClassDecoratorContext) {
-    const _class = class extends constructor {
-      /* props = props // 8a8f can I remove the equality?
+    const _class = class extends constructor implements SceneCore, SceneInterface {
+      babylonEngine: BabylonEngine
+      renderStart: (id: string) => void
+      renderStop: (id: string) => void
+      babylon: BabylonScene
+      loaded: boolean
+      started: boolean
 
-      start(): void {}
-      stop(): void {}
-      load(): void {}
-      unload(): void {}
+      // Core methods, only to be used within KhanonJs
+      setEngineParams(): void {
+      }
 
-      /*setState(state: StateConstructor): void {
+      start(state: StateConstructor): void {
+
+      }
+
+      stop(): void {
+
+      }
+
+      load(): void {
+        console.log('aki DECORATOR LOAD')
+      }
+
+      unload(): void {
+
+      }
+
+      setState(state: StateConstructor): void {
 
       }
 
       spawn(entity: ActorConstructor | ParticleConstructor | ParticleSourceConstructor): void {
 
-      } */
+      }
     }
+    const instance = new _class()
+    SceneController.registerScene(instance)
     return _class
   }
 }
