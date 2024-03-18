@@ -5,12 +5,12 @@ export interface SpriteProps {
   url?: string
 
   /**
-   * Cells width. In case the image is a single cell it represents the image width. (required if the sprite is loaded through url)
+   * Cells width. In case the image contains single cell it represents the image width. (required if the sprite is loaded through 'url')
    */
   cellWidth?: number
 
   /**
-   * Cells height. In case the image is a single cell it represents the image height. (required if the sprite is loaded through url)
+   * Cells height. In case the image contains single cell it represents the image height. (required if the sprite is loaded through 'url')
    */
   celHeight?: number
 

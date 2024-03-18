@@ -156,7 +156,8 @@ export declare function Sprite(props: SpriteProps): any
 export { SpriteProps } from './decorators/sprite/sprite-props'
 export declare abstract class SpriteInterface {
   /**
-   * Used to assign a Babylon DynamicTexture to the Sprite.
+   * Used to assign a DynamicTexture to the Sprite.
+   * This method is called in case Sprite property 'toDynamicTexture' is true.
    */
   fromDynamicTexture?(texture?: DynamicTexture): DynamicTexture
 }
@@ -189,12 +190,6 @@ export declare namespace KJS {
   }
 
   export namespace Sprite {
-    /**
-     * Converts the image file to a dynamic texture and calls fromDynamicTexture. (false by default)
-     * If true, this option creates a DynamicTexture from the image file and calls 'fomDynamicTexture' method with the image file argument as a DynamicTexture.
-     * In that way the image can be modified manually.
-     */
-    function toDynamicTexture(sprite: SpriteConstructor): void
   }
 }
 
