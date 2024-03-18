@@ -1,3 +1,3 @@
 import { TileMapInterface } from '../decorators/tilemap/tilemap-interface'
 
-export declare type TileMapConstructor = new () => TileMapInterface
+export type TileMapConstructor = new () => TileMapInterface

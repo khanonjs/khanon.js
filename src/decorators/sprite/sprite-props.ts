@@ -1,16 +1,16 @@
 export interface SpriteProps {
   /**
-   * Load the image file from a url
+   * Load the image file from a url.
    */
   url?: string
 
   /**
-   * Cells width, in case it is a single image, it represents the image width (required if the sprite is loaded through url)
+   * Cells width. In case the image is a single cell it represents the image width. (required if the sprite is loaded through url)
    */
   cellWidth?: number
 
   /**
-   * Cells height, in case it is a single image, it represents the image height (required if the sprite is loaded through url)
+   * Cells height. In case the image is a single cell it represents the image height. (required if the sprite is loaded through url)
    */
   celHeight?: number
 
@@ -18,6 +18,7 @@ export interface SpriteProps {
    * Converts the image file to a dynamic texture and calls fromDynamicTexture. (false by default)
    * If true, this option creates a DynamicTexture from the image file and calls 'fomDynamicTexture' method with the image file argument as a DynamicTexture.
    * In that way the image can be modified manually.
+   * In case the 'url' hasn't been defined, a blank texture will be sent as argument.
    */
   toDynamicTexture?: boolean
 

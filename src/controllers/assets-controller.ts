@@ -11,14 +11,14 @@ interface CachedFile {
   data: Buffer
 }
 
-export class AssetController {
+export class AssetsController {
   private cachedFiles: CachedFile[]
 
-  /*public loadScene(): LoadingProgress {
+  /* public loadScene(): LoadingProgress {
     return null
   }
 
   public loadGUI(): LoadingProgress {
     return null
-  }*/
+  } */
 }

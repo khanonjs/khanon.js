@@ -3,11 +3,11 @@ import { ActorConstructor } from '../constructors'
 export class ActorsController {
   static actors: ActorConstructor[] = []
 
-  static registerActor(actor: ActorConstructor) {
+  static register(actor: ActorConstructor) {
     ActorsController.actors.push(actor)
   }
 
-  static getActor(constructor: ActorConstructor): ActorConstructor {
+  static get(constructor: ActorConstructor): ActorConstructor {
     return ActorsController.actors.find(actor => actor instanceof (constructor as ActorConstructor))
   }
 }

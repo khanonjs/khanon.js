@@ -1,4 +1,4 @@
-import { SceneController } from './controllers/scenes-controller'
+import { ScenesController } from './controllers/scenes-controller'
 import { Core } from './core'
 
 export class KJS {
@@ -10,7 +10,7 @@ export class KJS {
     // TODO 8a8f
   }
 
-  static get Scene(): SceneController { return SceneController }
+  static get Scene(): ScenesController { return ScenesController }
 }
 
 export default KJS

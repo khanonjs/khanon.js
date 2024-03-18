@@ -7,7 +7,7 @@ export function Actor2D(props: Actor2DProps): any {
     const _class = class extends constructor implements Actor2DCore {
       props = props
     }
-    ActorsController.registerActor(_class)
+    ActorsController.register(_class)
     return _class
   }
 }

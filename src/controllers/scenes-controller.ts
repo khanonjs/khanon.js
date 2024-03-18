@@ -1,31 +1,21 @@
-import { SceneConstructor } from '../constructors'
+import { BaseController } from '../base/base-controller'
 import { SceneType } from '../decorators/scene/scene-type'
 import { Logger } from '../modules/logger/logger'
 
-export class SceneController {
-  static scenes: SceneType[] = []
-
-  static registerScene(scene: SceneType) {
-    SceneController.scenes.push(scene)
-  }
-
-  static load(constructors: SceneConstructor | SceneConstructor[]) {
+export class ScenesController extends BaseController<SceneType>() {
+  static load(constructors: SceneType | SceneType[]) {
     if (Array.isArray(constructors)) {
-      constructors.forEach(constructor => SceneController.getScene(constructor).load())
+      constructors.forEach(constructor => ScenesController.get(constructor).load())
     } else {
-      SceneController.getScene(constructors).load()
+      ScenesController.get(constructors).load()
     }
   }
 
-  static unload(constructors: SceneConstructor | SceneConstructor[]) {
+  static unload(constructors: SceneType | SceneType[]) {
     if (Array.isArray(constructors)) {
-      constructors.forEach(constructor => SceneController.getScene(constructor).unload())
+      constructors.forEach(constructor => ScenesController.get(constructor).unload())
     } else {
-      SceneController.getScene(constructors).unload()
+      ScenesController.get(constructors).unload()
     }
-  }
-
-  static getScene(constructor: SceneConstructor): SceneType {
-    return SceneController.scenes.find(scene => scene instanceof (constructor as SceneConstructor))
   }
 }

@@ -9,6 +9,7 @@ import {
   SceneConstructor,
   StateConstructor
 } from './constructors'
+import { SpriteConstructor } from './constructors/sprite-constructor'
 import { Actor2DProps } from './decorators/actor/actor2d/actor2d-props'
 import { Actor3DProps } from './decorators/actor/actor3d/actor3d-props'
 import { AppProps } from './decorators/app/app-props'
@@ -181,9 +182,19 @@ export declare namespace KJS {
   export namespace Scene {
     function load(scene: SceneConstructor): LoadingProgress
     function load(scene: SceneConstructor[]): LoadingProgress
-    function unload(): void
+    function unload(scene: SceneConstructor): void
+    function unload(scene: SceneConstructor[]): void
     function start(): void
     function stop(): void
+  }
+
+  export namespace Sprite {
+    /**
+     * Converts the image file to a dynamic texture and calls fromDynamicTexture. (false by default)
+     * If true, this option creates a DynamicTexture from the image file and calls 'fomDynamicTexture' method with the image file argument as a DynamicTexture.
+     * In that way the image can be modified manually.
+     */
+    function toDynamicTexture(sprite: SpriteConstructor): void
   }
 }
 

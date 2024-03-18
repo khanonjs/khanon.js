@@ -7,7 +7,7 @@ import {
   ParticleSourceConstructor,
   StateConstructor
 } from '../../constructors'
-import { SceneController } from '../../controllers/scenes-controller'
+import { ScenesController } from '../../controllers/scenes-controller'
 import { SceneCore } from './scene-core'
 import { SceneInterface } from './scene-interface'
 import { SceneProps } from './scene-props'
@@ -56,7 +56,7 @@ export function Scene(props: SceneProps): any {
       }
     }
     const instance = new _class()
-    SceneController.registerScene(instance)
+    ScenesController.register(instance)
     return _class
   }
 }

@@ -7,7 +7,7 @@ export function Actor3D(props: Actor3DProps): any {
     const _class = class extends constructor implements Actor3DCore {
       props = props
     }
-    ActorsController.registerActor(_class)
+    ActorsController.register(_class)
     return _class
   }
 }

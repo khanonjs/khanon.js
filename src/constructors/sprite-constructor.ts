@@ -1,3 +1,3 @@
 import { SpriteInterface } from '../decorators/sprite/sprite-interface'
 
-export declare type SpriteConstructor = new () => SpriteInterface
+export type SpriteConstructor = new () => SpriteInterface
