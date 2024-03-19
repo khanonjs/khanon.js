@@ -7,7 +7,10 @@ import {
   ParticleSourceConstructor,
   StateConstructor
 } from '../../constructors'
+import { ActorsController } from '../../controllers/actors-controller'
 import { ScenesController } from '../../controllers/scenes-controller'
+import { BabylonContainer } from '../../models/babylon-container'
+import { ActorType } from '../actor/actor-type'
 import { SceneCore } from './scene-core'
 import { SceneInterface } from './scene-interface'
 import { SceneProps } from './scene-props'
@@ -19,17 +22,17 @@ import { SceneProps } from './scene-props'
 export function Scene(props: SceneProps): any {
   return function <T extends { new (...args: any[]): any }>(constructor: T & SceneCore & SceneInterface, context: ClassDecoratorContext) {
     const _class = class extends constructor implements SceneCore, SceneInterface {
+      // Core
       props = props
-      babylonEngine: BabylonEngine
-      renderStart: (id: string) => void
-      renderStop: (id: string) => void
-      babylonScene: BabylonScene
+
+      setEngineParams(): void {}
+      renderStart(id: string): void {}
+      renderStop(id: string): void {}
+
+      // Interface
+      babylon: Pick<BabylonContainer, 'engine' | 'scene'>
       loaded: boolean
       started: boolean
-
-      // Core methods, only to be used within KhanonJs
-      setEngineParams(): void {
-      }
 
       start(state: StateConstructor): void {
 
@@ -40,7 +43,11 @@ export function Scene(props: SceneProps): any {
       }
 
       load(): void {
-        console.log('aki DECORATOR LOAD')
+        console.log('aki DECORATOR LOAD A', this.props)
+        // console.log('aki DECORATOR LOAD B', this.props.actors[0].props)
+        const actor = ActorsController.get(this.props.actors[0])
+        console.log('aki scene load actor A', actor.props)
+        console.log('aki scene load actor B', new actor.Interface())
       }
 
       unload(): void {
@@ -55,8 +62,7 @@ export function Scene(props: SceneProps): any {
 
       }
     }
-    const instance = new _class()
-    ScenesController.register(instance)
+    ScenesController.register(new _class())
     return _class
   }
 }

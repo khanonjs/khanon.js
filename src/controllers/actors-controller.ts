@@ -1,13 +1,5 @@
-import { ActorConstructor } from '../constructors'
+import { BaseController } from '../base/base-controller'
+import { ActorType } from '../decorators/actor/actor-type'
 
-export class ActorsController {
-  static actors: ActorConstructor[] = []
-
-  static register(actor: ActorConstructor) {
-    ActorsController.actors.push(actor)
-  }
-
-  static get(constructor: ActorConstructor): ActorConstructor {
-    return ActorsController.actors.find(actor => actor instanceof (constructor as ActorConstructor))
-  }
+export class ActorsController extends BaseController<ActorType>() {
 }

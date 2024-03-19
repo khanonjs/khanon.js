@@ -6,7 +6,7 @@ import {
 } from '../../constructors'
 
 export interface ActorProps {
-  states: StateConstructor[]
-  actions: ActionConstructor[]
-  particles: (ParticleConstructor | ParticleSourceConstructor)[]
+  states?: StateConstructor[]
+  actions?: ActionConstructor[]
+  particles?: (ParticleConstructor | ParticleSourceConstructor)[]
 }

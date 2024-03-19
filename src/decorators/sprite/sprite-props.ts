@@ -1,6 +1,7 @@
 export interface SpriteProps {
   /**
    * Load the image file from a url.
+   * In case url is not defined, a blank image will be used.
    */
   url?: string
 
@@ -18,7 +19,7 @@ export interface SpriteProps {
    * Converts the image file to a dynamic texture and calls fromDynamicTexture. (false by default)
    * If true, this option creates a DynamicTexture from the image file and calls 'fomDynamicTexture' method with the image file argument as a DynamicTexture.
    * In that way the image can be modified manually.
-   * In case the 'url' hasn't been defined, a blank texture will be sent as argument.
+   * In case the url hasn't been defined, a blank texture will be sent as argument.
    */
   toDynamicTexture?: boolean
 

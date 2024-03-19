@@ -15,7 +15,9 @@ import { Actor3DProps } from './decorators/actor/actor3d/actor3d-props'
 import { AppProps } from './decorators/app/app-props'
 import { SceneProps } from './decorators/scene/scene-props'
 import { SpriteProps } from './decorators/sprite/sprite-props'
+import { SpriteTexture } from './decorators/sprite/sprite-texture'
 import { LoadingProgress } from './models'
+import { BabylonContainer } from './models/babylon-container'
 
 // **************
 //  Constructors
@@ -56,9 +58,9 @@ export declare function Scene(props: SceneProps): any
 export { SceneProps } from './decorators/scene/scene-props'
 export declare abstract class SceneInterface {
   /**
-   * Babylon.js scene instance.
+   * Babylon container
    */
-  babylonScene: BabylonScene
+  babylon: Pick<BabylonContainer, 'engine' | 'scene'>
 
   /**
    * Indicates if the scene has been loaded.
@@ -132,20 +134,19 @@ export declare abstract class SceneInterface {
 // ****************
 // Actor decorator
 // ****************
-export { ActorProps } from './decorators/actor/actor-props'
 export declare abstract class ActorInterface {
 
 }
 
 export declare function Actor2D(props: Actor2DProps): any
 export { Actor2DProps } from './decorators/actor/actor2d/actor2d-props'
-export declare abstract class Actor2DInterface {
+export declare abstract class Actor2DInterface extends ActorInterface {
 
 }
 
 export declare function Actor3D(props: Actor3DProps): any
 export { Actor3DProps } from './decorators/actor/actor3d/actor3d-props'
-export declare abstract class Actor3DInterface {
+export declare abstract class Actor3DInterface extends ActorInterface {
 
 }
 
@@ -155,6 +156,11 @@ export declare abstract class Actor3DInterface {
 export declare function Sprite(props: SpriteProps): any
 export { SpriteProps } from './decorators/sprite/sprite-props'
 export declare abstract class SpriteInterface {
+  /**
+   * Babylon container
+   */
+  babylon: Pick<BabylonContainer, 'sprite' | 'spriteManager'>
+
   /**
    * Used to assign a DynamicTexture to the Sprite.
    * This method is called in case Sprite property 'toDynamicTexture' is true.

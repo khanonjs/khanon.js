@@ -1,7 +1,8 @@
+import { Actor2DConstructor } from '../../../constructors'
 import { ActorCore } from '../actor-core'
-import { ActorProps } from '../actor-props'
 import { Actor2DProps } from './actor2d-props'
 
-export class Actor2DCore extends ActorCore {
-  props: Actor2DProps & ActorProps
+export abstract class Actor2DCore extends ActorCore {
+  props: Actor2DProps
+  Interface: Actor2DConstructor
 }

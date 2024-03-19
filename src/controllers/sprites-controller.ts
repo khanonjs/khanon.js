@@ -6,5 +6,4 @@ import {
 import { Logger } from '../modules/logger/logger'
 
 export class SpritesController extends BaseController<SpriteConstructor>() {
-
 }

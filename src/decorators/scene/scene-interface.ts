@@ -1,5 +1,3 @@
-import { Scene as BabylonScene } from '@babylonjs/core/scene'
-
 import {
   ActorConstructor,
   ParticleConstructor,
@@ -7,9 +5,10 @@ import {
   StateConstructor
 } from '../../constructors'
 import { LoadingProgress } from '../../models'
+import { BabylonContainer } from '../../models/babylon-container'
 
 export abstract class SceneInterface {
-  babylonScene: BabylonScene
+  babylon: Pick<BabylonContainer, 'engine' | 'scene'>
   loaded: boolean
   started: boolean
   abstract start(state: StateConstructor): void

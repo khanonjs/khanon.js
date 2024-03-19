@@ -1,13 +1,16 @@
+import { Logger } from '../modules/logger/logger'
+
 export function BaseController<T>() {
   abstract class BaseController {
     protected static items: T[] = []
 
-    static register(sprite: T) {
-      this.items.push(sprite)
+    static register(item: T) {
+      Logger.trace('Controller register:', item)
+      this.items.push(item)
     }
 
-    static get(constructor: T): T {
-      return this.items.find(sprite => sprite instanceof (constructor as any))
+    static get(constructor: any): T {
+      return this.items.find(item => item instanceof constructor)
     }
   }
   return BaseController
