@@ -1,11 +1,11 @@
-import { BaseController } from '../base/base-controller'
+import { Controller } from '../base'
 import { SceneType } from '../decorators/scene/scene-type'
 import { Logger } from '../modules/logger/logger'
 
-export class ScenesController extends BaseController<SceneType>() {
+export class ScenesController extends Controller<SceneType>() {
   static load(constructors: SceneType | SceneType[]) {
     if (Array.isArray(constructors)) {
-      constructors.forEach(constructor => ScenesController.get(constructor).load())
+      ScenesController.get(constructors).forEach(actor => actor.load())
     } else {
       ScenesController.get(constructors).load()
     }
@@ -13,7 +13,7 @@ export class ScenesController extends BaseController<SceneType>() {
 
   static unload(constructors: SceneType | SceneType[]) {
     if (Array.isArray(constructors)) {
-      constructors.forEach(constructor => ScenesController.get(constructor).unload())
+      ScenesController.get(constructors).forEach(actor => actor.unload())
     } else {
       ScenesController.get(constructors).unload()
     }

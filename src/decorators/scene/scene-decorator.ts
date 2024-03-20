@@ -43,11 +43,7 @@ export function Scene(props: SceneProps): any {
       }
 
       load(): void {
-        console.log('aki DECORATOR LOAD A', this.props)
-        // console.log('aki DECORATOR LOAD B', this.props.actors[0].props)
-        const actor = ActorsController.get(this.props.actors[0])
-        console.log('aki scene load actor A', actor.props)
-        console.log('aki scene load actor B', new actor.Interface())
+        ActorsController.load(this.props.actors)
       }
 
       unload(): void {

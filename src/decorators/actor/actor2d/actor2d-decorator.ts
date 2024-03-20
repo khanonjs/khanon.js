@@ -13,6 +13,7 @@ export function Actor2D(props: Actor2DProps): any {
       Interface: Actor2DConstructor = Actor2DInterface
 
       load(): LoadingProgress {
+        console.log('aki ACTOR 2D LOAD')
         return {} as any
       }
 
