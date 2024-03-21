@@ -6,12 +6,22 @@ export interface SpriteProps {
   url?: string
 
   /**
-   * Cells width. In case the image contains single cell it represents the image width. (required if the sprite is loaded through 'url')
+   * Width of the sprite. It is required in case of using a blank texture. Not required if the url is defined.
+   */
+  width?: number
+
+  /**
+   * Height of the sprite. It is required in case of using a blank texture. Not required if the url is defined.
+   */
+  height?: number
+
+  /**
+   * Cells width. In case the image contains a single cell it represents the image width.
    */
   cellWidth?: number
 
   /**
-   * Cells height. In case the image contains single cell it represents the image height. (required if the sprite is loaded through 'url')
+   * Cells height. In case the image contains a single cell it represents the image height.
    */
   celHeight?: number
 

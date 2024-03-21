@@ -86,7 +86,7 @@ export declare abstract class SceneInterface {
   /**
    * Load the scene's assets.
    */
-  load(): void
+  load(): LoadingProgress
 
   /**
    * Unload assets.
@@ -159,7 +159,7 @@ export declare abstract class SpriteInterface {
   /**
    * Babylon container
    */
-  babylon: Pick<BabylonContainer, 'sprite' | 'spriteManager'>
+  babylon: Pick<BabylonContainer, 'sprite'>
 
   /**
    * Used to assign a DynamicTexture to the Sprite.

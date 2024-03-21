@@ -1,9 +1,6 @@
-import { Controller } from '../base'
-import {
-  SceneConstructor,
-  SpriteConstructor
-} from '../constructors'
-import { Logger } from '../modules/logger/logger'
+import { ControllerLoadable } from '../base'
+import { SpriteConstructor } from '../constructors'
+import { SpriteType } from '../decorators/sprite/sprite-type'
 
-export class SpritesController extends Controller<SpriteConstructor>() {
+export class SpritesController extends ControllerLoadable<SpriteConstructor, SpriteType>() {
 }

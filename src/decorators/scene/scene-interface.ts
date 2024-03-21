@@ -1,3 +1,4 @@
+import { Loadable } from '../../base'
 import {
   ActorConstructor,
   ParticleConstructor,
@@ -7,13 +8,13 @@ import {
 import { LoadingProgress } from '../../models'
 import { BabylonContainer } from '../../models/babylon-container'
 
-export abstract class SceneInterface {
+export abstract class SceneInterface implements Loadable {
   babylon: Pick<BabylonContainer, 'engine' | 'scene'>
   loaded: boolean
   started: boolean
   abstract start(state: StateConstructor): void
   abstract stop(): void
-  abstract load(): void
+  abstract load(): LoadingProgress
   abstract unload(): void
   abstract setState(state: StateConstructor): void
   abstract spawn(entity: ActorConstructor | ParticleConstructor | ParticleSourceConstructor): void

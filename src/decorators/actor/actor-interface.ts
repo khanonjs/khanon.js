@@ -1,3 +1,2 @@
-export abstract class ActorInterface {
-
+export class ActorInterface {
 }

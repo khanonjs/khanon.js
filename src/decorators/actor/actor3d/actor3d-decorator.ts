@@ -8,19 +8,24 @@ import { Actor3DProps } from './actor3d-props'
 export function Actor3D(props: Actor3DProps): any {
   return function <T extends { new (...args: any[]): any }>(constructor: T & Actor3DCore, context: ClassDecoratorContext) {
     const _class = class extends constructor implements Actor3DCore {
-      // Core
       props = props
-      Interface: Actor3DConstructor = Actor3DInterface
+      Instance: Actor3DConstructor = Actor3DInterface
+      loaded = false
 
       load(): LoadingProgress {
+        // 8a8f Load  the rest of props
         return {} as any
       }
 
       unload(): void {
 
       }
+
+      spawn(): void {
+
+      }
     }
-    ActorsController.register(_class)
+    ActorsController.register(new _class())
     return _class
   }
 }

@@ -7,7 +7,6 @@ import { appPropsDefault } from './app.props.deafult'
 export function App(props: AppProps): any {
   return function <T extends { new (...args: any[]): any }>(constructor: T & AppCore, context: ClassDecoratorContext) {
     const _class = class extends constructor implements AppCore {
-      // Core
       props = applyDefaults(props, appPropsDefault)
     }
     Core.initialize(new _class())

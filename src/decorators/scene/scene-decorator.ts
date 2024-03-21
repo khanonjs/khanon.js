@@ -9,8 +9,8 @@ import {
 } from '../../constructors'
 import { ActorsController } from '../../controllers/actors-controller'
 import { ScenesController } from '../../controllers/scenes-controller'
+import { LoadingProgress } from '../../models'
 import { BabylonContainer } from '../../models/babylon-container'
-import { ActorType } from '../actor/actor-type'
 import { SceneCore } from './scene-core'
 import { SceneInterface } from './scene-interface'
 import { SceneProps } from './scene-props'
@@ -42,8 +42,9 @@ export function Scene(props: SceneProps): any {
 
       }
 
-      load(): void {
-        ActorsController.load(this.props.actors)
+      load(): LoadingProgress {
+        ActorsController.load(this.props.actors, this)
+        return {} as LoadingProgress // 8a8f
       }
 
       unload(): void {

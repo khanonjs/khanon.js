@@ -1,4 +1,4 @@
-import { Logger } from '../modules/logger/logger'
+import { Logger } from '../../modules/logger/logger'
 
 export function Controller<T>() {
   abstract class BaseController {

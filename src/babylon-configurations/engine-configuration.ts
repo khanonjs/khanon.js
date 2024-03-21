@@ -16,4 +16,3 @@ export type EngineConfiguration = {
    */
   adaptToDeviceRatio?: boolean
 }
-
