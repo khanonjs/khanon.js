@@ -16,8 +16,10 @@ import { AppProps } from './decorators/app/app-props'
 import { SceneProps } from './decorators/scene/scene-props'
 import { SpriteProps } from './decorators/sprite/sprite-props'
 import { SpriteTexture } from './decorators/sprite/sprite-texture'
-import { LoadingProgress } from './models'
-import { BabylonContainer } from './models/babylon-container'
+import {
+  BabylonContainer,
+  LoadingProgress
+} from './models'
 
 // **************
 //  Constructors

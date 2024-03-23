@@ -60,7 +60,6 @@
     "npm-check-updates": "^16.14.11",
     "recursive-copy": "^2.0.14",
     "rimraf": "^5.0.5",
-    "rxjs": "^7.8.1",
     "semver": "^7.5.4",
     "sinon": "^17.0.1",
     "string-replace-loader": "^3.1.0",

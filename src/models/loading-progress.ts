@@ -17,6 +17,24 @@ export class LoadingProgress {
   onCompleted: Observable<void> = new Observable<void>()
 
   /**
+   * Observable triggered on loading error
+   */
+  onError: Observable<string> = new Observable<string>()
+
+  /**
+   * Observable triggered on loading progress (from 0 to 1)
+   */
+  onProgress: Observable<number> = new Observable<number>()
+
+  /**
+   * Sets current progress
+   */
+  setProgress(progres: number) {
+    this.progress = progres
+    this.onProgress.notifyObservers(this.progress)
+  }
+
+  /**
    * Set the loading progress to completed
    */
   complete() {

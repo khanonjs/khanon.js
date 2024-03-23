@@ -9,8 +9,10 @@ import {
 } from '../../constructors'
 import { ActorsController } from '../../controllers/actors-controller'
 import { ScenesController } from '../../controllers/scenes-controller'
-import { LoadingProgress } from '../../models'
-import { BabylonContainer } from '../../models/babylon-container'
+import {
+  BabylonContainer,
+  LoadingProgress
+} from '../../models'
 import { SceneCore } from './scene-core'
 import { SceneInterface } from './scene-interface'
 import { SceneProps } from './scene-props'

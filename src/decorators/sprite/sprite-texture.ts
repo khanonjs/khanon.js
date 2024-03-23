@@ -1,7 +1,7 @@
 import { DynamicTexture } from '@babylonjs/core'
 import { SpriteManager } from '@babylonjs/core/Sprites/spriteManager'
 
-import { BabylonContainer } from '../../models/babylon-container'
+import { BabylonContainer } from '../../models'
 import { SceneType } from '../scene/scene-type'
 
 export class SpriteTexture {
