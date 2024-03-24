@@ -22,7 +22,7 @@ export function Sprite(props: SpriteProps): any {
           progress.complete()
         } else {
           if (this.props.url) {
-            AssetsController.getUrl(this.props.url, this.props.cached)
+            AssetsController.getFileFromUrl(this.props.url, this.props.cached)
           } else {
             this.texture = new SpriteTexture(scene)
             this.texture.setFromBlank(this.props.width, this.props.height)
