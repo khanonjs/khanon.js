@@ -1,7 +1,10 @@
 import { SpriteConstructor } from '../../constructors'
 import { AssetsController } from '../../controllers/assets-controller'
 import { SpritesController } from '../../controllers/sprites-controller'
-import { LoadingProgress } from '../../models'
+import {
+  AssetType,
+  LoadingProgress
+} from '../../models'
 import { SceneType } from '../scene/scene-type'
 import { SpriteCore } from './sprite-core'
 import { SpriteInterface } from './sprite-interface'
@@ -17,19 +20,21 @@ export function Sprite(props: SpriteProps): any {
       Instance: SpriteConstructor = SpriteInterface
 
       load(scene: SceneType): LoadingProgress {
-        const progress = new LoadingProgress()
         if (this.loaded) {
-          progress.complete()
+          return new LoadingProgress().complete()
         } else {
           if (this.props.url) {
-            AssetsController.getFileFromUrl(this.props.url, this.props.cached)
+            const progress = AssetsController.getFileFromUrl(this.props.url, this.props.cached, AssetType.IMAGE)
+            progress.onComplete.add(() => {
+              // 8a8f
+            })
+            return progress
           } else {
             this.texture = new SpriteTexture(scene)
             this.texture.setFromBlank(this.props.width, this.props.height)
-            progress.complete()
+            return new LoadingProgress().complete()
           }
         }
-        return progress
       }
 
       unload(): void {

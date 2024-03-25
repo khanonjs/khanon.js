@@ -13,19 +13,20 @@ export class AssetsController {
     [AssetType.AUDIO]: ['audio/aac', 'audio/midi', 'audio/x-midi', 'audio/mpeg', 'audio/ogg', 'audio/opus', 'audio/wav', 'audio/webm'] // 8a8f
   }
 
-  private static cachedFiles: Map<string, Buffer> = new Map<string, Buffer>()
+  private static cachedFiles: Map<string, ArrayBuffer> = new Map<string, ArrayBuffer>()
 
-  static getFileFromUrl(url: string, cached?: boolean, enforceType?: AssetType): LoadingProgress<Buffer> {
-    Logger.debug(`getFileFromUrl: '${url}', cached: ${!!cached}`)
-    const progress = new LoadingProgress<Buffer>()
-    let data: Buffer = AssetsController.cachedFiles.get(url)
+  static getFileFromUrl(url: string, cached?: boolean, enforceType?: AssetType): LoadingProgress<ArrayBuffer> {
+    const progress = new LoadingProgress<ArrayBuffer>()
+    let data: ArrayBuffer = AssetsController.cachedFiles.get(url)
     if (data) {
+      Logger.debug(`getFileFromUrl: '${url}' loaded from cache.`)
       progress.complete(data)
       return progress
     } else {
       let reader: ReadableStreamDefaultReader
       const throwError = (errorMsg: string) => {
         Logger.error(errorMsg)
+        progress.error(errorMsg)
         reader?.cancel()
         progress.onError.notifyObservers(errorMsg)
       }
@@ -35,7 +36,7 @@ export class AssetsController {
           const contentType = response.headers.get('Content-Type')
           const contentLength = +response.headers.get('Content-Length')
           const parts = []
-          let currentLength = 0
+          let receivedLength = 0
 
           if (enforceType && !AssetsController.contentTypes[enforceType].find(type => type === contentType)) {
             throwError(`getFileFromUrl error: content type '${contentType}' doesn't satisfy the enforced type '${[enforceType]}'`)
@@ -46,15 +47,22 @@ export class AssetsController {
             reader.read()
               .then((result) => {
                 if (result.done) {
-                  data = Buffer.concat(parts)
+                  const allParts = new Uint8Array(receivedLength)
+                  let position = 0
+                  for (const part of parts) {
+                    allParts.set(part, position)
+                    position += part.length
+                  }
+                  data = allParts.buffer.slice(allParts.byteOffset, allParts.byteLength + allParts.byteOffset)
                   if (cached) {
                     AssetsController.cachedFiles.set(url, data)
                   }
+                  Logger.debug(`getFileFromUrl: '${url}' loaded from url, cached: ${!!cached}`)
                   progress.complete(data)
                 } else if (result.value.length) {
                   parts.push(result.value)
-                  currentLength += result.value.length
-                  progress.setProgress(currentLength / contentLength)
+                  receivedLength += result.value.length
+                  progress.setProgress(receivedLength / contentLength)
                   next()
                 } else {
                   throwError(`getFileFromUrl error: undefined value reading url '${url}'`)

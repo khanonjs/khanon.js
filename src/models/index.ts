@@ -1,5 +1,4 @@
 export { AssetType } from './asset-type'
 export { BabylonContainer } from './babylon-container'
-export { CachedUrlFile } from './cached-url-file'
 export { LoadingProgress } from './loading-progress'
 export { Rect } from './rect'

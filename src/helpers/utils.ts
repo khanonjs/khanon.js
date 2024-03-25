@@ -16,7 +16,6 @@ export function applyDefaults<O, D extends ExtractOptional<O>>(object: O, defaul
  * This method prevents circular references.
  */
 export function objectToString(data: unknown, stringfy = true): string {
-  console.log('aki data A', data)
   function getCircularReplacer() {
     const ancestors = []
     return function (key, value) {
@@ -36,7 +35,6 @@ export function objectToString(data: unknown, stringfy = true): string {
       return value
     }
   }
-  console.log('aki data B', data)
   return data
     ? (data instanceof Error
       ? data.message

@@ -1,6 +1,6 @@
 import { Observable } from '@babylonjs/core'
 
-export class LoadingProgress<D = undefined> {
+export class LoadingProgress<D = any> {
   /**
    * Progress factor (from 0 to 1)
    */
@@ -14,17 +14,24 @@ export class LoadingProgress<D = undefined> {
   /**
    * Observable triggered on loading completed
    */
-  onCompleted: Observable<D> = new Observable<D>()
+  onComplete: Observable<D | boolean> = new Observable<D | boolean>(undefined, true)
 
   /**
    * Observable triggered on loading error
    */
-  onError: Observable<string> = new Observable<string>()
+  onError: Observable<string> = new Observable<string>(undefined, true)
 
   /**
    * Observable triggered on loading progress (from 0 to 1)
    */
-  onProgress: Observable<number> = new Observable<number>()
+  onProgress: Observable<number> = new Observable<number>(undefined, true)
+
+  /**
+   * Notify error loading
+   */
+  error(error: any) {
+    this.onError.notifyObservers(error)
+  }
 
   /**
    * Sets current progress
@@ -37,9 +44,14 @@ export class LoadingProgress<D = undefined> {
   /**
    * Set the loading progress to completed
    */
-  complete(data?: any) {
+  complete(data?: D | boolean): LoadingProgress<D> {
+    // Guarantees Observable.notifyIfTriggered will emit on add even if data is 'undefined'
+    if (data === undefined) {
+      data = true
+    }
     this.progress = 1
     this.completed = true
-    this.onCompleted.notifyObservers(data)
+    this.onComplete.notifyObservers(data)
+    return this
   }
 }
