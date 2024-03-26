@@ -7,7 +7,7 @@ export function ControllerLoadable<L, T extends Loadable>() {
       if (Array.isArray(constructors)) {
         ControllerLoadable.get(constructors).forEach(item => item.load(data))
       } else {
-        (ControllerLoadable.get(constructors) as T).load(data) // TODO: TS bug: Does not correctly infer conditional type
+        (ControllerLoadable.get(constructors) as T).load(data) // TODO: TS bug?: Does not correctly infer conditional type
       }
     }
 
@@ -15,7 +15,7 @@ export function ControllerLoadable<L, T extends Loadable>() {
       if (Array.isArray(constructors)) {
         ControllerLoadable.get(constructors).forEach(item => item.unload())
       } else {
-        (ControllerLoadable.get(constructors) as T).unload() // TODO: TS bug: Does not correctly infer conditional type
+        (ControllerLoadable.get(constructors) as T).unload() // TODO: TS bug?: Does not correctly infer conditional type
       }
     }
   }

@@ -1,3 +1,6 @@
+// Classes
+export { LoadingProgress } from './base'
+
 // App decorator
 export { App } from './decorators/app/app-decorator'
 export { AppProps } from './decorators/app/app-props'

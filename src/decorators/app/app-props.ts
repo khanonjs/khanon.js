@@ -1,4 +1,4 @@
-import { EngineConfiguration } from '../../babylon-configurations'
+import { EngineConfiguration } from '../../babylon-interfaces'
 import { AppPropLoopUpdate } from './app-props-loop-update'
 
 export interface AppProps {

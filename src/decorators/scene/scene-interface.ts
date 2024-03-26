@@ -1,11 +1,13 @@
-import { Loadable } from '../../base'
+import {
+  Loadable,
+  LoadingProgress
+} from '../../base'
 import {
   ActorConstructor,
   ParticleConstructor,
   ParticleSourceConstructor,
   StateConstructor
 } from '../../constructors'
-import { LoadingProgress } from '../../models'
 import { BabylonContainer } from '../../models/babylon-container'
 
 export abstract class SceneInterface implements Loadable {

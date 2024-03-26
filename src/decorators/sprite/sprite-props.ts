@@ -1,7 +1,9 @@
+import { TextureOptions } from '../../babylon-interfaces'
+
 export interface SpriteProps {
   /**
    * Load the image file from a url.
-   * In case url is not defined, a blank image will be used.
+   * In case 'url' is not defined, the method 'fomDynamicTexture' will be called with 'undefined' argument to allow the creation of a texture manually.
    */
   url?: string
 
@@ -27,11 +29,15 @@ export interface SpriteProps {
 
   /**
    * Converts the image file to a dynamic texture and calls fromDynamicTexture. (false by default)
-   * If true, this option creates a DynamicTexture from the image file and calls 'fomDynamicTexture' method with the image file argument as a DynamicTexture.
+   * If true, this option creates a DynamicTexture from the url image file and calls 'fomDynamicTexture' method with the argument as a DynamicTexture.
    * In that way the image can be modified manually.
-   * In case the url hasn't been defined, a blank texture will be sent as argument.
    */
   toDynamicTexture?: boolean
+
+  /**
+   * Set the generated texture options
+   */
+  textureOptions?: TextureOptions
 
   /**
    * Cache this sprite.

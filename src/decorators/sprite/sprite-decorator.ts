@@ -1,12 +1,11 @@
+import { LoadingProgress } from '../../base'
 import { SpriteConstructor } from '../../constructors'
 import { AssetsController } from '../../controllers/assets-controller'
 import { SpritesController } from '../../controllers/sprites-controller'
-import {
-  AssetType,
-  LoadingProgress
-} from '../../models'
+import { AssetType } from '../../models'
 import { SceneType } from '../scene/scene-type'
 import { SpriteCore } from './sprite-core'
+import { SpriteInstance } from './sprite-instance'
 import { SpriteInterface } from './sprite-interface'
 import { SpriteProps } from './sprite-props'
 import { SpriteTexture } from './sprite-texture'
@@ -17,16 +16,20 @@ export function Sprite(props: SpriteProps): any {
       loaded = false
       props = props
       texture: SpriteTexture
-      Instance: SpriteConstructor = SpriteInterface
+      // Instance: () => SpriteInstance = () => SpriteInstance  // 8a8f
 
       load(scene: SceneType): LoadingProgress {
+        const sendDynamicTexture = (texture: SpriteTexture) => {
+          // this.
+        }
         if (this.loaded) {
           return new LoadingProgress().complete()
         } else {
           if (this.props.url) {
             const progress = AssetsController.getFileFromUrl(this.props.url, this.props.cached, AssetType.IMAGE)
-            progress.onComplete.add(() => {
-              // 8a8f
+            progress.onComplete.add((buffer) => {
+              this.texture = new SpriteTexture(scene)
+              this.texture.setFromArrayBuffer(buffer)
             })
             return progress
           } else {

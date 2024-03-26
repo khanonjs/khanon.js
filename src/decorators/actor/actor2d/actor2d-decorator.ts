@@ -1,7 +1,7 @@
+import { LoadingProgress } from '../../../base'
 import { Actor2DConstructor } from '../../../constructors/actor2d-constructor'
 import { ActorsController } from '../../../controllers/actors-controller'
 import { SpritesController } from '../../../controllers/sprites-controller'
-import { LoadingProgress } from '../../../models'
 import { SceneType } from '../../scene/scene-type'
 import { Actor2DCore } from './actor2d-core'
 import { Actor2DInterface } from './actor2d-interface'

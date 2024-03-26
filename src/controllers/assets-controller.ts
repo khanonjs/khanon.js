@@ -1,8 +1,6 @@
+import { LoadingProgress } from '../base'
 import { objectToString } from '../helpers/utils'
-import {
-  AssetType,
-  LoadingProgress
-} from '../models'
+import { AssetType } from '../models'
 import { Logger } from '../modules'
 
 export class AssetsController {

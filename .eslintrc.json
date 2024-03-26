@@ -39,6 +39,7 @@
         "space-infix-ops": "warn",
         "no-useless-constructor": "off",
         "keyword-spacing": "warn",
+        "n/handle-callback-err": "warn",
         "array-bracket-spacing": "warn",
         "space-in-parens": "warn",
         "eol-last": ["warn", "always"],

@@ -16,10 +16,37 @@ import { AppProps } from './decorators/app/app-props'
 import { SceneProps } from './decorators/scene/scene-props'
 import { SpriteProps } from './decorators/sprite/sprite-props'
 import { SpriteTexture } from './decorators/sprite/sprite-texture'
-import {
-  BabylonContainer,
-  LoadingProgress
-} from './models'
+import { BabylonContainer } from './models'
+
+// ********
+// Classes
+// ********
+export declare class LoadingProgress {
+  /**
+   * Progress factor (from 0 to 1)
+   */
+  progress: number = 0
+
+  /**
+   * Indicates if the loading have been completed
+   */
+  completed: boolean = false
+
+  /**
+   * Observable triggered on loading completed
+   */
+  onComplete: Observable<void>
+
+  /**
+   * Observable triggered on loading error
+   */
+  onError: Observable<string>
+
+  /**
+   * Observable triggered on loading progress (from 0 to 1)
+   */
+  onProgress: Observable<number>
+}
 
 // **************
 //  Constructors
@@ -159,15 +186,12 @@ export declare function Sprite(props: SpriteProps): any
 export { SpriteProps } from './decorators/sprite/sprite-props'
 export declare abstract class SpriteInterface {
   /**
-   * Babylon container
+   * Used to edit manually the texture of the Sprite.
+   * This method is called in any of these cases:
+   *  - In case sprite property 'url' hasn't been defined, a blank DynamicTexture will be sent to this method as argument.
+   *  - In case sprite property 'toDynamicTexture' is 'true' and 'rul is defined, the image file will be sent to this method as argument.
    */
-  babylon: Pick<BabylonContainer, 'sprite'>
-
-  /**
-   * Used to assign a DynamicTexture to the Sprite.
-   * This method is called in case Sprite property 'toDynamicTexture' is true.
-   */
-  fromDynamicTexture?(texture?: DynamicTexture): DynamicTexture
+  fromDynamicTexture?(texture: DynamicTexture): void
 }
 
 // *********
@@ -178,12 +202,13 @@ export declare namespace KJS {
    * Throws critical error and stops the application.
    * @param error
    */
-  function throw_(error?: any): void
+  function throw_(): void;
+  export { throw_ as throw } // Cheat function name
 
   /**
    * Clears cache.
    */
-  function clearCache(): void
+  export function clearCache(): void
 
   /**
    * Scene controller

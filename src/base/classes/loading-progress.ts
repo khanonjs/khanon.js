@@ -1,6 +1,11 @@
 import { Observable } from '@babylonjs/core'
 
 export class LoadingProgress<D = any> {
+  private nodes: {
+    completed: boolean,
+    progress: number
+  }[]
+
   /**
    * Progress factor (from 0 to 1)
    */
@@ -14,7 +19,7 @@ export class LoadingProgress<D = any> {
   /**
    * Observable triggered on loading completed
    */
-  onComplete: Observable<D | boolean> = new Observable<D | boolean>(undefined, true)
+  onComplete: Observable<D> = new Observable<D>(undefined, true)
 
   /**
    * Observable triggered on loading error
@@ -45,13 +50,39 @@ export class LoadingProgress<D = any> {
    * Set the loading progress to completed
    */
   complete(data?: D | boolean): LoadingProgress<D> {
-    // Guarantees Observable.notifyIfTriggered will emit on add even if data is 'undefined'
+    // Set true to guarantee Observable.notifyIfTriggered will emit on add even if data is 'undefined'
     if (data === undefined) {
       data = true
     }
-    this.progress = 1
+    this.setProgress(1)
     this.completed = true
-    this.onComplete.notifyObservers(data)
+    this.onComplete.notifyObservers(data as D)
     return this
+  }
+
+  /**
+   * Handles multiple LoadingProgress instances and behaves like all of them are one
+   */
+  fromNodes(progresses: LoadingProgress[]) {
+    progresses.forEach(progress => {
+      const node = {
+        completed: false,
+        progress: 0
+      }
+      this.nodes.push(node)
+      progress.onComplete.add(() => {
+        node.completed = true
+        if (!this.nodes.find(_node => !_node.completed)) {
+          this.complete()
+        }
+      })
+      progress.onError.add((error) => {
+        this.error(error)
+      })
+      progress.onProgress.add((value: number) => {
+        node.progress = value
+        this.setProgress(this.nodes.reduce((acc, curr) => curr.progress < acc.progress ? curr : acc).progress)
+      })
+    })
   }
 }
