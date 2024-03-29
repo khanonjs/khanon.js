@@ -6,28 +6,25 @@ import { SpriteManager } from '@babylonjs/core/Sprites/spriteManager'
 
 import { BabylonContainer } from '../../models'
 import { SceneType } from '../scene/scene-type'
+import { SpriteProps } from './sprite-props'
 
 export class SpriteTexture {
-  private readonly MAX_SPRITES_PER_INSTANCE = 9999 // 8a8f
-
   babylon: Pick<BabylonContainer, 'spriteManager' | 'scene'>
   width: number
   height: number
 
-  constructor(scene: SceneType) {
+  constructor(scene: SceneType, private readonly spriteProps: SpriteProps) {
     this.babylon.scene = scene.babylon.scene
   }
 
   setFromArrayBuffer(buffer: ArrayBuffer): void {
-    // 8a8f apply TextureOptions
-    const texture = new Texture('', this.babylon.scene, undefined, undefined, undefined, undefined, undefined, buffer, false)
-    this.setFromTexture(texture)
+    const texture = new Texture('', this.babylon.scene, { ...this.spriteProps.textureOptions, buffer })
+    this.setFromTexture(texture, this.spriteProps.width, this.spriteProps.height)
   }
 
-  setFromBlank(width: number, height: number): void {
-    // 8a8f apply TextureOptions
-    const texture = new Texture('', this.babylon.scene)
-    this.setFromTexture(texture, width, height)
+  setFromBlank(): void {
+    const texture = new Texture('', this.babylon.scene, this.spriteProps.textureOptions)
+    this.setFromTexture(texture, this.spriteProps.width, this.spriteProps.height)
   }
 
   setFromTexture(texture: Texture | DynamicTexture, width?: number, height?: number): void {
@@ -36,7 +33,7 @@ export class SpriteTexture {
     this.babylon.spriteManager = new SpriteManager(
       'FromDynamicTexture',
       '',
-      this.MAX_SPRITES_PER_INSTANCE,
+      this.spriteProps.maxAllowedSprites,
       { width: this.width, height: this.height },
       this.babylon.scene
     )

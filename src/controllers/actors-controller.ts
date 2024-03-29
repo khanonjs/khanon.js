@@ -1,7 +1,7 @@
-import { ControllerLoadable } from '../base'
+import { ControllerLoader } from '../base'
 import { ActorConstructor } from '../constructors'
 import { ActorType } from '../decorators/actor/actor-type'
 
-export class ActorsController extends ControllerLoadable<ActorConstructor, ActorType>() {
+export class ActorsController extends ControllerLoader<ActorConstructor, ActorType>() {
 
 }

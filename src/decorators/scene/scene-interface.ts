@@ -11,9 +11,9 @@ import {
 import { BabylonContainer } from '../../models/babylon-container'
 
 export abstract class SceneInterface implements Loadable {
-  babylon: Pick<BabylonContainer, 'engine' | 'scene'>
-  loaded: boolean
-  started: boolean
+  abstract babylon: Pick<BabylonContainer, 'engine' | 'scene'>
+  abstract get loaded(): boolean
+  abstract get started(): boolean
   abstract start(state: StateConstructor): void
   abstract stop(): void
   abstract load(): LoadingProgress

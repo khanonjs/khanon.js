@@ -15,10 +15,9 @@ export function Actor2D(props: Actor2DProps): any {
       loaded = false
 
       load(scene: SceneType): LoadingProgress {
-        console.log('aki ACTOR 2D LOAD')
-        SpritesController.load(this.props.sprites, scene)
+        console.log('aki ACTOR 2D LOAD', scene)
         // 8a8f Load  the rest of props
-        return {} as any
+        return SpritesController.load(this.props.sprites, scene)
       }
 
       unload(): void {

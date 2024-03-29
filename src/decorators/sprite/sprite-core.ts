@@ -7,9 +7,10 @@ import { SceneType } from '../scene/scene-type'
 import { SpriteInstance } from './sprite-instance'
 import { SpriteProps } from './sprite-props'
 import { SpriteTexture } from './sprite-texture'
+import { SpritePropsDefault } from './sprite.props.deafult'
 
 export abstract class SpriteCore implements Loadable<SceneType>, Spawnable<() => SpriteInstance> {
-  abstract props: SpriteProps
+  abstract props: SpriteProps & SpritePropsDefault
   abstract loaded: boolean
   abstract texture: SpriteTexture
   abstract Instance: () => SpriteInstance // Disambiguate core methods from interface spawnable instances

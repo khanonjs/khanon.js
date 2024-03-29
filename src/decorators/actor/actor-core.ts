@@ -1,9 +1,9 @@
 import {
   Loadable,
+  LoadingProgress,
   Spawnable
 } from '../../base'
 import { ActorConstructor } from '../../constructors'
-import { LoadingProgress } from '../../models'
 import { SceneType } from '../scene/scene-type'
 import { ActorProps } from './actor-props'
 

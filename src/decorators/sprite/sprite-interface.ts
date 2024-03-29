@@ -1,5 +1,6 @@
-import { DynamicTexture } from '@babylonjs/core'
+import { BabylonContainer } from '../../models'
 
 export class SpriteInterface {
-  fromDynamicTexture?(texture: DynamicTexture): void
+  babylon: Pick<BabylonContainer, 'spriteManager'>
+  onLoaded?(): void
 }

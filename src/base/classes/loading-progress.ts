@@ -4,7 +4,7 @@ export class LoadingProgress<D = any> {
   private nodes: {
     completed: boolean,
     progress: number
-  }[]
+  }[] = []
 
   /**
    * Progress factor (from 0 to 1)
@@ -50,7 +50,7 @@ export class LoadingProgress<D = any> {
    * Set the loading progress to completed
    */
   complete(data?: D | boolean): LoadingProgress<D> {
-    // Set true to guarantee Observable.notifyIfTriggered will emit on add even if data is 'undefined'
+    // Set true to guarantee Observable.notifyIfTriggered will emit (it doesn't emit if data is undefined)
     if (data === undefined) {
       data = true
     }
@@ -63,7 +63,7 @@ export class LoadingProgress<D = any> {
   /**
    * Handles multiple LoadingProgress instances and behaves like all of them are one
    */
-  fromNodes(progresses: LoadingProgress[]) {
+  fromNodes(progresses: LoadingProgress[]): LoadingProgress<D> {
     progresses.forEach(progress => {
       const node = {
         completed: false,
@@ -84,5 +84,6 @@ export class LoadingProgress<D = any> {
         this.setProgress(this.nodes.reduce((acc, curr) => curr.progress < acc.progress ? curr : acc).progress)
       })
     })
+    return this
   }
 }

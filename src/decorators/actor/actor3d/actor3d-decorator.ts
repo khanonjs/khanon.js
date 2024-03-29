@@ -1,6 +1,6 @@
+import { LoadingProgress } from '../../../base'
 import { Actor3DConstructor } from '../../../constructors'
 import { ActorsController } from '../../../controllers/actors-controller'
-import { LoadingProgress } from '../../../models'
 import { Actor3DCore } from './actor3d-core'
 import { Actor3DInterface } from './actor3d-interface'
 import { Actor3DProps } from './actor3d-props'

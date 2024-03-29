@@ -1,7 +1,7 @@
 import { Observable } from '@babylonjs/core'
 import { DynamicTexture } from '@babylonjs/core/Materials/Textures/dynamicTexture'
-import { Scene as BabylonScene } from '@babylonjs/core/scene'
 
+import { LoadingProgress } from './base'
 import {
   ActorConstructor,
   ParticleConstructor,
@@ -17,36 +17,6 @@ import { SceneProps } from './decorators/scene/scene-props'
 import { SpriteProps } from './decorators/sprite/sprite-props'
 import { SpriteTexture } from './decorators/sprite/sprite-texture'
 import { BabylonContainer } from './models'
-
-// ********
-// Classes
-// ********
-export declare class LoadingProgress {
-  /**
-   * Progress factor (from 0 to 1)
-   */
-  progress: number = 0
-
-  /**
-   * Indicates if the loading have been completed
-   */
-  completed: boolean = false
-
-  /**
-   * Observable triggered on loading completed
-   */
-  onComplete: Observable<void>
-
-  /**
-   * Observable triggered on loading error
-   */
-  onError: Observable<string>
-
-  /**
-   * Observable triggered on loading progress (from 0 to 1)
-   */
-  onProgress: Observable<number>
-}
 
 // **************
 //  Constructors
@@ -164,7 +134,10 @@ export declare abstract class SceneInterface {
 // Actor decorator
 // ****************
 export declare abstract class ActorInterface {
-
+  /**
+   * Callback invoked after the actor has been loaded.
+   */
+  onLoaded?(): void
 }
 
 export declare function Actor2D(props: Actor2DProps): any
@@ -186,12 +159,14 @@ export declare function Sprite(props: SpriteProps): any
 export { SpriteProps } from './decorators/sprite/sprite-props'
 export declare abstract class SpriteInterface {
   /**
-   * Used to edit manually the texture of the Sprite.
-   * This method is called in any of these cases:
-   *  - In case sprite property 'url' hasn't been defined, a blank DynamicTexture will be sent to this method as argument.
-   *  - In case sprite property 'toDynamicTexture' is 'true' and 'rul is defined, the image file will be sent to this method as argument.
+   * Babylon.js objects used by this class.
    */
-  fromDynamicTexture?(texture: DynamicTexture): void
+  babylon: Pick<BabylonContainer, 'spriteManager'>
+
+  /**
+   * Callback invoked after the sprite have been loaded.
+   */
+  onLoaded?(): void
 }
 
 // *********

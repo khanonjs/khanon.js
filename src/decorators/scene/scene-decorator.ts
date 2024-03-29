@@ -1,6 +1,4 @@
-import { Engine as BabylonEngine } from '@babylonjs/core/Engines/engine'
-import { Scene as BabylonScene } from '@babylonjs/core/scene'
-
+import { LoadingProgress } from '../../base'
 import {
   ActorConstructor,
   ParticleConstructor,
@@ -9,10 +7,7 @@ import {
 } from '../../constructors'
 import { ActorsController } from '../../controllers/actors-controller'
 import { ScenesController } from '../../controllers/scenes-controller'
-import {
-  BabylonContainer,
-  LoadingProgress
-} from '../../models'
+import { BabylonContainer } from '../../models'
 import { SceneCore } from './scene-core'
 import { SceneInterface } from './scene-interface'
 import { SceneProps } from './scene-props'
@@ -26,6 +21,8 @@ export function Scene(props: SceneProps): any {
     const _class = class extends constructor implements SceneCore, SceneInterface {
       // Core
       props = props
+      _loaded: boolean
+      _started: boolean
 
       setEngineParams(): void {}
       renderStart(id: string): void {}
@@ -33,8 +30,8 @@ export function Scene(props: SceneProps): any {
 
       // Interface
       babylon: Pick<BabylonContainer, 'engine' | 'scene'>
-      loaded: boolean
-      started: boolean
+      get loaded(): boolean { return this._loaded }
+      get started(): boolean { return this._started }
 
       start(state: StateConstructor): void {
 
@@ -45,8 +42,8 @@ export function Scene(props: SceneProps): any {
       }
 
       load(): LoadingProgress {
-        ActorsController.load(this.props.actors, this)
-        return {} as LoadingProgress // 8a8f
+        // 8a8f create scene
+        return ActorsController.load(this.props.actors, this)
       }
 
       unload(): void {

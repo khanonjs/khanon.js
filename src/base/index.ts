@@ -1,5 +1,5 @@
 export { Controller } from './controller/controller'
-export { ControllerLoadable } from './controller/controller-loadable'
+export { ControllerLoader } from './controller/controller-loadable'
 export { Loadable } from './interfaces/loadable'
 export { LoadingProgress } from './classes/loading-progress'
 export { Spawnable } from './interfaces/spawnable'

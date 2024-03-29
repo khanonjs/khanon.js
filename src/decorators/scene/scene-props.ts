@@ -1,4 +1,4 @@
-import { SceneConfiguration } from '../../babylon-interfaces'
+import { SceneConfiguration } from '../../babylon-config'
 import {
   ActorConstructor,
   CameraConstructor,

@@ -1,9 +1,8 @@
-import { TextureOptions } from '../../babylon-interfaces'
+import { TextureOptions } from '../../babylon-config'
 
 export interface SpriteProps {
   /**
    * Load the image file from a url.
-   * In case 'url' is not defined, the method 'fomDynamicTexture' will be called with 'undefined' argument to allow the creation of a texture manually.
    */
   url?: string
 
@@ -28,13 +27,6 @@ export interface SpriteProps {
   celHeight?: number
 
   /**
-   * Converts the image file to a dynamic texture and calls fromDynamicTexture. (false by default)
-   * If true, this option creates a DynamicTexture from the url image file and calls 'fomDynamicTexture' method with the argument as a DynamicTexture.
-   * In that way the image can be modified manually.
-   */
-  toDynamicTexture?: boolean
-
-  /**
    * Set the generated texture options
    */
   textureOptions?: TextureOptions
@@ -46,4 +38,9 @@ export interface SpriteProps {
    * Cached files have a shorter loading time at the expense of memory usage.
    */
   cached?: boolean
+
+  /**
+   * Defines the maximum allowed number of sprites for this sprite sheet
+   */
+  maxAllowedSprites?: number
 }
