@@ -1,3 +1,5 @@
+import { SceneOptions } from '@babylonjs/core'
+
 import { SceneConfiguration } from '../../babylon-config'
 import {
   ActorConstructor,
@@ -11,5 +13,6 @@ export interface SceneProps {
     maps?: SceneMapConstructor[]
     states?: StateConstructor[]
     actors?: ActorConstructor[]
+    options?: SceneOptions
     configuration?: SceneConfiguration
 }

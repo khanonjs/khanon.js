@@ -1,3 +1,5 @@
+import { Scene as BabylonScene } from '@babylonjs/core/scene'
+
 import { LoadingProgress } from '../../base'
 import {
   ActorConstructor,
@@ -7,6 +9,7 @@ import {
 } from '../../constructors'
 import { ActorsController } from '../../controllers/actors-controller'
 import { ScenesController } from '../../controllers/scenes-controller'
+import { Core } from '../../core'
 import { BabylonContainer } from '../../models'
 import { SceneCore } from './scene-core'
 import { SceneInterface } from './scene-interface'
@@ -29,7 +32,7 @@ export function Scene(props: SceneProps): any {
       renderStop(id: string): void {}
 
       // Interface
-      babylon: Pick<BabylonContainer, 'engine' | 'scene'>
+      babylon: Pick<BabylonContainer, 'scene'> = { scene: null }
       get loaded(): boolean { return this._loaded }
       get started(): boolean { return this._started }
 
@@ -43,6 +46,18 @@ export function Scene(props: SceneProps): any {
 
       load(): LoadingProgress {
         // 8a8f create scene
+        this.babylon.scene = new BabylonScene(Core.engine, this.props.options)
+        if (this.props.configuration) {
+          for (const [key, value] of Object.entries(this.props.configuration)) {
+            this.babylon.scene[key] = value
+          }
+        }
+
+        // Babylon inspector (only DEV mode). Babylon inspector's imports are removed on webpack build.
+        if (Core.isDevelopmentMode()) {
+          this.debugInspector()
+        }
+
         return ActorsController.load(this.props.actors, this)
       }
 
@@ -56,6 +71,23 @@ export function Scene(props: SceneProps): any {
 
       spawn(entity: ActorConstructor | ParticleConstructor | ParticleSourceConstructor): void {
 
+      }
+
+      debugInspector(): void {
+        window.addEventListener('keydown', (ev) => {
+          if (ev.shiftKey && ev.ctrlKey && ev.altKey && ev.key === 'I') {
+            // 8a8f
+            /*
+            // @ts-ignore
+            if (this.babylonjs.debugLayer.isVisible()) {
+              // @ts-ignore
+              this.babylonjs.debugLayer.hide()
+            } else {
+              // @ts-ignore
+              this.babylonjs.debugLayer.show()
+            } */
+          }
+        })
       }
     }
     ScenesController.register(new _class())

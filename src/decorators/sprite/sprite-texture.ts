@@ -9,7 +9,7 @@ import { SceneType } from '../scene/scene-type'
 import { SpriteProps } from './sprite-props'
 
 export class SpriteTexture {
-  babylon: Pick<BabylonContainer, 'spriteManager' | 'scene'>
+  babylon: Pick<BabylonContainer, 'spriteManager' | 'scene'> = { spriteManager: null, scene: null }
   width: number
   height: number
 

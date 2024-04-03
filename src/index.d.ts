@@ -161,12 +161,14 @@ export declare abstract class SpriteInterface {
   /**
    * Babylon.js objects used by this class.
    */
-  babylon: Pick<BabylonContainer, 'spriteManager'>
+  babylon: Pick<BabylonContainer, 'spriteManager' | 'scene'>
 
   /**
-   * Callback invoked after the sprite have been loaded.
+   * Callback invoked after the sprite has been loaded in a scene.
    */
   onLoaded?(): void
+
+  spawn(): void
 }
 
 // *********

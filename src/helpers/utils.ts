@@ -1,6 +1,15 @@
 import { ExtractOptional } from '../types/extract-optional'
 
 /**
+ * Invokes optional callback
+ */
+export function invokeCallback(func?: () => void, context?: any, ...params: any[]) {
+  if (func !== undefined) {
+    func.bind(context).call(params)
+  }
+}
+
+/**
  * Applies default configuration to the not setted properties of an object
  */
 export function applyDefaults<O, D extends ExtractOptional<O>>(object: O, defaults: D): O & D {

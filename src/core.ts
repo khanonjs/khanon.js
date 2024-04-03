@@ -13,7 +13,10 @@ import { AppConstructor } from './constructors'
 // import { Scene } from './modules/scene/scene'
 import { AppCore } from './decorators/app/app-core'
 import { AppInterface } from './decorators/app/app-interface'
-import { Rect } from './models'
+import {
+  BabylonContainer,
+  Rect
+} from './models'
 import { Logger } from './modules/logger/logger'
 import { LoggerLevels } from './modules/logger/logger-levels'
 import { Timeout } from './types'
@@ -29,7 +32,7 @@ export class Core {
   private static htmlGui: HTMLDivElement // 8a8f
 
   // Babylon
-  private static engine: Engine
+  private static babylon: Pick<BabylonContainer, 'engine'> = { engine: null }
 
   // Canvas
   private static canvasRect: Rect
@@ -61,6 +64,9 @@ export class Core {
   // Scene
   // private static loadSceneQueue: Misc.KeyValue<Scene, (scene: Scene) => void> = new Misc.KeyValue<Scene, SceneFunctionArg>()
 
+  static get canvas(): HTMLCanvasElement { return this.htmlCanvas }
+  static get engine(): Engine { return this.babylon.engine }
+
   /**
    * Called once, on app decorator
    * @param app
@@ -73,7 +79,7 @@ export class Core {
 
     Core.app = app
     Logger.info('Environment mode:', process.env.NODE_ENV)
-    Logger.level = (Core.app.props.debugLog || process.env.NODE_ENV === 'development') ? LoggerLevels.TRACE : LoggerLevels.INFO
+    Logger.level = (Core.app.props.debugLog || this.isDevelopmentMode()) ? LoggerLevels.TRACE : LoggerLevels.INFO
     Logger.debug('App instance created:', Core.app.props)
 
     // Avoid canvas scale error 8a8f TODO??
@@ -91,7 +97,7 @@ export class Core {
     // Manage resize
     window.addEventListener('resize', () => {
       Core.updateCanvasRect()
-      Core.engine.resize() // TODO: Test this besides 'Core.app.props.engineConfiguration.adaptToDeviceRatio = true'
+      Core.babylon.engine.resize() // TODO: Test this besides 'Core.app.props.engineConfiguration.adaptToDeviceRatio = true'
       // CoreGlobals.canvasResize$.next(canvasDimensions) // 8a8f
     })
 
@@ -111,8 +117,8 @@ export class Core {
     if (Core.loopUpdateInterval) {
       clearInterval(Core.loopUpdateInterval)
     }
-    if (Core.engine) {
-      Core.engine.stopRenderLoop()
+    if (Core.babylon.engine) {
+      Core.babylon.engine.stopRenderLoop()
     }
     if (Core.app.onClose) {
       Core.app.onClose()
@@ -121,6 +127,10 @@ export class Core {
     // TODO 8a8f:
     //  - Stop all listeners (Loop Update, etc)
     //  - Show error page
+  }
+
+  static isDevelopmentMode(): boolean {
+    return process.env.NODE_ENV === 'development'
   }
 
   /* static loadScene(scene: Scene, onLoaded?: (scene: Scene) => void): Scene {
@@ -152,13 +162,13 @@ export class Core {
   }
 
   private static initializeBabylon(): void {
-    Core.engine = new Engine(
+    Core.babylon.engine = new Engine(
       Core.htmlCanvas,
       Core.app.props.engineConfiguration.antialias,
       Core.app.props.engineConfiguration.options,
       Core.app.props.engineConfiguration.adaptToDeviceRatio
     )
-    Core.engine.runRenderLoop(() => {
+    Core.babylon.engine.runRenderLoop(() => {
       // TODO 8a8f: add render scenes here
       // TODO 8a8f: add FPS updater here
 

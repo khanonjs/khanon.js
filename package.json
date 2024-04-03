@@ -23,7 +23,7 @@
     "unlink": "cd ./src && npm uninstall --global && rimraf node_modules && rimraf package.json && rimraf package-lock.json",
     "clean": "rimraf dist",
     "webpack-bundle-analyze": "webpack --profile --json > bundle-stats.json && webpack-bundle-analyzer bundle-stats.json",
-    "check-circular-refs": "dpdm ./src/index.ts",
+    "circular-refs": "dpdm ./src/index.ts",
     "check-updates": "npm-check-updates -u",
     "lint": "eslint ./src/**/*.*",
     "lint:fix": "eslint ./src/**/*.* --fix"
@@ -49,6 +49,7 @@
     "clean-webpack-plugin": "^4.0.0",
     "cpy-cli": "^5.0.0",
     "cross-env": "^7.0.3",
+    "dpdm": "^3.14.0",
     "eslint": "^8.54.0",
     "eslint-config-standard": "^17.1.0",
     "eslint-plugin-import": "^2.29.0",

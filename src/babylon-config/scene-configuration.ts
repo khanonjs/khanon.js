@@ -1,5 +1,6 @@
 import { Scene as BabylonScene } from '@babylonjs/core/scene'
 
+// VERSION: Review on each babylon update
 export type SceneConfiguration = Partial<Pick<BabylonScene,
   'ambientColor' |
   'animationTimeScale' |
