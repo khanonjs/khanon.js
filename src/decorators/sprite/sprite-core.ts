@@ -11,8 +11,7 @@ import { SpritePropsDefault } from './sprite.props.deafult'
 
 export abstract class SpriteCore implements Loadable<SceneType>, Spawnable<() => SpriteInstance> {
   abstract props: SpriteProps & SpritePropsDefault
-  abstract loaded: boolean
-  abstract texture: SpriteTexture
+  abstract textures: Map<SceneType, SpriteTexture>
   abstract Instance: () => SpriteInstance // Disambiguate core methods from interface spawnable instances
   abstract load(scene: SceneType): LoadingProgress
   abstract unload(): void

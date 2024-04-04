@@ -14,6 +14,7 @@ import { Actor2DProps } from './decorators/actor/actor2d/actor2d-props'
 import { Actor3DProps } from './decorators/actor/actor3d/actor3d-props'
 import { AppProps } from './decorators/app/app-props'
 import { SceneProps } from './decorators/scene/scene-props'
+import { SceneType } from './decorators/scene/scene-type'
 import { SpriteProps } from './decorators/sprite/sprite-props'
 import { SpriteTexture } from './decorators/sprite/sprite-texture'
 import { BabylonContainer } from './models'
@@ -166,7 +167,7 @@ export declare abstract class SpriteInterface {
   /**
    * Callback invoked after the sprite has been loaded in a scene.
    */
-  onLoaded?(): void
+  onLoaded?(sceneName: string): void
 
   spawn(): void
 }

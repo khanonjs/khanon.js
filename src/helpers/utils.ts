@@ -5,7 +5,7 @@ import { ExtractOptional } from '../types/extract-optional'
  */
 export function invokeCallback(func?: () => void, context?: any, ...params: any[]) {
   if (func !== undefined) {
-    func.bind(context).call(params)
+    func.apply(context, params as [])
   }
 }
 

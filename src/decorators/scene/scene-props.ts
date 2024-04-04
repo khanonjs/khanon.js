@@ -9,6 +9,7 @@ import {
 } from '../../constructors'
 
 export interface SceneProps {
+    name: string
     cameras?: CameraConstructor[]
     maps?: SceneMapConstructor[]
     states?: StateConstructor[]
