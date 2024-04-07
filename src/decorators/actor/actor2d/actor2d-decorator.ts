@@ -6,10 +6,9 @@ import { SceneType } from '../../scene/scene-type'
 import { Actor2DCore } from './actor2d-core'
 import { Actor2DInterface } from './actor2d-interface'
 import { Actor2DProps } from './actor2d-props'
-import { Actor2DType } from './actor2d-type'
 
 export function Actor2D(props: Actor2DProps): any {
-  return function <T extends { new (...args: any[]): Actor2DType }>(constructor: T & Actor2DType, context: ClassDecoratorContext) {
+  return function <T extends { new (...args: any[]): Actor2DCore }>(constructor: T & Actor2DCore, context: ClassDecoratorContext) {
     const _class = class extends constructor implements Actor2DCore {
       props = props
       Instance: Actor2DConstructor = Actor2DInterface // 8a8f
