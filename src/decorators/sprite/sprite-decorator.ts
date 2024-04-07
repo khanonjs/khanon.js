@@ -31,7 +31,7 @@ export function Sprite(props: SpriteProps): any {
 
       load(scene: SceneType): LoadingProgress {
         const callLoaded = () => {
-          invokeCallback(this.onLoaded, this, scene.props.name)
+          invokeCallback(this.onLoaded, this, scene)
         }
         if (this.textures.get(scene)) {
           callLoaded()

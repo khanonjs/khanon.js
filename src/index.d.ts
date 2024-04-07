@@ -9,20 +9,55 @@ import {
   SceneConstructor,
   StateConstructor
 } from './constructors'
-import { SpriteConstructor } from './constructors/sprite-constructor'
 import { Actor2DProps } from './decorators/actor/actor2d/actor2d-props'
 import { Actor3DProps } from './decorators/actor/actor3d/actor3d-props'
 import { AppProps } from './decorators/app/app-props'
 import { SceneProps } from './decorators/scene/scene-props'
 import { SceneType } from './decorators/scene/scene-type'
 import { SpriteProps } from './decorators/sprite/sprite-props'
-import { SpriteTexture } from './decorators/sprite/sprite-texture'
 import { BabylonContainer } from './models'
 
 // **************
 //  Constructors
 // **************
 export * from './constructors'
+
+// *********
+// Khanonjs
+// *********
+export declare namespace KJS {
+  /**
+   * Throws critical error and stops the application.
+   * @param error
+   */
+  function throw_(): void;
+  export { throw_ as throw } // Cheat function name
+
+  /**
+   * Clears cache.
+   */
+  export function clearCache(): void
+
+  // Types
+  export type Actor2D = Actor2DInterface;
+  export type Actor3D = Actor3DInterface;
+  export type Scene = SceneInterface;
+
+  /**
+   * Scene controller
+   */
+  export namespace Scene {
+    function load(scene: SceneConstructor): LoadingProgress
+    function load(scene: SceneConstructor[]): LoadingProgress
+    function unload(scene: SceneConstructor): void
+    function unload(scene: SceneConstructor[]): void
+    function start(): void
+    function stop(): void
+  }
+
+  export namespace Sprite {
+  }
+}
 
 // **************
 // App decorator
@@ -54,6 +89,7 @@ export declare abstract class AppInterface {
 // ****************
 // Scene decorator
 // ****************
+export { SceneType } from './decorators/scene/scene-type'
 export declare function Scene(props: SceneProps): any
 export { SceneProps } from './decorators/scene/scene-props'
 export declare abstract class SceneInterface {
@@ -167,41 +203,9 @@ export declare abstract class SpriteInterface {
   /**
    * Callback invoked after the sprite has been loaded in a scene.
    */
-  onLoaded?(sceneName: string): void
+  onLoaded?(scene: KJS.Scene): void
 
   spawn(): void
-}
-
-// *********
-// Khanonjs
-// *********
-export declare namespace KJS {
-  /**
-   * Throws critical error and stops the application.
-   * @param error
-   */
-  function throw_(): void;
-  export { throw_ as throw } // Cheat function name
-
-  /**
-   * Clears cache.
-   */
-  export function clearCache(): void
-
-  /**
-   * Scene controller
-   */
-  export namespace Scene {
-    function load(scene: SceneConstructor): LoadingProgress
-    function load(scene: SceneConstructor[]): LoadingProgress
-    function unload(scene: SceneConstructor): void
-    function unload(scene: SceneConstructor[]): void
-    function start(): void
-    function stop(): void
-  }
-
-  export namespace Sprite {
-  }
 }
 
 // ********

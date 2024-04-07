@@ -1,6 +1,7 @@
 import { BabylonContainer } from '../../models'
+import { SceneInterface } from '../scene/scene-interface'
 
 export abstract class SpriteInterface {
   abstract babylon: Pick<BabylonContainer, 'spriteManager' | 'scene'>
-  onLoaded?(sceneName: string): void
+  onLoaded?(scene: SceneInterface): void
 }
