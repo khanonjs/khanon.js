@@ -29,6 +29,7 @@
         "prefer-const": "warn",
         "no-empty": "warn",
         "comma-dangle": "warn",
+        "comma-spacing": "warn",
         "spaced-comment": "warn",
         "no-case-declarations": "off",
         "no-unused-vars": "off",

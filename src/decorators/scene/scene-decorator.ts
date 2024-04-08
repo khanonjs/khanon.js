@@ -8,9 +8,14 @@ import {
   StateConstructor
 } from '../../constructors'
 import { ActorsController } from '../../controllers/actors-controller'
+import { AssetsController } from '../../controllers/assets-controller'
 import { ScenesController } from '../../controllers/scenes-controller'
 import { Core } from '../../core'
-import { BabylonContainer } from '../../models'
+import { removeDuplicities } from '../../helpers/utils'
+import {
+  AssetDefinition,
+  BabylonContainer
+} from '../../models'
 import { SceneCore } from './scene-core'
 import { SceneInterface } from './scene-interface'
 import { SceneProps } from './scene-props'
@@ -24,7 +29,7 @@ export function Scene(props: SceneProps): any {
   return function <T extends { new (...args: any[]): SceneType }>(constructor: T & SceneType, context: ClassDecoratorContext) {
     const _class = class extends constructor implements SceneCore, SceneInterface {
       // Core
-      props = props
+      props = removeDuplicities(props)
       _loaded: boolean
       _started: boolean
 
@@ -46,7 +51,7 @@ export function Scene(props: SceneProps): any {
       }
 
       load(): LoadingProgress {
-        // 8a8f create scene
+        // Create babylon scene and apply configuration
         this.babylon.scene = new BabylonScene(Core.engine, this.props.options)
         if (this.props.configuration) {
           for (const [key, value] of Object.entries(this.props.configuration)) {
@@ -59,7 +64,9 @@ export function Scene(props: SceneProps): any {
           this.debugInspector()
         }
 
-        return ActorsController.load(this.props.actors, this)
+        const progress = AssetsController.sceneLoad(this)
+
+        return progress// ActorsController.load(this.props.actors, this)
       }
 
       unload(): void {

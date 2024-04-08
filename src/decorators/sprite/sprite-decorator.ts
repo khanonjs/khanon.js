@@ -38,7 +38,8 @@ export function Sprite(props: SpriteProps): any {
           return new LoadingProgress().complete()
         } else {
           if (this.props.url) {
-            const progress = AssetsController.getFileFromUrl(this.props.url, this.props.cached, AssetType.IMAGE)
+            // 8a8f
+            /* const progress = AssetsController.getFileFromUrl(this.props.url, scene, this.props.cached, AssetType.IMAGE)
             progress.onComplete.add((buffer) => {
               const texture = new SpriteTexture(scene, this.props)
               texture.setFromArrayBuffer(buffer)
@@ -46,7 +47,7 @@ export function Sprite(props: SpriteProps): any {
               this.textures.set(scene, texture)
               callLoaded()
             })
-            return progress
+            return progress */
           } else {
             const texture = new SpriteTexture(scene, this.props)
             texture.setFromBlank()
@@ -58,7 +59,7 @@ export function Sprite(props: SpriteProps): any {
         }
       }
 
-      unload(): void {
+      unload(scene: SceneType): void {
 
       }
 

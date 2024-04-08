@@ -27,7 +27,7 @@ export function applyDefaults<O, D extends ExtractOptional<O>>(object: O, defaul
 export function objectToString(data: unknown, stringfy = true): string {
   function getCircularReplacer() {
     const ancestors = []
-    return function (key, value) {
+    return function (key: any, value: null) {
       if (typeof value !== 'object' || value === null) {
         return value
       }
@@ -51,4 +51,33 @@ export function objectToString(data: unknown, stringfy = true): string {
         ? JSON.stringify(data, getCircularReplacer())
         : data as string))
     : ''
+}
+
+/**
+ * Removes duplicated items in array or first level of object properties
+ */
+export function removeDuplicities<T extends object>(values: T): T {
+  function remove(vals: any): any {
+    if (Array.isArray(vals)) {
+      return Array.from(new Set(vals))
+    } else {
+      return vals
+    }
+  }
+  if (typeof values === 'object') {
+    for (const [key, value] of Object.entries(values)) {
+      values[key] = remove(value)
+    }
+    return values
+  } else {
+    return remove(values)
+  }
+}
+
+/**
+ * Returns true if a class is the prototype of another child class.
+ * E.g: isPrototypeOf(ActorInterface, SomeActorClass) = true
+ */
+export function isPrototypeOf(_parent: any, _child: any): boolean {
+  return Object.prototype.isPrototypeOf.call(_parent, _child)
 }

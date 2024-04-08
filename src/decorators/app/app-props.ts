@@ -1,4 +1,5 @@
 import { EngineConfiguration } from '../../babylon-config'
+import { GUIConstructor } from '../../constructors'
 import { AppPropLoopUpdate } from './app-props-loop-update'
 
 export interface AppProps {
@@ -35,4 +36,9 @@ export interface AppProps {
    * Logs canvas size in case it has been resized
    */
   logCanvasSize?: boolean
+
+  /**
+   * List of GUIs available at any time
+   */
+  guis?: GUIConstructor[]
 }

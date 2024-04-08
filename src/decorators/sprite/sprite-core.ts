@@ -14,6 +14,6 @@ export abstract class SpriteCore implements Loadable<SceneType>, Spawnable<() =>
   abstract textures: Map<SceneType, SpriteTexture>
   abstract Instance: () => SpriteInstance // Disambiguate core methods from interface spawnable instances
   abstract load(scene: SceneType): LoadingProgress
-  abstract unload(): void
+  abstract unload(scene: SceneType): void
   abstract spawn(): void
 }
