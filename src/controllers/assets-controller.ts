@@ -44,9 +44,9 @@ export class AssetsController {
   }
 
   /**
-   * Gets all asset definitions within a class (Scene, GUI, Actor, Particle, etc..)
+   * Gets all assets definitions within a class (Scene, GUI, Actor, Particle, etc..)
    */
-  static getAssetDefinitionsFromObject(item: any, urls: object = {}): AssetDefinition[] {
+  static getAssetsDefinitions(item: any, urls: object = {}): AssetDefinition[] {
     let definitions: AssetDefinition[] = []
     if (typeof item === 'object') {
       for (const property of Object.values(item)) {
@@ -54,7 +54,7 @@ export class AssetsController {
           property.forEach(value => {
             if (isPrototypeOf(ActorInterface, value)) {
               const actor = ActorsController.get<Actor2DType>(value)
-              definitions = [...definitions, ...AssetsController.getAssetDefinitionsFromObject(actor.props, urls)]
+              definitions = [...definitions, ...AssetsController.getAssetsDefinitions(actor.props, urls)]
             }
             if (isPrototypeOf(SpriteInterface, value)) {
               const sprite = SpritesController.get<SpriteType>(value)
@@ -80,7 +80,7 @@ export class AssetsController {
   static sceneLoad(scene: SceneType): LoadingProgress<void> {
     // 8a8f
     // Load scene assets
-    const assets = this.getAssetDefinitionsFromObject(scene.props)
+    const assets = this.getAssetsDefinitions(scene.props)
     console.log('aki ASSETS DEFINITION', assets)
 
     return new LoadingProgress()
