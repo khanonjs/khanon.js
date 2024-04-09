@@ -1,4 +1,7 @@
-import { LoadingProgress } from '../base'
+import {
+  Asset,
+  LoadingProgress
+} from '../base'
 import {
   ActorConstructor,
   SceneConstructor
@@ -22,12 +25,6 @@ import { Logger } from '../modules'
 import { ActorsController } from './actors-controller'
 import { SpritesController } from './sprites-controller'
 
-interface CachedFileContent {
-  assetDefinition: AssetDefinition
-  sources: SceneType[]
-  buffer: ArrayBuffer
-}
-
 export class AssetsController {
   private static contentTypes = {
     [AssetType.FONT]: ['font/otf', 'font/ttf', 'font/woff', 'font/woff2', ''], // 8a8f
@@ -36,7 +33,7 @@ export class AssetsController {
     [AssetType.AUDIO]: ['audio/aac', 'audio/midi', 'audio/x-midi', 'audio/mpeg', 'audio/ogg', 'audio/opus', 'audio/wav', 'audio/webm'] // 8a8f
   }
 
-  private static cachedFiles: Map<string, CachedFileContent> = new Map<string, CachedFileContent>()
+  private static assets: Map<string, Asset> = new Map<string, Asset>()
 
   static getBuffer(url: string): ArrayBuffer {
     // 8a8f
@@ -46,15 +43,15 @@ export class AssetsController {
   /**
    * Gets all assets definitions within a class (Scene, GUI, Actor, Particle, etc..)
    */
-  static getAssetsDefinitions(item: any, urls: object = {}): AssetDefinition[] {
+  static findAssetsDefinitions(source: any, urls: object = {}): AssetDefinition[] {
     let definitions: AssetDefinition[] = []
-    if (typeof item === 'object') {
-      for (const property of Object.values(item)) {
+    if (typeof source === 'object') {
+      for (const property of Object.values(source)) {
         if (Array.isArray(property)) {
           property.forEach(value => {
             if (isPrototypeOf(ActorInterface, value)) {
               const actor = ActorsController.get<Actor2DType>(value)
-              definitions = [...definitions, ...AssetsController.getAssetsDefinitions(actor.props, urls)]
+              definitions = [...definitions, ...AssetsController.findAssetsDefinitions(actor.props, urls)]
             }
             if (isPrototypeOf(SpriteInterface, value)) {
               const sprite = SpritesController.get<SpriteType>(value)
@@ -62,7 +59,8 @@ export class AssetsController {
                 urls[sprite.props.url] = true
                 definitions = [...definitions, {
                   url: sprite.props.url,
-                  type: AssetType.IMAGE
+                  type: AssetType.IMAGE,
+                  cached: sprite.props.cached
                 }]
               }
             }
@@ -74,16 +72,22 @@ export class AssetsController {
   }
 
   static clearCache() {
-    AssetsController.cachedFiles.clear()
+    AssetsController.assets.clear()
   }
 
-  static sceneLoad(scene: SceneType): LoadingProgress<void> {
-    // 8a8f
-    // Load scene assets
-    const assets = this.getAssetsDefinitions(scene.props)
-    console.log('aki ASSETS DEFINITION', assets)
-
-    return new LoadingProgress()
+  static sceneLoad(scene: SceneType): LoadingProgress {
+    const progress = new LoadingProgress()
+    const assetsDefinitions = this.findAssetsDefinitions(scene.props)
+    if (assetsDefinitions.length === 0) {
+      progress.complete()
+    } else {
+      const progresses = []
+      assetsDefinitions.forEach(assetDef => {
+        progresses.push(AssetsController.loadFileFromUrl(assetDef, scene))
+      })
+      progress.fromNodes(progresses)
+    }
+    return progress
   }
 
   static scenePurge(scene: SceneType) {
@@ -96,24 +100,22 @@ export class AssetsController {
     // Remove scene assets that are not cached
   }
 
-  // 8a8f varios actores diferentes pueden cargar el mismo sprite, el cual a su vez carga el mismo archivo.
-  // Para eliminar un archivo tras hacer unload, es necesario conocer tu fuente (actor, etc)
-  private static loadFileFromUrl(url: string, source: SceneType, cached?: boolean, enforceType?: AssetType): LoadingProgress<ArrayBuffer> {
-    const progress = new LoadingProgress<ArrayBuffer>()
-    const data: CachedFileContent = AssetsController.cachedFiles.get(url)
-    if (data) {
-      Logger.debug(`getFileFromUrl: '${url}' loaded from cache.`)
-      progress.complete(data.buffer)
-      return progress
+  private static loadFileFromUrl(definition: AssetDefinition, source: SceneType): LoadingProgress<ArrayBuffer> {
+    let asset: Asset = AssetsController.assets.get(definition.url)
+    if (asset) {
+      asset.addSource(source, definition.cached)
+      return asset.progress
     } else {
+      asset = new Asset(definition, source)
+      AssetsController.assets.set(definition.url, asset)
       let reader: ReadableStreamDefaultReader
       const throwError = (errorMsg: string) => {
         Logger.error(errorMsg)
-        progress.error(errorMsg)
+        asset.progress.error(errorMsg)
         reader?.cancel()
-        progress.onError.notifyObservers(errorMsg)
+        asset.progress.onError.notifyObservers(errorMsg)
       }
-      fetch(url)
+      fetch(definition.url)
         .then((response) => {
           reader = response.body.getReader()
           const contentType = response.headers.get('Content-Type')
@@ -121,8 +123,8 @@ export class AssetsController {
           const parts = []
           let receivedLength = 0
 
-          if (enforceType && !AssetsController.contentTypes[enforceType].find(type => type === contentType)) {
-            throwError(`getFileFromUrl error: content type '${contentType}' doesn't satisfy the enforced type '${[enforceType]}'`)
+          if (!AssetsController.contentTypes[definition.type].find(type => type === contentType)) {
+            throwError(`getFileFromUrl error: content type '${contentType}' doesn't satisfy the type '${[definition.type]}'`)
             return
           }
 
@@ -136,19 +138,16 @@ export class AssetsController {
                     allParts.set(part, position)
                     position += part.length
                   }
-                  data.buffer = allParts.buffer.slice(allParts.byteOffset, allParts.byteLength + allParts.byteOffset)
-                  if (cached) {
-                    AssetsController.cachedFiles.set(url, data)
-                  }
-                  Logger.debug(`getFileFromUrl: '${url}' loaded from url, cached: ${!!cached}`)
-                  progress.complete(data.buffer)
+                  asset.setBuffer(allParts.buffer.slice(allParts.byteOffset, allParts.byteLength + allParts.byteOffset))
+                  Logger.debug(`getFileFromUrl: '${definition.url}' loaded from url, cached: ${!!definition.cached}`)
+                  asset.progress.complete(asset.getBuffer())
                 } else if (result.value.length) {
                   parts.push(result.value)
                   receivedLength += result.value.length
-                  progress.setProgress(receivedLength / contentLength)
+                  asset.progress.setProgress(receivedLength / contentLength)
                   next()
                 } else {
-                  throwError(`getFileFromUrl error: undefined value reading url '${url}'`)
+                  throwError(`getFileFromUrl error: undefined value reading url '${definition.url}'`)
                 }
               })
               .catch(error => throwError(`getFileFromUrl error reading part: ${objectToString(error)}`))
@@ -156,7 +155,7 @@ export class AssetsController {
           next()
         })
         .catch(error => throwError(`getFileFromUrl error fetching: ${objectToString(error)}`))
-      return progress
+      return asset.progress
     }
   }
 }

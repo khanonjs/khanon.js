@@ -30,8 +30,8 @@ export declare namespace KJS {
    * Throws critical error and stops the application.
    * @param error
    */
-  function throw_(): void;
-  export { throw_ as throw } // Cheat function name
+  function throw_(error?: any): void;
+  export { throw_ as throw } // Cheat function name :)
 
   /**
    * Clears cache.
@@ -73,17 +73,16 @@ export declare abstract class AppInterface {
   abstract onStart(): void
 
   /**
+   * Callback invoked on app error. This error could happen at any point of the app lifetime and is critical, it will stop the application.
+   */
+  abstract onError(error?: any): void
+
+  /**
    * Called on browser tab closed (Optional).
    * Release any app resource.
    * The application progress should be saved at this point.
    */
   onClose?(): void
-
-  /**
-   * Called on any app error.
-   * App errors are critical and the application is closed at this point.
-   */
-  onError?(error?: any): void
 }
 
 // ****************
@@ -160,11 +159,6 @@ export declare abstract class SceneInterface {
    * Callback invoked on scene unload.
    */
   onUnload?(): void
-
-  /**
-   * Callback invoked on scene error. This error could happen at any point of the scene lifetime.
-   */
-  onError?(errorMsg: string): void
 }
 
 // ****************

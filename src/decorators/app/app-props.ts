@@ -38,7 +38,7 @@ export interface AppProps {
   logCanvasSize?: boolean
 
   /**
-   * List of GUIs available at any time
+   * List of available GUIs at any time
    */
   guis?: GUIConstructor[]
 }

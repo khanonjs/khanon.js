@@ -1,3 +1,4 @@
+export { Asset } from './classes/asset'
 export { Controller } from './controller/controller'
 export { ControllerLoader } from './controller/controller-loadable'
 export { Loadable } from './interfaces/loadable'

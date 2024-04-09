@@ -12,10 +12,12 @@ import { AssetsController } from '../../controllers/assets-controller'
 import { ScenesController } from '../../controllers/scenes-controller'
 import { Core } from '../../core'
 import { removeDuplicities } from '../../helpers/utils'
+import KJS from '../../kjs'
 import {
   AssetDefinition,
   BabylonContainer
 } from '../../models'
+import { Logger } from '../../modules'
 import { SceneCore } from './scene-core'
 import { SceneInterface } from './scene-interface'
 import { SceneProps } from './scene-props'
@@ -51,6 +53,8 @@ export function Scene(props: SceneProps): any {
       }
 
       load(): LoadingProgress {
+        Logger.debug('Scene loading...', _class.prototype)
+
         // Create babylon scene and apply configuration
         this.babylon.scene = new BabylonScene(Core.engine, this.props.options)
         if (this.props.configuration) {
@@ -64,13 +68,26 @@ export function Scene(props: SceneProps): any {
           this.debugInspector()
         }
 
-        const progress = AssetsController.sceneLoad(this)
+        const sceneProgress = new LoadingProgress()
+        const assetsProgress = AssetsController.sceneLoad(this)
 
-        return progress// ActorsController.load(this.props.actors, this)
+        assetsProgress.onComplete.add(() => {
+          Logger.debug('Scene assets load completed', _class.prototype)
+          // ActorsController.load(this.props.actors, this)
+        })
+        assetsProgress.onError.add((error: string) => {
+          Logger.debug('Scene assets load error', error, _class.prototype)
+          KJS.throw(error)
+        })
+        assetsProgress.onProgress.add((progress: number) => {
+          sceneProgress.setProgress(progress)
+        })
+
+        return sceneProgress// ActorsController.load(this.props.actors, this)
       }
 
       unload(): void {
-
+        Logger.debug('Scene unload.', _class.prototype)
       }
 
       setState(state: StateConstructor): void {

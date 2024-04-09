@@ -22,5 +22,4 @@ export abstract class SceneInterface implements Loadable {
   onStop?(): void
   onLoad?(progress: LoadingProgress): void
   onUnload?(): void
-  onError?(errorMsg: string): void
 }

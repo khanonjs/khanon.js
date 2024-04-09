@@ -108,7 +108,7 @@ export class Core {
     const response = error ?? 'Uncaught error'
     Logger.error('Fatal error:', response)
     if (Core.app.onError) {
-      Core.app.onError.apply(response)
+      Core.app.onError(response)
     }
     Core.close()
   }

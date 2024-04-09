@@ -2,7 +2,7 @@ import { ScenesController } from './controllers/scenes-controller'
 import { Core } from './core'
 
 export class KJS {
-  static throw_(error?: any): void {
+  static throw(error?: any): void {
     Core.throw(error)
   }
 
