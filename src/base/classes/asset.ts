@@ -8,9 +8,11 @@ export class Asset {
   progress: LoadingProgress<ArrayBuffer> = new LoadingProgress<ArrayBuffer>()
 
   private sources: Set<AssetSource> = new Set<AssetSource>()
-  private buffer: ArrayBuffer
+  private _buffer: ArrayBuffer
 
   constructor(readonly defitinion: AssetDefinition, readonly source: AssetSource) {}
+
+  get buffer(): ArrayBuffer { return this._buffer }
 
   addSource(source: AssetSource, cached: boolean) {
     this.sources.add(source)
@@ -24,10 +26,6 @@ export class Asset {
   }
 
   setBuffer(buffer: ArrayBuffer) {
-    this.buffer = buffer
-  }
-
-  getBuffer(): ArrayBuffer {
-    return this.buffer
+    this._buffer = buffer
   }
 }

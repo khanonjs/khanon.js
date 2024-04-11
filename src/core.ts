@@ -13,6 +13,7 @@ import { AppConstructor } from './constructors'
 // import { Scene } from './modules/scene/scene'
 import { AppCore } from './decorators/app/app-core'
 import { AppInterface } from './decorators/app/app-interface'
+import { SceneType } from './decorators/scene/scene-type'
 import {
   BabylonContainer,
   Rect
@@ -43,6 +44,9 @@ export class Core {
   private static loopUpdateMps: number // Number of logical steps per frame
   private static loopUpdateLag: number
   private static loopUpdateDeltaTime: number // Time acceleration factor
+
+  // Render scenes
+  private static readonly renderScenes: Set<SceneType> = new Set<SceneType>()
 
   // ********************************************************
 
@@ -133,20 +137,13 @@ export class Core {
     return process.env.NODE_ENV === 'development'
   }
 
-  /* static loadScene(scene: Scene, onLoaded?: (scene: Scene) => void): Scene {
-    Core.engine.registerScene(scene)
-    Core.loadSceneQueue.add(scene, onLoaded)
-    if (Core.loadSceneQueue.getKeys().length === 1) {
-      setTimeout(
-        () =>
-          scene.load(() => {
-            Core.loadSceneQueueNext(scene, onLoaded)
-          }),
-        1
-      )
-    }
-    return scene
-  } */
+  static startRenderScene(scene: SceneType): void {
+    Core.renderScenes.add(scene)
+  }
+
+  static stopRenderScene(scene: SceneType): void {
+    Core.renderScenes.delete(scene)
+  }
 
   private static initializeHTMLLayers(): void {
     const parentId = Core.app.props.htmlCanvasContainerId
@@ -172,8 +169,8 @@ export class Core {
       // TODO 8a8f: add render scenes here
       // TODO 8a8f: add FPS updater here
 
-      /* this.renderScenes.getValues().forEach((scene) => scene.babylonjs.render())
-      if (this.properties?.fpsContainer) {
+      Core.renderScenes.forEach((scene) => scene.babylon.scene.render())
+      /* if (this.properties?.fpsContainer) {
         const divFps = document.getElementById(this.properties.fpsContainer)
         divFps.innerHTML = this.babylon.getFps().toFixed() + ' fps'
       } */

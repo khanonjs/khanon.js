@@ -1,3 +1,4 @@
+import { Logger } from '../modules'
 import { ExtractOptional } from '../types/extract-optional'
 
 /**
@@ -56,7 +57,7 @@ export function objectToString(data: unknown, stringfy = true): string {
 /**
  * Removes duplicated items in array or first level of object properties
  */
-export function removeDuplicities<T extends object>(values: T): T {
+export function removeArrayDuplicitiesInObject<T extends object>(values: T): T {
   function remove(vals: any): any {
     if (Array.isArray(vals)) {
       return Array.from(new Set(vals))
@@ -70,7 +71,8 @@ export function removeDuplicities<T extends object>(values: T): T {
     }
     return values
   } else {
-    return remove(values)
+    Logger.error('Trying to remove array duplicities in a non-object variable.')
+    return values
   }
 }
 

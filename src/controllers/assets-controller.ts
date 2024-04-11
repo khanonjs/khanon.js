@@ -35,9 +35,8 @@ export class AssetsController {
 
   private static assets: Map<string, Asset> = new Map<string, Asset>()
 
-  static getBuffer(url: string): ArrayBuffer {
-    // 8a8f
-    return new Uint8Array()
+  static getAsset(url: string): Asset | undefined {
+    return this.assets.get(url)
   }
 
   /**
@@ -72,17 +71,20 @@ export class AssetsController {
   }
 
   static clearCache() {
+    // 8a8f
     AssetsController.assets.clear()
   }
 
+  /**
+   * Loads all assets from a Scene
+   */
   static sceneLoad(scene: SceneType): LoadingProgress {
     const progress = new LoadingProgress()
-    const assetsDefinitions = this.findAssetsDefinitions(scene.props)
-    if (assetsDefinitions.length === 0) {
+    if (scene.assets.length === 0) {
       progress.complete()
     } else {
       const progresses = []
-      assetsDefinitions.forEach(assetDef => {
+      scene.assets.forEach(assetDef => {
         progresses.push(AssetsController.loadFileFromUrl(assetDef, scene))
       })
       progress.fromNodes(progresses)
@@ -90,14 +92,27 @@ export class AssetsController {
     return progress
   }
 
+  /**
+   * Purge loaded assets from a Scene.
+   * Non cached and unnecessary assets will be removed.
+   */
   static scenePurge(scene: SceneType) {
+    // scene.assets.
     // 8a8f
-    // Purge scene assets that are not needed after scene load
   }
 
+  /**
+   * Unload all existing assets of a Scene that are not cached.
+   */
   static sceneUnload(scene: SceneType) {
     // 8a8f
-    // Remove scene assets that are not cached
+  }
+
+  /**
+   * Remove non cached assets with no sources
+   */
+  private purgeAssets() {
+    // 8a8f
   }
 
   private static loadFileFromUrl(definition: AssetDefinition, source: SceneType): LoadingProgress<ArrayBuffer> {
@@ -140,7 +155,7 @@ export class AssetsController {
                   }
                   asset.setBuffer(allParts.buffer.slice(allParts.byteOffset, allParts.byteLength + allParts.byteOffset))
                   Logger.debug(`getFileFromUrl: '${definition.url}' loaded from url, cached: ${!!definition.cached}`)
-                  asset.progress.complete(asset.getBuffer())
+                  asset.progress.complete(asset.buffer)
                 } else if (result.value.length) {
                   parts.push(result.value)
                   receivedLength += result.value.length

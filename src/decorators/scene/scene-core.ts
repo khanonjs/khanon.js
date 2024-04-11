@@ -1,9 +1,12 @@
+import { AssetDefinition } from '../../models'
 import { SceneProps } from './scene-props'
 
 export abstract class SceneCore {
-  props: SceneProps
-  abstract _loaded: boolean
-  abstract _started: boolean
+  abstract props: SceneProps
+  protected abstract _assets: AssetDefinition[]
+  protected abstract _loaded: boolean
+  protected abstract _started: boolean
+  abstract get assets(): AssetDefinition[]
   abstract setEngineParams(): void
   abstract renderStart(id: string): void
   abstract renderStop(id: string): void

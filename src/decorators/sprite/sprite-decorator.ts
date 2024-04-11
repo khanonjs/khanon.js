@@ -6,10 +6,7 @@ import {
   applyDefaults,
   invokeCallback
 } from '../../helpers/utils'
-import {
-  AssetType,
-  BabylonContainer
-} from '../../models'
+import { BabylonContainer } from '../../models'
 import { SceneType } from '../scene/scene-type'
 import { SpriteCore } from './sprite-core'
 import { SpriteInstance } from './sprite-instance'
@@ -33,39 +30,32 @@ export function Sprite(props: SpriteProps): any {
         const callLoaded = () => {
           invokeCallback(this.onLoaded, this, scene)
         }
+        const progress = new LoadingProgress().complete()
         if (this.textures.get(scene)) {
           callLoaded()
-          return new LoadingProgress().complete()
+          return progress.complete()
         } else {
           if (this.props.url) {
-            // 8a8f
-            /* const progress = AssetsController.getFileFromUrl(this.props.url, scene, this.props.cached, AssetType.IMAGE)
-            progress.onComplete.add((buffer) => {
-              const texture = new SpriteTexture(scene, this.props)
-              texture.setFromArrayBuffer(buffer)
-              this.babylon = texture.babylon
-              this.textures.set(scene, texture)
-              callLoaded()
-            })
-            return progress */
+            const asset = AssetsController.getAsset(this.props.url)
+            const texture = new SpriteTexture(scene, this.props)
+            texture.setFromArrayBuffer(asset.buffer)
+            this.babylon = texture.babylon
+            this.textures.set(scene, texture)
+            callLoaded()
+            return progress
           } else {
             const texture = new SpriteTexture(scene, this.props)
             texture.setFromBlank()
             this.babylon = texture.babylon
             this.textures.set(scene, texture)
             callLoaded()
-            return new LoadingProgress().complete()
+            return progress.complete()
           }
         }
       }
 
       unload(scene: SceneType): void {
 
-      }
-
-      spawn(): void {
-        console.log('aki SPAWN!')
-        // const instance = new SpriteInstance()
       }
     }
     SpritesController.register(new _class())

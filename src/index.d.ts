@@ -51,8 +51,8 @@ export declare namespace KJS {
     function load(scene: SceneConstructor[]): LoadingProgress
     function unload(scene: SceneConstructor): void
     function unload(scene: SceneConstructor[]): void
-    function start(): void
-    function stop(): void
+    function start(scene: SceneConstructor, state: StateConstructor): void
+    function stop(scene: SceneConstructor): void
   }
 
   export namespace Sprite {
