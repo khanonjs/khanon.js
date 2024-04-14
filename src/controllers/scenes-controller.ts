@@ -13,4 +13,8 @@ export class ScenesController extends ControllerLoader<SceneType, SceneType>() {
   static stop(scene: SceneConstructor): void {
     ScenesController.get(scene).stop()
   }
+
+  static setState(scene: SceneConstructor, state: StateConstructor): void {
+    ScenesController.get(scene).setState(state)
+  }
 }

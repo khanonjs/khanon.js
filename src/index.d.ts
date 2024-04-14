@@ -1,9 +1,13 @@
-import { Observable } from '@babylonjs/core'
+import {
+  Camera as BabylonCamera,
+  Observable
+} from '@babylonjs/core'
 import { DynamicTexture } from '@babylonjs/core/Materials/Textures/dynamicTexture'
 
 import { LoadingProgress } from './base'
 import {
   ActorConstructor,
+  CameraConstructor,
   ParticleConstructor,
   ParticleSourceConstructor,
   SceneConstructor,
@@ -12,10 +16,12 @@ import {
 import { Actor2DProps } from './decorators/actor/actor2d/actor2d-props'
 import { Actor3DProps } from './decorators/actor/actor3d/actor3d-props'
 import { AppProps } from './decorators/app/app-props'
+import { CameraProps } from './decorators/camera/camera-props'
 import { SceneProps } from './decorators/scene/scene-props'
 import { SceneType } from './decorators/scene/scene-type'
 import { SpriteProps } from './decorators/sprite/sprite-props'
-import { BabylonContainer } from './models'
+import { StateProps } from './decorators/state/state-props'
+import { BabylonAccessor } from './models'
 
 // **************
 //  Constructors
@@ -95,7 +101,7 @@ export declare abstract class SceneInterface {
   /**
    * Babylon container
    */
-  babylon: Pick<BabylonContainer, 'engine' | 'scene'>
+  babylon: Pick<BabylonAccessor, 'engine' | 'scene'>
 
   /**
    * Indicates if the scene has been loaded.
@@ -192,7 +198,7 @@ export declare abstract class SpriteInterface {
   /**
    * Babylon.js objects used by this class.
    */
-  babylon: Pick<BabylonContainer, 'spriteManager' | 'scene'>
+  babylon: Pick<BabylonAccessor, 'spriteManager' | 'scene'>
 
   /**
    * Callback invoked after the sprite has been loaded in a scene.
@@ -200,6 +206,29 @@ export declare abstract class SpriteInterface {
   onLoaded?(scene: KJS.Scene): void
 
   spawn(): void
+}
+
+// ****************
+// Camera decorator
+// ****************
+export declare function Camera(props: CameraProps): any
+export { CameraProps } from './decorators/camera/camera-props'
+export declare abstract class CameraInterface<C extends BabylonCamera> {
+  camera: C
+  initialize(): C
+  loopUpdate?(): void
+}
+
+// ****************
+// State decorator
+// ****************
+export declare function State(props: StateProps): any
+export { StateProps } from './decorators/state/state-props'
+export declare abstract class StateInterface {
+  useCamera(camera: CameraConstructor): void
+  onStart?(): void
+  onEnd?(): void
+  loopUpdate?(delta: number): void
 }
 
 // ********

@@ -1,4 +1,4 @@
 export { AssetDefinition } from './asset-definition'
 export { AssetType } from './asset-type'
-export { BabylonAccesor as BabylonContainer } from './babylon-accesor'
+export { BabylonAccessor } from './babylon-accessor'
 export { Rect } from './rect'

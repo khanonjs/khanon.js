@@ -18,7 +18,7 @@ import {
 import KJS from '../../kjs'
 import {
   AssetDefinition,
-  BabylonContainer
+  BabylonAccessor
 } from '../../models'
 import { Logger } from '../../modules'
 import { SceneCore } from './scene-core'
@@ -44,7 +44,7 @@ export function Scene(props: SceneProps): any {
       renderStop(id: string): void {}
 
       // Interface
-      babylon: Pick<BabylonContainer, 'scene'> = { scene: null }
+      babylon: Pick<BabylonAccessor, 'scene'> = { scene: null }
       get assets(): AssetDefinition[] { return this._assets }
       get loaded(): boolean { return this._loaded }
       get started(): boolean { return this._started }

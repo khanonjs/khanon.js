@@ -15,7 +15,7 @@ import { AppCore } from './decorators/app/app-core'
 import { AppInterface } from './decorators/app/app-interface'
 import { SceneType } from './decorators/scene/scene-type'
 import {
-  BabylonContainer,
+  BabylonAccessor,
   Rect
 } from './models'
 import { Logger } from './modules/logger/logger'
@@ -33,7 +33,7 @@ export class Core {
   private static htmlGui: HTMLDivElement // 8a8f
 
   // Babylon
-  private static babylon: Pick<BabylonContainer, 'engine'> = { engine: null }
+  private static babylon: Pick<BabylonAccessor, 'engine'> = { engine: null }
 
   // Canvas
   private static canvasRect: Rect

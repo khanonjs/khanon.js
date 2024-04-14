@@ -1,5 +1,7 @@
 import { StateProps } from './state-props'
 
-export class StateCore {
-  props: StateProps
+export abstract class StateCore {
+  abstract props: StateProps
+  abstract start(): void
+  abstract end(): void
 }

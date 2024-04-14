@@ -6,7 +6,7 @@ import {
   applyDefaults,
   invokeCallback
 } from '../../helpers/utils'
-import { BabylonContainer } from '../../models'
+import { BabylonAccessor } from '../../models'
 import { SceneType } from '../scene/scene-type'
 import { SpriteCore } from './sprite-core'
 import { SpriteInstance } from './sprite-instance'
@@ -19,7 +19,7 @@ import { spritePropsDefault } from './sprite.props.deafult'
 export function Sprite(props: SpriteProps): any {
   return function <T extends { new (...args: any[]): SpriteType }>(constructor: T & SpriteType, context: ClassDecoratorContext) {
     const _class = class extends constructor implements SpriteCore, SpriteInterface {
-      babylon: Pick<BabylonContainer, 'spriteManager' | 'scene'>
+      babylon: Pick<BabylonAccessor, 'spriteManager' | 'scene'>
       props = applyDefaults(props, spritePropsDefault)
       textures: Map<SceneType, SpriteTexture> = new Map<SceneType, SpriteTexture>()
       Instance: () => SpriteInstance = () => SpriteInstance // 8a8f

@@ -6,7 +6,7 @@ import { SpriteManager } from '@babylonjs/core/Sprites/spriteManager'
 /**
  * Object exposed in Khanon.js wrappers enablig access to Babylon.js classes and objects
  */
-export interface BabylonAccesor {
+export interface BabylonAccessor {
   engine: Engine
   scene: Scene
   sprite: Sprite
