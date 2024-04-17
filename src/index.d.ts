@@ -1,8 +1,4 @@
-import {
-  Camera as BabylonCamera,
-  Observable
-} from '@babylonjs/core'
-import { DynamicTexture } from '@babylonjs/core/Materials/Textures/dynamicTexture'
+import { Camera as BabylonCamera } from '@babylonjs/core'
 
 import { LoadingProgress } from './base'
 import {
@@ -17,10 +13,10 @@ import { Actor2DProps } from './decorators/actor/actor2d/actor2d-props'
 import { Actor3DProps } from './decorators/actor/actor3d/actor3d-props'
 import { AppProps } from './decorators/app/app-props'
 import { CameraProps } from './decorators/camera/camera-props'
+import { SceneStateProps } from './decorators/scene-state/scene-state-props'
 import { SceneProps } from './decorators/scene/scene-props'
 import { SceneType } from './decorators/scene/scene-type'
 import { SpriteProps } from './decorators/sprite/sprite-props'
-import { StateProps } from './decorators/state/state-props'
 import { BabylonAccessor } from './models'
 
 // **************
@@ -213,21 +209,42 @@ export declare abstract class SpriteInterface {
 // ****************
 export declare function Camera(props: CameraProps): any
 export { CameraProps } from './decorators/camera/camera-props'
-export declare abstract class CameraInterface<C extends BabylonCamera> {
-  camera: C
-  initialize(): C
-  loopUpdate?(): void
+export declare abstract class CameraInterface {
+  babylon: Pick<BabylonAccessor<ReturnType<this['initialize']>>, 'camera'>
+
+  /**
+   * Initialize the camera. This method must return a valid Babylon camera.
+   * It will be used from any Scene State.
+   */
+  abstract initialize(): BabylonCamera
+
+  loopUpdate?(delta: number): void
 }
 
 // ****************
 // State decorator
 // ****************
-export declare function State(props: StateProps): any
-export { StateProps } from './decorators/state/state-props'
-export declare abstract class StateInterface {
+export declare function SceneState(props: SceneStateProps): any
+export { SceneStateProps } from './decorators/scene-state/scene-state-props'
+export declare abstract class SceneStateInterface {
+  /**
+   * Uses a camera. Use this method at any point or event of the state lifecycle.
+   */
   useCamera(camera: CameraConstructor): void
+
+  /**
+   * Invoked on state start. Use this method to setup the scene according to this state start.
+   */
   onStart?(): void
+
+  /**
+   * Invoked on state end. Use this method to setup the scene according to this state end.
+   */
   onEnd?(): void
+
+  /**
+   * LoopUpdate method.
+   */
   loopUpdate?(delta: number): void
 }
 

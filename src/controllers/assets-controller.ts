@@ -19,7 +19,7 @@ import {
 } from '../helpers/utils'
 import {
   AssetDefinition,
-  AssetType
+  AssetsEnum
 } from '../models'
 import { Logger } from '../modules'
 import { ActorsController } from './actors-controller'
@@ -27,10 +27,10 @@ import { SpritesController } from './sprites-controller'
 
 export class AssetsController {
   private static contentTypes = {
-    [AssetType.FONT]: ['font/otf', 'font/ttf', 'font/woff', 'font/woff2', ''], // 8a8f
-    [AssetType.IMAGE]: ['image/bmp', 'image/jpeg', 'image/png', 'image/tiff', 'image/webp'], // 8a8f
-    [AssetType.MESH]: [''], // 8a8f
-    [AssetType.AUDIO]: ['audio/aac', 'audio/midi', 'audio/x-midi', 'audio/mpeg', 'audio/ogg', 'audio/opus', 'audio/wav', 'audio/webm'] // 8a8f
+    [AssetsEnum.FONT]: ['font/otf', 'font/ttf', 'font/woff', 'font/woff2', ''], // 8a8f
+    [AssetsEnum.IMAGE]: ['image/bmp', 'image/jpeg', 'image/png', 'image/tiff', 'image/webp'], // 8a8f
+    [AssetsEnum.MESH]: [''], // 8a8f
+    [AssetsEnum.AUDIO]: ['audio/aac', 'audio/midi', 'audio/x-midi', 'audio/mpeg', 'audio/ogg', 'audio/opus', 'audio/wav', 'audio/webm'] // 8a8f
   }
 
   private static assets: Map<string, Asset> = new Map<string, Asset>()
@@ -58,7 +58,7 @@ export class AssetsController {
                 urls[sprite.props.url] = true
                 definitions = [...definitions, {
                   url: sprite.props.url,
-                  type: AssetType.IMAGE,
+                  type: AssetsEnum.IMAGE,
                   cached: sprite.props.cached
                 }]
               }

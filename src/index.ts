@@ -11,6 +11,11 @@ export { Scene } from './decorators/scene/scene-decorator'
 export { SceneProps } from './decorators/scene/scene-props'
 export { SceneInterface } from './decorators/scene/scene-interface'
 
+// Scene state decorator
+export { SceneState } from './decorators/scene-state/scene-state-decorator'
+export { SceneStateProps } from './decorators/scene-state/scene-state-props'
+export { SceneStateInterface } from './decorators/scene-state/scene-state-interface'
+
 // Actor decorator
 export { ActorProps } from './decorators/actor/actor-props'
 export { ActorInterface } from './decorators/actor/actor-interface'
@@ -27,6 +32,11 @@ export { Actor3DInterface } from './decorators/actor/actor3d/actor3d-interface'
 export { Sprite } from './decorators/sprite/sprite-decorator'
 export { SpriteProps } from './decorators/sprite/sprite-props'
 export { SpriteInterface } from './decorators/sprite/sprite-interface'
+
+// Camera decorator
+export { Camera } from './decorators/camera/camera-decorator'
+export { CameraProps } from './decorators/camera/camera-props'
+export { CameraInterface } from './decorators/camera/camera-interface'
 
 // Khanon.js
 export { KJS } from './kjs'

@@ -2,10 +2,10 @@ import { LoopUpdatable } from '../../base'
 import { CameraConstructor } from '../../constructors'
 import { BabylonAccessor } from '../../models'
 
-export abstract class StateInterface implements LoopUpdatable {
+export abstract class SceneStateInterface implements LoopUpdatable {
   abstract babylon: Pick<BabylonAccessor, 'scene'>
   abstract useCamera(camera: CameraConstructor): void
-  abstract onStart?(): void
-  abstract onEnd?(): void
-  abstract loopUpdate?(delta: number): void
+  onStart?(): void
+  onEnd?(): void
+  loopUpdate?(delta: number): void
 }
