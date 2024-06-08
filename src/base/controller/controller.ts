@@ -1,4 +1,3 @@
-import { isPrototypeOf } from '../../helpers/utils'
 import { Logger } from '../../modules/logger/logger'
 import { Spawnable } from '../interfaces/spawnable'
 
