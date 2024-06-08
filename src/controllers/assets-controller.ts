@@ -50,9 +50,7 @@ export class AssetsController {
         if (Array.isArray(property)) {
           property.forEach(value => {
             if (isPrototypeOf(ActorInterface, value)) {
-              console.log('aki A VER actor A', value)
               const actor = ActorsController.get<Actor2DCore>(value)
-              console.log('aki A VER actor B', actor)
               definitions = [...definitions, ...AssetsController.findAssetsDefinitions(actor.props, urls)]
             }
             if (isPrototypeOf(SpriteInterface, value)) {

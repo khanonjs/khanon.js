@@ -55,9 +55,9 @@ export function Scene(props: SceneProps): any {
 
       start(state: SceneStateConstructor): void {
         Logger.debug('Scene start', _class.prototype)
-        SceneStatesController.get(state).spawn().start(this)
         Core.startRenderScene(this)
         this._started = true
+        this.setState(state)
         invokeCallback(this.onStart, this)
       }
 
@@ -116,7 +116,11 @@ export function Scene(props: SceneProps): any {
       }
 
       setState(state: SceneStateConstructor): void {
-
+        if (!this.props.states.find(_state => _state === state)) {
+          Logger.error('Trying to set a state non added to the scene. Please check he scene props.', _class.prototype, state.prototype)
+        } else {
+          SceneStatesController.get(state).spawn().start(this)
+        }
       }
 
       spawn(entity: ActorConstructor | ParticleConstructor | ParticleSourceConstructor): void {
