@@ -55,7 +55,7 @@ export function objectToString(data: unknown, stringfy = true): string {
 }
 
 /**
- * Removes duplicated items in 'Array' or 'First Level Object Array'
+ * Removes duplicated items in 'Array' or first-Level 'Object' array
  */
 export function removeArrayDuplicitiesInObject<T extends object>(values: T): T {
   function remove(vals: any): any {
