@@ -2,6 +2,7 @@ import { Camera as BabylonCamera } from '@babylonjs/core'
 
 import { CameraConstructor } from '../../constructors'
 import { CamerasController } from '../../controllers'
+import { spawnClass } from '../../helpers/utils'
 import { BabylonAccessor } from '../../models'
 import { SceneType } from '../scene/scene-type'
 import { CameraCore } from './camera-core'
@@ -13,12 +14,10 @@ export function Camera(): any {
       babylon: Pick<BabylonAccessor<BabylonCamera>, 'camera'> = { camera: null }
     }
     const _classCore = class implements CameraCore {
-      Instance: CameraConstructor = _classInterface
-      InstanceReference: CameraInterface = new _classInterface()
+      Instance: CameraInterface = new _classInterface()
 
       spawn(): CameraInterface {
-        const camera = new this.Instance()
-        return camera
+        return spawnClass(this.Instance)
       }
     }
     CamerasController.register(new _classCore())

@@ -7,6 +7,7 @@ import {
   SceneStatesController
 } from '../../controllers'
 import { Core } from '../../core'
+import { spawnClass } from '../../helpers/utils'
 import {
   BabylonAccessor,
   UseCamera
@@ -51,11 +52,10 @@ export function SceneState(props: SceneStateProps): any {
     }
     const _classCore = class implements SceneStateCore {
       props = props
-      Instance: SceneStateConstructor = _classInterface
-      InstanceReference: SceneStateInterface = new _classInterface()
+      Instance: SceneStateInterface = new _classInterface()
 
       spawn(): SceneStateInterface {
-        return new this.Instance()
+        return spawnClass(this.Instance)
       }
     }
     SceneStatesController.register(new _classCore())

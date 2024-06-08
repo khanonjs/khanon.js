@@ -12,7 +12,6 @@ import { SceneType } from '../../scene/scene-type'
 import { Actor2DCore } from './actor2d-core'
 import { Actor2DInterface } from './actor2d-interface'
 import { Actor2DProps } from './actor2d-props'
-import { Actor2DType } from './actor2d-type'
 
 export function Actor2D(props: Actor2DProps): any {
   return function <T extends { new (...args: any[]): Actor2DInterface }>(constructor: T & Actor2DInterface, context: ClassDecoratorContext) {
@@ -21,8 +20,7 @@ export function Actor2D(props: Actor2DProps): any {
     }
     const _classCore = class implements Actor2DCore {
       props = removeArrayDuplicitiesInObject(props)
-      Instance: Actor2DConstructor = _classInterface
-      InstanceReference: Actor2DInterface = new _classInterface()
+      Instance: Actor2DInterface = new _classInterface()
       loaded = false
 
       load(scene: SceneType): LoadingProgress {

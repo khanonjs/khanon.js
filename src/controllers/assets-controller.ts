@@ -2,15 +2,8 @@ import {
   Asset,
   LoadingProgress
 } from '../base'
-import {
-  ActorConstructor,
-  SceneConstructor
-} from '../constructors'
 import { ActorInterface } from '../decorators/actor/actor-interface'
-import { ActorType } from '../decorators/actor/actor-type'
 import { Actor2DCore } from '../decorators/actor/actor2d/actor2d-core'
-import { Actor2DInterface } from '../decorators/actor/actor2d/actor2d-interface'
-import { Actor2DType } from '../decorators/actor/actor2d/actor2d-type'
 import { SceneType } from '../decorators/scene/scene-type'
 import { SpriteInterface } from '../decorators/sprite/sprite-interface'
 import { SpriteType } from '../decorators/sprite/sprite-type'
@@ -50,6 +43,7 @@ export class AssetsController {
         if (Array.isArray(property)) {
           property.forEach(value => {
             if (isPrototypeOf(ActorInterface, value)) {
+              console.log('aki AHORA!!!!!')
               const actor = ActorsController.get<Actor2DCore>(value)
               definitions = [...definitions, ...AssetsController.findAssetsDefinitions(actor.props, urls)]
             }

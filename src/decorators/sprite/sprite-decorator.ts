@@ -24,7 +24,6 @@ export function Sprite(props: SpriteProps): any {
       babylon: Pick<BabylonAccessor, 'spriteManager' | 'scene'>
       props = applyDefaults(props, spritePropsDefault)
       textures: Map<SceneType, SpriteTexture> = new Map<SceneType, SpriteTexture>()
-      Instance: () => SpriteInstance = () => SpriteInstance // 8a8f
 
       onLoaded?(): () => void
 

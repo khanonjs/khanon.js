@@ -14,8 +14,7 @@ export function Actor3D(props: Actor3DProps): any {
     }
     const _classCore = class implements Actor3DCore {
       props = removeArrayDuplicitiesInObject(props)
-      Instance: Actor3DConstructor = _classInterface
-      InstanceReference: Actor3DInterface = new _classInterface()
+      Instance: Actor3DInterface = new _classInterface()
       loaded = false
 
       load(scene: SceneType): LoadingProgress {

@@ -1,8 +1,8 @@
 import { ControllerLoader } from '../base'
 import { ActorConstructor } from '../constructors'
-import { ActorType } from '../decorators/actor/actor-type'
+import { ActorCore } from '../decorators/actor/actor-core'
 import { SceneType } from '../decorators/scene/scene-type'
 
-export class ActorsController extends ControllerLoader<ActorConstructor, ActorType, SceneType>() {
+export class ActorsController extends ControllerLoader<ActorConstructor, ActorCore, SceneType>() {
 
 }
