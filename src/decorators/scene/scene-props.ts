@@ -6,7 +6,7 @@ import {
   CameraConstructor,
   GUIConstructor,
   SceneMapConstructor,
-  StateConstructor
+  SceneStateConstructor
 } from '../../constructors'
 
 export interface SceneProps {
@@ -15,6 +15,6 @@ export interface SceneProps {
     guis?: GUIConstructor[]
     cameras?: CameraConstructor[]
     maps?: SceneMapConstructor[]
-    states?: StateConstructor[]
+    states?: SceneStateConstructor[]
     actors?: ActorConstructor[]
 }

@@ -8,6 +8,7 @@ import {
 } from '../constructors'
 import { ActorInterface } from '../decorators/actor/actor-interface'
 import { ActorType } from '../decorators/actor/actor-type'
+import { Actor2DCore } from '../decorators/actor/actor2d/actor2d-core'
 import { Actor2DInterface } from '../decorators/actor/actor2d/actor2d-interface'
 import { Actor2DType } from '../decorators/actor/actor2d/actor2d-type'
 import { SceneType } from '../decorators/scene/scene-type'
@@ -19,7 +20,7 @@ import {
 } from '../helpers/utils'
 import {
   AssetDefinition,
-  AssetsEnum
+  AssetType
 } from '../models'
 import { Logger } from '../modules'
 import { ActorsController } from './actors-controller'
@@ -27,10 +28,10 @@ import { SpritesController } from './sprites-controller'
 
 export class AssetsController {
   private static contentTypes = {
-    [AssetsEnum.FONT]: ['font/otf', 'font/ttf', 'font/woff', 'font/woff2', ''], // 8a8f
-    [AssetsEnum.IMAGE]: ['image/bmp', 'image/jpeg', 'image/png', 'image/tiff', 'image/webp'], // 8a8f
-    [AssetsEnum.MESH]: [''], // 8a8f
-    [AssetsEnum.AUDIO]: ['audio/aac', 'audio/midi', 'audio/x-midi', 'audio/mpeg', 'audio/ogg', 'audio/opus', 'audio/wav', 'audio/webm'] // 8a8f
+    [AssetType.FONT]: ['font/otf', 'font/ttf', 'font/woff', 'font/woff2', ''], // 8a8f
+    [AssetType.IMAGE]: ['image/bmp', 'image/jpeg', 'image/png', 'image/tiff', 'image/webp'], // 8a8f
+    [AssetType.MESH]: [''], // 8a8f
+    [AssetType.AUDIO]: ['audio/aac', 'audio/midi', 'audio/x-midi', 'audio/mpeg', 'audio/ogg', 'audio/opus', 'audio/wav', 'audio/webm'] // 8a8f
   }
 
   private static assets: Map<string, Asset> = new Map<string, Asset>()
@@ -40,7 +41,7 @@ export class AssetsController {
   }
 
   /**
-   * Gets all assets definitions within a class (Scene, GUI, Actor, Particle, etc..)
+   * Get all assets definitions within a class (Scene, GUI, Actor, Particle, etc..)
    */
   static findAssetsDefinitions(source: any, urls: object = {}): AssetDefinition[] {
     let definitions: AssetDefinition[] = []
@@ -49,7 +50,9 @@ export class AssetsController {
         if (Array.isArray(property)) {
           property.forEach(value => {
             if (isPrototypeOf(ActorInterface, value)) {
-              const actor = ActorsController.get<Actor2DType>(value)
+              console.log('aki A VER actor A', value)
+              const actor = ActorsController.get<Actor2DCore>(value)
+              console.log('aki A VER actor B', actor)
               definitions = [...definitions, ...AssetsController.findAssetsDefinitions(actor.props, urls)]
             }
             if (isPrototypeOf(SpriteInterface, value)) {
@@ -58,7 +61,7 @@ export class AssetsController {
                 urls[sprite.props.url] = true
                 definitions = [...definitions, {
                   url: sprite.props.url,
-                  type: AssetsEnum.IMAGE,
+                  type: AssetType.IMAGE,
                   cached: sprite.props.cached
                 }]
               }

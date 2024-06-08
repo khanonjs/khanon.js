@@ -35,7 +35,6 @@ export { SpriteInterface } from './decorators/sprite/sprite-interface'
 
 // Camera decorator
 export { Camera } from './decorators/camera/camera-decorator'
-export { CameraProps } from './decorators/camera/camera-props'
 export { CameraInterface } from './decorators/camera/camera-interface'
 
 // Khanon.js
@@ -44,3 +43,6 @@ export { KJS } from './kjs'
 // Modules
 export { Logger } from './modules/logger/logger'
 export { LoggerLevels } from './modules/logger/logger-levels'
+
+// Models
+export { UseCamera } from './models/use-camera'

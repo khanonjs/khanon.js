@@ -1,5 +1,5 @@
 export { AssetDefinition } from './asset-definition'
-export { AssetsEnum } from './assets-enum'
+export { AssetType } from './asset-type'
 export { BabylonAccessor } from './babylon-accessor'
 export { Rect } from './rect'
 export { UseCamera } from './use-camera'

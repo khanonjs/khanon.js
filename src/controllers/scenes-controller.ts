@@ -1,12 +1,12 @@
 import { ControllerLoader } from '../base'
 import {
   SceneConstructor,
-  StateConstructor
+  SceneStateConstructor
 } from '../constructors'
 import { SceneType } from '../decorators/scene/scene-type'
 
 export class ScenesController extends ControllerLoader<SceneType, SceneType>() {
-  static start(scene: SceneConstructor, state: StateConstructor): void {
+  static start(scene: SceneConstructor, state: SceneStateConstructor): void {
     ScenesController.get(scene).start(state)
   }
 
@@ -14,7 +14,7 @@ export class ScenesController extends ControllerLoader<SceneType, SceneType>() {
     ScenesController.get(scene).stop()
   }
 
-  static setState(scene: SceneConstructor, state: StateConstructor): void {
+  static setState(scene: SceneConstructor, state: SceneStateConstructor): void {
     ScenesController.get(scene).setState(state)
   }
 }

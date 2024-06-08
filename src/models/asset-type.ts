@@ -1,4 +1,4 @@
-export enum AssetsEnum {
+export enum AssetType {
   AUDIO,
   IMAGE,
   FONT,

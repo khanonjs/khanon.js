@@ -1,7 +1,7 @@
-import { AssetsEnum } from './asset-enum'
+import { AssetType } from './asset-type'
 
 export interface AssetDefinition {
   url: string
-  type: AssetsEnum
+  type: AssetType
   cached: boolean
 }

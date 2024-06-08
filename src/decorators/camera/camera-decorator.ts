@@ -1,15 +1,27 @@
+import { Camera as BabylonCamera } from '@babylonjs/core'
+
+import { CameraConstructor } from '../../constructors'
+import { CamerasController } from '../../controllers'
 import { BabylonAccessor } from '../../models'
+import { SceneType } from '../scene/scene-type'
 import { CameraCore } from './camera-core'
 import { CameraInterface } from './camera-interface'
-import { CameraProps } from './camera-props'
-import { CameraType } from './camera-type'
 
-export function Camera(props: CameraProps): any {
-  return function <T extends { new (...args: any[]): CameraType }>(constructor: T & CameraType, context: ClassDecoratorContext) {
-    const _class = class extends constructor implements CameraCore, CameraInterface {
-      props = props
-      babylon: Pick<BabylonAccessor<ReturnType<this['initialize']>>, 'camera'> = { camera: null }
+export function Camera(): any {
+  return function <T extends { new (...args: any[]): CameraInterface }>(constructor: T & CameraInterface, context: ClassDecoratorContext) {
+    const _classInterface = class extends constructor implements CameraInterface {
+      babylon: Pick<BabylonAccessor<BabylonCamera>, 'camera'> = { camera: null }
     }
-    return _class
+    const _classCore = class implements CameraCore {
+      Instance: CameraConstructor = _classInterface
+      InstanceReference: CameraInterface = new _classInterface()
+
+      spawn(): CameraInterface {
+        const camera = new this.Instance()
+        return camera
+      }
+    }
+    CamerasController.register(new _classCore())
+    return CameraInterface
   }
 }

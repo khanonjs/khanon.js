@@ -1,7 +1,9 @@
 import { LoadingProgress } from '../../base'
 import { SpriteConstructor } from '../../constructors'
-import { AssetsController } from '../../controllers/assets-controller'
-import { SpritesController } from '../../controllers/sprites-controller'
+import {
+  AssetsController,
+  SpritesController
+} from '../../controllers'
 import {
   applyDefaults,
   invokeCallback

@@ -1,20 +1,28 @@
 import { LoadingProgress } from '../../../base'
 import { Actor3DConstructor } from '../../../constructors'
-import { ActorsController } from '../../../controllers/actors-controller'
+import { ActorsController } from '../../../controllers'
+import { removeArrayDuplicitiesInObject } from '../../../helpers/utils'
+import { SceneType } from '../../scene/scene-type'
 import { Actor3DCore } from './actor3d-core'
 import { Actor3DInterface } from './actor3d-interface'
 import { Actor3DProps } from './actor3d-props'
 
 export function Actor3D(props: Actor3DProps): any {
-  return function <T extends { new (...args: any[]): Actor3DCore }>(constructor: T & Actor3DCore, context: ClassDecoratorContext) {
-    const _class = class extends constructor implements Actor3DCore {
-      props = props
-      Instance: Actor3DConstructor = Actor3DInterface // 8a8f
+  return function <T extends { new (...args: any[]): Actor3DInterface }>(constructor: T & Actor3DInterface, context: ClassDecoratorContext) {
+    const _classInterface = class extends constructor implements Actor3DInterface {
+      onLoaded?(): void {}
+    }
+    const _classCore = class implements Actor3DCore {
+      props = removeArrayDuplicitiesInObject(props)
+      Instance: Actor3DConstructor = _classInterface
+      InstanceReference: Actor3DInterface = new _classInterface()
       loaded = false
 
-      load(): LoadingProgress {
+      load(scene: SceneType): LoadingProgress {
+        const progress = new LoadingProgress().complete()
+        // SpritesController.load(this.props.sprites, scene)
         // 8a8f Load  the rest of props
-        return {} as any
+        return progress
       }
 
       unload(): void {
@@ -25,7 +33,7 @@ export function Actor3D(props: Actor3DProps): any {
 
       }
     }
-    ActorsController.register(new _class())
-    return _class
+    ActorsController.register(new _classCore())
+    return _classInterface
   }
 }

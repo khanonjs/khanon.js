@@ -1,5 +1,9 @@
-import { CameraProps } from './camera-props'
+import { Spawnable } from '../../base'
+import { CameraConstructor } from '../../constructors'
+import { CameraInterface } from './camera-interface'
 
-export class CameraCore {
-  props: CameraProps
+export abstract class CameraCore implements Spawnable<CameraConstructor, CameraInterface> {
+  abstract Instance: CameraConstructor // Disambiguate core methods from interface spawnable instances
+  abstract InstanceReference: CameraInterface
+  abstract spawn(): CameraInterface
 }

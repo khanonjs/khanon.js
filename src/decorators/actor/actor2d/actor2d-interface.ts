@@ -1,5 +1,4 @@
 import { ActorInterface } from '../actor-interface'
 
-export class Actor2DInterface extends ActorInterface {
-
+export abstract class Actor2DInterface extends ActorInterface {
 }

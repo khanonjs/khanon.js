@@ -1,5 +1,4 @@
 import { Actor2DConstructor } from '../../../constructors'
-import { BabylonAccessor } from '../../../models'
 import { ActorCore } from '../actor-core'
 import { Actor2DProps } from './actor2d-props'
 

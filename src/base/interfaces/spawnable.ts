@@ -1,4 +1,5 @@
-export abstract class Spawnable<I> {
+export abstract class Spawnable<I, R> {
   abstract Instance: I
-  abstract spawn(): void
+  abstract InstanceReference: R
+  abstract spawn(container?: any): void
 }

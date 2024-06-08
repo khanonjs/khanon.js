@@ -1,4 +1,7 @@
-import { Camera as BabylonCamera } from '@babylonjs/core'
+import {
+  Camera as BabylonCamera,
+  Scene as BabylonScene
+} from '@babylonjs/core'
 
 import { LoadingProgress } from './base'
 import {
@@ -7,17 +10,20 @@ import {
   ParticleConstructor,
   ParticleSourceConstructor,
   SceneConstructor,
-  StateConstructor
+  SceneStateConstructor
 } from './constructors'
 import { Actor2DProps } from './decorators/actor/actor2d/actor2d-props'
 import { Actor3DProps } from './decorators/actor/actor3d/actor3d-props'
 import { AppProps } from './decorators/app/app-props'
-import { CameraProps } from './decorators/camera/camera-props'
 import { SceneStateProps } from './decorators/scene-state/scene-state-props'
 import { SceneProps } from './decorators/scene/scene-props'
-import { SceneType } from './decorators/scene/scene-type'
 import { SpriteProps } from './decorators/sprite/sprite-props'
 import { BabylonAccessor } from './models'
+
+// **************
+//  Models
+// **************
+export { UseCamera } from './models/use-camera'
 
 // **************
 //  Constructors
@@ -53,7 +59,7 @@ export declare namespace KJS {
     function load(scene: SceneConstructor[]): LoadingProgress
     function unload(scene: SceneConstructor): void
     function unload(scene: SceneConstructor[]): void
-    function start(scene: SceneConstructor, state: StateConstructor): void
+    function start(scene: SceneConstructor, state: SceneStateConstructor): void
     function stop(scene: SceneConstructor): void
   }
 
@@ -113,7 +119,7 @@ export declare abstract class SceneInterface {
    * Start the scene.
    * @param state Initial state.
    */
-  start(state: StateConstructor): void
+  start(state: SceneStateConstructor): void
 
   /**
    * Stop the scene.
@@ -134,7 +140,7 @@ export declare abstract class SceneInterface {
    * Set the state.
    * @param state
    */
-  setState(state: StateConstructor): void
+  setState(state: SceneStateConstructor): void
 
   /**
    * Spawns an Actor, Particle, or Particle Source.
@@ -207,17 +213,19 @@ export declare abstract class SpriteInterface {
 // ****************
 // Camera decorator
 // ****************
-export declare function Camera(props: CameraProps): any
-export { CameraProps } from './decorators/camera/camera-props'
+export declare function Camera(): any
 export declare abstract class CameraInterface {
   babylon: Pick<BabylonAccessor<ReturnType<this['initialize']>>, 'camera'>
 
   /**
    * Initialize the camera. This method must return a valid Babylon camera.
-   * It will be used from any Scene State.
+   * It will be used from any Scene State requiring it.
    */
-  abstract initialize(): BabylonCamera
+  abstract initialize(scene: BabylonScene): BabylonCamera
 
+  /**
+   * LoopUpdate method.
+   */
   loopUpdate?(delta: number): void
 }
 
@@ -227,10 +235,12 @@ export declare abstract class CameraInterface {
 export declare function SceneState(props: SceneStateProps): any
 export { SceneStateProps } from './decorators/scene-state/scene-state-props'
 export declare abstract class SceneStateInterface {
+  babylon: Pick<BabylonAccessor, 'scene'>
+
   /**
-   * Uses a camera. Use this method at any point or event of the state lifecycle.
+   * Sets a camera. Use this method at any point or event of the state lifecycle.
    */
-  useCamera(camera: CameraConstructor): void
+  setCamera(camera: CameraConstructor): void
 
   /**
    * Invoked on state start. Use this method to setup the scene according to this state start.

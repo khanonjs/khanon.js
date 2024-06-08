@@ -3,12 +3,12 @@ import {
   GUIConstructor,
   ParticleConstructor,
   ParticleSourceConstructor,
-  StateConstructor
+  SceneStateConstructor
 } from '../../constructors'
 
 export interface ActorProps {
   guis?: GUIConstructor[]
-  states?: StateConstructor[]
+  states?: SceneStateConstructor[]
   actions?: ActionConstructor[]
   particles?: (ParticleConstructor | ParticleSourceConstructor)[]
 }

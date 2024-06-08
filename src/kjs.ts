@@ -1,4 +1,4 @@
-import { ScenesController } from './controllers/scenes-controller'
+import { ScenesController } from './controllers'
 import { Core } from './core'
 
 export class KJS {

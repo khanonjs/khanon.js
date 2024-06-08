@@ -1,18 +1,28 @@
-import { LoadingProgress } from '../../../base'
+import {
+  LoadingProgress,
+  Spawnable
+} from '../../../base'
 import { Actor2DConstructor } from '../../../constructors/actor2d-constructor'
-import { ActorsController } from '../../../controllers/actors-controller'
-import { SpritesController } from '../../../controllers/sprites-controller'
+import {
+  ActorsController,
+  SpritesController
+} from '../../../controllers'
 import { removeArrayDuplicitiesInObject } from '../../../helpers/utils'
 import { SceneType } from '../../scene/scene-type'
 import { Actor2DCore } from './actor2d-core'
 import { Actor2DInterface } from './actor2d-interface'
 import { Actor2DProps } from './actor2d-props'
+import { Actor2DType } from './actor2d-type'
 
 export function Actor2D(props: Actor2DProps): any {
-  return function <T extends { new (...args: any[]): Actor2DCore }>(constructor: T & Actor2DCore, context: ClassDecoratorContext) {
-    const _class = class extends constructor implements Actor2DCore {
+  return function <T extends { new (...args: any[]): Actor2DInterface }>(constructor: T & Actor2DInterface, context: ClassDecoratorContext) {
+    const _classInterface = class extends constructor implements Actor2DInterface {
+      onLoaded?(): void {}
+    }
+    const _classCore = class implements Actor2DCore {
       props = removeArrayDuplicitiesInObject(props)
-      Instance: Actor2DConstructor = Actor2DInterface // 8a8f
+      Instance: Actor2DConstructor = _classInterface
+      InstanceReference: Actor2DInterface = new _classInterface()
       loaded = false
 
       load(scene: SceneType): LoadingProgress {
@@ -30,7 +40,7 @@ export function Actor2D(props: Actor2DProps): any {
 
       }
     }
-    ActorsController.register(new _class())
-    return _class
+    ActorsController.register(new _classCore())
+    return _classInterface
   }
 }

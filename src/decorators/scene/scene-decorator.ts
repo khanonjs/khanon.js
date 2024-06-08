@@ -3,13 +3,17 @@ import { Scene as BabylonScene } from '@babylonjs/core/scene'
 import { LoadingProgress } from '../../base'
 import {
   ActorConstructor,
+  CameraConstructor,
   ParticleConstructor,
   ParticleSourceConstructor,
-  StateConstructor
+  SceneStateConstructor
 } from '../../constructors'
-import { ActorsController } from '../../controllers/actors-controller'
-import { AssetsController } from '../../controllers/assets-controller'
-import { ScenesController } from '../../controllers/scenes-controller'
+import {
+  ActorsController,
+  AssetsController,
+  ScenesController,
+  SceneStatesController
+} from '../../controllers'
 import { Core } from '../../core'
 import {
   invokeCallback,
@@ -49,11 +53,10 @@ export function Scene(props: SceneProps): any {
       get loaded(): boolean { return this._loaded }
       get started(): boolean { return this._started }
 
-      start(state: StateConstructor): void {
-        // 8a8f create camera. cameras are related to states.
+      start(state: SceneStateConstructor): void {
         Logger.debug('Scene start', _class.prototype)
+        SceneStatesController.get(state).spawn().start(this)
         Core.startRenderScene(this)
-        this.babylon.scene.activeCamera.attachControl(Core.canvas)
         this._started = true
         invokeCallback(this.onStart, this)
       }
@@ -108,7 +111,11 @@ export function Scene(props: SceneProps): any {
         Logger.debug('Scene unload', _class.prototype)
       }
 
-      setState(state: StateConstructor): void {
+      setCamera(camera: CameraConstructor): void {
+
+      }
+
+      setState(state: SceneStateConstructor): void {
 
       }
 

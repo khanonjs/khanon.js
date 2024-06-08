@@ -32,6 +32,12 @@ export class Logger {
     }
   }
 
+  static debugError(msg: string, ...params: any[]) {
+    if (Logger.level >= LoggerLevels.DEBUG) {
+      console.log.apply(console, ['%c' + msg, 'background: #ffc2c2; color: #550000;' + Logger.boldStyle, ...params])
+    }
+  }
+
   static trace(msg: string, ...params: any[]) {
     if (Logger.level >= LoggerLevels.TRACE) {
       console.log.apply(console, ['%c' + msg, 'background: #e010e0; color: #240524;' + Logger.boldStyle, ...params])
