@@ -2,7 +2,7 @@ import { Camera as BabylonCamera } from '@babylonjs/core'
 
 import { CameraConstructor } from '../../constructors'
 import { CamerasController } from '../../controllers'
-import { spawnClass } from '../../helpers/utils'
+import { cloneClass } from '../../helpers/utils'
 import { BabylonAccessor } from '../../models'
 import { SceneType } from '../scene/scene-type'
 import { CameraCore } from './camera-core'
@@ -17,7 +17,7 @@ export function Camera(): any {
       Instance: CameraInterface = new _classInterface()
 
       spawn(): CameraInterface {
-        return spawnClass(this.Instance)
+        return cloneClass(this.Instance)
       }
     }
     CamerasController.register(new _classCore())

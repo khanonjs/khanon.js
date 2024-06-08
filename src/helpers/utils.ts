@@ -78,15 +78,15 @@ export function removeArrayDuplicitiesInObject<T extends object>(values: T): T {
 
 /**
  * Returns true if a class is the prototype of another child class.
- * E.g: isPrototypeOf(ActorInterface, SomeActorClass) = true
+ * E.g: isPrototypeOf(ActorInterface, SomeActorClass whom parent is ActorInterface) = true
  */
-export function isPrototypeOf(_parent: any, _child: any): boolean {
+export function isPrototypeOf(_parent: object, _child: object): boolean {
   return Object.prototype.isPrototypeOf.call(_parent, _child)
 }
 
 /**
  * Spawn class from prototype
  */
-export function spawnClass(_class: any) {
+export function cloneClass(_class: object) {
   return Object.assign(Object.create(Object.getPrototypeOf(_class)), _class)
 }

@@ -1,18 +1,16 @@
 import { LoadingProgress } from '../../base'
-import { SpriteConstructor } from '../../constructors'
 import {
   AssetsController,
   SpritesController
 } from '../../controllers'
 import {
   applyDefaults,
+  cloneClass,
   invokeCallback
 } from '../../helpers/utils'
 import { BabylonAccessor } from '../../models'
 import { SceneType } from '../scene/scene-type'
-import { SpriteCore } from './sprite-core'
 import { SpriteInstance } from './sprite-instance'
-import { SpriteInterface } from './sprite-interface'
 import { SpriteProps } from './sprite-props'
 import { SpriteTexture } from './sprite-texture'
 import { SpriteType } from './sprite-type'
@@ -20,9 +18,10 @@ import { spritePropsDefault } from './sprite.props.deafult'
 
 export function Sprite(props: SpriteProps): any {
   return function <T extends { new (...args: any[]): SpriteType }>(constructor: T & SpriteType, context: ClassDecoratorContext) {
-    const _class = class extends constructor implements SpriteCore, SpriteInterface {
-      babylon: Pick<BabylonAccessor, 'spriteManager' | 'scene'>
+    const _class = class extends constructor implements SpriteType {
       props = applyDefaults(props, spritePropsDefault)
+      Instance: SpriteInstance = new SpriteInstance()
+      babylon: Pick<BabylonAccessor, 'spriteManager' | 'scene'>
       textures: Map<SceneType, SpriteTexture> = new Map<SceneType, SpriteTexture>()
 
       onLoaded?(): () => void
@@ -57,6 +56,10 @@ export function Sprite(props: SpriteProps): any {
 
       unload(scene: SceneType): void {
 
+      }
+
+      spawn(): SpriteInstance {
+        return cloneClass(this.Instance)
       }
     }
     SpritesController.register(new _class())
