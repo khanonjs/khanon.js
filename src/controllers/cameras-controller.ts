@@ -1,5 +1,5 @@
 import { Controller } from '../base'
-import { CameraType } from '../decorators/camera/camera-type'
+import { CameraCore } from '../decorators/camera/camera-core'
 
-export class CamerasController extends Controller<CameraType>() {
+export class CamerasController extends Controller<CameraCore>() {
 }

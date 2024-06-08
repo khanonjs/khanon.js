@@ -1,5 +1,5 @@
 import { Controller } from '../base'
-import { SceneStateType } from '../decorators/scene-state/scene-state-type'
+import { SceneStateCore } from '../decorators/scene-state/scene-state-core'
 
-export class SceneStatesController extends Controller<SceneStateType>() {
+export class SceneStatesController extends Controller<SceneStateCore>() {
 }

@@ -43,12 +43,11 @@ export class AssetsController {
         if (Array.isArray(property)) {
           property.forEach(value => {
             if (isPrototypeOf(ActorInterface, value)) {
-              console.log('aki AHORA!!!!!')
               const actor = ActorsController.get<Actor2DCore>(value)
               definitions = [...definitions, ...AssetsController.findAssetsDefinitions(actor.props, urls)]
             }
             if (isPrototypeOf(SpriteInterface, value)) {
-              const sprite = SpritesController.get<SpriteType>(value)
+              const sprite = SpritesController.get<SpriteType>(value, false)
               if (sprite.props.url && !urls[sprite.props.url]) {
                 urls[sprite.props.url] = true
                 definitions = [...definitions, {
