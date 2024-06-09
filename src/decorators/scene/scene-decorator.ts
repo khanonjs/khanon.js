@@ -11,6 +11,7 @@ import {
 import {
   ActorsController,
   AssetsController,
+  CamerasController,
   ScenesController,
   SceneStatesController
 } from '../../controllers'
@@ -111,8 +112,10 @@ export function Scene(props: SceneProps): any {
         Logger.debug('Scene unload', _class.prototype)
       }
 
-      setCamera(camera: CameraConstructor): void {
-
+      setCamera(constructor: CameraConstructor): void {
+        const camera = CamerasController.get(constructor).spawn()
+        camera.babylon.camera = camera.initialize(this.babylon.scene)
+        camera.babylon.camera.attachControl(Core.canvas, true)
       }
 
       setState(state: SceneStateConstructor): void {

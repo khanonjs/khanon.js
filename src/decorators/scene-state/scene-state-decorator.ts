@@ -27,10 +27,8 @@ export function SceneState(props: SceneStateProps): any {
       // Public
       babylon: Pick<BabylonAccessor, 'scene'> = { scene: null }
 
-      setCamera(_camera: CameraConstructor): void {
-        const camera = CamerasController.get(_camera).spawn()
-        camera.babylon.camera = camera.initialize(this.scene.babylon.scene)
-        camera.babylon.camera.attachControl(Core.canvas, true)
+      setCamera(camera: CameraConstructor): void {
+        this.scene.setCamera(camera)
       }
 
       start(scene: SceneType): void {
