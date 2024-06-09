@@ -152,6 +152,8 @@ export class Core {
       Core.htmlContainer = parentElement
       Core.htmlCanvas = document.createElement('canvas')
       Core.htmlCanvas.id = 'khanonjs-canvas'
+      Core.htmlCanvas.style.width = '100%'
+      Core.htmlCanvas.style.height = '100%'
       Core.htmlContainer.appendChild(Core.htmlCanvas)
     } else {
       Core.throw(`Canvas container id '${parentId}' not found.`)

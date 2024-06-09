@@ -70,8 +70,8 @@ export declare namespace KJS {
 // **************
 // App decorator
 // **************
-export declare function App(props: AppProps): any
 export { AppProps } from './decorators/app/app-props'
+export declare function App(props: AppProps): any
 export declare abstract class AppInterface {
   /**
    * Entry point of the application.
@@ -97,8 +97,8 @@ export declare abstract class AppInterface {
 // Scene decorator
 // ****************
 export { SceneType } from './decorators/scene/scene-type'
-export declare function Scene(props: SceneProps): any
 export { SceneProps } from './decorators/scene/scene-props'
+export declare function Scene(props: SceneProps): any
 export declare abstract class SceneInterface {
   /**
    * Babylon container
@@ -179,14 +179,14 @@ export declare abstract class ActorInterface {
   onLoaded?(): void
 }
 
-export declare function Actor2D(props: Actor2DProps): any
 export { Actor2DProps } from './decorators/actor/actor2d/actor2d-props'
+export declare function Actor2D(props: Actor2DProps): any
 export declare abstract class Actor2DInterface extends ActorInterface {
 
 }
 
-export declare function Actor3D(props: Actor3DProps): any
 export { Actor3DProps } from './decorators/actor/actor3d/actor3d-props'
+export declare function Actor3D(props: Actor3DProps): any
 export declare abstract class Actor3DInterface extends ActorInterface {
 
 }
@@ -194,8 +194,8 @@ export declare abstract class Actor3DInterface extends ActorInterface {
 // ****************
 // Sprite decorator
 // ****************
-export declare function Sprite(props: SpriteProps): any
 export { SpriteProps } from './decorators/sprite/sprite-props'
+export declare function Sprite(props: SpriteProps): any
 export declare abstract class SpriteInterface {
   /**
    * Babylon.js objects used by this class.
@@ -232,8 +232,8 @@ export declare abstract class CameraInterface {
 // ****************
 // State decorator
 // ****************
-export declare function SceneState(props: SceneStateProps): any
 export { SceneStateProps } from './decorators/scene-state/scene-state-props'
+export declare function SceneState(props: SceneStateProps): any
 export declare abstract class SceneStateInterface {
   babylon: Pick<BabylonAccessor, 'scene'>
 

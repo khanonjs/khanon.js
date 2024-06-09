@@ -70,7 +70,7 @@ export class AssetsController {
   }
 
   /**
-   * Loads all assets from a Scene
+   * Loads all assets of a Scene
    */
   static sceneLoad(scene: SceneType): LoadingProgress {
     const progress = new LoadingProgress()
