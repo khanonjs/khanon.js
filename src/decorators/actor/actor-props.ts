@@ -1,14 +1,14 @@
 import {
-  ActionConstructor,
+  ActorEventConstructor,
+  ActorStateConstructor,
   GUIConstructor,
   ParticleConstructor,
-  ParticleSourceConstructor,
-  SceneStateConstructor
+  ParticleSourceConstructor
 } from '../../constructors'
 
 export interface ActorProps {
   guis?: GUIConstructor[]
-  states?: SceneStateConstructor[]
-  actions?: ActionConstructor[]
+  states?: ActorStateConstructor[]
+  events?: ActorEventConstructor[]
   particles?: (ParticleConstructor | ParticleSourceConstructor)[]
 }
