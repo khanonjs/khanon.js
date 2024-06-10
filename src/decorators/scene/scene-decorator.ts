@@ -120,7 +120,7 @@ export function Scene(props: SceneProps): any {
 
       setState(state: SceneStateConstructor): void {
         if (!this.props.states.find(_state => _state === state)) {
-          Logger.error('Trying to set a state non added to the scene. Please check he scene props.', _class.prototype, state.prototype)
+          Logger.error('Trying to set a state non available to the scene. Please check the scene props.', _class.prototype, state.prototype)
         } else {
           SceneStatesController.get(state).spawn().start(this)
         }

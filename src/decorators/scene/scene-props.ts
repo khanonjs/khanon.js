@@ -5,6 +5,7 @@ import {
   ActorConstructor,
   CameraConstructor,
   GUIConstructor,
+  SceneEventConstructor,
   SceneMapConstructor,
   SceneStateConstructor
 } from '../../constructors'
@@ -17,4 +18,5 @@ export interface SceneProps {
     maps?: SceneMapConstructor[]
     states?: SceneStateConstructor[]
     actors?: ActorConstructor[]
+    events?: SceneEventConstructor[]
 }
