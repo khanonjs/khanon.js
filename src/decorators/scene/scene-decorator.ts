@@ -94,6 +94,7 @@ export function Scene(props: SceneProps): any {
           Logger.debug('Scene assets load completed', _class.prototype)
           ActorsController.load(this.props.actors, this)
           this.babylon.scene.executeWhenReady(() => {
+            invokeCallback(this.onLoaded, this)
             sceneProgress.complete()
           })
         })
@@ -122,11 +123,19 @@ export function Scene(props: SceneProps): any {
         if (!this.props.states.find(_state => _state === state)) {
           Logger.error('Trying to set a state non available to the scene. Please check the scene props.', _class.prototype, state.prototype)
         } else {
-          SceneStatesController.get(state).spawn().start(this)
+          SceneStatesController.get(state).spawn().play(this)
         }
       }
 
-      spawn(entity: ActorConstructor | ParticleConstructor | ParticleSourceConstructor): void {
+      spawnActor(actor: ActorConstructor, onSpawn?: (item: ActorConstructor) => void): void {
+        Logger.trace('aki SPAWN ACTOR!!')
+      }
+
+      spawnParticle(particle: ParticleConstructor, onSpawn?: (particle: ParticleConstructor) => void): void {
+
+      }
+
+      spawnParticleSource(particleSource: ParticleSourceConstructor, onSpawn?: (particleSource: ParticleSourceConstructor) => void): void {
 
       }
 

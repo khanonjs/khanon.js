@@ -7,11 +7,15 @@ import {
   SceneStatesController
 } from '../../controllers'
 import { Core } from '../../core'
-import { cloneClass } from '../../helpers/utils'
+import {
+  cloneClass,
+  invokeCallback
+} from '../../helpers/utils'
 import {
   BabylonAccessor,
   UseCamera
 } from '../../models'
+import { Logger } from '../../modules'
 import { SceneType } from '../scene/scene-type'
 import { SceneStateCore } from './scene-state-core'
 import { SceneStateInterface } from './scene-state-interface'
@@ -22,7 +26,6 @@ export function SceneState(props: SceneStateProps): any {
     const _classInterface = class extends constructor implements SceneStateInterface {
       // Private
       props = props
-      scene: SceneType
 
       // Public
       babylon: Pick<BabylonAccessor, 'scene'> = { scene: null }
@@ -31,16 +34,18 @@ export function SceneState(props: SceneStateProps): any {
         this.scene.setCamera(camera)
       }
 
-      start(scene: SceneType): void {
+      play(scene: SceneType): void {
+        Logger.debug('Scene state play', _classInterface.prototype)
         this.scene = scene
         if (this.props.useCamera === UseCamera.ON_START ||
             (this.props.useCamera === UseCamera.INHERIT && !scene.babylon.scene.activeCamera)) {
           this.setCamera(this.props.camera)
         }
+        invokeCallback(this.onPlay, this, this.scene)
       }
 
       end(scene: SceneType): void {
-
+        Logger.debug('Scene state end', _classInterface.prototype)
       }
 
       // User defined

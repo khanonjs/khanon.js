@@ -6,7 +6,6 @@ export function Controller<T>() {
     protected static items: T[] = []
 
     static register(item: T) {
-      Logger.trace('Controller register:', item)
       BaseController.items.push(item)
     }
 

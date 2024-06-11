@@ -5,10 +5,11 @@ import { SceneType } from '../scene/scene-type'
 
 export class SceneStateInterface implements LoopUpdatable {
   babylon: Pick<BabylonAccessor, 'scene'>
+  scene: SceneType
   setCamera?(camera: CameraConstructor): void
-  start?(scene: SceneType): void
+  play?(scene: SceneType): void
   end?(scene: SceneType): void
-  onStart?(): void
+  onPlay?(scene: SceneType): void
   onEnd?(): void
   loopUpdate?(delta: number): void
 }

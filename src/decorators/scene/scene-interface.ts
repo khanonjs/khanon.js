@@ -17,9 +17,11 @@ export abstract class SceneInterface implements Loadable {
   abstract load(): LoadingProgress
   abstract unload(): void
   abstract setState(state: SceneStateConstructor): void
-  abstract spawn(entity: ActorConstructor | ParticleConstructor | ParticleSourceConstructor): void
+  abstract spawnActor(actor: ActorConstructor, onSpawn?: (item: ActorConstructor) => void): void
+  abstract spawnParticle(particle: ParticleConstructor, onSpawn?: (particle: ParticleConstructor) => void): void
+  abstract spawnParticleSource(particleSource: ParticleSourceConstructor, onSpawn?: (particleSource: ParticleSourceConstructor) => void): void
   onStart?(): void
   onStop?(): void
-  onLoad?(progress: LoadingProgress): void
+  onLoaded?(): void
   onUnload?(): void
 }

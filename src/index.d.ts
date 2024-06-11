@@ -17,6 +17,7 @@ import { Actor3DProps } from './decorators/actor/actor3d/actor3d-props'
 import { AppProps } from './decorators/app/app-props'
 import { SceneStateProps } from './decorators/scene-state/scene-state-props'
 import { SceneProps } from './decorators/scene/scene-props'
+import { SceneType } from './decorators/scene/scene-type'
 import { SpriteProps } from './decorators/sprite/sprite-props'
 import { BabylonAccessor } from './models'
 
@@ -143,10 +144,22 @@ export declare abstract class SceneInterface {
   setState(state: SceneStateConstructor): void
 
   /**
-   * Spawns an Actor, Particle, or Particle Source.
-   * @param entity
+   * Spawns an Actor.
+   * @param actor
    */
-  spawn(entity: ActorConstructor | ParticleConstructor | ParticleSourceConstructor): void
+  spawnActor(actor: ActorConstructor, onSpawn?: (item: ActorConstructor) => void): void
+
+  /**
+   * Spawns a Particle.
+   * @param actor
+   */
+  spawnParticle(particle: ParticleConstructor, onSpawn?: (particle: ParticleConstructor) => void): void
+
+  /**
+   * Spawns a Particle Source.
+   * @param actor
+   */
+  spawnParticleSource(particleSource: ParticleSourceConstructor, onSpawn?: (particleSource: ParticleSourceConstructor) => void): void
 
   /**
    * Callback invoked before the scene has been started.
@@ -180,7 +193,7 @@ export declare abstract class ActorInterface {
 }
 
 export { Actor2DProps } from './decorators/actor/actor2d/actor2d-props'
-export declare function Actor2D(props: Actor2DProps): any
+export declare function Actor2D(props: Actor2DProps = {}): any
 export declare abstract class Actor2DInterface extends ActorInterface {
 
 }
@@ -207,7 +220,7 @@ export declare abstract class SpriteInterface {
    */
   onLoaded?(scene: KJS.Scene): void
 
-  spawn(): void
+  spawn(): void // 8a8f esto sobra?
 }
 
 // ****************
@@ -235,7 +248,15 @@ export declare abstract class CameraInterface {
 export { SceneStateProps } from './decorators/scene-state/scene-state-props'
 export declare function SceneState(props: SceneStateProps): any
 export declare abstract class SceneStateInterface {
+  /**
+   * Babylon.js objects
+   */
   babylon: Pick<BabylonAccessor, 'scene'>
+
+  /**
+   * Owner scene of this state
+   */
+  scene: SceneType
 
   /**
    * Sets a camera. Use this method at any point or event of the state lifecycle.
@@ -245,7 +266,7 @@ export declare abstract class SceneStateInterface {
   /**
    * Invoked on state start. Use this method to setup the scene according to this state start.
    */
-  onStart?(): void
+  onPlay?(scene: SceneType): void
 
   /**
    * Invoked on state end. Use this method to setup the scene according to this state end.

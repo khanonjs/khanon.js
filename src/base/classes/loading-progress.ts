@@ -47,7 +47,7 @@ export class LoadingProgress<D = any> {
   }
 
   /**
-   * Set the loading progress to completed
+   * Sets the loading progress to completed
    */
   complete(data?: D | boolean): LoadingProgress<D> {
     // Set true to guarantee Observable.notifyIfTriggered will emit (it doesn't emit if data is undefined)
