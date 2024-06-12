@@ -1,5 +1,4 @@
 import { LoadingProgress } from '../../../base'
-import { Actor3DConstructor } from '../../../constructors'
 import { ActorsController } from '../../../controllers'
 import { removeArrayDuplicitiesInObject } from '../../../helpers/utils'
 import { SceneType } from '../../scene/scene-type'
@@ -26,6 +25,10 @@ export function Actor3D(props: Actor3DProps): any {
 
       unload(): void {
 
+      }
+
+      compose() {
+        return []
       }
 
       spawn(): void {

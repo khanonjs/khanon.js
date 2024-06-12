@@ -3,7 +3,9 @@ import {
   LoadingProgress,
   Spawnable
 } from '../../base'
+import { MeshInstance } from '../mesh/mesh-instance'
 import { SceneType } from '../scene/scene-type'
+import { SpriteInstance } from '../sprite/sprite-instance'
 import { ActorInterface } from './actor-interface'
 import { ActorProps } from './actor-props'
 

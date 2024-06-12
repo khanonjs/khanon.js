@@ -1,19 +1,37 @@
-export { ActorEventConstructor } from './actor-event-constructor'
-export { ActorConstructor } from './actor-constructor'
-export { ActorStateConstructor } from './actor-state-constructor'
-export { Actor2DConstructor } from './actor2d-constructor'
-export { Actor3DConstructor } from './actor3d-constructor'
-export { AppConstructor } from './app-constructor'
-export { CameraConstructor } from './camera-constructor'
-export { GUIConstructor } from './gui-constructor'
-export { MeshConstructor } from './mesh-constructor'
-export { MeshMapConstructor } from './meshmap-constructor'
-export { MotionConstructor } from './motion-constructor'
-export { ParticleConstructor } from './particle-constructor'
-export { ParticleSourceConstructor } from './particle-source-constructor'
-export { SceneConstructor } from './scene-constructor'
-export { SceneEventConstructor } from './scene-event-constructor'
-export { SceneMapConstructor } from './scenemap-constructor'
-export { SceneStateConstructor } from './scene-state-constructor'
-export { SpriteConstructor } from './sprite-constructor'
-export { TileMapConstructor } from './tilemap-constructor'
+import { ActorEventInterface } from '../decorators/actor-event/actor-event-interface'
+import { ActorStateInterface } from '../decorators/actor-state/actor-state-interface'
+import { Actor2DInterface } from '../decorators/actor/actor2d/actor2d-interface'
+import { Actor3DInterface } from '../decorators/actor/actor3d/actor3d-interface'
+import { AppInterface } from '../decorators/app/app-interface'
+import { CameraInterface } from '../decorators/camera/camera-interface'
+import { GUIInterface } from '../decorators/gui/gui-interface'
+import { MeshInterface } from '../decorators/mesh/mesh-interface'
+import { MeshMapInterface } from '../decorators/meshmap/meshmap-interface'
+import { MotionInterface } from '../decorators/motion/motion-interface'
+import { ParticleSourceInterface } from '../decorators/particle-source/particle-source-interface'
+import { ParticleInterface } from '../decorators/particle/particle-interface'
+import { SceneEventInterface } from '../decorators/scene-event/scene-event-interface'
+import { SceneStateInterface } from '../decorators/scene-state/scene-state-interface'
+import { SceneInterface } from '../decorators/scene/scene-interface'
+import { SpriteInterface } from '../decorators/sprite/sprite-interface'
+import { TileMapInterface } from '../decorators/tilemap/tilemap-interface'
+
+export type Actor2DConstructor = new () => Actor2DInterface
+export type Actor3DConstructor = new () => Actor3DInterface
+export type ActorConstructor = Actor2DConstructor | Actor3DConstructor
+export type ActorEventConstructor = new () => ActorEventInterface
+export type ActorStateConstructor = new () => ActorStateInterface
+export type AppConstructor = new () => AppInterface
+export type CameraConstructor = new () => CameraInterface
+export type GUIConstructor = new () => GUIInterface
+export type MeshConstructor = new () => MeshInterface
+export type MeshMapConstructor = new () => MeshMapInterface
+export type MotionConstructor = new () => MotionInterface
+export type ParticleConstructor = new () => ParticleInterface
+export type ParticleSourceConstructor = new () => ParticleSourceInterface
+export type SceneConstructor = new () => SceneInterface
+export type SceneEventConstructor = new () => SceneEventInterface
+export type SceneStateConstructor = new () => SceneStateInterface
+export type TileMapConstructor = new () => TileMapInterface
+export type SceneMapConstructor = MeshMapConstructor | TileMapConstructor
+export type SpriteConstructor = new () => SpriteInterface

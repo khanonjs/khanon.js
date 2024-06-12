@@ -1,8 +1,4 @@
-import {
-  LoadingProgress,
-  Spawnable
-} from '../../../base'
-import { Actor2DConstructor } from '../../../constructors/actor2d-constructor'
+import { LoadingProgress } from '../../../base'
 import {
   ActorsController,
   SpritesController
@@ -32,6 +28,10 @@ export function Actor2D(props: Actor2DProps = {}): any {
 
       unload(): void {
 
+      }
+
+      compose() {
+        return []
       }
 
       spawn(): void {
