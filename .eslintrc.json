@@ -39,6 +39,7 @@
         "space-before-blocks": "warn",
         "space-infix-ops": "warn",
         "no-useless-constructor": "off",
+        "func-call-spacing": "off",
         "keyword-spacing": "warn",
         "n/handle-callback-err": "warn",
         "array-bracket-spacing": "warn",

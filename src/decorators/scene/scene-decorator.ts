@@ -94,6 +94,7 @@ export function Scene(props: SceneProps): any {
           Logger.debug('Scene assets load completed', _class.prototype)
           ActorsController.load(this.props.actors, this)
           this.babylon.scene.executeWhenReady(() => {
+            Logger.trace('aki SCENE ONLOADED', this.onLoaded)
             invokeCallback(this.onLoaded, this)
             sceneProgress.complete()
           })
@@ -127,8 +128,9 @@ export function Scene(props: SceneProps): any {
         }
       }
 
-      spawnActor(actor: ActorConstructor, onSpawn?: (item: ActorConstructor) => void): void {
-        Logger.trace('aki SPAWN ACTOR!!')
+      spawnActor(actor: ActorConstructor, initialize?: (actor: ActorConstructor) => void): void {
+        const actorInstance = ActorsController.get(actor).spawn()
+        invokeCallback(initialize, this, actorInstance)
       }
 
       spawnParticle(particle: ParticleConstructor, onSpawn?: (particle: ParticleConstructor) => void): void {

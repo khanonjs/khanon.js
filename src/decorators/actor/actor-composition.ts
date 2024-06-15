@@ -1,8 +1,10 @@
-import { MeshType } from '../mesh/mesh-type'
-import { SpriteType } from '../sprite/sprite-type'
+/*
+import { MeshInstance } from '../mesh/mesh-instance'
+import { SpriteInstance } from '../sprite/sprite-instance'
 
 export interface ActorComposition {
   id: string
-  sprites?: SpriteType[]
-  meshes?: MeshType[]
+  sprites?: SpriteInstance[]
+  meshes?: MeshInstance[]
 }
+*/

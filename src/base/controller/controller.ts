@@ -11,7 +11,7 @@ export function Controller<T>() {
 
     /**
      * @param constructor Constructor class to find and retrieve
-     * @param useInstance If 'true' use Spawnable Instance property to find the class in case it is Spawnable, Otherwise will use the class itself for the instanceof comparison
+     * @param useInstance If 'true' use Spawnable Instance property to find the class (in case it is Spawnable), Otherwise will use the class itself for the instanceof comparison
      */
     static get<C>(constructor: C, useInstance: boolean = true): C extends any[] ? T[] : T {
       if (Array.isArray(constructor)) {

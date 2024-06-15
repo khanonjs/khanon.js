@@ -21,6 +21,11 @@ import { SceneType } from './decorators/scene/scene-type'
 import { SpriteProps } from './decorators/sprite/sprite-props'
 import { BabylonAccessor } from './models'
 
+// ********************
+//  Babylon.js objects
+// ********************
+export { BabylonScene }
+
 // **************
 //  Models
 // **************
@@ -147,19 +152,19 @@ export declare abstract class SceneInterface {
    * Spawns an Actor.
    * @param actor
    */
-  spawnActor(actor: ActorConstructor, onSpawn?: (item: ActorConstructor) => void): void
+  spawnActor(actor: ActorConstructor, initialize?: (item: ActorConstructor) => void): void
 
   /**
    * Spawns a Particle.
    * @param actor
    */
-  spawnParticle(particle: ParticleConstructor, onSpawn?: (particle: ParticleConstructor) => void): void
+  spawnParticle(particle: ParticleConstructor, initialize?: (particle: ParticleConstructor) => void): void
 
   /**
    * Spawns a Particle Source.
    * @param actor
    */
-  spawnParticleSource(particleSource: ParticleSourceConstructor, onSpawn?: (particleSource: ParticleSourceConstructor) => void): void
+  spawnParticleSource(particleSource: ParticleSourceConstructor, initialize?: (particleSource: ParticleSourceConstructor) => void): void
 
   /**
    * Callback invoked before the scene has been started.
@@ -185,21 +190,38 @@ export declare abstract class SceneInterface {
 // ****************
 // Actor decorator
 // ****************
+
+/**
+ * Actor Composition
+ */
+export declare function ActorComposition(id: string)
+
 export declare abstract class ActorInterface {
+  /**
+   * Use a previously defined composition within the Actor class using ActorComposition decorator
+   * @param id Composition Id
+   */
+  useComposition<C = any>(id: string): C
+
   /**
    * Callback invoked after the actor has been loaded.
    */
   onLoaded?(): void
+
+  /**
+   * Callback invoked after the actor has been spawned on a scene
+   */
+  onSpawn?(): void
 }
 
 export { Actor2DProps } from './decorators/actor/actor2d/actor2d-props'
-export declare function Actor2D(props: Actor2DProps = {}): any
+export declare function Actor2D(props?: Actor2DProps = {}): any
 export declare abstract class Actor2DInterface extends ActorInterface {
 
 }
 
 export { Actor3DProps } from './decorators/actor/actor3d/actor3d-props'
-export declare function Actor3D(props: Actor3DProps): any
+export declare function Actor3D(props?: Actor3DProps): any
 export declare abstract class Actor3DInterface extends ActorInterface {
 
 }

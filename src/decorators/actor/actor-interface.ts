@@ -1,7 +1,17 @@
-import { ActorComposition } from './actor-composition'
+export abstract class ActorInterface {
+  /**
+   * Private
+   */
+  compositions?: Map<string, () => any>
 
-export class ActorInterface {
-  onLoaded?(): void
-  addComposition?(composition: () => ActorComposition): void
-  setComposition?(id: string): void
+  /**
+   * Public
+  */
+  abstract useComposition?<C = any>(id: string): C
+
+  /**
+   * User defined
+   */
+  abstract onLoaded?(): void
+  abstract onSpawn?(): void
 }
