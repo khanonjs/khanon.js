@@ -9,6 +9,7 @@ import {
   SceneStateConstructor
 } from '../../constructors'
 import { BabylonAccessor } from '../../models/babylon-accessor'
+import { ActorInterface } from '../actor/actor-interface'
 
 export abstract class SceneInterface implements Loadable {
   abstract babylon: Pick<BabylonAccessor, | 'scene'>
@@ -19,7 +20,7 @@ export abstract class SceneInterface implements Loadable {
   abstract load(): LoadingProgress
   abstract unload(): void
   abstract setState(state: SceneStateConstructor): void
-  abstract spawnActor(actor: ActorConstructor, initialize?: (actor: ActorConstructor) => void): void
+  abstract spawnActor(actor: ActorConstructor, initialize?: (actor: ActorInterface) => void): void
   abstract spawnParticle(particle: ParticleConstructor, initialize?: (particle: ParticleConstructor) => void): void
   abstract spawnParticleSource(particleSource: ParticleSourceConstructor, initialize?: (particleSource: ParticleSourceConstructor) => void): void
   onStart?(): void

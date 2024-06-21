@@ -26,6 +26,7 @@ import {
   BabylonAccessor
 } from '../../models'
 import { Logger } from '../../modules'
+import { ActorInterface } from '../actor/actor-interface'
 import { SceneCore } from './scene-core'
 import { SceneInterface } from './scene-interface'
 import { SceneProps } from './scene-props'
@@ -128,16 +129,16 @@ export function Scene(props: SceneProps): any {
         }
       }
 
-      spawnActor(actor: ActorConstructor, initialize?: (actor: ActorConstructor) => void): void {
-        const actorInstance = ActorsController.get(actor).spawn()
+      spawnActor(actor: ActorConstructor, initialize?: (actor: ActorInterface) => void): void {
+        const actorInstance = ActorsController.get(actor).spawn(this)
         invokeCallback(initialize, this, actorInstance)
       }
 
-      spawnParticle(particle: ParticleConstructor, onSpawn?: (particle: ParticleConstructor) => void): void {
+      spawnParticle(particle: ParticleConstructor, initialize?: (particle: ParticleConstructor) => void): void {
 
       }
 
-      spawnParticleSource(particleSource: ParticleSourceConstructor, onSpawn?: (particleSource: ParticleSourceConstructor) => void): void {
+      spawnParticleSource(particleSource: ParticleSourceConstructor, initialize?: (particleSource: ParticleSourceConstructor) => void): void {
 
       }
 

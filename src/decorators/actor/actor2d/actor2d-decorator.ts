@@ -11,21 +11,22 @@ import {
 import { Logger } from '../../../modules'
 import { SceneType } from '../../scene/scene-type'
 import { ActorInterface } from '../actor-interface'
+import { ActorMetadata } from '../actor-metadata'
 import { Actor2DCore } from './actor2d-core'
 import { Actor2DInterface } from './actor2d-interface'
 import { Actor2DProps } from './actor2d-props'
 
 export function Actor2D(props: Actor2DProps = {}): any {
   return function <T extends { new (...args: any[]): Actor2DInterface }>(constructor: T & Actor2DInterface, context: ClassDecoratorContext) {
-    const _classInterface = class extends constructor implements Actor2DInterface {
-      // compositions?: Map<string, () => any>
-      onLoaded?(): void {}
+    const _classInterface = class /* extends constructor implements Actor2DInterface */ {
+      metadata: ActorMetadata = Reflect.getMetadata('metadata', this)
+
       onSpawn?(): void {}
 
-      useComposition<C = any>(id: string): C {
+      setComposition<C = any>(id: string): any {
         Logger.trace('aki Actor3D useComposition', id)
-        if (!this.compositions.get(id)) { Logger.debugError(`Actor composition not found: ${id}`, this) }
-        return this.compositions.get(id)()
+        // if (!this.compositions.get(id)) { Logger.debugError(`Actor composition not found: ${id}`, this) }
+        // return this.compositions.get(id)()
       }
     }
     const _classCore = class implements Actor2DCore {

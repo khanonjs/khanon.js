@@ -12,5 +12,5 @@ export abstract class ActorCore implements Loadable<SceneType>, Spawnable<ActorI
   abstract Instance: ActorInterface // Disambiguate core methods from interface spawnable instances
   abstract load(scene: SceneType): LoadingProgress
   abstract unload(): void
-  abstract spawn(): ActorInterface
+  abstract spawn(scene: SceneType): ActorInterface
 }

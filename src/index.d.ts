@@ -12,6 +12,7 @@ import {
   SceneConstructor,
   SceneStateConstructor
 } from './constructors'
+import { ActorCompositionDefinition } from './decorators/actor/actor-composition/actor-composition-definition'
 import { Actor2DProps } from './decorators/actor/actor2d/actor2d-props'
 import { Actor3DProps } from './decorators/actor/actor3d/actor3d-props'
 import { AppProps } from './decorators/app/app-props'
@@ -152,7 +153,7 @@ export declare abstract class SceneInterface {
    * Spawns an Actor.
    * @param actor
    */
-  spawnActor(actor: ActorConstructor, initialize?: (item: ActorConstructor) => void): void
+  spawnActor(actor: ActorConstructor, initialize?: (item: ActorInterface) => void): void
 
   /**
    * Spawns a Particle.
@@ -195,18 +196,16 @@ export declare abstract class SceneInterface {
  * Actor Composition
  */
 export declare function ActorComposition(id: string)
+export { ActorCompositionDefinition } from './decorators/actor/actor-composition/actor-composition-definition'
 
 export declare abstract class ActorInterface {
+  composition: ActorCompositionDefinition
+
   /**
    * Use a previously defined composition within the Actor class using ActorComposition decorator
    * @param id Composition Id
    */
-  useComposition<C = any>(id: string): C
-
-  /**
-   * Callback invoked after the actor has been loaded.
-   */
-  onLoaded?(): void
+  setComposition(id: any): ActorCompositionDefinition
 
   /**
    * Callback invoked after the actor has been spawned on a scene
