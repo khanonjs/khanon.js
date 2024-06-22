@@ -9,26 +9,33 @@ import {
   invokeCallback
 } from '../../helpers/utils'
 import { BabylonAccessor } from '../../models'
+import { SceneInterface } from '../scene/scene-interface'
 import { SceneType } from '../scene/scene-type'
-import { SpriteInstance } from './sprite-instance'
+import { SpriteCore } from './sprite-core'
+import { SpriteInterface } from './sprite-interface'
 import { SpriteProps } from './sprite-props'
 import { SpriteTexture } from './sprite-texture'
-import { SpriteType } from './sprite-type'
 import { spritePropsDefault } from './sprite.props.deafult'
 
 export function Sprite(props: SpriteProps): any {
-  return function <T extends { new (...args: any[]): SpriteType }>(constructor: T & SpriteType, context: ClassDecoratorContext) {
-    const _class = class extends constructor implements SpriteType {
-      props = applyDefaults(props, spritePropsDefault)
-      Instance: SpriteInstance = new SpriteInstance()
-      babylon: Pick<BabylonAccessor, 'spriteManager' | 'scene'>
-      textures: Map<SceneType, SpriteTexture> = new Map<SceneType, SpriteTexture>()
+  return function <T extends { new (...args: any[]): SpriteInterface }>(constructor: T & SpriteInterface, context: ClassDecoratorContext) {
+    const _classInterface = class extends constructor implements SpriteInterface {
+      babylon: Pick<BabylonAccessor, 'spriteManager' | 'scene'> = { spriteManager: null, scene: null }
 
-      onLoaded?(): () => void
+      constructor(private readonly scene: SceneType) {
+        super()
+      }
+
+      onSpawn?(scene: SceneInterface): void {}
+    }
+    const _classCore = class implements SpriteCore {
+      props = applyDefaults(props, spritePropsDefault)
+      Instance: SpriteInterface = new _classInterface(null)
+      textures: Map<SceneType, SpriteTexture> = new Map<SceneType, SpriteTexture>()
 
       load(scene: SceneType): LoadingProgress {
         const callLoaded = () => {
-          invokeCallback(this.onLoaded, this, scene)
+          // invokeCallback(this.onLoaded, this, scene) // 8a8f ??s
         }
         const progress = new LoadingProgress().complete()
         if (this.textures.get(scene)) {
@@ -39,14 +46,12 @@ export function Sprite(props: SpriteProps): any {
             const asset = AssetsController.getAsset(this.props.url)
             const texture = new SpriteTexture(scene, this.props)
             texture.setFromArrayBuffer(asset.buffer)
-            this.babylon = texture.babylon
             this.textures.set(scene, texture)
             callLoaded()
             return progress
           } else {
             const texture = new SpriteTexture(scene, this.props)
             texture.setFromBlank()
-            this.babylon = texture.babylon
             this.textures.set(scene, texture)
             callLoaded()
             return progress.complete()
@@ -58,11 +63,13 @@ export function Sprite(props: SpriteProps): any {
 
       }
 
-      spawn(): SpriteInstance {
-        return cloneClass(this.Instance)
+      spawn(scene: SceneType): SpriteInterface {
+        const sprite = new _classInterface(scene)
+        invokeCallback(sprite.onSpawn, sprite, scene)
+        return sprite
       }
     }
-    SpritesController.register(new _class())
-    return _class
+    SpritesController.register(new _classCore())
+    return _classInterface
   }
 }

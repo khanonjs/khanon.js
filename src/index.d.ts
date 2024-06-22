@@ -1,5 +1,6 @@
 import {
   Camera as BabylonCamera,
+  Mesh as BabylonMesh,
   Scene as BabylonScene
 } from '@babylonjs/core'
 
@@ -7,16 +8,17 @@ import { LoadingProgress } from './base'
 import {
   ActorConstructor,
   CameraConstructor,
+  MeshConstructor,
   ParticleConstructor,
   ParticleSourceConstructor,
   SceneConstructor,
-  SceneStateConstructor
+  SceneStateConstructor,
+  SpriteConstructor
 } from './constructors'
 import { ActorCompositionDefinition } from './decorators/actor/actor-composition/actor-composition-definition'
 import { ActorProps } from './decorators/actor/actor-props'
-import { Actor2DProps } from './decorators/actor/actor2d/actor2d-props'
-import { Actor3DProps } from './decorators/actor/actor3d/actor3d-props'
 import { AppProps } from './decorators/app/app-props'
+import { MeshProps } from './decorators/mesh/mesh-props'
 import { SceneStateProps } from './decorators/scene-state/scene-state-props'
 import { SceneProps } from './decorators/scene/scene-props'
 import { SceneType } from './decorators/scene/scene-type'
@@ -27,6 +29,7 @@ import { BabylonAccessor } from './models'
 //  Babylon.js objects
 // ********************
 export { BabylonScene }
+export { BabylonMesh }
 
 // **************
 //  Models
@@ -192,7 +195,7 @@ export declare abstract class SceneInterface {
 // Actor decorator
 // ****************
 export declare function ActorComposition(id: string)
-export { ActorCompositionDefinition } from './decorators/actor/actor-composition/actor-composition-definition'
+export { ActorCompositionDefinition }
 
 export { ActorProps } from './decorators/actor/actor-props'
 export declare function Actor(props?: ActorProps = {}): any
@@ -212,7 +215,7 @@ export declare abstract class ActorInterface {
   /**
    * Callback invoked after the actor has been spawned on a scene
    */
-  onSpawn?(): void
+  onSpawn?(scene: KJS.Scene): void
 }
 
 // ****************
@@ -222,16 +225,38 @@ export { SpriteProps } from './decorators/sprite/sprite-props'
 export declare function Sprite(props: SpriteProps): any
 export declare abstract class SpriteInterface {
   /**
-   * Babylon.js objects used by this class.
+   * Babylon.js objects.
    */
   babylon: Pick<BabylonAccessor, 'spriteManager' | 'scene'>
 
   /**
-   * Callback invoked after the sprite has been loaded in a scene.
+   * Callback invoked after the sprite has been spawned in a scene.
    */
-  onLoaded?(scene: KJS.Scene): void
+  onSpawn?(scene: KJS.Scene): void
+}
 
-  spawn(): void // 8a8f esto sobra?
+// ****************
+// Mesh decorator
+// ****************
+export { MeshProps } from './decorators/mesh/mesh-props'
+export declare function Mesh(props?: MeshProps): any
+export declare abstract class MeshInterface {
+  /**
+   * Babylon.js objects.
+   */
+  babylon: Pick<BabylonAccessor, 'scene'>
+
+  /**
+   * Sets a mesh manually.
+   * It is possible to create manually a Babylon.js mesh in 'onSpawn' and set it up using this method.
+   * @param babylonMesh
+   */
+  setMesh(babylonMesh: BabylonMesh): void
+
+  /**
+   * Callback invoked after the mesh has been spawned in a scene.
+   */
+  onSpawn?(scene: KJS.Scene): void
 }
 
 // ****************

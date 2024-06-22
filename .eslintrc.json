@@ -34,6 +34,7 @@
         "no-case-declarations": "off",
         "no-unused-vars": "off",
         "no-unused-expressions": "off",
+        "no-dupe-class-members": "off",
         "sort-imports": "off",
         "space-before-function-paren": "off",
         "space-before-blocks": "warn",

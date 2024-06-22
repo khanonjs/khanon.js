@@ -4,16 +4,16 @@ import {
   Spawnable
 } from '../../base'
 import { SceneType } from '../scene/scene-type'
-import { SpriteInstance } from './sprite-instance'
+import { SpriteInterface } from './sprite-interface'
 import { SpriteProps } from './sprite-props'
 import { SpriteTexture } from './sprite-texture'
 import { SpritePropsDefault } from './sprite.props.deafult'
 
-export abstract class SpriteCore implements Loadable<SceneType>, Spawnable<SpriteInstance> {
+export abstract class SpriteCore implements Loadable<SceneType>, Spawnable<SpriteInterface> {
   abstract props: SpriteProps & SpritePropsDefault
-  abstract Instance: SpriteInstance
+  abstract Instance: SpriteInterface
   abstract textures: Map<SceneType, SpriteTexture>
   abstract load(scene: SceneType): LoadingProgress
   abstract unload(scene: SceneType): void
-  abstract spawn(): SpriteInstance
+  abstract spawn(scene: SceneType): SpriteInterface
 }

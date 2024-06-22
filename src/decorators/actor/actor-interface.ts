@@ -1,3 +1,4 @@
+import { SceneInterface } from '../scene/scene-interface'
 import { ActorCompositionDefinition } from './actor-composition/actor-composition-definition'
 import { ActorMetadata } from './actor-metadata'
 
@@ -16,5 +17,5 @@ export abstract class ActorInterface {
   /**
    * User defined
    */
-  abstract onSpawn?(): void
+  abstract onSpawn?(scene: SceneInterface): void
 }

@@ -1,3 +1,5 @@
+import { Mesh as BabylonMesh } from '@babylonjs/core'
+
 import { LoadingProgress } from '../../base'
 import { MeshesController } from '../../controllers/meshes-controller'
 import { invokeCallback } from '../../helpers/utils'
@@ -12,11 +14,15 @@ export function Mesh(props: MeshProps): any {
     const _classInterface = class extends constructor implements MeshInterface {
       babylon: Pick<BabylonAccessor, 'scene'> = { scene: null }
 
-      constructor(private readonly scene: SceneType) {
+      /* constructor(private readonly scene: SceneType) {
         super()
-      }
+      } */
 
-      onSpawn?(): void {}
+      onSpawn?(scene: SceneType): void {}
+
+      setMesh(babylonMesh: BabylonMesh): void {
+        // 8a8f
+      }
     }
     const _classCore = class implements MeshCore {
       props = props
@@ -30,9 +36,9 @@ export function Mesh(props: MeshProps): any {
 
       }
 
-      spawn(scene: SceneType): MeshInterface {
-        const mesh = new _classInterface(scene)
-        invokeCallback(mesh.onSpawn, mesh)
+      spawn(/* scene: SceneType */): MeshInterface { // 8a8f es necesaria la escena aquí
+        const mesh = new _classInterface(/* scene */)
+        invokeCallback(mesh.onSpawn, mesh/*, scene */)
         return mesh
       }
     }

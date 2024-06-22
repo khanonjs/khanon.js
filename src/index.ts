@@ -30,6 +30,11 @@ export { Sprite } from './decorators/sprite/sprite-decorator'
 export { SpriteProps } from './decorators/sprite/sprite-props'
 export { SpriteInterface } from './decorators/sprite/sprite-interface'
 
+// Mesh decorator
+export { Mesh } from './decorators/mesh/mesh-decorator'
+export { MeshProps } from './decorators/mesh/mesh-props'
+export { MeshInterface } from './decorators/mesh/mesh-interface'
+
 // Camera decorator
 export { Camera } from './decorators/camera/camera-decorator'
 export { CameraInterface } from './decorators/camera/camera-interface'

@@ -58,7 +58,7 @@ export function Actor(props: ActorProps): any {
 
       spawn(scene: SceneType): ActorInterface {
         const actor = new _classInterface(scene)
-        invokeCallback(actor.onSpawn, actor)
+        invokeCallback(actor.onSpawn, actor, scene)
         return actor
       }
     }

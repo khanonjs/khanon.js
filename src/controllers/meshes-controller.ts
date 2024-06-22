@@ -1,7 +1,6 @@
 import { ControllerLoader } from '../base'
 import { MeshConstructor } from '../constructors'
-import { MeshType } from '../decorators/mesh/mesh-type'
+import { MeshCore } from '../decorators/mesh/mesh-core'
 import { SceneType } from '../decorators/scene/scene-type'
 
-export class MeshesController extends ControllerLoader<MeshConstructor, MeshType, SceneType>(false) {
-}
+export class MeshesController extends ControllerLoader<MeshConstructor, MeshCore, SceneType>(false) {}
