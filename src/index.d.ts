@@ -13,6 +13,7 @@ import {
   SceneStateConstructor
 } from './constructors'
 import { ActorCompositionDefinition } from './decorators/actor/actor-composition/actor-composition-definition'
+import { ActorProps } from './decorators/actor/actor-props'
 import { Actor2DProps } from './decorators/actor/actor2d/actor2d-props'
 import { Actor3DProps } from './decorators/actor/actor3d/actor3d-props'
 import { AppProps } from './decorators/app/app-props'
@@ -54,8 +55,7 @@ export declare namespace KJS {
   export function clearCache(): void
 
   // Types
-  export type Actor2D = Actor2DInterface;
-  export type Actor3D = Actor3DInterface;
+  export type Actor = ActorInterface;
   export type Scene = SceneInterface;
 
   /**
@@ -191,38 +191,28 @@ export declare abstract class SceneInterface {
 // ****************
 // Actor decorator
 // ****************
-
-/**
- * Actor Composition
- */
 export declare function ActorComposition(id: string)
 export { ActorCompositionDefinition } from './decorators/actor/actor-composition/actor-composition-definition'
 
+export { ActorProps } from './decorators/actor/actor-props'
+export declare function Actor(props?: ActorProps = {}): any
 export declare abstract class ActorInterface {
+  /**
+   * Current composition in use
+   */
   composition: ActorCompositionDefinition
 
   /**
    * Use a previously defined composition within the Actor class using ActorComposition decorator
    * @param id Composition Id
+   * @param CompositionDefinition User custom composition definition
    */
-  setComposition(id: any): ActorCompositionDefinition
+  useComposition<C extends ActorCompositionDefinition>(id: string, CompositionDefinition?: new (id: string) => C): C
 
   /**
    * Callback invoked after the actor has been spawned on a scene
    */
   onSpawn?(): void
-}
-
-export { Actor2DProps } from './decorators/actor/actor2d/actor2d-props'
-export declare function Actor2D(props?: Actor2DProps = {}): any
-export declare abstract class Actor2DInterface extends ActorInterface {
-
-}
-
-export { Actor3DProps } from './decorators/actor/actor3d/actor3d-props'
-export declare function Actor3D(props?: Actor3DProps): any
-export declare abstract class Actor3DInterface extends ActorInterface {
-
 }
 
 // ****************

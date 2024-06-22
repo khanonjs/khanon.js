@@ -1,7 +1,13 @@
 import { BabylonAccessor } from '../../models'
-import { SceneInterface } from '../scene/scene-interface'
 
 export abstract class MeshInterface {
+  /**
+   * Public
+   */
   abstract babylon: Pick<BabylonAccessor, 'scene'>
-  onLoaded?(scene: SceneInterface): void
+
+  /**
+   * User defined
+   */
+  abstract onSpawn?(): void
 }

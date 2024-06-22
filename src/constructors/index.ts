@@ -1,7 +1,6 @@
 import { ActorEventInterface } from '../decorators/actor-event/actor-event-interface'
 import { ActorStateInterface } from '../decorators/actor-state/actor-state-interface'
-import { Actor2DInterface } from '../decorators/actor/actor2d/actor2d-interface'
-import { Actor3DInterface } from '../decorators/actor/actor3d/actor3d-interface'
+import { ActorInterface } from '../decorators/actor/actor-interface'
 import { AppInterface } from '../decorators/app/app-interface'
 import { CameraInterface } from '../decorators/camera/camera-interface'
 import { GUIInterface } from '../decorators/gui/gui-interface'
@@ -16,9 +15,7 @@ import { SceneInterface } from '../decorators/scene/scene-interface'
 import { SpriteInterface } from '../decorators/sprite/sprite-interface'
 import { TileMapInterface } from '../decorators/tilemap/tilemap-interface'
 
-export type Actor2DConstructor = new () => Actor2DInterface
-export type Actor3DConstructor = new () => Actor3DInterface
-export type ActorConstructor = Actor2DConstructor | Actor3DConstructor
+export type ActorConstructor = new () => ActorInterface
 export type ActorEventConstructor = new () => ActorEventInterface
 export type ActorStateConstructor = new () => ActorStateInterface
 export type AppConstructor = new () => AppInterface

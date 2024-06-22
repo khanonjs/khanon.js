@@ -89,6 +89,6 @@ export function isPrototypeOf(_parent: object, _child: object): boolean {
 /**
  * Spawn class from prototype
  */
-export function cloneClass(_class: object) {
+export function cloneClass(_class: object) { // 8a8f eliminar
   return Object.assign(Object.create(Object.getPrototypeOf(_class)), _class)
 }

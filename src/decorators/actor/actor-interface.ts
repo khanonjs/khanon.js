@@ -11,7 +11,7 @@ export abstract class ActorInterface {
    * Public
   */
   abstract composition?: ActorCompositionDefinition
-  abstract setComposition?(id: string): ActorCompositionDefinition
+  abstract useComposition?(id: string, CompositionDefinition?: new (id: string) => ActorCompositionDefinition): ActorCompositionDefinition
 
   /**
    * User defined

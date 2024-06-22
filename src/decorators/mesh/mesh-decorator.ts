@@ -1,21 +1,26 @@
 import { LoadingProgress } from '../../base'
 import { MeshesController } from '../../controllers/meshes-controller'
-import { cloneClass } from '../../helpers/utils'
+import { invokeCallback } from '../../helpers/utils'
 import { BabylonAccessor } from '../../models'
 import { SceneType } from '../scene/scene-type'
-import { MeshInstance } from './mesh-instance'
+import { MeshCore } from './mesh-core'
+import { MeshInterface } from './mesh-interface'
 import { MeshProps } from './mesh-props'
-import { MeshType } from './mesh-type'
 
 export function Mesh(props: MeshProps): any {
-  return function <T extends { new (...args: any[]): MeshType }>(constructor: T & MeshType, context: ClassDecoratorContext) {
-    const _class = class extends constructor implements MeshType {
-      props = props
-      Instance: MeshInstance = new MeshInstance()
-      babylon: Pick<BabylonAccessor, 'scene'>
-      // textures: Map<SceneType, SpriteTexture> = new Map<SceneType, SpriteTexture>()
+  return function <T extends { new (...args: any[]): MeshInterface }>(constructor: T & MeshInterface, context: ClassDecoratorContext) {
+    const _classInterface = class extends constructor implements MeshInterface {
+      babylon: Pick<BabylonAccessor, 'scene'> = { scene: null }
 
-      onLoaded?(): () => void
+      constructor(private readonly scene: SceneType) {
+        super()
+      }
+
+      onSpawn?(): void {}
+    }
+    const _classCore = class implements MeshCore {
+      props = props
+      Instance: MeshInterface = new _classInterface(null)
 
       load(scene: SceneType): LoadingProgress {
         return new LoadingProgress().complete()
@@ -25,11 +30,13 @@ export function Mesh(props: MeshProps): any {
 
       }
 
-      spawn(): MeshInstance {
-        return cloneClass(this.Instance)
+      spawn(scene: SceneType): MeshInterface {
+        const mesh = new _classInterface(scene)
+        invokeCallback(mesh.onSpawn, mesh)
+        return mesh
       }
     }
-    MeshesController.register(new _class())
-    return _class
+    MeshesController.register(new _classCore())
+    return _classInterface
   }
 }
