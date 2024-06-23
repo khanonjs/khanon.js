@@ -26,7 +26,7 @@ export abstract class SceneInterface implements Loadable, LoopUpdatable, CanvasR
   abstract stop(): void
   abstract load(): LoadingProgress
   abstract unload(): void
-  abstract setState(state: SceneStateConstructor): void
+  abstract startState(state: SceneStateConstructor): void
   abstract spawnActor(actor: ActorConstructor, initialize?: (actor: ActorInterface) => void): void
   abstract spawnParticle(particle: ParticleConstructor, initialize?: (particle: ParticleConstructor) => void): void
   abstract spawnParticleSource(particleSource: ParticleSourceConstructor, initialize?: (particleSource: ParticleSourceConstructor) => void): void
@@ -35,5 +35,5 @@ export abstract class SceneInterface implements Loadable, LoopUpdatable, CanvasR
   onLoaded?(): void
   onUnload?(): void
   onLoopUpdate?(delta: number): void
-  onCanvasResize?(canvasRect: Rect): void
+  onCanvasResize?(canvasSize: Rect): void
 }

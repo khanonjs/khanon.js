@@ -1,15 +1,22 @@
-import { LoopUpdatable } from '../../base'
+import { Observer } from '@babylonjs/core'
+
+import {
+  CanvasResizable,
+  LoopUpdatable
+} from '../../base'
 import { CameraConstructor } from '../../constructors'
-import { BabylonAccessor } from '../../models'
+import { Rect } from '../../models'
 import { SceneType } from '../scene/scene-type'
 
-export class SceneStateInterface implements LoopUpdatable {
-  babylon: Pick<BabylonAccessor, 'scene'>
-  scene: SceneType
-  setCamera?(camera: CameraConstructor): void
-  play?(scene: SceneType): void
-  end?(scene: SceneType): void
-  onPlay?(scene: SceneType): void
+export abstract class SceneStateInterface implements LoopUpdatable, CanvasResizable {
+  abstract scene: SceneType
+  abstract loopUpdate$?: Observer<number>
+  abstract canvasResize$?: Observer<Rect>
+  abstract setCamera?(camera: CameraConstructor): void
+  abstract start?(): void
+  abstract end?(): void
+  onStart?(scene: SceneType): void
   onEnd?(): void
   onLoopUpdate?(delta: number): void
+  onCanvasResize?(canvasSize: Rect): void
 }

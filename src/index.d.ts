@@ -156,7 +156,7 @@ export declare abstract class SceneInterface {
    * Set the state.
    * @param state
    */
-  setState(state: SceneStateConstructor): void
+  startState(state: SceneStateConstructor): void
 
   /**
    * Spawns an Actor.
@@ -204,9 +204,9 @@ export declare abstract class SceneInterface {
 
   /**
    * Callback invoked on canvas resize.
-   * @param canvasRect Canvas Rect.
+   * @param canvasSize Canvas Rect.
    */
-  onCanvasResize?(canvasRect: Rect): void
+  onCanvasResize?(canvasSize: Rect): void
 }
 
 // ****************
@@ -325,9 +325,16 @@ export declare abstract class CameraInterface {
   abstract initialize(scene: BabylonScene): BabylonCamera
 
   /**
-   * Callback invoked on Loop Update.
+   * Callback invoked on loop update.
+   * @param delta Time differential since last frame.
    */
   onLoopUpdate?(delta: number): void
+
+  /**
+   * Callback invoked on canvas resize.
+   * @param canvasSize Canvas Rect.
+   */
+  onCanvasResize?(canvasSize: Rect): void
 }
 
 // ****************
@@ -354,7 +361,7 @@ export declare abstract class SceneStateInterface {
   /**
    * Invoked on state start. Use this method to setup the scene according to this state start.
    */
-  onPlay?(scene: SceneType): void
+  onStart?(scene: SceneType): void
 
   /**
    * Invoked on state end. Use this method to setup the scene according to this state end.
@@ -362,9 +369,16 @@ export declare abstract class SceneStateInterface {
   onEnd?(): void
 
   /**
-   * Callback invoked on Loop Update.
+   * Callback invoked on loop update.
+   * @param delta Time differential since last frame.
    */
   onLoopUpdate?(delta: number): void
+
+  /**
+   * Callback invoked on canvas resize.
+   * @param canvasSize Canvas Rect.
+   */
+  onCanvasResize?(canvasSize: Rect): void
 }
 
 // ********

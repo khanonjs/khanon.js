@@ -68,13 +68,13 @@ export function Scene(props: SceneProps): any {
       onLoaded?(): void
       onUnload?(): void
       onLoopUpdate?(delta: number): void
-      onCanvasResize?(canvasRect: Rect): void
+      onCanvasResize?(canvasSize: Rect): void
 
       start(state: SceneStateConstructor): void {
         Logger.debug('Scene start', _class.prototype)
         Core.startRenderScene(this)
         this._started = true
-        this.setState(state)
+        this.startState(state)
         invokeCallback(this.onStart, this)
         if (this.onLoopUpdate) {
           this.loopUpdate$ = Core.addLoopUpdateObserver(this.onLoopUpdate.bind(this))
@@ -95,7 +95,6 @@ export function Scene(props: SceneProps): any {
           Core.removeCanvasResizeObserver(this.canvasResize$)
           this.canvasResize$ = undefined
         }
-        // 8a8f stop loop update and canvas resize
       }
 
       load(): LoadingProgress {
@@ -150,11 +149,11 @@ export function Scene(props: SceneProps): any {
         camera.babylon.camera.attachControl(Core.canvas, true)
       }
 
-      setState(state: SceneStateConstructor): void {
+      startState(state: SceneStateConstructor): void {
         if (!this.props.states.find(_state => _state === state)) {
           Logger.error('Trying to set a state non available to the scene. Please check the scene props.', _class.prototype, state.prototype)
         } else {
-          SceneStatesController.get(state).spawn().play(this)
+          SceneStatesController.get(state).spawn(this).start()
         }
       }
 

@@ -1,3 +1,5 @@
+import { Observer } from '@babylonjs/core'
+
 import {
   CameraConstructor,
   SceneStateConstructor
@@ -13,6 +15,7 @@ import {
 } from '../../helpers/utils'
 import {
   BabylonAccessor,
+  Rect,
   UseCamera
 } from '../../models'
 import { Logger } from '../../modules'
@@ -24,41 +27,59 @@ import { SceneStateProps } from './scene-state-props'
 export function SceneState(props: SceneStateProps): any {
   return function <T extends { new (...args: any[]): SceneStateInterface }>(constructor: T & SceneStateInterface, context: ClassDecoratorContext) {
     const _classInterface = class extends constructor implements SceneStateInterface {
+      constructor(readonly scene: SceneType) {
+        super()
+      }
+
       // Private
       props = props
+      loopUpdate$: Observer<number>
+      canvasResize$: Observer<Rect>
 
       // Public
-      babylon: Pick<BabylonAccessor, 'scene'> = { scene: null }
+      onStart?(): void
+      onEnd?(): void
+      onLoopUpdate?(delta: number): void
+      onCanvasResize?(canvasSize: Rect): void
 
       setCamera(camera: CameraConstructor): void {
         this.scene.setCamera(camera)
       }
 
-      play(scene: SceneType): void {
-        Logger.debug('Scene state play', _classInterface.prototype)
-        this.scene = scene
+      start(): void {
+        Logger.debug('SceneState start', _classInterface.prototype)
         if (this.props.useCamera === UseCamera.ON_START ||
-            (this.props.useCamera === UseCamera.INHERIT && !scene.babylon.scene.activeCamera)) {
+            (this.props.useCamera === UseCamera.INHERIT && !this.scene.babylon.scene.activeCamera)) {
           this.setCamera(this.props.camera)
         }
-        invokeCallback(this.onPlay, this, this.scene)
+        invokeCallback(this.onStart, this, this.scene)
+        if (this.onLoopUpdate) {
+          this.loopUpdate$ = Core.addLoopUpdateObserver(this.onLoopUpdate.bind(this))
+        }
+        if (this.onCanvasResize) {
+          this.canvasResize$ = Core.addCanvasResizeObserver(this.onCanvasResize.bind(this))
+        }
       }
 
-      end(scene: SceneType): void {
+      end(): void {
+        if (this.loopUpdate$) {
+          Core.removeLoopUpdateObserver(this.loopUpdate$)
+          this.loopUpdate$ = undefined
+        }
+        if (this.canvasResize$) {
+          Core.removeCanvasResizeObserver(this.canvasResize$)
+          this.canvasResize$ = undefined
+        }
         Logger.debug('Scene state end', _classInterface.prototype)
       }
-
-      // User defined
-      onStart?(): void
-      onEnd?(): void
-      loopUpdate?(delta: number): void
     }
     const _classCore = class implements SceneStateCore {
       props = props
-      Instance: SceneStateInterface = new _classInterface()
+      Instance: SceneStateInterface = new _classInterface(null)
 
-      spawn(): SceneStateInterface {
-        return cloneClass(this.Instance)
+      spawn(scene: SceneType): SceneStateInterface {
+        const state = new _classInterface(scene)
+        return state
       }
     }
     SceneStatesController.register(new _classCore())

@@ -15,6 +15,6 @@ export class ScenesController extends ControllerLoader<SceneType, SceneType>() {
   }
 
   static setState(scene: SceneConstructor, state: SceneStateConstructor): void {
-    ScenesController.get(scene).setState(state)
+    ScenesController.get(scene).startState(state)
   }
 }

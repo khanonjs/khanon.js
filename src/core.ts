@@ -40,7 +40,7 @@ export class Core {
   private static babylon: Pick<BabylonAccessor, 'engine'> = { engine: null }
 
   // Canvas
-  private static canvasRect: Rect
+  private static canvasSize: Rect
   private static onCanvasResize: Observable<Rect> = new Observable<Rect>()
 
   // Loop update
@@ -102,11 +102,11 @@ export class Core {
     this.initializeBabylon()
     this.initializeLoopUpdate()
 
-    Core.updateCanvasRect()
+    Core.updatecanvasSize()
 
     // Manage resize
     window.addEventListener('resize', () => {
-      Core.updateCanvasRect()
+      Core.updatecanvasSize()
       Core.babylon.engine.resize() // TODO: Test this besides 'Core.app.props.engineConfiguration.adaptToDeviceRatio = true'
       // CoreGlobals.canvasResize$.next(canvasDimensions) // 8a8f
     })
@@ -159,7 +159,7 @@ export class Core {
     this.onLoopUpdate.remove(observer)
   }
 
-  static addCanvasResizeObserver(func: (canvasRect: Rect) => void): Observer<Rect> {
+  static addCanvasResizeObserver(func: (canvasSize: Rect) => void): Observer<Rect> {
     return this.onCanvasResize.add(func)
   }
 
@@ -219,16 +219,16 @@ export class Core {
     )
   }
 
-  private static updateCanvasRect(): void {
+  private static updatecanvasSize(): void {
     const boundingRect = Core.htmlCanvas.getBoundingClientRect()
-    Core.canvasRect = {
+    Core.canvasSize = {
       x: 0,
       y: 0,
       width: Math.floor(boundingRect.width),
       height: Math.floor(boundingRect.height)
     }
-    this.onCanvasResize.notifyObservers(Core.canvasRect)
-    Logger.debug('Canvas size:', Core.canvasRect.width, Core.canvasRect.height)
+    this.onCanvasResize.notifyObservers(Core.canvasSize)
+    Logger.debug('Canvas size:', Core.canvasSize.width, Core.canvasSize.height)
   }
 
   /* private static loadSceneQueueNext(sceneLoaded: Scene, onLoaded?: ( scene: Scene) => void): void {
