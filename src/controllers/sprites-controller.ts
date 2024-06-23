@@ -1,7 +1,7 @@
 import { ControllerLoader } from '../base'
 import { SpriteConstructor } from '../constructors'
 import { SceneType } from '../decorators/scene/scene-type'
-import { SpriteType } from '../decorators/sprite/sprite-type'
+import { SpriteCore } from '../decorators/sprite/sprite-core'
 
-export class SpritesController extends ControllerLoader<SpriteConstructor, SpriteType, SceneType>(false) {
+export class SpritesController extends ControllerLoader<SpriteConstructor, SpriteCore, SceneType>(false) {
 }

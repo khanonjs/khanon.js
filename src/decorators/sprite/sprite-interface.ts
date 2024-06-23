@@ -11,4 +11,9 @@ export abstract class SpriteInterface {
    * User defined
    */
   abstract onSpawn?(scene: SceneInterface): void
+
+  /**
+   * Private
+   */
+  abstract release?(): void
 }

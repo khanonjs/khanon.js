@@ -24,15 +24,15 @@ export function Actor(props: ActorProps): any {
 
       onSpawn?(): void
 
-      useComposition(id: string, CompositionDefinition?: new (id: string) => ActorCompositionDefinition): ActorCompositionDefinition {
+      useComposition(id: string, CompositionDefinition?: new (id: string, scene: SceneType) => ActorCompositionDefinition): ActorCompositionDefinition {
         if (!this.metadata.compositions.get(id)) { Logger.debugError(`Actor - Actor composition not found: ${id}`, this) }
         if (this.composition) {
           this.composition.release()
         }
         this.composition = CompositionDefinition
-          ? new CompositionDefinition(id)
-          : new ActorCompositionDefinition(id)
-        this.metadata.compositions.get(id)(new ActorCompositionDefinition(id), this.scene)
+          ? new CompositionDefinition(id, this.scene)
+          : new ActorCompositionDefinition(id, this.scene)
+        this.metadata.compositions.get(id)(this.composition, this.scene)
         return this.composition
       }
     }

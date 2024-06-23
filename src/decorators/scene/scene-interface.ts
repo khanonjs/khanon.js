@@ -1,6 +1,10 @@
+import { Observer } from '@babylonjs/core'
+
 import {
+  CanvasResizable,
   Loadable,
-  LoadingProgress
+  LoadingProgress,
+  LoopUpdatable
 } from '../../base'
 import {
   ActorConstructor,
@@ -8,11 +12,14 @@ import {
   ParticleSourceConstructor,
   SceneStateConstructor
 } from '../../constructors'
+import { Rect } from '../../models'
 import { BabylonAccessor } from '../../models/babylon-accessor'
 import { ActorInterface } from '../actor/actor-interface'
 
-export abstract class SceneInterface implements Loadable {
+export abstract class SceneInterface implements Loadable, LoopUpdatable, CanvasResizable {
   abstract babylon: Pick<BabylonAccessor, | 'scene'>
+  abstract loopUpdate$?: Observer<number>
+  abstract canvasResize$?: Observer<Rect>
   abstract get loaded(): boolean
   abstract get started(): boolean
   abstract start(state: SceneStateConstructor): void
@@ -27,4 +34,6 @@ export abstract class SceneInterface implements Loadable {
   onStop?(): void
   onLoaded?(): void
   onUnload?(): void
+  onLoopUpdate?(delta: number): void
+  onCanvasResize?(canvasRect: Rect): void
 }

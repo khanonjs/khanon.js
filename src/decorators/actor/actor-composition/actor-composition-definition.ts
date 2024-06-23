@@ -6,6 +6,7 @@ import { SpritesController } from '../../../controllers'
 import { MeshesController } from '../../../controllers/meshes-controller'
 import { Logger } from '../../../modules'
 import { MeshInterface } from '../../mesh/mesh-interface'
+import { SceneType } from '../../scene/scene-type'
 import { SpriteInterface } from '../../sprite/sprite-interface'
 
 export class ActorCompositionDefinition {
@@ -13,15 +14,14 @@ export class ActorCompositionDefinition {
   sprites: Map<string, SpriteInterface> = new Map<string, SpriteInterface>()
   meshes: Map<string, MeshInterface> = new Map<string, MeshInterface>()
 
-  constructor(private readonly id: string) {}
+  constructor(private readonly id: string, private readonly scene: SceneType) {}
 
   addSprite(spriteCtr: SpriteConstructor, name?: string): SpriteInterface {
     if (!name) {
       name = (++this.fakeId).toString()
     }
-    const sprite = SpritesController.get(spriteCtr).spawn()
-    Logger.trace('aki ActorCompositionDefinition addSprite', name)
-    if (this.sprites.get(name)) { Logger.debugError(`ActorCompositionDefinition - Can't add a mesh with same name '${name}'`) }
+    const sprite = SpritesController.get(spriteCtr).spawn(this.scene)
+    if (this.sprites.get(name)) { Logger.debugError(`ActorCompositionDefinition - Adding Sprite with name already defined '${name}'`) }
     this.sprites.set(name, sprite)
     return sprite
   }
@@ -30,15 +30,16 @@ export class ActorCompositionDefinition {
     if (!name) {
       name = (++this.fakeId).toString()
     }
-    const mesh = MeshesController.get(meshCtr).spawn()
-    Logger.trace('aki ActorCompositionDefinition addMesh', name)
-    if (this.meshes.get(name)) { Logger.debugError(`ActorCompositionDefinition - Can't add a mesh with same name '${name}'`) }
+    const mesh = MeshesController.get(meshCtr).spawn(this.scene)
+    if (this.meshes.get(name)) { Logger.debugError(`ActorCompositionDefinition - Adding Mesh with name already defined '${name}'`) }
     this.meshes.set(name, mesh)
     return mesh
   }
 
   release(): void {
-    Logger.trace('aki ActorCompositionDefinition release')
-    // 8a8f
+    this.sprites.forEach(sprite => sprite.release())
+    this.sprites.clear()
+    this.meshes.forEach(mesh => mesh.release())
+    this.meshes.clear()
   }
 }

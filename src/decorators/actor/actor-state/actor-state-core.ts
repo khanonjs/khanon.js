@@ -1,4 +1,4 @@
-import { Spawnable } from '../../base'
+import { Spawnable } from '../../../base'
 import { ActorStateInterface } from './actor-state-interface'
 import { ActorStateProps } from './actor-state-props'
 

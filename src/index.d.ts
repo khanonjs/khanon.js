@@ -1,10 +1,12 @@
 import {
   Camera as BabylonCamera,
   Mesh as BabylonMesh,
-  Scene as BabylonScene
+  Scene as BabylonScene,
+  Vector3
 } from '@babylonjs/core'
 
 import { LoadingProgress } from './base'
+import { DisplayObject } from './base/classes/display-object'
 import {
   ActorConstructor,
   CameraConstructor,
@@ -23,7 +25,10 @@ import { SceneStateProps } from './decorators/scene-state/scene-state-props'
 import { SceneProps } from './decorators/scene/scene-props'
 import { SceneType } from './decorators/scene/scene-type'
 import { SpriteProps } from './decorators/sprite/sprite-props'
-import { BabylonAccessor } from './models'
+import {
+  BabylonAccessor,
+  Rect
+} from './models'
 
 // ********************
 //  Babylon.js objects
@@ -34,6 +39,7 @@ export { BabylonMesh }
 // **************
 //  Models
 // **************
+export { Rect } from './models/rect'
 export { UseCamera } from './models/use-camera'
 
 // **************
@@ -189,6 +195,18 @@ export declare abstract class SceneInterface {
    * Callback invoked on scene unload.
    */
   onUnload?(): void
+
+  /**
+   * Callback invoked on loop update.
+   * @param delta Time differential since last frame.
+   */
+  onLoopUpdate?(delta: number): void
+
+  /**
+   * Callback invoked on canvas resize.
+   * @param canvasRect Canvas Rect.
+   */
+  onCanvasResize?(canvasRect: Rect): void
 }
 
 // ****************
@@ -240,11 +258,17 @@ export declare abstract class SpriteInterface {
 // ****************
 export { MeshProps } from './decorators/mesh/mesh-props'
 export declare function Mesh(props?: MeshProps): any
-export declare abstract class MeshInterface {
+export declare abstract class MeshInterface implements DisplayObject {
   /**
    * Babylon.js objects.
    */
-  babylon: Pick<BabylonAccessor, 'scene'>
+  babylon: Pick<BabylonAccessor, 'scene' | 'mesh'>
+
+  /**
+   * Mesh visibility
+   */
+  set visible(value: boolean)
+  get visible(): boolean
 
   /**
    * Sets a mesh manually.
@@ -257,6 +281,34 @@ export declare abstract class MeshInterface {
    * Callback invoked after the mesh has been spawned in a scene.
    */
   onSpawn?(scene: KJS.Scene): void
+
+  setPosition(position: Vector3): void
+  setPositionFromFloats(x: number, y: number, z: number): void
+
+  getPosition(): Vector3
+
+  setX(value: number): void
+  incX(value: number): void
+  getX(): number
+
+  setY(value: number): void
+  incY(value: number): void
+  getY(): number
+
+  setZ(value: number): void
+  incZ(value: number): void
+  getZ(): number
+
+  setRotation(rotation: Vector3): void
+  getRotation(): Vector3
+
+  setScale(scale: number): void
+  getScale(): number
+
+  setAlpha(alpha: number): void
+  getAlpha(): number
+
+  play(animation: any/* SpriteAnimation | MeshAnimation */, loopOverride?: boolean, completed?: () => void): void
 }
 
 // ****************
@@ -273,9 +325,9 @@ export declare abstract class CameraInterface {
   abstract initialize(scene: BabylonScene): BabylonCamera
 
   /**
-   * LoopUpdate method.
+   * Callback invoked on Loop Update.
    */
-  loopUpdate?(delta: number): void
+  onLoopUpdate?(delta: number): void
 }
 
 // ****************
@@ -310,9 +362,9 @@ export declare abstract class SceneStateInterface {
   onEnd?(): void
 
   /**
-   * LoopUpdate method.
+   * Callback invoked on Loop Update.
    */
-  loopUpdate?(delta: number): void
+  onLoopUpdate?(delta: number): void
 }
 
 // ********

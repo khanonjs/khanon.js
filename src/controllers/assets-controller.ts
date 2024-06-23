@@ -2,11 +2,11 @@ import {
   Asset,
   LoadingProgress
 } from '../base'
+import { ActorCore } from '../decorators/actor/actor-core'
 import { ActorInterface } from '../decorators/actor/actor-interface'
-import { Actor2DCore } from '../decorators/actor/actor2d/actor2d-core'
 import { SceneType } from '../decorators/scene/scene-type'
+import { SpriteCore } from '../decorators/sprite/sprite-core'
 import { SpriteInterface } from '../decorators/sprite/sprite-interface'
-import { SpriteType } from '../decorators/sprite/sprite-type'
 import {
   isPrototypeOf,
   objectToString
@@ -43,11 +43,11 @@ export class AssetsController {
         if (Array.isArray(property)) {
           property.forEach(value => {
             if (isPrototypeOf(ActorInterface, value)) {
-              const actor = ActorsController.get<Actor2DCore>(value)
+              const actor = ActorsController.get<ActorCore>(value)
               definitions = [...definitions, ...AssetsController.findAssetsDefinitions(actor.props, urls)]
             }
             if (isPrototypeOf(SpriteInterface, value)) {
-              const sprite = SpritesController.get<SpriteType>(value, false)
+              const sprite = SpritesController.get<SpriteCore>(value)
               if (sprite.props.url && !urls[sprite.props.url]) {
                 urls[sprite.props.url] = true
                 definitions = [...definitions, {

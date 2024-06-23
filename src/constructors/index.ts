@@ -1,6 +1,6 @@
-import { ActorEventInterface } from '../decorators/actor-event/actor-event-interface'
-import { ActorStateInterface } from '../decorators/actor-state/actor-state-interface'
+import { ActorEventInterface } from '../decorators/actor/actor-event/actor-event-interface'
 import { ActorInterface } from '../decorators/actor/actor-interface'
+import { ActorStateInterface } from '../decorators/actor/actor-state/actor-state-interface'
 import { AppInterface } from '../decorators/app/app-interface'
 import { CameraInterface } from '../decorators/camera/camera-interface'
 import { GUIInterface } from '../decorators/gui/gui-interface'

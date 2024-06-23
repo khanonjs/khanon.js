@@ -11,5 +11,5 @@ export class SceneStateInterface implements LoopUpdatable {
   end?(scene: SceneType): void
   onPlay?(scene: SceneType): void
   onEnd?(): void
-  loopUpdate?(delta: number): void
+  onLoopUpdate?(delta: number): void
 }

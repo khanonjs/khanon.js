@@ -2,6 +2,10 @@ import '@babylonjs/core/Loading/loadingScreen'
 import '@babylonjs/core/Loading/Plugins/babylonFileLoader'
 import '@babylonjs/core/Materials/PBR/pbrMaterial'
 
+import {
+  Observable,
+  Observer
+} from '@babylonjs/core'
 import { Engine } from '@babylonjs/core/Engines/engine'
 
 import { AppConstructor } from './constructors'
@@ -37,6 +41,7 @@ export class Core {
 
   // Canvas
   private static canvasRect: Rect
+  private static onCanvasResize: Observable<Rect> = new Observable<Rect>()
 
   // Loop update
   private static loopUpdateInterval: Timeout
@@ -44,6 +49,7 @@ export class Core {
   private static loopUpdateMps: number // Number of logical steps per frame
   private static loopUpdateLag: number
   private static loopUpdateDeltaTime: number // Time acceleration factor
+  private static onLoopUpdate: Observable<number> = new Observable<number>()
 
   // Render scenes
   private static readonly renderScenes: Set<SceneType> = new Set<SceneType>()
@@ -145,6 +151,22 @@ export class Core {
     Core.renderScenes.delete(scene)
   }
 
+  static addLoopUpdateObserver(func: (delta: number) => void): Observer<number> {
+    return this.onLoopUpdate.add(func)
+  }
+
+  static removeLoopUpdateObserver(observer: Observer<number>): void {
+    this.onLoopUpdate.remove(observer)
+  }
+
+  static addCanvasResizeObserver(func: (canvasRect: Rect) => void): Observer<Rect> {
+    return this.onCanvasResize.add(func)
+  }
+
+  static removeCanvasResizeObserver(observer: Observer<Rect>): void {
+    this.onCanvasResize.remove(observer)
+  }
+
   private static initializeHTMLLayers(): void {
     const parentId = Core.app.props.htmlCanvasContainerId
     const parentElement = document.getElementById(parentId)
@@ -187,10 +209,9 @@ export class Core {
       () => {
         const currentMs = performance.now()
         Core.loopUpdateLag += currentMs - Core.loopUpdateLastMs
+        Core.loopUpdateLastMs = currentMs
         while (Core.loopUpdateLag > Core.loopUpdateMps) {
-          Core.loopUpdateLastMs = currentMs
-          // CoreGlobals.loopUpdate$.next(Core.loopUpdateDeltaTime) // 8a8f
-          // CoreGlobals.physicsUpdate$.next(Core.loopUpdateDeltaTime) // 8a8f
+          this.onLoopUpdate.notifyObservers(Core.loopUpdateMps)
           Core.loopUpdateLag -= Core.loopUpdateMps
         }
       },
@@ -199,8 +220,15 @@ export class Core {
   }
 
   private static updateCanvasRect(): void {
-    Core.canvasRect = Core.htmlCanvas.getBoundingClientRect() // 8a8f not updating for some reason
-    Logger.debug('Canvas size:', Math.floor(Core.canvasRect.width), Math.floor(Core.canvasRect.height))
+    const boundingRect = Core.htmlCanvas.getBoundingClientRect()
+    Core.canvasRect = {
+      x: 0,
+      y: 0,
+      width: Math.floor(boundingRect.width),
+      height: Math.floor(boundingRect.height)
+    }
+    this.onCanvasResize.notifyObservers(Core.canvasRect)
+    Logger.debug('Canvas size:', Core.canvasRect.width, Core.canvasRect.height)
   }
 
   /* private static loadSceneQueueNext(sceneLoaded: Scene, onLoaded?: ( scene: Scene) => void): void {

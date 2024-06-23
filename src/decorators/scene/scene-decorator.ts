@@ -1,3 +1,8 @@
+// 8a8f
+import '@babylonjs/inspector'
+import '@babylonjs/core/Debug/debugLayer'
+
+import { Observer } from '@babylonjs/core'
 import { Scene as BabylonScene } from '@babylonjs/core/scene'
 
 import { LoadingProgress } from '../../base'
@@ -23,7 +28,8 @@ import {
 import KJS from '../../kjs'
 import {
   AssetDefinition,
-  BabylonAccessor
+  BabylonAccessor,
+  Rect
 } from '../../models'
 import { Logger } from '../../modules'
 import { ActorInterface } from '../actor/actor-interface'
@@ -51,9 +57,18 @@ export function Scene(props: SceneProps): any {
 
       // Interface
       babylon: Pick<BabylonAccessor, 'scene'> = { scene: null }
+      loopUpdate$: Observer<number>
+      canvasResize$: Observer<Rect>
       get assets(): AssetDefinition[] { return this._assets }
       get loaded(): boolean { return this._loaded }
       get started(): boolean { return this._started }
+
+      onStart?(): void
+      onStop?(): void
+      onLoaded?(): void
+      onUnload?(): void
+      onLoopUpdate?(delta: number): void
+      onCanvasResize?(canvasRect: Rect): void
 
       start(state: SceneStateConstructor): void {
         Logger.debug('Scene start', _class.prototype)
@@ -61,11 +76,26 @@ export function Scene(props: SceneProps): any {
         this._started = true
         this.setState(state)
         invokeCallback(this.onStart, this)
+        if (this.onLoopUpdate) {
+          this.loopUpdate$ = Core.addLoopUpdateObserver(this.onLoopUpdate.bind(this))
+        }
+        if (this.onCanvasResize) {
+          this.canvasResize$ = Core.addCanvasResizeObserver(this.onCanvasResize.bind(this))
+        }
       }
 
       stop(): void {
         Logger.debug('Scene stop', _class.prototype)
         Core.stopRenderScene(this)
+        if (this.loopUpdate$) {
+          Core.removeLoopUpdateObserver(this.loopUpdate$)
+          this.loopUpdate$ = undefined
+        }
+        if (this.canvasResize$) {
+          Core.removeCanvasResizeObserver(this.canvasResize$)
+          this.canvasResize$ = undefined
+        }
+        // 8a8f stop loop update and canvas resize
       }
 
       load(): LoadingProgress {
@@ -81,7 +111,7 @@ export function Scene(props: SceneProps): any {
         }
 
         // Babylon inspector (only DEV mode). Babylon inspector's imports are removed on webpack build.
-        if (Core.isDevelopmentMode()) {
+        if (Core.isDevelopmentMode()) { // 8a8f uno por escena, permitir solo uno activo
           this.debugInspector()
         }
 
@@ -95,7 +125,6 @@ export function Scene(props: SceneProps): any {
           Logger.debug('Scene assets load completed', _class.prototype)
           ActorsController.load(this.props.actors, this)
           this.babylon.scene.executeWhenReady(() => {
-            Logger.trace('aki SCENE ONLOADED', this.onLoaded)
             invokeCallback(this.onLoaded, this)
             sceneProgress.complete()
           })
@@ -143,18 +172,17 @@ export function Scene(props: SceneProps): any {
       }
 
       debugInspector(): void {
-        window.addEventListener('keydown', (ev) => {
+        // 8a8f ver qué hacer con esto
+        window.addEventListener('keyup', (ev) => {
           if (ev.shiftKey && ev.ctrlKey && ev.altKey && ev.key === 'I') {
-            // 8a8f
-            /*
             // @ts-ignore
-            if (this.babylonjs.debugLayer.isVisible()) {
+            if (this.babylon.scene.debugLayer.isVisible()) {
               // @ts-ignore
-              this.babylonjs.debugLayer.hide()
+              this.babylon.scene.debugLayer.hide()
             } else {
               // @ts-ignore
-              this.babylonjs.debugLayer.show()
-            } */
+              this.babylon.scene.debugLayer.show()
+            }
           }
         })
       }

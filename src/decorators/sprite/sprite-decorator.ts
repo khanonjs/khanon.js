@@ -5,10 +5,10 @@ import {
 } from '../../controllers'
 import {
   applyDefaults,
-  cloneClass,
   invokeCallback
 } from '../../helpers/utils'
 import { BabylonAccessor } from '../../models'
+import { Logger } from '../../modules'
 import { SceneInterface } from '../scene/scene-interface'
 import { SceneType } from '../scene/scene-type'
 import { SpriteCore } from './sprite-core'
@@ -22,11 +22,15 @@ export function Sprite(props: SpriteProps): any {
     const _classInterface = class extends constructor implements SpriteInterface {
       babylon: Pick<BabylonAccessor, 'spriteManager' | 'scene'> = { spriteManager: null, scene: null }
 
-      constructor(private readonly scene: SceneType) {
+      /* constructor(private readonly scene: SceneType) {
         super()
-      }
+      } */
 
       onSpawn?(scene: SceneInterface): void {}
+
+      release(): void {
+
+      }
     }
     const _classCore = class implements SpriteCore {
       props = applyDefaults(props, spritePropsDefault)
@@ -34,12 +38,8 @@ export function Sprite(props: SpriteProps): any {
       textures: Map<SceneType, SpriteTexture> = new Map<SceneType, SpriteTexture>()
 
       load(scene: SceneType): LoadingProgress {
-        const callLoaded = () => {
-          // invokeCallback(this.onLoaded, this, scene) // 8a8f ??s
-        }
         const progress = new LoadingProgress().complete()
         if (this.textures.get(scene)) {
-          callLoaded()
           return progress.complete()
         } else {
           if (this.props.url) {
@@ -47,24 +47,23 @@ export function Sprite(props: SpriteProps): any {
             const texture = new SpriteTexture(scene, this.props)
             texture.setFromArrayBuffer(asset.buffer)
             this.textures.set(scene, texture)
-            callLoaded()
             return progress
           } else {
             const texture = new SpriteTexture(scene, this.props)
             texture.setFromBlank()
             this.textures.set(scene, texture)
-            callLoaded()
             return progress.complete()
           }
         }
       }
 
       unload(scene: SceneType): void {
-
+        this.textures.delete(scene)
+        // AssetsController. // 8a8f
       }
 
       spawn(scene: SceneType): SpriteInterface {
-        const sprite = new _classInterface(scene)
+        const sprite = new _classInterface(/* scene */)
         invokeCallback(sprite.onSpawn, sprite, scene)
         return sprite
       }
