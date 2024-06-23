@@ -17,6 +17,9 @@ export abstract class CameraInterface implements LoopUpdatable, CanvasResizable 
   abstract babylon: Pick<BabylonAccessor<BabylonCamera>, 'camera'>
   abstract loopUpdate$?: Observer<number>
   abstract canvasResize$?: Observer<Rect>
+  abstract start?(): void
+  abstract stop?(): void
   initialize?(scene: BabylonScene): BabylonCamera
   onLoopUpdate?(delta: number): void
+  onCanvasResize?(size: Rect): void
 }

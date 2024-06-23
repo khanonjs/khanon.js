@@ -45,6 +45,7 @@ export { KJS } from './kjs'
 // Modules
 export { Logger } from './modules/logger/logger'
 export { LoggerLevels } from './modules/logger/logger-levels'
+export { Helper } from './modules/helper'
 
 // Models
 export { UseCamera } from './models/use-camera'

@@ -1,5 +1,7 @@
+import { Observer } from '@babylonjs/core'
+
 import { ActorStatesController } from '../../../controllers'
-import { cloneClass } from '../../../helpers/utils'
+import { cloneClass } from '../../../utils/utils'
 import { ActorInterface } from '../actor-interface'
 import { ActorStateCore } from './actor-state-core'
 import { ActorStateInterface } from './actor-state-interface'
@@ -11,6 +13,7 @@ export function ActorState(props: ActorStateProps): any {
       // Private
       props = props
       actor: ActorInterface
+      loopUpdate$: Observer<number>
 
       start(actor: ActorInterface): void {
 

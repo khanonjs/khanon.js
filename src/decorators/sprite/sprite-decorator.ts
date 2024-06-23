@@ -3,12 +3,12 @@ import {
   AssetsController,
   SpritesController
 } from '../../controllers'
+import { BabylonAccessor } from '../../models'
+import { Logger } from '../../modules'
 import {
   applyDefaults,
   invokeCallback
-} from '../../helpers/utils'
-import { BabylonAccessor } from '../../models'
-import { Logger } from '../../modules'
+} from '../../utils/utils'
 import { SceneInterface } from '../scene/scene-interface'
 import { SceneType } from '../scene/scene-type'
 import { SpriteCore } from './sprite-core'

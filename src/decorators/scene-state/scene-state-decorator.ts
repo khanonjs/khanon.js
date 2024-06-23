@@ -10,15 +10,15 @@ import {
 } from '../../controllers'
 import { Core } from '../../core'
 import {
-  cloneClass,
-  invokeCallback
-} from '../../helpers/utils'
-import {
   BabylonAccessor,
   Rect,
   UseCamera
 } from '../../models'
 import { Logger } from '../../modules'
+import {
+  cloneClass,
+  invokeCallback
+} from '../../utils/utils'
 import { SceneType } from '../scene/scene-type'
 import { SceneStateCore } from './scene-state-core'
 import { SceneStateInterface } from './scene-state-interface'
@@ -40,7 +40,7 @@ export function SceneState(props: SceneStateProps): any {
       onStart?(): void
       onEnd?(): void
       onLoopUpdate?(delta: number): void
-      onCanvasResize?(canvasSize: Rect): void
+      onCanvasResize?(size: Rect): void
 
       setCamera(camera: CameraConstructor): void {
         this.scene.setCamera(camera)
@@ -62,6 +62,7 @@ export function SceneState(props: SceneStateProps): any {
       }
 
       end(): void {
+        Logger.debug('SceneState end', _classInterface.prototype)
         if (this.loopUpdate$) {
           Core.removeLoopUpdateObserver(this.loopUpdate$)
           this.loopUpdate$ = undefined
@@ -70,7 +71,7 @@ export function SceneState(props: SceneStateProps): any {
           Core.removeCanvasResizeObserver(this.canvasResize$)
           this.canvasResize$ = undefined
         }
-        Logger.debug('Scene state end', _classInterface.prototype)
+        invokeCallback(this.onEnd, this, this.scene)
       }
     }
     const _classCore = class implements SceneStateCore {

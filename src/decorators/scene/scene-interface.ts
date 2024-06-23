@@ -35,5 +35,5 @@ export abstract class SceneInterface implements Loadable, LoopUpdatable, CanvasR
   onLoaded?(): void
   onUnload?(): void
   onLoopUpdate?(delta: number): void
-  onCanvasResize?(canvasSize: Rect): void
+  onCanvasResize?(size: Rect): void
 }

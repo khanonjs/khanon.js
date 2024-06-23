@@ -40,8 +40,8 @@ export class Core {
   private static babylon: Pick<BabylonAccessor, 'engine'> = { engine: null }
 
   // Canvas
-  private static canvasSize: Rect
-  private static onCanvasResize: Observable<Rect> = new Observable<Rect>()
+  private static canvasRect: Rect
+  private static onCanvasResize: Observable<Rect> = new Observable<Rect>(undefined, true)
 
   // Loop update
   private static loopUpdateInterval: Timeout
@@ -159,7 +159,7 @@ export class Core {
     this.onLoopUpdate.remove(observer)
   }
 
-  static addCanvasResizeObserver(func: (canvasSize: Rect) => void): Observer<Rect> {
+  static addCanvasResizeObserver(func: (size: Rect) => void): Observer<Rect> {
     return this.onCanvasResize.add(func)
   }
 
@@ -221,14 +221,14 @@ export class Core {
 
   private static updatecanvasSize(): void {
     const boundingRect = Core.htmlCanvas.getBoundingClientRect()
-    Core.canvasSize = {
+    Core.canvasRect = {
       x: 0,
       y: 0,
       width: Math.floor(boundingRect.width),
       height: Math.floor(boundingRect.height)
     }
-    this.onCanvasResize.notifyObservers(Core.canvasSize)
-    Logger.debug('Canvas size:', Core.canvasSize.width, Core.canvasSize.height)
+    this.onCanvasResize.notifyObservers(Core.canvasRect)
+    Logger.debug('Canvas size:', Core.canvasRect.width, Core.canvasRect.height)
   }
 
   /* private static loadSceneQueueNext(sceneLoaded: Scene, onLoaded?: ( scene: Scene) => void): void {

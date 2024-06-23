@@ -8,14 +8,14 @@ import { SceneType } from '../decorators/scene/scene-type'
 import { SpriteCore } from '../decorators/sprite/sprite-core'
 import { SpriteInterface } from '../decorators/sprite/sprite-interface'
 import {
-  isPrototypeOf,
-  objectToString
-} from '../helpers/utils'
-import {
   AssetDefinition,
   AssetType
 } from '../models'
 import { Logger } from '../modules'
+import {
+  isPrototypeOf,
+  objectToString
+} from '../utils/utils'
 import { ActorsController } from './actors-controller'
 import { SpritesController } from './sprites-controller'
 

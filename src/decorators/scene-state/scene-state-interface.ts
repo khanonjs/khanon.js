@@ -18,5 +18,5 @@ export abstract class SceneStateInterface implements LoopUpdatable, CanvasResiza
   onStart?(scene: SceneType): void
   onEnd?(): void
   onLoopUpdate?(delta: number): void
-  onCanvasResize?(canvasSize: Rect): void
+  onCanvasResize?(size: Rect): void
 }

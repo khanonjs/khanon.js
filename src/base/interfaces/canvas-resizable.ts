@@ -4,5 +4,5 @@ import { Rect } from '../../models'
 
 export abstract class CanvasResizable {
   abstract canvasResize$?: Observer<Rect>
-  abstract onCanvasResize?(canvasSize: Rect): void
+  abstract onCanvasResize?(size: Rect): void
 }

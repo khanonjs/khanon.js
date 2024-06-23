@@ -21,10 +21,6 @@ import {
   SceneStatesController
 } from '../../controllers'
 import { Core } from '../../core'
-import {
-  invokeCallback,
-  removeArrayDuplicitiesInObject
-} from '../../helpers/utils'
 import KJS from '../../kjs'
 import {
   AssetDefinition,
@@ -32,7 +28,13 @@ import {
   Rect
 } from '../../models'
 import { Logger } from '../../modules'
+import {
+  invokeCallback,
+  removeArrayDuplicitiesInObject
+} from '../../utils/utils'
 import { ActorInterface } from '../actor/actor-interface'
+import { CameraInterface } from '../camera/camera-interface'
+import { SceneStateInterface } from '../scene-state/scene-state-interface'
 import { SceneCore } from './scene-core'
 import { SceneInterface } from './scene-interface'
 import { SceneProps } from './scene-props'
@@ -50,6 +52,8 @@ export function Scene(props: SceneProps): any {
       protected _assets: AssetDefinition[]
       protected _loaded: boolean
       protected _started: boolean
+      protected _state: SceneStateInterface
+      protected _camera: CameraInterface
 
       setEngineParams(): void {}
       renderStart(id: string): void {}
@@ -62,13 +66,15 @@ export function Scene(props: SceneProps): any {
       get assets(): AssetDefinition[] { return this._assets }
       get loaded(): boolean { return this._loaded }
       get started(): boolean { return this._started }
+      get state(): SceneStateInterface { return this._state }
+      get camera(): CameraInterface { return this._camera }
 
       onStart?(): void
       onStop?(): void
       onLoaded?(): void
       onUnload?(): void
       onLoopUpdate?(delta: number): void
-      onCanvasResize?(canvasSize: Rect): void
+      onCanvasResize?(size: Rect): void
 
       start(state: SceneStateConstructor): void {
         Logger.debug('Scene start', _class.prototype)
@@ -145,16 +151,23 @@ export function Scene(props: SceneProps): any {
 
       setCamera(constructor: CameraConstructor): void {
         const camera = CamerasController.get(constructor).spawn()
-        camera.babylon.camera = camera.initialize(this.babylon.scene)
-        camera.babylon.camera.attachControl(Core.canvas, true)
+        if (this._camera) {
+          this._camera.stop()
+        }
+        this._camera = camera
+        this._camera.babylon.camera = this._camera.initialize(this.babylon.scene)
+        this._camera.babylon.camera.attachControl(Core.canvas, true)
+        this._camera.start()
       }
 
       startState(state: SceneStateConstructor): void {
-        if (!this.props.states.find(_state => _state === state)) {
-          Logger.error('Trying to set a state non available to the scene. Please check the scene props.', _class.prototype, state.prototype)
-        } else {
-          SceneStatesController.get(state).spawn(this).start()
+        if (!this.props.states.find(_state => _state === state)) { Logger.debugError('Trying to set a state non available to the scene. Please check the scene props.', _class.prototype, state.prototype) }
+        const _state = SceneStatesController.get(state).spawn(this)
+        if (this._state) {
+          this._state.end()
         }
+        this._state = _state
+        this._state.start()
       }
 
       spawnActor(actor: ActorConstructor, initialize?: (actor: ActorInterface) => void): void {

@@ -5,9 +5,9 @@ import {
 
 import { LoadingProgress } from '../../base'
 import { MeshesController } from '../../controllers/meshes-controller'
-import { invokeCallback } from '../../helpers/utils'
 import { BabylonAccessor } from '../../models'
 import { Logger } from '../../modules'
+import { invokeCallback } from '../../utils/utils'
 import { SceneType } from '../scene/scene-type'
 import { MeshCore } from './mesh-core'
 import { MeshInterface } from './mesh-interface'

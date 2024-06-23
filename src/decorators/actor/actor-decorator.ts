@@ -1,10 +1,10 @@
 import { LoadingProgress } from '../../base'
 import { ActorsController } from '../../controllers'
+import { Logger } from '../../modules'
 import {
   invokeCallback,
   removeArrayDuplicitiesInObject
-} from '../../helpers/utils'
-import { Logger } from '../../modules'
+} from '../../utils/utils'
 import { SceneType } from '../scene/scene-type'
 import { ActorCompositionDefinition } from './actor-composition/actor-composition-definition'
 import { ActorCore } from './actor-core'

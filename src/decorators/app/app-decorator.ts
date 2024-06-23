@@ -1,5 +1,5 @@
 import { Core } from '../../core'
-import { applyDefaults } from '../../helpers/utils'
+import { applyDefaults } from '../../utils/utils'
 import { AppCore } from './app-core'
 import { AppProps } from './app-props'
 import { AppType } from './app-type'
