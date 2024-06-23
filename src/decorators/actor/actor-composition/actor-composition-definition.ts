@@ -1,4 +1,9 @@
 import {
+  Vector2,
+  Vector3
+} from '@babylonjs/core'
+
+import {
   MeshConstructor,
   SpriteConstructor
 } from '../../../constructors'
@@ -16,7 +21,7 @@ export class ActorCompositionDefinition {
 
   constructor(private readonly id: string, private readonly scene: SceneType) {}
 
-  addSprite(spriteCtr: SpriteConstructor, name?: string): SpriteInterface {
+  addSprite(spriteCtr: SpriteConstructor, name?: string, translation?: Vector2, rotation?: Vector2, scale?: Vector2): SpriteInterface { // 8a8f translation, rotation
     if (!name) {
       name = (++this.fakeId).toString()
     }
@@ -26,7 +31,7 @@ export class ActorCompositionDefinition {
     return sprite
   }
 
-  addMesh(meshCtr: MeshConstructor, name?: string): MeshInterface {
+  addMesh(meshCtr: MeshConstructor, name?: string, translation?: Vector3, rotation?: Vector3, scale?: Vector3): MeshInterface { // 8a8f translation, rotation
     if (!name) {
       name = (++this.fakeId).toString()
     }
