@@ -51,24 +51,6 @@ export function Sprite(props: SpriteProps): any {
         }
       }
 
-      setScale(scale: number): void {
-        this._scale = scale
-        this.babylon.sprite.width = this.babylon.sprite.width * this._scale
-        this.babylon.sprite.height = this.babylon.sprite.height * this._scale
-      }
-
-      getScale(): number {
-        return this._scale
-      }
-
-      setAlpha(alpha: number): void {
-        this.babylon.sprite.color.a = alpha
-      }
-
-      getAlpha(): number {
-        return this.babylon.sprite.color.a
-      }
-
       setFrame(frame: number): void {
         this.stopAnimation()
         this.visible = true

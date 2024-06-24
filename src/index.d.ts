@@ -173,29 +173,7 @@ export declare abstract class SpriteInterface {
   setSprite(babylonSprite: BabylonSprite): void
 
   /**
-   * Sets the scale.
-   * @param scale
-   */
-  setScale(scale: number): void
-
-  /**
-   * Gets the scale.
-   */
-  getScale(): number
-
-  /**
-   * Sets the Alpha value.
-   * @param alpha
-   */
-  setAlpha(alpha: number): void
-
-  /**
-   * Gets the Alpha value.
-   */
-  getAlpha(): number
-
-  /**
-   * Sets the transform.
+   * Sets the transform (translation, rotation and scale).
    * @param transform
    */
   setTransform(transform: Matrix): void
@@ -256,18 +234,7 @@ export declare abstract class MeshInterface implements DisplayObject {
   setMesh(babylonMesh: BabylonMesh): void
 
   /**
-   * Sets the scale.
-   * @param scale
-   */
-  setScale(scale: number): void
-
-  /**
-   * Gets the scale.
-   */
-  getScale(): number
-
-  /**
-   * Sets the transform.
+   * Sets the transform (translation, rotation and scale).
    * @param transform
    */
   setTransform(transform: Matrix): void

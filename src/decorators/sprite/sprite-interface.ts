@@ -12,10 +12,6 @@ export abstract class SpriteInterface extends DisplayObject {
   abstract babylon: Pick<BabylonAccessor, 'scene' | 'spriteManager'>
   abstract scene: SceneType
   abstract setSprite(babylonSprite: BabylonSprite): void
-  abstract setScale(scale: number): void
-  abstract getScale(): number
-  abstract setAlpha(alpha: number): void
-  abstract getAlpha(): number
 
   /**
    * User defined

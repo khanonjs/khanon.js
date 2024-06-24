@@ -57,7 +57,7 @@ export function Mesh(props: MeshProps): any {
       // DisplayObject
       // ***************
       private _visible: boolean
-      private _scale: number = 1
+      private _scale: Vector3 = new Vector3(1.0, 1.0, 1.0)
 
       set visible(value: boolean) {
         // 8a8f
@@ -66,15 +66,6 @@ export function Mesh(props: MeshProps): any {
 
       get visible(): boolean {
         return this._visible
-      }
-
-      setScale(scale: number): void {
-        this._scale = scale
-        this.babylon.mesh.scaling = new Vector3(this._scale, this._scale, this._scale)
-      }
-
-      getScale(): number {
-        return this._scale
       }
 
       setTransform(transform: Matrix): void {
