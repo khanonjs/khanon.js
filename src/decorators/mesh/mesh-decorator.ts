@@ -1,7 +1,8 @@
 import {
-  Mesh as BabylonMesh,
-  Vector3
+  Matrix,
+  Mesh as BabylonMesh
 } from '@babylonjs/core'
+import { Vector3 } from '@babylonjs/core/Maths/math.vector'
 
 import { LoadingProgress } from '../../base'
 import { MeshesController } from '../../controllers/meshes-controller'
@@ -16,29 +17,50 @@ import { MeshProps } from './mesh-props'
 export function Mesh(props: MeshProps): any {
   return function <T extends { new (...args: any[]): MeshInterface }>(constructor: T & MeshInterface, context: ClassDecoratorContext) {
     const _classInterface = class extends constructor implements MeshInterface {
+      constructor(readonly scene: SceneType, private readonly props: MeshProps) {
+        super()
+      }
+
       // ***************
       // MeshInterface
       // ***************
+
+      /**
+       * Public
+       */
       babylon: Pick<BabylonAccessor, 'scene' | 'mesh'> = { scene: null, mesh: null }
-      _visible: boolean
 
       setMesh(babylonMesh: BabylonMesh): void {
         if (this.babylon.mesh) {
+          const transform = this.getTransform()
           this.babylon.mesh.dispose()
+          this.babylon.mesh = babylonMesh
+          this.setTransform(transform)
+        } else {
+          this.babylon.mesh = babylonMesh
         }
-        this.babylon.mesh = babylonMesh
       }
 
+      /**
+       * User defined
+       */
       onSpawn?(scene: SceneType): void
 
+      /**
+       * Private
+       */
       release(): void {
-
+        // 8a8f
       }
 
       // ***************
       // DisplayObject
       // ***************
+      private _visible: boolean
+      private _scale: number = 1
+
       set visible(value: boolean) {
+        // 8a8f
         this._visible = value
       }
 
@@ -46,87 +68,40 @@ export function Mesh(props: MeshProps): any {
         return this._visible
       }
 
-      setPosition(position: Vector3): void {
-        this.babylon.mesh.position = position
-      }
-
-      setPositionFromFloats(x: number, y: number, z: number): void {
-        this.babylon.mesh.position.x = x
-        this.babylon.mesh.position.y = y
-        this.babylon.mesh.position.z = z
-      }
-
-      getPosition(): Vector3 {
-        return this.babylon.mesh.position
-      }
-
-      setX(value: number): void {
-        this.babylon.mesh.position.x = value
-      }
-
-      incX(value: number): void {
-        this.babylon.mesh.position.x += value
-      }
-
-      getX(): number {
-        return this.babylon.mesh.position.x
-      }
-
-      setY(value: number): void {
-        this.babylon.mesh.position.y = value
-      }
-
-      incY(value: number): void {
-        this.babylon.mesh.position.y += value
-      }
-
-      getY(): number {
-        return this.babylon.mesh.position.y
-      }
-
-      setZ(value: number): void {
-        this.babylon.mesh.position.z = value
-      }
-
-      incZ(value: number): void {
-        this.babylon.mesh.position.z += value
-      }
-
-      getZ(): number {
-        return this.babylon.mesh.position.z
-      }
-
-      setRotation(rotation: Vector3): void {
-
-      }
-
-      getRotation(): Vector3 {
-        return null
-      }
-
       setScale(scale: number): void {
-
+        this._scale = scale
+        this.babylon.mesh.scaling = new Vector3(this._scale, this._scale, this._scale)
       }
 
       getScale(): number {
+        return this._scale
+      }
+
+      setTransform(transform: Matrix): void {
+        // 8a8f
+        // this.babylon.mesh.updatePoseMatrix(transform) // TODO: Test this
+        // this.setPosition(transform.getTranslation())
+        // this.setRotation(transform.getRotationMatrix())  // 8a8f
+        // this.babylon.mesh.scaling = transform.sca
+        // this.babylon.mesh.rota = transform.getTranslation()
+      }
+
+      getTransform(): Matrix {
+        // 8a8f
         return null
       }
 
-      setAlpha(alpha: number): void {
-
+      playAnimation(animation: any/* SpriteAnimation | MeshAnimation */, loopOverride?: boolean, completed?: () => void): void {
+        // 8a8f
       }
 
-      getAlpha(): number {
-        return null
-      }
-
-      play(animation: any/* SpriteAnimation | MeshAnimation */, loopOverride?: boolean, completed?: () => void): void {
+      stopAnimation(): void {
 
       }
     }
     const _classCore = class implements MeshCore {
       props = props
-      Instance: MeshInterface = new _classInterface(null)
+      Instance: MeshInterface = new _classInterface(null, null)
 
       load(scene: SceneType): LoadingProgress {
         return new LoadingProgress().complete()
@@ -138,7 +113,7 @@ export function Mesh(props: MeshProps): any {
 
       spawn(scene: SceneType): MeshInterface { // 8a8f es necesaria la escena aquí
         Logger.trace('aki MeshCore spawn')
-        const mesh = new _classInterface(/* scene */)
+        const mesh = new _classInterface(scene, this.props)
         invokeCallback(mesh.onSpawn, mesh, scene)
         mesh.visible = true
         return mesh

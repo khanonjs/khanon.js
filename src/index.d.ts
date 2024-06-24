@@ -1,7 +1,9 @@
 import {
   Camera as BabylonCamera,
+  Matrix,
   Mesh as BabylonMesh,
   Scene as BabylonScene,
+  Sprite as BabylonSprite,
   Vector3
 } from '@babylonjs/core'
 
@@ -18,10 +20,12 @@ import {
 import { ActorCompositionDefinition } from './decorators/actor/actor-composition/actor-composition-definition'
 import { ActorProps } from './decorators/actor/actor-props'
 import { AppProps } from './decorators/app/app-props'
+import { MeshAnimation } from './decorators/mesh/mesh-animation'
 import { MeshProps } from './decorators/mesh/mesh-props'
 import { SceneStateProps } from './decorators/scene-state/scene-state-props'
 import { SceneProps } from './decorators/scene/scene-props'
 import { SceneType } from './decorators/scene/scene-type'
+import { SpriteAnimation } from './decorators/sprite/sprite-animation'
 import { SpriteProps } from './decorators/sprite/sprite-props'
 import {
   BabylonAccessor,
@@ -111,7 +115,7 @@ export declare function ActorComposition(id: string)
 export { ActorCompositionDefinition }
 
 export { ActorProps } from './decorators/actor/actor-props'
-export declare function Actor(props?: ActorProps = {}): any
+export declare function Actor(props?: ActorProps): any
 export declare abstract class ActorInterface {
   /**
    * Current composition in use
@@ -140,12 +144,77 @@ export declare abstract class SpriteInterface {
   /**
    * Babylon.js objects.
    */
-  get babylon(): Pick<BabylonAccessor, 'spriteManager' | 'scene'>
+  get babylon(): Pick<BabylonAccessor, 'scene' | 'spriteManager' | 'sprite'>
+
+  /**
+   * Scene this Sprite belongs to.
+   */
+  get scene(): SceneType
+
+  /**
+   * Sprite visibility.
+   */
+  set visible(value: boolean)
+  get visible(): boolean
 
   /**
    * Callback invoked after the sprite has been spawned in a scene.
    */
   onSpawn?(scene: KJS.Scene): void
+
+  /**
+   * Sets a sprite manually.
+   * Through this method, it is possible to manually create a Babylon Sprite in 'onSpawn' method and set it up.
+   * @param babylonMesh
+   */
+  setSprite(babylonSprite: BabylonSprite): void
+
+  /**
+   * Sets the scale.
+   * @param scale
+   */
+  setScale(scale: number): void
+
+  /**
+   * Gets the scale.
+   */
+  getScale(): number
+
+  /**
+   * Sets the Alpha value.
+   * @param alpha
+   */
+  setAlpha(alpha: number): void
+
+  /**
+   * Gets the Alpha value.
+   */
+  getAlpha(): number
+
+  /**
+   * Sets the transform.
+   * @param transform
+   */
+  setTransform(transform: Matrix): void
+
+  /**
+   * Gets teh transform.
+   * @param transform
+   */
+  getTransform(): Matrix
+
+  /**
+   * Plays an animation. Animations are defined in the Sprite decorator 'props' or manually using 'MeshAnimation' interface.
+   * @param animation
+   * @param loopOverride
+   * @param completed
+   */
+  playAnimation(animation: SpriteAnimation, loopOverride?: boolean, completed?: () => void): void
+
+  /**
+   * Stops current animation.
+   */
+  stopAnimation(): void
 }
 
 // ****************
@@ -160,50 +229,63 @@ export declare abstract class MeshInterface implements DisplayObject {
   get babylon(): Pick<BabylonAccessor, 'scene' | 'mesh'>
 
   /**
-   * Mesh visibility
+   * Scene this Mesh belongs to.
+   */
+  get scene(): SceneType
+
+  /**
+   * Mesh visibility.
    */
   set visible(value: boolean)
   get visible(): boolean
-
-  /**
-   * Sets a mesh manually.
-   * It is possible to create manually a Babylon.js mesh in 'onSpawn' and set it up using this method.
-   * @param babylonMesh
-   */
-  setMesh(babylonMesh: BabylonMesh): void
 
   /**
    * Callback invoked after the mesh has been spawned in a scene.
    */
   onSpawn?(scene: KJS.Scene): void
 
-  setPosition(position: Vector3): void
-  setPositionFromFloats(x: number, y: number, z: number): void
+  /**
+   * Sets a mesh manually.
+   * Through this method, it is possible to manually create a Babylon Mesh in 'onSpawn' method and set it up.
+   * @param babylonMesh
+   */
+  setMesh(babylonMesh: BabylonMesh): void
 
-  getPosition(): Vector3
-
-  setX(value: number): void
-  incX(value: number): void
-  getX(): number
-
-  setY(value: number): void
-  incY(value: number): void
-  getY(): number
-
-  setZ(value: number): void
-  incZ(value: number): void
-  getZ(): number
-
-  setRotation(rotation: Vector3): void
-  getRotation(): Vector3
-
+  /**
+   * Sets the scale.
+   * @param scale
+   */
   setScale(scale: number): void
+
+  /**
+   * Gets the scale.
+   */
   getScale(): number
 
-  setAlpha(alpha: number): void
-  getAlpha(): number
+  /**
+   * Sets the transform.
+   * @param transform
+   */
+  setTransform(transform: Matrix): void
 
-  play(animation: any/* SpriteAnimation | MeshAnimation */, loopOverride?: boolean, completed?: () => void): void
+  /**
+   * Gets the transform.
+   * @param transform
+   */
+  getTransform(): Matrix
+
+  /**
+   * Plays an animation. Animations are defined in the Mesh decorator 'props' or manually using 'MeshAnimation' interface.
+   * @param animation
+   * @param loopOverride
+   * @param completed
+   */
+  playAnimation(animation: MeshAnimation, loopOverride?: boolean, completed?: () => void): void
+
+  /**
+   * Stops current animation.
+   */
+  stopAnimation(): void
 }
 
 // ****************
@@ -390,22 +472,22 @@ export { LoggerLevels } from './modules/logger/logger-levels'
 
 export declare namespace Helper {
   export namespace Arrays {
-    function shuffle(arr: any[], startsOn: number = 0): void
+    function shuffle(arr: any[], startsOn?: number): void
     function clear(arr: any[]): void
   }
 
   export namespace Maths {
-    function dragValue(ratio: number, origin: number, target: number, ratioClampMin: number = 0, ratioClampMax: number = 1): number
+    function dragValue(ratio: number, origin: number, target: number, ratioClampMin?: number, ratioClampMax?: number): number
     function clamp(value: number, min: number, max: number): number
     function randomInt(minValue: number, maxValue: number): number
     function increaseValue(from: number, to: number, speed: number, completed?: () => void): number
-    function increaseValueWithInertia(from: number, to: number, speed: number, acceleration: number = 1, completed?: () => void): number
+    function increaseValueWithInertia(from: number, to: number, speed: number, acceleration?: number, completed?: () => void): number
     function increaseVector(from: number[], to: number[], speed: number, completed?: () => void): number[]
-    function increaseVectorWithInertia(from: number[], to: number[], speed: number, acceleration: number = 1, completed?: () => void): number[]
+    function increaseVectorWithInertia(from: number[], to: number[], speed: number, acceleration?: number, completed?: () => void): number[]
   }
 
   export namespace Vectors {
-    function dragPoint(ratio: number, origin: Vector3, target: Vector3, ratioClampMin: number = 0, ratioClampMax: number = 1): Vector3
+    function dragPoint(ratio: number, origin: Vector3, target: Vector3, ratioClampMin?: number, ratioClampMax?: number): Vector3
     function vectorialProjectionToLine(vector: Vector3, line: Vector3): Vector3
     function scalarProjectionToLine(vector: Vector3, line: Vector3): number
     function vectorialProjectionToPlane(vector: Vector3, planeNormal: Vector3): Vector3

@@ -1,4 +1,5 @@
 import {
+  Matrix,
   Vector2,
   Vector3
 } from '@babylonjs/core'
@@ -21,22 +22,28 @@ export class ActorCompositionDefinition {
 
   constructor(private readonly id: string, private readonly scene: SceneType) {}
 
-  addSprite(spriteCtr: SpriteConstructor, name?: string, translation?: Vector2, rotation?: Vector2, scale?: Vector2): SpriteInterface { // 8a8f translation, rotation
+  addSprite(spriteCtr: SpriteConstructor, name?: string, transform?: Matrix): SpriteInterface {
     if (!name) {
       name = (++this.fakeId).toString()
     }
+    if (this.sprites.get(name)) { Logger.debugError(`ActorCompositionDefinition - Adding Sprite with name already defined '${name}'`); return }
     const sprite = SpritesController.get(spriteCtr).spawn(this.scene)
-    if (this.sprites.get(name)) { Logger.debugError(`ActorCompositionDefinition - Adding Sprite with name already defined '${name}'`) }
+    if (transform) {
+      sprite.setTransform(transform)
+    }
     this.sprites.set(name, sprite)
     return sprite
   }
 
-  addMesh(meshCtr: MeshConstructor, name?: string, translation?: Vector3, rotation?: Vector3, scale?: Vector3): MeshInterface { // 8a8f translation, rotation
+  addMesh(meshCtr: MeshConstructor, name?: string, transform?: Matrix): MeshInterface {
     if (!name) {
       name = (++this.fakeId).toString()
     }
+    if (this.meshes.get(name)) { Logger.debugError(`ActorCompositionDefinition - Adding Mesh with name already defined '${name}'`); return }
     const mesh = MeshesController.get(meshCtr).spawn(this.scene)
-    if (this.meshes.get(name)) { Logger.debugError(`ActorCompositionDefinition - Adding Mesh with name already defined '${name}'`) }
+    if (transform) {
+      mesh.setTransform(transform)
+    }
     this.meshes.set(name, mesh)
     return mesh
   }
