@@ -167,7 +167,7 @@ export declare abstract class SpriteInterface {
 
   /**
    * Sets a sprite manually.
-   * Through this method, it is possible to manually create a Babylon Sprite in 'onSpawn' method and set it up.
+   * Through this method, it is possible to manually create a Babylon Sprite in 'onSpawn' method and apply it.
    * @param babylonMesh
    */
   setSprite(babylonSprite: BabylonSprite): void
@@ -228,7 +228,7 @@ export declare abstract class MeshInterface implements DisplayObject {
 
   /**
    * Sets a mesh manually.
-   * Through this method, it is possible to manually create a Babylon Mesh in 'onSpawn' method and set it up.
+   * Through this method, it is possible to manually create a Babylon Mesh in 'onSpawn' method and apply it.
    * @param babylonMesh
    */
   setMesh(babylonMesh: BabylonMesh): void
