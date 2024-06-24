@@ -32,11 +32,13 @@ import {
   Rect
 } from './models'
 
-// ********************
-//  Babylon.js objects
-// ********************
-export { BabylonScene }
+// ****************************
+//  Babylon.js renamed objects
+// ****************************
+export { BabylonCamera }
 export { BabylonMesh }
+export { BabylonScene }
+export { BabylonSprite }
 
 // **************
 //  Models
@@ -139,6 +141,7 @@ export declare abstract class ActorInterface {
 // Sprite decorator
 // ****************
 export { SpriteProps } from './decorators/sprite/sprite-props'
+export { SpriteAnimation } from './decorators/sprite/sprite-animation'
 export declare function Sprite(props: SpriteProps): any
 export declare abstract class SpriteInterface {
   /**
@@ -221,6 +224,7 @@ export declare abstract class SpriteInterface {
 // Mesh decorator
 // ****************
 export { MeshProps } from './decorators/mesh/mesh-props'
+export { MeshAnimation } from './decorators/mesh/mesh-animation'
 export declare function Mesh(props?: MeshProps): any
 export declare abstract class MeshInterface implements DisplayObject {
   /**
