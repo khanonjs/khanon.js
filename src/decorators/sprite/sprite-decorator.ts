@@ -2,6 +2,7 @@ import {
   Matrix,
   Sprite as BabylonSprite
 } from '@babylonjs/core'
+import { TransformNode } from '@babylonjs/core/Meshes/transformNode'
 
 import { LoadingProgress } from '../../base'
 import {
@@ -10,6 +11,7 @@ import {
 } from '../../controllers'
 import { BabylonAccessor } from '../../models'
 import { Logger } from '../../modules'
+import { SpriteTransform } from '../../types'
 import {
   applyDefaults,
   invokeCallback
@@ -49,6 +51,7 @@ export function Sprite(props: SpriteProps): any {
         } else {
           this.babylon.sprite = babylonSprite
         }
+        this.transform = this.babylon.sprite
       }
 
       setFrame(frame: number): void {
@@ -65,19 +68,11 @@ export function Sprite(props: SpriteProps): any {
        */
       onSpawn?(scene: SceneInterface): void {}
 
-      /**
-       * Private
-       */
-      release(): void {
-        this.stopAnimation()
-        this.babylon.sprite.dispose()
-      }
-
       // ***************
       // DisplayObject
       // ***************
+      transform: SpriteTransform
       private _visible: boolean
-      private _scale: number = 1
       private keyFramesTimeouts: number[] = []
       private endAnimationTimer: number
 
@@ -163,6 +158,11 @@ export function Sprite(props: SpriteProps): any {
           clearTimeout(this.endAnimationTimer)
           this.endAnimationTimer = undefined
         }
+      }
+
+      release(): void {
+        this.stopAnimation()
+        this.babylon.sprite.dispose()
       }
     }
     const _classCore = class implements SpriteCore {

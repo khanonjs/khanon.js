@@ -2,12 +2,12 @@ import {
   Matrix,
   Mesh as BabylonMesh
 } from '@babylonjs/core'
-import { Vector3 } from '@babylonjs/core/Maths/math.vector'
 
 import { LoadingProgress } from '../../base'
 import { MeshesController } from '../../controllers/meshes-controller'
 import { BabylonAccessor } from '../../models'
 import { Logger } from '../../modules'
+import { MeshTransform } from '../../types'
 import { invokeCallback } from '../../utils/utils'
 import { SceneType } from '../scene/scene-type'
 import { MeshCore } from './mesh-core'
@@ -39,6 +39,7 @@ export function Mesh(props: MeshProps): any {
         } else {
           this.babylon.mesh = babylonMesh
         }
+        this.transform = this.babylon.mesh
       }
 
       /**
@@ -46,18 +47,11 @@ export function Mesh(props: MeshProps): any {
        */
       onSpawn?(scene: SceneType): void
 
-      /**
-       * Private
-       */
-      release(): void {
-        // 8a8f
-      }
-
       // ***************
       // DisplayObject
       // ***************
+      transform: MeshTransform
       private _visible: boolean
-      private _scale: Vector3 = new Vector3(1.0, 1.0, 1.0)
 
       set visible(value: boolean) {
         // 8a8f
@@ -88,6 +82,10 @@ export function Mesh(props: MeshProps): any {
 
       stopAnimation(): void {
 
+      }
+
+      release(): void {
+        // 8a8f
       }
     }
     const _classCore = class implements MeshCore {

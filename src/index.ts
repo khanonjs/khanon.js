@@ -18,7 +18,7 @@ export { SceneStateInterface } from './decorators/scene-state/scene-state-interf
 
 // Actor Composition decorator
 export { ActorComposition } from './decorators/actor/actor-composition/actor-composition-decorator'
-export { ActorCompositionDefinition } from './decorators/actor/actor-composition/actor-composition-definition'
+export { ActorCompositionBuilder as ActorCompositionDefinition } from './decorators/actor/actor-composition/actor-composition-builder'
 
 // Actor decorator
 export { Actor } from './decorators/actor/actor-decorator'

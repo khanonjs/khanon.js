@@ -17,7 +17,7 @@ import {
   SceneConstructor,
   SceneStateConstructor
 } from './constructors'
-import { ActorCompositionDefinition } from './decorators/actor/actor-composition/actor-composition-definition'
+import { ActorCompositionBuilder } from './decorators/actor/actor-composition/actor-composition-builder'
 import { ActorProps } from './decorators/actor/actor-props'
 import { AppProps } from './decorators/app/app-props'
 import { MeshAnimation } from './decorators/mesh/mesh-animation'
@@ -31,6 +31,10 @@ import {
   BabylonAccessor,
   Rect
 } from './models'
+import {
+  MeshTransform,
+  SpriteTransform
+} from './types'
 
 // ****************************
 //  Babylon.js renamed objects
@@ -114,7 +118,7 @@ export declare abstract class AppInterface {
 // Actor decorator
 // ****************
 export declare function ActorComposition(id: string)
-export { ActorCompositionDefinition }
+export { ActorCompositionBuilder as ActorCompositionDefinition }
 
 export { ActorProps } from './decorators/actor/actor-props'
 export declare function Actor(props?: ActorProps): any
@@ -122,14 +126,19 @@ export declare abstract class ActorInterface {
   /**
    * Current composition in use
    */
-  get composition(): ActorCompositionDefinition
+  get composition(): ActorCompositionBuilder
+
+  /**
+   * Transform of the body.
+   */
+  get transform(): ReturnType<this['this.composition.setBody']>
 
   /**
    * Use a previously defined composition within the Actor class using ActorComposition decorator
    * @param id Composition Id
    * @param CompositionDefinition User custom composition definition
    */
-  useComposition<C extends ActorCompositionDefinition>(id: string, CompositionDefinition?: new (id: string) => C): C
+  useComposition<C extends ActorCompositionBuilder>(id: string, CompositionDefinition?: new (id: string) => C): C
 
   /**
    * Callback invoked after the actor has been spawned on a scene
@@ -155,10 +164,10 @@ export declare abstract class SpriteInterface {
   get scene(): SceneType
 
   /**
-   * Sprite visibility.
+   * Shortcut to basic transform methods and accessors.
+   * Using this object is the same than accesing it through 'this.babylon.sprite'
    */
-  set visible(value: boolean)
-  get visible(): boolean
+  transform: SpriteTransform
 
   /**
    * Callback invoked after the sprite has been spawned in a scene.
@@ -216,10 +225,10 @@ export declare abstract class MeshInterface implements DisplayObject {
   get scene(): SceneType
 
   /**
-   * Mesh visibility.
+   * Shortcut to basic transform methods and accessors.
+   * Using this object is the same than accesing it through 'this.babylon.mesh'.
    */
-  set visible(value: boolean)
-  get visible(): boolean
+  transform: MeshTransform
 
   /**
    * Callback invoked after the mesh has been spawned in a scene.

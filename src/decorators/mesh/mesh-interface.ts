@@ -18,9 +18,4 @@ export abstract class MeshInterface extends DisplayObject {
    * User defined
    */
   abstract onSpawn?(scene: SceneInterface): void
-
-  /**
-   * Private
-   */
-  abstract release?(): void
 }

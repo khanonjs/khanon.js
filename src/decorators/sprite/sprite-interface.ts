@@ -17,9 +17,4 @@ export abstract class SpriteInterface extends DisplayObject {
    * User defined
    */
   abstract onSpawn?(scene: SceneInterface): void
-
-  /**
-   * Private
-   */
-  abstract release?(): void
 }

@@ -1,4 +1,6 @@
-export { ExtractOptional } from './extract-optional'
 export { DeepPartial } from './deep-partial'
 export { DeepRequired } from './deep-required'
+export { ExtractOptional } from './extract-optional'
+export { MeshTransform } from './mesh-transform'
+export { SpriteTransform } from './sprite-transform'
 export { Timeout } from './timeout'
