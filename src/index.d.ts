@@ -10,7 +10,6 @@ import {
 import { LoadingProgress } from './base'
 import { DisplayObject } from './base/classes/display-object'
 import {
-  ActorConstructor,
   CameraConstructor,
   MeshConstructor,
   ParticleConstructor,
@@ -19,7 +18,6 @@ import {
   SceneStateConstructor,
   SpriteConstructor
 } from './constructors'
-import { ActorCompositionBuilder } from './decorators/actor/actor-composition/actor-composition-builder'
 import { ActorProps } from './decorators/actor/actor-props'
 import { AppProps } from './decorators/app/app-props'
 import { MeshAnimation } from './decorators/mesh/mesh-animation'
@@ -243,15 +241,12 @@ export declare abstract class MeshInterface implements DisplayObject {
 // Actor decorator
 // ****************
 export declare function ActorComposition(id: string)
-export { ActorCompositionBuilder as ActorCompositionDefinition }
 
 export { ActorProps } from './decorators/actor/actor-props'
 export declare function Actor(props?: ActorProps): any
 export declare abstract class ActorInterface<B extends SpriteInterface | MeshInterface> {
-  /**
-   * Current composition in use
-   */
-  get composition(): ActorCompositionBuilder<B>
+  // 8a8f
+  compositions: string
 
   /**
    * Transform of the body.
@@ -269,7 +264,7 @@ export declare abstract class ActorInterface<B extends SpriteInterface | MeshInt
    * Compositions are defined using 'ActorComposition' decorator on a Actor class method.
    * @param id
    */
-  useComposition?(id: string): void
+  useComposition(id: string): void
 
   /**
    * Sets the body of the Actor.
@@ -289,7 +284,7 @@ export declare abstract class ActorInterface<B extends SpriteInterface | MeshInt
    * @param id Composition Id
    * @param CompositionDefinition User custom composition definition
    */
-  useComposition<C extends ActorCompositionBuilder<B>>(id: string, CompositionDefinition?: new (id: string) => C): C
+  useComposition(id: string): void
 
   /**
    * Callback invoked after the actor has been spawned on a scene

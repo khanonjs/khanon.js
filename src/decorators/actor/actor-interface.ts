@@ -1,4 +1,3 @@
-import { DisplayObject } from '../../base/classes/display-object'
 import {
   MeshConstructor,
   SpriteConstructor
@@ -16,14 +15,17 @@ export abstract class ActorInterface<B extends SpriteInterface | MeshInterface =
   /**
    * Private
    */
-  abstract metadata?: ActorMetadata
+  protected abstract metadata?: ActorMetadata
+
+  // 8a8f
+  compositions: string
 
   /**
    * Public
    */
-  abstract transform?: B extends SpriteInterface ? SpriteTransform : MeshTransform
+  abstract transform: B extends SpriteInterface ? SpriteTransform : MeshTransform
   abstract body: B
-  abstract useComposition?(id: string): void
+  abstract useComposition(id: string): void
   abstract setBody(Node: B extends SpriteInterface ? SpriteConstructor : MeshConstructor): B
   abstract addNode(Node: B extends SpriteInterface ? SpriteConstructor : MeshConstructor, name?: string): B
 

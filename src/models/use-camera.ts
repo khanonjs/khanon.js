@@ -2,7 +2,7 @@ export enum UseCamera {
   /**
    * Uses the state camera always on start
    */
-  ON_START = 'onStart',
+  ON_START = 'on-start',
 
   /**
    * Uses any camera already on use.

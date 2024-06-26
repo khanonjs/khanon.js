@@ -12,9 +12,9 @@ import { SceneType } from './scene-type'
 export class SceneSpawn {
   constructor(private readonly scene: SceneType) {}
 
-  actor(actor: ActorConstructor, compositionId: string, onSpawn?: (actor: ActorInterface) => void): void {
+  actor<A extends ActorInterface>(actor: ActorConstructor, compositionId: string): A {
     const instance = ActorsController.get(actor).spawn(this.scene)
-    invokeCallback(onSpawn, this.scene, instance)
+    return instance as A
   }
 
   particle(particle: ParticleConstructor, onSpawn?: (actor: ActorInterface) => void): void {}
