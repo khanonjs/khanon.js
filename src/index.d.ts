@@ -12,10 +12,12 @@ import { DisplayObject } from './base/classes/display-object'
 import {
   ActorConstructor,
   CameraConstructor,
+  MeshConstructor,
   ParticleConstructor,
   ParticleSourceConstructor,
   SceneConstructor,
-  SceneStateConstructor
+  SceneStateConstructor,
+  SpriteConstructor
 } from './constructors'
 import { ActorCompositionBuilder } from './decorators/actor/actor-composition/actor-composition-builder'
 import { ActorProps } from './decorators/actor/actor-props'
@@ -24,6 +26,7 @@ import { MeshAnimation } from './decorators/mesh/mesh-animation'
 import { MeshProps } from './decorators/mesh/mesh-props'
 import { SceneStateProps } from './decorators/scene-state/scene-state-props'
 import { SceneProps } from './decorators/scene/scene-props'
+import { SceneSpawn } from './decorators/scene/scene-spawn'
 import { SceneType } from './decorators/scene/scene-type'
 import { SpriteAnimation } from './decorators/sprite/sprite-animation'
 import { SpriteProps } from './decorators/sprite/sprite-props'
@@ -112,38 +115,6 @@ export declare abstract class AppInterface {
    * The application progress should be saved at this point.
    */
   onClose?(): void
-}
-
-// ****************
-// Actor decorator
-// ****************
-export declare function ActorComposition(id: string)
-export { ActorCompositionBuilder as ActorCompositionDefinition }
-
-export { ActorProps } from './decorators/actor/actor-props'
-export declare function Actor(props?: ActorProps): any
-export declare abstract class ActorInterface {
-  /**
-   * Current composition in use
-   */
-  get composition(): ActorCompositionBuilder
-
-  /**
-   * Transform of the body.
-   */
-  get transform(): ReturnType<this['this.composition.setBody']>
-
-  /**
-   * Use a previously defined composition within the Actor class using ActorComposition decorator
-   * @param id Composition Id
-   * @param CompositionDefinition User custom composition definition
-   */
-  useComposition<C extends ActorCompositionBuilder>(id: string, CompositionDefinition?: new (id: string) => C): C
-
-  /**
-   * Callback invoked after the actor has been spawned on a scene
-   */
-  onSpawn?(scene: KJS.Scene): void
 }
 
 // ****************
@@ -269,6 +240,64 @@ export declare abstract class MeshInterface implements DisplayObject {
 }
 
 // ****************
+// Actor decorator
+// ****************
+export declare function ActorComposition(id: string)
+export { ActorCompositionBuilder as ActorCompositionDefinition }
+
+export { ActorProps } from './decorators/actor/actor-props'
+export declare function Actor(props?: ActorProps): any
+export declare abstract class ActorInterface<B extends SpriteInterface | MeshInterface> {
+  /**
+   * Current composition in use
+   */
+  get composition(): ActorCompositionBuilder<B>
+
+  /**
+   * Transform of the body.
+   */
+  get transform(): B extends SpriteInterface ? SpriteTransform : MeshTransform
+
+  /**
+   * Body of the actor.
+   * 'actor.transform' references to this object.
+   */
+  get body(): B
+
+  /**
+   * Uses a composition by Id.
+   * Compositions are defined using 'ActorComposition' decorator on a Actor class method.
+   * @param id
+   */
+  useComposition?(id: string): void
+
+  /**
+   * Sets the body of the Actor.
+   * @param Node
+   */
+  setBody(Node: B extends SpriteInterface ? SpriteConstructor : MeshConstructor): B
+
+  /**
+   *Adds a Node to the Body of the Actor.
+   * @param Node
+   * @param name
+   */
+  addNode(Node: B extends SpriteInterface ? SpriteConstructor : MeshConstructor, name?: string): B
+
+  /**
+   * Use a previously defined composition within the Actor class using ActorComposition decorator
+   * @param id Composition Id
+   * @param CompositionDefinition User custom composition definition
+   */
+  useComposition<C extends ActorCompositionBuilder<B>>(id: string, CompositionDefinition?: new (id: string) => C): C
+
+  /**
+   * Callback invoked after the actor has been spawned on a scene
+   */
+  onSpawn?(scene: KJS.Scene): void
+}
+
+// ****************
 // Camera decorator
 // ****************
 export declare function Camera(): any
@@ -294,9 +323,9 @@ export declare abstract class CameraInterface {
   onCanvasResize?(size: Rect): void
 }
 
-// ****************
-// State decorator
-// ****************
+// *********************
+// SceneState decorator
+// *********************
 export { SceneStateProps } from './decorators/scene-state/scene-state-props'
 export declare function SceneState(props: SceneStateProps): any
 export declare abstract class SceneStateInterface {
@@ -366,6 +395,11 @@ export declare abstract class SceneInterface {
   get state(): SceneStateInterface
 
   /**
+   * Scene spawn methods.
+   */
+  get spawn(): SceneSpawn
+
+  /**
    * Start the scene.
    * @param state Initial state.
    */
@@ -391,12 +425,6 @@ export declare abstract class SceneInterface {
    * @param state
    */
   startState(state: SceneStateConstructor): void
-
-  /**
-   * Spawns an Actor.
-   * @param actor
-   */
-  spawnActor(actor: ActorConstructor, initialize?: (item: ActorInterface) => void): void
 
   /**
    * Spawns a Particle.

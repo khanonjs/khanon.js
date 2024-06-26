@@ -38,11 +38,8 @@ import { SceneStateInterface } from '../scene-state/scene-state-interface'
 import { SceneCore } from './scene-core'
 import { SceneInterface } from './scene-interface'
 import { SceneProps } from './scene-props'
+import { SceneSpawn } from './scene-spawn'
 import { SceneType } from './scene-type'
-
-// 8a8f can those methods be added to index.d.ts decorator declaration?
-// Should be they added to scene-interface in declaration file?
-// Should the methods be added to the function return as a type?
 
 export function Scene(props: SceneProps): any {
   return function <T extends { new (...args: any[]): SceneType }>(constructor: T & SceneType, context: ClassDecoratorContext) {
@@ -54,6 +51,7 @@ export function Scene(props: SceneProps): any {
       protected _started: boolean
       protected _state: SceneStateInterface
       protected _camera: CameraInterface
+      protected _sceneSpawn: SceneSpawn = new SceneSpawn(this)
 
       setEngineParams(): void {}
       renderStart(id: string): void {}
@@ -68,6 +66,7 @@ export function Scene(props: SceneProps): any {
       get started(): boolean { return this._started }
       get state(): SceneStateInterface { return this._state }
       get camera(): CameraInterface { return this._camera }
+      get spawn(): SceneSpawn { return this._sceneSpawn }
 
       onStart?(): void
       onStop?(): void
@@ -168,19 +167,6 @@ export function Scene(props: SceneProps): any {
         }
         this._state = _state
         this._state.start()
-      }
-
-      spawnActor(actor: ActorConstructor, initialize?: (actor: ActorInterface) => void): void {
-        const actorInstance = ActorsController.get(actor).spawn(this)
-        invokeCallback(initialize, this, actorInstance)
-      }
-
-      spawnParticle(particle: ParticleConstructor, initialize?: (particle: ParticleConstructor) => void): void {
-
-      }
-
-      spawnParticleSource(particleSource: ParticleSourceConstructor, initialize?: (particleSource: ParticleSourceConstructor) => void): void {
-
       }
 
       debugInspector(): void {

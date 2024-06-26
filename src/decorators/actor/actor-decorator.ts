@@ -1,6 +1,14 @@
 import { LoadingProgress } from '../../base'
 import { DisplayObject } from '../../base/classes/display-object'
-import { ActorsController } from '../../controllers'
+import {
+  MeshConstructor,
+  SpriteConstructor
+} from '../../constructors'
+import {
+  ActorsController,
+  SpritesController
+} from '../../controllers'
+import { MeshesController } from '../../controllers/meshes-controller'
 import { Logger } from '../../modules'
 import {
   MeshTransform,
@@ -10,8 +18,9 @@ import {
   invokeCallback,
   removeArrayDuplicitiesInObject
 } from '../../utils/utils'
+import { MeshInterface } from '../mesh/mesh-interface'
 import { SceneType } from '../scene/scene-type'
-import { ActorCompositionBuilder } from './actor-composition/actor-composition-builder'
+import { SpriteInterface } from '../sprite/sprite-interface'
 import { ActorCore } from './actor-core'
 import { ActorInterface } from './actor-interface'
 import { ActorMetadata } from './actor-metadata'
@@ -21,9 +30,8 @@ export function Actor(props: ActorProps): any {
   return function <T extends { new (...args: any[]): ActorInterface }>(constructor: T & ActorInterface, context: ClassDecoratorContext) {
     const _classInterface = class extends constructor implements ActorInterface {
       metadata: ActorMetadata = Reflect.getMetadata('metadata', this)
-      body: DisplayObject
+      body: SpriteInterface | MeshInterface
       transform: SpriteTransform | MeshTransform
-      composition: ActorCompositionBuilder
 
       constructor(private readonly scene: SceneType) {
         super()
@@ -31,16 +39,27 @@ export function Actor(props: ActorProps): any {
 
       onSpawn?(): void
 
-      useComposition(id: string, CompositionDefinition?: new (id: string, scene: SceneType) => ActorCompositionBuilder): ActorCompositionBuilder {
+      useComposition(id: string): void {
         if (!this.metadata.compositions.get(id)) { Logger.debugError(`Actor - Actor composition not found: ${id}`, this) }
-        if (this.composition) {
-          this.composition.release()
+        this.metadata.compositions.get(id).apply(this, [this.scene])
+      }
+
+      setBody<N extends SpriteConstructor | MeshConstructor>(Node: N): any {
+        if (new Node() instanceof SpriteInterface) {
+          this.body = SpritesController.get(Node).spawn(this.scene)
+        } else {
+          this.body = MeshesController.get(Node).spawn(this.scene)
         }
-        this.composition = CompositionDefinition
-          ? new CompositionDefinition(id, this.scene)
-          : new ActorCompositionBuilder(id, this.scene, this)
-        this.metadata.compositions.get(id)(this.composition, this.scene)
-        return this.composition
+        return this.body as any
+      }
+
+      addNode<N extends SpriteConstructor | MeshConstructor>(Node: N, name?: string): any {
+        // 8a8f
+        // if (!name) {
+        //   name = (++this.fakeId).toString()
+        // }
+        // if (this.nodes.get(name)) { Logger.debugError(`ActorCompositionDefinition - Adding a node with name already defined '${name}'`); return }
+        return null
       }
     }
     const _classCore = class implements ActorCore {

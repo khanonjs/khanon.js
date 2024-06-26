@@ -51,16 +51,6 @@ export function Mesh(props: MeshProps): any {
       // DisplayObject
       // ***************
       transform: MeshTransform
-      private _visible: boolean
-
-      set visible(value: boolean) {
-        // 8a8f
-        this._visible = value
-      }
-
-      get visible(): boolean {
-        return this._visible
-      }
 
       setTransform(transform: Matrix): void {
         // 8a8f
@@ -100,11 +90,9 @@ export function Mesh(props: MeshProps): any {
 
       }
 
-      spawn(scene: SceneType): MeshInterface { // 8a8f es necesaria la escena aquí
-        Logger.trace('aki MeshCore spawn')
+      spawn(scene: SceneType): MeshInterface {
         const mesh = new _classInterface(scene, this.props)
         invokeCallback(mesh.onSpawn, mesh, scene)
-        mesh.visible = true
         return mesh
       }
     }
