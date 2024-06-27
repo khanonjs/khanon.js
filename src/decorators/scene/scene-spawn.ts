@@ -19,31 +19,31 @@ export class SceneSpawn {
   }
 
   actor<A extends ActorInterface>(actor: new () => A): A {
-    Logger.debug('Spawned actor in the scene:', actor, this.scene)
+    Logger.debug('Actor spawned:', actor.prototype)
     const instance = ActorsController.get(actor).spawn(this.scene)
     return instance as A
   }
 
   particle<P extends ParticleInterface>(particle: new () => P): P {
-    Logger.debug('Spawned particle in the scene:', particle, this.scene)
+    Logger.debug('Particle spawned:', particle.prototype)
     // 8a8f
     return null
   }
 
   particleSource<S extends ParticleSourceInterface>(particleSource: new () => S): S {
-    Logger.debug('Spawned particle source in the scene:', particleSource, this.scene)
+    Logger.debug('Particle Source spawned:', particleSource.prototype)
     // 8a8f
     return null
   }
 
   mesh<M extends MeshInterface>(mesh: new () => M): M {
-    Logger.debug('Spawned mesh in the scene:', mesh, this.scene)
+    Logger.debug('Mesh spawned:', mesh.prototype)
     const instance = MeshesController.get(mesh).spawn(this.scene)
     return instance as M
   }
 
   sprite<S extends SpriteInterface>(sprite: new () => S): S {
-    Logger.debug('Spawned sprite in the scene:', sprite, this.scene)
+    Logger.debug('Sprite spawned:', sprite.prototype)
     const instance = SpritesController.get(sprite).spawn(this.scene)
     return instance as S
   }
