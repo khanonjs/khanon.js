@@ -16,9 +16,6 @@ export { SceneState } from './decorators/scene-state/scene-state-decorator'
 export { SceneStateProps } from './decorators/scene-state/scene-state-props'
 export { SceneStateInterface } from './decorators/scene-state/scene-state-interface'
 
-// Actor Composition decorator
-export { ActorComposition } from './decorators/actor/actor-composition/actor-composition-decorator'
-
 // Actor decorator
 export { Actor } from './decorators/actor/actor-decorator'
 export { ActorProps } from './decorators/actor/actor-props'

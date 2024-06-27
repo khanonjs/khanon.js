@@ -8,7 +8,9 @@ import {
 } from '../../types'
 import { MeshInterface } from '../mesh/mesh-interface'
 import { SceneInterface } from '../scene/scene-interface'
+import { SceneType } from '../scene/scene-type'
 import { SpriteInterface } from '../sprite/sprite-interface'
+import { ActorComposition } from './actor-composition'
 import { ActorMetadata } from './actor-metadata'
 
 export abstract class ActorInterface<B extends SpriteInterface | MeshInterface = any> {
@@ -16,18 +18,13 @@ export abstract class ActorInterface<B extends SpriteInterface | MeshInterface =
    * Private
    */
   protected abstract metadata?: ActorMetadata
-
-  // 8a8f
-  compositions: string
+  abstract scene?: SceneType
 
   /**
    * Public
    */
   abstract transform: B extends SpriteInterface ? SpriteTransform : MeshTransform
-  abstract body: B
-  abstract useComposition(id: string): void
-  abstract setBody(Node: B extends SpriteInterface ? SpriteConstructor : MeshConstructor): B
-  abstract addNode(Node: B extends SpriteInterface ? SpriteConstructor : MeshConstructor, name?: string): B
+  abstract composition: ActorComposition<B>
 
   /**
    * User defined

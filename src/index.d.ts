@@ -136,7 +136,7 @@ export declare abstract class SpriteInterface {
    * Shortcut to basic transform methods and accessors.
    * Using this object is the same than accesing it through 'this.babylon.sprite'
    */
-  transform: SpriteTransform
+  get transform(): SpriteTransform
 
   /**
    * Callback invoked after the sprite has been spawned in a scene.
@@ -197,7 +197,7 @@ export declare abstract class MeshInterface implements DisplayObject {
    * Shortcut to basic transform methods and accessors.
    * Using this object is the same than accesing it through 'this.babylon.mesh'.
    */
-  transform: MeshTransform
+  get transform(): MeshTransform
 
   /**
    * Callback invoked after the mesh has been spawned in a scene.
@@ -240,44 +240,57 @@ export declare abstract class MeshInterface implements DisplayObject {
 // ****************
 // Actor decorator
 // ****************
-export declare function ActorComposition(id: string)
-
 export { ActorProps } from './decorators/actor/actor-props'
 export declare function Actor(props?: ActorProps): any
-export declare abstract class ActorInterface<B extends SpriteInterface | MeshInterface> {
-  // 8a8f
-  compositions: string
+export declare class ActorComposition<B extends SpriteInterface | MeshInterface> {
+  get body(): B
 
+  /**
+   * Sets the Body of the Actor.
+   * Setting a new Body removes any previously added Node.
+   * @param Node
+   * @returns
+   */
+  setBody<N extends SpriteInterface | MeshInterface>(Node: new () => N): N
+
+  /**
+   * Adds a Node hooked to the actor's body.
+   * @param Node
+   * @param name
+   * @returns
+   */
+  addNode<N extends SpriteConstructor | MeshConstructor>(Node: N, name: string): B
+
+  /**
+   * Gets a Node by name.
+   * @param name
+   * @returns
+   */
+  getNode(name: string): B
+}
+export declare abstract class ActorInterface<B extends SpriteInterface | MeshInterface> {
   /**
    * Transform of the body.
    */
   get transform(): B extends SpriteInterface ? SpriteTransform : MeshTransform
 
   /**
-   * Body of the actor.
-   * 'actor.transform' references to this object.
+   * Gets the ActorComposition class.
    */
-  get body(): B
-
-  /**
-   * Uses a composition by Id.
-   * Compositions are defined using 'ActorComposition' decorator on a Actor class method.
-   * @param id
-   */
-  useComposition(id: string): void
+  get composition(): ActorComposition<B>
 
   /**
    * Sets the body of the Actor.
    * @param Node
    */
-  setBody(Node: B extends SpriteInterface ? SpriteConstructor : MeshConstructor): B
+  // setBody(Node: B extends SpriteInterface ? SpriteConstructor : MeshConstructor): B  // 8a8f
 
   /**
    *Adds a Node to the Body of the Actor.
    * @param Node
    * @param name
    */
-  addNode(Node: B extends SpriteInterface ? SpriteConstructor : MeshConstructor, name?: string): B
+  // addNode(Node: B extends SpriteInterface ? SpriteConstructor : MeshConstructor, name?: string): B // 8a8f
 
   /**
    * Use a previously defined composition within the Actor class using ActorComposition decorator
