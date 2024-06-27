@@ -126,7 +126,7 @@ export declare abstract class SpriteInterface {
   /**
    * Babylon.js objects.
    */
-  get babylon(): Pick<BabylonAccessor, 'scene' | 'spriteManager' | 'sprite'>
+  get babylon(): Pick<BabylonAccessor, 'spriteManager' | 'sprite'>
 
   /**
    * Scene this Sprite belongs to.
@@ -187,7 +187,7 @@ export declare abstract class MeshInterface implements DisplayObject {
   /**
    * Babylon.js objects.
    */
-  get babylon(): Pick<BabylonAccessor, 'scene' | 'mesh'>
+  get babylon(): Pick<BabylonAccessor, 'mesh'>
 
   /**
    * Scene this Mesh belongs to.

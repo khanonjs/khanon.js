@@ -10,7 +10,7 @@ export abstract class SpriteInterface extends DisplayObject {
   /**
    * Public
    */
-  abstract babylon: Pick<BabylonAccessor, 'scene' | 'spriteManager' | 'sprite'>
+  abstract babylon: Pick<BabylonAccessor, 'spriteManager' | 'sprite'>
   abstract scene: SceneType
   abstract transform: SpriteTransform
   abstract setSprite(babylonSprite: BabylonSprite): void

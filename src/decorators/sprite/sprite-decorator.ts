@@ -40,7 +40,7 @@ export function Sprite(props: SpriteProps): any {
       /**
        * Public
        */
-      babylon: Pick<BabylonAccessor, 'scene' | 'spriteManager' | 'sprite'> = { scene: null, spriteManager: null, sprite: null }
+      babylon: Pick<BabylonAccessor, 'spriteManager' | 'sprite'> = { spriteManager: null, sprite: null }
 
       setSprite(babylonSprite: BabylonSprite): void {
         if (this.babylon.sprite) {

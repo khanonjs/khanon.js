@@ -28,7 +28,7 @@ export function Mesh(props: MeshProps): any {
       /**
        * Public
        */
-      babylon: Pick<BabylonAccessor, 'scene' | 'mesh'> = { scene: null, mesh: null }
+      babylon: Pick<BabylonAccessor, 'mesh'> = { mesh: null }
 
       setMesh(babylonMesh: BabylonMesh): void {
         if (this.babylon.mesh) {
