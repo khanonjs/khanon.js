@@ -140,11 +140,6 @@ export declare abstract class SpriteInterface {
   get transform(): SpriteTransform
 
   /**
-   * Callback invoked after the sprite has been spawned in a scene.
-   */
-  onSpawn?(scene: KJS.Scene): void
-
-  /**
    * Sets a sprite manually.
    * Through this method, it is possible to manually create a Babylon Sprite in 'onSpawn' method and apply it.
    * @param babylonMesh
@@ -175,6 +170,23 @@ export declare abstract class SpriteInterface {
    * Stops current animation.
    */
   stopAnimation(): void
+
+  /**
+   * Callback invoked after the sprite has been spawned in a scene.
+   */
+  onSpawn?(scene: KJS.Scene): void
+
+  /**
+   * Callback invoked on loop update.
+   * @param delta Time differential since last frame.
+   */
+  onLoopUpdate?(delta: number): void
+
+  /**
+   * Callback invoked on canvas resize.
+   * @param canvasSize Canvas Rect.
+   */
+  onCanvasResize?(size: Rect): void
 }
 
 // ****************
@@ -199,11 +211,6 @@ export declare abstract class MeshInterface implements DisplayObject {
    * Using this object is the same than accesing it through 'this.babylon.mesh'.
    */
   get transform(): MeshTransform
-
-  /**
-   * Callback invoked after the mesh has been spawned in a scene.
-   */
-  onSpawn?(scene: KJS.Scene): void
 
   /**
    * Sets a mesh manually.
@@ -236,6 +243,23 @@ export declare abstract class MeshInterface implements DisplayObject {
    * Stops current animation.
    */
   stopAnimation(): void
+
+  /**
+   * Callback invoked after the mesh has been spawned in a scene.
+   */
+  onSpawn?(scene: KJS.Scene): void
+
+  /**
+   * Callback invoked on loop update.
+   * @param delta Time differential since last frame.
+   */
+  onLoopUpdate?(delta: number): void
+
+  /**
+   * Callback invoked on canvas resize.
+   * @param canvasSize Canvas Rect.
+   */
+  onCanvasResize?(size: Rect): void
 }
 
 // ****************
@@ -296,6 +320,18 @@ export declare abstract class ActorInterface<B extends SpriteInterface | MeshInt
    * Callback invoked after the actor has been spawned on a scene
    */
   onSpawn?(scene: KJS.Scene): void
+
+  /**
+   * Callback invoked on loop update.
+   * @param delta Time differential since last frame.
+   */
+  onLoopUpdate?(delta: number): void
+
+  /**
+   * Callback invoked on canvas resize.
+   * @param canvasSize Canvas Rect.
+   */
+  onCanvasResize?(size: Rect): void
 }
 
 // ****************

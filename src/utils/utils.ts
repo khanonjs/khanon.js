@@ -1,5 +1,44 @@
+import { Core } from '../core'
 import { Logger } from '../modules'
 import { ExtractOptional } from '../types/extract-optional'
+
+/**
+ * Attach LoopUpdate in context if exists
+ */
+export function attachLoopUpdate(context: any): void {
+  if (context.onLoopUpdate) {
+    context.loopUpdate$ = Core.addLoopUpdateObserver(context.onLoopUpdate.bind(context))
+  }
+}
+
+/**
+ * Attach canvasResize in context if exists
+ */
+export function attachCanvasResize(context: any): void {
+  if (context.onCanvasResize) {
+    context.canvasResize$ = Core.addCanvasResizeObserver(context.onCanvasResize.bind(context))
+  }
+}
+
+/**
+ * Removes LoopUpdate in context if exists
+ */
+export function removeLoopUpdate(context: any): void {
+  if (context.loopUpdate$) {
+    Core.removeLoopUpdateObserver(context.loopUpdate$)
+    context.loopUpdate$ = undefined
+  }
+}
+
+/**
+ * Removes canvasResize in context if exists
+ */
+export function removeCanvasResize(context: any): void {
+  if (context.canvasResize$) {
+    Core.removeCanvasResizeObserver(context.canvasResize$)
+    context.canvasResize$ = undefined
+  }
+}
 
 /**
  * Invokes optional callback

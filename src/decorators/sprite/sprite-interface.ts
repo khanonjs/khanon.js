@@ -1,12 +1,24 @@
-import { Sprite as BabylonSprite } from '@babylonjs/core'
+import {
+  Observer,
+  Sprite as BabylonSprite
+} from '@babylonjs/core'
 
 import { DisplayObject } from '../../base/classes/display-object'
-import { BabylonAccessor } from '../../models'
+import {
+  BabylonAccessor,
+  Rect
+} from '../../models'
 import { SpriteTransform } from '../../types'
 import { SceneInterface } from '../scene/scene-interface'
 import { SceneType } from '../scene/scene-type'
 
 export abstract class SpriteInterface extends DisplayObject {
+  /**
+   * Private
+   */
+  abstract loopUpdate$?: Observer<number>
+  abstract canvasResize$?: Observer<Rect>
+
   /**
    * Public
    */
@@ -18,5 +30,7 @@ export abstract class SpriteInterface extends DisplayObject {
   /**
    * User defined
    */
-  abstract onSpawn?(scene: SceneInterface): void
+  onSpawn?(scene: SceneInterface): void
+  onLoopUpdate?(delta: number): void
+  onCanvasResize?(size: Rect): void
 }

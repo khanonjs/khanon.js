@@ -16,8 +16,12 @@ import {
 } from '../../models'
 import { Logger } from '../../modules'
 import {
+  attachCanvasResize,
+  attachLoopUpdate,
   cloneClass,
-  invokeCallback
+  invokeCallback,
+  removeCanvasResize,
+  removeLoopUpdate
 } from '../../utils/utils'
 import { SceneType } from '../scene/scene-type'
 import { SceneStateCore } from './scene-state-core'
@@ -31,12 +35,10 @@ export function SceneState(props: SceneStateProps): any {
         super()
       }
 
-      // Private
       props = props
       loopUpdate$: Observer<number>
       canvasResize$: Observer<Rect>
 
-      // Public
       onStart?(): void
       onEnd?(): void
       onLoopUpdate?(delta: number): void
@@ -53,24 +55,14 @@ export function SceneState(props: SceneStateProps): any {
           this.setCamera(this.props.camera)
         }
         invokeCallback(this.onStart, this, this.scene)
-        if (this.onLoopUpdate) {
-          this.loopUpdate$ = Core.addLoopUpdateObserver(this.onLoopUpdate.bind(this))
-        }
-        if (this.onCanvasResize) {
-          this.canvasResize$ = Core.addCanvasResizeObserver(this.onCanvasResize.bind(this))
-        }
+        attachLoopUpdate(this)
+        attachCanvasResize(this)
       }
 
       end(): void {
         Logger.debug('SceneState end', _classInterface.prototype)
-        if (this.loopUpdate$) {
-          Core.removeLoopUpdateObserver(this.loopUpdate$)
-          this.loopUpdate$ = undefined
-        }
-        if (this.canvasResize$) {
-          Core.removeCanvasResizeObserver(this.canvasResize$)
-          this.canvasResize$ = undefined
-        }
+        removeLoopUpdate(this)
+        removeCanvasResize(this)
         invokeCallback(this.onEnd, this, this.scene)
       }
     }

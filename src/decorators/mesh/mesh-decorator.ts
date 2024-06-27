@@ -1,14 +1,24 @@
 import {
   Matrix,
-  Mesh as BabylonMesh
+  Mesh as BabylonMesh,
+  Observer
 } from '@babylonjs/core'
 
 import { LoadingProgress } from '../../base'
 import { MeshesController } from '../../controllers/meshes-controller'
-import { BabylonAccessor } from '../../models'
+import {
+  BabylonAccessor,
+  Rect
+} from '../../models'
 import { Logger } from '../../modules'
 import { MeshTransform } from '../../types'
-import { invokeCallback } from '../../utils/utils'
+import {
+  attachCanvasResize,
+  attachLoopUpdate,
+  invokeCallback,
+  removeCanvasResize,
+  removeLoopUpdate
+} from '../../utils/utils'
 import { SceneType } from '../scene/scene-type'
 import { MeshCore } from './mesh-core'
 import { MeshInterface } from './mesh-interface'
@@ -24,11 +34,13 @@ export function Mesh(props: MeshProps): any {
       // ***************
       // MeshInterface
       // ***************
-
-      /**
-       * Public
-       */
       babylon: Pick<BabylonAccessor, 'mesh'> = { mesh: null }
+      loopUpdate$: Observer<number>
+      canvasResize$: Observer<Rect>
+
+      onSpawn?(scene: SceneType): void
+      onLoopUpdate?(delta: number): void
+      onCanvasResize?(size: Rect): void
 
       setMesh(babylonMesh: BabylonMesh): void {
         if (this.babylon.mesh) {
@@ -40,12 +52,9 @@ export function Mesh(props: MeshProps): any {
           this.babylon.mesh = babylonMesh
         }
         this.transform = this.babylon.mesh
+        attachLoopUpdate(this)
+        attachCanvasResize(this)
       }
-
-      /**
-       * User defined
-       */
-      onSpawn?(scene: SceneType): void
 
       // ***************
       // DisplayObject
@@ -76,6 +85,8 @@ export function Mesh(props: MeshProps): any {
 
       release(): void {
         // 8a8f
+        removeLoopUpdate(this)
+        removeCanvasResize(this)
       }
     }
     const _classCore = class implements MeshCore {

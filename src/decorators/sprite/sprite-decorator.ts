@@ -1,5 +1,6 @@
 import {
   Matrix,
+  Observer,
   Sprite as BabylonSprite
 } from '@babylonjs/core'
 import { TransformNode } from '@babylonjs/core/Meshes/transformNode'
@@ -9,12 +10,19 @@ import {
   AssetsController,
   SpritesController
 } from '../../controllers'
-import { BabylonAccessor } from '../../models'
+import {
+  BabylonAccessor,
+  Rect
+} from '../../models'
 import { Logger } from '../../modules'
 import { SpriteTransform } from '../../types'
 import {
   applyDefaults,
-  invokeCallback
+  attachCanvasResize,
+  attachLoopUpdate,
+  invokeCallback,
+  removeCanvasResize,
+  removeLoopUpdate
 } from '../../utils/utils'
 import { SceneInterface } from '../scene/scene-interface'
 import { SceneType } from '../scene/scene-type'
@@ -33,14 +41,16 @@ export function Sprite(props: SpriteProps): any {
       }
 
       // ***************
-      // MeshInterface
+      // SpriteInterface
       // ***************
       animation: SpriteAnimation = null
-
-      /**
-       * Public
-       */
       babylon: Pick<BabylonAccessor, 'spriteManager' | 'sprite'> = { spriteManager: null, sprite: null }
+      loopUpdate$: Observer<number>
+      canvasResize$: Observer<Rect>
+
+      onSpawn?(scene: SceneInterface): void
+      onLoopUpdate?(delta: number): void
+      onCanvasResize?(size: Rect): void
 
       setSprite(babylonSprite: BabylonSprite): void {
         if (this.babylon.sprite) {
@@ -52,6 +62,8 @@ export function Sprite(props: SpriteProps): any {
           this.babylon.sprite = babylonSprite
         }
         this.transform = this.babylon.sprite
+        attachLoopUpdate(this)
+        attachCanvasResize(this)
       }
 
       setFrame(frame: number): void {
@@ -62,11 +74,6 @@ export function Sprite(props: SpriteProps): any {
         }
         this.babylon.sprite.cellIndex = frame
       }
-
-      /**
-       * User defined
-       */
-      onSpawn?(scene: SceneInterface): void {}
 
       // ***************
       // DisplayObject
@@ -163,6 +170,8 @@ export function Sprite(props: SpriteProps): any {
       release(): void {
         this.stopAnimation()
         this.babylon.sprite.dispose()
+        removeLoopUpdate(this)
+        removeCanvasResize(this)
       }
     }
     const _classCore = class implements SpriteCore {

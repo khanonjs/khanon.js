@@ -4,6 +4,12 @@ import {
 } from '../../constructors'
 import { SpritesController } from '../../controllers'
 import { MeshesController } from '../../controllers/meshes-controller'
+import {
+  attachCanvasResize,
+  attachLoopUpdate,
+  removeCanvasResize,
+  removeLoopUpdate
+} from '../../utils/utils'
 import { MeshInterface } from '../mesh/mesh-interface'
 import { SpriteInterface } from '../sprite/sprite-interface'
 import { ActorInterface } from './actor-interface'
@@ -36,6 +42,8 @@ export class ActorComposition<B extends SpriteInterface | MeshInterface = any> {
       this._body = MeshesController.get(Node).spawn(this.actor.scene) as any
     }
     this.actor.transform = this._body.transform
+    attachLoopUpdate(this.actor) // 8a8f esto aquí?
+    attachCanvasResize(this.actor)
     return this._body as unknown as N
   }
 

@@ -29,8 +29,12 @@ import {
 } from '../../models'
 import { Logger } from '../../modules'
 import {
+  attachCanvasResize,
+  attachLoopUpdate,
   invokeCallback,
-  removeArrayDuplicitiesInObject
+  removeArrayDuplicitiesInObject,
+  removeCanvasResize,
+  removeLoopUpdate
 } from '../../utils/utils'
 import { ActorInterface } from '../actor/actor-interface'
 import { CameraInterface } from '../camera/camera-interface'
@@ -81,25 +85,15 @@ export function Scene(props: SceneProps): any {
         this._started = true
         this.startState(state)
         invokeCallback(this.onStart, this)
-        if (this.onLoopUpdate) {
-          this.loopUpdate$ = Core.addLoopUpdateObserver(this.onLoopUpdate.bind(this))
-        }
-        if (this.onCanvasResize) {
-          this.canvasResize$ = Core.addCanvasResizeObserver(this.onCanvasResize.bind(this))
-        }
+        attachLoopUpdate(this)
+        attachCanvasResize(this)
       }
 
       stop(): void {
         Logger.debug('Scene stop', _class.prototype)
         Core.stopRenderScene(this)
-        if (this.loopUpdate$) {
-          Core.removeLoopUpdateObserver(this.loopUpdate$)
-          this.loopUpdate$ = undefined
-        }
-        if (this.canvasResize$) {
-          Core.removeCanvasResizeObserver(this.canvasResize$)
-          this.canvasResize$ = undefined
-        }
+        removeLoopUpdate(this)
+        removeCanvasResize(this)
       }
 
       load(): LoadingProgress {

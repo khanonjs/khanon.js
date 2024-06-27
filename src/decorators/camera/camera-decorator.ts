@@ -10,6 +10,12 @@ import {
   BabylonAccessor,
   Rect
 } from '../../models'
+import {
+  attachCanvasResize,
+  attachLoopUpdate,
+  removeCanvasResize,
+  removeLoopUpdate
+} from '../../utils/utils'
 import { CameraCore } from './camera-core'
 import { CameraInterface } from './camera-interface'
 
@@ -21,23 +27,13 @@ export function Camera(): any {
       canvasResize$: Observer<Rect>
 
       start(): void {
-        if (this.onLoopUpdate) {
-          this.loopUpdate$ = Core.addLoopUpdateObserver(this.onLoopUpdate.bind(this))
-        }
-        if (this.onCanvasResize) {
-          this.canvasResize$ = Core.addCanvasResizeObserver(this.onCanvasResize.bind(this))
-        }
+        attachLoopUpdate(this)
+        attachCanvasResize(this)
       }
 
       stop(): void {
-        if (this.loopUpdate$) {
-          Core.removeLoopUpdateObserver(this.loopUpdate$)
-          this.loopUpdate$ = undefined
-        }
-        if (this.canvasResize$) {
-          Core.removeCanvasResizeObserver(this.canvasResize$)
-          this.canvasResize$ = undefined
-        }
+        removeLoopUpdate(this)
+        removeCanvasResize(this)
       }
     }
     const _classCore = class implements CameraCore {

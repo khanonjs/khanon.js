@@ -1,3 +1,5 @@
+import { Observer } from '@babylonjs/core'
+
 import { LoadingProgress } from '../../base'
 import { DisplayObject } from '../../base/classes/display-object'
 import {
@@ -9,6 +11,7 @@ import {
   SpritesController
 } from '../../controllers'
 import { MeshesController } from '../../controllers/meshes-controller'
+import { Rect } from '../../models'
 import { Logger } from '../../modules'
 import {
   MeshTransform,
@@ -16,7 +19,9 @@ import {
 } from '../../types'
 import {
   invokeCallback,
-  removeArrayDuplicitiesInObject
+  removeArrayDuplicitiesInObject,
+  removeCanvasResize,
+  removeLoopUpdate
 } from '../../utils/utils'
 import { MeshInterface } from '../mesh/mesh-interface'
 import { SceneType } from '../scene/scene-type'
@@ -34,6 +39,8 @@ export function Actor(props: ActorProps): any {
       body: SpriteInterface | MeshInterface
       transform: SpriteTransform | MeshTransform
       composition: ActorComposition
+      loopUpdate$: Observer<number>
+      canvasResize$: Observer<Rect>
 
       constructor(readonly scene: SceneType) {
         super()
@@ -41,6 +48,13 @@ export function Actor(props: ActorProps): any {
       }
 
       onSpawn?(): void
+      onLoopUpdate?(delta: number): void
+      onCanvasResize?(size: Rect): void
+
+      release() {
+        removeLoopUpdate(this) // 8a8f esto aquí?
+        removeCanvasResize(this)
+      }
     }
     const _classCore = class implements ActorCore {
       props = removeArrayDuplicitiesInObject(props)
