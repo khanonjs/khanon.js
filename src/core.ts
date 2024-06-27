@@ -48,7 +48,7 @@ export class Core {
   private static loopUpdateLastMs: number
   private static loopUpdateMps: number // Number of logical steps per frame
   private static loopUpdateLag: number
-  private static loopUpdateDeltaTime: number // Time acceleration factor
+  private static loopUpdateDeltaTime: number = 1.0 // Time acceleration factor
   private static onLoopUpdate: Observable<number> = new Observable<number>()
 
   // Render scenes
@@ -211,7 +211,7 @@ export class Core {
         Core.loopUpdateLag += currentMs - Core.loopUpdateLastMs
         Core.loopUpdateLastMs = currentMs
         while (Core.loopUpdateLag > Core.loopUpdateMps) {
-          this.onLoopUpdate.notifyObservers(Core.loopUpdateMps)
+          this.onLoopUpdate.notifyObservers(Core.loopUpdateDeltaTime)
           Core.loopUpdateLag -= Core.loopUpdateMps
         }
       },
