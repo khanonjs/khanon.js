@@ -22,9 +22,10 @@ import { ActorProps } from './decorators/actor/actor-props'
 import { AppProps } from './decorators/app/app-props'
 import { MeshAnimation } from './decorators/mesh/mesh-animation'
 import { MeshProps } from './decorators/mesh/mesh-props'
+import { ParticleSourceInterface } from './decorators/particle-source/particle-source-interface'
+import { ParticleInterface } from './decorators/particle/particle-interface'
 import { SceneStateProps } from './decorators/scene-state/scene-state-props'
 import { SceneProps } from './decorators/scene/scene-props'
-import { SceneSpawn } from './decorators/scene/scene-spawn'
 import { SceneType } from './decorators/scene/scene-type'
 import { SpriteAnimation } from './decorators/sprite/sprite-animation'
 import { SpriteProps } from './decorators/sprite/sprite-props'
@@ -268,6 +269,11 @@ export declare class ActorComposition<B extends SpriteInterface | MeshInterface>
    */
   getNode(name: string): B
 }
+
+/**
+ * Actor Interface to be extended from decorated Actors.
+ * The generic 'B' alludes to what kind of interface this actor will have as composition Body and Nodes.
+ */
 export declare abstract class ActorInterface<B extends SpriteInterface | MeshInterface> {
   /**
    * Transform of the body.
@@ -278,19 +284,6 @@ export declare abstract class ActorInterface<B extends SpriteInterface | MeshInt
    * Gets the ActorComposition class.
    */
   get composition(): ActorComposition<B>
-
-  /**
-   * Sets the body of the Actor.
-   * @param Node
-   */
-  // setBody(Node: B extends SpriteInterface ? SpriteConstructor : MeshConstructor): B  // 8a8f
-
-  /**
-   *Adds a Node to the Body of the Actor.
-   * @param Node
-   * @param name
-   */
-  // addNode(Node: B extends SpriteInterface ? SpriteConstructor : MeshConstructor, name?: string): B // 8a8f
 
   /**
    * Use a previously defined composition within the Actor class using ActorComposition decorator
@@ -338,11 +331,6 @@ export { SceneStateProps } from './decorators/scene-state/scene-state-props'
 export declare function SceneState(props: SceneStateProps): any
 export declare abstract class SceneStateInterface {
   /**
-   * Babylon.js objects
-   */
-  get babylon(): Pick<BabylonAccessor, 'scene'>
-
-  /**
    * Owner scene of this state
    */
   get scene(): SceneType
@@ -381,11 +369,44 @@ export declare abstract class SceneStateInterface {
 export { SceneType } from './decorators/scene/scene-type'
 export { SceneProps } from './decorators/scene/scene-props'
 export declare function Scene(props: SceneProps): any
+export declare class SceneSpawn {
+  /**
+   * Spawns an actor in the scene.
+   * @param actor
+   * @param compositionId
+   * @returns
+   */
+  actor<A extends ActorInterface>(actor: new () => A): A
+
+  /**
+   * Spawns a particle in the scene.
+   * @param particle
+   */
+  particle<P extends ParticleInterface>(particle: new () => P): P
+
+  /**
+   * Spawns a particle source in the scene.
+   * @param particleSource
+   */
+  particleSource<S extends ParticleSourceInterface>(particleSource: new () => S): S
+
+  /**
+   * Spawns a mesh in the scene.
+   * @param mesh
+   */
+  mesh<M extends MeshInterface>(mesh: new () => M): M
+
+  /**
+   * Spawns a sprite in the scene.
+   * @param sprite
+   */
+  sprite<S extends SpriteInterface>(sprite: new () => S): S
+}
 export declare abstract class SceneInterface {
   /**
    * Babylon container
    */
-  get babylon(): Pick<BabylonAccessor, 'engine' | 'scene'>
+  get babylon(): Pick<BabylonAccessor, 'scene'>
 
   /**
    * Indicates if the scene has been loaded.
@@ -433,18 +454,6 @@ export declare abstract class SceneInterface {
    * @param state
    */
   startState(state: SceneStateConstructor): void
-
-  /**
-   * Spawns a Particle.
-   * @param actor
-   */
-  spawnParticle(particle: ParticleConstructor, initialize?: (particle: ParticleConstructor) => void): void
-
-  /**
-   * Spawns a Particle Source.
-   * @param actor
-   */
-  spawnParticleSource(particleSource: ParticleSourceConstructor, initialize?: (particleSource: ParticleSourceConstructor) => void): void
 
   /**
    * Callback invoked before the scene has been started.

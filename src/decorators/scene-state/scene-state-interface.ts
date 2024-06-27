@@ -12,7 +12,7 @@ export abstract class SceneStateInterface implements LoopUpdatable, CanvasResiza
   abstract scene: SceneType
   abstract loopUpdate$?: Observer<number>
   abstract canvasResize$?: Observer<Rect>
-  abstract setCamera?(camera: CameraConstructor): void
+  abstract setCamera(camera: CameraConstructor): void
   abstract start?(): void
   abstract end?(): void
   onStart?(scene: SceneType): void
