@@ -9,12 +9,24 @@ import { Rect } from '../../models'
 import { SceneType } from '../scene/scene-type'
 
 export abstract class SceneStateInterface implements LoopUpdatable, CanvasResizable {
-  abstract scene: SceneType
+  /**
+   * Private
+   */
   abstract loopUpdate$?: Observer<number>
   abstract canvasResize$?: Observer<Rect>
-  abstract setCamera(camera: CameraConstructor): void
   abstract start?(): void
   abstract end?(): void
+
+  /**
+   * Public
+   */
+  abstract scene: SceneType
+  abstract loopUpdate: boolean
+  abstract setCamera(camera: CameraConstructor): void
+
+  /**
+   * User defined
+   */
   onStart?(scene: SceneType): void
   onEnd?(): void
   onLoopUpdate?(delta: number): void

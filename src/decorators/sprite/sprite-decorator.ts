@@ -22,7 +22,8 @@ import {
   attachLoopUpdate,
   invokeCallback,
   removeCanvasResize,
-  removeLoopUpdate
+  removeLoopUpdate,
+  switchLoopUpdate
 } from '../../utils/utils'
 import { SceneInterface } from '../scene/scene-interface'
 import { SceneType } from '../scene/scene-type'
@@ -51,6 +52,9 @@ export function Sprite(props: SpriteProps): any {
       onSpawn?(scene: SceneInterface): void
       onLoopUpdate?(delta: number): void
       onCanvasResize?(size: Rect): void
+
+      set loopUpdate(value: boolean) { switchLoopUpdate(value, this) }
+      get loopUpdate(): boolean { return !!this.loopUpdate$ }
 
       setSprite(babylonSprite: BabylonSprite): void {
         if (this.babylon.sprite) {

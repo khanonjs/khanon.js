@@ -21,7 +21,8 @@ import {
   invokeCallback,
   removeArrayDuplicitiesInObject,
   removeCanvasResize,
-  removeLoopUpdate
+  removeLoopUpdate,
+  switchLoopUpdate
 } from '../../utils/utils'
 import { MeshInterface } from '../mesh/mesh-interface'
 import { SceneType } from '../scene/scene-type'
@@ -50,6 +51,9 @@ export function Actor(props: ActorProps): any {
       onSpawn?(): void
       onLoopUpdate?(delta: number): void
       onCanvasResize?(size: Rect): void
+
+      set loopUpdate(value: boolean) { switchLoopUpdate(value, this) }
+      get loopUpdate(): boolean { return !!this.loopUpdate$ }
 
       release() {
         removeLoopUpdate(this) // 8a8f esto aquí?

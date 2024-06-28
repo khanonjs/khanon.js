@@ -140,6 +140,12 @@ export declare abstract class SpriteInterface {
   get transform(): SpriteTransform
 
   /**
+   * Turns ON/OFF 'onLoopUpdate' callback
+   */
+  set loopUpdate(value: boolean)
+  get loopUpdate(): boolean
+
+  /**
    * Sets a sprite manually.
    * Through this method, it is possible to manually create a Babylon Sprite in 'onSpawn' method and apply it.
    * @param babylonMesh
@@ -213,6 +219,12 @@ export declare abstract class MeshInterface implements DisplayObject {
   get transform(): MeshTransform
 
   /**
+   * Turns ON/OFF 'onLoopUpdate' callback
+   */
+  set loopUpdate(value: boolean)
+  get loopUpdate(): boolean
+
+  /**
    * Sets a mesh manually.
    * Through this method, it is possible to manually create a Babylon Mesh in 'onSpawn' method and apply it.
    * @param babylonMesh
@@ -268,6 +280,11 @@ export declare abstract class MeshInterface implements DisplayObject {
 export { ActorProps } from './decorators/actor/actor-props'
 export declare function Actor(props?: ActorProps): any
 export declare class ActorComposition<B extends SpriteInterface | MeshInterface> {
+  /**
+   * Body of this actor.
+   * This is the main 'Sprite' or 'Mesh. The rest of nodes are attached to this object.
+   * 'actor.transform' references to 'actor.body.transform'.
+   */
   get body(): B
 
   /**
@@ -310,6 +327,12 @@ export declare abstract class ActorInterface<B extends SpriteInterface | MeshInt
   get composition(): ActorComposition<B>
 
   /**
+   * Turns ON/OFF 'onLoopUpdate' callback
+   */
+  set loopUpdate(value: boolean)
+  get loopUpdate(): boolean
+
+  /**
    * Use a previously defined composition within the Actor class using ActorComposition decorator
    * @param id Composition Id
    * @param CompositionDefinition User custom composition definition
@@ -342,6 +365,12 @@ export declare abstract class CameraInterface {
   get babylon(): Pick<BabylonAccessor<ReturnType<this['initialize']>>, 'camera'>
 
   /**
+   * Turns ON/OFF 'onLoopUpdate' callback
+   */
+  set loopUpdate(value: boolean)
+  get loopUpdate(): boolean
+
+  /**
    * Initialize the camera. This method must return a valid Babylon camera.
    * It will be used from any Scene State requiring it.
    */
@@ -370,6 +399,12 @@ export declare abstract class SceneStateInterface {
    * Owner scene of this state
    */
   get scene(): SceneType
+
+  /**
+   * Turns ON/OFF 'onLoopUpdate' callback
+   */
+  set loopUpdate(value: boolean)
+  get loopUpdate(): boolean
 
   /**
    * Sets a camera. Use this method at any point or event of the state lifecycle.
@@ -463,6 +498,12 @@ export declare abstract class SceneInterface {
    * Scene spawn methods.
    */
   get spawn(): SceneSpawn
+
+  /**
+   * Turns ON/OFF 'onLoopUpdate' callback
+   */
+  set loopUpdate(value: boolean)
+  get loopUpdate(): boolean
 
   /**
    * Start the scene.

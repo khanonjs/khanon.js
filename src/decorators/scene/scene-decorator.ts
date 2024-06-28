@@ -34,7 +34,8 @@ import {
   invokeCallback,
   removeArrayDuplicitiesInObject,
   removeCanvasResize,
-  removeLoopUpdate
+  removeLoopUpdate,
+  switchLoopUpdate
 } from '../../utils/utils'
 import { ActorInterface } from '../actor/actor-interface'
 import { CameraInterface } from '../camera/camera-interface'
@@ -78,6 +79,9 @@ export function Scene(props: SceneProps): any {
       onUnload?(): void
       onLoopUpdate?(delta: number): void
       onCanvasResize?(size: Rect): void
+
+      set loopUpdate(value: boolean) { switchLoopUpdate(value, this) }
+      get loopUpdate(): boolean { return !!this.loopUpdate$ }
 
       start(state: SceneStateConstructor): void {
         Logger.debug('Scene start', _class.prototype)

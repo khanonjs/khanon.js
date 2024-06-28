@@ -25,6 +25,7 @@ export abstract class SpriteInterface extends DisplayObject {
   abstract babylon: Pick<BabylonAccessor, 'spriteManager' | 'sprite'>
   abstract scene: SceneType
   abstract transform: SpriteTransform
+  abstract loopUpdate: boolean
   abstract setSprite(babylonSprite: BabylonSprite): void
 
   /**

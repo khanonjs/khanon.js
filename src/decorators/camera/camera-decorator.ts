@@ -14,7 +14,8 @@ import {
   attachCanvasResize,
   attachLoopUpdate,
   removeCanvasResize,
-  removeLoopUpdate
+  removeLoopUpdate,
+  switchLoopUpdate
 } from '../../utils/utils'
 import { CameraCore } from './camera-core'
 import { CameraInterface } from './camera-interface'
@@ -25,6 +26,9 @@ export function Camera(): any {
       babylon: Pick<BabylonAccessor<BabylonCamera>, 'camera'> = { camera: null }
       loopUpdate$: Observer<number>
       canvasResize$: Observer<Rect>
+
+      set loopUpdate(value: boolean) { switchLoopUpdate(value, this) }
+      get loopUpdate(): boolean { return !!this.loopUpdate$ }
 
       start(): void {
         attachLoopUpdate(this)

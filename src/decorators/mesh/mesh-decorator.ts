@@ -17,7 +17,8 @@ import {
   attachLoopUpdate,
   invokeCallback,
   removeCanvasResize,
-  removeLoopUpdate
+  removeLoopUpdate,
+  switchLoopUpdate
 } from '../../utils/utils'
 import { SceneType } from '../scene/scene-type'
 import { MeshCore } from './mesh-core'
@@ -41,6 +42,9 @@ export function Mesh(props: MeshProps): any {
       onSpawn?(scene: SceneType): void
       onLoopUpdate?(delta: number): void
       onCanvasResize?(size: Rect): void
+
+      set loopUpdate(value: boolean) { switchLoopUpdate(value, this) }
+      get loopUpdate(): boolean { return !!this.loopUpdate$ }
 
       setMesh(babylonMesh: BabylonMesh): void {
         if (this.babylon.mesh) {

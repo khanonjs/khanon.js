@@ -21,6 +21,17 @@ export function attachCanvasResize(context: any): void {
 }
 
 /**
+ * Switch onLoopUpdate on/off
+ */
+export function switchLoopUpdate(value: boolean, context: any): void {
+  if (value) {
+    attachLoopUpdate(context)
+  } else {
+    removeLoopUpdate(context)
+  }
+}
+
+/**
  * Removes LoopUpdate in context if exists
  */
 export function removeLoopUpdate(context: any): void {

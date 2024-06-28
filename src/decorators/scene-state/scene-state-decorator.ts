@@ -21,7 +21,8 @@ import {
   cloneClass,
   invokeCallback,
   removeCanvasResize,
-  removeLoopUpdate
+  removeLoopUpdate,
+  switchLoopUpdate
 } from '../../utils/utils'
 import { SceneType } from '../scene/scene-type'
 import { SceneStateCore } from './scene-state-core'
@@ -43,6 +44,9 @@ export function SceneState(props: SceneStateProps): any {
       onEnd?(): void
       onLoopUpdate?(delta: number): void
       onCanvasResize?(size: Rect): void
+
+      set loopUpdate(value: boolean) { switchLoopUpdate(value, this) }
+      get loopUpdate(): boolean { return !!this.loopUpdate$ }
 
       setCamera(camera: CameraConstructor): void {
         this.scene.setCamera(camera)

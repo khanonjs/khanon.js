@@ -26,6 +26,7 @@ export abstract class MeshInterface extends DisplayObject {
   abstract babylon: Pick<BabylonAccessor, 'mesh'>
   abstract scene: SceneType
   abstract transform: MeshTransform
+  abstract loopUpdate: boolean
   abstract setMesh(babylonMesh: BabylonMesh): void
 
   /**
