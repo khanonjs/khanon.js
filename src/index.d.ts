@@ -165,6 +165,12 @@ export declare abstract class SpriteInterface {
   getTransform(): Matrix
 
   /**
+   * Sets current frame (stops current animation)
+   * @param frame
+   */
+  setFrame(frame: number): void
+
+  /**
    * Plays an animation. Animations are defined in the Sprite decorator 'props' or manually using 'MeshAnimation' interface.
    * @param animation
    * @param loopOverride
@@ -279,7 +285,7 @@ export declare abstract class MeshInterface implements DisplayObject {
 // ****************
 export { ActorProps } from './decorators/actor/actor-props'
 export declare function Actor(props?: ActorProps): any
-export declare class ActorComposition<B extends SpriteInterface | MeshInterface> {
+export declare class ActorComposer<B extends SpriteInterface | MeshInterface> {
   /**
    * Body of this actor.
    * This is the main 'Sprite' or 'Mesh. The rest of nodes are attached to this object.
@@ -309,11 +315,17 @@ export declare class ActorComposition<B extends SpriteInterface | MeshInterface>
    * @returns
    */
   getNode(name: string): B
+
+  /**
+   * Sets the visibility of Body and all Nodes
+   * @param value
+   */
+  setVisible(value: boolean)
 }
 
 /**
  * Actor Interface to be extended from decorated Actors.
- * The generic 'B' alludes to what kind of interface this actor will have as composition Body and Nodes.
+ * The generic 'B' alludes to what kind of interface this actor will have as Body and Nodes (if it is composed by Sprites or Meshes).
  */
 export declare abstract class ActorInterface<B extends SpriteInterface | MeshInterface> {
   /**
@@ -322,22 +334,16 @@ export declare abstract class ActorInterface<B extends SpriteInterface | MeshInt
   get transform(): B extends SpriteInterface ? SpriteTransform : MeshTransform
 
   /**
-   * Gets the ActorComposition class.
+   * Gets the ActorComposer class.
+   * This class is used to compose the actor shape, composed by a main body and nodes hooked to it.
    */
-  get composition(): ActorComposition<B>
+  get composer(): ActorComposer<B>
 
   /**
    * Turns ON/OFF 'onLoopUpdate' callback
    */
   set loopUpdate(value: boolean)
   get loopUpdate(): boolean
-
-  /**
-   * Use a previously defined composition within the Actor class using ActorComposition decorator
-   * @param id Composition Id
-   * @param CompositionDefinition User custom composition definition
-   */
-  useComposition(id: string): void
 
   /**
    * Callback invoked after the actor has been spawned on a scene
@@ -444,7 +450,6 @@ export declare class SceneSpawn {
   /**
    * Spawns an actor in the scene.
    * @param actor
-   * @param compositionId
    * @returns
    */
   actor<A extends ActorInterface>(actor: new () => A): A

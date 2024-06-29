@@ -12,6 +12,5 @@ function ActorComposition(id: string) {
     }
 
     const metadata = Reflect.getMetadata('metadata', target) as ActorMetadata
-    metadata.compositions.set(id, target[propertyKey])
   }
 }

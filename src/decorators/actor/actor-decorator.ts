@@ -27,7 +27,7 @@ import {
 import { MeshInterface } from '../mesh/mesh-interface'
 import { SceneType } from '../scene/scene-type'
 import { SpriteInterface } from '../sprite/sprite-interface'
-import { ActorComposition } from './actor-composition'
+import { ActorComposer } from './actor-composer'
 import { ActorCore } from './actor-core'
 import { ActorInterface } from './actor-interface'
 import { ActorMetadata } from './actor-metadata'
@@ -36,17 +36,21 @@ import { ActorProps } from './actor-props'
 export function Actor(props: ActorProps): any {
   return function <T extends { new (...args: any[]): ActorInterface }>(constructor: T & ActorInterface, context: ClassDecoratorContext) {
     const _classInterface = class extends constructor implements ActorInterface {
+      constructor(readonly scene: SceneType) {
+        super()
+      }
+
+      initialize() {
+        this.composer = new ActorComposer(this)
+        invokeCallback(this.onSpawn, this, this.scene)
+      }
+
       metadata: ActorMetadata // = Reflect.getMetadata('metadata', this)  // 8a8f
       body: SpriteInterface | MeshInterface
       transform: SpriteTransform | MeshTransform
-      composition: ActorComposition
+      composer: ActorComposer
       loopUpdate$: Observer<number>
       canvasResize$: Observer<Rect>
-
-      constructor(readonly scene: SceneType) {
-        super()
-        this.composition = new ActorComposition(this)
-      }
 
       onSpawn?(): void
       onLoopUpdate?(delta: number): void
@@ -67,7 +71,7 @@ export function Actor(props: ActorProps): any {
 
       load(scene: SceneType): LoadingProgress {
         const progress = new LoadingProgress().complete()
-        // SpritesController.load(this.props.sprites, scene)
+        SpritesController.load(this.props.sprites, scene)
         // 8a8f Load  the rest of props
         return progress
       }
@@ -78,7 +82,7 @@ export function Actor(props: ActorProps): any {
 
       spawn(scene: SceneType): ActorInterface {
         const actor = new _classInterface(scene)
-        invokeCallback(actor.onSpawn, actor, scene)
+        actor.initialize()
         return actor
       }
     }

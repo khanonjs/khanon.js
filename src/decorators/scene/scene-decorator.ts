@@ -7,10 +7,7 @@ import { Scene as BabylonScene } from '@babylonjs/core/scene'
 
 import { LoadingProgress } from '../../base'
 import {
-  ActorConstructor,
   CameraConstructor,
-  ParticleConstructor,
-  ParticleSourceConstructor,
   SceneStateConstructor
 } from '../../constructors'
 import {
@@ -37,7 +34,6 @@ import {
   removeLoopUpdate,
   switchLoopUpdate
 } from '../../utils/utils'
-import { ActorInterface } from '../actor/actor-interface'
 import { CameraInterface } from '../camera/camera-interface'
 import { SceneStateInterface } from '../scene-state/scene-state-interface'
 import { SceneCore } from './scene-core'
@@ -49,20 +45,23 @@ import { SceneType } from './scene-type'
 export function Scene(props: SceneProps): any {
   return function <T extends { new (...args: any[]): SceneType }>(constructor: T & SceneType, context: ClassDecoratorContext) {
     const _class = class extends constructor implements SceneCore, SceneInterface {
-      // Core
+      constructor() {
+        super()
+        this._spawn = new SceneSpawn(this, _class.prototype)
+      }
+
       props = removeArrayDuplicitiesInObject(props)
       protected _assets: AssetDefinition[]
       protected _loaded: boolean
       protected _started: boolean
       protected _state: SceneStateInterface
       protected _camera: CameraInterface
-      protected _sceneSpawn: SceneSpawn = new SceneSpawn(this)
+      protected _spawn: SceneSpawn
 
       setEngineParams(): void {}
       renderStart(id: string): void {}
       renderStop(id: string): void {}
 
-      // Interface
       babylon: Pick<BabylonAccessor, 'scene'> = { scene: null }
       loopUpdate$: Observer<number>
       canvasResize$: Observer<Rect>
@@ -71,7 +70,7 @@ export function Scene(props: SceneProps): any {
       get started(): boolean { return this._started }
       get state(): SceneStateInterface { return this._state }
       get camera(): CameraInterface { return this._camera }
-      get spawn(): SceneSpawn { return this._sceneSpawn }
+      get spawn(): SceneSpawn { return this._spawn }
 
       onStart?(): void
       onStop?(): void

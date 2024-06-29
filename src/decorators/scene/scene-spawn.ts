@@ -1,9 +1,11 @@
+import { Spawnable } from '../../base'
 import {
   ActorsController,
   SpritesController
 } from '../../controllers'
 import { MeshesController } from '../../controllers/meshes-controller'
 import { Logger } from '../../modules'
+import { isPrototypeOf } from '../../utils/utils'
 import { ActorInterface } from '../actor/actor-interface'
 import { MeshInterface } from '../mesh/mesh-interface'
 import { ParticleSourceInterface } from '../particle-source/particle-source-interface'
@@ -13,25 +15,28 @@ import { SceneType } from './scene-type'
 
 export class SceneSpawn {
   private readonly scene?: SceneType
+  private readonly scenePrototype?: any
 
-  constructor(scene: SceneType) {
+  constructor(scene: SceneType, scenePrototype: any) {
     this.scene = scene
+    this.scenePrototype = scenePrototype
   }
 
   actor<A extends ActorInterface>(actor: new () => A): A {
-    Logger.debug('Actor spawned:', actor.prototype)
+    if (this.scene.props.actors.indexOf(actor) === -1) { Logger.debugError('Traying to spawn an actor that doesn\'t belong to the scene:', actor.prototype, this.scenePrototype); return }
+    Logger.debug('Actor spawn:', actor.prototype)
     const instance = ActorsController.get(actor).spawn(this.scene)
     return instance as A
   }
 
   particle<P extends ParticleInterface>(particle: new () => P): P {
-    Logger.debug('Particle spawned:', particle.prototype)
+    Logger.debug('Particle spawn:', particle.prototype)
     // 8a8f
     return null
   }
 
   particleSource<S extends ParticleSourceInterface>(particleSource: new () => S): S {
-    Logger.debug('Particle Source spawned:', particleSource.prototype)
+    Logger.debug('ParticleSource spawn:', particleSource.prototype)
     // 8a8f
     return null
   }

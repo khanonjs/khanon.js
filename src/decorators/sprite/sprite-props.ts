@@ -24,7 +24,7 @@ export interface SpriteProps {
   /**
    * Cells height. In case the image contains a single cell it represents the image height.
    */
-  celHeight?: number
+  cellHeight?: number
 
   /**
    * Set the generated texture options

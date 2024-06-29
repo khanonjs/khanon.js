@@ -3,7 +3,6 @@ import {
   Observer,
   Sprite as BabylonSprite
 } from '@babylonjs/core'
-import { TransformNode } from '@babylonjs/core/Meshes/transformNode'
 
 import { LoadingProgress } from '../../base'
 import {
@@ -39,6 +38,24 @@ export function Sprite(props: SpriteProps): any {
     const _classInterface = class extends constructor implements SpriteInterface {
       constructor(readonly scene: SceneType, private readonly props: SpriteProps) {
         super()
+      }
+
+      initialize(spriteTexture?: SpriteTexture) {
+        if (spriteTexture) {
+          const babylonSprite = new BabylonSprite('COMOOOOOOOOOOO????', spriteTexture.babylon.spriteManager)
+          babylonSprite.width = spriteTexture.width
+          babylonSprite.height = spriteTexture.height
+          babylonSprite.isVisible = true
+          this.setSprite(babylonSprite)
+          Logger.trace('aki initialize', spriteTexture.babylon.spriteManager)
+          // const spriteTexture = AssetsController.getAsset
+          // this.spriteTexture = spriteTexture;
+          // this.babylonjs = new BabylonJsSprite(this.name, this.spriteTexture.babylonjs);
+          // this.babylonjs.width = this.spriteTexture.width;
+          // this.babylonjs.height = this.spriteTexture.height;
+          // this.visible = false;
+        }
+        invokeCallback(this.onSpawn, this, this.scene)
       }
 
       // ***************
@@ -210,7 +227,7 @@ export function Sprite(props: SpriteProps): any {
 
       spawn(scene: SceneType): SpriteInterface {
         const sprite = new _classInterface(scene, this.props)
-        invokeCallback(sprite.onSpawn, sprite, scene)
+        sprite.initialize(this.textures.get(scene))
         return sprite
       }
     }

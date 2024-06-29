@@ -6,15 +6,13 @@ import { SpritesController } from '../../controllers'
 import { MeshesController } from '../../controllers/meshes-controller'
 import {
   attachCanvasResize,
-  attachLoopUpdate,
-  removeCanvasResize,
-  removeLoopUpdate
+  attachLoopUpdate
 } from '../../utils/utils'
 import { MeshInterface } from '../mesh/mesh-interface'
 import { SpriteInterface } from '../sprite/sprite-interface'
 import { ActorInterface } from './actor-interface'
 
-export class ActorComposition<B extends SpriteInterface | MeshInterface = any> {
+export class ActorComposer<B extends SpriteInterface | MeshInterface = any> {
   private _body?: B
   private nodes?: Map<string, B> = new Map<string, B>()
   private readonly actor?: ActorInterface
@@ -70,5 +68,9 @@ export class ActorComposition<B extends SpriteInterface | MeshInterface = any> {
   getNode(name: string): B {
     // 8a8f
     return null
+  }
+
+  setVisible(value: boolean) {
+    // 8a8f
   }
 }

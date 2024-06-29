@@ -5,6 +5,7 @@ import {
 import { SpriteManager } from '@babylonjs/core/Sprites/spriteManager'
 
 import { BabylonAccessor } from '../../models'
+import { Logger } from '../../modules'
 import { SceneType } from '../scene/scene-type'
 import { SpriteProps } from './sprite-props'
 
@@ -19,7 +20,7 @@ export class SpriteTexture {
 
   setFromArrayBuffer(buffer: ArrayBuffer): void {
     const texture = new Texture('', this.babylon.scene, { ...this.spriteProps.textureOptions, buffer })
-    this.setFromTexture(texture, this.spriteProps.width, this.spriteProps.height)
+    this.setFromTexture(texture, this.spriteProps.width ?? this.spriteProps.cellWidth, this.spriteProps.height ?? this.spriteProps.cellHeight)
   }
 
   setFromBlank(): void {

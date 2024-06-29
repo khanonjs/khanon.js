@@ -17,7 +17,7 @@ import { MeshInterface } from '../mesh/mesh-interface'
 import { SceneInterface } from '../scene/scene-interface'
 import { SceneType } from '../scene/scene-type'
 import { SpriteInterface } from '../sprite/sprite-interface'
-import { ActorComposition } from './actor-composition'
+import { ActorComposer } from './actor-composer'
 import { ActorMetadata } from './actor-metadata'
 
 export abstract class ActorInterface<B extends SpriteInterface | MeshInterface = any> implements LoopUpdatable, CanvasResizable {
@@ -29,13 +29,14 @@ export abstract class ActorInterface<B extends SpriteInterface | MeshInterface =
   abstract loopUpdate: boolean
   abstract loopUpdate$?: Observer<number>
   abstract canvasResize$?: Observer<Rect>
+  abstract initialize?(): void
   abstract release?(): void
 
   /**
    * Public
    */
   abstract transform: B extends SpriteInterface ? SpriteTransform : MeshTransform
-  abstract composition: ActorComposition<B>
+  abstract composer: ActorComposer<B>
 
   /**
    * User defined

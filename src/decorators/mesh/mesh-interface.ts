@@ -2,7 +2,6 @@ import {
   Mesh as BabylonMesh,
   Observer
 } from '@babylonjs/core'
-import { Vector3 } from '@babylonjs/core/Maths/math.vector'
 
 import { DisplayObject } from '../../base/classes/display-object'
 import {
@@ -19,6 +18,7 @@ export abstract class MeshInterface extends DisplayObject {
    */
   abstract loopUpdate$?: Observer<number>
   abstract canvasResize$?: Observer<Rect>
+  abstract initialize?(): void
 
   /**
    * Public

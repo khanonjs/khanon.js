@@ -18,6 +18,7 @@ export abstract class SpriteInterface extends DisplayObject {
    */
   abstract loopUpdate$?: Observer<number>
   abstract canvasResize$?: Observer<Rect>
+  abstract initialize?(): void
 
   /**
    * Public
@@ -27,6 +28,7 @@ export abstract class SpriteInterface extends DisplayObject {
   abstract transform: SpriteTransform
   abstract loopUpdate: boolean
   abstract setSprite(babylonSprite: BabylonSprite): void
+  abstract setFrame(frame: number): void
 
   /**
    * User defined

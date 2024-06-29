@@ -32,6 +32,10 @@ export function Mesh(props: MeshProps): any {
         super()
       }
 
+      initialize() {
+        invokeCallback(this.onSpawn, this, this.scene)
+      }
+
       // ***************
       // MeshInterface
       // ***************
@@ -107,7 +111,7 @@ export function Mesh(props: MeshProps): any {
 
       spawn(scene: SceneType): MeshInterface {
         const mesh = new _classInterface(scene, this.props)
-        invokeCallback(mesh.onSpawn, mesh, scene)
+        mesh.initialize()
         return mesh
       }
     }

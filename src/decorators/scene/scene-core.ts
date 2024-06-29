@@ -8,7 +8,7 @@ export abstract class SceneCore {
   protected abstract _assets: AssetDefinition[]
   protected abstract _loaded: boolean
   protected abstract _started: boolean
-  protected abstract _sceneSpawn: SceneSpawn
+  protected abstract _spawn: SceneSpawn
   abstract get assets(): AssetDefinition[]
   abstract setCamera(camera: CameraConstructor): void
   abstract setEngineParams(): void
