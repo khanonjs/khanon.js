@@ -1,11 +1,9 @@
-import { Spawnable } from '../../base'
 import {
   ActorsController,
   SpritesController
 } from '../../controllers'
 import { MeshesController } from '../../controllers/meshes-controller'
 import { Logger } from '../../modules'
-import { isPrototypeOf } from '../../utils/utils'
 import { ActorInterface } from '../actor/actor-interface'
 import { MeshInterface } from '../mesh/mesh-interface'
 import { ParticleSourceInterface } from '../particle-source/particle-source-interface'

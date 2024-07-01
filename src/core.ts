@@ -8,13 +8,6 @@ import {
 } from '@babylonjs/core'
 import { Engine } from '@babylonjs/core/Engines/engine'
 
-import { AppConstructor } from './constructors'
-// import { CoreGlobals } from './_OLD-models/core-globals'
-// import { CoreProperties } from './_OLD-models/core-properties'
-// import { DimensionsWH } from './_OLD-models/dimensions-wh'
-// import * as Misc from './misc'
-// import { Engine } from './modules/engine/engine'
-// import { Scene } from './modules/scene/scene'
 import { AppCore } from './decorators/app/app-core'
 import { AppInterface } from './decorators/app/app-interface'
 import { SceneType } from './decorators/scene/scene-type'
@@ -29,6 +22,8 @@ import { Timeout } from './types'
 // type SceneFunctionArg = (scene: Scene) => void
 
 export class Core {
+  static canvasRect: Rect
+
   private static app: AppInterface & AppCore
 
   // HTML Layers
@@ -40,7 +35,6 @@ export class Core {
   private static babylon: Pick<BabylonAccessor, 'engine'> = { engine: null }
 
   // Canvas
-  private static canvasRect: Rect
   private static onCanvasResize: Observable<Rect> = new Observable<Rect>(undefined, true)
 
   // Loop update

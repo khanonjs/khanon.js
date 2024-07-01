@@ -4,10 +4,6 @@ import {
   CanvasResizable,
   LoopUpdatable
 } from '../../base'
-import {
-  MeshConstructor,
-  SpriteConstructor
-} from '../../constructors'
 import { Rect } from '../../models'
 import {
   MeshTransform,

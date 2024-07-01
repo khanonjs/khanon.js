@@ -9,15 +9,11 @@ import {
 
 import { LoadingProgress } from './base'
 import { DisplayObject } from './base/classes/display-object'
-import {
-  CameraConstructor,
-  MeshConstructor,
-  ParticleConstructor,
-  ParticleSourceConstructor,
-  SceneConstructor,
-  SceneStateConstructor,
-  SpriteConstructor
-} from './constructors'
+import { CameraConstructor } from './constructors/camera-constructor'
+import { MeshConstructor } from './constructors/mesh-constructor'
+import { SceneConstructor } from './constructors/scene-constructor'
+import { SceneStateConstructor } from './constructors/scene-state-constructor'
+import { SpriteConstructor } from './constructors/sprite-constructor'
 import { ActorProps } from './decorators/actor/actor-props'
 import { AppProps } from './decorators/app/app-props'
 import { MeshAnimation } from './decorators/mesh/mesh-animation'
@@ -55,7 +51,23 @@ export { UseCamera } from './models/use-camera'
 // **************
 //  Constructors
 // **************
-export * from './constructors'
+export { ActorConstructor } from './constructors/actor-constructor'
+export { ActorEventConstructor } from './constructors/actor-event-constructor'
+export { ActorStateConstructor } from './constructors/actor-state-constructor'
+export { AppConstructor } from './constructors/app-constructor'
+export { CameraConstructor } from './constructors/camera-constructor'
+export { GUIConstructor } from './constructors/gui-constructor'
+export { MeshConstructor } from './constructors/mesh-constructor'
+export { MeshMapConstructor } from './constructors/mesh-map-constructor'
+export { MotionConstructor } from './constructors/motion-constructor'
+export { ParticleConstructor } from './constructors/particle-constructor'
+export { ParticleSourceConstructor } from './constructors/particle-source-constructor'
+export { SceneConstructor } from './constructors/scene-constructor'
+export { SceneEventConstructor } from './constructors/scene-event-constructor'
+export { SceneStateConstructor } from './constructors/scene-state-constructor'
+export { TileMapConstructor } from './constructors/tile-map-constructor'
+export { SceneMapConstructor } from './constructors/scene-map-constructor'
+export { SpriteConstructor } from './constructors/sprite-constructor'
 
 // *********
 // Khanonjs
@@ -74,7 +86,7 @@ export declare namespace KJS {
   export function clearCache(): void
 
   // Types
-  export type Actor = ActorInterface;
+  export type Actor = ActorInterface<any>;
   export type Scene = SceneInterface;
 
   /**
@@ -299,7 +311,7 @@ export declare class ActorComposer<B extends SpriteInterface | MeshInterface> {
    * @param Node
    * @returns
    */
-  setBody<N extends SpriteInterface | MeshInterface>(Node: new () => N): N
+  setBody<N extends B>(Node: new () => N): N
 
   /**
    * Adds a Node hooked to the actor's body.
@@ -307,7 +319,7 @@ export declare class ActorComposer<B extends SpriteInterface | MeshInterface> {
    * @param name
    * @returns
    */
-  addNode<N extends SpriteConstructor | MeshConstructor>(Node: N, name: string): B
+  addNode<N extends B>(Node: N, name: string): B
 
   /**
    * Gets a Node by name.
@@ -452,7 +464,7 @@ export declare class SceneSpawn {
    * @param actor
    * @returns
    */
-  actor<A extends ActorInterface>(actor: new () => A): A
+  actor<A extends ActorInterface<any>>(actor: new () => A): A
 
   /**
    * Spawns a particle in the scene.

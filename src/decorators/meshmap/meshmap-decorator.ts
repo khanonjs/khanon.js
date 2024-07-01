@@ -1,5 +1,3 @@
-import { MeshMapCore } from './meshmap-core'
-import { MeshMapInterface } from './meshmap-interface'
 import { MeshMapProps } from './meshmap-props'
 import { MeshMapType } from './meshmap-type'
 

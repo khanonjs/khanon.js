@@ -1,7 +1,3 @@
-import {
-  MeshConstructor,
-  SpriteConstructor
-} from '../../constructors'
 import { SpritesController } from '../../controllers'
 import { MeshesController } from '../../controllers/meshes-controller'
 import {
@@ -29,7 +25,7 @@ export class ActorComposer<B extends SpriteInterface | MeshInterface = any> {
    * @param Node
    * @returns
    */
-  setBody<N extends SpriteInterface | MeshInterface>(Node: new () => N): N {
+  setBody<N extends B>(Node: new () => N): N {
     this.nodes.forEach(node => {
       node.release()
     })
@@ -51,7 +47,7 @@ export class ActorComposer<B extends SpriteInterface | MeshInterface = any> {
    * @param name
    * @returns
    */
-  addNode<N extends SpriteConstructor | MeshConstructor>(Node: N, name: string): B {
+  addNode<N extends B>(Node: N, name: string): B {
     // 8a8f
     // if (!name) {
     //   name = (++this.fakeId).toString()

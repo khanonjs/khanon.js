@@ -1,7 +1,6 @@
 import { Observer } from '@babylonjs/core'
 
 import { ActorStatesController } from '../../../controllers'
-import { cloneClass } from '../../../utils/utils'
 import { ActorInterface } from '../actor-interface'
 import { ActorStateCore } from './actor-state-core'
 import { ActorStateInterface } from './actor-state-interface'
@@ -13,6 +12,7 @@ export function ActorState(props: ActorStateProps): any {
       // Private
       props = props
       actor: ActorInterface
+      loopUpdate: boolean
       loopUpdate$: Observer<number>
 
       start(actor: ActorInterface): void {
@@ -26,14 +26,14 @@ export function ActorState(props: ActorStateProps): any {
       // User defined
       onStart?(): void
       onEnd?(): void
-      loopUpdate?(delta: number): void
+      onLoopUpdate?(delta: number): void
     }
     const _classCore = class implements ActorStateCore {
       props = props
       Instance: ActorStateInterface = new _classInterface()
 
       spawn(): ActorStateInterface {
-        return cloneClass(this.Instance)
+        return null // cloneClass(this.Instance)
       }
     }
     ActorStatesController.register(new _classCore())

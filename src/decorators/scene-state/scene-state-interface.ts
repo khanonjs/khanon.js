@@ -4,9 +4,9 @@ import {
   CanvasResizable,
   LoopUpdatable
 } from '../../base'
-import { CameraConstructor } from '../../constructors'
+import { CameraConstructor } from '../../constructors/camera-constructor'
 import { Rect } from '../../models'
-import { SceneType } from '../scene/scene-type'
+import { SceneInterface } from '../scene/scene-interface'
 
 export abstract class SceneStateInterface implements LoopUpdatable, CanvasResizable {
   /**
@@ -20,14 +20,14 @@ export abstract class SceneStateInterface implements LoopUpdatable, CanvasResiza
   /**
    * Public
    */
-  abstract scene: SceneType
+  abstract scene: SceneInterface
   abstract loopUpdate: boolean
   abstract setCamera(camera: CameraConstructor): void
 
   /**
    * User defined
    */
-  onStart?(scene: SceneType): void
+  onStart?(scene: SceneInterface): void
   onEnd?(): void
   onLoopUpdate?(delta: number): void
   onCanvasResize?(size: Rect): void

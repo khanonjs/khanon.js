@@ -1,16 +1,10 @@
 import { Observer } from '@babylonjs/core'
 
 import { LoadingProgress } from '../../base'
-import { DisplayObject } from '../../base/classes/display-object'
-import {
-  MeshConstructor,
-  SpriteConstructor
-} from '../../constructors'
 import {
   ActorsController,
   SpritesController
 } from '../../controllers'
-import { MeshesController } from '../../controllers/meshes-controller'
 import { Rect } from '../../models'
 import { Logger } from '../../modules'
 import {

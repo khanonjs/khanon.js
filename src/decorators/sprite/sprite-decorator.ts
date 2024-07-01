@@ -42,7 +42,7 @@ export function Sprite(props: SpriteProps): any {
 
       initialize(spriteTexture?: SpriteTexture) {
         if (spriteTexture) {
-          const babylonSprite = new BabylonSprite('COMOOOOOOOOOOO????', spriteTexture.babylon.spriteManager)
+          const babylonSprite = new BabylonSprite('BABYLON SPRITE', spriteTexture.babylon.spriteManager)
           babylonSprite.width = spriteTexture.width
           babylonSprite.height = spriteTexture.height
           babylonSprite.isVisible = true

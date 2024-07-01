@@ -27,9 +27,9 @@ export class AssetsController {
     [AssetType.AUDIO]: ['audio/aac', 'audio/midi', 'audio/x-midi', 'audio/mpeg', 'audio/ogg', 'audio/opus', 'audio/wav', 'audio/webm'] // 8a8f
   }
 
-  private static assets: Map<string, Asset> = new Map<string, Asset>()
+  private static assets: Map<string, Asset<SceneType>> = new Map<string, Asset<SceneType>>()
 
-  static getAsset(url: string): Asset | undefined {
+  static getAsset(url: string): Asset<SceneType> | undefined {
     return this.assets.get(url)
   }
 
@@ -110,7 +110,7 @@ export class AssetsController {
   }
 
   private static loadFileFromUrl(definition: AssetDefinition, source: SceneType): LoadingProgress<ArrayBuffer> {
-    let asset: Asset = AssetsController.assets.get(definition.url)
+    let asset: Asset<SceneType> = AssetsController.assets.get(definition.url)
     if (asset) {
       asset.addSource(source, definition.cached)
       return asset.progress

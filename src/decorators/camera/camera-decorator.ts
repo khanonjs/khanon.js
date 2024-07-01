@@ -3,9 +3,7 @@ import {
   Observer
 } from '@babylonjs/core'
 
-import { CameraConstructor } from '../../constructors'
 import { CamerasController } from '../../controllers'
-import { Core } from '../../core'
 import {
   BabylonAccessor,
   Rect

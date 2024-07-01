@@ -19,7 +19,13 @@ export class SpriteTexture {
   }
 
   setFromArrayBuffer(buffer: ArrayBuffer): void {
-    const texture = new Texture('', this.babylon.scene, { ...this.spriteProps.textureOptions, buffer })
+    const texture = new Texture(/* './assets/scene-intro/sprites/sun.png' */undefined, this.babylon.scene, { ...this.spriteProps.textureOptions, buffer })
+    // const texture = new Texture('./assets/scene-intro/sprites/sun.png', this.babylon.scene, { ...this.spriteProps.textureOptions/*, buffer */ })
+    Logger.trace('aki Texture', { ...this.spriteProps.textureOptions, buffer }/* texture */)
+    // 8a8f ver qué hace con ITextureCreationOptions cuando la crea de archivo y si falta algo ahí
+    // Una opción es almacenar el spriteManager en lugar del buffer, y clonarlo para cada escena
+    // Buscar cómo carga de archivo y comparar con cómo carga de buffer, debe faltar alguna propiedad o formato por definir
+    // https://www.html5gamedevs.com/topic/11405-is-possible-to-load-textures-from-a-arraybufferview/
     this.setFromTexture(texture, this.spriteProps.width ?? this.spriteProps.cellWidth, this.spriteProps.height ?? this.spriteProps.cellHeight)
   }
 
@@ -33,11 +39,12 @@ export class SpriteTexture {
     this.height = height ?? texture.getSize().height
     this.babylon.spriteManager = new SpriteManager(
       'FromDynamicTexture',
-      '',
+      '', // 8a8f File name
       this.spriteProps.maxAllowedSprites,
       { width: this.width, height: this.height },
       this.babylon.scene
     )
+    Logger.trace('aki SpriteManager', texture)
     this.babylon.spriteManager.texture = texture
   }
 

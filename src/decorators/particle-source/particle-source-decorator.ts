@@ -1,5 +1,4 @@
 import { ParticleSourceCore } from './particle-source-core'
-import { ParticleSourceInterface } from './particle-source-interface'
 import { ParticleSourceProps } from './particle-source-props'
 import { ParticleSourceType } from './particle-source-type'
 

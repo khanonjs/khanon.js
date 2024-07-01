@@ -6,7 +6,7 @@ import {
   LoadingProgress,
   LoopUpdatable
 } from '../../base'
-import { SceneStateConstructor } from '../../constructors'
+import { SceneStateConstructor } from '../../constructors/scene-state-constructor'
 import { Rect } from '../../models'
 import { BabylonAccessor } from '../../models/babylon-accessor'
 import { SceneStateInterface } from '../scene-state/scene-state-interface'

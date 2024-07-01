@@ -1,5 +1,3 @@
-import { TileMapCore } from './tilemap-core'
-import { TileMapInterface } from './tilemap-interface'
 import { TileMapProps } from './tilemap-props'
 import { TileMapType } from './tilemap-type'
 
