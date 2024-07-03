@@ -6,10 +6,8 @@ import { Observer } from '@babylonjs/core'
 import { Scene as BabylonScene } from '@babylonjs/core/scene'
 
 import { LoadingProgress } from '../../base'
-import {
-  CameraConstructor,
-  SceneStateConstructor
-} from '../../constructors'
+import { CameraConstructor } from '../../constructors/camera-constructor'
+import { SceneStateConstructor } from '../../constructors/scene-state-constructor'
 import {
   ActorsController,
   AssetsController,

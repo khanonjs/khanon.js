@@ -1,8 +1,6 @@
 import { ControllerLoader } from '../base'
-import {
-  SceneConstructor,
-  SceneStateConstructor
-} from '../constructors'
+import { SceneConstructor } from '../constructors/scene-constructor'
+import { SceneStateConstructor } from '../constructors/scene-state-constructor'
 import { SceneType } from '../decorators/scene/scene-type'
 
 export class ScenesController extends ControllerLoader<SceneType, SceneType>() {

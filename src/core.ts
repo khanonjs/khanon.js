@@ -17,7 +17,7 @@ import {
 } from './models'
 import { Logger } from './modules/logger/logger'
 import { LoggerLevels } from './modules/logger/logger-levels'
-import { Timeout } from './types'
+import { TimeoutType } from './types'
 
 // type SceneFunctionArg = (scene: Scene) => void
 
@@ -38,7 +38,7 @@ export class Core {
   private static onCanvasResize: Observable<Rect> = new Observable<Rect>(undefined, true)
 
   // Loop update
-  private static loopUpdateInterval: Timeout
+  private static loopUpdateInterval: TimeoutType
   private static loopUpdateLastMs: number
   private static loopUpdateMps: number // Number of logical steps per frame
   private static loopUpdateLag: number

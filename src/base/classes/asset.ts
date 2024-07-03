@@ -1,4 +1,5 @@
 import { AssetDefinition } from '../../models'
+import { Logger } from '../../modules'
 import { LoadingProgress } from './loading-progress'
 
 export class Asset<S> {
@@ -6,15 +7,24 @@ export class Asset<S> {
 
   private sources: Set<S> = new Set<S>()
   private _buffer: ArrayBuffer
+  private _objectURL: string
 
-  constructor(readonly defitinion: AssetDefinition, readonly source: S) {}
+  constructor(readonly definition: AssetDefinition, readonly source: S) {}
 
-  get buffer(): ArrayBuffer { return this._buffer }
+  get buffer(): ArrayBuffer {
+    Logger.debugError(`Asset Error: No Buffer for asset '${this.definition.url}', did you mean objectURL?`)
+    return this._buffer
+  }
+
+  get objectURL(): string {
+    Logger.debugError(`Asset Error: No objectURL for asset '${this.definition.url}', did you mean Buffer?`)
+    return this._objectURL
+  }
 
   addSource(source: S, cached: boolean) {
     this.sources.add(source)
     if (cached) {
-      this.defitinion.cached = true
+      this.definition.cached = true
     }
   }
 
@@ -24,5 +34,9 @@ export class Asset<S> {
 
   setBuffer(buffer: ArrayBuffer) {
     this._buffer = buffer
+  }
+
+  setObjectURL(buffer: ArrayBuffer) {
+    this._objectURL = URL.createObjectURL(new Blob([buffer]))
   }
 }

@@ -25,11 +25,8 @@ export class ActorComposer<B extends SpriteInterface | MeshInterface = any> {
    * @param Node
    * @returns
    */
-  setBody<N extends B>(Node: new () => N): N {
-    this.nodes.forEach(node => {
-      node.release()
-    })
-    this.nodes.clear()
+  setBody<B>(Node: new () => B): B {
+    this.clearNodes()
     if (new Node() instanceof SpriteInterface) {
       this._body = SpritesController.get(Node).spawn(this.actor.scene) as any
     } else {
@@ -38,7 +35,7 @@ export class ActorComposer<B extends SpriteInterface | MeshInterface = any> {
     this.actor.transform = this._body.transform
     attachLoopUpdate(this.actor) // 8a8f esto aquí?
     attachCanvasResize(this.actor)
-    return this._body as unknown as N
+    return this._body as unknown as B
   }
 
   /**
@@ -47,7 +44,7 @@ export class ActorComposer<B extends SpriteInterface | MeshInterface = any> {
    * @param name
    * @returns
    */
-  addNode<N extends B>(Node: N, name: string): B {
+  addNode<B>(Node: B, name: string): B {
     // 8a8f
     // if (!name) {
     //   name = (++this.fakeId).toString()
@@ -68,5 +65,12 @@ export class ActorComposer<B extends SpriteInterface | MeshInterface = any> {
 
   setVisible(value: boolean) {
     // 8a8f
+  }
+
+  private clearNodes?() {
+    this.nodes.forEach(node => {
+      node.release()
+    })
+    this.nodes.clear()
   }
 }

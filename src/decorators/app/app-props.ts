@@ -1,5 +1,5 @@
 import { EngineConfiguration } from '../../babylon-config'
-import { GUIConstructor } from '../../constructors'
+import { GUIConstructor } from '../../constructors/gui-constructor'
 import { AppPropLoopUpdate } from './app-props-loop-update'
 
 export interface AppProps {

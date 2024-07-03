@@ -1,5 +1,5 @@
 import { ControllerLoader } from '../base'
-import { SpriteConstructor } from '../constructors'
+import { SpriteConstructor } from '../constructors/sprite-constructor'
 import { SceneType } from '../decorators/scene/scene-type'
 import { SpriteCore } from '../decorators/sprite/sprite-core'
 

@@ -311,7 +311,7 @@ export declare class ActorComposer<B extends SpriteInterface | MeshInterface> {
    * @param Node
    * @returns
    */
-  setBody<N extends B>(Node: new () => N): N
+  setBody<B>(Node: new () => B): B
 
   /**
    * Adds a Node hooked to the actor's body.
@@ -319,7 +319,7 @@ export declare class ActorComposer<B extends SpriteInterface | MeshInterface> {
    * @param name
    * @returns
    */
-  addNode<N extends B>(Node: N, name: string): B
+  addNode<B>(Node: B, name: string): B
 
   /**
    * Gets a Node by name.

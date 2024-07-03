@@ -1,3 +1,5 @@
+import { LoadFile } from '@babylonjs/core'
+
 import {
   Asset,
   LoadingProgress
@@ -20,7 +22,7 @@ import { ActorsController } from './actors-controller'
 import { SpritesController } from './sprites-controller'
 
 export class AssetsController {
-  private static contentTypes = {
+  private static contentTypes = { // 8a8f is this worth?
     [AssetType.FONT]: ['font/otf', 'font/ttf', 'font/woff', 'font/woff2', ''], // 8a8f
     [AssetType.IMAGE]: ['image/bmp', 'image/jpeg', 'image/png', 'image/tiff', 'image/webp'], // 8a8f
     [AssetType.MESH]: [''], // 8a8f
@@ -79,7 +81,13 @@ export class AssetsController {
     } else {
       const progresses = []
       scene.assets.forEach(assetDef => {
-        progresses.push(AssetsController.loadFileFromUrl(assetDef, scene))
+        const asset: Asset<SceneType> = AssetsController.assets.get(assetDef.url)
+        if (asset) {
+          asset.addSource(scene, assetDef.cached)
+          progresses.push(asset.progress)
+        } else {
+          progresses.push(AssetsController.loadFileFromUrl(assetDef, scene))
+        }
       })
       progress.fromNodes(progresses)
     }
@@ -110,61 +118,35 @@ export class AssetsController {
   }
 
   private static loadFileFromUrl(definition: AssetDefinition, source: SceneType): LoadingProgress<ArrayBuffer> {
-    let asset: Asset<SceneType> = AssetsController.assets.get(definition.url)
-    if (asset) {
-      asset.addSource(source, definition.cached)
-      return asset.progress
-    } else {
-      asset = new Asset(definition, source)
-      AssetsController.assets.set(definition.url, asset)
-      let reader: ReadableStreamDefaultReader
-      const throwError = (errorMsg: string) => {
-        Logger.error(errorMsg)
-        asset.progress.error(errorMsg)
-        reader?.cancel()
-        asset.progress.onError.notifyObservers(errorMsg)
-      }
-      fetch(definition.url)
-        .then((response) => {
-          reader = response.body.getReader()
-          const contentType = response.headers.get('Content-Type')
-          const contentLength = +response.headers.get('Content-Length')
-          const parts = []
-          let receivedLength = 0
-
-          if (!AssetsController.contentTypes[definition.type].find(type => type === contentType)) {
-            throwError(`getFileFromUrl error: content type '${contentType}' doesn't satisfy the type '${[definition.type]}'`)
-            return
-          }
-
-          const next = () => {
-            reader.read()
-              .then((result) => {
-                if (result.done) {
-                  const allParts = new Uint8Array(receivedLength)
-                  let position = 0
-                  for (const part of parts) {
-                    allParts.set(part, position)
-                    position += part.length
-                  }
-                  asset.setBuffer(allParts.buffer.slice(allParts.byteOffset, allParts.byteLength + allParts.byteOffset))
-                  Logger.debug(`getFileFromUrl: '${definition.url}' loaded from url, cached: ${!!definition.cached}`)
-                  asset.progress.complete(asset.buffer)
-                } else if (result.value.length) {
-                  parts.push(result.value)
-                  receivedLength += result.value.length
-                  asset.progress.setProgress(receivedLength / contentLength)
-                  next()
-                } else {
-                  throwError(`getFileFromUrl error: undefined value reading url '${definition.url}'`)
-                }
-              })
-              .catch(error => throwError(`getFileFromUrl error reading part: ${objectToString(error)}`))
-          }
-          next()
-        })
-        .catch(error => throwError(`getFileFromUrl error fetching: ${objectToString(error)}`))
-      return asset.progress
+    const asset = new Asset(definition, source)
+    AssetsController.assets.set(definition.url, asset)
+    let reader: ReadableStreamDefaultReader
+    const throwError = (errorMsg: string) => {
+      Logger.error(errorMsg)
+      asset.progress.error(errorMsg)
+      reader?.cancel()
+      asset.progress.onError.notifyObservers(errorMsg)
     }
+    LoadFile(definition.url,
+      (data) => {
+        Logger.debug(`LoadFileFromUrl: '${definition.url}' loaded from url, cached: ${!!definition.cached}`)
+        const buffer = data as ArrayBuffer
+        if (definition.type === AssetType.IMAGE) {
+          asset.setObjectURL(buffer)
+        } else {
+          asset.setBuffer(buffer)
+        }
+        asset.progress.complete(buffer)
+      },
+      (progress) => {
+        asset.progress.setProgress(progress.loaded / progress.total)
+      },
+      undefined,
+      true,
+      (error) => {
+        throwError(`LoadFileFromUrl: Error loading file '${definition.url}': ${objectToString(error)}`)
+      }
+    )
+    return asset.progress
   }
 }

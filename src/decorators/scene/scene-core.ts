@@ -1,4 +1,4 @@
-import { CameraConstructor } from '../../constructors'
+import { CameraConstructor } from '../../constructors/camera-constructor'
 import { AssetDefinition } from '../../models'
 import { SceneProps } from './scene-props'
 import { SceneSpawn } from './scene-spawn'

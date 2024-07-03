@@ -208,7 +208,7 @@ export function Sprite(props: SpriteProps): any {
           if (this.props.url) {
             const asset = AssetsController.getAsset(this.props.url)
             const texture = new SpriteTexture(scene, this.props)
-            texture.setFromArrayBuffer(asset.buffer)
+            texture.setFromAsset(asset)
             this.textures.set(scene, texture)
             return progress
           } else {
