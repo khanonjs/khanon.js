@@ -35,27 +35,10 @@ import { spritePropsDefault } from './sprite.props.deafult'
 
 export function Sprite(props: SpriteProps): any {
   return function <T extends { new (...args: any[]): SpriteInterface }>(constructor: T & SpriteInterface, context: ClassDecoratorContext) {
+    const _className = constructor.name
     const _classInterface = class extends constructor implements SpriteInterface {
       constructor(readonly scene: SceneType, private readonly props: SpriteProps) {
         super()
-      }
-
-      initialize(spriteTexture?: SpriteTexture) {
-        if (spriteTexture) {
-          const babylonSprite = new BabylonSprite('BABYLON SPRITE', spriteTexture.babylon.spriteManager)
-          babylonSprite.width = spriteTexture.width
-          babylonSprite.height = spriteTexture.height
-          babylonSprite.isVisible = true
-          this.setSprite(babylonSprite)
-          Logger.trace('aki initialize', spriteTexture.babylon.spriteManager)
-          // const spriteTexture = AssetsController.getAsset
-          // this.spriteTexture = spriteTexture;
-          // this.babylonjs = new BabylonJsSprite(this.name, this.spriteTexture.babylonjs);
-          // this.babylonjs.width = this.spriteTexture.width;
-          // this.babylonjs.height = this.spriteTexture.height;
-          // this.visible = false;
-        }
-        invokeCallback(this.onSpawn, this, this.scene)
       }
 
       // ***************
@@ -73,7 +56,16 @@ export function Sprite(props: SpriteProps): any {
       set loopUpdate(value: boolean) { switchLoopUpdate(value, this) }
       get loopUpdate(): boolean { return !!this.loopUpdate$ }
 
-      setSprite(babylonSprite: BabylonSprite): void {
+      initialize(spriteTexture: SpriteTexture) {
+        const babylonSprite = new BabylonSprite(_className, spriteTexture.babylon.spriteManager)
+        babylonSprite.width = spriteTexture.width
+        babylonSprite.height = spriteTexture.height
+        babylonSprite.isVisible = true
+        this.setSprite(babylonSprite, spriteTexture)
+        invokeCallback(this.onSpawn, this, this.scene)
+      }
+
+      setSprite(babylonSprite: BabylonSprite, spriteTexture?: SpriteTexture): void {
         if (this.babylon.sprite) {
           const transform = this.getTransform()
           this.babylon.sprite.dispose()
@@ -81,6 +73,7 @@ export function Sprite(props: SpriteProps): any {
           this.setTransform(transform)
         } else {
           this.babylon.sprite = babylonSprite
+          this.babylon.spriteManager = spriteTexture.babylon.spriteManager
         }
         this.transform = this.babylon.sprite
         attachLoopUpdate(this)

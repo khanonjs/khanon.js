@@ -7,7 +7,7 @@ export interface AppPropsDefault extends ExtractOptional<AppProps> {
     fps: number
   },
   engineConfiguration: {
-    antialias: false,
+    antialias: true,
     adaptToDeviceRatio: boolean
   }
 }
@@ -18,7 +18,7 @@ export const appPropsDefault: AppPropsDefault = {
     fps: 30
   },
   engineConfiguration: {
-    antialias: false,
+    antialias: true,
     adaptToDeviceRatio: false
   }
 }

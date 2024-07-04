@@ -23,6 +23,7 @@ export class SpriteTexture {
     const width = this.spriteProps.width ?? this.spriteProps.cellWidth
     const height = this.spriteProps.height ?? this.spriteProps.cellHeight
     const texture = new Texture(asset.objectURL, this.babylon.scene, this.spriteProps.textureOptions)
+    texture.name = asset.definition.url
     this.setFromTexture(texture, width, height, asset.definition.url)
   }
 

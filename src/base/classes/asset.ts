@@ -12,12 +12,12 @@ export class Asset<S> {
   constructor(readonly definition: AssetDefinition, readonly source: S) {}
 
   get buffer(): ArrayBuffer {
-    Logger.debugError(`Asset Error: No Buffer for asset '${this.definition.url}', did you mean objectURL?`)
+    if (!this._buffer) { Logger.debugError(`Asset Error: No Buffer for asset '${this.definition.url}', did you mean objectURL?`) }
     return this._buffer
   }
 
   get objectURL(): string {
-    Logger.debugError(`Asset Error: No objectURL for asset '${this.definition.url}', did you mean Buffer?`)
+    if (!this._objectURL) { Logger.debugError(`Asset Error: No objectURL for asset '${this.definition.url}', did you mean Buffer?`) }
     return this._objectURL
   }
 

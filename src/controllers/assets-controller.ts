@@ -129,7 +129,7 @@ export class AssetsController {
     }
     LoadFile(definition.url,
       (data) => {
-        Logger.debug(`LoadFileFromUrl: '${definition.url}' loaded from url, cached: ${!!definition.cached}`)
+        Logger.debug(`LoadFileFromUrl: Loaded '${definition.url}', cached: ${!!definition.cached}`)
         const buffer = data as ArrayBuffer
         if (definition.type === AssetType.IMAGE) {
           asset.setObjectURL(buffer)

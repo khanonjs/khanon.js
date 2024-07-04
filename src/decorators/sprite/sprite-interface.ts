@@ -11,6 +11,7 @@ import {
 import { SpriteTransform } from '../../types'
 import { SceneInterface } from '../scene/scene-interface'
 import { SceneType } from '../scene/scene-type'
+import { SpriteTexture } from './sprite-texture'
 
 export abstract class SpriteInterface extends DisplayObject {
   /**
@@ -18,7 +19,7 @@ export abstract class SpriteInterface extends DisplayObject {
    */
   abstract loopUpdate$?: Observer<number>
   abstract canvasResize$?: Observer<Rect>
-  abstract initialize?(): void
+  abstract initialize?(spriteTexture?: SpriteTexture): void
 
   /**
    * Public
