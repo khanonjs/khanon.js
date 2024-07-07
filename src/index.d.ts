@@ -48,7 +48,7 @@ export { SpriteConstructor } from './constructors/sprite-constructor'
 // KJS App handler
 // ****************
 export declare namespace KJS {
-  export type Actor = ActorInterface
+  export type Actor = ActorInterface<any>
   export type Scene = SceneInterface
 
   /**
@@ -62,10 +62,6 @@ export declare namespace KJS {
    * Clears cache.
    */
   export function clearCache(): void
-
-  // Types
-  /* export type Actor = ActorInterface<any>;
-  export type Scene = SceneInterface; */
 
   /**
    * Scene controller
@@ -81,6 +77,7 @@ export declare namespace KJS {
 }
 
 export * from './models'
+
 export * from './modules/helper'
 export * from './modules/logger'
 
