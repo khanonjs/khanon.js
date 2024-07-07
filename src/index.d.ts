@@ -56,7 +56,7 @@ export declare namespace KJS {
    * @param error
    */
   function throw_(error?: any): void;
-  export { throw_ as throw } // Cheat function name :)
+  export { throw_ as throw } // Hack function name :)
 
   /**
    * Clears cache.
