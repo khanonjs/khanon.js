@@ -1,5 +1,5 @@
-import { Spawnable } from '../../base'
-import { SceneType } from '../scene/scene-type'
+import { Spawnable } from '../../../base'
+import { SceneType } from '../../scene/scene-type'
 import { SceneStateInterface } from './scene-state-interface'
 import { SceneStateProps } from './scene-state-props'
 

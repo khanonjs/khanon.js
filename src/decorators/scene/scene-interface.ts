@@ -9,8 +9,8 @@ import {
 import { SceneStateConstructor } from '../../constructors/scene-state-constructor'
 import { Rect } from '../../models'
 import { BabylonAccessor } from '../../models/babylon-accessor'
-import { SceneStateInterface } from '../scene-state/scene-state-interface'
 import { SceneSpawn } from './scene-spawn'
+import { SceneStateInterface } from './scene-state/scene-state-interface'
 
 export abstract class SceneInterface implements Loadable, LoopUpdatable, CanvasResizable {
   /**

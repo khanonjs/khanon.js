@@ -12,9 +12,9 @@ export { SceneProps } from './decorators/scene/scene-props'
 export { SceneInterface } from './decorators/scene/scene-interface'
 
 // Scene state decorator
-export { SceneState } from './decorators/scene-state/scene-state-decorator'
-export { SceneStateProps } from './decorators/scene-state/scene-state-props'
-export { SceneStateInterface } from './decorators/scene-state/scene-state-interface'
+export { SceneState } from './decorators/scene/scene-state/scene-state-decorator'
+export { SceneStateProps } from './decorators/scene/scene-state/scene-state-props'
+export { SceneStateInterface } from './decorators/scene/scene-state/scene-state-interface'
 
 // Actor decorator
 export { Actor } from './decorators/actor/actor-decorator'

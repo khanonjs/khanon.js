@@ -3,10 +3,10 @@ import { Observer } from '@babylonjs/core'
 import {
   CanvasResizable,
   LoopUpdatable
-} from '../../base'
-import { CameraConstructor } from '../../constructors/camera-constructor'
-import { Rect } from '../../models'
-import { SceneInterface } from '../scene/scene-interface'
+} from '../../../base'
+import { CameraConstructor } from '../../../constructors/camera-constructor'
+import { Rect } from '../../../models'
+import { SceneInterface } from '../scene-interface'
 
 export abstract class SceneStateInterface implements LoopUpdatable, CanvasResizable {
   /**

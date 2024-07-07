@@ -33,11 +33,11 @@ import {
   switchLoopUpdate
 } from '../../utils/utils'
 import { CameraInterface } from '../camera/camera-interface'
-import { SceneStateInterface } from '../scene-state/scene-state-interface'
 import { SceneCore } from './scene-core'
 import { SceneInterface } from './scene-interface'
 import { SceneProps } from './scene-props'
 import { SceneSpawn } from './scene-spawn'
+import { SceneStateInterface } from './scene-state/scene-state-interface'
 import { SceneType } from './scene-type'
 
 export function Scene(props: SceneProps): any {

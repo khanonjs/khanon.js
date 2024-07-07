@@ -1,12 +1,12 @@
 import { Observer } from '@babylonjs/core'
 
-import { CameraConstructor } from '../../constructors/camera-constructor'
-import { SceneStatesController } from '../../controllers'
+import { CameraConstructor } from '../../../constructors/camera-constructor'
+import { SceneStatesController } from '../../../controllers'
 import {
   Rect,
   UseCamera
-} from '../../models'
-import { Logger } from '../../modules'
+} from '../../../models'
+import { Logger } from '../../../modules'
 import {
   attachCanvasResize,
   attachLoopUpdate,
@@ -14,8 +14,8 @@ import {
   removeCanvasResize,
   removeLoopUpdate,
   switchLoopUpdate
-} from '../../utils/utils'
-import { SceneType } from '../scene/scene-type'
+} from '../../../utils/utils'
+import { SceneType } from '../scene-type'
 import { SceneStateCore } from './scene-state-core'
 import { SceneStateInterface } from './scene-state-interface'
 import { SceneStateProps } from './scene-state-props'
