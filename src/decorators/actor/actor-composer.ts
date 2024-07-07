@@ -1,5 +1,6 @@
 import { SpritesController } from '../../controllers'
 import { MeshesController } from '../../controllers/meshes-controller'
+import { Logger } from '../../modules/logger'
 import {
   attachCanvasResize,
   attachLoopUpdate
@@ -22,15 +23,17 @@ export class ActorComposer<B extends SpriteInterface | MeshInterface = any> {
   /**
    * Sets the Body of the Actor.
    * Setting a new Body removes any previously added Node.
-   * @param Node
+   * @param Body
    * @returns
    */
-  setBody<B>(Node: new () => B): B {
+  setBody<B>(Body: new () => B): B {
     this.clearNodes()
-    if (new Node() instanceof SpriteInterface) {
-      this._body = SpritesController.get(Node).spawn(this.actor.scene) as any
+    if (new Body() instanceof SpriteInterface) {
+      if (!this.actor.metadata.sprites.find(_definition => _definition.classDefinition === Body) && !this.actor.props.sprites?.find(_sprite => _sprite === Body)) { Logger.debugError('Trying to use a sprite non available to the actor. Please check the actor props.', this.actor.constructor.prototype, Body.prototype); return }
+      this._body = SpritesController.get(Body).spawn(this.actor.scene) as any
     } else {
-      this._body = MeshesController.get(Node).spawn(this.actor.scene) as any
+      if (!this.actor.props.meshes?.find(_mesh => _mesh === Body)) { Logger.debugError('Trying to use a mesh non available to the actor. Please check the actor props.', this.actor.constructor.prototype, Body.prototype); return }
+      this._body = MeshesController.get(Body).spawn(this.actor.scene) as any
     }
     this.actor.transform = this._body.transform
     attachLoopUpdate(this.actor) // 8a8f esto aquí?
@@ -45,7 +48,7 @@ export class ActorComposer<B extends SpriteInterface | MeshInterface = any> {
    * @returns
    */
   addNode<B>(Node: B, name: string): B {
-    // 8a8f
+    // TODO
     // if (!name) {
     //   name = (++this.fakeId).toString()
     // }
@@ -59,12 +62,12 @@ export class ActorComposer<B extends SpriteInterface | MeshInterface = any> {
    * @returns
    */
   getNode(name: string): B {
-    // 8a8f
+    // TODO
     return null
   }
 
   setVisible(value: boolean) {
-    // 8a8f
+    // TODO
   }
 
   private clearNodes?() {

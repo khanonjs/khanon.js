@@ -22,11 +22,11 @@ import { ActorsController } from './actors-controller'
 import { SpritesController } from './sprites-controller'
 
 export class AssetsController {
-  private static contentTypes = { // 8a8f is this worth?
-    [AssetType.FONT]: ['font/otf', 'font/ttf', 'font/woff', 'font/woff2', ''], // 8a8f
-    [AssetType.IMAGE]: ['image/bmp', 'image/jpeg', 'image/png', 'image/tiff', 'image/webp'], // 8a8f
-    [AssetType.MESH]: [''], // 8a8f
-    [AssetType.AUDIO]: ['audio/aac', 'audio/midi', 'audio/x-midi', 'audio/mpeg', 'audio/ogg', 'audio/opus', 'audio/wav', 'audio/webm'] // 8a8f
+  private static contentTypes = { // TODO is this worth?
+    [AssetType.FONT]: ['font/otf', 'font/ttf', 'font/woff', 'font/woff2', ''],
+    [AssetType.IMAGE]: ['image/bmp', 'image/jpeg', 'image/png', 'image/tiff', 'image/webp'],
+    [AssetType.MESH]: [''],
+    [AssetType.AUDIO]: ['audio/aac', 'audio/midi', 'audio/x-midi', 'audio/mpeg', 'audio/ogg', 'audio/opus', 'audio/wav', 'audio/webm']
   }
 
   private static assets: Map<string, Asset<SceneType>> = new Map<string, Asset<SceneType>>()
@@ -47,6 +47,7 @@ export class AssetsController {
             if (isPrototypeOf(ActorInterface, value)) {
               const actor = ActorsController.get<ActorCore>(value)
               definitions = [...definitions, ...AssetsController.findAssetsDefinitions(actor.props, urls)]
+              definitions = [...definitions, ...AssetsController.findAssetsDefinitions(actor.Instance.metadata.getProps(), urls)]
             }
             if (isPrototypeOf(SpriteInterface, value)) {
               const sprite = SpritesController.get<SpriteCore>(value)
@@ -67,7 +68,7 @@ export class AssetsController {
   }
 
   static clearCache() {
-    // 8a8f
+    // TODO
     AssetsController.assets.clear()
   }
 
@@ -100,21 +101,21 @@ export class AssetsController {
    */
   static scenePurge(scene: SceneType) {
     // scene.assets.
-    // 8a8f
+    // TODO
   }
 
   /**
    * Unload all existing assets of a Scene that are not cached.
    */
   static sceneUnload(scene: SceneType) {
-    // 8a8f
+    // TODO
   }
 
   /**
    * Remove non cached assets with no sources
    */
   private purgeAssets() {
-    // 8a8f
+    // TODO
   }
 
   private static loadFileFromUrl(definition: AssetDefinition, source: SceneType): LoadingProgress<ArrayBuffer> {

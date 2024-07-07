@@ -15,17 +15,19 @@ import { SceneType } from '../scene/scene-type'
 import { SpriteInterface } from '../sprite/sprite-interface'
 import { ActorComposer } from './actor-composer'
 import { ActorMetadata } from './actor-metadata'
+import { ActorProps } from './actor-props'
 
 export abstract class ActorInterface<B extends SpriteInterface | MeshInterface = any> implements LoopUpdatable, CanvasResizable {
   /**
    * Private
    */
-  protected abstract metadata?: ActorMetadata
+  abstract metadata?: ActorMetadata
+  abstract props?: ActorProps
   abstract scene?: SceneType
   abstract loopUpdate: boolean
   abstract loopUpdate$?: Observer<number>
   abstract canvasResize$?: Observer<Rect>
-  abstract initialize?(): void
+  abstract initialize?(props: ActorProps): void
   abstract release?(): void
 
   /**

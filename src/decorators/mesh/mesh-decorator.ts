@@ -70,21 +70,21 @@ export function Mesh(props: MeshProps): any {
       transform: MeshTransform
 
       setTransform(transform: Matrix): void {
-        // 8a8f
+        // TODO
         // this.babylon.mesh.updatePoseMatrix(transform) // TODO: Test this
         // this.setPosition(transform.getTranslation())
-        // this.setRotation(transform.getRotationMatrix())  // 8a8f
+        // this.setRotation(transform.getRotationMatrix())
         // this.babylon.mesh.scaling = transform.sca
         // this.babylon.mesh.rota = transform.getTranslation()
       }
 
       getTransform(): Matrix {
-        // 8a8f
+        // TODO
         return null
       }
 
       playAnimation(animation: any/* SpriteAnimation | MeshAnimation */, loopOverride?: boolean, completed?: () => void): void {
-        // 8a8f
+        // TODO
       }
 
       stopAnimation(): void {
@@ -92,7 +92,7 @@ export function Mesh(props: MeshProps): any {
       }
 
       release(): void {
-        // 8a8f
+        // TODO
         removeLoopUpdate(this)
         removeCanvasResize(this)
       }

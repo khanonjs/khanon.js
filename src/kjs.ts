@@ -7,7 +7,7 @@ export class KJS {
   }
 
   static clearCache(): void {
-    // TODO 8a8f
+    // TODO
   }
 
   static get Scene(): ScenesController { return ScenesController }

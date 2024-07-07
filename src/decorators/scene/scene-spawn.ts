@@ -29,13 +29,13 @@ export class SceneSpawn {
 
   particle<P extends ParticleInterface>(particle: new () => P): P {
     Logger.debug('Particle spawn:', particle.prototype)
-    // 8a8f
+    // TODO
     return null
   }
 
   particleSource<S extends ParticleSourceInterface>(particleSource: new () => S): S {
     Logger.debug('ParticleSource spawn:', particleSource.prototype)
-    // 8a8f
+    // TODO
     return null
   }
 

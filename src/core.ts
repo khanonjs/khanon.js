@@ -29,7 +29,7 @@ export class Core {
   // HTML Layers
   private static htmlContainer: HTMLElement
   private static htmlCanvas: HTMLCanvasElement
-  private static htmlGui: HTMLDivElement // 8a8f
+  private static htmlGui: HTMLDivElement // TODO
 
   // Babylon
   private static babylon: Pick<BabylonAccessor, 'engine'> = { engine: null }
@@ -86,7 +86,7 @@ export class Core {
     Logger.level = (Core.app.props.debugLog || this.isDevelopmentMode()) ? LoggerLevels.TRACE : LoggerLevels.INFO
     Logger.debug('App instance created:', Core.app.props)
 
-    // Avoid canvas scale error 8a8f TODO??
+    // Avoid canvas scale error TODO??
     /* setTimeout(
       () => {
       }, 0
@@ -102,7 +102,6 @@ export class Core {
     window.addEventListener('resize', () => {
       Core.updatecanvasSize()
       Core.babylon.engine.resize() // TODO: Test this besides 'Core.app.props.engineConfiguration.adaptToDeviceRatio = true'
-      // CoreGlobals.canvasResize$.next(canvasDimensions) // 8a8f
     })
 
     Core.app.onStart()
@@ -128,7 +127,7 @@ export class Core {
       Core.app.onClose()
     }
     Logger.error('App closed.')
-    // TODO 8a8f:
+    // TODO:
     //  - Stop all listeners (Loop Update, etc)
     //  - Show error page
   }
@@ -184,10 +183,9 @@ export class Core {
       Core.app.props.engineConfiguration.adaptToDeviceRatio
     )
     Core.babylon.engine.runRenderLoop(() => {
-      // TODO 8a8f: add render scenes here
-      // TODO 8a8f: add FPS updater here
-
       Core.renderScenes.forEach((scene) => scene.babylon.scene.render())
+
+      // TODO: add FPS updater here
       /* if (this.properties?.fpsContainer) {
         const divFps = document.getElementById(this.properties.fpsContainer)
         divFps.innerHTML = this.babylon.getFps().toFixed() + ' fps'

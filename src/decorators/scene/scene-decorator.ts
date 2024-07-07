@@ -1,4 +1,4 @@
-// 8a8f
+// TODO lines from webpack
 import '@babylonjs/inspector'
 import '@babylonjs/core/Debug/debugLayer'
 
@@ -104,13 +104,13 @@ export function Scene(props: SceneProps): any {
         this.babylon.scene = new BabylonScene(Core.engine, this.props.options)
         if (this.props.configuration) {
           for (const [key, value] of Object.entries(this.props.configuration)) {
-            // 8a8f test this
+            // TODO test this
             this.babylon.scene[key] = value
           }
         }
 
         // Babylon inspector (only DEV mode). Babylon inspector's imports are removed on webpack build.
-        if (Core.isDevelopmentMode()) { // 8a8f uno por escena, permitir solo uno activo
+        if (Core.isDevelopmentMode()) { // TODO uno por escena, permitir solo uno activo
           this.debugInspector()
         }
 
@@ -165,7 +165,7 @@ export function Scene(props: SceneProps): any {
       }
 
       debugInspector(): void {
-        // 8a8f ver qué hacer con esto
+        // TODO ver qué hacer con esto
         window.addEventListener('keyup', (ev) => {
           if (ev.shiftKey && ev.ctrlKey && ev.altKey && ev.key === 'I') {
             // @ts-ignore

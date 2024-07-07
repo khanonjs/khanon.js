@@ -106,16 +106,16 @@ export function Sprite(props: SpriteProps): any {
       }
 
       setTransform(transform: Matrix): void {
-        // 8a8f
+        // TODO
         // this.babylon.mesh.updatePoseMatrix(transform) // TODO: Test this
         // this.setPosition(transform.getTranslation())
-        // this.setRotation(transform.getRotationMatrix())  // 8a8f
+        // this.setRotation(transform.getRotationMatrix())
         // this.babylon.mesh.scaling = transform.sca
         // this.babylon.mesh.rota = transform.getTranslation()
       }
 
       getTransform(): Matrix {
-        // 8a8f
+        // TODO
         return null
       }
 
@@ -128,7 +128,7 @@ export function Sprite(props: SpriteProps): any {
         const playAnimation = () => {
           this.babylon.sprite.playAnimation(frameStart, frameEnd, false, animation.delay)
           if (completed || loop) {
-            this.endAnimationTimer = setTimeout(() => onCompleted(), (frameEnd - frameStart + 1) * animation.delay, this) // 8a8f link timeouts to loop update
+            this.endAnimationTimer = setTimeout(() => onCompleted(), (frameEnd - frameStart + 1) * animation.delay, this) // TODO link timeouts to loop update?
           }
           setKeyframesTimeouts()
         }
@@ -139,7 +139,7 @@ export function Sprite(props: SpriteProps): any {
           if (animation.keyFrames) {
             animation.keyFrames.forEach((animationKeyFrame) => {
               animationKeyFrame.timeouts.forEach((time) => {
-                this.keyFramesTimeouts.push(setTimeout(() => animationKeyFrame.linkedSubject.notifyObservers(), time, this)) // 8a8f link timeouts to loop update
+                this.keyFramesTimeouts.push(setTimeout(() => animationKeyFrame.linkedSubject.notifyObservers(), time, this)) // TODO link timeouts to loop update?
               })
             })
           }
@@ -215,7 +215,7 @@ export function Sprite(props: SpriteProps): any {
 
       unload(scene: SceneType): void {
         this.textures.delete(scene)
-        // AssetsController. // 8a8f
+        // AssetsController. // TODO
       }
 
       spawn(scene: SceneType): SpriteInterface {

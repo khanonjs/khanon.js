@@ -5,6 +5,7 @@ import {
   ActorsController,
   SpritesController
 } from '../../controllers'
+import { MeshesController } from '../../controllers/meshes-controller'
 import { Rect } from '../../models'
 import { Logger } from '../../modules/logger'
 import {
@@ -32,14 +33,19 @@ export function Actor(props: ActorProps): any {
     const _classInterface = class extends constructor implements ActorInterface {
       constructor(readonly scene: SceneType) {
         super()
+        this.metadata.sprites.forEach(definition => {
+          this[definition.propertyName] = definition.classDefinition
+        })
       }
 
-      initialize() {
+      initialize(props: ActorProps) {
+        this.props = props
         this.composer = new ActorComposer(this)
         invokeCallback(this.onSpawn, this, this.scene)
       }
 
-      metadata: ActorMetadata // = Reflect.getMetadata('metadata', this)  // 8a8f
+      props: ActorProps
+      metadata: ActorMetadata = Reflect.getMetadata('metadata', this) ?? new ActorMetadata()
       body: SpriteInterface | MeshInterface
       transform: SpriteTransform | MeshTransform
       composer: ActorComposer
@@ -60,13 +66,19 @@ export function Actor(props: ActorProps): any {
     }
     const _classCore = class implements ActorCore {
       props = removeArrayDuplicitiesInObject(props)
-      Instance: ActorInterface = new _classInterface(null)
+      Instance: ActorInterface // = new _classInterface(null)
       loaded = false
+
+      constructor() {
+        this.Instance = new _classInterface(null)
+      }
 
       load(scene: SceneType): LoadingProgress {
         const progress = new LoadingProgress().complete()
         SpritesController.load(this.props.sprites, scene)
-        // 8a8f Load  the rest of props
+        SpritesController.load(this.Instance.metadata.getProps().sprites, scene)
+        MeshesController.load(this.props.meshes, scene)
+        MeshesController.load(this.Instance.metadata.getProps().meshes, scene)
         return progress
       }
 
@@ -76,7 +88,7 @@ export function Actor(props: ActorProps): any {
 
       spawn(scene: SceneType): ActorInterface {
         const actor = new _classInterface(scene)
-        actor.initialize()
+        actor.initialize(this.props)
         return actor
       }
     }

@@ -83,6 +83,7 @@ export * from './modules/logger'
 
 export * from './decorators/app'
 export * from './decorators/actor'
+export * from './decorators/actor/actor-sprite'
 export * from './decorators/camera'
 export * from './decorators/mesh'
 export * from './decorators/sprite'

@@ -20,6 +20,7 @@ export { SceneStateInterface } from './decorators/scene/scene-state/scene-state-
 export { Actor } from './decorators/actor/actor-decorator'
 export { ActorProps } from './decorators/actor/actor-props'
 export { ActorInterface } from './decorators/actor/actor-interface'
+export { ActorSprite } from './decorators/actor/actor-sprite/actor-sprite-decorator'
 
 // Sprite decorator
 export { Sprite } from './decorators/sprite/sprite-decorator'
