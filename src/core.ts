@@ -96,11 +96,12 @@ export class Core {
     this.initializeBabylon()
     this.initializeLoopUpdate()
 
-    Core.updatecanvasSize()
+    Core.updateCanvasSize()
+    Logger.debug('Initial canvas size:', Core.canvasRect.width, Core.canvasRect.height)
 
-    // Manage resize
+    // Manage canvas resize
     window.addEventListener('resize', () => {
-      Core.updatecanvasSize()
+      Core.updateCanvasSize()
       Core.babylon.engine.resize() // TODO: Test this besides 'Core.app.props.engineConfiguration.adaptToDeviceRatio = true'
     })
 
@@ -211,7 +212,7 @@ export class Core {
     )
   }
 
-  private static updatecanvasSize(): void {
+  private static updateCanvasSize(): void {
     const boundingRect = Core.htmlCanvas.getBoundingClientRect()
     Core.canvasRect = {
       x: 0,
@@ -220,7 +221,6 @@ export class Core {
       height: Math.floor(boundingRect.height)
     }
     this.onCanvasResize.notifyObservers(Core.canvasRect)
-    Logger.debug('Canvas size:', Core.canvasRect.width, Core.canvasRect.height)
   }
 
   /* private static loadSceneQueueNext(sceneLoaded: Scene, onLoaded?: ( scene: Scene) => void): void {
