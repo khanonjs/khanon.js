@@ -3,7 +3,7 @@ import {
   MeshasBabylonMesh
 } from '@babylonjs/core'
 
-import { DisplayObject } from '../../base/classes/display-object'
+import { DisplayObject } from '../../base'
 import KJS from '../../kjs'
 import {
   BabylonAccessor,
