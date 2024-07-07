@@ -7,5 +7,3 @@ export class Helper {
   static get Maths(): Maths { return Maths }
   static get Vectors(): Vectors { return Vectors }
 }
-
-export default Helper

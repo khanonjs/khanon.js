@@ -1,5 +1,5 @@
 import { Core } from '../core'
-import { Logger } from '../modules'
+import { Logger } from '../modules/logger'
 import { ExtractOptional } from '../types/extract-optional'
 
 /**

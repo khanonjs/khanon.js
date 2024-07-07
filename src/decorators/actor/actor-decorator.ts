@@ -6,7 +6,7 @@ import {
   SpritesController
 } from '../../controllers'
 import { Rect } from '../../models'
-import { Logger } from '../../modules'
+import { Logger } from '../../modules/logger'
 import {
   MeshTransform,
   SpriteTransform

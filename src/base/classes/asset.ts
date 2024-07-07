@@ -1,5 +1,5 @@
 import { AssetDefinition } from '../../models'
-import { Logger } from '../../modules'
+import { Logger } from '../../modules/logger'
 import { LoadingProgress } from './loading-progress'
 
 export class Asset<S> {

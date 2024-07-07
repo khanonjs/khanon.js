@@ -7,6 +7,8 @@ import {
 import { LoadingProgress } from './base'
 import { SceneConstructor } from './constructors/scene-constructor'
 import { SceneStateConstructor } from './constructors/scene-state-constructor'
+import { ActorInterface } from './decorators/actor'
+import { SceneInterface } from './decorators/scene'
 
 // ****************************
 //  Babylon.js renamed objects
@@ -46,6 +48,9 @@ export { SpriteConstructor } from './constructors/sprite-constructor'
 // KJS App handler
 // ****************
 export declare namespace KJS {
+  export type Actor = ActorInterface
+  export type Scene = SceneInterface
+
   /**
    * Throws critical error and stops the application.
    * @param error
@@ -75,12 +80,15 @@ export declare namespace KJS {
   }
 }
 
+export * from './models'
+export * from './modules/helper'
+export * from './modules/logger'
+
 export * from './decorators/app'
-export * from './decorators/sprite'
-export * from './decorators/mesh'
 export * from './decorators/actor'
+export * from './decorators/camera'
+export * from './decorators/mesh'
+export * from './decorators/sprite'
 export * from './decorators/scene'
 export * from './decorators/scene/scene-state'
 export * from './decorators/scene/scene-event'
-export * from './models'
-export * from './modules'

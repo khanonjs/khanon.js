@@ -13,7 +13,7 @@ import {
   BabylonAccessor,
   Rect
 } from '../../models'
-import { Logger } from '../../modules'
+import { Logger } from '../../modules/logger'
 import { SpriteTransform } from '../../types'
 import {
   applyDefaults,

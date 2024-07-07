@@ -13,7 +13,7 @@ import {
   AssetDefinition,
   AssetType
 } from '../models'
-import { Logger } from '../modules'
+import { Logger } from '../modules/logger'
 import {
   isPrototypeOf,
   objectToString

@@ -6,7 +6,7 @@ import {
   Rect,
   UseCamera
 } from '../../../models'
-import { Logger } from '../../../modules'
+import { Logger } from '../../../modules/logger'
 import {
   attachCanvasResize,
   attachLoopUpdate,

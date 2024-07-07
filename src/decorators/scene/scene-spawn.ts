@@ -3,7 +3,7 @@ import {
   SpritesController
 } from '../../controllers'
 import { MeshesController } from '../../controllers/meshes-controller'
-import { Logger } from '../../modules'
+import { Logger } from '../../modules/logger'
 import { ActorInterface } from '../actor/actor-interface'
 import { MeshInterface } from '../mesh/mesh-interface'
 import { ParticleSourceInterface } from '../particle-source/particle-source-interface'
