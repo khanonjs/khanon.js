@@ -10,13 +10,12 @@ import { ActorMetadata } from '../actor-metadata'
 
 export function ActorSprite(props: SpriteProps) {
   return function (target: any, propertyKey: string, descriptor: PropertyDescriptor) {
-    if (!Reflect.hasMetadata('metadata', target)) {
-      Reflect.defineMetadata('metadata', new ActorMetadata(), target)
-    }
-
     @Sprite(props)
     class _classInterface extends SpriteInterface {}
 
+    if (!Reflect.hasMetadata('metadata', target)) {
+      Reflect.defineMetadata('metadata', new ActorMetadata(), target)
+    }
     const metadata = Reflect.getMetadata('metadata', target) as ActorMetadata
     metadata.sprites.push({
       propertyName: propertyKey,
