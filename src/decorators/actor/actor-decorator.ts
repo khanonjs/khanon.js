@@ -28,7 +28,7 @@ import { ActorInterface } from './actor-interface'
 import { ActorMetadata } from './actor-metadata'
 import { ActorProps } from './actor-props'
 
-export function Actor(props: ActorProps): any {
+export function Actor(props: ActorProps = {}): any {
   return function <T extends { new (...args: any[]): ActorInterface }>(constructor: T & ActorInterface, context: ClassDecoratorContext) {
     const _classInterface = class extends constructor implements ActorInterface {
       constructor(readonly scene: SceneType) {
@@ -66,12 +66,8 @@ export function Actor(props: ActorProps): any {
     }
     const _classCore = class implements ActorCore {
       props = removeArrayDuplicitiesInObject(props)
-      Instance: ActorInterface // = new _classInterface(null)
+      Instance: ActorInterface = new _classInterface(null)
       loaded = false
-
-      constructor() {
-        this.Instance = new _classInterface(null)
-      }
 
       load(scene: SceneType): LoadingProgress {
         const progress = new LoadingProgress().complete()
@@ -83,7 +79,7 @@ export function Actor(props: ActorProps): any {
       }
 
       unload(): void {
-
+        // TODO
       }
 
       spawn(scene: SceneType): ActorInterface {

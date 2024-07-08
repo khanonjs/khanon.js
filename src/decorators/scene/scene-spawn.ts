@@ -21,7 +21,7 @@ export class SceneSpawn {
   }
 
   actor<A extends ActorInterface>(actor: new () => A): A {
-    if (this.scene.props.actors.indexOf(actor) === -1) { Logger.debugError('Traying to spawn an actor that doesn\'t belong to the scene:', actor.prototype, this.scenePrototype); return }
+    if (this.scene.props.actors.indexOf(actor) === -1) { Logger.debugError('Trying to spawn an actor that doesn\'t belong to the scene. Please check the scene props.', this.scenePrototype, actor.prototype); return }
     Logger.debug('Actor spawn:', actor.prototype)
     const instance = ActorsController.get(actor).spawn(this.scene)
     return instance as A

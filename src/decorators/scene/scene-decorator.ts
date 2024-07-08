@@ -129,7 +129,7 @@ export function Scene(props: SceneProps): any {
           })
         })
         assetsProgress.onError.add((error: string) => {
-          Logger.debug('Scene assets load error', error, _class.prototype)
+          Logger.debugError('Scene assets load error', error, _class.prototype)
           KJS.throw(error)
         })
         assetsProgress.onProgress.add((progress: number) => {
