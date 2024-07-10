@@ -44,10 +44,12 @@ export function Sprite(props: SpriteProps): any {
       // ***************
       // SpriteInterface
       // ***************
+      spriteTexture: SpriteTexture
       animation: SpriteAnimation = null
       babylon: Pick<BabylonAccessor, 'spriteManager' | 'sprite'> = { spriteManager: null, sprite: null }
       loopUpdate$: Observer<number>
       canvasResize$: Observer<Rect>
+      _scale: number = 1
 
       onSpawn?(scene: SceneInterface): void
       onLoopUpdate?(delta: number): void
@@ -56,16 +58,28 @@ export function Sprite(props: SpriteProps): any {
       set loopUpdate(value: boolean) { switchLoopUpdate(value, this) }
       get loopUpdate(): boolean { return !!this.loopUpdate$ }
 
-      initialize(spriteTexture: SpriteTexture) {
-        const babylonSprite = new BabylonSprite(_className, spriteTexture.babylon.spriteManager)
-        babylonSprite.width = spriteTexture.width
-        babylonSprite.height = spriteTexture.height
-        babylonSprite.isVisible = true
-        this.setSprite(babylonSprite, spriteTexture)
-        invokeCallback(this.onSpawn, this, this.scene)
+      get width(): number {
+        return this.spriteTexture.width
       }
 
-      setSprite(babylonSprite: BabylonSprite, spriteTexture?: SpriteTexture): void {
+      get height(): number {
+        return this.spriteTexture.height
+      }
+
+      set scale(scale: number) {
+        this._scale = scale
+        this.transform.width = this.width * this._scale
+        this.transform.height = this.height * this.scale
+      }
+
+      get scale(): number { return this._scale }
+
+      initialize(spriteTexture: SpriteTexture) {
+        this.spriteTexture = spriteTexture
+        const babylonSprite = new BabylonSprite(_className, this.spriteTexture.babylon.spriteManager)
+        babylonSprite.width = this.spriteTexture.width
+        babylonSprite.height = this.spriteTexture.height
+        babylonSprite.isVisible = true
         if (this.babylon.sprite) {
           const transform = this.getTransform()
           this.babylon.sprite.dispose()
@@ -73,20 +87,35 @@ export function Sprite(props: SpriteProps): any {
           this.setTransform(transform)
         } else {
           this.babylon.sprite = babylonSprite
-          this.babylon.spriteManager = spriteTexture.babylon.spriteManager
+          this.babylon.spriteManager = this.spriteTexture.babylon.spriteManager
         }
         this.transform = this.babylon.sprite
         attachLoopUpdate(this)
         attachCanvasResize(this)
+        invokeCallback(this.onSpawn, this, this.scene)
       }
 
       setFrame(frame: number): void {
+        if (frame < this.getFirstFrame() || frame > this.getLastFrame()) { Logger.debugError(`Calling out of bound setFrame(${frame}) - Start: ${this.getFirstFrame()}, End: ${this.getLastFrame()}`) }
         this.stopAnimation()
         this.visible = true
-        if (frame < 0) {
-          frame = this.animation.frameEnd
-        }
         this.babylon.sprite.cellIndex = frame
+      }
+
+      setFirstFrame(): void {
+        this.setFrame(this.getFirstFrame())
+      }
+
+      setLastFrame(): void {
+        this.setFrame(this.getLastFrame())
+      }
+
+      private getFirstFrame(): number {
+        return this.animation?.frameStart ?? 0
+      }
+
+      private getLastFrame(): number {
+        return this.animation?.frameEnd ?? this.props.numFrames - 1 ?? 0
       }
 
       // ***************
@@ -122,8 +151,8 @@ export function Sprite(props: SpriteProps): any {
       playAnimation(animation: SpriteAnimation, loopOverride?: boolean, completed?: () => void): void {
         this.animation = animation
         const loop = loopOverride ?? animation.loop
-        const frameStart = animation.frameStart
-        const frameEnd = animation.frameEnd
+        const frameStart = this.getFirstFrame()
+        const frameEnd = this.getLastFrame()
 
         const playAnimation = () => {
           this.babylon.sprite.playAnimation(frameStart, frameEnd, false, animation.delay)
@@ -169,6 +198,13 @@ export function Sprite(props: SpriteProps): any {
         this.animation = null
       }
 
+      release(): void {
+        this.stopAnimation()
+        this.babylon.sprite.dispose()
+        removeLoopUpdate(this)
+        removeCanvasResize(this)
+      }
+
       private removeAnimationKeyFrames(): void {
         this.keyFramesTimeouts.forEach((timeout) => clearTimeout(timeout))
         this.keyFramesTimeouts = []
@@ -179,13 +215,6 @@ export function Sprite(props: SpriteProps): any {
           clearTimeout(this.endAnimationTimer)
           this.endAnimationTimer = undefined
         }
-      }
-
-      release(): void {
-        this.stopAnimation()
-        this.babylon.sprite.dispose()
-        removeLoopUpdate(this)
-        removeCanvasResize(this)
       }
     }
     const _classCore = class implements SpriteCore {

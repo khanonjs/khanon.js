@@ -24,8 +24,13 @@ export abstract class SpriteInterface extends DisplayObject {
   abstract scene: SceneInterface
   abstract transform: SpriteTransform
   abstract loopUpdate: boolean
-  abstract setSprite(babylonSprite: BabylonSprite): void
+  abstract get width(): number
+  abstract get height(): number
+  abstract set scale(scale: number)
+  abstract get scale(): number
   abstract setFrame(frame: number): void
+  abstract setFirstFrame(): void
+  abstract setLastFrame(): void
 
   /**
    * User defined

@@ -39,11 +39,24 @@ export declare abstract class SpriteInterface {
   get loopUpdate(): boolean
 
   /**
-   * Sets a sprite manually.
-   * Through this method, it is possible to manually create a Babylon Sprite in 'onSpawn' method and apply it.
-   * @param babylonMesh
+   * Gets the width of the sprite
    */
-  setSprite(babylonSprite: SpriteasBabylonSprite): void
+  get width(): number
+
+  /**
+   * Gets the height of the sprite
+   */
+  get height(): number
+
+  /**
+   * Sets the scale of the sprite
+   */
+  set scale(scale: number)
+
+  /**
+   * Gets the scale of the sprite
+   */
+  get scale(): number
 
   /**
    * Sets the transform (translation, rotation and scale).
@@ -62,6 +75,16 @@ export declare abstract class SpriteInterface {
    * @param frame
    */
   setFrame(frame: number): void
+
+  /**
+   * Sets the first frame of the sprite (or current animation)
+   */
+  setFirstFrame(): void
+
+  /**
+   * Sets the last frame of the sprite (or current animation)
+   */
+  setLastFrame(): void
 
   /**
    * Plays an animation. Animations are defined in the Sprite decorator 'props' or manually using 'MeshAnimation' interface.

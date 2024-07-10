@@ -22,21 +22,21 @@ export class SpriteTexture {
   setFromAsset(asset: Asset<SceneType>): void {
     const width = this.spriteProps.width ?? this.spriteProps.cellWidth
     const height = this.spriteProps.height ?? this.spriteProps.cellHeight
-    const texture = new Texture(asset.objectURL, this.babylon.scene, this.spriteProps.textureOptions)
+    const texture = new Texture(asset.objectURL, this.babylon.scene, this.spriteProps.noMipmap, this.spriteProps.invertY, this.spriteProps.samplingMode)
     texture.name = asset.definition.url
-    this.setFromTexture(texture, width, height, asset.definition.url)
+    this.setFromTexture(texture, asset.definition.url, width, height)
   }
 
   setFromBlank(): void {
-    const texture = new Texture('', this.babylon.scene, this.spriteProps.textureOptions)
-    this.setFromTexture(texture, this.spriteProps.width, this.spriteProps.height)
+    const texture = new Texture('', this.babylon.scene, this.spriteProps.noMipmap, this.spriteProps.invertY, this.spriteProps.samplingMode)
+    this.setFromTexture(texture, 'blank-texture', this.spriteProps.width, this.spriteProps.height)
   }
 
-  setFromTexture(texture: Texture | DynamicTexture, width?: number, height?: number, name?: string): void {
+  setFromTexture(texture: Texture | DynamicTexture, name: string, width?: number, height?: number): void {
     this.width = width ?? texture.getSize().width
     this.height = height ?? texture.getSize().height
     this.babylon.spriteManager = new SpriteManager(
-      name ?? '',
+      name,
       null,
       this.spriteProps.maxAllowedSprites,
       { width: this.width, height: this.height },

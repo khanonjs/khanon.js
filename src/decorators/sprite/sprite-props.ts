@@ -1,5 +1,3 @@
-import { TextureOptions } from '../../babylon-config'
-
 export interface SpriteProps {
   /**
    * Load the image file from a url.
@@ -7,29 +5,44 @@ export interface SpriteProps {
   url?: string
 
   /**
-   * Width of the sprite. It is required in case of using a blank texture. Not required if the url is defined.
+   * Width of the sprite. It is required in case of using a blank texture. Not required if 'cellWidth' is defined.
    */
   width?: number
 
   /**
-   * Height of the sprite. It is required in case of using a blank texture. Not required if the url is defined.
+   * Height of the sprite. It is required in case of using a blank texture. Not required if 'cellHeight' is defined.
    */
   height?: number
 
   /**
-   * Cells width. In case the image contains a single cell it represents the image width.
+   * Cells width. Each cell represents an animation frame. It is equivalent to the sprite width.
    */
   cellWidth?: number
 
   /**
-   * Cells height. In case the image contains a single cell it represents the image height.
+   * Cells height. Each cell represents an animation frame. It is equivalent to the sprite height.
    */
   cellHeight?: number
 
   /**
-   * Set the generated texture options
+   * Numnber of franes. Number total of cells contained within the image.
    */
-  textureOptions?: TextureOptions
+  numFrames?: number
+
+  /**
+   * Defines if the texture has bitmaps (false by default).
+   */
+  noMipmap?: boolean
+
+  /**
+   * Defines if the texture is inverted on Y axis (false by default).
+   */
+  invertY?: boolean
+
+  /**
+   * Defines the sampling mode we want for the texture while fetching from it (BABYLON.Texture.NEAREST_SAMPLINGMODE...) (default: BABYLON.Texture.TRILINEAR_SAMPLINGMODE)
+   */
+  samplingMode?: number
 
   /**
    * Cache this sprite.
