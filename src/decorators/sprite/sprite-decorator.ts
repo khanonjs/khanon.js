@@ -1,8 +1,4 @@
-import {
-  Matrix,
-  Observer,
-  Sprite as BabylonSprite
-} from '@babylonjs/core'
+import * as BABYLON from '@babylonjs/core'
 
 import { LoadingProgress } from '../../base'
 import {
@@ -47,8 +43,8 @@ export function Sprite(props: SpriteProps): any {
       spriteTexture: SpriteTexture
       animation: SpriteAnimation = null
       babylon: Pick<BabylonAccessor, 'spriteManager' | 'sprite'> = { spriteManager: null, sprite: null }
-      loopUpdate$: Observer<number>
-      canvasResize$: Observer<Rect>
+      loopUpdate$: BABYLON.Observer<number>
+      canvasResize$: BABYLON.Observer<Rect>
       _scale: number = 1
 
       onSpawn?(scene: SceneInterface): void
@@ -76,7 +72,7 @@ export function Sprite(props: SpriteProps): any {
 
       initialize(spriteTexture: SpriteTexture) {
         this.spriteTexture = spriteTexture
-        const babylonSprite = new BabylonSprite(_className, this.spriteTexture.babylon.spriteManager)
+        const babylonSprite = new BABYLON.Sprite(_className, this.spriteTexture.babylon.spriteManager)
         babylonSprite.width = this.spriteTexture.width
         babylonSprite.height = this.spriteTexture.height
         babylonSprite.isVisible = true
@@ -134,7 +130,7 @@ export function Sprite(props: SpriteProps): any {
         return this._visible
       }
 
-      setTransform(transform: Matrix): void {
+      setTransform(transform: BABYLON.Matrix): void {
         // TODO
         // this.babylon.mesh.updatePoseMatrix(transform) // TODO: Test this
         // this.setPosition(transform.getTranslation())
@@ -143,7 +139,7 @@ export function Sprite(props: SpriteProps): any {
         // this.babylon.mesh.rota = transform.getTranslation()
       }
 
-      getTransform(): Matrix {
+      getTransform(): BABYLON.Matrix {
         // TODO
         return null
       }

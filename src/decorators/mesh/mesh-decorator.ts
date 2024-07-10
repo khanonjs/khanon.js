@@ -1,8 +1,4 @@
-import {
-  Matrix,
-  Mesh as BabylonMesh,
-  Observer
-} from '@babylonjs/core'
+import * as BABYLON from '@babylonjs/core'
 
 import { LoadingProgress } from '../../base'
 import { MeshesController } from '../../controllers/meshes-controller'
@@ -40,8 +36,8 @@ export function Mesh(props: MeshProps): any {
       // MeshInterface
       // ***************
       babylon: Pick<BabylonAccessor, 'mesh'> = { mesh: null }
-      loopUpdate$: Observer<number>
-      canvasResize$: Observer<Rect>
+      loopUpdate$: BABYLON.Observer<number>
+      canvasResize$: BABYLON.Observer<Rect>
 
       onSpawn?(scene: SceneType): void
       onLoopUpdate?(delta: number): void
@@ -50,7 +46,7 @@ export function Mesh(props: MeshProps): any {
       set loopUpdate(value: boolean) { switchLoopUpdate(value, this) }
       get loopUpdate(): boolean { return !!this.loopUpdate$ }
 
-      setMesh(babylonMesh: BabylonMesh): void {
+      setMesh(babylonMesh: BABYLON.Mesh): void {
         if (this.babylon.mesh) {
           const transform = this.getTransform()
           this.babylon.mesh.dispose()
@@ -69,7 +65,7 @@ export function Mesh(props: MeshProps): any {
       // ***************
       transform: MeshTransform
 
-      setTransform(transform: Matrix): void {
+      setTransform(transform: BABYLON.Matrix): void {
         // TODO
         // this.babylon.mesh.updatePoseMatrix(transform) // TODO: Test this
         // this.setPosition(transform.getTranslation())
@@ -78,7 +74,7 @@ export function Mesh(props: MeshProps): any {
         // this.babylon.mesh.rota = transform.getTranslation()
       }
 
-      getTransform(): Matrix {
+      getTransform(): BABYLON.Matrix {
         // TODO
         return null
       }

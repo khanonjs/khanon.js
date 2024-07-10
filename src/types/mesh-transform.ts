@@ -1,9 +1,9 @@
-import { Mesh as BabylonMesh } from '@babylonjs/core'
+import * as BABYLON from '@babylonjs/core'
 
 /**
  * Shortcut to basic babylon transform methods and variables
  */
-export type MeshTransform = Pick<BabylonMesh,
+export type MeshTransform = Pick<BABYLON.Mesh,
     'absolutePosition'
   | 'absoluteRotationQuaternion'
   | 'absoluteScaling'

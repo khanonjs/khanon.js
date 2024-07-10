@@ -1,7 +1,4 @@
-import {
-  Mesh as BabylonMesh,
-  Observer
-} from '@babylonjs/core'
+import * as BABYLON from '@babylonjs/core'
 
 import { DisplayObject } from '../../base'
 import {
@@ -12,8 +9,8 @@ import { MeshTransform } from '../../types'
 import { SceneInterface } from '../scene/scene-interface'
 
 export abstract class MeshInterface extends DisplayObject {
-  abstract loopUpdate$?: Observer<number>
-  abstract canvasResize$?: Observer<Rect>
+  abstract loopUpdate$?: BABYLON.Observer<number>
+  abstract canvasResize$?: BABYLON.Observer<Rect>
   abstract initialize?(): void
 
   /**
@@ -23,7 +20,7 @@ export abstract class MeshInterface extends DisplayObject {
   abstract scene: SceneInterface
   abstract transform: MeshTransform
   abstract loopUpdate: boolean
-  abstract setMesh(babylonMesh: BabylonMesh): void
+  abstract setMesh(babylonMesh: BABYLON.Mesh): void
 
   /**
    * User defined

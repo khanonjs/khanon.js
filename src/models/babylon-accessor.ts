@@ -1,18 +1,13 @@
-import { Camera } from '@babylonjs/core'
-import { Engine } from '@babylonjs/core/Engines/engine'
-import { Mesh as BabylonMesh } from '@babylonjs/core/Meshes'
-import { Scene } from '@babylonjs/core/scene'
-import { Sprite as BabylonSprite } from '@babylonjs/core/Sprites'
-import { SpriteManager } from '@babylonjs/core/Sprites/spriteManager'
+import * as BABYLON from '@babylonjs/core'
 
 /**
  * Object exposed in Khanon.js wrappers enablig access to Babylon.js classes and objects
  */
-export interface BabylonAccessor<C extends Camera = any> {
+export interface BabylonAccessor<C extends BABYLON.Camera = any> {
   camera: C
-  engine: Engine
-  scene: Scene
-  sprite: BabylonSprite
-  mesh: BabylonMesh
-  spriteManager: SpriteManager
+  engine: BABYLON.Engine
+  scene: BABYLON.Scene
+  sprite: BABYLON.Sprite
+  mesh: BABYLON.Mesh
+  spriteManager: BABYLON.SpriteManager
 }

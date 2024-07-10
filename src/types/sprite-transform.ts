@@ -1,6 +1,6 @@
-import { Sprite as BabylonSprite } from '@babylonjs/core'
+import * as BABYLON from '@babylonjs/core'
 
 /**
  * Shortcut to basic babylon transform methods and variables
  */
-export type SpriteTransform = Pick<BabylonSprite, 'isVisible' | 'position' | 'angle' | 'color' | 'width' | 'height' | 'size'>
+export type SpriteTransform = Pick<BABYLON.Sprite, 'isVisible' | 'position' | 'angle' | 'color' | 'width' | 'height' | 'size'>

@@ -1,7 +1,4 @@
-import {
-  Camera as BabylonCamera,
-  SceneasBabylonScene
-} from '@babylonjs/core/scene'
+import * as BABYLON from '@babylonjs/core'
 
 import {
   BabylonAccessor,
@@ -22,7 +19,7 @@ export declare abstract class CameraInterface {
    * Initialize the camera. This method must return a valid Babylon camera.
    * It will be used from any Scene State requiring it.
    */
-  abstract initialize(scene: SceneasBabylonScene): BabylonCamera
+  abstract initialize(scene: BABYLON.Scene): BABYLON.Camera
 
   /**
    * Callback invoked on loop update.

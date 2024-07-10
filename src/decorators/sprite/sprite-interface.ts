@@ -1,7 +1,4 @@
-import {
-  Observer,
-  Sprite as BabylonSprite
-} from '@babylonjs/core'
+import * as BABYLON from '@babylonjs/core'
 
 import { DisplayObject } from '../../base'
 import {
@@ -13,8 +10,8 @@ import { SceneInterface } from '../scene/scene-interface'
 import { SpriteTexture } from './sprite-texture'
 
 export abstract class SpriteInterface extends DisplayObject {
-  abstract loopUpdate$?: Observer<number>
-  abstract canvasResize$?: Observer<Rect>
+  abstract loopUpdate$?: BABYLON.Observer<number>
+  abstract canvasResize$?: BABYLON.Observer<Rect>
   abstract initialize?(spriteTexture?: SpriteTexture): void
 
   /**

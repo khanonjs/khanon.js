@@ -1,4 +1,4 @@
-import { EngineOptions as BabylonEngineOptions } from '@babylonjs/core'
+import * as BABYLON from '@babylonjs/core'
 
 export type EngineConfiguration = {
   /**
@@ -9,7 +9,7 @@ export type EngineConfiguration = {
   /**
    * Babylon engine options
    */
-  options?: BabylonEngineOptions
+  options?: BABYLON.EngineOptions
 
   /**
    * Default = true

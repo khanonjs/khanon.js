@@ -1,8 +1,4 @@
-import {
-  Camera as BabylonCamera,
-  Observer,
-  Scene as BabylonScene
-} from '@babylonjs/core'
+import * as BABYLON from '@babylonjs/core'
 
 import {
   CanvasResizable,
@@ -14,13 +10,13 @@ import {
 } from '../../models'
 
 export abstract class CameraInterface implements LoopUpdatable, CanvasResizable {
-  abstract babylon: Pick<BabylonAccessor<BabylonCamera>, 'camera'>
+  abstract babylon: Pick<BabylonAccessor<BABYLON.Camera>, 'camera'>
   abstract loopUpdate?: boolean
-  abstract loopUpdate$?: Observer<number>
-  abstract canvasResize$?: Observer<Rect>
+  abstract loopUpdate$?: BABYLON.Observer<number>
+  abstract canvasResize$?: BABYLON.Observer<Rect>
   abstract start?(): void
   abstract stop?(): void
-  initialize?(scene: BabylonScene): BabylonCamera
+  initialize?(scene: BABYLON.Scene): BABYLON.Camera
   onLoopUpdate?(delta: number): void
   onCanvasResize?(size: Rect): void
 }

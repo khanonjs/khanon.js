@@ -2,8 +2,7 @@
 import '@babylonjs/inspector'
 import '@babylonjs/core/Debug/debugLayer'
 
-import { Observer } from '@babylonjs/core'
-import { Scene as BabylonScene } from '@babylonjs/core/scene'
+import * as BABYLON from '@babylonjs/core'
 
 import { LoadingProgress } from '../../base'
 import { CameraConstructor } from '../../constructors/camera-constructor'
@@ -61,8 +60,8 @@ export function Scene(props: SceneProps): any {
       renderStop(id: string): void {}
 
       babylon: Pick<BabylonAccessor, 'scene'> = { scene: null }
-      loopUpdate$: Observer<number>
-      canvasResize$: Observer<Rect>
+      loopUpdate$: BABYLON.Observer<number>
+      canvasResize$: BABYLON.Observer<Rect>
       get assets(): AssetDefinition[] { return this._assets }
       get loaded(): boolean { return this._loaded }
       get started(): boolean { return this._started }
@@ -101,7 +100,7 @@ export function Scene(props: SceneProps): any {
         Logger.debug('Scene load', _class.prototype)
 
         // Create babylon scene and apply configuration
-        this.babylon.scene = new BabylonScene(Core.engine, this.props.options)
+        this.babylon.scene = new BABYLON.Scene(Core.engine, this.props.options)
         if (this.props.configuration) {
           for (const [key, value] of Object.entries(this.props.configuration)) {
             // TODO test this

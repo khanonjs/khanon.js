@@ -1,21 +1,8 @@
-import {
-  Mesh as BabylonMesh,
-  Scene as BabylonScene,
-  Sprite as BabylonSprite
-} from '@babylonjs/core'
-
 import { LoadingProgress } from './base'
 import { SceneConstructor } from './constructors/scene-constructor'
 import { SceneStateConstructor } from './constructors/scene-state-constructor'
 import { ActorInterface } from './decorators/actor'
 import { SceneInterface } from './decorators/scene'
-
-// ****************************
-//  Babylon.js renamed objects
-// ****************************
-export { BabylonMesh }
-export { BabylonScene }
-export { BabylonSprite }
 
 // **************
 //  Models

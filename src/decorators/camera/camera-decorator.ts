@@ -1,7 +1,4 @@
-import {
-  Camera as BabylonCamera,
-  Observer
-} from '@babylonjs/core'
+import * as BABYLON from '@babylonjs/core'
 
 import { CamerasController } from '../../controllers'
 import {
@@ -21,9 +18,9 @@ import { CameraInterface } from './camera-interface'
 export function Camera(): any {
   return function <T extends { new (...args: any[]): CameraInterface }>(constructor: T & CameraInterface, context: ClassDecoratorContext) {
     const _classInterface = class extends constructor implements CameraInterface {
-      babylon: Pick<BabylonAccessor<BabylonCamera>, 'camera'> = { camera: null }
-      loopUpdate$: Observer<number>
-      canvasResize$: Observer<Rect>
+      babylon: Pick<BabylonAccessor<BABYLON.Camera>, 'camera'> = { camera: null }
+      loopUpdate$: BABYLON.Observer<number>
+      canvasResize$: BABYLON.Observer<Rect>
 
       set loopUpdate(value: boolean) { switchLoopUpdate(value, this) }
       get loopUpdate(): boolean { return !!this.loopUpdate$ }
