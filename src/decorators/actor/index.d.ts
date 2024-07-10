@@ -10,7 +10,22 @@ import { ActorProps } from './actor-props'
 
 export { ActorProps } from './'
 export declare function Actor(props?: ActorProps): any
-export declare class ActorComposer<B extends SpriteInterface | MeshInterface> {
+/**
+ * Actor Interface to be extended from decorated Actors.
+ * The generic 'B' alludes to what kind of interface this actor will have as Body and Nodes (if it is composed by Sprites or Meshes).
+ */
+export declare abstract class ActorInterface<B extends SpriteInterface | MeshInterface> {
+  /**
+   * Transform of the body.
+   */
+  get transform(): B extends SpriteInterface ? SpriteTransform : MeshTransform
+
+  /**
+   * Turns ON/OFF 'onLoopUpdate' callback
+   */
+  set loopUpdate(value: boolean)
+  get loopUpdate(): boolean
+
   /**
    * Body of this actor.
    * This is the main 'Sprite' or 'Mesh. The rest of nodes are attached to this object.
@@ -46,29 +61,6 @@ export declare class ActorComposer<B extends SpriteInterface | MeshInterface> {
    * @param value
    */
   setVisible(value: boolean)
-}
-
-/**
- * Actor Interface to be extended from decorated Actors.
- * The generic 'B' alludes to what kind of interface this actor will have as Body and Nodes (if it is composed by Sprites or Meshes).
- */
-export declare abstract class ActorInterface<B extends SpriteInterface | MeshInterface> {
-  /**
-   * Transform of the body.
-   */
-  get transform(): B extends SpriteInterface ? SpriteTransform : MeshTransform
-
-  /**
-   * Gets the ActorComposer class.
-   * This class is used to compose the actor shape, composed by a main body and nodes hooked to it.
-   */
-  get composer(): ActorComposer<B>
-
-  /**
-   * Turns ON/OFF 'onLoopUpdate' callback
-   */
-  set loopUpdate(value: boolean)
-  get loopUpdate(): boolean
 
   /**
    * Callback invoked after the actor has been spawned on a scene

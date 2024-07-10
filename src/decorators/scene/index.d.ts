@@ -12,7 +12,6 @@ import { SpriteInterface } from '../sprite'
 import { SceneProps } from './scene-props'
 import { SceneStateInterface } from './scene-state'
 
-export { SceneType } from './decorators/scene/scene-type'
 export { SceneProps } from './decorators/scene/scene-props'
 export declare function Scene(props: SceneProps): any
 export declare class SceneSpawn {
@@ -21,7 +20,7 @@ export declare class SceneSpawn {
    * @param actor
    * @returns
    */
-  actor<A extends ActorInterface<any>>(actor: new () => A): A
+  actor<A extends ActorInterface>(actor: new () => A): A
 
   /**
    * Spawns a particle in the scene.
@@ -75,7 +74,7 @@ export declare abstract class SceneInterface {
   get spawn(): SceneSpawn
 
   /**
-   * Turns ON/OFF 'onLoopUpdate' callback
+   * Turns On/Off 'onLoopUpdate' callback
    */
   set loopUpdate(value: boolean)
   get loopUpdate(): boolean

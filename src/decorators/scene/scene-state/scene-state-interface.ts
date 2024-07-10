@@ -9,16 +9,13 @@ import { Rect } from '../../../models'
 import { SceneInterface } from '../scene-interface'
 
 export abstract class SceneStateInterface implements LoopUpdatable, CanvasResizable {
-  /**
-   * Private
-   */
   abstract loopUpdate$?: Observer<number>
   abstract canvasResize$?: Observer<Rect>
   abstract start?(): void
   abstract end?(): void
 
   /**
-   * Public
+   * User available
    */
   abstract scene: SceneInterface
   abstract loopUpdate: boolean

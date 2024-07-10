@@ -1,6 +1,6 @@
 import { CameraConstructor } from '../../../constructors/camera-constructor'
+import KJS from '../../../kjs'
 import { Rect } from '../../../models'
-import { SceneType } from '../scene-type'
 import { SceneStateProps } from './scene-state-props'
 
 export { SceneStateProps } from './decorators/scene-state/scene-state-props'
@@ -9,7 +9,7 @@ export declare abstract class SceneStateInterface {
   /**
    * Owner scene of this state
    */
-  get scene(): SceneType
+  get scene(): KJS.Scene
 
   /**
    * Turns ON/OFF 'onLoopUpdate' callback
@@ -25,7 +25,7 @@ export declare abstract class SceneStateInterface {
   /**
    * Invoked on state start. Use this method to setup the scene according to this state start.
    */
-  onStart?(scene: SceneType): void
+  onStart?(scene: KJS.Scene): void
 
   /**
    * Invoked on state end. Use this method to setup the scene according to this state end.

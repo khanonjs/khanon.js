@@ -13,16 +13,13 @@ import { SceneSpawn } from './scene-spawn'
 import { SceneStateInterface } from './scene-state/scene-state-interface'
 
 export abstract class SceneInterface implements Loadable, LoopUpdatable, CanvasResizable {
-  /**
-   * Private
-   */
   abstract loopUpdate$?: Observer<number>
   abstract canvasResize$?: Observer<Rect>
 
   /**
-   * Public
+   * User available
    */
-  abstract babylon: Pick<BabylonAccessor, | 'scene'>
+  abstract babylon: Pick<BabylonAccessor, 'scene'>
   abstract loopUpdate: boolean
   abstract get loaded(): boolean
   abstract get started(): boolean

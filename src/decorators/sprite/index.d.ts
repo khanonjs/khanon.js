@@ -9,7 +9,6 @@ import {
   Rect
 } from '../../models'
 import { SpriteTransform } from '../../types'
-import { SceneType } from '../scene/scene-type'
 import { SpriteAnimation } from './sprite-animation'
 import { SpriteProps } from './sprite-props'
 
@@ -25,7 +24,7 @@ export declare abstract class SpriteInterface {
   /**
    * Scene this Sprite belongs to.
    */
-  get scene(): SceneType
+  get scene(): KJS.Scene
 
   /**
    * Shortcut to basic transform methods and accessors.

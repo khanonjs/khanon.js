@@ -10,7 +10,6 @@ import {
   Rect
 } from '../../models'
 import { MeshTransform } from '../../types'
-import { SceneType } from '../scene/scene-type'
 import { MeshAnimation } from './mesh-animation'
 import { MeshProps } from './mesh-props'
 
@@ -26,7 +25,7 @@ export declare abstract class MeshInterface implements DisplayObject {
   /**
    * Scene this Mesh belongs to.
    */
-  get scene(): SceneType
+  get scene(): KJS.Scene
 
   /**
    * Shortcut to basic transform methods and accessors.

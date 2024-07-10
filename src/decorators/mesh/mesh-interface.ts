@@ -10,21 +10,17 @@ import {
 } from '../../models'
 import { MeshTransform } from '../../types'
 import { SceneInterface } from '../scene/scene-interface'
-import { SceneType } from '../scene/scene-type'
 
 export abstract class MeshInterface extends DisplayObject {
-  /**
-   * Private
-   */
   abstract loopUpdate$?: Observer<number>
   abstract canvasResize$?: Observer<Rect>
   abstract initialize?(): void
 
   /**
-   * Public
+   * User available
    */
   abstract babylon: Pick<BabylonAccessor, 'mesh'>
-  abstract scene: SceneType
+  abstract scene: SceneInterface
   abstract transform: MeshTransform
   abstract loopUpdate: boolean
   abstract setMesh(babylonMesh: BabylonMesh): void

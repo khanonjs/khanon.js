@@ -13,6 +13,8 @@ import {
   SpriteTransform
 } from '../../types'
 import {
+  attachCanvasResize,
+  attachLoopUpdate,
   invokeCallback,
   removeArrayDuplicitiesInObject,
   removeCanvasResize,
@@ -22,11 +24,12 @@ import {
 import { MeshInterface } from '../mesh/mesh-interface'
 import { SceneType } from '../scene/scene-type'
 import { SpriteInterface } from '../sprite/sprite-interface'
-import { ActorComposer } from './actor-composer'
 import { ActorCore } from './actor-core'
 import { ActorInterface } from './actor-interface'
 import { ActorMetadata } from './actor-metadata'
 import { ActorProps } from './actor-props'
+
+type B = SpriteInterface | MeshInterface
 
 export function Actor(props: ActorProps = {}): any {
   return function <T extends { new (...args: any[]): ActorInterface }>(constructor: T & ActorInterface, context: ClassDecoratorContext) {
@@ -40,17 +43,16 @@ export function Actor(props: ActorProps = {}): any {
 
       initialize(props: ActorProps) {
         this.props = props
-        this.composer = new ActorComposer(this)
         invokeCallback(this.onSpawn, this, this.scene)
       }
 
       props: ActorProps
       metadata: ActorMetadata = Reflect.getMetadata('metadata', this) ?? new ActorMetadata()
-      body: SpriteInterface | MeshInterface
       transform: SpriteTransform | MeshTransform
-      composer: ActorComposer
       loopUpdate$: Observer<number>
       canvasResize$: Observer<Rect>
+      _body?: B
+      nodes?: Map<string, B> = new Map<string, B>()
 
       onSpawn?(): void
       onLoopUpdate?(delta: number): void
@@ -59,9 +61,51 @@ export function Actor(props: ActorProps = {}): any {
       set loopUpdate(value: boolean) { switchLoopUpdate(value, this) }
       get loopUpdate(): boolean { return !!this.loopUpdate$ }
 
+      get body(): SpriteInterface | MeshInterface { return this._body }
+
       release() {
         removeLoopUpdate(this) // 8a8f esto aquí?
         removeCanvasResize(this)
+      }
+
+      setBody<B>(Body: new () => B): B {
+        this.clearNodes()
+        if (new Body() instanceof SpriteInterface) {
+          if (!this.metadata.sprites.find(_definition => _definition.classDefinition === Body) && !this.props.sprites?.find(_sprite => _sprite === Body)) { Logger.debugError('Trying to use a sprite non available to the actor. Please check the actor props.', this.constructor.prototype, Body.prototype); return }
+          this._body = SpritesController.get(Body).spawn(this.scene) as any
+        } else {
+          if (!this.props.meshes?.find(_mesh => _mesh === Body)) { Logger.debugError('Trying to use a mesh non available to the actor. Please check the actor props.', this.constructor.prototype, Body.prototype); return }
+          this._body = MeshesController.get(Body).spawn(this.scene) as any
+        }
+        this.transform = this._body.transform
+        attachLoopUpdate(this) // 8a8f esto aquí?
+        attachCanvasResize(this)
+        return this._body as unknown as B
+      }
+
+      addNode<B>(Node: B, name: string): B {
+        // TODO
+        // if (!name) {
+        //   name = (++this.fakeId).toString()
+        // }
+        // if (this.nodes.get(name)) { Logger.debugError(`ActorCompositionDefinition - Adding a node with name already defined '${name}'`); return }
+        return null
+      }
+
+      getNode(name: string): SpriteInterface | MeshInterface {
+        // TODO
+        return null
+      }
+
+      setVisible(value: boolean) {
+        // TODO
+      }
+
+      private clearNodes?() {
+        this.nodes.forEach(node => {
+          node.release()
+        })
+        this.nodes.clear()
       }
     }
     const _classCore = class implements ActorCore {
