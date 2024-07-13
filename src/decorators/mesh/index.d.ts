@@ -4,12 +4,12 @@ import {
 } from '@babylonjs/core'
 
 import { DisplayObject } from '../../base'
-import KJS from '../../kjs'
 import {
   BabylonAccessor,
   Rect
 } from '../../models'
 import { MeshTransform } from '../../types'
+import { SceneInterface } from '../scene'
 import { MeshAnimation } from './mesh-animation'
 import { MeshProps } from './mesh-props'
 
@@ -25,7 +25,7 @@ export declare abstract class MeshInterface implements DisplayObject {
   /**
    * Scene this Mesh belongs to.
    */
-  get scene(): KJS.Scene
+  get scene(): SceneInterface
 
   /**
    * Shortcut to basic transform methods and accessors.
@@ -109,7 +109,7 @@ export declare abstract class MeshInterface implements DisplayObject {
   /**
    * Callback invoked after the mesh has been spawned in a scene.
    */
-  onSpawn?(scene: KJS.Scene): void
+  onSpawn?(scene: SceneInterface): void
 
   /**
    * Callback invoked on loop update.

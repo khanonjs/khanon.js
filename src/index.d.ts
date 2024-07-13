@@ -36,9 +36,6 @@ export { SpriteConstructor } from './constructors/sprite-constructor'
 // KJS App handler
 // ****************
 export declare namespace KJS {
-  export type Actor = ActorInterface<any>
-  export type Scene = SceneInterface
-
   /**
    * Scene controller
    */

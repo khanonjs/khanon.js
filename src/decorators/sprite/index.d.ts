@@ -1,11 +1,11 @@
 import { Matrix } from '@babylonjs/core'
 
-import KJS from '../../kjs'
 import {
   BabylonAccessor,
   Rect
 } from '../../models'
 import { SpriteTransform } from '../../types'
+import { SceneInterface } from '../scene'
 import { SpriteAnimation } from './sprite-animation'
 import { SpriteProps } from './sprite-props'
 
@@ -19,9 +19,9 @@ export declare abstract class SpriteInterface {
   get babylon(): Pick<BabylonAccessor, 'spriteManager' | 'sprite'>
 
   /**
-   * Scene this Sprite belongs to.
+   * Scene owner of this Sprite.
    */
-  get scene(): KJS.Scene
+  get scene(): SceneInterface
 
   /**
    * Shortcut to basic transform methods and accessors.
@@ -118,7 +118,7 @@ export declare abstract class SpriteInterface {
   /**
    * Callback invoked after the sprite has been spawned in a scene.
    */
-  onSpawn?(scene: KJS.Scene): void
+  onSpawn?(scene: SceneInterface): void
 
   /**
    * Callback invoked on loop update.

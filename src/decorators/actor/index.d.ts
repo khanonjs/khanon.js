@@ -1,10 +1,10 @@
-import KJS from '../../kjs'
 import { Rect } from '../../models'
 import {
   MeshTransform,
   SpriteTransform
 } from '../../types'
 import { MeshInterface } from '../mesh'
+import { SceneInterface } from '../scene'
 import { SpriteInterface } from '../sprite'
 import { ActorProps } from './actor-props'
 
@@ -65,7 +65,7 @@ export declare abstract class ActorInterface<B extends SpriteInterface | MeshInt
   /**
    * Callback invoked after the actor has been spawned on a scene
    */
-  onSpawn?(scene: KJS.Scene): void
+  onSpawn?(scene: SceneInterface): void
 
   /**
    * Callback invoked on loop update.
