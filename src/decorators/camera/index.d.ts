@@ -10,14 +10,14 @@ export declare abstract class CameraInterface {
   get babylon(): Pick<BabylonAccessor<ReturnType<this['initialize']>>, 'camera'>
 
   /**
-   * Turns ON/OFF 'onLoopUpdate' callback
+   * Turns On/Off 'onLoopUpdate' callback
    */
   set loopUpdate(value: boolean)
   get loopUpdate(): boolean
 
   /**
    * Initialize the camera. This method must return a valid Babylon camera.
-   * It will be used from any Scene State requiring it.
+   * It will be used from any SceneState requiring it.
    */
   abstract initialize(scene: BABYLON.Scene): BABYLON.Camera
 

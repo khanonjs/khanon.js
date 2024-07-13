@@ -21,7 +21,7 @@ export declare abstract class ActorInterface<B extends SpriteInterface | MeshInt
   get transform(): B extends SpriteInterface ? SpriteTransform : MeshTransform
 
   /**
-   * Turns ON/OFF 'onLoopUpdate' callback
+   * Turns On/Off 'onLoopUpdate' callback
    */
   set loopUpdate(value: boolean)
   get loopUpdate(): boolean
