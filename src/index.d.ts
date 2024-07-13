@@ -1,8 +1,6 @@
 import { LoadingProgress } from './base'
 import { SceneConstructor } from './constructors/scene-constructor'
 import { SceneStateConstructor } from './constructors/scene-state-constructor'
-import { ActorInterface } from './decorators/actor'
-import { SceneInterface } from './decorators/scene'
 import { Timeout } from './models/timeout'
 
 // **************

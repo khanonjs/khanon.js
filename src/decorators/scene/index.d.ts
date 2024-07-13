@@ -1,6 +1,5 @@
 import { LoadingProgress } from '../../base'
 import { SceneStateConstructor } from '../../constructors/scene-state-constructor'
-import KJS from '../../kjs'
 import {
   BabylonAccessor,
   Rect

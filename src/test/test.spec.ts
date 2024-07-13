@@ -4,7 +4,7 @@ import {
   test
 } from '@jest/globals'
 
-import { KJS } from '../'
+// import { KJS } from '../'
 
 describe('KJS unit tests', () => {
   test('adios', () => {
