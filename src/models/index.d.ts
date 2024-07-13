@@ -1,5 +1,3 @@
-export declare class Timeout {}
-
 export declare interface AnimationKeyFrame {
   /**
    * Id of the keyframe.
@@ -43,3 +41,5 @@ export declare interface AnimationBase {
    */
   keyFrames?: AnimationKeyFrame[];
 }
+
+export declare class Timeout {}
