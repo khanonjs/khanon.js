@@ -158,16 +158,14 @@ export function Sprite(props: SpriteProps): any {
           setKeyframesTimeouts()
         }
 
-        // Emit subject for each keyFrame timeout
+        // Emit keyframe after timeout
         const setKeyframesTimeouts = () => {
           this.keyFramesTimeouts = []
-          if (animation.keyFrames) {
-            animation.keyFrames.forEach((animationKeyFrame) => {
-              animationKeyFrame.timeouts.forEach((time) => {
-                this.keyFramesTimeouts.push(setTimeout(() => animationKeyFrame.linkedSubject.notifyObservers(), time, this)) // TODO link timeouts to loop update?
-              })
+          animation.keyFrames?.forEach((animationKeyFrame) => {
+            animationKeyFrame.timeouts.forEach((time) => {
+              this.keyFramesTimeouts.push(setTimeout(() => animationKeyFrame.emitter.notifyObservers(), time, this)) // TODO link timeouts to loop update?
             })
-          }
+          })
         }
 
         // To support 'keyframes' and 'completed' callback for each loop tt is neccesary to do the loop manually since Babylon only notify the first end of animation

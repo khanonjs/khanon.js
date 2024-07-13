@@ -2,25 +2,17 @@ import { Observable } from '@babylonjs/core'
 
 export class AnimationKeyFrame {
   /**
-   * Id of the keyframes group
+   * Name of the keyframe.
    */
-  id: number
+  name: string
 
   /**
-   * Frames numbers
+   * Frames to trigger the emitter.
    */
   frames: number[]
 
   /**
-   * Subject linked to this keyframe.
-   * Since can be more keyframes of this ID, all of them are linked to the same Subject.
-   * This is handled by Actor module.
+   * Observable emitter.
    */
-  linkedSubject?: Observable<void>
-
-  /**
-   * Timeouts to emit subject on animation start
-   * This is handled by Actor module.
-   */
-  timeouts?: number[]
+  emitter: Observable<void>
 }

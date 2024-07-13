@@ -15,6 +15,9 @@ import {
   BabylonAccessor,
   Rect
 } from './models'
+import { Timeout } from './models/timeout'
+import { Arrays } from './modules/helper/arrays'
+import { Helper } from './modules/helper/helper'
 import { Logger } from './modules/logger/logger'
 import { LoggerLevels } from './modules/logger/logger-levels'
 import { TimeoutType } from './types'
@@ -48,6 +51,10 @@ export class Core {
   // Render scenes
   private static readonly renderScenes: Set<SceneType> = new Set<SceneType>()
 
+  // Timeouts
+  private static timeouts: Set<Timeout> = new Set<Timeout>()
+  private static intervals: Set<Timeout> = new Set<Timeout>()
+
   // ********************************************************
 
   // Properties
@@ -68,8 +75,8 @@ export class Core {
   // Scene
   // private static loadSceneQueue: Misc.KeyValue<Scene, (scene: Scene) => void> = new Misc.KeyValue<Scene, SceneFunctionArg>()
 
-  static get canvas(): HTMLCanvasElement { return this.htmlCanvas }
-  static get engine(): Engine { return this.babylon.engine }
+  static get canvas(): HTMLCanvasElement { return Core.htmlCanvas }
+  static get engine(): Engine { return Core.babylon.engine }
 
   /**
    * Called once, on app decorator
@@ -83,7 +90,7 @@ export class Core {
 
     Core.app = app
     Logger.info('Environment mode:', process.env.NODE_ENV)
-    Logger.level = (Core.app.props.debugLog || this.isDevelopmentMode()) ? LoggerLevels.TRACE : LoggerLevels.INFO
+    Logger.level = (Core.app.props.debugLog || Core.isDevelopmentMode()) ? LoggerLevels.TRACE : LoggerLevels.INFO
     Logger.debug('App instance created:', Core.app.props)
 
     // Avoid canvas scale error TODO??
@@ -92,9 +99,9 @@ export class Core {
       }, 0
     ) */
 
-    this.initializeHTMLLayers()
-    this.initializeBabylon()
-    this.initializeLoopUpdate()
+    Core.initializeHTMLLayers()
+    Core.initializeBabylon()
+    Core.loopUpdate()
 
     Core.updateCanvasSize()
     Logger.debug('Initial canvas size:', Core.canvasRect.width, Core.canvasRect.height)
@@ -146,19 +153,39 @@ export class Core {
   }
 
   static addLoopUpdateObserver(func: (delta: number) => void): Observer<number> {
-    return this.onLoopUpdate.add(func)
+    return Core.onLoopUpdate.add(func)
   }
 
   static removeLoopUpdateObserver(observer: Observer<number>): void {
-    this.onLoopUpdate.remove(observer)
+    Core.onLoopUpdate.remove(observer)
   }
 
   static addCanvasResizeObserver(func: (size: Rect) => void): Observer<Rect> {
-    return this.onCanvasResize.add(func)
+    return Core.onCanvasResize.add(func)
   }
 
   static removeCanvasResizeObserver(observer: Observer<Rect>): void {
-    this.onCanvasResize.remove(observer)
+    Core.onCanvasResize.remove(observer)
+  }
+
+  static setTimeout(func: () => void, mms: number): Timeout {
+    const timeout = { func, omms: mms, mms }
+    Core.timeouts.add(timeout)
+    return timeout
+  }
+
+  static setInterval(func: () => void, mms: number): Timeout {
+    const timeout = { func, omms: mms, mms }
+    Core.intervals.add(timeout)
+    return timeout
+  }
+
+  static clearTimeout(timeout: Timeout): void {
+    Core.timeouts.delete(timeout)
+  }
+
+  static clearInterval(timeout: Timeout): void {
+    Core.intervals.delete(timeout)
   }
 
   private static initializeHTMLLayers(): void {
@@ -187,14 +214,14 @@ export class Core {
       Core.renderScenes.forEach((scene) => scene.babylon.scene.render())
 
       // TODO: add FPS updater here
-      /* if (this.properties?.fpsContainer) {
-        const divFps = document.getElementById(this.properties.fpsContainer)
-        divFps.innerHTML = this.babylon.getFps().toFixed() + ' fps'
+      /* if (Core.properties?.fpsContainer) {
+        const divFps = document.getElementById(Core.properties.fpsContainer)
+        divFps.innerHTML = Core.babylon.getFps().toFixed() + ' fps'
       } */
     })
   }
 
-  private static initializeLoopUpdate(): void {
+  private static loopUpdate(): void {
     Core.loopUpdateMps = 1000 / Core.app.props.loopUpdate.fps
     Core.loopUpdateLastMs = performance.now()
     Core.loopUpdateLag = 0
@@ -204,7 +231,21 @@ export class Core {
         Core.loopUpdateLag += currentMs - Core.loopUpdateLastMs
         Core.loopUpdateLastMs = currentMs
         while (Core.loopUpdateLag > Core.loopUpdateMps) {
-          this.onLoopUpdate.notifyObservers(Core.loopUpdateDeltaTime)
+          Core.onLoopUpdate.notifyObservers(Core.loopUpdateDeltaTime)
+          Core.timeouts.forEach(timeout => {
+            timeout.mms -= Core.loopUpdateMps
+            if (timeout.mms < 0) {
+              timeout.func()
+              Core.timeouts.delete(timeout)
+            }
+          })
+          Core.intervals.forEach(interval => {
+            interval.mms -= Core.loopUpdateMps
+            if (interval.mms < 0) {
+              interval.func()
+              interval.mms = interval.omms + interval.mms
+            }
+          })
           Core.loopUpdateLag -= Core.loopUpdateMps
         }
       },
@@ -220,7 +261,7 @@ export class Core {
       width: Math.floor(boundingRect.width),
       height: Math.floor(boundingRect.height)
     }
-    this.onCanvasResize.notifyObservers(Core.canvasRect)
+    Core.onCanvasResize.notifyObservers(Core.canvasRect)
   }
 
   /* private static loadSceneQueueNext(sceneLoaded: Scene, onLoaded?: ( scene: Scene) => void): void {

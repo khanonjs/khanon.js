@@ -16,16 +16,18 @@ export interface SpriteProps {
 
   /**
    * Cells width. Each cell represents an animation frame. It is equivalent to the sprite width.
+   * Currently it is only supported all cells of the same size.
    */
   cellWidth?: number
 
   /**
    * Cells height. Each cell represents an animation frame. It is equivalent to the sprite height.
+   * Currently it is only supported all cells of the same size.
    */
   cellHeight?: number
 
   /**
-   * Numnber of franes. Number total of cells contained within the image.
+   * Numnber of frames (total cells).
    */
   numFrames?: number
 
@@ -48,7 +50,7 @@ export interface SpriteProps {
    * Cache this sprite.
    * Cached files are kept in memory and only removed after calling KJS.clearCache().
    * Use cached files in case they are being used between more than one scene.
-   * Cached files have a shorter loading time at the expense of memory usage.
+   * Cached sprites make shorter loading time at the expense of memory usage.
    */
   cached?: boolean
 

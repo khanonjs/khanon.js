@@ -3,6 +3,7 @@ import { SceneConstructor } from './constructors/scene-constructor'
 import { SceneStateConstructor } from './constructors/scene-state-constructor'
 import { ActorInterface } from './decorators/actor'
 import { SceneInterface } from './decorators/scene'
+import { Timeout } from './models/timeout'
 
 // **************
 //  Models
@@ -39,6 +40,18 @@ export declare namespace KJS {
   export type Scene = SceneInterface
 
   /**
+   * Scene controller
+   */
+  export namespace Scene {
+    function load(scene: SceneConstructor): LoadingProgress
+    function load(scene: SceneConstructor[]): LoadingProgress
+    function unload(scene: SceneConstructor): void
+    function unload(scene: SceneConstructor[]): void
+    function start(scene: SceneConstructor, state: SceneStateConstructor): void
+    function stop(scene: SceneConstructor): void
+  }
+
+  /**
    * Throws critical error and stops the application.
    * @param error
    */
@@ -51,16 +64,34 @@ export declare namespace KJS {
   export function clearCache(): void
 
   /**
-   * Scene controller
+   * Sets a timeout.
+   * This timeout relies on the app loopUpdate, meaning the application will trigger it at time, no matter if the tab is unfocused.
+   * Some browsers delay native timeouts when tab is unfocused to unweight cpu load.
+   * @param func Callback
+   * @param mms Milliseconds
    */
-  export namespace Scene {
-    function load(scene: SceneConstructor): LoadingProgress
-    function load(scene: SceneConstructor[]): LoadingProgress
-    function unload(scene: SceneConstructor): void
-    function unload(scene: SceneConstructor[]): void
-    function start(scene: SceneConstructor, state: SceneStateConstructor): void
-    function stop(scene: SceneConstructor): void
-  }
+  export function setTimeout(func: () => void, mms: number): Timeout
+
+  /**
+   * Sets an interval.
+   * This interval relies on the app loopUpdate, meaning the application will trigger it at time, no matter if the tab is unfocused.
+   * Some browsers delay native intervals when tab is unfocused to unweight cpu load.
+   * @param func Callback
+   * @param mms Milliseconds
+   */
+  export function setInterval(func: () => void, mms: number): Timeout
+
+  /**
+   * Clears a timeout.
+   * @param timeout
+   */
+  export function clearTimeout(timeout: Timeout): void
+
+  /**
+   * Clears an interval.
+   * @param timeout
+   */
+  export function clearInterval(timeout: Timeout): void
 }
 
 export * from './models'
