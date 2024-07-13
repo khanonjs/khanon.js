@@ -45,7 +45,6 @@ export function Sprite(props: SpriteProps): any {
       spriteTexture: SpriteTexture
       animation: SpriteAnimation = null
       animations: Map<string, SpriteAnimation> = new Map<string, SpriteAnimation>()
-      keyframesSubscriptions?: Map<string, { context: any, observer: BABYLON.Observer<void> }> = new Map<string, { context: any, observer: BABYLON.Observer<void> }>()
       babylon: Pick<BabylonAccessor, 'spriteManager' | 'sprite'> = { spriteManager: null, sprite: null }
       loopUpdate$: BABYLON.Observer<number>
       canvasResize$: BABYLON.Observer<Rect>
@@ -203,6 +202,13 @@ export function Sprite(props: SpriteProps): any {
         playAnimation()
       }
 
+      stopAnimation(): void {
+        this.removeEndAnimationTimer()
+        this.removeAnimationKeyFrames()
+        this.babylon.sprite.stopAnimation()
+        this.animation = null
+      }
+
       subscribeToKeyframe(keyframeName: string, callback: () => void): BABYLON.Observer<void>[] {
         const observers: BABYLON.Observer<void>[] = []
         this.animations.forEach(animation => {
@@ -219,13 +225,6 @@ export function Sprite(props: SpriteProps): any {
             .filter(keyframe => keyframe.name === keyframeName)
             .forEach(keyframe => keyframe.emitter.clear())
         })
-      }
-
-      stopAnimation(): void {
-        this.removeEndAnimationTimer()
-        this.removeAnimationKeyFrames()
-        this.babylon.sprite.stopAnimation()
-        this.animation = null
       }
 
       release(): void {

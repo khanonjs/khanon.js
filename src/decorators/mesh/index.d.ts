@@ -59,17 +59,52 @@ export declare abstract class MeshInterface implements DisplayObject {
   getTransform(): Matrix
 
   /**
-   * Plays an animation. Animations are defined in the Mesh decorator 'props' or manually using 'MeshAnimation' interface.
-   * @param animation
-   * @param loopOverride
-   * @param completed
+   * Sets current frame (stops current animation).
+   * @param frame
    */
-  playAnimation(animation: MeshAnimation, loopOverride?: boolean, completed?: () => void): void
+  setFrame(frame: number): void
+
+  /**
+   * Sets the first frame of the sprite or current animation.
+   */
+  setFirstFrame(): void
+
+  /**
+   * Sets the last frame of the sprite or current animation.
+   */
+  setLastFrame(): void
+
+  /**
+   * Adds an animation. Animations can be added from this method, or from Sprite props.
+   * @param animation
+   */
+  addAnimation(animation: MeshAnimation): void
+
+  /**
+   * Plays an animation. Animations are defined in the Sprite decorator 'props' or manually using 'MeshAnimation' interface.
+   * @param animation Animation object or ID of a predefined animation
+   * @param loopOverride Overrides the animation loop value in case needed
+   * @param completed Completed animation callback
+   */
+  playAnimation(animation: MeshAnimation | string, loopOverride?: boolean, completed?: () => void): void
 
   /**
    * Stops current animation.
    */
   stopAnimation(): void
+
+  /**
+   * Subscribes a method to all keydframes of a certain Name.
+   * @param keyframeName
+   * @param callback
+   */
+  subscribeToKeyframe(keyframeName: string, callback: () => void): void
+
+  /**
+   * Clears all subscriptions to a keyframe.
+   * @param keyframeName
+   */
+  clearKeyframeSubscriptions(keyframeName: string): void
 
   /**
    * Callback invoked after the mesh has been spawned in a scene.

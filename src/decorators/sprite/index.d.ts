@@ -1,7 +1,4 @@
-import {
-  Matrix,
-  SpriteasBabylonSprite
-} from '@babylonjs/core'
+import { Matrix } from '@babylonjs/core'
 
 import KJS from '../../kjs'
 import {
@@ -93,19 +90,6 @@ export declare abstract class SpriteInterface {
   addAnimation(animation: SpriteAnimation): void
 
   /**
-   * Subscribes a method to all keydframes of a certain Name.
-   * @param keyframeName
-   * @param callback
-   */
-  subscribeToKeyframe(keyframeName: string, callback: () => void): void
-
-  /**
-   * Clears all subscriptions to a keyframe.
-   * @param keyframeName
-   */
-  clearKeyframeSubscriptions(keyframeName: string): void
-
-  /**
    * Plays an animation. Animations are defined in the Sprite decorator 'props' or manually using 'MeshAnimation' interface.
    * @param animation Animation object or ID of a predefined animation
    * @param loopOverride Overrides the animation loop value in case needed
@@ -117,6 +101,19 @@ export declare abstract class SpriteInterface {
    * Stops current animation.
    */
   stopAnimation(): void
+
+  /**
+   * Subscribes a method to all keydframes of a certain Name.
+   * @param keyframeName
+   * @param callback
+   */
+  subscribeToKeyframe(keyframeName: string, callback: () => void): void
+
+  /**
+   * Clears all subscriptions to a keyframe.
+   * @param keyframeName
+   */
+  clearKeyframeSubscriptions(keyframeName: string): void
 
   /**
    * Callback invoked after the sprite has been spawned in a scene.

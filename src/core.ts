@@ -16,8 +16,6 @@ import {
   Rect
 } from './models'
 import { Timeout } from './models/timeout'
-import { Arrays } from './modules/helper/arrays'
-import { Helper } from './modules/helper/helper'
 import { Logger } from './modules/logger/logger'
 import { LoggerLevels } from './modules/logger/logger-levels'
 import { TimeoutType } from './types'

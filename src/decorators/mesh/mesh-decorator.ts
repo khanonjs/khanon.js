@@ -17,6 +17,7 @@ import {
   switchLoopUpdate
 } from '../../utils/utils'
 import { SceneType } from '../scene/scene-type'
+import { MeshAnimation } from './mesh-animation'
 import { MeshCore } from './mesh-core'
 import { MeshInterface } from './mesh-interface'
 import { MeshProps } from './mesh-props'
@@ -36,6 +37,8 @@ export function Mesh(props: MeshProps): any {
       // MeshInterface
       // ***************
       babylon: Pick<BabylonAccessor, 'mesh'> = { mesh: null }
+      animation: MeshAnimation = null
+      animations: Map<string, MeshAnimation> = new Map<string, MeshAnimation>()
       loopUpdate$: BABYLON.Observer<number>
       canvasResize$: BABYLON.Observer<Rect>
 
@@ -79,12 +82,37 @@ export function Mesh(props: MeshProps): any {
         return null
       }
 
-      playAnimation(animation: any/* SpriteAnimation | MeshAnimation */, loopOverride?: boolean, completed?: () => void): void {
+      setFrame(frame: number): void {
+        // TODO
+      }
+
+      setFirstFrame(): void {
+        // TODO
+      }
+
+      setLastFrame(): void {
+        // TODO
+      }
+
+      addAnimation(animation: MeshAnimation): void {
+        // TODO
+      }
+
+      playAnimation(animation: MeshAnimation, loopOverride?: boolean, completed?: () => void): void {
         // TODO
       }
 
       stopAnimation(): void {
+        // TODO
+      }
 
+      subscribeToKeyframe(keyframeName: string, callback: () => void): BABYLON.Observer<void>[] {
+        // TODO
+        return null
+      }
+
+      clearKeyframeSubscriptions(keyframeName: string): void {
+        // TODO
       }
 
       release(): void {
