@@ -74,7 +74,7 @@ export declare abstract class SceneInterface {
   get spawn(): SceneSpawn
 
   /**
-   * Turns On/Off 'onLoopUpdate' callback
+   * Turns On/Off 'onLoopUpdate' callback.
    */
   set loopUpdate(value: boolean)
   get loopUpdate(): boolean

@@ -10,7 +10,7 @@ export declare abstract class CameraInterface {
   get babylon(): Pick<BabylonAccessor<ReturnType<this['initialize']>>, 'camera'>
 
   /**
-   * Turns On/Off 'onLoopUpdate' callback
+   * Turns On/Off 'onLoopUpdate' callback.
    */
   set loopUpdate(value: boolean)
   get loopUpdate(): boolean

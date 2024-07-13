@@ -12,7 +12,7 @@ export declare abstract class SceneStateInterface {
   get scene(): SceneInterface
 
   /**
-   * Turns On/Off 'onLoopUpdate' callback
+   * Turns On/Off 'onLoopUpdate' callback.
    */
   set loopUpdate(value: boolean)
   get loopUpdate(): boolean

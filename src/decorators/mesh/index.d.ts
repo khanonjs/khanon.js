@@ -34,7 +34,7 @@ export declare abstract class MeshInterface implements DisplayObject {
   get transform(): MeshTransform
 
   /**
-   * Turns On/Off 'onLoopUpdate' callback
+   * Turns On/Off 'onLoopUpdate' callback.
    */
   set loopUpdate(value: boolean)
   get loopUpdate(): boolean

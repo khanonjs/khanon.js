@@ -96,7 +96,7 @@ export declare abstract class SpriteInterface {
   get transform(): SpriteTransform
 
   /**
-   * Turns On/Off 'onLoopUpdate' callback
+   * Turns On/Off 'onLoopUpdate' callback.
    */
   set loopUpdate(value: boolean)
   get loopUpdate(): boolean
