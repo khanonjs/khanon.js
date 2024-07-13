@@ -4,10 +4,8 @@ import {
   CanvasResizable,
   LoopUpdatable
 } from '../../base'
-import {
-  BabylonAccessor,
-  Rect
-} from '../../models'
+import { BabylonAccessor } from '../../models/babylon-accessor'
+import { Rect } from '../../models/rect'
 
 export abstract class CameraInterface implements LoopUpdatable, CanvasResizable {
   abstract babylon: Pick<BabylonAccessor<BABYLON.Camera>, 'camera'>

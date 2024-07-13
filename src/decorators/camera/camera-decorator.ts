@@ -1,10 +1,8 @@
 import * as BABYLON from '@babylonjs/core'
 
 import { CamerasController } from '../../controllers'
-import {
-  BabylonAccessor,
-  Rect
-} from '../../models'
+import { BabylonAccessor } from '../../models/babylon-accessor'
+import { Rect } from '../../models/rect'
 import {
   attachCanvasResize,
   attachLoopUpdate,

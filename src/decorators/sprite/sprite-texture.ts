@@ -5,7 +5,7 @@ import {
 import { SpriteManager } from '@babylonjs/core/Sprites/spriteManager'
 
 import { Asset } from '../../base'
-import { BabylonAccessor } from '../../models'
+import { BabylonAccessor } from '../../models/babylon-accessor'
 import { Logger } from '../../modules/logger'
 import { SceneType } from '../scene/scene-type'
 import { SpriteProps } from './sprite-props'

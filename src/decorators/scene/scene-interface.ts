@@ -7,8 +7,8 @@ import {
   LoopUpdatable
 } from '../../base'
 import { SceneStateConstructor } from '../../constructors/scene-state-constructor'
-import { Rect } from '../../models'
 import { BabylonAccessor } from '../../models/babylon-accessor'
+import { Rect } from '../../models/rect'
 import { SceneSpawn } from './scene-spawn'
 import { SceneStateInterface } from './scene-state/scene-state-interface'
 

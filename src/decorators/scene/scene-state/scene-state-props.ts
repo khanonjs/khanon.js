@@ -1,5 +1,5 @@
 import { CameraConstructor } from '../../../constructors/camera-constructor'
-import { UseCamera } from '../../../models'
+import { UseCamera } from '../../../models/use-camera'
 
 export interface SceneStateProps {
   /**

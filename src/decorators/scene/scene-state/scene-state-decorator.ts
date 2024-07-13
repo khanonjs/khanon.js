@@ -2,10 +2,8 @@ import { Observer } from '@babylonjs/core'
 
 import { CameraConstructor } from '../../../constructors/camera-constructor'
 import { SceneStatesController } from '../../../controllers'
-import {
-  Rect,
-  UseCamera
-} from '../../../models'
+import { Rect } from '../../../models/rect'
+import { UseCamera } from '../../../models/use-camera'
 import { Logger } from '../../../modules/logger'
 import {
   attachCanvasResize,

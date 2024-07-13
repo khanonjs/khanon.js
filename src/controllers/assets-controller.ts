@@ -9,10 +9,8 @@ import { ActorInterface } from '../decorators/actor/actor-interface'
 import { SceneType } from '../decorators/scene/scene-type'
 import { SpriteCore } from '../decorators/sprite/sprite-core'
 import { SpriteInterface } from '../decorators/sprite/sprite-interface'
-import {
-  AssetDefinition,
-  AssetType
-} from '../models'
+import { AssetDefinition } from '../models/asset-definition'
+import { AssetType } from '../models/asset-type'
 import { Logger } from '../modules/logger'
 import {
   isPrototypeOf,

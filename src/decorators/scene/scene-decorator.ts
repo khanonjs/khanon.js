@@ -16,11 +16,9 @@ import {
 } from '../../controllers'
 import { Core } from '../../core'
 import KJS from '../../kjs'
-import {
-  AssetDefinition,
-  BabylonAccessor,
-  Rect
-} from '../../models'
+import { AssetDefinition } from '../../models/asset-definition'
+import { BabylonAccessor } from '../../models/babylon-accessor'
+import { Rect } from '../../models/rect'
 import { Logger } from '../../modules/logger'
 import {
   attachCanvasResize,

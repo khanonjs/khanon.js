@@ -5,7 +5,7 @@ import {
   LoopUpdatable
 } from '../../../base'
 import { CameraConstructor } from '../../../constructors/camera-constructor'
-import { Rect } from '../../../models'
+import { Rect } from '../../../models/rect'
 import { SceneInterface } from '../scene-interface'
 
 export abstract class SceneStateInterface implements LoopUpdatable, CanvasResizable {

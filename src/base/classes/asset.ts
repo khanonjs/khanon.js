@@ -1,4 +1,4 @@
-import { AssetDefinition } from '../../models'
+import { AssetDefinition } from '../../models/asset-definition'
 import { Logger } from '../../modules/logger'
 import { LoadingProgress } from './loading-progress'
 

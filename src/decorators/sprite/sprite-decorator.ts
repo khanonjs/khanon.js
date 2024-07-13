@@ -87,7 +87,7 @@ export function Sprite(props: SpriteProps): any {
           this.babylon.spriteManager = this.spriteTexture.babylon.spriteManager
         }
         this.transform = this.babylon.sprite
-        this.props.animations.forEach(animation => this.addAnimation(animation))
+        this.props.animations?.forEach(animation => this.addAnimation(animation))
         attachLoopUpdate(this)
         attachCanvasResize(this)
         invokeCallback(this.onSpawn, this, this.scene)

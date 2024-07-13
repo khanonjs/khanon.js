@@ -4,7 +4,7 @@ import {
   CanvasResizable,
   LoopUpdatable
 } from '../../base'
-import { Rect } from '../../models'
+import { Rect } from '../../models/rect'
 import {
   MeshTransform,
   SpriteTransform

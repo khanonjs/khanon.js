@@ -1,5 +1,5 @@
 import { CameraConstructor } from '../../constructors/camera-constructor'
-import { AssetDefinition } from '../../models'
+import { AssetDefinition } from '../../models/asset-definition'
 import { SceneProps } from './scene-props'
 import { SceneSpawn } from './scene-spawn'
 
