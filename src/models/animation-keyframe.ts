@@ -15,4 +15,9 @@ export class AnimationKeyFrame {
    * Observable emitter.
    */
   emitter: Observable<void>
+
+  /**
+   * Milliseconds to trigger it
+   */
+  ms: number[]
 }

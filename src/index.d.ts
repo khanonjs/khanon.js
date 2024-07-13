@@ -66,20 +66,20 @@ export declare namespace KJS {
   /**
    * Sets a timeout.
    * This timeout relies on the app loopUpdate, meaning the application will trigger it at time, no matter if the tab is unfocused.
-   * Some browsers delay native timeouts when tab is unfocused to unweight cpu load.
+   * Some browsers delay native timeouts when tab is unfocused to unweight cpu load, what could drive to app inconsistencies.
    * @param func Callback
-   * @param mms Milliseconds
+   * @param ms Milliseconds
    */
-  export function setTimeout(func: () => void, mms: number): Timeout
+  export function setTimeout(func: () => void, ms: number): Timeout
 
   /**
    * Sets an interval.
    * This interval relies on the app loopUpdate, meaning the application will trigger it at time, no matter if the tab is unfocused.
-   * Some browsers delay native intervals when tab is unfocused to unweight cpu load.
+   * Some browsers delay native timeouts when tab is unfocused to unweight cpu load, what could drive to app inconsistencies.
    * @param func Callback
-   * @param mms Milliseconds
+   * @param ms Milliseconds
    */
-  export function setInterval(func: () => void, mms: number): Timeout
+  export function setInterval(func: () => void, ms: number): Timeout
 
   /**
    * Clears a timeout.

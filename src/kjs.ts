@@ -13,12 +13,12 @@ export class KJS {
     // TODO
   }
 
-  static setTimeout(func: () => void, mms: number): Timeout {
-    return Core.setTimeout(func, mms)
+  static setTimeout(func: () => void, ms: number): Timeout {
+    return Core.setTimeout(func, ms)
   }
 
-  static setInterval(func: () => void, mms: number): Timeout {
-    return Core.setInterval(func, mms)
+  static setInterval(func: () => void, ms: number): Timeout {
+    return Core.setInterval(func, ms)
   }
 
   static clearTimeout(timeout: Timeout): void {

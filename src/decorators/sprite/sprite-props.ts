@@ -1,3 +1,5 @@
+import { SpriteAnimation } from './sprite-animation'
+
 export interface SpriteProps {
   /**
    * Load the image file from a url.
@@ -30,6 +32,11 @@ export interface SpriteProps {
    * Numnber of frames (total cells).
    */
   numFrames?: number
+
+  /**
+   * Animations
+   */
+  animations?: SpriteAnimation[]
 
   /**
    * Defines if the texture has bitmaps (false by default).

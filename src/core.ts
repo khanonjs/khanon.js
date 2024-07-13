@@ -168,14 +168,14 @@ export class Core {
     Core.onCanvasResize.remove(observer)
   }
 
-  static setTimeout(func: () => void, mms: number): Timeout {
-    const timeout = { func, omms: mms, mms }
+  static setTimeout(func: () => void, ms: number, context?: any): Timeout {
+    const timeout = { func, oms: ms, ms, context }
     Core.timeouts.add(timeout)
     return timeout
   }
 
-  static setInterval(func: () => void, mms: number): Timeout {
-    const timeout = { func, omms: mms, mms }
+  static setInterval(func: () => void, ms: number, context?: any): Timeout {
+    const timeout = { func, oms: ms, ms, context }
     Core.intervals.add(timeout)
     return timeout
   }
@@ -233,17 +233,17 @@ export class Core {
         while (Core.loopUpdateLag > Core.loopUpdateMps) {
           Core.onLoopUpdate.notifyObservers(Core.loopUpdateDeltaTime)
           Core.timeouts.forEach(timeout => {
-            timeout.mms -= Core.loopUpdateMps
-            if (timeout.mms < 0) {
-              timeout.func()
+            timeout.ms -= Core.loopUpdateMps
+            if (timeout.ms < 0) {
+              timeout.func.bind(timeout.context)
               Core.timeouts.delete(timeout)
             }
           })
           Core.intervals.forEach(interval => {
-            interval.mms -= Core.loopUpdateMps
-            if (interval.mms < 0) {
-              interval.func()
-              interval.mms = interval.omms + interval.mms
+            interval.ms -= Core.loopUpdateMps
+            if (interval.ms < 0) {
+              interval.func.bind(interval.context)
+              interval.ms = interval.oms + interval.ms
             }
           })
           Core.loopUpdateLag -= Core.loopUpdateMps

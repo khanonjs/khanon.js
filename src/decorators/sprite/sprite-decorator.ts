@@ -5,10 +5,12 @@ import {
   AssetsController,
   SpritesController
 } from '../../controllers'
+import { Core } from '../../core'
 import {
   BabylonAccessor,
   Rect
 } from '../../models'
+import { Timeout } from '../../models/timeout'
 import { Logger } from '../../modules/logger'
 import { SpriteTransform } from '../../types'
 import {
@@ -42,6 +44,8 @@ export function Sprite(props: SpriteProps): any {
       // ***************
       spriteTexture: SpriteTexture
       animation: SpriteAnimation = null
+      animations: Map<string, SpriteAnimation> = new Map<string, SpriteAnimation>()
+      keyframesSubscriptions?: Map<string, { context: any, observer: BABYLON.Observer<void> }> = new Map<string, { context: any, observer: BABYLON.Observer<void> }>()
       babylon: Pick<BabylonAccessor, 'spriteManager' | 'sprite'> = { spriteManager: null, sprite: null }
       loopUpdate$: BABYLON.Observer<number>
       canvasResize$: BABYLON.Observer<Rect>
@@ -119,8 +123,8 @@ export function Sprite(props: SpriteProps): any {
       // ***************
       transform: SpriteTransform
       private _visible: boolean
-      private keyFramesTimeouts: number[] = []
-      private endAnimationTimer: number
+      private keyFramesTimeouts: Timeout[] = []
+      private endAnimationTimer: Timeout
 
       set visible(value: boolean) {
         this._visible = value
@@ -144,6 +148,20 @@ export function Sprite(props: SpriteProps): any {
         return null
       }
 
+      addAnimation(animation: SpriteAnimation): void {
+        if (this.animations.get(animation.name)) { Logger.debugError(`Animation name '${animation.name}' already exists.`); return }
+        if (animation.keyFrames) {
+          animation.keyFrames.forEach((keyFrame) => {
+            keyFrame.emitter = new BABYLON.Observable<void>()
+            keyFrame.ms = []
+            keyFrame.frames.forEach((frame) => {
+              keyFrame.ms.push((frame - animation.frameStart) * animation.delay)
+            })
+          })
+        }
+        this.animations.set(animation.name, animation)
+      }
+
       playAnimation(animation: SpriteAnimation, loopOverride?: boolean, completed?: () => void): void {
         this.animation = animation
         const loop = loopOverride ?? animation.loop
@@ -153,7 +171,7 @@ export function Sprite(props: SpriteProps): any {
         const playAnimation = () => {
           this.babylon.sprite.playAnimation(frameStart, frameEnd, false, animation.delay)
           if (completed || loop) {
-            this.endAnimationTimer = setTimeout(() => onCompleted(), (frameEnd - frameStart + 1) * animation.delay, this) // TODO link timeouts to loop update?
+            this.endAnimationTimer = Core.setTimeout(() => onCompleted(), (frameEnd - frameStart + 1) * animation.delay, this)
           }
           setKeyframesTimeouts()
         }
@@ -162,8 +180,8 @@ export function Sprite(props: SpriteProps): any {
         const setKeyframesTimeouts = () => {
           this.keyFramesTimeouts = []
           animation.keyFrames?.forEach((animationKeyFrame) => {
-            animationKeyFrame.timeouts.forEach((time) => {
-              this.keyFramesTimeouts.push(setTimeout(() => animationKeyFrame.emitter.notifyObservers(), time, this)) // TODO link timeouts to loop update?
+            animationKeyFrame.ms.forEach((ms) => {
+              this.keyFramesTimeouts.push(Core.setTimeout(() => animationKeyFrame.emitter.notifyObservers(), ms, this))
             })
           })
         }
@@ -185,6 +203,24 @@ export function Sprite(props: SpriteProps): any {
         playAnimation()
       }
 
+      subscribeToKeyframe(keyframeName: string, callback: () => void): BABYLON.Observer<void>[] {
+        const observers: BABYLON.Observer<void>[] = []
+        this.animations.forEach(animation => {
+          animation.keyFrames
+            .filter(keyframe => keyframe.name === keyframeName)
+            .forEach(keyframe => observers.push(keyframe.emitter.add(callback)))
+        })
+        return observers
+      }
+
+      clearKeyframeSubscriptions(keyframeName: string): void {
+        this.animations.forEach(animation => {
+          animation.keyFrames
+            .filter(keyframe => keyframe.name === keyframeName)
+            .forEach(keyframe => keyframe.emitter.clear())
+        })
+      }
+
       stopAnimation(): void {
         this.removeEndAnimationTimer()
         this.removeAnimationKeyFrames()
@@ -200,13 +236,13 @@ export function Sprite(props: SpriteProps): any {
       }
 
       private removeAnimationKeyFrames(): void {
-        this.keyFramesTimeouts.forEach((timeout) => clearTimeout(timeout))
+        this.keyFramesTimeouts.forEach((timeout) => Core.clearTimeout(timeout))
         this.keyFramesTimeouts = []
       }
 
       private removeEndAnimationTimer(): void {
         if (this.endAnimationTimer) {
-          clearTimeout(this.endAnimationTimer)
+          Core.clearTimeout(this.endAnimationTimer)
           this.endAnimationTimer = undefined
         }
       }

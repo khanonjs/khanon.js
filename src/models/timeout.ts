@@ -1,5 +1,6 @@
 export interface Timeout {
   func: () => void
-  omms: number
-  mms: number
+  oms: number
+  ms: number
+  context: any
 }
