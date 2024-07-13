@@ -6,10 +6,8 @@ import {
   SpritesController
 } from '../../controllers'
 import { Core } from '../../core'
-import {
-  BabylonAccessor,
-  Rect
-} from '../../models'
+import { BabylonAccessor } from '../../models/babylon-accessor'
+import { Rect } from '../../models/rect'
 import { Timeout } from '../../models/timeout'
 import { Logger } from '../../modules/logger'
 import { SpriteTransform } from '../../types'
@@ -44,7 +42,7 @@ export function Sprite(props: SpriteProps): any {
       // ***************
       spriteTexture: SpriteTexture
       animation: SpriteAnimation = null
-      animations: Map<string, SpriteAnimation> = new Map<string, SpriteAnimation>()
+      animations: Map<string | number, SpriteAnimation> = new Map<string | number, SpriteAnimation>()
       babylon: Pick<BabylonAccessor, 'spriteManager' | 'sprite'> = { spriteManager: null, sprite: null }
       loopUpdate$: BABYLON.Observer<number>
       canvasResize$: BABYLON.Observer<Rect>
@@ -89,6 +87,7 @@ export function Sprite(props: SpriteProps): any {
           this.babylon.spriteManager = this.spriteTexture.babylon.spriteManager
         }
         this.transform = this.babylon.sprite
+        this.props.animations.forEach(animation => this.addAnimation(animation))
         attachLoopUpdate(this)
         attachCanvasResize(this)
         invokeCallback(this.onSpawn, this, this.scene)
@@ -148,7 +147,7 @@ export function Sprite(props: SpriteProps): any {
       }
 
       addAnimation(animation: SpriteAnimation): void {
-        if (this.animations.get(animation.name)) { Logger.debugError(`Animation name '${animation.name}' already exists.`); return }
+        if (this.animations.get(animation.id)) { Logger.debugError(`Animation name '${animation.id}' already exists.`); return }
         if (animation.keyFrames) {
           animation.keyFrames.forEach((keyFrame) => {
             keyFrame.emitter = new BABYLON.Observable<void>()
@@ -158,7 +157,7 @@ export function Sprite(props: SpriteProps): any {
             })
           })
         }
-        this.animations.set(animation.name, animation)
+        this.animations.set(animation.id, animation)
       }
 
       playAnimation(animation: SpriteAnimation, loopOverride?: boolean, completed?: () => void): void {
@@ -209,20 +208,20 @@ export function Sprite(props: SpriteProps): any {
         this.animation = null
       }
 
-      subscribeToKeyframe(keyframeName: string, callback: () => void): BABYLON.Observer<void>[] {
+      subscribeToKeyframe(keyframeId: string | number, callback: () => void): BABYLON.Observer<void>[] {
         const observers: BABYLON.Observer<void>[] = []
         this.animations.forEach(animation => {
           animation.keyFrames
-            .filter(keyframe => keyframe.name === keyframeName)
+            .filter(keyframe => keyframe.id === keyframeId)
             .forEach(keyframe => observers.push(keyframe.emitter.add(callback)))
         })
         return observers
       }
 
-      clearKeyframeSubscriptions(keyframeName: string): void {
+      clearKeyframeSubscriptions(keyframeId: string | number): void {
         this.animations.forEach(animation => {
           animation.keyFrames
-            .filter(keyframe => keyframe.name === keyframeName)
+            .filter(keyframe => keyframe.id === keyframeId)
             .forEach(keyframe => keyframe.emitter.clear())
         })
       }

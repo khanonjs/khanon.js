@@ -95,16 +95,16 @@ export declare abstract class MeshInterface implements DisplayObject {
 
   /**
    * Subscribes a method to all keydframes of a certain Name.
-   * @param keyframeName
+   * @param keyframeId
    * @param callback
    */
-  subscribeToKeyframe(keyframeName: string, callback: () => void): void
+  subscribeToKeyframe(keyframeId: string, callback: () => void): void
 
   /**
    * Clears all subscriptions to a keyframe.
-   * @param keyframeName
+   * @param keyframeId
    */
-  clearKeyframeSubscriptions(keyframeName: string): void
+  clearKeyframeSubscriptions(keyframeId: string): void
 
   /**
    * Callback invoked after the mesh has been spawned in a scene.

@@ -11,10 +11,8 @@ import { Engine } from '@babylonjs/core/Engines/engine'
 import { AppCore } from './decorators/app/app-core'
 import { AppInterface } from './decorators/app/app-interface'
 import { SceneType } from './decorators/scene/scene-type'
-import {
-  BabylonAccessor,
-  Rect
-} from './models'
+import { BabylonAccessor } from './models/babylon-accessor'
+import { Rect } from './models/rect'
 import { Timeout } from './models/timeout'
 import { Logger } from './modules/logger/logger'
 import { LoggerLevels } from './modules/logger/logger-levels'

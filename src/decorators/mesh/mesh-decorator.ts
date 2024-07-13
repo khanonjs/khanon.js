@@ -2,10 +2,8 @@ import * as BABYLON from '@babylonjs/core'
 
 import { LoadingProgress } from '../../base'
 import { MeshesController } from '../../controllers/meshes-controller'
-import {
-  BabylonAccessor,
-  Rect
-} from '../../models'
+import { BabylonAccessor } from '../../models/babylon-accessor'
+import { Rect } from '../../models/rect'
 import { Logger } from '../../modules/logger'
 import { MeshTransform } from '../../types'
 import {
@@ -38,7 +36,7 @@ export function Mesh(props: MeshProps): any {
       // ***************
       babylon: Pick<BabylonAccessor, 'mesh'> = { mesh: null }
       animation: MeshAnimation = null
-      animations: Map<string, MeshAnimation> = new Map<string, MeshAnimation>()
+      animations: Map<string | number, MeshAnimation> = new Map<string | number, MeshAnimation>()
       loopUpdate$: BABYLON.Observer<number>
       canvasResize$: BABYLON.Observer<Rect>
 
@@ -106,12 +104,12 @@ export function Mesh(props: MeshProps): any {
         // TODO
       }
 
-      subscribeToKeyframe(keyframeName: string, callback: () => void): BABYLON.Observer<void>[] {
+      subscribeToKeyframe(keyframeId: string, callback: () => void): BABYLON.Observer<void>[] {
         // TODO
         return null
       }
 
-      clearKeyframeSubscriptions(keyframeName: string): void {
+      clearKeyframeSubscriptions(keyframeId: string): void {
         // TODO
       }
 

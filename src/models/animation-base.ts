@@ -2,9 +2,9 @@ import { AnimationKeyFrame } from './animation-keyframe'
 
 export interface AnimationBase {
   /**
-   * Name of the animation.
+   * Id of the animation.
    */
-  name: string
+  id: string | number
 
   /**
    * Delay between frames (in milliseconds)

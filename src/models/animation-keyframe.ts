@@ -1,10 +1,10 @@
 import { Observable } from '@babylonjs/core'
 
-export class AnimationKeyFrame {
+export interface AnimationKeyFrame {
   /**
-   * Name of the keyframe.
+   * Id of the keyframe.
    */
-  name: string
+  id: string | number
 
   /**
    * Frames to trigger the emitter.

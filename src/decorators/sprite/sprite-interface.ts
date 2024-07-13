@@ -1,10 +1,8 @@
 import * as BABYLON from '@babylonjs/core'
 
 import { DisplayObject } from '../../base'
-import {
-  BabylonAccessor,
-  Rect
-} from '../../models'
+import { BabylonAccessor } from '../../models/babylon-accessor'
+import { Rect } from '../../models/rect'
 import { SpriteTransform } from '../../types'
 import { SceneInterface } from '../scene/scene-interface'
 import { SpriteTexture } from './sprite-texture'

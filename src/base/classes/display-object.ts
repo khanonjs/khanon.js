@@ -9,7 +9,7 @@ import {
 
 export abstract class DisplayObject {
   abstract animation?: SpriteAnimation | MeshAnimation
-  abstract animations?: Map<string, SpriteAnimation | MeshAnimation>
+  abstract animations?: Map<string | number, SpriteAnimation | MeshAnimation>
 
   abstract release?(): void
 
@@ -27,6 +27,6 @@ export abstract class DisplayObject {
   abstract playAnimation(animation: SpriteAnimation | MeshAnimation | string, loopOverride?: boolean, completed?: () => void): void
   abstract stopAnimation(): void
 
-  abstract subscribeToKeyframe(keyframeName: string, callback: () => void): void
-  abstract clearKeyframeSubscriptions(keyframeName: string): void
+  abstract subscribeToKeyframe(keyframeId: string, callback: () => void): void
+  abstract clearKeyframeSubscriptions(keyframeId: string): void
 }
