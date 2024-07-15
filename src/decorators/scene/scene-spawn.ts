@@ -1,8 +1,8 @@
 import {
   ActorsController,
+  MeshesController,
   SpritesController
 } from '../../controllers'
-import { MeshesController } from '../../controllers/meshes-controller'
 import { Logger } from '../../modules/logger'
 import { ActorInterface } from '../actor/actor-interface'
 import { MeshInterface } from '../mesh/mesh-interface'

@@ -1,4 +1,4 @@
-import { MeshConstructor } from '../../../constructors/mesh-constructor'
+import { MeshConstructor } from '../../constructors/mesh-constructor'
 
 export interface ActorMeshDefinition {
   propertyName: string

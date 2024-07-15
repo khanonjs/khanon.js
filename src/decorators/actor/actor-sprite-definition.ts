@@ -1,4 +1,4 @@
-import { SpriteConstructor } from '../../../constructors/sprite-constructor'
+import { SpriteConstructor } from '../../constructors/sprite-constructor'
 
 export interface ActorSpriteDefinition {
   propertyName: string

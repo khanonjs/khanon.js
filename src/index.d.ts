@@ -13,7 +13,7 @@ export { UseCamera } from './models/use-camera'
 //  Constructors
 // **************
 export { ActorConstructor } from './constructors/actor-constructor'
-export { ActorEventConstructor } from './constructors/actor-event-constructor'
+export { ActorActionConstructor } from './constructors/actor-action-constructor'
 export { ActorStateConstructor } from './constructors/actor-state-constructor'
 export { AppConstructor } from './constructors/app-constructor'
 export { CameraConstructor } from './constructors/camera-constructor'
@@ -96,7 +96,7 @@ export * from './modules/logger'
 
 export * from './decorators/app'
 export * from './decorators/actor'
-export * from './decorators/actor/actor-sprite'
+export * from './decorators/actor/actor-action'
 export * from './decorators/camera'
 export * from './decorators/mesh'
 export * from './decorators/sprite'

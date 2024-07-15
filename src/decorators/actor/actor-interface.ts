@@ -4,6 +4,7 @@ import {
   CanvasResizable,
   LoopUpdatable
 } from '../../base'
+import { ActorActionConstructor } from '../../constructors/actor-action-constructor'
 import { Rect } from '../../models/rect'
 import {
   MeshTransform,
@@ -36,6 +37,7 @@ export abstract class ActorInterface<B extends SpriteInterface | MeshInterface =
   abstract addNode<B>(Node: B, name: string): B
   abstract getNode(name: string): B
   abstract setVisible(value: boolean): void
+  abstract playAction(action: ActorActionConstructor, props: any): void
 
   /**
    * User defined

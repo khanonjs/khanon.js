@@ -1,3 +1,4 @@
+import { ActorActionConstructor } from '../../constructors/actor-action-constructor'
 import { Rect } from '../../models'
 import {
   MeshTransform,
@@ -57,13 +58,20 @@ export declare abstract class ActorInterface<B extends SpriteInterface | MeshInt
   getNode(name: string): B
 
   /**
-   * Sets the visibility of Body and all Nodes
+   * Sets the visibility of Body and all Nodes.
    * @param value
    */
   setVisible(value: boolean)
 
   /**
-   * Callback invoked after the actor has been spawned on a scene
+   * Plays an Actor Action.
+   * @param action
+   * @param props
+   */
+  playAction(action: ActorActionConstructor, props: any): void
+
+  /**
+   * Callback invoked after the actor has been spawned on a scene.
    */
   onSpawn?(scene: SceneInterface): void
 

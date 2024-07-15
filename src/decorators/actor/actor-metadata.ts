@@ -1,6 +1,6 @@
-import { ActorMeshDefinition } from './actor-mesh/actor-mesh-definition'
+import { ActorMeshDefinition } from './actor-mesh-definition'
 import { ActorProps } from './actor-props'
-import { ActorSpriteDefinition } from './actor-sprite/actor-sprite-definition'
+import { ActorSpriteDefinition } from './actor-sprite-definition'
 
 export class ActorMetadata {
   sprites: ActorSpriteDefinition[] = []

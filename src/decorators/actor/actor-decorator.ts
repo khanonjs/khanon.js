@@ -1,11 +1,12 @@
 import { Observer } from '@babylonjs/core'
 
 import { LoadingProgress } from '../../base'
+import { ActorActionConstructor } from '../../constructors/actor-action-constructor'
 import {
   ActorsController,
+  MeshesController,
   SpritesController
 } from '../../controllers'
-import { MeshesController } from '../../controllers/meshes-controller'
 import { Rect } from '../../models/rect'
 import { Logger } from '../../modules/logger'
 import {
@@ -99,6 +100,10 @@ export function Actor(props: ActorProps = {}): any {
 
       setVisible(value: boolean) {
         // TODO
+      }
+
+      playAction(action: ActorActionConstructor, props: any): void {
+
       }
 
       private clearNodes?() {

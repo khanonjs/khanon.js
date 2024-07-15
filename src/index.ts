@@ -11,7 +11,7 @@ export { Scene } from './decorators/scene/scene-decorator'
 export { SceneProps } from './decorators/scene/scene-props'
 export { SceneInterface } from './decorators/scene/scene-interface'
 
-// Scene state decorator
+// Scene State decorator
 export { SceneState } from './decorators/scene/scene-state/scene-state-decorator'
 export { SceneStateProps } from './decorators/scene/scene-state/scene-state-props'
 export { SceneStateInterface } from './decorators/scene/scene-state/scene-state-interface'
@@ -20,7 +20,11 @@ export { SceneStateInterface } from './decorators/scene/scene-state/scene-state-
 export { Actor } from './decorators/actor/actor-decorator'
 export { ActorProps } from './decorators/actor/actor-props'
 export { ActorInterface } from './decorators/actor/actor-interface'
-export { ActorSprite } from './decorators/actor/actor-sprite/actor-sprite-decorator'
+
+// Actos Action
+export { ActorAction } from './decorators/actor/actor-action/actor-action-decorator'
+export { ActorActionProps } from './decorators/actor/actor-action/actor-action-props'
+export { ActorActionInterface } from './decorators/actor/actor-action/actor-action-interface'
 
 // Sprite decorator
 export { Sprite } from './decorators/sprite/sprite-decorator'

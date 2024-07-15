@@ -1,4 +1,4 @@
-import { ActorEventConstructor } from '../../constructors/actor-event-constructor'
+import { ActorActionConstructor } from '../../constructors/actor-action-constructor'
 import { ActorStateConstructor } from '../../constructors/actor-state-constructor'
 import { GUIConstructor } from '../../constructors/gui-constructor'
 import { MeshConstructor } from '../../constructors/mesh-constructor'
@@ -11,6 +11,6 @@ export interface ActorProps {
   meshes?: MeshConstructor[]
   guis?: GUIConstructor[]
   states?: ActorStateConstructor[]
-  events?: ActorEventConstructor[]
+  actions?: ActorActionConstructor[]
   particles?: (ParticleConstructor | ParticleSourceConstructor)[]
 }

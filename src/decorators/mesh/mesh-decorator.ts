@@ -1,7 +1,10 @@
+import 'reflect-metadata'
+
 import * as BABYLON from '@babylonjs/core'
 
+import { MeshInterface as UserMeshInterface } from '../../'
 import { LoadingProgress } from '../../base'
-import { MeshesController } from '../../controllers/meshes-controller'
+import { MeshesController } from '../../controllers'
 import { BabylonAccessor } from '../../models/babylon-accessor'
 import { Rect } from '../../models/rect'
 import { Logger } from '../../modules/logger'
@@ -14,6 +17,8 @@ import {
   removeLoopUpdate,
   switchLoopUpdate
 } from '../../utils/utils'
+import { ActorInterface } from '../actor/actor-interface'
+import { ActorMetadata } from '../actor/actor-metadata'
 import { SceneType } from '../scene/scene-type'
 import { MeshAnimation } from './mesh-animation'
 import { MeshCore } from './mesh-core'
@@ -21,123 +26,144 @@ import { MeshInterface } from './mesh-interface'
 import { MeshProps } from './mesh-props'
 
 export function Mesh(props: MeshProps): any {
-  return function <T extends { new (...args: any[]): MeshInterface }>(constructor: T & MeshInterface, context: ClassDecoratorContext) {
-    const _classInterface = class extends constructor implements MeshInterface {
-      constructor(readonly scene: SceneType, private readonly props: MeshProps) {
-        super()
-      }
-
-      initialize() {
-        invokeCallback(this.onSpawn, this, this.scene)
-      }
-
-      // ***************
-      // MeshInterface
-      // ***************
-      babylon: Pick<BabylonAccessor, 'mesh'> = { mesh: null }
-      animation: MeshAnimation = null
-      animations: Map<string | number, MeshAnimation> = new Map<string | number, MeshAnimation>()
-      loopUpdate$: BABYLON.Observer<number>
-      canvasResize$: BABYLON.Observer<Rect>
-
-      onSpawn?(scene: SceneType): void
-      onLoopUpdate?(delta: number): void
-      onCanvasResize?(size: Rect): void
-
-      set loopUpdate(value: boolean) { switchLoopUpdate(value, this) }
-      get loopUpdate(): boolean { return !!this.loopUpdate$ }
-
-      setMesh(babylonMesh: BABYLON.Mesh): void {
-        if (this.babylon.mesh) {
-          const transform = this.getTransform()
-          this.babylon.mesh.dispose()
-          this.babylon.mesh = babylonMesh
-          this.setTransform(transform)
-        } else {
-          this.babylon.mesh = babylonMesh
+  return function <T extends { new (...args: any[]): MeshInterface }>(constructorOrTarget: (T & MeshInterface) | any, contextOrProperty: ClassDecoratorContext | string) {
+    const decorateClass = () => {
+      const _classInterface = class extends constructorOrTarget implements MeshInterface {
+        constructor(readonly scene: SceneType, private readonly props: MeshProps) {
+          super()
         }
-        this.transform = this.babylon.mesh
-        attachLoopUpdate(this)
-        attachCanvasResize(this)
-      }
 
-      // ***************
-      // DisplayObject
-      // ***************
-      transform: MeshTransform
+        initialize() {
+          invokeCallback(this.onSpawn, this, this.scene)
+        }
 
-      setTransform(transform: BABYLON.Matrix): void {
+        // ***************
+        // MeshInterface
+        // ***************
+        babylon: Pick<BabylonAccessor, 'mesh'> = { mesh: null }
+        animation: MeshAnimation = null
+        animations: Map<string | number, MeshAnimation> = new Map<string | number, MeshAnimation>()
+        loopUpdate$: BABYLON.Observer<number>
+        canvasResize$: BABYLON.Observer<Rect>
+
+        onSpawn?(scene: SceneType): void
+        onLoopUpdate?(delta: number): void
+        onCanvasResize?(size: Rect): void
+
+        set loopUpdate(value: boolean) { switchLoopUpdate(value, this) }
+        get loopUpdate(): boolean { return !!this.loopUpdate$ }
+
+        setMesh(babylonMesh: BABYLON.Mesh): void {
+          if (this.babylon.mesh) {
+            const transform = this.getTransform()
+            this.babylon.mesh.dispose()
+            this.babylon.mesh = babylonMesh
+            this.setTransform(transform)
+          } else {
+            this.babylon.mesh = babylonMesh
+          }
+          this.transform = this.babylon.mesh
+          attachLoopUpdate(this)
+          attachCanvasResize(this)
+        }
+
+        // ***************
+        // DisplayObject
+        // ***************
+        transform: MeshTransform
+
+        setTransform(transform: BABYLON.Matrix): void {
         // TODO
         // this.babylon.mesh.updatePoseMatrix(transform) // TODO: Test this
         // this.setPosition(transform.getTranslation())
         // this.setRotation(transform.getRotationMatrix())
         // this.babylon.mesh.scaling = transform.sca
         // this.babylon.mesh.rota = transform.getTranslation()
-      }
+        }
 
-      getTransform(): BABYLON.Matrix {
+        getTransform(): BABYLON.Matrix {
         // TODO
-        return null
-      }
+          return null
+        }
 
-      setFrame(frame: number): void {
+        setFrame(frame: number): void {
         // TODO
-      }
+        }
 
-      setFirstFrame(): void {
+        setFirstFrame(): void {
         // TODO
-      }
+        }
 
-      setLastFrame(): void {
+        setLastFrame(): void {
         // TODO
-      }
+        }
 
-      addAnimation(animation: MeshAnimation): void {
+        addAnimation(animation: MeshAnimation): void {
         // TODO
-      }
+        }
 
-      playAnimation(animation: MeshAnimation, loopOverride?: boolean, completed?: () => void): void {
+        playAnimation(animation: MeshAnimation, loopOverride?: boolean, completed?: () => void): void {
         // TODO
-      }
+        }
 
-      stopAnimation(): void {
+        stopAnimation(): void {
         // TODO
-      }
+        }
 
-      subscribeToKeyframe(keyframeId: string, callback: () => void): BABYLON.Observer<void>[] {
+        subscribeToKeyframe(keyframeId: string, callback: () => void): BABYLON.Observer<void>[] {
         // TODO
-        return null
-      }
+          return null
+        }
 
-      clearKeyframeSubscriptions(keyframeId: string): void {
+        clearKeyframeSubscriptions(keyframeId: string): void {
         // TODO
-      }
+        }
 
-      release(): void {
+        release(): void {
         // TODO
-        removeLoopUpdate(this)
-        removeCanvasResize(this)
+          removeLoopUpdate(this)
+          removeCanvasResize(this)
+        }
       }
+      const _classCore = class implements MeshCore {
+        props = props
+        Instance: MeshInterface = new _classInterface(null, null)
+
+        load(scene: SceneType): LoadingProgress {
+          return new LoadingProgress().complete()
+        }
+
+        unload(scene: SceneType): void {
+
+        }
+
+        spawn(scene: SceneType): MeshInterface {
+          const mesh = new _classInterface(scene, this.props)
+          mesh.initialize()
+          return mesh
+        }
+      }
+      MeshesController.register(new _classCore())
+      return _classInterface
     }
-    const _classCore = class implements MeshCore {
-      props = props
-      Instance: MeshInterface = new _classInterface(null, null)
 
-      load(scene: SceneType): LoadingProgress {
-        return new LoadingProgress().complete()
+    // Mutate decorator to class or property
+    if (constructorOrTarget.prototype) {
+      return decorateClass()
+    } else if (constructorOrTarget instanceof ActorInterface) {
+      @Mesh(props)
+      class _meshInterface extends UserMeshInterface {}
+
+      if (!Reflect.hasMetadata('metadata', constructorOrTarget)) {
+        Reflect.defineMetadata('metadata', new ActorMetadata(), constructorOrTarget)
       }
-
-      unload(scene: SceneType): void {
-
-      }
-
-      spawn(scene: SceneType): MeshInterface {
-        const mesh = new _classInterface(scene, this.props)
-        mesh.initialize()
-        return mesh
-      }
+      const metadata = Reflect.getMetadata('metadata', constructorOrTarget) as ActorMetadata
+      metadata.meshes.push({
+        propertyName: contextOrProperty as string,
+        classDefinition: _meshInterface
+      })
+    } else {
+      Logger.debugError('Cannot apply Mesh decorator to non allowed property class:', constructorOrTarget)
     }
-    MeshesController.register(new _classCore())
-    return _classInterface
   }
 }

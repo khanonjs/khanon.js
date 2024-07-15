@@ -2,7 +2,7 @@ import { LoadingProgress } from '../classes/loading-progress'
 import { Loadable } from '../interfaces/loadable'
 import { Controller } from './controller'
 
-export function ControllerLoader</* Constructor type to load */ L, /* Instance or constructor type to get */ T extends Loadable, D = any>(useInstance?: boolean) {
+export function ControllerLoader</* Constructor type to load from */ L, /* Instance or constructor type to get */ T extends Loadable, /* User data for 'load' method */ D = any>(useInstance?: boolean) {
   abstract class ControllerLoadable extends Controller<T>() {
     static load(constructors: L | L[], data?: D): LoadingProgress {
       if (constructors) {
