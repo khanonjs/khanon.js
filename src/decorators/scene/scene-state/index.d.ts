@@ -4,12 +4,20 @@ import { Rect } from '../../../models'
 import { SceneStateProps } from './scene-state-props'
 
 export { SceneStateProps } from './decorators/scene-state/scene-state-props'
+export declare class SceneStateOptions<S = any> {
+  setup(vars: S): void
+}
 export declare function SceneState(props: SceneStateProps): any
-export declare abstract class SceneStateInterface {
+export declare abstract class SceneStateInterface<S = any> {
   /**
-   * Owner scene of this state
+   * Owner scene of this state.
    */
   get scene(): SceneInterface
+
+  /**
+   * Initial setup of the state.
+   */
+  get setup(): S
 
   /**
    * Turns On/Off 'onLoopUpdate' callback.

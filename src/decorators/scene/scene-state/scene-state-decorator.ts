@@ -21,11 +21,10 @@ import { SceneStateProps } from './scene-state-props'
 export function SceneState(props: SceneStateProps): any {
   return function <T extends { new (...args: any[]): SceneStateInterface }>(constructor: T & SceneStateInterface, context: ClassDecoratorContext) {
     const _classInterface = class extends constructor implements SceneStateInterface {
-      constructor(readonly scene: SceneType) {
+      constructor(readonly scene: SceneType, readonly setup: any) {
         super()
       }
 
-      props = props
       loopUpdate$: Observer<number>
       canvasResize$: Observer<Rect>
 
@@ -43,9 +42,9 @@ export function SceneState(props: SceneStateProps): any {
 
       start(): void {
         Logger.debug('SceneState start', _classInterface.prototype)
-        if (this.props.useCamera === UseCamera.ON_START ||
-            (this.props.useCamera === UseCamera.INHERIT && !this.scene.babylon.scene.activeCamera)) {
-          this.setCamera(this.props.camera)
+        if (props.useCamera === UseCamera.ON_START ||
+            (props.useCamera === UseCamera.INHERIT && !this.scene.babylon.scene.activeCamera)) {
+          this.setCamera(props.camera)
         }
         invokeCallback(this.onStart, this, this.scene)
         attachLoopUpdate(this)
@@ -61,10 +60,10 @@ export function SceneState(props: SceneStateProps): any {
     }
     const _classCore = class implements SceneStateCore {
       props = props
-      Instance: SceneStateInterface = new _classInterface(null)
+      Instance: SceneStateInterface = new _classInterface(null, null)
 
       spawn(scene: SceneType): SceneStateInterface {
-        const state = new _classInterface(scene)
+        const state = new _classInterface(scene, null)
         return state
       }
     }

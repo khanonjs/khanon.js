@@ -8,7 +8,7 @@ import { CameraConstructor } from '../../../constructors/camera-constructor'
 import { Rect } from '../../../models/rect'
 import { SceneInterface } from '../scene-interface'
 
-export abstract class SceneStateInterface implements LoopUpdatable, CanvasResizable {
+export abstract class SceneStateInterface<S = any> implements LoopUpdatable, CanvasResizable {
   abstract loopUpdate$?: Observer<number>
   abstract canvasResize$?: Observer<Rect>
   abstract start?(): void
@@ -18,6 +18,7 @@ export abstract class SceneStateInterface implements LoopUpdatable, CanvasResiza
    * User available
    */
   abstract scene: SceneInterface
+  abstract setup: S
   abstract loopUpdate: boolean
   abstract setCamera(camera: CameraConstructor): void
 

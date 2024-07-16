@@ -1,6 +1,7 @@
 import { LoadingProgress } from './base'
 import { SceneConstructor } from './constructors/scene-constructor'
 import { SceneStateConstructor } from './constructors/scene-state-constructor'
+import { SceneStateOptions } from './decorators/scene/scene-state/'
 import { Timeout } from './models/timeout'
 
 // **************
@@ -24,7 +25,6 @@ export { MotionConstructor } from './constructors/motion-constructor'
 export { ParticleConstructor } from './constructors/particle-constructor'
 export { ParticleSourceConstructor } from './constructors/particle-source-constructor'
 export { SceneConstructor } from './constructors/scene-constructor'
-export { SceneEventConstructor } from './constructors/scene-event-constructor'
 export { SceneStateConstructor } from './constructors/scene-state-constructor'
 export { TileMapConstructor } from './constructors/tile-map-constructor'
 export { SceneMapConstructor } from './constructors/scene-map-constructor'
@@ -42,7 +42,7 @@ export declare namespace KJS {
     function load(scene: SceneConstructor[]): LoadingProgress
     function unload(scene: SceneConstructor): void
     function unload(scene: SceneConstructor[]): void
-    function start(scene: SceneConstructor, state: SceneStateConstructor): void
+    function start<S extends SceneStateConstructor>(scene: SceneConstructor, state: S): SceneStateOptions<InstanceType<S>['setup']> // 8a8f
     function stop(scene: SceneConstructor): void
   }
 
