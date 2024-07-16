@@ -33,9 +33,13 @@ export abstract class ActorInterface<B extends SpriteInterface | MeshInterface =
    * User available
    */
   abstract transform: B extends SpriteInterface ? SpriteTransform : MeshTransform
+  abstract body: B
   abstract setBody<B>(Body: new () => B): B
   abstract addNode<B>(Node: B, name: string): B
   abstract getNode(name: string): B
+  abstract removeBody(): void
+  abstract removeNode(name: string): void
+  abstract clearNodes(includeBody: boolean): void
   abstract setVisible(value: boolean): void
   abstract playAction(action: ActorActionConstructor, props: any): void
 

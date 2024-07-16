@@ -35,6 +35,7 @@ import { SceneInterface } from './scene-interface'
 import { SceneProps } from './scene-props'
 import { SceneSpawn } from './scene-spawn'
 import { SceneStateInterface } from './scene-state/scene-state-interface'
+import { SceneStateOptions } from './scene-state/scene-state-options'
 import { SceneType } from './scene-type'
 
 export function Scene(props: SceneProps): any {
@@ -77,7 +78,7 @@ export function Scene(props: SceneProps): any {
       set loopUpdate(value: boolean) { switchLoopUpdate(value, this) }
       get loopUpdate(): boolean { return !!this.loopUpdate$ }
 
-      start(state: SceneStateConstructor): void {
+      start(state: SceneStateConstructor): SceneStateInterface {
         Logger.debug('Scene start', _class.prototype)
         Core.startRenderScene(this)
         this._started = true
@@ -85,6 +86,7 @@ export function Scene(props: SceneProps): any {
         invokeCallback(this.onStart, this)
         attachLoopUpdate(this)
         attachCanvasResize(this)
+        return this.state
       }
 
       stop(): void {
@@ -151,7 +153,7 @@ export function Scene(props: SceneProps): any {
         this._camera.start()
       }
 
-      startState(state: SceneStateConstructor): void {
+      startState(state: SceneStateConstructor): SceneStateOptions {
         if (!this.props.states.find(_state => _state === state)) { Logger.debugError('Trying to set a state non available to the scene. Please check the scene props.', _class.prototype, state.prototype) }
         const _state = SceneStatesController.get(state).spawn(this)
         if (this._state) {
@@ -159,6 +161,7 @@ export function Scene(props: SceneProps): any {
         }
         this._state = _state
         this._state.start()
+        return new SceneStateOptions(this._state)
       }
 
       debugInspector(): void {

@@ -14,6 +14,11 @@ import { SceneType } from './scene-type'
 export class SceneSpawn {
   private readonly scene?: SceneType
   private readonly scenePrototype?: any
+  private actors?: ActorInterface[] = []
+  private particles?: ParticleInterface[] = []
+  private particleSources?: ParticleSourceInterface[] = []
+  private meshes?: MeshInterface[] = []
+  private sprites?: SpriteInterface[] = []
 
   constructor(scene: SceneType, scenePrototype: any) {
     this.scene = scene
@@ -24,6 +29,7 @@ export class SceneSpawn {
     if (this.scene.props.actors.indexOf(actor) === -1) { Logger.debugError('Trying to spawn an actor that doesn\'t belong to the scene. Please check the scene props.', this.scenePrototype, actor.prototype); return }
     Logger.debug('Actor spawn:', actor.prototype)
     const instance = ActorsController.get(actor).spawn(this.scene)
+    this.actors.push(instance)
     return instance as A
   }
 
@@ -42,12 +48,27 @@ export class SceneSpawn {
   mesh<M extends MeshInterface>(mesh: new () => M): M {
     Logger.debug('Mesh spawned:', mesh.prototype)
     const instance = MeshesController.get(mesh).spawn(this.scene)
+    this.meshes.push(instance)
     return instance as M
   }
 
   sprite<S extends SpriteInterface>(sprite: new () => S): S {
     Logger.debug('Sprite spawned:', sprite.prototype)
     const instance = SpritesController.get(sprite).spawn(this.scene)
+    this.sprites.push(instance)
     return instance as S
+  }
+
+  clear() {
+    this.actors.forEach(actor => actor.release())
+    this.actors = []
+    // this.particles.forEach(actor => actor.release()) // TODO
+    // this.particles = []
+    // this.particleSources.forEach(actor => actor.release()) // TODO
+    // this.particleSources = []
+    this.meshes.forEach(mesh => mesh.release())
+    this.meshes = []
+    this.sprites.forEach(sprite => sprite.release())
+    this.sprites = []
   }
 }

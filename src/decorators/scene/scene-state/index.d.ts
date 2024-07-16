@@ -4,7 +4,7 @@ import { Rect } from '../../../models'
 import { SceneStateProps } from './scene-state-props'
 
 export { SceneStateProps } from './decorators/scene-state/scene-state-props'
-export declare class SceneStateOptions<S = any> {
+export declare class SceneStateOptions<S> {
   setup(vars: S): void
 }
 export declare function SceneState(props: SceneStateProps): any
@@ -32,8 +32,14 @@ export declare abstract class SceneStateInterface<S = any> {
 
   /**
    * Invoked on state start. Use this method to setup the scene according to this state start.
+   * NOTE: Setup variables are not present at this point. Setup variables are applied at 'onSetup' callback.
    */
   onStart?(scene: SceneInterface): void
+
+  /**
+   * Invoked after setup variables have been applied to the State.
+   */
+  onSetup?(): void
 
   /**
    * Invoked on state end. Use this method to setup the scene according to this state end.

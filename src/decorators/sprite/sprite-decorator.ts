@@ -85,7 +85,7 @@ export function Sprite(props: SpriteProps): any {
           babylonSprite.isVisible = true
           if (this.babylon.sprite) {
             const transform = this.getTransform()
-            this.babylon.sprite.dispose()
+            this.release()
             this.babylon.sprite = babylonSprite
             this.setTransform(transform)
           } else {

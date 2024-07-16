@@ -9,6 +9,7 @@ import {
   attachCanvasResize,
   attachLoopUpdate,
   invokeCallback,
+  objectToString,
   removeCanvasResize,
   removeLoopUpdate,
   switchLoopUpdate
@@ -41,7 +42,7 @@ export function SceneState(props: SceneStateProps): any {
       }
 
       start(): void {
-        Logger.debug('SceneState start', _classInterface.prototype)
+        if (this.setup) { Logger.debug(`SceneState start, setup: ${objectToString(this.setup)}`, _classInterface.prototype) } else { Logger.debug('SceneState start', _classInterface.prototype) }
         if (props.useCamera === UseCamera.ON_START ||
             (props.useCamera === UseCamera.INHERIT && !this.scene.babylon.scene.activeCamera)) {
           this.setCamera(props.camera)

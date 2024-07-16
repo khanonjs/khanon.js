@@ -58,6 +58,22 @@ export declare abstract class ActorInterface<B extends SpriteInterface | MeshInt
   getNode(name: string): B
 
   /**
+   * Removes the body.
+   */
+  removeBody(): void
+
+  /**
+   * Removes a node.
+   * @param name
+   */
+  removeNode(name: string): void
+
+  /**
+   * Clear all nodes of this actor.
+   */
+  clearNodes(includeBody?: boolean): void
+
+  /**
    * Sets the visibility of Body and all Nodes.
    * @param value
    */

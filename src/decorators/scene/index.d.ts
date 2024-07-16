@@ -10,7 +10,10 @@ import { ParticleSourceInterface } from '../particle-source/particle-source-inte
 import { ParticleInterface } from '../particle/particle-interface'
 import { SpriteInterface } from '../sprite'
 import { SceneProps } from './scene-props'
-import { SceneStateInterface } from './scene-state'
+import {
+  SceneStateInterface,
+  SceneStateOptions
+} from './scene-state'
 
 export { SceneProps } from './decorators/scene/scene-props'
 export declare function Scene(props: SceneProps): any
@@ -45,6 +48,11 @@ export declare class SceneSpawn {
    * @param sprite
    */
   sprite<S extends SpriteInterface>(sprite: new () => S): S
+
+  /**
+   * Remove all spawned elements of this scene.
+   */
+  clear(): void
 }
 
 export declare abstract class SceneInterface {
@@ -83,7 +91,7 @@ export declare abstract class SceneInterface {
    * Start the scene.
    * @param state Initial state.
    */
-  start(state: SceneStateConstructor): void
+  start(state: SceneStateConstructor): SceneStateInterface
 
   /**
    * Stop the scene.
@@ -104,7 +112,7 @@ export declare abstract class SceneInterface {
    * Set the state.
    * @param state
    */
-  startState(state: SceneStateConstructor): void
+  startState<S extends SceneStateConstructor>(state: S): SceneStateOptions<InstanceType<S>['setup']>
 
   /**
    * Callback invoked before the scene has been started.

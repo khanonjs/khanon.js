@@ -65,12 +65,12 @@ export function Actor(props: ActorProps = {}): any {
       get body(): SpriteInterface | MeshInterface { return this._body }
 
       release() {
-        removeLoopUpdate(this) // 8a8f esto aquí?
+        this.clearNodes()
+        removeLoopUpdate(this)
         removeCanvasResize(this)
       }
 
       setBody<B>(Body: new () => B): B {
-        this.clearNodes()
         if (new Body() instanceof SpriteInterface) {
           if (!this.metadata.sprites.find(_definition => _definition.classDefinition === Body) && !this.props.sprites?.find(_sprite => _sprite === Body)) { Logger.debugError('Trying to use a sprite non available to the actor. Please check the actor props.', this.constructor.prototype, Body.prototype); return }
           this._body = SpritesController.get(Body).spawn(this.scene) as any
@@ -79,9 +79,16 @@ export function Actor(props: ActorProps = {}): any {
           this._body = MeshesController.get(Body).spawn(this.scene) as any
         }
         this.transform = this._body.transform
-        attachLoopUpdate(this) // 8a8f esto aquí?
+        attachLoopUpdate(this)
         attachCanvasResize(this)
         return this._body as unknown as B
+      }
+
+      removeBody(): void {
+        if (this._body) {
+          this._body.release()
+          this._body = undefined
+        }
       }
 
       addNode<B>(Node: B, name: string): B {
@@ -98,6 +105,10 @@ export function Actor(props: ActorProps = {}): any {
         return null
       }
 
+      removeNode(name: string): void {
+        // TODO
+      }
+
       setVisible(value: boolean) {
         // TODO
       }
@@ -106,11 +117,14 @@ export function Actor(props: ActorProps = {}): any {
 
       }
 
-      private clearNodes?() {
+      clearNodes(includeBody = true) {
         this.nodes.forEach(node => {
           node.release()
         })
         this.nodes.clear()
+        if (includeBody) {
+          this.removeBody()
+        }
       }
     }
     const _classCore = class implements ActorCore {

@@ -56,7 +56,7 @@ export function Mesh(props: MeshProps): any {
         setMesh(babylonMesh: BABYLON.Mesh): void {
           if (this.babylon.mesh) {
             const transform = this.getTransform()
-            this.babylon.mesh.dispose()
+            this.release()
             this.babylon.mesh = babylonMesh
             this.setTransform(transform)
           } else {
@@ -120,7 +120,8 @@ export function Mesh(props: MeshProps): any {
         }
 
         release(): void {
-        // TODO
+          this.stopAnimation()
+          this.babylon.mesh.dispose()
           removeLoopUpdate(this)
           removeCanvasResize(this)
         }
