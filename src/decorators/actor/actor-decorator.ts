@@ -2,8 +2,10 @@ import { Observer } from '@babylonjs/core'
 
 import { LoadingProgress } from '../../base'
 import { ActorActionConstructor } from '../../constructors/actor-action-constructor'
+import { ActorStateConstructor } from '../../constructors/actor-state-constructor'
 import {
   ActorsController,
+  ActorStatesController,
   MeshesController,
   SpritesController
 } from '../../controllers'
@@ -29,6 +31,8 @@ import { ActorCore } from './actor-core'
 import { ActorInterface } from './actor-interface'
 import { ActorMetadata } from './actor-metadata'
 import { ActorProps } from './actor-props'
+import { ActorStateInterface } from './actor-state/actor-state-interface'
+import { ActorStateOptions } from './actor-state/actor-state-options'
 
 type B = SpriteInterface | MeshInterface
 
@@ -53,6 +57,7 @@ export function Actor(props: ActorProps = {}): any {
       loopUpdate$: Observer<number>
       canvasResize$: Observer<Rect>
       _body?: B
+      _state: ActorStateInterface
       nodes?: Map<string, B> = new Map<string, B>()
 
       onSpawn?(): void
@@ -61,8 +66,8 @@ export function Actor(props: ActorProps = {}): any {
 
       set loopUpdate(value: boolean) { switchLoopUpdate(value, this) }
       get loopUpdate(): boolean { return !!this.loopUpdate$ }
-
       get body(): SpriteInterface | MeshInterface { return this._body }
+      get state(): ActorStateInterface { return this._state }
 
       release() {
         this.clearNodes()
@@ -111,6 +116,17 @@ export function Actor(props: ActorProps = {}): any {
 
       setVisible(value: boolean) {
         // TODO
+      }
+
+      startState(state: ActorStateConstructor): ActorStateOptions {
+        if (!this.props.states?.find(_state => _state === state)) { Logger.debugError('Trying to set a state non available to the actor. Please check the actor props.', _classInterface.prototype, state.prototype); return }
+        const _state = ActorStatesController.get(state).spawn(this)
+        if (this._state) {
+          this._state.end()
+        }
+        this._state = _state
+        this._state.start()
+        return new ActorStateOptions(this._state)
       }
 
       playAction(action: ActorActionConstructor, props: any): void {

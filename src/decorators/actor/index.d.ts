@@ -1,4 +1,5 @@
 import { ActorActionConstructor } from '../../constructors/actor-action-constructor'
+import { ActorStateConstructor } from '../../constructors/actor-state-constructor'
 import { Rect } from '../../models'
 import {
   MeshTransform,
@@ -8,6 +9,10 @@ import { MeshInterface } from '../mesh'
 import { SceneInterface } from '../scene'
 import { SpriteInterface } from '../sprite'
 import { ActorProps } from './actor-props'
+import {
+  ActorStateInterface,
+  ActorStateOptions
+} from './actor-state'
 
 export { ActorProps } from './'
 export declare function Actor(props?: ActorProps): any
@@ -33,6 +38,11 @@ export declare abstract class ActorInterface<B extends SpriteInterface | MeshInt
    * 'actor.transform' references to 'actor.body.transform'.
    */
   get body(): B
+
+  /**
+   * Gets the current state.
+   */
+  get state(): ActorStateInterface
 
   /**
    * Sets the Body of the Actor.
@@ -78,6 +88,12 @@ export declare abstract class ActorInterface<B extends SpriteInterface | MeshInt
    * @param value
    */
   setVisible(value: boolean)
+
+  /**
+   * Starts a state.
+   * @param state
+   */
+  startState<S extends ActorStateConstructor>(state: S): ActorStateOptions<InstanceType<S>['setup']>
 
   /**
    * Plays an Actor Action.

@@ -1,3 +1,4 @@
+import { ActorStateConstructor } from '../../constructors/actor-state-constructor'
 import {
   ActorsController,
   MeshesController,

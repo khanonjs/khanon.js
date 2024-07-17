@@ -1,15 +1,50 @@
+import { Observer } from '@babylonjs/core'
+
 import { ActorStatesController } from '../../../controllers'
+import { Rect } from '../../../models/rect'
 import { Logger } from '../../../modules/logger'
+import {
+  attachCanvasResize,
+  attachLoopUpdate,
+  invokeCallback,
+  objectToString,
+  removeCanvasResize,
+  removeLoopUpdate
+} from '../../../utils/utils'
 import { ActorInterface } from '../actor-interface'
 import { ActorStateCore } from './actor-state-core'
 import { ActorStateInterface } from './actor-state-interface'
 import { ActorStateProps } from './actor-state-props'
 
-export function ActorState(props: ActorStateProps): any {
+export function ActorState(props?: ActorStateProps): any {
   return function <T extends { new (...args: any[]): ActorStateInterface }>(constructor: T & ActorStateInterface, context: ClassDecoratorContext) {
     const _classInterface = class extends constructor implements ActorStateInterface {
       constructor(readonly actor: ActorInterface) {
         super()
+      }
+
+      onStart?(): void
+      onSetup?(): void
+      onEnd?(): void
+      onLoopUpdate?(delta: number): void
+      onCanvasResize?(size: Rect): void
+
+      loopUpdate$?: Observer<number>
+      canvasResize$?: Observer<Rect>
+      setup: any
+      loopUpdate: boolean
+
+      start(): void {
+        Logger.debug('ActorState start', _classInterface.prototype, this.actor.constructor.prototype)
+        invokeCallback(this.onStart, this)
+        attachLoopUpdate(this)
+        attachCanvasResize(this)
+      }
+
+      end(): void {
+        removeLoopUpdate(this)
+        removeCanvasResize(this)
+        invokeCallback(this.onEnd, this)
       }
     }
     const _classCore = class implements ActorStateCore {

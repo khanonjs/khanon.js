@@ -25,7 +25,7 @@ export abstract class SceneStateInterface<S = any> implements LoopUpdatable, Can
   /**
    * User defined
    */
-  onStart?(scene: SceneInterface): void
+  onStart?(): void
   onSetup?(): void
   onEnd?(): void
   onLoopUpdate?(delta: number): void

@@ -154,7 +154,7 @@ export function Scene(props: SceneProps): any {
       }
 
       startState(state: SceneStateConstructor): SceneStateOptions {
-        if (!this.props.states.find(_state => _state === state)) { Logger.debugError('Trying to set a state non available to the scene. Please check the scene props.', _class.prototype, state.prototype) }
+        if (!this.props.states.find(_state => _state === state)) { Logger.debugError('Trying to set a state non available to the scene. Please check the scene props.', _class.prototype, state.prototype); return }
         const _state = SceneStatesController.get(state).spawn(this)
         if (this._state) {
           this._state.end()

@@ -1,8 +1,8 @@
 import { invokeCallback } from '../../../utils/utils'
-import { SceneStateInterface } from './scene-state-interface'
+import { ActorStateInterface } from './actor-state-interface'
 
-export class SceneStateOptions<S = any> {
-  constructor(readonly state?: SceneStateInterface) {}
+export class ActorStateOptions<S = any> {
+  constructor(readonly state?: ActorStateInterface) {}
 
   setup(setup: S) {
     this.state.setup = setup

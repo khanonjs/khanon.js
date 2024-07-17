@@ -21,6 +21,11 @@ export { Actor } from './decorators/actor/actor-decorator'
 export { ActorProps } from './decorators/actor/actor-props'
 export { ActorInterface } from './decorators/actor/actor-interface'
 
+// Actos State
+export { ActorState } from './decorators/actor/actor-state/actor-state-decorator'
+export { ActorStateProps } from './decorators/actor/actor-state/actor-state-props'
+export { ActorStateInterface } from './decorators/actor/actor-state/actor-state-interface'
+
 // Actos Action
 export { ActorAction } from './decorators/actor/actor-action/actor-action-decorator'
 export { ActorActionProps } from './decorators/actor/actor-action/actor-action-props'

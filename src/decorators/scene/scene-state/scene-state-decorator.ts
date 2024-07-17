@@ -42,21 +42,20 @@ export function SceneState(props: SceneStateProps): any {
       }
 
       start(): void {
-        if (this.setup) { Logger.debug(`SceneState start, setup: ${objectToString(this.setup)}`, _classInterface.prototype) } else { Logger.debug('SceneState start', _classInterface.prototype) }
+        Logger.debug('SceneState start', _classInterface.prototype, this.scene.constructor.prototype)
         if (props.useCamera === UseCamera.ON_START ||
             (props.useCamera === UseCamera.INHERIT && !this.scene.babylon.scene.activeCamera)) {
           this.setCamera(props.camera)
         }
-        invokeCallback(this.onStart, this, this.scene)
+        invokeCallback(this.onStart, this)
         attachLoopUpdate(this)
         attachCanvasResize(this)
       }
 
       end(): void {
-        Logger.debug('SceneState end', _classInterface.prototype)
         removeLoopUpdate(this)
         removeCanvasResize(this)
-        invokeCallback(this.onEnd, this, this.scene)
+        invokeCallback(this.onEnd, this)
       }
     }
     const _classCore = class implements SceneStateCore {

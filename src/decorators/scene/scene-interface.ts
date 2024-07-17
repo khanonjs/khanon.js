@@ -10,8 +10,8 @@ import { SceneStateConstructor } from '../../constructors/scene-state-constructo
 import { BabylonAccessor } from '../../models/babylon-accessor'
 import { Rect } from '../../models/rect'
 import { SceneSpawn } from './scene-spawn'
-import { SceneStateOptions } from './scene-state'
 import { SceneStateInterface } from './scene-state/scene-state-interface'
+import { SceneStateOptions } from './scene-state/scene-state-options'
 
 export abstract class SceneInterface implements Loadable, LoopUpdatable, CanvasResizable {
   abstract loopUpdate$?: Observer<number>

@@ -34,7 +34,7 @@ export declare abstract class SceneStateInterface<S = any> {
    * Invoked on state start. Use this method to setup the scene according to this state start.
    * NOTE: Setup variables are not present at this point. Setup variables are applied at 'onSetup' callback.
    */
-  onStart?(scene: SceneInterface): void
+  onStart?(): void
 
   /**
    * Invoked after setup variables have been applied to the State.
