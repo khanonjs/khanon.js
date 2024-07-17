@@ -8,6 +8,7 @@ import {
 import { MeshInterface } from '../mesh'
 import { SceneInterface } from '../scene'
 import { SpriteInterface } from '../sprite'
+import { ActorActionOptions } from './actor-action'
 import { ActorProps } from './actor-props'
 import {
   ActorStateInterface,
@@ -18,7 +19,9 @@ export { ActorProps } from './'
 export declare function Actor(props?: ActorProps): any
 /**
  * Actor Interface to be extended from decorated Actors.
- * The generic 'B' alludes to what kind of interface this actor will have as Body and Nodes (if it is composed by Sprites or Meshes).
+ * @param B alludes to what kind of interface this actor will have as Body and Nodes.
+ * To use 2D Sprites set it as 'SpriteInterface'.
+ * To use 3D Messhes set it as 'MeshInterface'.
  */
 export declare abstract class ActorInterface<B extends SpriteInterface | MeshInterface> {
   /**
@@ -96,11 +99,16 @@ export declare abstract class ActorInterface<B extends SpriteInterface | MeshInt
   startState<S extends ActorStateConstructor>(state: S): ActorStateOptions<InstanceType<S>['setup']>
 
   /**
-   * Plays an Actor Action.
+   * Plays an Action. N actions can be played simultaneously.
    * @param action
-   * @param props
    */
-  playAction(action: ActorActionConstructor, props: any): void
+  playAction<S extends ActorActionConstructor>(action: ActorActionConstructor): ActorActionOptions<InstanceType<S>['setup']>
+
+  /**
+   * Stops an action. Actions can be stopped also within the Action itself.
+   * @param action
+   */
+  stopAction(action: ActorActionConstructor): void
 
   /**
    * Callback invoked after the actor has been spawned on a scene.

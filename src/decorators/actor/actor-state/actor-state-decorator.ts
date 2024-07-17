@@ -7,7 +7,6 @@ import {
   attachCanvasResize,
   attachLoopUpdate,
   invokeCallback,
-  objectToString,
   removeCanvasResize,
   removeLoopUpdate
 } from '../../../utils/utils'

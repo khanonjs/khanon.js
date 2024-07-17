@@ -1,8 +1,4 @@
-import {
-  CanvasResizable,
-  LoopUpdatable,
-  StateInterface
-} from '../../../base'
+import { StateInterface } from '../../../base'
 import { CameraConstructor } from '../../../constructors/camera-constructor'
 import { SceneInterface } from '../scene-interface'
 

@@ -3,7 +3,6 @@ import { CameraConstructor } from '../../../constructors/camera-constructor'
 import { Rect } from '../../../models'
 import { SceneStateProps } from './scene-state-props'
 
-// 8a8f think stages concept
 export { SceneStateProps } from './decorators/scene-state/scene-state-props'
 export declare class SceneStateOptions<S> {
   setup(vars: S): void
@@ -32,7 +31,7 @@ export declare abstract class SceneStateInterface<S = any> {
   setCamera(camera: CameraConstructor): void
 
   /**
-   * Invoked on state start. Use this method to setup the scene according to this state start.
+   * Invoked on State start. Use this method to setup the scene according to this State start.
    * NOTE: Setup variables are not present at this point. Setup variables are applied at 'onSetup' callback.
    */
   onStart?(): void
@@ -43,7 +42,7 @@ export declare abstract class SceneStateInterface<S = any> {
   onSetup?(): void
 
   /**
-   * Invoked on state end. Use this method to setup the scene according to this state end.
+   * Invoked on State end. Use this method to setup the scene according to the State end.
    */
   onEnd?(): void
 

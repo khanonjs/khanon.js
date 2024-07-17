@@ -27,6 +27,7 @@ import {
 import { MeshInterface } from '../mesh/mesh-interface'
 import { SceneType } from '../scene/scene-type'
 import { SpriteInterface } from '../sprite/sprite-interface'
+import { ActorActionOptions } from './actor-action/actor-action-options'
 import { ActorCore } from './actor-core'
 import { ActorInterface } from './actor-interface'
 import { ActorMetadata } from './actor-metadata'
@@ -129,7 +130,11 @@ export function Actor(props: ActorProps = {}): any {
         return new ActorStateOptions(this._state)
       }
 
-      playAction(action: ActorActionConstructor, props: any): void {
+      playAction(action: ActorActionConstructor): ActorActionOptions<any> {
+        return null
+      }
+
+      stopAction(action: ActorActionConstructor): void {
 
       }
 
