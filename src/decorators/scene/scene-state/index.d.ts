@@ -3,6 +3,7 @@ import { CameraConstructor } from '../../../constructors/camera-constructor'
 import { Rect } from '../../../models'
 import { SceneStateProps } from './scene-state-props'
 
+// 8a8f think stages concept
 export { SceneStateProps } from './decorators/scene-state/scene-state-props'
 export declare class SceneStateOptions<S> {
   setup(vars: S): void

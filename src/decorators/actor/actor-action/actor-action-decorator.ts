@@ -9,7 +9,7 @@ import { ActorActionProps } from './actor-action-props'
  * @param props
  * @returns
  */
-export function ActorAction(props: ActorActionProps): any {
+export function ActorAction(props: ActorActionProps = {}): any {
   return function <T extends { new (...args: any[]): any }>(constructor: T & ActorActionInterface, context: ClassDecoratorContext) {
     const _classInterface = class extends constructor implements ActorActionInterface {
       constructor(readonly actor: ActorInterface, readonly props: any) {

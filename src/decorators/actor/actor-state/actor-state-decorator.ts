@@ -16,7 +16,7 @@ import { ActorStateCore } from './actor-state-core'
 import { ActorStateInterface } from './actor-state-interface'
 import { ActorStateProps } from './actor-state-props'
 
-export function ActorState(props?: ActorStateProps): any {
+export function ActorState(props: ActorStateProps = {}): any {
   return function <T extends { new (...args: any[]): ActorStateInterface }>(constructor: T & ActorStateInterface, context: ClassDecoratorContext) {
     const _classInterface = class extends constructor implements ActorStateInterface {
       constructor(readonly actor: ActorInterface) {
