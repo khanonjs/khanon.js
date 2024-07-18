@@ -16,6 +16,7 @@ import { SceneInterface } from '../scene/scene-interface'
 import { SceneType } from '../scene/scene-type'
 import { SpriteInterface } from '../sprite/sprite-interface'
 import { ActorActionOptions } from './actor-action'
+import { ActorActionInterface } from './actor-action/actor-action-interface'
 import { ActorMetadata } from './actor-metadata'
 import { ActorProps } from './actor-props'
 import { ActorStateInterface } from './actor-state/actor-state-interface'
@@ -29,8 +30,9 @@ export abstract class ActorInterface<B extends SpriteInterface | MeshInterface =
   abstract loopUpdate$?: Observer<number>
   abstract canvasResize$?: Observer<Rect>
   abstract _body?: B
-  abstract _state?: ActorStateInterface
   abstract nodes?: Map<string, B>
+  abstract _state?: ActorStateInterface
+  abstract actions?: Map<ActorActionConstructor, ActorActionInterface>
   abstract initialize?(props: ActorProps): void
   abstract release?(): void
 
@@ -50,6 +52,7 @@ export abstract class ActorInterface<B extends SpriteInterface | MeshInterface =
   abstract startState(state: ActorStateConstructor): ActorStateOptions<any>
   abstract playAction(action: ActorActionConstructor): ActorActionOptions<any>
   abstract stopAction(action: ActorActionConstructor): void
+  abstract stopActionGroup(group: number): void
 
   /**
    * User defined

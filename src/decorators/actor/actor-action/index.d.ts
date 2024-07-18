@@ -1,20 +1,20 @@
 import { ActorInterface } from '../'
 import { Rect } from '../../../models/rect'
-import { ActorStateProps } from './actor-state-props'
+import { ActorActionProps } from './actor-action-props'
 
-export { ActorStateProps } from './'
-export declare function ActorAction(props?: ActorStateProps): any
+export { ActorActionProps } from './'
+export declare function ActorAction(props?: ActorActionProps): any
 export declare class ActorActionOptions<S> {
   setup(vars: S): void
 }
 export declare abstract class ActorActionInterface<S = any> {
   /**
-   * Actor owner of the state.
+   * Actor owner of the action.
    */
   actor: ActorInterface
 
   /**
-   * Setup of the state.
+   * Setup of the action.
    */
   setup: S
 
@@ -25,20 +25,20 @@ export declare abstract class ActorActionInterface<S = any> {
   get loopUpdate(): boolean
 
   /**
-   * Invoked on State start. Use this method to setup the Actor according to the State start.
+   * Invoked on action start. Use this method to setup the Actor according to the action start.
    * NOTE: Setup variables are not present at this point. Setup variables are applied at 'onSetup' callback.
    */
   onStart?(): void
 
   /**
-   * Invoked after setup variables have been applied to the State.
+   * Invoked after setup variables have been applied to the action.
    */
   onSetup?(): void
 
   /**
-   * Invoked on State end. Use this method to setup the actor according to the State end.
+   * Invoked on action stop. If 'props.preserved' is 'true', the action instance will remain alive waiting for another 'playAction'.
    */
-  onEnd?(): void
+  onStop?(): void
 
   /**
    * Callback invoked on loop update.

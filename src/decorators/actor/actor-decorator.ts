@@ -4,6 +4,7 @@ import { LoadingProgress } from '../../base'
 import { ActorActionConstructor } from '../../constructors/actor-action-constructor'
 import { ActorStateConstructor } from '../../constructors/actor-state-constructor'
 import {
+  ActorActionsController,
   ActorsController,
   ActorStatesController,
   MeshesController,
@@ -27,6 +28,7 @@ import {
 import { MeshInterface } from '../mesh/mesh-interface'
 import { SceneType } from '../scene/scene-type'
 import { SpriteInterface } from '../sprite/sprite-interface'
+import { ActorActionInterface } from './actor-action/actor-action-interface'
 import { ActorActionOptions } from './actor-action/actor-action-options'
 import { ActorCore } from './actor-core'
 import { ActorInterface } from './actor-interface'
@@ -58,8 +60,9 @@ export function Actor(props: ActorProps = {}): any {
       loopUpdate$: Observer<number>
       canvasResize$: Observer<Rect>
       _body?: B
-      _state: ActorStateInterface
       nodes?: Map<string, B> = new Map<string, B>()
+      _state: ActorStateInterface
+      actions: Map<ActorActionConstructor, ActorActionInterface> = new Map<ActorActionConstructor, ActorActionInterface>()
 
       onSpawn?(): void
       onLoopUpdate?(delta: number): void
@@ -130,12 +133,35 @@ export function Actor(props: ActorProps = {}): any {
         return new ActorStateOptions(this._state)
       }
 
-      playAction(action: ActorActionConstructor): ActorActionOptions<any> {
-        return null
+      playAction(actionConstructor: ActorActionConstructor): ActorActionOptions<any> {
+        if (!this.props.actions?.find(_action => _action === actionConstructor)) { Logger.debugError('Trying to play an action non available to the actor. Please check the actor props.', _classInterface.prototype, actionConstructor.prototype); return }
+        const action = this.actions.get(actionConstructor) ?? ActorActionsController.get(actionConstructor).spawn(this)
+        this.actions.set(actionConstructor, action)
+        action.props.overrides?.forEach(actionOverride => {
+          this.actions.get(actionOverride)?.stop()
+        })
+        action.start()
+        return new ActorActionOptions(action)
       }
 
-      stopAction(action: ActorActionConstructor): void {
+      stopAction(actionConstructor: ActorActionConstructor): void {
+        const action = this.actions.get(actionConstructor)
+        if (action) {
+          action.stop()
+          if (!action.props.preserve) {
+            this.actions.delete(actionConstructor)
+          }
+        }
+      }
 
+      stopActionGroup(group: number): void {
+        const actionsStop: ActorActionConstructor[] = []
+        this.actions.forEach((action, actionConstructor) => {
+          if (action.props.group !== undefined && action.props.group === group) {
+            actionsStop.push(actionConstructor)
+          }
+        })
+        actionsStop.forEach(actionConstructor => this.stopAction(actionConstructor))
       }
 
       clearNodes(includeBody = true) {

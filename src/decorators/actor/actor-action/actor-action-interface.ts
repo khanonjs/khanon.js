@@ -3,17 +3,19 @@ import { Observer } from '@babylonjs/core'
 
 import { Rect } from '../../../models/rect'
 import { ActorInterface } from '../actor-interface'
+import { ActorActionProps } from './actor-action-props'
 
 export abstract class ActorActionInterface<S = any> /* extends StateInterface<S> */ { // 8a8f
+  abstract props?: ActorActionProps
+
   /**
    * User available
    */
   abstract actor: ActorInterface
-
   abstract loopUpdate$?: Observer<number>
   abstract canvasResize$?: Observer<Rect>
   abstract start?(): void
-  abstract end?(): void
+  abstract stop?(): void
 
   /**
    * User available
@@ -26,7 +28,7 @@ export abstract class ActorActionInterface<S = any> /* extends StateInterface<S>
    */
   onStart?(): void
   onSetup?(): void
-  onEnd?(): void
+  onStop?(): void
   onLoopUpdate?(delta: number): void
   onCanvasResize?(size: Rect): void
 }

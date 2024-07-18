@@ -1,6 +1,6 @@
 import { Observer } from '@babylonjs/core'
 
-import { ActorStatesController } from '../../../controllers'
+import { ActorActionsController } from '../../../controllers'
 import { Rect } from '../../../models/rect'
 import { Logger } from '../../../modules/logger'
 import {
@@ -22,9 +22,11 @@ export function ActorAction(props: ActorActionProps = {}): any {
         super()
       }
 
+      props = props
+
       onStart?(): void
       onSetup?(): void
-      onEnd?(): void
+      onStop?(): void
       onLoopUpdate?(delta: number): void
       onCanvasResize?(size: Rect): void
 
@@ -34,16 +36,16 @@ export function ActorAction(props: ActorActionProps = {}): any {
       loopUpdate: boolean
 
       start(): void {
-        Logger.debug('ActorState start', _classInterface.prototype, this.actor.constructor.prototype)
+        Logger.debug('ActorAction start', _classInterface.prototype, this.actor.constructor.prototype)
         invokeCallback(this.onStart, this)
         attachLoopUpdate(this)
         attachCanvasResize(this)
       }
 
-      end(): void {
+      stop(): void {
         removeLoopUpdate(this)
         removeCanvasResize(this)
-        invokeCallback(this.onEnd, this)
+        invokeCallback(this.onStop, this)
       }
     }
     const _classCore = class implements ActorActionCore {
@@ -51,11 +53,11 @@ export function ActorAction(props: ActorActionProps = {}): any {
       Instance: ActorActionInterface = new _classInterface(null)
 
       spawn(actor: ActorInterface): ActorActionInterface {
-        const state = new _classInterface(actor)
-        return state
+        const action = new _classInterface(actor)
+        return action
       }
     }
-    ActorStatesController.register(new _classCore())
+    ActorActionsController.register(new _classCore())
     return _classInterface
   }
 }
