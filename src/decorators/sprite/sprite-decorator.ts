@@ -35,7 +35,7 @@ import { SpriteTexture } from './sprite-texture'
 import { spritePropsDefault } from './sprite.props.deafult'
 
 export function Sprite(props: SpriteProps): any {
-  return function <T extends { new (...args: any[]): SpriteInterface }>(constructorOrTarget: (T & SpriteInterface) | any, contextOrProperty: ClassDecoratorContext | string) {
+  return function <T extends { new (...args: any[]): SpriteInterface }>(constructorOrTarget: (T & SpriteInterface) | any, contextOrProperty: ClassDecoratorContext | string, descriptor: PropertyDescriptor) {
     const decorateClass = () => {
       const _className = constructorOrTarget.name
       const _classInterface = class extends constructorOrTarget implements SpriteInterface {
@@ -294,7 +294,7 @@ export function Sprite(props: SpriteProps): any {
     // Mutate decorator to class or property
     if (constructorOrTarget.prototype) {
       return decorateClass()
-    } else if (constructorOrTarget instanceof ActorInterface) {
+    } else if (constructorOrTarget instanceof ActorInterface && !descriptor) { // Undefined descriptor means it is a property
       @Sprite(props)
       class _spriteInterface extends UserSpriteInterface {}
 
@@ -307,7 +307,7 @@ export function Sprite(props: SpriteProps): any {
         classDefinition: _spriteInterface
       })
     } else {
-      Logger.debugError('Cannot apply Sprite decorator to non allowed property class:', constructorOrTarget)
+      Logger.debugError('Cannot apply sprite decorator to non allowed property class:', constructorOrTarget, contextOrProperty)
     }
   }
 }

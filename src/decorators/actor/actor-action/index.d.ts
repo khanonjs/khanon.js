@@ -1,5 +1,7 @@
 import { ActorInterface } from '../'
 import { Rect } from '../../../models/rect'
+import { MeshInterface } from '../../mesh'
+import { SpriteInterface } from '../../sprite'
 import { ActorActionProps } from './actor-action-props'
 
 export { ActorActionProps } from './'
@@ -11,7 +13,7 @@ export declare abstract class ActorActionInterface<S = any> {
   /**
    * Actor owner of the action.
    */
-  actor: ActorInterface
+  actor: ActorInterface<SpriteInterface | MeshInterface>
 
   /**
    * Setup of the action.

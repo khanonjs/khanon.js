@@ -13,6 +13,7 @@ export interface ActorActionProps {
 
   /**
    * List of actions to be overriden on action play.
+   * NOTE: Overrides don't apply to method decorators.
    */
   overrides?: ActorActionConstructor[]
 }

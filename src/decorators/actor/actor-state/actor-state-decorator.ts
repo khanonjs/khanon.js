@@ -12,6 +12,7 @@ import {
   switchLoopUpdate
 } from '../../../utils/utils'
 import { ActorInterface } from '../actor-interface'
+import { ActorMetadata } from '../actor-metadata'
 import { ActorStateCore } from './actor-state-core'
 import { ActorStateInterface } from './actor-state-interface'
 import { ActorStateProps } from './actor-state-props'
@@ -21,8 +22,10 @@ export function ActorState(props: ActorStateProps = {}): any {
     const _classInterface = class extends constructor implements ActorStateInterface {
       constructor(readonly actor: ActorInterface) {
         super()
+        this.metadata.applyProps(this)
       }
 
+      metadata: ActorMetadata = Reflect.getMetadata('metadata', this) ?? new ActorMetadata()
       loopUpdate$?: Observer<number>
       canvasResize$?: Observer<Rect>
 

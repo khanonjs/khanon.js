@@ -11,7 +11,7 @@ export abstract class ActorActionInterface<S = any> /* extends StateInterface<S>
   /**
    * User available
    */
-  abstract actor: ActorInterface
+  abstract actor: ActorInterface<any>
   abstract loopUpdate$?: Observer<number>
   abstract canvasResize$?: Observer<Rect>
   abstract start?(): void

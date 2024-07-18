@@ -1,5 +1,8 @@
+import 'reflect-metadata'
+
 import { Observer } from '@babylonjs/core'
 
+import { ActorActionInterface as UserActorActionInterface } from '../../../'
 import { ActorActionsController } from '../../../controllers'
 import { Rect } from '../../../models/rect'
 import { Logger } from '../../../modules/logger'
@@ -12,55 +15,88 @@ import {
   switchLoopUpdate
 } from '../../../utils/utils'
 import { ActorInterface } from '../actor-interface'
+import { ActorMetadata } from '../actor-metadata'
+import { ActorStateInterface } from '../actor-state/actor-state-interface'
 import { ActorActionCore } from './actor-action-core'
 import { ActorActionInterface } from './actor-action-interface'
 import { ActorActionProps } from './actor-action-props'
 
 export function ActorAction(props: ActorActionProps = {}): any {
-  return function <T extends { new (...args: any[]): ActorActionInterface }>(constructor: T & ActorActionInterface, context: ClassDecoratorContext) {
-    const _classInterface = class extends constructor implements ActorActionInterface {
-      constructor(readonly actor: ActorInterface) {
-        super()
+  return function <T extends { new (...args: any[]): ActorActionInterface }>(constructorOrTarget: (T & ActorActionInterface) | any, contextOrMethod: ClassDecoratorContext | string, descriptor: PropertyDescriptor) {
+    const decorateClass = () => {
+      const _classInterface = class extends constructorOrTarget implements ActorActionInterface {
+        constructor(readonly actor: ActorInterface) {
+          super()
+        }
+
+        props = props
+
+        onStart?(): void
+        onSetup?(): void
+        onStop?(): void
+        onLoopUpdate?(delta: number): void
+        onCanvasResize?(size: Rect): void
+
+        loopUpdate$?: Observer<number>
+        canvasResize$?: Observer<Rect>
+        setup: any
+
+        set loopUpdate(value: boolean) { switchLoopUpdate(value, this) }
+        get loopUpdate(): boolean { return !!this.loopUpdate$ }
+
+        start(): void {
+          Logger.debug('ActorAction start', _classInterface.prototype, this.actor.constructor.prototype)
+          invokeCallback(this.onStart, this)
+          attachLoopUpdate(this)
+          attachCanvasResize(this)
+        }
+
+        stop(): void {
+          removeLoopUpdate(this)
+          removeCanvasResize(this)
+          invokeCallback(this.onStop, this)
+        }
       }
+      const _classCore = class implements ActorActionCore {
+        props = props
+        Instance: ActorActionInterface = new _classInterface(null)
 
-      props = props
-
-      onStart?(): void
-      onSetup?(): void
-      onStop?(): void
-      onLoopUpdate?(delta: number): void
-      onCanvasResize?(size: Rect): void
-
-      loopUpdate$?: Observer<number>
-      canvasResize$?: Observer<Rect>
-      setup: any
-
-      set loopUpdate(value: boolean) { switchLoopUpdate(value, this) }
-      get loopUpdate(): boolean { return !!this.loopUpdate$ }
-
-      start(): void {
-        Logger.debug('ActorAction start', _classInterface.prototype, this.actor.constructor.prototype)
-        invokeCallback(this.onStart, this)
-        attachLoopUpdate(this)
-        attachCanvasResize(this)
+        spawn(actor: ActorInterface): ActorActionInterface {
+          const action = new _classInterface(actor)
+          return action
+        }
       }
-
-      stop(): void {
-        removeLoopUpdate(this)
-        removeCanvasResize(this)
-        invokeCallback(this.onStop, this)
-      }
+      ActorActionsController.register(new _classCore())
+      return _classInterface
     }
-    const _classCore = class implements ActorActionCore {
-      props = props
-      Instance: ActorActionInterface = new _classInterface(null)
 
-      spawn(actor: ActorInterface): ActorActionInterface {
-        const action = new _classInterface(actor)
-        return action
+    // Mutate decorator to class or property
+    if (constructorOrTarget.prototype) {
+      return decorateClass()
+    } else if ((
+      constructorOrTarget instanceof ActorStateInterface ||
+      constructorOrTarget instanceof ActorInterface
+    ) && descriptor) { // Defined descriptor means it is a method
+      let context: any // 8a8f
+      Logger.trace('Aki descriptor.value', descriptor.value)
+      @ActorAction(props)
+      class _actionInterface extends UserActorActionInterface {
+        onLoopUpdate(delta: number): void {
+          descriptor.value.call(this, delta) // 8a8f losing 'this' here. 'this' must be the instance of constructorOrTarget
+        }
       }
+
+      if (!Reflect.hasMetadata('metadata', constructorOrTarget)) {
+        Reflect.defineMetadata('metadata', new ActorMetadata(), constructorOrTarget)
+      }
+      const metadata = Reflect.getMetadata('metadata', constructorOrTarget) as ActorMetadata
+      metadata.actions.push({
+        methodName: contextOrMethod as string,
+        classDefinition: _actionInterface
+      })
+      Logger.trace('aki REGISTRA ACTION', Reflect.getMetadata('metadata', constructorOrTarget))
+    } else {
+      Logger.debugError('Cannot apply action decorator to non allowed method class:', constructorOrTarget, contextOrMethod)
     }
-    ActorActionsController.register(new _classCore())
-    return _classInterface
   }
 }

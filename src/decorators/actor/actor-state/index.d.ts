@@ -1,5 +1,7 @@
 import { ActorInterface } from '../'
 import { Rect } from '../../../models/rect'
+import { MeshInterface } from '../../mesh'
+import { SpriteInterface } from '../../sprite'
 import { ActorStateProps } from './actor-state-props'
 
 export { ActorStateProps } from './'
@@ -11,7 +13,7 @@ export declare abstract class ActorStateInterface<S = any> {
   /**
    * Actor owner of the state.
    */
-  actor: ActorInterface
+  actor: ActorInterface<SpriteInterface | MeshInterface>
 
   /**
    * Setup of the state.

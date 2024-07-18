@@ -26,7 +26,7 @@ import { MeshInterface } from './mesh-interface'
 import { MeshProps } from './mesh-props'
 
 export function Mesh(props: MeshProps): any {
-  return function <T extends { new (...args: any[]): MeshInterface }>(constructorOrTarget: (T & MeshInterface) | any, contextOrProperty: ClassDecoratorContext | string) {
+  return function <T extends { new (...args: any[]): MeshInterface }>(constructorOrTarget: (T & MeshInterface) | any, contextOrProperty: ClassDecoratorContext | string, descriptor: PropertyDescriptor) {
     const decorateClass = () => {
       const _classInterface = class extends constructorOrTarget implements MeshInterface {
         constructor(readonly scene: SceneType, private readonly props: MeshProps) {
@@ -151,7 +151,7 @@ export function Mesh(props: MeshProps): any {
     // Mutate decorator to class or property
     if (constructorOrTarget.prototype) {
       return decorateClass()
-    } else if (constructorOrTarget instanceof ActorInterface) {
+    } else if (constructorOrTarget instanceof ActorInterface && !descriptor) { // Undefined descriptor means it is a property
       @Mesh(props)
       class _meshInterface extends UserMeshInterface {}
 
@@ -164,7 +164,7 @@ export function Mesh(props: MeshProps): any {
         classDefinition: _meshInterface
       })
     } else {
-      Logger.debugError('Cannot apply Mesh decorator to non allowed property class:', constructorOrTarget)
+      Logger.debugError('Cannot apply mesh decorator to non allowed property class:', constructorOrTarget, contextOrProperty)
     }
   }
 }

@@ -44,9 +44,7 @@ export function Actor(props: ActorProps = {}): any {
     const _classInterface = class extends constructor implements ActorInterface {
       constructor(readonly scene: SceneType) {
         super()
-        this.metadata.sprites.forEach(definition => {
-          this[definition.propertyName] = definition.classDefinition
-        })
+        this.metadata.applyProps(this)
       }
 
       initialize(props: ActorProps) {
@@ -134,7 +132,7 @@ export function Actor(props: ActorProps = {}): any {
       }
 
       playAction(actionConstructor: ActorActionConstructor): ActorActionOptions<any> {
-        if (!this.props.actions?.find(_action => _action === actionConstructor)) { Logger.debugError('Trying to play an action non available to the actor. Please check the actor props.', _classInterface.prototype, actionConstructor.prototype); return }
+        if (!this.props.actions?.find(_action => _action === actionConstructor) && !this.metadata.getProps().actions?.find(_action => _action === actionConstructor) && !this._state?.metadata.getProps().actions?.find(_action => _action === actionConstructor)) { Logger.debugError('Trying to play an action non available to the actor. Please check the actor props.', _classInterface.prototype, actionConstructor.prototype); return }
         const action = this.actions.get(actionConstructor) ?? ActorActionsController.get(actionConstructor).spawn(this)
         this.actions.set(actionConstructor, action)
         action.props.overrides?.forEach(actionOverride => {
