@@ -8,7 +8,8 @@ import {
   attachLoopUpdate,
   invokeCallback,
   removeCanvasResize,
-  removeLoopUpdate
+  removeLoopUpdate,
+  switchLoopUpdate
 } from '../../../utils/utils'
 import { ActorInterface } from '../actor-interface'
 import { ActorActionCore } from './actor-action-core'
@@ -33,7 +34,9 @@ export function ActorAction(props: ActorActionProps = {}): any {
       loopUpdate$?: Observer<number>
       canvasResize$?: Observer<Rect>
       setup: any
-      loopUpdate: boolean
+
+      set loopUpdate(value: boolean) { switchLoopUpdate(value, this) }
+      get loopUpdate(): boolean { return !!this.loopUpdate$ }
 
       start(): void {
         Logger.debug('ActorAction start', _classInterface.prototype, this.actor.constructor.prototype)

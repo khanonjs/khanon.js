@@ -102,7 +102,7 @@ export declare abstract class ActorInterface<B extends SpriteInterface | MeshInt
    * Plays an Action. N actions can be played simultaneously.
    * @param action
    */
-  playAction<S extends ActorActionConstructor>(action: ActorActionConstructor): ActorActionOptions<InstanceType<S>['setup']>
+  playAction<S extends ActorActionConstructor>(action: S): ActorActionOptions<InstanceType<S>['setup']>
 
   /**
    * Stops an action. Actions can be stopped also within the Action itself.

@@ -8,7 +8,8 @@ import {
   attachLoopUpdate,
   invokeCallback,
   removeCanvasResize,
-  removeLoopUpdate
+  removeLoopUpdate,
+  switchLoopUpdate
 } from '../../../utils/utils'
 import { ActorInterface } from '../actor-interface'
 import { ActorStateCore } from './actor-state-core'
@@ -22,16 +23,19 @@ export function ActorState(props: ActorStateProps = {}): any {
         super()
       }
 
+      loopUpdate$?: Observer<number>
+      canvasResize$?: Observer<Rect>
+
       onStart?(): void
       onSetup?(): void
       onEnd?(): void
       onLoopUpdate?(delta: number): void
       onCanvasResize?(size: Rect): void
 
-      loopUpdate$?: Observer<number>
-      canvasResize$?: Observer<Rect>
       setup: any
-      loopUpdate: boolean
+
+      set loopUpdate(value: boolean) { switchLoopUpdate(value, this) }
+      get loopUpdate(): boolean { return !!this.loopUpdate$ }
 
       start(): void {
         Logger.debug('ActorState start', _classInterface.prototype, this.actor.constructor.prototype)
