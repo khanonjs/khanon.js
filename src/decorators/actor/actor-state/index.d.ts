@@ -9,11 +9,16 @@ export declare function ActorState(props?: ActorStateProps): any
 export declare class ActorStateOptions<S> {
   setup(vars: S): void
 }
-export declare abstract class ActorStateInterface<S = any> {
+/**
+ * Defines the state of an actor.
+ * @param A Actor owner of hte state (optional).
+ * @param S Setup interface (optional).
+ */
+export declare abstract class ActorStateInterface<S = any, A = ActorInterface<SpriteInterface | MeshInterface>> {
   /**
    * Actor owner of the state.
    */
-  actor: ActorInterface<SpriteInterface | MeshInterface>
+  actor: A
 
   /**
    * Setup of the state.

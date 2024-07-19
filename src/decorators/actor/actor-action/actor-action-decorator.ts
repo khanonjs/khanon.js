@@ -77,13 +77,9 @@ export function ActorAction(props: ActorActionProps = {}): any {
       constructorOrTarget instanceof ActorStateInterface ||
       constructorOrTarget instanceof ActorInterface
     ) && descriptor) { // Defined descriptor means it is a method
-      let context: any // 8a8f
-      Logger.trace('Aki descriptor.value', descriptor.value)
       @ActorAction(props)
       class _actionInterface extends UserActorActionInterface {
-        onLoopUpdate(delta: number): void {
-          descriptor.value.call(this, delta) // 8a8f losing 'this' here. 'this' must be the instance of constructorOrTarget
-        }
+        onLoopUpdate = descriptor.value
       }
 
       if (!Reflect.hasMetadata('metadata', constructorOrTarget)) {
@@ -94,7 +90,6 @@ export function ActorAction(props: ActorActionProps = {}): any {
         methodName: contextOrMethod as string,
         classDefinition: _actionInterface
       })
-      Logger.trace('aki REGISTRA ACTION', Reflect.getMetadata('metadata', constructorOrTarget))
     } else {
       Logger.debugError('Cannot apply action decorator to non allowed method class:', constructorOrTarget, contextOrMethod)
     }

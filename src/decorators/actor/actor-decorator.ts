@@ -133,12 +133,26 @@ export function Actor(props: ActorProps = {}): any {
 
       playAction(actionConstructor: ActorActionConstructor): ActorActionOptions<any> {
         if (!this.props.actions?.find(_action => _action === actionConstructor) && !this.metadata.getProps().actions?.find(_action => _action === actionConstructor) && !this._state?.metadata.getProps().actions?.find(_action => _action === actionConstructor)) { Logger.debugError('Trying to play an action non available to the actor. Please check the actor props.', _classInterface.prototype, actionConstructor.prototype); return }
-        const action = this.actions.get(actionConstructor) ?? ActorActionsController.get(actionConstructor).spawn(this)
-        this.actions.set(actionConstructor, action)
-        action.props.overrides?.forEach(actionOverride => {
-          this.actions.get(actionOverride)?.stop()
-        })
-        action.start()
+        let action = this.actions.get(actionConstructor)
+        if (!action) {
+          action = ActorActionsController.get(actionConstructor).spawn(this)
+          if (!this.props.actions?.find(_action => _action === actionConstructor)) {
+            // Applies context to 'onLoopUpdate' as caller 'Actor' or 'ActorState' to preserve the 'this'
+            // in case 'onLoopUpdate' is equivalent to a decorated method of some of those both interfaces.
+            action.onLoopUpdate = action.onLoopUpdate.bind(
+              this.metadata.getProps().actions?.find(_action => _action === actionConstructor)
+                ? this
+                : this._state?.metadata.getProps().actions?.find(_action => _action === actionConstructor)
+                  ? this._state
+                  : undefined
+            )
+          }
+          this.actions.set(actionConstructor, action)
+          action.props.overrides?.forEach(actionOverride => {
+            this.actions.get(actionOverride)?.stop()
+          })
+          action.start()
+        }
         return new ActorActionOptions(action)
       }
 

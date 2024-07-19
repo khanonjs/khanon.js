@@ -5,6 +5,13 @@ import { SpriteInterface } from '../../sprite'
 import { ActorActionProps } from './actor-action-props'
 
 export { ActorActionProps } from './'
+/**
+ * ActorAction decorator can be applied in three different places:
+ * - To a class itself, where it will inherit extended ActorActionInterface lifecycle, methods and variables.
+ * - To an 'Actor' class method, where it will be called as the 'onLoopUpdate' callback.
+ * - To an 'ActorState' class method, where it will be called as the 'onLoopUpdate' callback.
+ * @param props
+ */
 export declare function ActorAction(props?: ActorActionProps): any
 export declare class ActorActionOptions<S> {
   setup(vars: S): void
