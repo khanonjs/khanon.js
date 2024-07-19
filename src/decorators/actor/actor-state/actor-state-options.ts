@@ -1,11 +1,3 @@
-import { invokeCallback } from '../../../utils/utils'
-import { ActorStateInterface } from './actor-state-interface'
+import { StateOptions } from '../../../base'
 
-export class ActorStateOptions<S = any> {
-  constructor(readonly state?: ActorStateInterface) {}
-
-  setup(setup: S) {
-    this.state.setup = setup
-    invokeCallback(this.state.onSetup, this.state)
-  }
-}
+export class ActorStateOptions<S = any> extends StateOptions<S> {}

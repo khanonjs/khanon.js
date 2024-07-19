@@ -2,8 +2,8 @@ import 'reflect-metadata'
 
 import { Observer } from '@babylonjs/core'
 
-import { ActorActionInterface as UserActorActionInterface } from '../../../'
-import { ActorActionsController } from '../../../controllers'
+import { SceneActionInterface as UserSceneActionInterface } from '../../..'
+import { SceneActionsController } from '../../../controllers'
 import { Rect } from '../../../models/rect'
 import { Logger } from '../../../modules/logger'
 import {
@@ -14,18 +14,19 @@ import {
   removeLoopUpdate,
   switchLoopUpdate
 } from '../../../utils/utils'
-import { ActorInterface } from '../actor-interface'
-import { ActorMetadata } from '../actor-metadata'
-import { ActorStateInterface } from '../actor-state/actor-state-interface'
-import { ActorActionCore } from './actor-action-core'
-import { ActorActionInterface } from './actor-action-interface'
-import { ActorActionProps } from './actor-action-props'
+import { SceneInterface } from '../scene-interface'
+import { SceneMetadata } from '../scene-metadata'
+import { SceneStateInterface } from '../scene-state/scene-state-interface'
+import { SceneType } from '../scene-type'
+import { SceneActionCore } from './scene-action-core'
+import { SceneActionInterface } from './scene-action-interface'
+import { SceneActionProps } from './scene-action-props'
 
-export function ActorAction(props: ActorActionProps = {}): any {
-  return function <T extends { new (...args: any[]): ActorActionInterface }>(constructorOrTarget: (T & ActorActionInterface) | any, contextOrMethod: ClassDecoratorContext | string, descriptor: PropertyDescriptor) {
+export function SceneAction(props: SceneActionProps = {}): any {
+  return function <T extends { new (...args: any[]): SceneActionInterface }>(constructorOrTarget: (T & SceneActionInterface) | any, contextOrMethod: ClassDecoratorContext | string, descriptor: PropertyDescriptor) {
     const decorateClass = () => {
-      const _classInterface = class extends constructorOrTarget implements ActorActionInterface {
-        constructor(readonly actor: ActorInterface) {
+      const _classInterface = class extends constructorOrTarget implements SceneActionInterface {
+        constructor(readonly scene: SceneInterface) {
           super()
         }
 
@@ -56,16 +57,16 @@ export function ActorAction(props: ActorActionProps = {}): any {
           invokeCallback(this.onStop, this)
         }
       }
-      const _classCore = class implements ActorActionCore {
+      const _classCore = class implements SceneActionCore {
         props = props
-        Instance: ActorActionInterface = new _classInterface(null)
+        Instance: SceneActionInterface = new _classInterface(null)
 
-        spawn(actor: ActorInterface): ActorActionInterface {
-          const action = new _classInterface(actor)
+        spawn(scene: SceneType): SceneActionInterface {
+          const action = new _classInterface(scene)
           return action
         }
       }
-      ActorActionsController.register(new _classCore())
+      SceneActionsController.register(new _classCore())
       return _classInterface
     }
 
@@ -73,18 +74,18 @@ export function ActorAction(props: ActorActionProps = {}): any {
     if (constructorOrTarget.prototype) {
       return decorateClass()
     } else if ((
-      constructorOrTarget instanceof ActorStateInterface ||
-      constructorOrTarget instanceof ActorInterface
+      constructorOrTarget instanceof SceneStateInterface ||
+      constructorOrTarget instanceof SceneInterface
     ) && descriptor) { // Defined descriptor means it is a method
-      @ActorAction(props)
-      class _actionInterface extends UserActorActionInterface {
+      @SceneAction(props)
+      class _actionInterface extends UserSceneActionInterface {
         onLoopUpdate = descriptor.value
       }
 
       if (!Reflect.hasMetadata('metadata', constructorOrTarget)) {
-        Reflect.defineMetadata('metadata', new ActorMetadata(), constructorOrTarget)
+        Reflect.defineMetadata('metadata', new SceneMetadata(), constructorOrTarget)
       }
-      const metadata = Reflect.getMetadata('metadata', constructorOrTarget) as ActorMetadata
+      const metadata = Reflect.getMetadata('metadata', constructorOrTarget) as SceneMetadata
       metadata.actions.push({
         methodName: contextOrMethod as string,
         classDefinition: _actionInterface

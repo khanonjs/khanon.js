@@ -3,11 +3,11 @@ import {
   MetadataMeshDefinition,
   MetadataSpriteDefinition
 } from '../../base'
-import { ActorActionConstructor } from '../../constructors/actor-action-constructor'
-import { ActorProps } from './actor-props'
+import { SceneActionConstructor } from '../../constructors/scene-action-constructor'
+import { SceneProps } from './scene-props'
 
-export class ActorMetadata {
-  actions: MetadataActionDefinition<ActorActionConstructor>[] = []
+export class SceneMetadata {
+  actions: MetadataActionDefinition<SceneActionConstructor>[] = []
   sprites: MetadataSpriteDefinition[] = []
   meshes: MetadataMeshDefinition[] = []
 
@@ -23,7 +23,7 @@ export class ActorMetadata {
     })
   }
 
-  getProps(): ActorProps {
+  getProps(): SceneProps {
     return {
       actions: this.actions.map(definition => definition.classDefinition),
       sprites: this.sprites.map(definition => definition.classDefinition),

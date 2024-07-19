@@ -4,9 +4,22 @@ export { LoadingProgress } from './classes/loading-progress'
 export { ControllerLoader } from './controller/controller-loadable'
 export { Controller } from './controller/controller'
 
+export { ActionCore } from './interfaces/action/action-core'
+export { ActionInterface } from './interfaces/action/action-interface'
+export { ActionOptions } from './interfaces/action/action-options'
+export { ActionProps } from './interfaces/action/action-props'
+
+export { MetadataActionDefinition } from './interfaces/metadata/metadata-action-definition'
+export { MetadataMeshDefinition } from './interfaces/metadata/metadata-mesh-definition'
+export { MetadataSpriteDefinition } from './interfaces/metadata/metadata-sprite-definition'
+
+export { StateCore } from './interfaces/state/state-core'
+export { StateInterface } from './interfaces/state/state-interface'
+export { StateOptions } from './interfaces/state/state-options'
+export { StateProps } from './interfaces/state/state-props'
+
 export { CanvasResizable } from './interfaces/canvas-resizable'
 export { DisplayObject } from './interfaces/display-object'
 export { Loadable } from './interfaces/loadable'
 export { LoopUpdatable } from './interfaces/loop-updatable'
 export { Spawnable } from './interfaces/spawnable'
-export { StateInterface } from './interfaces/state-interface'

@@ -4,9 +4,11 @@ import { SceneConfiguration } from '../../babylon-config'
 import { ActorConstructor } from '../../constructors/actor-constructor'
 import { CameraConstructor } from '../../constructors/camera-constructor'
 import { GUIConstructor } from '../../constructors/gui-constructor'
-// import { SceneActionConstructor } from '../../constructors/scene-action-constructor' // 8a8f
+import { MeshConstructor } from '../../constructors/mesh-constructor'
+import { SceneActionConstructor } from '../../constructors/scene-action-constructor'
 import { SceneMapConstructor } from '../../constructors/scene-map-constructor'
 import { SceneStateConstructor } from '../../constructors/scene-state-constructor'
+import { SpriteConstructor } from '../../constructors/sprite-constructor'
 
 export interface SceneProps {
     options?: SceneOptions
@@ -16,5 +18,7 @@ export interface SceneProps {
     maps?: SceneMapConstructor[]
     states?: SceneStateConstructor[]
     actors?: ActorConstructor[]
-    // actions?: SceneActionConstructor[]
+    actions?: SceneActionConstructor[]
+    sprites?: SpriteConstructor[]
+    meshes?: MeshConstructor[]
 }

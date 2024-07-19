@@ -6,11 +6,13 @@ import * as BABYLON from '@babylonjs/core'
 
 import { LoadingProgress } from '../../base'
 import { CameraConstructor } from '../../constructors/camera-constructor'
+import { SceneActionConstructor } from '../../constructors/scene-action-constructor'
 import { SceneStateConstructor } from '../../constructors/scene-state-constructor'
 import {
   ActorsController,
   AssetsController,
   CamerasController,
+  SceneActionsController,
   ScenesController,
   SceneStatesController
 } from '../../controllers'
@@ -30,8 +32,11 @@ import {
   switchLoopUpdate
 } from '../../utils/utils'
 import { CameraInterface } from '../camera/camera-interface'
+import { SceneActionInterface } from './scene-action/scene-action-interface'
+import { SceneActionOptions } from './scene-action/scene-action-options'
 import { SceneCore } from './scene-core'
 import { SceneInterface } from './scene-interface'
+import { SceneMetadata } from './scene-metadata'
 import { SceneProps } from './scene-props'
 import { SceneSpawn } from './scene-spawn'
 import { SceneStateInterface } from './scene-state/scene-state-interface'
@@ -44,9 +49,12 @@ export function Scene(props: SceneProps): any {
       constructor() {
         super()
         this._spawn = new SceneSpawn(this, _class.prototype)
+        this.metadata.applyProps(this)
       }
 
       props = removeArrayDuplicitiesInObject(props)
+      metadata: SceneMetadata = Reflect.getMetadata('metadata', this) ?? new SceneMetadata()
+      actions: Map<SceneActionConstructor, SceneActionInterface> = new Map<SceneActionConstructor, SceneActionInterface>()
       protected _assets: AssetDefinition[]
       protected _loaded: boolean
       protected _started: boolean
@@ -162,6 +170,51 @@ export function Scene(props: SceneProps): any {
         this._state = _state
         this._state.start()
         return new SceneStateOptions(this._state)
+      }
+
+      playAction(actionConstructor: SceneActionConstructor): SceneActionOptions<any> {
+        if (!this.props.actions?.find(_action => _action === actionConstructor) && !this.metadata.getProps().actions?.find(_action => _action === actionConstructor) && !this._state?.metadata.getProps().actions?.find(_action => _action === actionConstructor)) { Logger.debugError('Trying to play an action non available to the actor. Please check the actor props.', _class.prototype, actionConstructor.prototype); return }
+        let action = this.actions.get(actionConstructor)
+        if (!action) {
+          action = SceneActionsController.get(actionConstructor).spawn(this)
+          if (!this.props.actions?.find(_action => _action === actionConstructor)) {
+            // Applies context to 'onLoopUpdate' as caller 'Actor' or 'ActorState' to preserve the 'this'
+            // in case 'onLoopUpdate' is equivalent to a decorated method of some of those both interfaces.
+            action.onLoopUpdate = action.onLoopUpdate.bind(
+              this.metadata.getProps().actions?.find(_action => _action === actionConstructor)
+                ? this
+                : this._state?.metadata.getProps().actions?.find(_action => _action === actionConstructor)
+                  ? this._state
+                  : undefined
+            )
+          }
+          this.actions.set(actionConstructor, action)
+          action.props.overrides?.forEach(actionOverride => {
+            this.actions.get(actionOverride)?.stop()
+          })
+          action.start()
+        }
+        return new SceneActionOptions(action)
+      }
+
+      stopAction(actionConstructor: SceneActionConstructor): void {
+        const action = this.actions.get(actionConstructor)
+        if (action) {
+          action.stop()
+          if (!action.props.preserve) {
+            this.actions.delete(actionConstructor)
+          }
+        }
+      }
+
+      stopActionGroup(group: number): void {
+        const actionsStop: SceneActionConstructor[] = []
+        this.actions.forEach((action, actionConstructor) => {
+          if (action.props.group !== undefined && action.props.group === group) {
+            actionsStop.push(actionConstructor)
+          }
+        })
+        actionsStop.forEach(actionConstructor => this.stopAction(actionConstructor))
       }
 
       debugInspector(): void {

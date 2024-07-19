@@ -13,6 +13,7 @@ import {
   removeLoopUpdate,
   switchLoopUpdate
 } from '../../../utils/utils'
+import { SceneMetadata } from '../scene-metadata'
 import { SceneType } from '../scene-type'
 import { SceneStateCore } from './scene-state-core'
 import { SceneStateInterface } from './scene-state-interface'
@@ -23,10 +24,12 @@ export function SceneState(props: SceneStateProps): any {
     const _classInterface = class extends constructor implements SceneStateInterface {
       constructor(readonly scene: SceneType, readonly setup: any) {
         super()
+        this.metadata.applyProps(this)
       }
 
       loopUpdate$: Observer<number>
       canvasResize$: Observer<Rect>
+      metadata: SceneMetadata = Reflect.getMetadata('metadata', this) ?? new SceneMetadata()
 
       onStart?(): void
       onEnd?(): void

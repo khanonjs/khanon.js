@@ -1,11 +1,3 @@
-import { invokeCallback } from '../../../utils/utils'
-import { ActorActionInterface } from './actor-action-interface'
+import { ActionOptions } from '../../../base'
 
-export class ActorActionOptions<S = any> {
-  constructor(readonly action?: ActorActionInterface) {}
-
-  setup(setup: S) {
-    this.action.setup = setup
-    invokeCallback(this.action.onSetup, this.action)
-  }
-}
+export class ActorActionOptions<S = any> extends ActionOptions<S> {}

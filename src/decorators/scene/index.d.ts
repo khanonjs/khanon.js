@@ -1,4 +1,5 @@
 import { LoadingProgress } from '../../base'
+import { SceneActionConstructor } from '../../constructors/scene-action-constructor'
 import { SceneStateConstructor } from '../../constructors/scene-state-constructor'
 import {
   BabylonAccessor,
@@ -9,6 +10,7 @@ import { MeshInterface } from '../mesh'
 import { ParticleSourceInterface } from '../particle-source/particle-source-interface'
 import { ParticleInterface } from '../particle/particle-interface'
 import { SpriteInterface } from '../sprite'
+import { SceneActionOptions } from './scene-action'
 import { SceneProps } from './scene-props'
 import {
   SceneStateInterface,
@@ -113,6 +115,25 @@ export declare abstract class SceneInterface {
    * @param state
    */
   startState<S extends SceneStateConstructor>(state: S): SceneStateOptions<InstanceType<S>['setup']>
+
+  /**
+   * Plays an Action. N actions can be played simultaneously.
+   * @param action
+   */
+  // playAction<S extends SceneActionConstructor>(action: S | ((delta: number) => void)): SceneActionOptions<InstanceType<S>['setup']> // TODO don't return ActorActionOptions in case it is (delta:number) => void
+  playAction<S extends SceneActionConstructor>(action: S | ((delta: number) => void)): SceneActionOptions<InstanceType<S>['setup']> // 8a8f
+
+  /**
+   * Stops an action. Actions can be stopped also within the Action itself.
+   * @param action
+   */
+  stopAction(action: SceneActionConstructor | ((delta: number) => void)): void
+
+  /**
+   * Stops all actions of a group.
+   * @param group
+   */
+  stopActionGroup(group: number): void
 
   /**
    * Callback invoked before the scene has been started.

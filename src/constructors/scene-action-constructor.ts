@@ -1,3 +1,3 @@
-// import { SceneActionInterface } from '../decorators/scene/scene-action/scene-action-interface' // 8a8f
+import { SceneActionInterface } from '../decorators/scene/scene-action/scene-action-interface'
 
-// export type SceneActionConstructor = new () => SceneActionInterface
+export type SceneActionConstructor = new () => SceneActionInterface

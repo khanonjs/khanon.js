@@ -1,8 +1,8 @@
 import { Observer } from '@babylonjs/core'
 
-import { Rect } from '../../models/rect'
-import { CanvasResizable } from './canvas-resizable'
-import { LoopUpdatable } from './loop-updatable'
+import { Rect } from '../../../models/rect'
+import { CanvasResizable } from '../canvas-resizable'
+import { LoopUpdatable } from '../loop-updatable'
 
 export abstract class StateInterface<S = any> implements LoopUpdatable, CanvasResizable {
   abstract loopUpdate$?: Observer<number>
