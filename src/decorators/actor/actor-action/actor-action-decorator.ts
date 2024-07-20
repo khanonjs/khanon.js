@@ -4,6 +4,7 @@ import { Observer } from '@babylonjs/core'
 
 import { ActorActionInterface as UserActorActionInterface } from '../../../'
 import { ActorActionsController } from '../../../controllers'
+import { Core } from '../../../core'
 import { Rect } from '../../../models/rect'
 import { Logger } from '../../../modules/logger'
 import {
@@ -37,6 +38,8 @@ export function ActorAction(props: ActorActionProps = {}): any {
         onLoopUpdate?(delta: number): void
         onCanvasResize?(size: Rect): void
 
+        countFramesUpdate$?: Observer<number>
+        countFrames = 0
         loopUpdate$?: Observer<number>
         canvasResize$?: Observer<Rect>
         setup: any
@@ -45,6 +48,17 @@ export function ActorAction(props: ActorActionProps = {}): any {
         get loopUpdate(): boolean { return !!this.loopUpdate$ }
 
         start(): void {
+          if (this.props.countFrames) {
+            this.countFramesUpdate$ = Core.addLoopUpdateObserver(() => {
+              this.countFrames++
+              if (this.countFrames > this.props.countFrames) {
+                this.countFramesUpdate$.remove()
+                this.countFramesUpdate$ = undefined
+                this.countFrames = 0
+                this.stop()
+              }
+            })
+          }
           invokeCallback(this.onStart, this)
           attachLoopUpdate(this)
           attachCanvasResize(this)

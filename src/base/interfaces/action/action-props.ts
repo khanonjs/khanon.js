@@ -14,4 +14,9 @@ export interface ActionProps<O> {
    * NOTE: Overrides don't apply to method decorators.
    */
   overrides?: O[]
+
+  /**
+   * Count of number of frames this action is executed.
+   */
+  countFrames?: number
 }
