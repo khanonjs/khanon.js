@@ -5,7 +5,10 @@ import {
   BabylonAccessor,
   Rect
 } from '../../models'
-import { SpriteTransform } from '../../types'
+import {
+  FlexId,
+  SpriteTransform
+} from '../../types'
 import { SceneInterface } from '../scene'
 
 export interface SpriteAnimation extends AnimationBase {}
@@ -156,12 +159,12 @@ export declare abstract class SpriteInterface {
   addAnimation(animation: SpriteAnimation): void
 
   /**
-   * Plays an animation. Animations are defined in the Sprite decorator 'props' or manually using 'MeshAnimation' interface.
-   * @param animation Animation object or ID of a predefined animation
+   * Plays an animation. Animations are defined in the Sprite decorator 'props' or manually using 'SpriteAnimation' interface.
+   * @param animation Animation object or Id of a predefined animation
    * @param loopOverride Overrides the animation loop value in case needed
    * @param completed Completed animation callback
    */
-  playAnimation(animation: SpriteAnimation | string, loopOverride?: boolean, completed?: () => void): void
+  playAnimation(animation: SpriteAnimation | FlexId, loopOverride?: boolean, completed?: () => void): void
 
   /**
    * Stops current animation.

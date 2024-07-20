@@ -1,8 +1,10 @@
+import { FlexId } from '../types'
+
 export declare interface AnimationKeyFrame {
   /**
    * Id of the keyframe.
    */
-  id: string | number
+  id: FlexId
 
   /**
    * Frames to trigger the emitter.
@@ -14,7 +16,7 @@ export declare interface AnimationBase {
   /**
    * Id of the animation.
    */
-  id: string | number
+  id: FlexId
 
   /**
    * Delay between frames (in milliseconds)

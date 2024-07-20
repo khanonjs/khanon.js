@@ -1,10 +1,11 @@
+import { FlexId } from '../types'
 import { AnimationKeyFrame } from './animation-keyframe'
 
 export interface AnimationBase {
   /**
    * Id of the animation.
    */
-  id: string | number
+  id: FlexId
 
   /**
    * Delay between frames (in milliseconds)

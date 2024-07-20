@@ -8,13 +8,14 @@ export abstract class ActionInterface<S = any> implements LoopUpdatable, CanvasR
   abstract loopUpdate$?: Observer<number>
   abstract canvasResize$?: Observer<Rect>
   abstract start?(): void
-  abstract stop?(): void
+  abstract end?(): void
 
   /**
    * User available
    */
   abstract setup: S
   abstract loopUpdate: boolean
+  abstract stop(): void // Callable from user Action, it will call to 'owner.stopActionFromInstance', then owner calls 'action.end' after remove it.
 
   /**
    * User defined

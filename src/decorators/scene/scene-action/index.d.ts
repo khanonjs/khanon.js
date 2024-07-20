@@ -32,6 +32,11 @@ export declare abstract class SceneActionInterface<S = any, C = SceneInterface> 
   get loopUpdate(): boolean
 
   /**
+   * Stops the action. Equivalent to calling 'scene.stopAction'.
+   */
+  stop(): void
+
+  /**
    * Invoked on action start. Use this method to setup the Actor according to the action start.
    * NOTE: Setup variables are not present at this point. Setup variables are applied at 'onSetup' callback.
    */

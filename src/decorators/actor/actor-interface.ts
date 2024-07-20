@@ -35,6 +35,7 @@ export abstract class ActorInterface<B extends SpriteInterface | MeshInterface =
   abstract actions?: Map<ActorActionConstructor, ActorActionInterface>
   abstract initialize?(props: ActorProps): void
   abstract release?(): void
+  abstract stopActionFromInstance?(instance: ActorActionInterface): void
 
   /**
    * User available

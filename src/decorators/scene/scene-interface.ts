@@ -22,6 +22,7 @@ export abstract class SceneInterface implements Loadable, LoopUpdatable, CanvasR
   abstract loopUpdate$?: Observer<number>
   abstract canvasResize$?: Observer<Rect>
   abstract actions?: Map<SceneActionConstructor, SceneActionInterface>
+  abstract stopActionFromInstance?(instance: SceneActionInterface): void
 
   /**
    * User available
@@ -37,7 +38,7 @@ export abstract class SceneInterface implements Loadable, LoopUpdatable, CanvasR
   abstract load(): LoadingProgress
   abstract unload(): void
   abstract startState(state: SceneStateConstructor): SceneStateOptions<any>
-  abstract playAction(action: SceneActionConstructor | ((delta: number) => void)): SceneActionOptions<any> // 8a8f quitar el delta
+  abstract playAction(action: SceneActionConstructor | ((delta: number) => void)): SceneActionOptions<any>
   abstract stopAction(action: SceneActionConstructor): void
   abstract stopActionGroup(group: number): void
 

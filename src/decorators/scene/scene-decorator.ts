@@ -190,17 +190,26 @@ export function Scene(props: SceneProps): any {
           }
           this.actions.set(actionConstructor, action)
           action.props.overrides?.forEach(actionOverride => {
-            this.actions.get(actionOverride)?.stop()
+            this.actions.get(actionOverride)?.end()
           })
           action.start()
         }
         return new SceneActionOptions(action)
       }
 
+      stopActionFromInstance(instance: SceneActionInterface) {
+        for (const [key, value] of this.actions.entries()) {
+          if (value === instance) {
+            this.stopAction(key)
+            return
+          }
+        }
+      }
+
       stopAction(actionConstructor: SceneActionConstructor): void {
         const action = this.actions.get(actionConstructor)
         if (action) {
-          action.stop()
+          action.end()
           if (!action.props.preserve) {
             this.actions.delete(actionConstructor)
           }

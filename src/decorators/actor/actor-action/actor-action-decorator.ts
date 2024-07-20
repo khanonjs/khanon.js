@@ -49,8 +49,8 @@ export function ActorAction(props: ActorActionProps = {}): any {
 
         start(): void {
           if (this.props.countFrames) {
-            this.countFramesUpdate$ = Core.addLoopUpdateObserver(() => {
-              this.countFrames++
+            this.countFramesUpdate$ = Core.addLoopUpdateObserver((delta: number) => {
+              this.countFrames += delta
               if (this.countFrames > this.props.countFrames) {
                 this.countFramesUpdate$.remove()
                 this.countFramesUpdate$ = undefined
@@ -64,10 +64,14 @@ export function ActorAction(props: ActorActionProps = {}): any {
           attachCanvasResize(this)
         }
 
-        stop(): void {
+        end(): void {
           removeLoopUpdate(this)
           removeCanvasResize(this)
           invokeCallback(this.onStop, this)
+        }
+
+        stop(): void {
+          this.actor.stopActionFromInstance(this)
         }
       }
       const _classCore = class implements ActorActionCore {

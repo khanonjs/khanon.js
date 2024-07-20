@@ -3,13 +3,14 @@ import { Matrix } from '@babylonjs/core/Maths/math.vector'
 import { MeshAnimation } from '../../decorators/mesh/mesh-animation'
 import { SpriteAnimation } from '../../decorators/sprite/sprite-animation'
 import {
+  FlexId,
   MeshTransform,
   SpriteTransform
 } from '../../types'
 
 export abstract class DisplayObject {
   abstract animation?: SpriteAnimation | MeshAnimation
-  abstract animations?: Map<string | number, SpriteAnimation | MeshAnimation>
+  abstract animations?: Map<FlexId, SpriteAnimation | MeshAnimation>
 
   abstract release?(): void
 

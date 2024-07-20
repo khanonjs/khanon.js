@@ -4,6 +4,7 @@ import { Observer } from '@babylonjs/core'
 
 import { SceneActionInterface as UserSceneActionInterface } from '../../..'
 import { SceneActionsController } from '../../../controllers'
+import { Core } from '../../../core'
 import { Rect } from '../../../models/rect'
 import { Logger } from '../../../modules/logger'
 import {
@@ -46,15 +47,30 @@ export function SceneAction(props: SceneActionProps = {}): any {
         get loopUpdate(): boolean { return !!this.loopUpdate$ }
 
         start(): void {
+          if (this.props.countFrames) {
+            this.countFramesUpdate$ = Core.addLoopUpdateObserver((delta: number) => {
+              this.countFrames += delta
+              if (this.countFrames > this.props.countFrames) {
+                this.countFramesUpdate$.remove()
+                this.countFramesUpdate$ = undefined
+                this.countFrames = 0
+                this.stop()
+              }
+            })
+          }
           invokeCallback(this.onStart, this)
           attachLoopUpdate(this)
           attachCanvasResize(this)
         }
 
-        stop(): void {
+        end(): void {
           removeLoopUpdate(this)
           removeCanvasResize(this)
           invokeCallback(this.onStop, this)
+        }
+
+        stop(): void {
+          this.scene.stopActionFromInstance(this)
         }
       }
       const _classCore = class implements SceneActionCore {

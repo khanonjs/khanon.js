@@ -8,7 +8,10 @@ import {
   BabylonAccessor,
   Rect
 } from '../../models'
-import { MeshTransform } from '../../types'
+import {
+  FlexId,
+  MeshTransform
+} from '../../types'
 import { SceneInterface } from '../scene'
 import { MeshAnimation } from './mesh-animation'
 import { MeshProps } from './mesh-props'
@@ -86,7 +89,7 @@ export declare abstract class MeshInterface implements DisplayObject {
    * @param loopOverride Overrides the animation loop value in case needed
    * @param completed Completed animation callback
    */
-  playAnimation(animation: MeshAnimation | string, loopOverride?: boolean, completed?: () => void): void
+  playAnimation(animation: MeshAnimation | FlexId, loopOverride?: boolean, completed?: () => void): void
 
   /**
    * Stops current animation.

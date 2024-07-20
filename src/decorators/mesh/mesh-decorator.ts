@@ -8,7 +8,10 @@ import { MeshesController } from '../../controllers'
 import { BabylonAccessor } from '../../models/babylon-accessor'
 import { Rect } from '../../models/rect'
 import { Logger } from '../../modules/logger'
-import { MeshTransform } from '../../types'
+import {
+  FlexId,
+  MeshTransform
+} from '../../types'
 import {
   attachCanvasResize,
   attachLoopUpdate,
@@ -42,7 +45,7 @@ export function Mesh(props: MeshProps): any {
         // ***************
         babylon: Pick<BabylonAccessor, 'mesh'> = { mesh: null }
         animation: MeshAnimation = null
-        animations: Map<string | number, MeshAnimation> = new Map<string | number, MeshAnimation>()
+        animations: Map<FlexId, MeshAnimation> = new Map<FlexId, MeshAnimation>()
         loopUpdate$: BABYLON.Observer<number>
         canvasResize$: BABYLON.Observer<Rect>
 
@@ -102,7 +105,7 @@ export function Mesh(props: MeshProps): any {
         // TODO
         }
 
-        playAnimation(animation: MeshAnimation, loopOverride?: boolean, completed?: () => void): void {
+        playAnimation(animation: MeshAnimation | FlexId, loopOverride?: boolean, completed?: () => void): void {
         // TODO
         }
 

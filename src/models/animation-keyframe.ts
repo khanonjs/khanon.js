@@ -1,10 +1,12 @@
 import { Observable } from '@babylonjs/core'
 
+import { FlexId } from '../types'
+
 export interface AnimationKeyFrame {
   /**
    * Id of the keyframe.
    */
-  id: string | number
+  id: FlexId
 
   /**
    * Frames to trigger the emitter.

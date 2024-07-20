@@ -13,12 +13,16 @@ import { BabylonAccessor } from '../../models/babylon-accessor'
 import { Rect } from '../../models/rect'
 import { Timeout } from '../../models/timeout'
 import { Logger } from '../../modules/logger'
-import { SpriteTransform } from '../../types'
+import {
+  FlexId,
+  SpriteTransform
+} from '../../types'
 import {
   applyDefaults,
   attachCanvasResize,
   attachLoopUpdate,
   invokeCallback,
+  isFlexId,
   removeCanvasResize,
   removeLoopUpdate,
   switchLoopUpdate
@@ -48,7 +52,7 @@ export function Sprite(props: SpriteProps): any {
         // ***************
         spriteTexture: SpriteTexture
         animation: SpriteAnimation = null
-        animations: Map<string | number, SpriteAnimation> = new Map<string | number, SpriteAnimation>()
+        animations: Map<FlexId, SpriteAnimation> = new Map<FlexId, SpriteAnimation>()
         babylon: Pick<BabylonAccessor, 'spriteManager' | 'sprite'> = { spriteManager: null, sprite: null }
         loopUpdate$: BABYLON.Observer<number>
         canvasResize$: BABYLON.Observer<Rect>
@@ -166,16 +170,21 @@ export function Sprite(props: SpriteProps): any {
           this.animations.set(animation.id, animation)
         }
 
-        playAnimation(animation: SpriteAnimation, loopOverride?: boolean, completed?: () => void): void {
-          this.animation = animation
-          const loop = loopOverride ?? animation.loop
+        playAnimation(animation: SpriteAnimation | FlexId, loopOverride?: boolean, completed?: () => void): void {
+          if (isFlexId(animation)) {
+            if (!this.animations.get(animation as FlexId)) { Logger.debugError(`Animation '${animation}' doesn't exist in sprite:`, _classInterface.prototype); return }
+            animation = this.animations.get(animation as FlexId)
+          }
+          // this.animations
+          this.animation = animation as SpriteAnimation
+          const loop = loopOverride ?? this.animation.loop
           const frameStart = this.getFirstFrame()
           const frameEnd = this.getLastFrame()
 
           const playAnimation = () => {
-            this.babylon.sprite.playAnimation(frameStart, frameEnd, false, animation.delay)
+            this.babylon.sprite.playAnimation(frameStart, frameEnd, false, this.animation.delay)
             if (completed || loop) {
-              this.endAnimationTimer = Core.setTimeout(() => onCompleted(), (frameEnd - frameStart + 1) * animation.delay, this)
+              this.endAnimationTimer = Core.setTimeout(() => onCompleted(), (frameEnd - frameStart + 1) * this.animation.delay, this)
             }
             setKeyframesTimeouts()
           }
@@ -183,7 +192,7 @@ export function Sprite(props: SpriteProps): any {
           // Emit keyframe after timeout
           const setKeyframesTimeouts = () => {
             this.keyFramesTimeouts = []
-            animation.keyFrames?.forEach((animationKeyFrame) => {
+            this.animation.keyFrames?.forEach((animationKeyFrame) => {
               animationKeyFrame.ms.forEach((ms) => {
                 this.keyFramesTimeouts.push(Core.setTimeout(() => animationKeyFrame.emitter.notifyObservers(), ms, this))
               })
@@ -214,7 +223,7 @@ export function Sprite(props: SpriteProps): any {
           this.animation = null
         }
 
-        subscribeToKeyframe(keyframeId: string | number, callback: () => void): BABYLON.Observer<void>[] {
+        subscribeToKeyframe(keyframeId: FlexId, callback: () => void): BABYLON.Observer<void>[] {
           const observers: BABYLON.Observer<void>[] = []
           this.animations.forEach(animation => {
             animation.keyFrames
@@ -224,7 +233,7 @@ export function Sprite(props: SpriteProps): any {
           return observers
         }
 
-        clearKeyframeSubscriptions(keyframeId: string | number): void {
+        clearKeyframeSubscriptions(keyframeId: FlexId): void {
           this.animations.forEach(animation => {
             animation.keyFrames
               .filter(keyframe => keyframe.id === keyframeId)
