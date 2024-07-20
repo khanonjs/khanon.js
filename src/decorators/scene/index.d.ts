@@ -120,8 +120,7 @@ export declare abstract class SceneInterface {
    * Plays an Action. N actions can be played simultaneously.
    * @param action
    */
-  // playAction<S extends SceneActionConstructor>(action: S | ((delta: number) => void)): SceneActionOptions<InstanceType<S>['setup']> // TODO don't return ActorActionOptions in case it is (delta:number) => void
-  playAction<S extends SceneActionConstructor>(action: S | ((delta: number) => void)): SceneActionOptions<InstanceType<S>['setup']> // 8a8f
+  playAction<S extends SceneActionConstructor>(action: S | ((delta: number) => void)): SceneActionOptions<InstanceType<S>['setup']> // TODO don't return ActorActionOptions in case it is (delta:number) => void
 
   /**
    * Stops an action. Actions can be stopped also within the Action itself.

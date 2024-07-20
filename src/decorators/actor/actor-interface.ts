@@ -15,8 +15,8 @@ import { MeshInterface } from '../mesh/mesh-interface'
 import { SceneInterface } from '../scene/scene-interface'
 import { SceneType } from '../scene/scene-type'
 import { SpriteInterface } from '../sprite/sprite-interface'
-import { ActorActionOptions } from './actor-action'
 import { ActorActionInterface } from './actor-action/actor-action-interface'
+import { ActorActionOptions } from './actor-action/actor-action-options'
 import { ActorMetadata } from './actor-metadata'
 import { ActorProps } from './actor-props'
 import { ActorStateInterface } from './actor-state/actor-state-interface'
@@ -50,7 +50,7 @@ export abstract class ActorInterface<B extends SpriteInterface | MeshInterface =
   abstract clearNodes(includeBody: boolean): void
   abstract setVisible(value: boolean): void
   abstract startState(state: ActorStateConstructor): ActorStateOptions<any>
-  abstract playAction(action: ActorActionConstructor): ActorActionOptions<any>
+  abstract playAction(action: ActorActionConstructor | ((delta: number) => void)): ActorActionOptions<any>
   abstract stopAction(action: ActorActionConstructor): void
   abstract stopActionGroup(group: number): void
 
