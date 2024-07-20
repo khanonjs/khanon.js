@@ -18,12 +18,12 @@ export declare abstract class ActorStateInterface<S = any, A = ActorInterface<Sp
   /**
    * Actor owner of the state.
    */
-  actor: A
+  get actor(): A
 
   /**
    * Setup of the state.
    */
-  setup: S
+  get setup(): S
 
   /**
    * Turns On/Off 'onLoopUpdate' callback.

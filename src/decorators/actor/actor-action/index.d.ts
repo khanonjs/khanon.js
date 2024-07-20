@@ -16,16 +16,16 @@ export declare function ActorAction(props?: ActorActionProps): any
 export declare class ActorActionOptions<S> {
   setup(vars: S): void
 }
-export declare abstract class ActorActionInterface<S = any> {
+export declare abstract class ActorActionInterface<S = any, A = ActorInterface<SpriteInterface | MeshInterface>> {
   /**
    * Actor owner of the action.
    */
-  actor: ActorInterface<SpriteInterface | MeshInterface>
+  get actor(): A
 
   /**
    * Setup of the action.
    */
-  setup: S
+  get setup(): S
 
   /**
    * Turns On/Off 'onLoopUpdate' callback.

@@ -14,16 +14,16 @@ export declare function SceneAction(props?: SceneActionProps): any
 export declare class SceneActionOptions<S> {
   setup(vars: S): void
 }
-export declare abstract class SceneActionInterface<S = any> {
+export declare abstract class SceneActionInterface<S = any, C = SceneInterface> {
   /**
    * Scene owner of the action.
    */
-  scene: SceneInterface
+  get scene(): C
 
   /**
    * Setup of the action.
    */
-  setup: S
+  get setup(): S
 
   /**
    * Turns On/Off 'onLoopUpdate' callback.

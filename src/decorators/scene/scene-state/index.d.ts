@@ -8,11 +8,11 @@ export declare class SceneStateOptions<S> {
   setup(vars: S): void
 }
 export declare function SceneState(props: SceneStateProps): any
-export declare abstract class SceneStateInterface<S = any> {
+export declare abstract class SceneStateInterface<S = any, C = SceneInterface> {
   /**
    * Owner scene of this state.
    */
-  get scene(): SceneInterface
+  get scene(): C
 
   /**
    * Initial setup of the state.

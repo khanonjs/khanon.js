@@ -3,12 +3,12 @@ import { CameraConstructor } from '../../../constructors/camera-constructor'
 import { SceneInterface } from '../scene-interface'
 import { SceneMetadata } from '../scene-metadata'
 
-export abstract class SceneStateInterface<S = any> extends StateInterface<S> {
+export abstract class SceneStateInterface<S = any, C = SceneInterface> extends StateInterface<S> {
   abstract metadata?: SceneMetadata
 
   /**
    * User available
    */
-  abstract scene: SceneInterface
+  abstract scene: C
   abstract setCamera(camera: CameraConstructor): void
 }
