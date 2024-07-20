@@ -7,7 +7,7 @@ import { ExtractOptional } from '../types/extract-optional'
  */
 export function attachLoopUpdate(context: any): void {
   if (context.onLoopUpdate) {
-    context.loopUpdate$ = Core.addLoopUpdateObserver(context.onLoopUpdate.bind(context))
+    context.loopUpdate$ = Core.loopUpdateAddObserver(context.onLoopUpdate.bind(context))
   }
 }
 
@@ -36,7 +36,7 @@ export function switchLoopUpdate(value: boolean, context: any): void {
  */
 export function removeLoopUpdate(context: any): void {
   if (context.loopUpdate$) {
-    Core.removeLoopUpdateObserver(context.loopUpdate$)
+    Core.loopUpdateRemoveObserver(context.loopUpdate$)
     context.loopUpdate$ = undefined
   }
 }

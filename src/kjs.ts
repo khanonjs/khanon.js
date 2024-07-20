@@ -1,3 +1,5 @@
+import { Observer } from '@babylonjs/core'
+
 import { ScenesController } from './controllers'
 import { Core } from './core'
 import { Timeout } from './models/timeout'
@@ -27,6 +29,14 @@ export class KJS {
 
   static clearInterval(timeout: Timeout): void {
     Core.clearInterval(timeout)
+  }
+
+  static addLoopUpdateObserver(func: (delta: number) => void): Observer<number> {
+    return Core.loopUpdateAddObserver(func)
+  }
+
+  static removeLoopUpdateObserver(observer: Observer<number>): void {
+    Core.loopUpdateRemoveObserver(observer)
   }
 }
 

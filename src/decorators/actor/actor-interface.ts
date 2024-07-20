@@ -58,8 +58,8 @@ export abstract class ActorInterface<B extends SpriteInterface | MeshInterface =
   /**
    * User defined
    */
-  onSpawn?(scene: SceneInterface): void
-  onSpawn?(scene: SceneInterface): void
+  onSpawn?(): void
+  onRelease?(): void
   onLoopUpdate?(delta: number): void
   onCanvasResize?(size: Rect): void
 }

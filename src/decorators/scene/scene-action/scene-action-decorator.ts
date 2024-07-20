@@ -48,7 +48,7 @@ export function SceneAction(props: SceneActionProps = {}): any {
 
         start(): void {
           if (this.props.countFrames) {
-            this.countFramesUpdate$ = Core.addLoopUpdateObserver((delta: number) => {
+            this.countFramesUpdate$ = Core.loopUpdateAddObserver((delta: number) => {
               this.countFrames += delta
               if (this.countFrames > this.props.countFrames) {
                 this.countFramesUpdate$.remove()

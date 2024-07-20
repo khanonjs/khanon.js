@@ -119,7 +119,12 @@ export declare abstract class ActorInterface<B extends SpriteInterface | MeshInt
   /**
    * Callback invoked after the actor has been spawned on a scene.
    */
-  onSpawn?(scene: SceneInterface): void
+  onSpawn?(): void
+
+  /**
+   * Callback invoked on actor release.
+   */
+  onRelease?(): void
 
   /**
    * Callback invoked on loop update.

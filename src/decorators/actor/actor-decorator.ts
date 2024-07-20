@@ -49,7 +49,7 @@ export function Actor(props: ActorProps = {}): any {
 
       initialize(props: ActorProps) {
         this.props = props
-        invokeCallback(this.onSpawn, this, this.scene)
+        invokeCallback(this.onSpawn, this)
       }
 
       props: ActorProps
@@ -63,6 +63,7 @@ export function Actor(props: ActorProps = {}): any {
       actions: Map<ActorActionConstructor, ActorActionInterface> = new Map<ActorActionConstructor, ActorActionInterface>()
 
       onSpawn?(): void
+      onRelease?(): void
       onLoopUpdate?(delta: number): void
       onCanvasResize?(size: Rect): void
 
@@ -75,6 +76,7 @@ export function Actor(props: ActorProps = {}): any {
         this.clearNodes()
         removeLoopUpdate(this)
         removeCanvasResize(this)
+        invokeCallback(this.onRelease, this)
       }
 
       setBody<B>(Body: new () => B): B {

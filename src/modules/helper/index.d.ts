@@ -7,6 +7,7 @@ export declare namespace Helper {
   }
 
   export namespace Maths {
+    const MIN_VALUE
     function dragValue(ratio: number, origin: number, target: number, ratioClampMin?: number, ratioClampMax?: number): number
     function clamp(value: number, min: number, max: number): number
     function randomInt(minValue: number, maxValue: number): number

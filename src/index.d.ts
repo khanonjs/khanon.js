@@ -1,3 +1,5 @@
+import { Observer } from '@babylonjs/core'
+
 import { LoadingProgress } from './base'
 import { SceneConstructor } from './constructors/scene-constructor'
 import { SceneStateConstructor } from './constructors/scene-state-constructor'
@@ -57,6 +59,17 @@ export declare namespace KJS {
    * Clears cache.
    */
   export function clearCache(): void
+
+  /**
+   * Subsscribes to loopUpdate event.
+   * @param func
+   */
+  export function loopUpdateAddObserver(func: (delta: number) => void): Observer<number>
+
+  /**
+   * Removes a subscription from loopUpdate event.
+   */
+  export function loopUpdateRemoveObserver(observer: Observer<number>): void
 
   /**
    * Sets a timeout.

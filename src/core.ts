@@ -20,6 +20,7 @@ import { TimeoutType } from './types'
 
 // type SceneFunctionArg = (scene: Scene) => void
 
+// TODO avoid exporting this outside Khanon.js
 export class Core {
   static canvasRect: Rect
 
@@ -148,11 +149,11 @@ export class Core {
     Core.renderScenes.delete(scene)
   }
 
-  static addLoopUpdateObserver(func: (delta: number) => void): Observer<number> {
+  static loopUpdateAddObserver(func: (delta: number) => void): Observer<number> {
     return Core.onLoopUpdate.add(func)
   }
 
-  static removeLoopUpdateObserver(observer: Observer<number>): void {
+  static loopUpdateRemoveObserver(observer: Observer<number>): void {
     Core.onLoopUpdate.remove(observer)
   }
 
