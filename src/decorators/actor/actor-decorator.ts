@@ -63,7 +63,7 @@ export function Actor(props: ActorProps = {}): any {
       actions: Map<ActorActionConstructor, ActorActionInterface> = new Map<ActorActionConstructor, ActorActionInterface>()
 
       onSpawn?(): void
-      onRelease?(): void
+      onDestroy?(): void
       onLoopUpdate?(delta: number): void
       onCanvasResize?(size: Rect): void
 
@@ -73,10 +73,12 @@ export function Actor(props: ActorProps = {}): any {
       get state(): ActorStateInterface { return this._state }
 
       release() {
+        // 8a8f actions, particles, sprites, etc
+        invokeCallback(this.onDestroy, this)
+        this.stopActionAll()
         this.clearNodes()
         removeLoopUpdate(this)
         removeCanvasResize(this)
-        invokeCallback(this.onRelease, this)
       }
 
       setBody<B>(Body: new () => B): B {
@@ -84,7 +86,7 @@ export function Actor(props: ActorProps = {}): any {
           if (!this.metadata.sprites.find(_definition => _definition.classDefinition === Body) && !this.props.sprites?.find(_sprite => _sprite === Body)) { Logger.debugError('Trying to use a sprite non available to the actor. Please check the actor props.', this.constructor.prototype, Body.prototype); return }
           this._body = SpritesController.get(Body).spawn(this.scene) as any
         } else {
-          if (!this.props.meshes?.find(_mesh => _mesh === Body)) { Logger.debugError('Trying to use a mesh non available to the actor. Please check the actor props.', this.constructor.prototype, Body.prototype); return }
+          if (!this.metadata.meshes.find(_definition => _definition.classDefinition === Body) && !this.props.meshes?.find(_mesh => _mesh === Body)) { Logger.debugError('Trying to use a mesh non available to the actor. Please check the actor props.', this.constructor.prototype, Body.prototype); return }
           this._body = MeshesController.get(Body).spawn(this.scene) as any
         }
         this.transform = this._body.transform
@@ -178,13 +180,17 @@ export function Actor(props: ActorProps = {}): any {
       }
 
       stopActionGroup(group: number): void {
-        const actionsStop: ActorActionConstructor[] = []
         this.actions.forEach((action, actionConstructor) => {
           if (action.props.group !== undefined && action.props.group === group) {
-            actionsStop.push(actionConstructor)
+            this.stopAction(actionConstructor)
           }
         })
-        actionsStop.forEach(actionConstructor => this.stopAction(actionConstructor))
+      }
+
+      stopActionAll(): void {
+        this.actions.forEach((action, actionConstructor) => {
+          this.stopAction(actionConstructor)
+        })
       }
 
       clearNodes(includeBody = true) {
@@ -195,6 +201,10 @@ export function Actor(props: ActorProps = {}): any {
         if (includeBody) {
           this.removeBody()
         }
+      }
+
+      destroy() {
+        this.scene.removeActor(this)
       }
     }
     const _classCore = class implements ActorCore {

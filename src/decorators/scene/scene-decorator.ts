@@ -31,6 +31,7 @@ import {
   removeLoopUpdate,
   switchLoopUpdate
 } from '../../utils/utils'
+import { ActorInterface } from '../actor/actor-interface'
 import { CameraInterface } from '../camera/camera-interface'
 import { SceneActionInterface } from './scene-action/scene-action-interface'
 import { SceneActionOptions } from './scene-action/scene-action-options'
@@ -224,6 +225,18 @@ export function Scene(props: SceneProps): any {
           }
         })
         actionsStop.forEach(actionConstructor => this.stopAction(actionConstructor))
+      }
+
+      stopActionAll(): void {
+        this.actions.forEach((action, actionConstructor) => {
+          this.stopAction(actionConstructor)
+        })
+      }
+
+      removeActor(actor: ActorInterface): void {
+        actor.release()
+        // 8a8f
+        // this.actors.push(instance)
       }
 
       debugInspector(): void {

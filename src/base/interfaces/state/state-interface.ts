@@ -13,8 +13,9 @@ export abstract class StateInterface<S = any> implements LoopUpdatable, CanvasRe
   /**
    * User available
    */
-  abstract setup: S
-  abstract loopUpdate: boolean
+  abstract get setup(): S
+  abstract get loopUpdate(): boolean
+  abstract set loopUpdate(value: boolean)
 
   /**
    * User defined

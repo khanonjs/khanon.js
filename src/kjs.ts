@@ -31,11 +31,11 @@ export class KJS {
     Core.clearInterval(timeout)
   }
 
-  static addLoopUpdateObserver(func: (delta: number) => void): Observer<number> {
+  static loopUpdateAddObserver(func: (delta: number) => void): Observer<number> {
     return Core.loopUpdateAddObserver(func)
   }
 
-  static removeLoopUpdateObserver(observer: Observer<number>): void {
+  static loopUpdateRemoveObserver(observer: Observer<number>): void {
     Core.loopUpdateRemoveObserver(observer)
   }
 }

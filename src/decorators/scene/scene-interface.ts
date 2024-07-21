@@ -10,6 +10,7 @@ import { SceneActionConstructor } from '../../constructors/scene-action-construc
 import { SceneStateConstructor } from '../../constructors/scene-state-constructor'
 import { BabylonAccessor } from '../../models/babylon-accessor'
 import { Rect } from '../../models/rect'
+import { ActorInterface } from '../actor/actor-interface'
 import { SceneActionInterface } from './scene-action/scene-action-interface'
 import { SceneActionOptions } from './scene-action/scene-action-options'
 import { SceneMetadata } from './scene-metadata'
@@ -28,7 +29,8 @@ export abstract class SceneInterface implements Loadable, LoopUpdatable, CanvasR
    * User available
    */
   abstract babylon: Pick<BabylonAccessor, 'scene'>
-  abstract loopUpdate: boolean
+  abstract get loopUpdate(): boolean
+  abstract set loopUpdate(value: boolean)
   abstract get loaded(): boolean
   abstract get started(): boolean
   abstract get state(): SceneStateInterface
@@ -41,6 +43,8 @@ export abstract class SceneInterface implements Loadable, LoopUpdatable, CanvasR
   abstract playAction(action: SceneActionConstructor | ((delta: number) => void)): SceneActionOptions<any>
   abstract stopAction(action: SceneActionConstructor): void
   abstract stopActionGroup(group: number): void
+  abstract stopActionAll(): void
+  abstract removeActor(actor: ActorInterface): void
 
   /**
    * User defined

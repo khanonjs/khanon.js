@@ -135,6 +135,17 @@ export declare abstract class SceneInterface {
   stopActionGroup(group: number): void
 
   /**
+   * Stops all actions.
+   */
+  stopActionAll(): void
+
+  /**
+   * Removes an actor from the scene
+   * @param actor
+   */
+  removeActor(actor: ActorInterface): void
+
+  /**
    * Callback invoked before the scene has been started.
    */
   onStart?(): void

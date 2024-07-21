@@ -117,6 +117,16 @@ export declare abstract class ActorInterface<B extends SpriteInterface | MeshInt
   stopActionGroup(group: number): void
 
   /**
+   * Stops all actions.
+   */
+  stopActionAll(): void
+
+  /**
+   * Removes the actor from the scene.
+   */
+  destroy(): void
+
+  /**
    * Callback invoked after the actor has been spawned on a scene.
    */
   onSpawn?(): void

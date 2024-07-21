@@ -54,12 +54,14 @@ export abstract class ActorInterface<B extends SpriteInterface | MeshInterface =
   abstract playAction(action: ActorActionConstructor | ((delta: number) => void)): ActorActionOptions<any>
   abstract stopAction(action: ActorActionConstructor): void
   abstract stopActionGroup(group: number): void
+  abstract stopActionAll(): void
+  abstract destroy(): void
 
   /**
    * User defined
    */
   onSpawn?(): void
-  onRelease?(): void
+  onDestroy?(): void
   onLoopUpdate?(delta: number): void
   onCanvasResize?(size: Rect): void
 }
