@@ -110,11 +110,11 @@ export function Sprite(props: SpriteProps): any {
           this.babylon.sprite.cellIndex = frame
         }
 
-        setFirstFrame(): void {
+        setFrameFirst(): void {
           this.setFrame(this.getFirstFrame())
         }
 
-        setLastFrame(): void {
+        setFrameLast(): void {
           this.setFrame(this.getLastFrame())
         }
 

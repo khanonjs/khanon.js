@@ -67,12 +67,12 @@ export declare abstract class MeshInterface implements DisplayObject {
   /**
    * Sets the first frame of the sprite or current animation.
    */
-  setFirstFrame(): void
+  setFrameFirst(): void
 
   /**
    * Sets the last frame of the sprite or current animation.
    */
-  setLastFrame(): void
+  setFrameLast(): void
 
   /**
    * Adds an animation. Animations can be added from this method, or from Sprite props.

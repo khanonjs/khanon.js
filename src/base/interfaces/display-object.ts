@@ -15,14 +15,14 @@ export abstract class DisplayObject {
   abstract release?(): void
 
   // User anailable
-  abstract transform: SpriteTransform | MeshTransform
+  abstract transform: SpriteTransform | MeshTransform // 8a8f
 
-  abstract setTransform(transform: BABYLON.Matrix): void
-  abstract getTransform(): BABYLON.Matrix
+  abstract setTransform(transform: BABYLON.Matrix): void // 8a8f
+  abstract getTransform(): BABYLON.Matrix // 8a8f
 
   abstract setFrame(frame: number): void
-  abstract setFirstFrame(): void
-  abstract setLastFrame(): void
+  abstract setFrameFirst(): void
+  abstract setFrameLast(): void
 
   abstract addAnimation(animation: SpriteAnimation | MeshAnimation): void
   abstract playAnimation(animation: SpriteAnimation | MeshAnimation | string, loopOverride?: boolean, completed?: () => void): void

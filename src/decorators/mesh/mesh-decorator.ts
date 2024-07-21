@@ -93,11 +93,11 @@ export function Mesh(props: MeshProps): any {
         // TODO
         }
 
-        setFirstFrame(): void {
+        setFrameFirst(): void {
         // TODO
         }
 
-        setLastFrame(): void {
+        setFrameLast(): void {
         // TODO
         }
 
