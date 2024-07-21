@@ -95,7 +95,6 @@ export class Core {
     Core.initializeHTMLLayers()
     Core.initializeBabylon()
     Core.loopUpdate()
-
     Core.updateCanvasSize()
     Logger.debug('Initial canvas size:', Core.canvasRect.width, Core.canvasRect.height)
 

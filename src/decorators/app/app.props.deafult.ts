@@ -15,7 +15,7 @@ export interface AppPropsDefault extends ExtractOptional<AppProps> {
 export const appPropsDefault: AppPropsDefault = {
   htmlCanvasContainerId: 'khanonjs',
   loopUpdate: {
-    fps: 30
+    fps: 60
   },
   engineConfiguration: {
     antialias: true,
