@@ -12,7 +12,6 @@ import {
   SpriteTransform
 } from '../../types'
 import { MeshInterface } from '../mesh/mesh-interface'
-import { SceneInterface } from '../scene/scene-interface'
 import { SceneType } from '../scene/scene-type'
 import { SpriteInterface } from '../sprite/sprite-interface'
 import { ActorActionInterface } from './actor-action/actor-action-interface'
