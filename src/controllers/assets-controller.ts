@@ -1,4 +1,4 @@
-import { LoadFile } from '@babylonjs/core'
+import * as BABYLON from '@babylonjs/core'
 
 import {
   Asset,
@@ -126,7 +126,7 @@ export class AssetsController {
       reader?.cancel()
       asset.progress.onError.notifyObservers(errorMsg)
     }
-    LoadFile(definition.url,
+    BABYLON.LoadFile(definition.url,
       (data) => {
         Logger.debug(`LoadFileFromUrl: Loaded '${definition.url}', cached: ${!!definition.cached}`)
         const buffer = data as ArrayBuffer

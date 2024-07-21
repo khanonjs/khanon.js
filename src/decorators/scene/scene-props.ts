@@ -1,4 +1,4 @@
-import { SceneOptions } from '@babylonjs/core'
+import * as BABYLON from '@babylonjs/core'
 
 import { SceneConfiguration } from '../../babylon-config'
 import { ActorConstructor } from '../../constructors/actor-constructor'
@@ -11,7 +11,7 @@ import { SceneStateConstructor } from '../../constructors/scene-state-constructo
 import { SpriteConstructor } from '../../constructors/sprite-constructor'
 
 export interface SceneProps {
-    options?: SceneOptions
+    options?: BABYLON.SceneOptions
     configuration?: SceneConfiguration
     guis?: GUIConstructor[]
     cameras?: CameraConstructor[]

@@ -1,4 +1,4 @@
-import { Matrix } from '@babylonjs/core'
+import * as BABYLON from '@babylonjs/core'
 
 import {
   AnimationBase,
@@ -128,13 +128,13 @@ export declare abstract class SpriteInterface {
    * Sets the transform (translation, rotation and scale).
    * @param transform
    */
-  setTransform(transform: Matrix): void
+  setTransform(transform: BABYLON.Matrix): void
 
   /**
    * Gets teh transform.
    * @param transform
    */
-  getTransform(): Matrix
+  getTransform(): BABYLON.Matrix
 
   /**
    * Sets current frame (stops current animation).

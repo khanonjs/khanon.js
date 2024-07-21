@@ -1,4 +1,4 @@
-import { Matrix } from '@babylonjs/core/Maths/math.vector'
+import * as BABYLON from '@babylonjs/core'
 
 import { MeshAnimation } from '../../decorators/mesh/mesh-animation'
 import { SpriteAnimation } from '../../decorators/sprite/sprite-animation'
@@ -17,8 +17,8 @@ export abstract class DisplayObject {
   // User anailable
   abstract transform: SpriteTransform | MeshTransform
 
-  abstract setTransform(transform: Matrix): void
-  abstract getTransform(): Matrix
+  abstract setTransform(transform: BABYLON.Matrix): void
+  abstract getTransform(): BABYLON.Matrix
 
   abstract setFrame(frame: number): void
   abstract setFirstFrame(): void

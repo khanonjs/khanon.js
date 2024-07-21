@@ -3,7 +3,6 @@ import '@babylonjs/core/Loading/Plugins/babylonFileLoader'
 import '@babylonjs/core/Materials/PBR/pbrMaterial'
 
 import * as BABYLON from '@babylonjs/core'
-import { Engine } from '@babylonjs/core/Engines/engine'
 
 import { AppCore } from './decorators/app/app-core'
 import { AppInterface } from './decorators/app/app-interface'
@@ -70,7 +69,7 @@ export class Core {
   // private static loadSceneQueue: Misc.KeyValue<Scene, (scene: Scene) => void> = new Misc.KeyValue<Scene, SceneFunctionArg>()
 
   static get canvas(): HTMLCanvasElement { return Core.htmlCanvas }
-  static get engine(): Engine { return Core.babylon.engine }
+  static get engine(): BABYLON.Engine { return Core.babylon.engine }
 
   /**
    * Called once, on app decorator
@@ -198,7 +197,7 @@ export class Core {
   }
 
   private static initializeBabylon(): void {
-    Core.babylon.engine = new Engine(
+    Core.babylon.engine = new BABYLON.Engine(
       Core.htmlCanvas,
       Core.app.props.engineConfiguration.antialias,
       Core.app.props.engineConfiguration.options,

@@ -1,4 +1,4 @@
-import { Observable } from '@babylonjs/core'
+import * as BABYLON from '@babylonjs/core'
 
 import { FlexId } from '../types'
 
@@ -16,7 +16,7 @@ export interface AnimationKeyFrame {
   /**
    * Observable emitter.
    */
-  emitter: Observable<void>
+  emitter: BABYLON.Observable<void>
 
   /**
    * Milliseconds to trigger it

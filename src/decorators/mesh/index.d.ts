@@ -1,7 +1,4 @@
-import {
-  Matrix,
-  MeshasBabylonMesh
-} from '@babylonjs/core'
+import * as BABYLON from '@babylonjs/core'
 
 import { DisplayObject } from '../../base'
 import {
@@ -47,19 +44,19 @@ export declare abstract class MeshInterface implements DisplayObject {
    * Through this method, it is possible to manually create a Babylon Mesh in 'onSpawn' method and apply it.
    * @param babylonMesh
    */
-  setMesh(babylonMesh: MeshasBabylonMesh): void
+  setMesh(babylonMesh: BABYLON.Mesh): void
 
   /**
    * Sets the transform (translation, rotation and scale).
    * @param transform
    */
-  setTransform(transform: Matrix): void
+  setTransform(transform: BABYLON.Matrix): void
 
   /**
    * Gets the transform.
    * @param transform
    */
-  getTransform(): Matrix
+  getTransform(): BABYLON.Matrix
 
   /**
    * Sets current frame (stops current animation).
