@@ -44,7 +44,7 @@ export class Core {
   // Render scenes
   private static readonly renderScenes: Set<SceneType> = new Set<SceneType>()
 
-  // Timeouts
+  // Timeouts // TODO thread here
   private static timeouts: Set<Timeout> = new Set<Timeout>()
   private static intervals: Set<Timeout> = new Set<Timeout>()
 
