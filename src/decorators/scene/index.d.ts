@@ -40,19 +40,20 @@ export declare class SceneSpawn {
   particleSource<S extends ParticleSourceInterface>(particleSource: new () => S): S
 
   /**
-   * Spawns a mesh in the scene.
-   * @param mesh
-   */
-  mesh<M extends MeshInterface>(mesh: new () => M): M
-
-  /**
-   * Spawns a sprite in the scene.
+   * Spawns a sprite in the scene.  // 8a8f agregar decorador a scene propp
    * @param sprite
    */
   sprite<S extends SpriteInterface>(sprite: new () => S): S
 
   /**
-   * Remove all spawned elements of this scene.
+   * Spawns a mesh in the scene. // 8a8f agregar decorador a scene propp
+   * @param mesh
+   */
+  mesh<M extends MeshInterface>(mesh: new () => M): M
+
+  /**
+   * Remove all spawned elements of this scene. // 8a8f pasar a clase 'remove.all()' o eliminar clase 'spawm'.
+   * 8a8f Clase spawn puede heredar de una creada por el usuario donde puede agregar funcines para hacer spawn de grupos de objetos.
    */
   clear(): void
 }
