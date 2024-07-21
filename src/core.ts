@@ -38,7 +38,7 @@ export class Core {
   private static loopUpdateLastMs: number
   private static loopUpdateMps: number // Number of logical steps per frame
   private static loopUpdateLag: number
-  private static loopUpdateDeltaTime: number = 1.0 // Time acceleration factor
+  private static loopUpdateDeltaTime: number = 1.0 // Time velocity factor
   private static onLoopUpdate: BABYLON.Observable<number> = new BABYLON.Observable<number>()
 
   // Render scenes

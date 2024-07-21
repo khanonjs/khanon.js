@@ -82,7 +82,7 @@ export function Actor(props: ActorProps = {}): any {
       }
 
       setBody<B>(Body: new () => B): B {
-        if (new Body() instanceof SpriteInterface) {
+        if (new Body() instanceof SpriteInterface) { // TODO is there a better way to do this avoiding the 'new'?
           if (!this.metadata.sprites.find(_definition => _definition.classDefinition === Body) && !this.props.sprites?.find(_sprite => _sprite === Body)) { Logger.debugError('Trying to use a sprite non available to the actor. Please check the actor props.', this.constructor.prototype, Body.prototype); return }
           this._body = SpritesController.get(Body).spawn(this.scene) as any
         } else {
@@ -92,7 +92,7 @@ export function Actor(props: ActorProps = {}): any {
         this.transform = this._body.transform
         attachLoopUpdate(this)
         attachCanvasResize(this)
-        return this._body as unknown as B
+        return this._body as B
       }
 
       removeBody(): void {
