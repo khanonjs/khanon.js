@@ -1,7 +1,3 @@
-import '@babylonjs/core/Loading/loadingScreen'
-import '@babylonjs/core/Loading/Plugins/babylonFileLoader'
-import '@babylonjs/core/Materials/PBR/pbrMaterial'
-
 import * as BABYLON from '@babylonjs/core'
 
 import { AppCore } from './decorators/app/app-core'

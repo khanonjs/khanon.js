@@ -86,7 +86,7 @@ export function SceneAction(props: SceneActionProps = {}): any {
       return _classInterface
     }
 
-    // Mutate decorator to class or property
+    // Mutates decorator to class or property
     if (constructorOrTarget.prototype) {
       return decorateClass()
     } else if ((

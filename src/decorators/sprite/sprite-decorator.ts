@@ -294,7 +294,7 @@ export function Sprite(props: SpriteProps): any {
       return _classInterface
     }
 
-    // Mutate decorator to class or property
+    // Mutates decorator to class or property
     if (constructorOrTarget.prototype) {
       return decorateClass()
     } else if (constructorOrTarget instanceof ActorInterface && !descriptor) { // Undefined descriptor means it is a property
