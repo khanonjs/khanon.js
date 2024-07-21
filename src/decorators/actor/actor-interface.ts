@@ -1,4 +1,4 @@
-import { Observer } from '@babylonjs/core'
+import * as BABYLON from '@babylonjs/core'
 
 import {
   CanvasResizable,
@@ -26,8 +26,8 @@ export abstract class ActorInterface<B extends SpriteInterface | MeshInterface =
   abstract props?: ActorProps
   abstract scene?: SceneType
   abstract loopUpdate: boolean
-  abstract loopUpdate$?: Observer<number>
-  abstract canvasResize$?: Observer<Rect>
+  abstract loopUpdate$?: BABYLON.Observer<number>
+  abstract canvasResize$?: BABYLON.Observer<Rect>
   abstract _body?: B
   abstract nodes?: Map<string, B>
   abstract _state?: ActorStateInterface

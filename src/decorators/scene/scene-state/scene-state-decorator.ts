@@ -1,4 +1,4 @@
-import { Observer } from '@babylonjs/core'
+import * as BABYLON from '@babylonjs/core'
 
 import { CameraConstructor } from '../../../constructors/camera-constructor'
 import { SceneStatesController } from '../../../controllers'
@@ -27,8 +27,8 @@ export function SceneState(props: SceneStateProps): any {
         this.metadata.applyProps(this)
       }
 
-      loopUpdate$: Observer<number>
-      canvasResize$: Observer<Rect>
+      loopUpdate$: BABYLON.Observer<number>
+      canvasResize$: BABYLON.Observer<Rect>
       metadata: SceneMetadata = Reflect.getMetadata('metadata', this) ?? new SceneMetadata()
 
       onStart?(): void

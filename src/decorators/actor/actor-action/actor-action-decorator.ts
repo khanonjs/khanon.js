@@ -1,6 +1,6 @@
 import 'reflect-metadata'
 
-import { Observer } from '@babylonjs/core'
+import * as BABYLON from '@babylonjs/core'
 
 import { ActorActionInterface as UserActorActionInterface } from '../../../'
 import { ActorActionsController } from '../../../controllers'
@@ -38,10 +38,10 @@ export function ActorAction(props: ActorActionProps = {}): any {
         onLoopUpdate?(delta: number): void
         onCanvasResize?(size: Rect): void
 
-        countFramesUpdate$?: Observer<number>
+        countFramesUpdate$?: BABYLON.Observer<number>
         countFrames = 0
-        loopUpdate$?: Observer<number>
-        canvasResize$?: Observer<Rect>
+        loopUpdate$?: BABYLON.Observer<number>
+        canvasResize$?: BABYLON.Observer<Rect>
         setup: any
 
         set loopUpdate(value: boolean) { switchLoopUpdate(value, this) }

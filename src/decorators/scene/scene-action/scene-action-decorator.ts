@@ -1,6 +1,6 @@
 import 'reflect-metadata'
 
-import { Observer } from '@babylonjs/core'
+import * as BABYLON from '@babylonjs/core'
 
 import { SceneActionInterface as UserSceneActionInterface } from '../../..'
 import { SceneActionsController } from '../../../controllers'
@@ -39,8 +39,8 @@ export function SceneAction(props: SceneActionProps = {}): any {
         onLoopUpdate?(delta: number): void
         onCanvasResize?(size: Rect): void
 
-        loopUpdate$?: Observer<number>
-        canvasResize$?: Observer<Rect>
+        loopUpdate$?: BABYLON.Observer<number>
+        canvasResize$?: BABYLON.Observer<Rect>
         setup: any
 
         set loopUpdate(value: boolean) { switchLoopUpdate(value, this) }

@@ -1,4 +1,4 @@
-import { Observer } from '@babylonjs/core'
+import * as BABYLON from '@babylonjs/core'
 
 import { ActorStatesController } from '../../../controllers'
 import { Rect } from '../../../models/rect'
@@ -26,8 +26,8 @@ export function ActorState(props: ActorStateProps = {}): any {
       }
 
       metadata: ActorMetadata = Reflect.getMetadata('metadata', this) ?? new ActorMetadata()
-      loopUpdate$?: Observer<number>
-      canvasResize$?: Observer<Rect>
+      loopUpdate$?: BABYLON.Observer<number>
+      canvasResize$?: BABYLON.Observer<Rect>
 
       onStart?(): void
       onSetup?(): void

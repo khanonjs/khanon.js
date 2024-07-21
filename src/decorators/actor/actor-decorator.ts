@@ -1,4 +1,4 @@
-import { Observer } from '@babylonjs/core'
+import * as BABYLON from '@babylonjs/core'
 
 import { LoadingProgress } from '../../base'
 import { ActorActionConstructor } from '../../constructors/actor-action-constructor'
@@ -55,8 +55,8 @@ export function Actor(props: ActorProps = {}): any {
       props: ActorProps
       metadata: ActorMetadata = Reflect.getMetadata('metadata', this) ?? new ActorMetadata()
       transform: SpriteTransform | MeshTransform
-      loopUpdate$: Observer<number>
-      canvasResize$: Observer<Rect>
+      loopUpdate$: BABYLON.Observer<number>
+      canvasResize$: BABYLON.Observer<Rect>
       _body?: B
       nodes?: Map<string, B> = new Map<string, B>()
       _state: ActorStateInterface

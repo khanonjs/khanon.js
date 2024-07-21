@@ -1,4 +1,4 @@
-import { Observer } from '@babylonjs/core'
+import * as BABYLON from '@babylonjs/core'
 
 import {
   CanvasResizable,
@@ -20,8 +20,8 @@ import { SceneStateOptions } from './scene-state/scene-state-options'
 
 export abstract class SceneInterface implements Loadable, LoopUpdatable, CanvasResizable {
   abstract metadata?: SceneMetadata
-  abstract loopUpdate$?: Observer<number>
-  abstract canvasResize$?: Observer<Rect>
+  abstract loopUpdate$?: BABYLON.Observer<number>
+  abstract canvasResize$?: BABYLON.Observer<Rect>
   abstract actions?: Map<SceneActionConstructor, SceneActionInterface>
   abstract stopActionFromInstance?(instance: SceneActionInterface): void
 

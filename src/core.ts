@@ -2,10 +2,7 @@ import '@babylonjs/core/Loading/loadingScreen'
 import '@babylonjs/core/Loading/Plugins/babylonFileLoader'
 import '@babylonjs/core/Materials/PBR/pbrMaterial'
 
-import {
-  Observable,
-  Observer
-} from '@babylonjs/core'
+import * as BABYLON from '@babylonjs/core'
 import { Engine } from '@babylonjs/core/Engines/engine'
 
 import { AppCore } from './decorators/app/app-core'
@@ -35,7 +32,7 @@ export class Core {
   private static babylon: Pick<BabylonAccessor, 'engine'> = { engine: null }
 
   // Canvas
-  private static onCanvasResize: Observable<Rect> = new Observable<Rect>(undefined, true)
+  private static onCanvasResize: BABYLON.Observable<Rect> = new BABYLON.Observable<Rect>(undefined, true)
 
   // Loop update
   private static loopUpdateInterval: TimeoutType
@@ -43,7 +40,7 @@ export class Core {
   private static loopUpdateMps: number // Number of logical steps per frame
   private static loopUpdateLag: number
   private static loopUpdateDeltaTime: number = 1.0 // Time acceleration factor
-  private static onLoopUpdate: Observable<number> = new Observable<number>()
+  private static onLoopUpdate: BABYLON.Observable<number> = new BABYLON.Observable<number>()
 
   // Render scenes
   private static readonly renderScenes: Set<SceneType> = new Set<SceneType>()
@@ -149,19 +146,19 @@ export class Core {
     Core.renderScenes.delete(scene)
   }
 
-  static loopUpdateAddObserver(func: (delta: number) => void): Observer<number> {
+  static loopUpdateAddObserver(func: (delta: number) => void): BABYLON.Observer<number> {
     return Core.onLoopUpdate.add(func)
   }
 
-  static loopUpdateRemoveObserver(observer: Observer<number>): void {
+  static loopUpdateRemoveObserver(observer: BABYLON.Observer<number>): void {
     Core.onLoopUpdate.remove(observer)
   }
 
-  static addCanvasResizeObserver(func: (size: Rect) => void): Observer<Rect> {
+  static addCanvasResizeObserver(func: (size: Rect) => void): BABYLON.Observer<Rect> {
     return Core.onCanvasResize.add(func)
   }
 
-  static removeCanvasResizeObserver(observer: Observer<Rect>): void {
+  static removeCanvasResizeObserver(observer: BABYLON.Observer<Rect>): void {
     Core.onCanvasResize.remove(observer)
   }
 
