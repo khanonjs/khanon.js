@@ -182,7 +182,7 @@ export function Sprite(props: SpriteProps): any {
           const frameEnd = this.getLastFrame()
 
           const playAnimation = () => {
-            this.babylon.sprite.playAnimation(frameStart, frameEnd, false, this.animation.delay)
+            this.babylon.sprite.playAnimation(frameStart, frameEnd, false, this.animation.delay) // 8a8f why am I not using babylon loop here?
             if (completed || loop) {
               this.endAnimationTimer = Core.setTimeout(() => onCompleted(), (frameEnd - frameStart + 1) * this.animation.delay, this)
             }
