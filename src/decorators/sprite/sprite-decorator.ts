@@ -175,22 +175,16 @@ export function Sprite(props: SpriteProps): any {
             if (!this.animations.get(animation as FlexId)) { Logger.debugError(`Animation '${animation}' doesn't exist in sprite:`, _classInterface.prototype); return }
             animation = this.animations.get(animation as FlexId)
           }
-          // this.animations
           this.animation = animation as SpriteAnimation
           const loop = loopOverride ?? this.animation.loop
           const frameStart = this.getFirstFrame()
           const frameEnd = this.getLastFrame()
 
           const playAnimation = () => {
-            this.babylon.sprite.playAnimation(frameStart, frameEnd, false, this.animation.delay) // 8a8f why am I not using babylon loop here?
+            this.babylon.sprite.playAnimation(frameStart, frameEnd, false, this.animation.delay)
             if (completed || loop) {
               this.endAnimationTimer = Core.setTimeout(() => onCompleted(), (frameEnd - frameStart + 1) * this.animation.delay, this)
             }
-            setKeyframesTimeouts()
-          }
-
-          // Emit keyframe after timeout
-          const setKeyframesTimeouts = () => {
             this.keyFramesTimeouts = []
             this.animation.keyFrames?.forEach((animationKeyFrame) => {
               animationKeyFrame.ms.forEach((ms) => {
