@@ -44,7 +44,7 @@ export class Core {
   // Render scenes
   private static readonly renderScenes: Set<SceneType> = new Set<SceneType>()
 
-  // Timeouts // TODO thread here
+  // Timeouts // TODO thread here?
   private static timeouts: Set<Timeout> = new Set<Timeout>()
   private static intervals: Set<Timeout> = new Set<Timeout>()
 
@@ -61,9 +61,6 @@ export class Core {
   // static onAppError?: (errorMsg: string) => void
   /** Development mode */
   // static isDevelopmentMode?: boolean
-
-  // Engine
-  // private static engine: Engine
 
   // Scene
   // private static loadSceneQueue: Misc.KeyValue<Scene, (scene: Scene) => void> = new Misc.KeyValue<Scene, SceneFunctionArg>()
