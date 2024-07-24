@@ -32,13 +32,7 @@ export declare class SceneSpawn {
    * Spawns a particle in the scene.
    * @param particle
    */
-  particle<P extends ParticleInterface>(particle: new () => P): P
-
-  /**
-   * Spawns a particle source in the scene.
-   * @param particleSource
-   */
-  particleSource<S extends ParticleSourceInterface>(particleSource: new () => S): S
+  particle<P extends (ParticleInterface | ParticleSourceInterface)>(particle: new () => P): P
 
   /**
    * Spawns a sprite in the scene.
@@ -54,6 +48,55 @@ export declare class SceneSpawn {
 }
 
 export declare class SceneRemove {
+  /**
+   * Removes an actor from the scene.
+   * @param actor
+   */
+  actor(actor: ActorInterface): void
+
+  /**
+   * Removes all actors from the scene.
+   */
+  actorAll(): void
+
+  /**
+   * Removes a particle from the scene.
+   * @param particle
+   */
+  particle(particle: ParticleInterface | ParticleSourceInterface): void
+
+  /**
+   * Removes all particles from the scene.
+   */
+  particleAll(): void
+
+  /**
+   * Removes a sprite from the scene.
+   * @param sprite
+   */
+  sprite(sprite: SpriteInterface): void
+
+  /**
+   * Removes all sprites from the scene.
+   */
+  spriteAll(): void
+
+  /**
+   * Removes a mesh from the scene.
+   * @param mesh
+   */
+  mesh(mesh: MeshInterface): void
+
+  /**
+   * Removes all meshes from the scene.
+   */
+  meshAll(): void
+
+  /**
+   * Removes all elements from the scene.
+   * @param mesh
+   */
+  all(): void
 }
 
 export declare abstract class SceneInterface {
@@ -142,12 +185,6 @@ export declare abstract class SceneInterface {
    * Stops all actions.
    */
   stopActionAll(): void
-
-  /**
-   * Removes an actor from the scene
-   * @param actor
-   */
-  removeActor(actor: ActorInterface): void
 
   /**
    * Callback invoked before the scene has been started.

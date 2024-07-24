@@ -31,11 +31,11 @@ export abstract class SceneInterface implements Loadable, LoopUpdatable, CanvasR
   abstract stopActionFromInstance?(instance: SceneActionInterface): void
   protected abstract _spawn?: SceneSpawn
   protected abstract _remove?: SceneRemove
-  abstract actors?: ActorInterface[]
-  abstract particles?: ParticleInterface[]
-  abstract particleSources?: ParticleSourceInterface[]
-  abstract meshes?: MeshInterface[]
-  abstract sprites?: SpriteInterface[]
+  abstract actors?: Set<ActorInterface>
+  abstract particles?: Set<ParticleInterface>
+  abstract particleSources?: Set<ParticleSourceInterface>
+  abstract meshes?: Set<MeshInterface>
+  abstract sprites?: Set<SpriteInterface>
 
   /**
    * User available
@@ -57,7 +57,6 @@ export abstract class SceneInterface implements Loadable, LoopUpdatable, CanvasR
   abstract stopAction(action: SceneActionConstructor): void
   abstract stopActionGroup(group: number): void
   abstract stopActionAll(): void
-  abstract removeActor(actor: ActorInterface): void
 
   /**
    * User defined

@@ -23,6 +23,7 @@ import KJS from '../../kjs'
 import { AssetDefinition } from '../../models/asset-definition'
 import { BabylonAccessor } from '../../models/babylon-accessor'
 import { Rect } from '../../models/rect'
+import { Arrays } from '../../modules/helper/arrays'
 import { Logger } from '../../modules/logger'
 import {
   attachCanvasResize,
@@ -73,11 +74,11 @@ export function Scene(props: SceneProps): any {
       protected _remove: SceneRemove
 
       // Spawned elements
-      actors: ActorInterface[] = []
-      particles: ParticleInterface[] = []
-      particleSources: ParticleSourceInterface[] = []
-      meshes: MeshInterface[] = []
-      sprites: SpriteInterface[] = []
+      actors: Set<ActorInterface> = new Set<ActorInterface>()
+      particles: Set<ParticleInterface> = new Set<ParticleInterface>()
+      particleSources: Set<ParticleSourceInterface> = new Set<ParticleSourceInterface>()
+      meshes: Set<MeshInterface> = new Set<MeshInterface>()
+      sprites: Set<SpriteInterface> = new Set<SpriteInterface>()
 
       setEngineParams(): void {}
       renderStart(id: string): void {}
@@ -253,12 +254,6 @@ export function Scene(props: SceneProps): any {
         this.actions.forEach((action, actionConstructor) => {
           this.stopAction(actionConstructor)
         })
-      }
-
-      removeActor(actor: ActorInterface): void {
-        actor.release()
-        // 8a8f
-        // this.actors.push(instance)
       }
 
       debugInspector(): void {

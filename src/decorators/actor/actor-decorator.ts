@@ -73,7 +73,7 @@ export function Actor(props: ActorProps = {}): any {
       get state(): ActorStateInterface { return this._state }
 
       release() {
-        // 8a8f actions, particles, sprites, etc
+        // TODO particles
         invokeCallback(this.onDestroy, this)
         this.stopActionAll()
         this.clearNodes()
@@ -204,7 +204,7 @@ export function Actor(props: ActorProps = {}): any {
       }
 
       destroy() {
-        this.scene.removeActor(this)
+        this.scene.remove.actor(this)
       }
     }
     const _classCore = class implements ActorCore {
