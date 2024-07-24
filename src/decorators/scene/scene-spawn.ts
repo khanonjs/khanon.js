@@ -26,7 +26,7 @@ export class SceneSpawn {
   }
 
   actor<A extends ActorInterface>(actor: new () => A): A {
-    if (this.scene.props.actors.indexOf(actor) === -1) { Logger.debugError('Trying to spawn an actor that doesn\'t belong to the scene. Please check the scene props.', this.scenePrototype, actor.prototype); return }
+    if (!this.scene.props.actors || this.scene.props.actors.indexOf(actor) === -1) { Logger.debugError('Trying to spawn an actor that doesn\'t belong to the scene. Please check the scene props.', this.scenePrototype, actor.prototype); return }
     Logger.debug('Actor spawn:', actor.prototype)
     const instance = ActorsController.get(actor).spawn(this.scene)
     this.actors.push(instance)
@@ -46,6 +46,7 @@ export class SceneSpawn {
   }
 
   mesh<M extends MeshInterface>(mesh: new () => M): M {
+    if ((!this.scene.props.meshes || this.scene.props.meshes?.indexOf(mesh) === -1) && (!this.scene.metadata?.getProps().meshes || this.scene.metadata.getProps().meshes.indexOf(mesh) === -1)) { Logger.debugError('Trying to spawn a mesh that doesn\'t belong to the scene. Please check the scene props.', this.scenePrototype, mesh.prototype); return }
     Logger.debug('Mesh spawned:', mesh.prototype)
     const instance = MeshesController.get(mesh).spawn(this.scene)
     this.meshes.push(instance)
@@ -53,6 +54,7 @@ export class SceneSpawn {
   }
 
   sprite<S extends SpriteInterface>(sprite: new () => S): S {
+    if ((!this.scene.props.sprites || this.scene.props.sprites?.indexOf(sprite) === -1) && (!this.scene.metadata?.getProps().sprites || this.scene.metadata.getProps().sprites.indexOf(sprite) === -1)) { Logger.debugError('Trying to spawn a sprite that doesn\'t belong to the scene. Please check the scene props.', this.scenePrototype, sprite.prototype); return }
     Logger.debug('Sprite spawned:', sprite.prototype)
     const instance = SpritesController.get(sprite).spawn(this.scene)
     this.sprites.push(instance)

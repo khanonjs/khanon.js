@@ -80,6 +80,13 @@ export declare interface SpriteProps {
   maxAllowedSprites?: number
 }
 
+/**
+ * Sprite decorator can be applied in three different places:
+ * - To a class itself, where it will inherit extended SpriteInterface lifecycle, methods and variables.
+ * - To an 'Actor' class property, where it will be created as a SpriteConstructor using the decorator props.
+ * - To a 'Scene' class property, where it will be created as a SpriteConstructor using the decorator props.
+ * @param props
+ */
 export declare function Sprite(props: SpriteProps): any
 export declare abstract class SpriteInterface {
   /**

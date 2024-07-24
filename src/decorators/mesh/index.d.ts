@@ -15,6 +15,14 @@ import { MeshProps } from './mesh-props'
 
 export { MeshProps } from './decorators/mesh/mesh-props'
 export { MeshAnimation } from './decorators/mesh/mesh-animation'
+
+/**
+ * Mesh decorator can be applied in three different places:
+ * - To a class itself, where it will inherit extended MeshInterface lifecycle, methods and variables.
+ * - To an 'Actor' class property, where it will be created as a MeshConstructor using the decorator props.
+ * - To a 'Scene' class property, where it will be created as a MeshConstructor using the decorator props.
+ * @param props
+ */
 export declare function Mesh(props?: MeshProps): any
 export declare abstract class MeshInterface implements DisplayObject {
   /**

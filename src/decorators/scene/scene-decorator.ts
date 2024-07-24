@@ -12,9 +12,11 @@ import {
   ActorsController,
   AssetsController,
   CamerasController,
+  MeshesController,
   SceneActionsController,
   ScenesController,
-  SceneStatesController
+  SceneStatesController,
+  SpritesController
 } from '../../controllers'
 import { Core } from '../../core'
 import KJS from '../../kjs'
@@ -124,13 +126,18 @@ export function Scene(props: SceneProps): any {
 
         const sceneProgress = new LoadingProgress()
         if (!this.assets) {
-          this._assets = AssetsController.findAssetsDefinitions(this.props)
+          this._assets = [
+            ...AssetsController.findAssetsDefinitions(this.props),
+            ...AssetsController.findAssetsDefinitions(this.metadata.getProps())
+          ]
         }
         const assetsProgress = AssetsController.sceneLoad(this)
 
         assetsProgress.onComplete.add(() => {
           Logger.debug('Scene assets load completed', _class.prototype)
           ActorsController.load(this.props.actors, this)
+          SpritesController.load(this.metadata.getProps().sprites, this)
+          MeshesController.load(this.metadata.getProps().meshes, this)
           this.babylon.scene.executeWhenReady(() => {
             invokeCallback(this.onLoaded, this)
             sceneProgress.complete()

@@ -22,6 +22,8 @@ import {
 } from '../../utils/utils'
 import { ActorInterface } from '../actor/actor-interface'
 import { ActorMetadata } from '../actor/actor-metadata'
+import { SceneInterface } from '../scene/scene-interface'
+import { SceneMetadata } from '../scene/scene-metadata'
 import { SceneType } from '../scene/scene-type'
 import { MeshAnimation } from './mesh-animation'
 import { MeshCore } from './mesh-core'
@@ -153,16 +155,19 @@ export function Mesh(props: MeshProps): any {
     }
 
     // Mutates decorator to class or property
-    if (constructorOrTarget.prototype) {
+    if (constructorOrTarget.prototype) { // Defined prototype means it is a decorated class
       return decorateClass()
-    } else if (constructorOrTarget instanceof ActorInterface && !descriptor) { // Undefined descriptor means it is a property
+    } else if ((
+      constructorOrTarget instanceof ActorInterface ||
+      constructorOrTarget instanceof SceneInterface
+    ) && !descriptor) { // Undefined descriptor means it is a decorated property, otherwiese it is a decorated method
       @Mesh(props)
       class _meshInterface extends UserMeshInterface {}
 
       if (!Reflect.hasMetadata('metadata', constructorOrTarget)) {
-        Reflect.defineMetadata('metadata', new ActorMetadata(), constructorOrTarget)
+        Reflect.defineMetadata('metadata', constructorOrTarget instanceof ActorInterface ? new ActorMetadata() : new SceneMetadata(), constructorOrTarget)
       }
-      const metadata = Reflect.getMetadata('metadata', constructorOrTarget) as ActorMetadata
+      const metadata = Reflect.getMetadata('metadata', constructorOrTarget) as (ActorMetadata | SceneMetadata)
       metadata.meshes.push({
         propertyName: contextOrProperty as string,
         classDefinition: _meshInterface
