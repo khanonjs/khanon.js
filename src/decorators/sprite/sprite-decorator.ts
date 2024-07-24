@@ -38,6 +38,7 @@ import { SpriteProps } from './sprite-props'
 import { SpriteTexture } from './sprite-texture'
 import { spritePropsDefault } from './sprite.props.deafult'
 
+// 8a8f add scene property decorator
 export function Sprite(props: SpriteProps): any {
   return function <T extends { new (...args: any[]): SpriteInterface }>(constructorOrTarget: (T & SpriteInterface) | any, contextOrProperty: ClassDecoratorContext | string, descriptor: PropertyDescriptor) {
     const decorateClass = () => {

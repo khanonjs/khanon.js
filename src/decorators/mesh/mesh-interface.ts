@@ -14,10 +14,10 @@ export abstract class MeshInterface extends DisplayObject {
   /**
    * User available
    */
-  abstract babylon: Pick<BabylonAccessor, 'mesh'>
-  abstract scene: SceneInterface
-  abstract transform: MeshTransform
   abstract loopUpdate: boolean
+  abstract get babylon(): Pick<BabylonAccessor, 'mesh'>
+  abstract get scene(): SceneInterface
+  abstract get transform(): MeshTransform
   abstract setMesh(babylonMesh: BABYLON.Mesh): void
 
   /**

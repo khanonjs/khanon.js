@@ -15,10 +15,10 @@ export abstract class SpriteInterface extends DisplayObject {
   /**
    * User available
    */
-  abstract babylon: Pick<BabylonAccessor, 'spriteManager' | 'sprite'>
-  abstract scene: SceneInterface
-  abstract transform: SpriteTransform
   abstract loopUpdate: boolean
+  abstract get babylon(): Pick<BabylonAccessor, 'spriteManager' | 'sprite'>
+  abstract get scene(): SceneInterface
+  abstract get transform(): SpriteTransform
   abstract get width(): number
   abstract get height(): number
   abstract set scale(scale: number)
