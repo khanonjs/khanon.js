@@ -1,6 +1,7 @@
 import { CameraConstructor } from '../../constructors/camera-constructor'
 import { AssetDefinition } from '../../models/asset-definition'
 import { SceneProps } from './scene-props'
+import { SceneRemove } from './scene-remove'
 import { SceneSpawn } from './scene-spawn'
 
 export abstract class SceneCore {
@@ -8,7 +9,6 @@ export abstract class SceneCore {
   protected abstract _assets: AssetDefinition[]
   protected abstract _loaded: boolean
   protected abstract _started: boolean
-  protected abstract _spawn: SceneSpawn
   abstract get assets(): AssetDefinition[]
   abstract setCamera(camera: CameraConstructor): void
   abstract setEngineParams(): void

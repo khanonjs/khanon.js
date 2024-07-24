@@ -30,7 +30,6 @@ import { MeshCore } from './mesh-core'
 import { MeshInterface } from './mesh-interface'
 import { MeshProps } from './mesh-props'
 
-// 8a8f add scene property decorator
 export function Mesh(props: MeshProps): any {
   return function <T extends { new (...args: any[]): MeshInterface }>(constructorOrTarget: (T & MeshInterface) | any, contextOrProperty: ClassDecoratorContext | string, descriptor: PropertyDescriptor) {
     const decorateClass = () => {
@@ -61,10 +60,10 @@ export function Mesh(props: MeshProps): any {
 
         setMesh(babylonMesh: BABYLON.Mesh): void {
           if (this.babylon.mesh) {
-            const transform = this.getTransform()
+            // const transform = this.getTransform() // TODO
             this.release()
             this.babylon.mesh = babylonMesh
-            this.setTransform(transform)
+            // this.setTransform(transform) // TODO
           } else {
             this.babylon.mesh = babylonMesh
           }
@@ -78,19 +77,17 @@ export function Mesh(props: MeshProps): any {
         // ***************
         transform: MeshTransform
 
-        setTransform(transform: BABYLON.Matrix): void {
-        // TODO
+        // setTransform(transform: BABYLON.Matrix): void {  // TODO
         // this.babylon.mesh.updatePoseMatrix(transform) // TODO: Test this
         // this.setPosition(transform.getTranslation())
         // this.setRotation(transform.getRotationMatrix())
         // this.babylon.mesh.scaling = transform.sca
         // this.babylon.mesh.rota = transform.getTranslation()
-        }
+        // }
 
-        getTransform(): BABYLON.Matrix {
-        // TODO
-          return null
-        }
+        // getTransform(): BABYLON.Matrix {// TODO
+        //   return null
+        // }
 
         setFrame(frame: number): void {
         // TODO

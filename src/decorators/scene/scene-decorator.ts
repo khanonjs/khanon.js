@@ -35,12 +35,17 @@ import {
 } from '../../utils/utils'
 import { ActorInterface } from '../actor/actor-interface'
 import { CameraInterface } from '../camera/camera-interface'
+import { MeshInterface } from '../mesh'
+import { ParticleSourceInterface } from '../particle-source/particle-source-interface'
+import { ParticleInterface } from '../particle/particle-interface'
+import { SpriteInterface } from '../sprite'
 import { SceneActionInterface } from './scene-action/scene-action-interface'
 import { SceneActionOptions } from './scene-action/scene-action-options'
 import { SceneCore } from './scene-core'
 import { SceneInterface } from './scene-interface'
 import { SceneMetadata } from './scene-metadata'
 import { SceneProps } from './scene-props'
+import { SceneRemove } from './scene-remove'
 import { SceneSpawn } from './scene-spawn'
 import { SceneStateInterface } from './scene-state/scene-state-interface'
 import { SceneStateOptions } from './scene-state/scene-state-options'
@@ -52,6 +57,7 @@ export function Scene(props: SceneProps): any {
       constructor() {
         super()
         this._spawn = new SceneSpawn(this, _class.prototype)
+        this._remove = new SceneRemove(this, _class.prototype)
         this.metadata.applyProps(this)
       }
 
@@ -64,6 +70,14 @@ export function Scene(props: SceneProps): any {
       protected _state: SceneStateInterface
       protected _camera: CameraInterface
       protected _spawn: SceneSpawn
+      protected _remove: SceneRemove
+
+      // Spawned elements
+      actors: ActorInterface[] = []
+      particles: ParticleInterface[] = []
+      particleSources: ParticleSourceInterface[] = []
+      meshes: MeshInterface[] = []
+      sprites: SpriteInterface[] = []
 
       setEngineParams(): void {}
       renderStart(id: string): void {}
@@ -78,6 +92,7 @@ export function Scene(props: SceneProps): any {
       get state(): SceneStateInterface { return this._state }
       get camera(): CameraInterface { return this._camera }
       get spawn(): SceneSpawn { return this._spawn }
+      get remove(): SceneRemove { return this._remove }
 
       onStart?(): void
       onStop?(): void

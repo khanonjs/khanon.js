@@ -135,13 +135,13 @@ export declare abstract class SpriteInterface {
    * Sets the transform (translation, rotation and scale).
    * @param transform
    */
-  setTransform(transform: BABYLON.Matrix): void
+  // setTransform(transform: BABYLON.Matrix): void  // TODO
 
   /**
    * Gets teh transform.
    * @param transform
    */
-  getTransform(): BABYLON.Matrix
+  // getTransform(): BABYLON.Matrix // TODO
 
   /**
    * Sets current frame (stops current animation).

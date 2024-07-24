@@ -58,13 +58,13 @@ export declare abstract class MeshInterface implements DisplayObject {
    * Sets the transform (translation, rotation and scale).
    * @param transform
    */
-  setTransform(transform: BABYLON.Matrix): void
+  // setTransform(transform: BABYLON.Matrix): void  // TODO
 
   /**
    * Gets the transform.
    * @param transform
    */
-  getTransform(): BABYLON.Matrix
+  // getTransform(): BABYLON.Matrix // TODO
 
   /**
    * Sets current frame (stops current animation).

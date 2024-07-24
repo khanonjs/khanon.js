@@ -39,7 +39,6 @@ import { SpriteProps } from './sprite-props'
 import { SpriteTexture } from './sprite-texture'
 import { spritePropsDefault } from './sprite.props.deafult'
 
-// 8a8f add scene property decorator
 export function Sprite(props: SpriteProps): any {
   return function <T extends { new (...args: any[]): SpriteInterface }>(constructorOrTarget: (T & SpriteInterface) | any, contextOrProperty: ClassDecoratorContext | string, descriptor: PropertyDescriptor) {
     const decorateClass = () => {
@@ -90,10 +89,10 @@ export function Sprite(props: SpriteProps): any {
           babylonSprite.height = this.spriteTexture.height
           babylonSprite.isVisible = true
           if (this.babylon.sprite) {
-            const transform = this.getTransform()
+            // const transform = this.getTransform()  // TODO
             this.release()
             this.babylon.sprite = babylonSprite
-            this.setTransform(transform)
+            // this.setTransform(transform) // TODO
           } else {
             this.babylon.sprite = babylonSprite
             this.babylon.spriteManager = this.spriteTexture.babylon.spriteManager
@@ -144,19 +143,17 @@ export function Sprite(props: SpriteProps): any {
           return this._visible
         }
 
-        setTransform(transform: BABYLON.Matrix): void {
-        // TODO
+        // setTransform(transform: BABYLON.Matrix): void { // TODO
         // this.babylon.mesh.updatePoseMatrix(transform) // TODO: Test this
         // this.setPosition(transform.getTranslation())
         // this.setRotation(transform.getRotationMatrix())
         // this.babylon.mesh.scaling = transform.sca
         // this.babylon.mesh.rota = transform.getTranslation()
-        }
+        // }
 
-        getTransform(): BABYLON.Matrix {
-        // TODO
-          return null
-        }
+        // getTransform(): BABYLON.Matrix {  // TODO
+        // return null
+        // }
 
         addAnimation(animation: SpriteAnimation): void {
           if (this.animations.get(animation.id)) { Logger.debugError(`Animation name '${animation.id}' already exists.`); return }

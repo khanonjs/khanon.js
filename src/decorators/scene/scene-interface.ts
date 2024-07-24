@@ -11,6 +11,11 @@ import { SceneStateConstructor } from '../../constructors/scene-state-constructo
 import { BabylonAccessor } from '../../models/babylon-accessor'
 import { Rect } from '../../models/rect'
 import { ActorInterface } from '../actor/actor-interface'
+import { MeshInterface } from '../mesh'
+import { ParticleSourceInterface } from '../particle-source/particle-source-interface'
+import { ParticleInterface } from '../particle/particle-interface'
+import { SpriteInterface } from '../sprite'
+import { SceneRemove } from './'
 import { SceneActionInterface } from './scene-action/scene-action-interface'
 import { SceneActionOptions } from './scene-action/scene-action-options'
 import { SceneMetadata } from './scene-metadata'
@@ -24,6 +29,13 @@ export abstract class SceneInterface implements Loadable, LoopUpdatable, CanvasR
   abstract canvasResize$?: BABYLON.Observer<Rect>
   abstract actions?: Map<SceneActionConstructor, SceneActionInterface>
   abstract stopActionFromInstance?(instance: SceneActionInterface): void
+  protected abstract _spawn?: SceneSpawn
+  protected abstract _remove?: SceneRemove
+  abstract actors?: ActorInterface[]
+  abstract particles?: ParticleInterface[]
+  abstract particleSources?: ParticleSourceInterface[]
+  abstract meshes?: MeshInterface[]
+  abstract sprites?: SpriteInterface[]
 
   /**
    * User available
@@ -35,6 +47,7 @@ export abstract class SceneInterface implements Loadable, LoopUpdatable, CanvasR
   abstract get started(): boolean
   abstract get state(): SceneStateInterface
   abstract get spawn(): SceneSpawn
+  abstract get remove(): SceneRemove
   abstract start(state: SceneStateConstructor): SceneStateInterface
   abstract stop(): void
   abstract load(): LoadingProgress

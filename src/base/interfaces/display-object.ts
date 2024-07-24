@@ -17,8 +17,8 @@ export abstract class DisplayObject {
   // User anailable
   abstract get transform(): SpriteTransform | MeshTransform
 
-  abstract setTransform(transform: BABYLON.Matrix): void // 8a8f
-  abstract getTransform(): BABYLON.Matrix // 8a8f
+  // abstract setTransform(transform: BABYLON.Matrix): void // TODO
+  // abstract getTransform(): BABYLON.Matrix // TODO
 
   abstract setFrame(frame: number): void
   abstract setFrameFirst(): void

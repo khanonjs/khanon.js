@@ -19,6 +19,7 @@ import {
 
 export { SceneProps } from './decorators/scene/scene-props'
 export declare function Scene(props: SceneProps): any
+
 export declare class SceneSpawn {
   /**
    * Spawns an actor in the scene.
@@ -40,22 +41,19 @@ export declare class SceneSpawn {
   particleSource<S extends ParticleSourceInterface>(particleSource: new () => S): S
 
   /**
-   * Spawns a sprite in the scene.  // 8a8f agregar decorador a scene propp
+   * Spawns a sprite in the scene.
    * @param sprite
    */
   sprite<S extends SpriteInterface>(sprite: new () => S): S
 
   /**
-   * Spawns a mesh in the scene. // 8a8f agregar decorador a scene propp
+   * Spawns a mesh in the scene.
    * @param mesh
    */
   mesh<M extends MeshInterface>(mesh: new () => M): M
+}
 
-  /**
-   * Remove all spawned elements of this scene. // 8a8f pasar a clase 'remove.all()' o eliminar clase 'spawm'.
-   * 8a8f Clase spawn puede heredar de una creada por el usuario donde puede agregar funcines para hacer spawn de grupos de objetos.
-   */
-  clear(): void
+export declare class SceneRemove {
 }
 
 export declare abstract class SceneInterface {
@@ -83,6 +81,11 @@ export declare abstract class SceneInterface {
    * Scene spawn methods.
    */
   get spawn(): SceneSpawn
+
+  /**
+   * Scene remove methods.
+   */
+  get remove(): SceneRemove
 
   /**
    * Turns On/Off 'onLoopUpdate' callback.
