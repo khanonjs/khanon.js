@@ -24,7 +24,6 @@ import { ActorInterface } from '../actor/actor-interface'
 import { ActorMetadata } from '../actor/actor-metadata'
 import { SceneInterface } from '../scene/scene-interface'
 import { SceneMetadata } from '../scene/scene-metadata'
-import { SceneType } from '../scene/scene-type'
 import { MeshAnimation } from './mesh-animation'
 import { MeshCore } from './mesh-core'
 import { MeshInterface } from './mesh-interface'
@@ -34,7 +33,7 @@ export function Mesh(props: MeshProps): any {
   return function <T extends { new (...args: any[]): MeshInterface }>(constructorOrTarget: (T & MeshInterface) | any, contextOrProperty: ClassDecoratorContext | string, descriptor: PropertyDescriptor) {
     const decorateClass = () => {
       const _classInterface = class extends constructorOrTarget implements MeshInterface {
-        constructor(readonly scene: SceneType, private readonly props: MeshProps) {
+        constructor(readonly scene: SceneInterface, private readonly props: MeshProps) {
           super()
         }
 
@@ -51,7 +50,7 @@ export function Mesh(props: MeshProps): any {
         loopUpdate$: BABYLON.Observer<number>
         canvasResize$: BABYLON.Observer<Rect>
 
-        onSpawn?(scene: SceneType): void
+        onSpawn?(scene: SceneInterface): void
         onLoopUpdate?(delta: number): void
         onCanvasResize?(size: Rect): void
 
@@ -133,15 +132,15 @@ export function Mesh(props: MeshProps): any {
         props = props
         Instance: MeshInterface = new _classInterface(null, null)
 
-        load(scene: SceneType): LoadingProgress {
+        load(scene: SceneInterface): LoadingProgress {
           return new LoadingProgress().complete()
         }
 
-        unload(scene: SceneType): void {
+        unload(scene: SceneInterface): void {
 
         }
 
-        spawn(scene: SceneType): MeshInterface {
+        spawn(scene: SceneInterface): MeshInterface {
           const mesh = new _classInterface(scene, this.props)
           mesh.initialize()
           return mesh

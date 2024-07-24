@@ -12,7 +12,7 @@ import {
   SpriteTransform
 } from '../../types'
 import { MeshInterface } from '../mesh/mesh-interface'
-import { SceneType } from '../scene/scene-type'
+import { SceneInterface } from '../scene/scene-interface'
 import { SpriteInterface } from '../sprite/sprite-interface'
 import { ActorActionInterface } from './actor-action/actor-action-interface'
 import { ActorActionOptions } from './actor-action/actor-action-options'
@@ -24,7 +24,7 @@ import { ActorStateOptions } from './actor-state/actor-state-options'
 export abstract class ActorInterface<B extends SpriteInterface | MeshInterface = any> implements LoopUpdatable, CanvasResizable {
   abstract metadata?: ActorMetadata
   abstract props?: ActorProps
-  abstract scene?: SceneType
+  abstract scene?: SceneInterface
   abstract loopUpdate: boolean
   abstract loopUpdate$?: BABYLON.Observer<number>
   abstract canvasResize$?: BABYLON.Observer<Rect>

@@ -18,7 +18,7 @@ import {
 import { SceneInterface } from '../scene-interface'
 import { SceneMetadata } from '../scene-metadata'
 import { SceneStateInterface } from '../scene-state/scene-state-interface'
-import { SceneType } from '../scene-type'
+import { SceneInterface } from '../scene-type'
 import { SceneActionCore } from './scene-action-core'
 import { SceneActionInterface } from './scene-action-interface'
 import { SceneActionProps } from './scene-action-props'
@@ -77,7 +77,7 @@ export function SceneAction(props: SceneActionProps = {}): any {
         props = props
         Instance: SceneActionInterface = new _classInterface(null)
 
-        spawn(scene: SceneType): SceneActionInterface {
+        spawn(scene: SceneInterface): SceneActionInterface {
           const action = new _classInterface(scene)
           return action
         }

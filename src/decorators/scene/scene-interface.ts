@@ -6,8 +6,10 @@ import {
   LoadingProgress,
   LoopUpdatable
 } from '../../base'
+import { CameraConstructor } from '../../constructors/camera-constructor'
 import { SceneActionConstructor } from '../../constructors/scene-action-constructor'
 import { SceneStateConstructor } from '../../constructors/scene-state-constructor'
+import { AssetDefinition } from '../../models/asset-definition'
 import { BabylonAccessor } from '../../models/babylon-accessor'
 import { Rect } from '../../models/rect'
 import { ActorInterface } from '../actor/actor-interface'
@@ -19,16 +21,21 @@ import { SceneRemove } from './'
 import { SceneActionInterface } from './scene-action/scene-action-interface'
 import { SceneActionOptions } from './scene-action/scene-action-options'
 import { SceneMetadata } from './scene-metadata'
+import { SceneProps } from './scene-props'
 import { SceneSpawn } from './scene-spawn'
 import { SceneStateInterface } from './scene-state/scene-state-interface'
 import { SceneStateOptions } from './scene-state/scene-state-options'
 
 export abstract class SceneInterface implements Loadable, LoopUpdatable, CanvasResizable {
+  abstract props?: SceneProps
+  protected abstract _assets?: AssetDefinition[]
+  protected abstract _loaded?: boolean
+  protected abstract _started?: boolean
+  abstract assets?: AssetDefinition[]
   abstract metadata?: SceneMetadata
   abstract loopUpdate$?: BABYLON.Observer<number>
   abstract canvasResize$?: BABYLON.Observer<Rect>
   abstract actions?: Map<SceneActionConstructor, SceneActionInterface>
-  abstract stopActionFromInstance?(instance: SceneActionInterface): void
   protected abstract _spawn?: SceneSpawn
   protected abstract _remove?: SceneRemove
   abstract actors?: Set<ActorInterface>
@@ -36,6 +43,11 @@ export abstract class SceneInterface implements Loadable, LoopUpdatable, CanvasR
   abstract particleSources?: Set<ParticleSourceInterface>
   abstract meshes?: Set<MeshInterface>
   abstract sprites?: Set<SpriteInterface>
+  abstract setCamera?(camera: CameraConstructor): void
+  abstract setEngineParams?(): void
+  abstract renderStart?(id: string): void
+  abstract renderStop?(id: string): void
+  abstract stopActionFromInstance?(instance: SceneActionInterface): void
 
   /**
    * User available

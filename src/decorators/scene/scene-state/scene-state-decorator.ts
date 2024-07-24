@@ -13,8 +13,8 @@ import {
   removeLoopUpdate,
   switchLoopUpdate
 } from '../../../utils/utils'
+import { SceneInterface } from '../scene-interface'
 import { SceneMetadata } from '../scene-metadata'
-import { SceneType } from '../scene-type'
 import { SceneStateCore } from './scene-state-core'
 import { SceneStateInterface } from './scene-state-interface'
 import { SceneStateProps } from './scene-state-props'
@@ -22,7 +22,7 @@ import { SceneStateProps } from './scene-state-props'
 export function SceneState(props: SceneStateProps): any {
   return function <T extends { new (...args: any[]): SceneStateInterface }>(constructor: T & SceneStateInterface, context: ClassDecoratorContext) {
     const _classInterface = class extends constructor implements SceneStateInterface {
-      constructor(readonly scene: SceneType, readonly setup: any) {
+      constructor(readonly scene: SceneInterface, readonly setup: any) {
         super()
         this.metadata.applyProps(this)
       }
@@ -64,7 +64,7 @@ export function SceneState(props: SceneStateProps): any {
       props = props
       Instance: SceneStateInterface = new _classInterface(null, null)
 
-      spawn(scene: SceneType): SceneStateInterface {
+      spawn(scene: SceneInterface): SceneStateInterface {
         const state = new _classInterface(scene, null)
         return state
       }

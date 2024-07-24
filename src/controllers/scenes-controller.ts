@@ -1,11 +1,11 @@
 import { ControllerLoader } from '../base'
 import { SceneConstructor } from '../constructors/scene-constructor'
 import { SceneStateConstructor } from '../constructors/scene-state-constructor'
+import { SceneInterface } from '../decorators/scene/scene-interface'
 import { SceneStateOptions } from '../decorators/scene/scene-state/scene-state-options'
-import { SceneType } from '../decorators/scene/scene-type'
 import { Logger } from '../modules/logger'
 
-export class ScenesController extends ControllerLoader<SceneType, SceneType>() {
+export class ScenesController extends ControllerLoader<SceneInterface, SceneInterface>() {
   static start(scene: SceneConstructor, state: SceneStateConstructor): SceneStateOptions {
     const sceneInterface = ScenesController.get(scene)
     const stateInterface = sceneInterface.start(state)

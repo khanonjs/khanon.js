@@ -26,7 +26,7 @@ import {
   switchLoopUpdate
 } from '../../utils/utils'
 import { MeshInterface } from '../mesh/mesh-interface'
-import { SceneType } from '../scene/scene-type'
+import { SceneInterface } from '../scene/scene-interface'
 import { SpriteInterface } from '../sprite/sprite-interface'
 import { ActorActionInterface } from './actor-action/actor-action-interface'
 import { ActorActionOptions } from './actor-action/actor-action-options'
@@ -42,7 +42,7 @@ type B = SpriteInterface | MeshInterface
 export function Actor(props: ActorProps = {}): any {
   return function <T extends { new (...args: any[]): ActorInterface }>(constructor: T & ActorInterface, context: ClassDecoratorContext) {
     const _classInterface = class extends constructor implements ActorInterface {
-      constructor(readonly scene: SceneType) {
+      constructor(readonly scene: SceneInterface) {
         super()
         this.metadata.applyProps(this)
       }
@@ -212,7 +212,7 @@ export function Actor(props: ActorProps = {}): any {
       Instance: ActorInterface = new _classInterface(null)
       loaded = false
 
-      load(scene: SceneType): LoadingProgress {
+      load(scene: SceneInterface): LoadingProgress {
         const progress = new LoadingProgress().complete()
         SpritesController.load(this.props.sprites, scene)
         SpritesController.load(this.Instance.metadata.getProps().sprites, scene)
@@ -225,7 +225,7 @@ export function Actor(props: ActorProps = {}): any {
         // TODO
       }
 
-      spawn(scene: SceneType): ActorInterface {
+      spawn(scene: SceneInterface): ActorInterface {
         const actor = new _classInterface(scene)
         actor.initialize(this.props)
         return actor

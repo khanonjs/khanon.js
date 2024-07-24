@@ -6,7 +6,7 @@ import {
 } from '../base'
 import { ActorCore } from '../decorators/actor/actor-core'
 import { ActorInterface } from '../decorators/actor/actor-interface'
-import { SceneType } from '../decorators/scene/scene-type'
+import { SceneInterface } from '../decorators/scene/scene-interface'
 import { SpriteCore } from '../decorators/sprite/sprite-core'
 import { SpriteInterface } from '../decorators/sprite/sprite-interface'
 import { AssetDefinition } from '../models/asset-definition'
@@ -27,9 +27,9 @@ export class AssetsController {
     [AssetType.AUDIO]: ['audio/aac', 'audio/midi', 'audio/x-midi', 'audio/mpeg', 'audio/ogg', 'audio/opus', 'audio/wav', 'audio/webm']
   }
 
-  private static assets: Map<string, Asset<SceneType>> = new Map<string, Asset<SceneType>>()
+  private static assets: Map<string, Asset<SceneInterface>> = new Map<string, Asset<SceneInterface>>()
 
-  static getAsset(url: string): Asset<SceneType> | undefined {
+  static getAsset(url: string): Asset<SceneInterface> | undefined {
     return this.assets.get(url)
   }
 
@@ -73,14 +73,14 @@ export class AssetsController {
   /**
    * Loads all assets of a Scene
    */
-  static sceneLoad(scene: SceneType): LoadingProgress {
+  static sceneLoad(scene: SceneInterface): LoadingProgress {
     const progress = new LoadingProgress()
     if (scene.assets.length === 0) {
       progress.complete()
     } else {
       const progresses = []
       scene.assets.forEach(assetDef => {
-        const asset: Asset<SceneType> = AssetsController.assets.get(assetDef.url)
+        const asset: Asset<SceneInterface> = AssetsController.assets.get(assetDef.url)
         if (asset) {
           asset.addSource(scene, assetDef.cached)
           progresses.push(asset.progress)
@@ -97,7 +97,7 @@ export class AssetsController {
    * Purge loaded assets from a Scene.
    * Non cached and unnecessary assets will be removed.
    */
-  static scenePurge(scene: SceneType) {
+  static scenePurge(scene: SceneInterface) {
     // scene.assets.
     // TODO
   }
@@ -105,7 +105,7 @@ export class AssetsController {
   /**
    * Unload all existing assets of a Scene that are not cached.
    */
-  static sceneUnload(scene: SceneType) {
+  static sceneUnload(scene: SceneInterface) {
     // TODO
   }
 
@@ -116,7 +116,7 @@ export class AssetsController {
     // TODO
   }
 
-  private static loadFileFromUrl(definition: AssetDefinition, source: SceneType): LoadingProgress<ArrayBuffer> {
+  private static loadFileFromUrl(definition: AssetDefinition, source: SceneInterface): LoadingProgress<ArrayBuffer> {
     const asset = new Asset(definition, source)
     AssetsController.assets.set(definition.url, asset)
     let reader: ReadableStreamDefaultReader

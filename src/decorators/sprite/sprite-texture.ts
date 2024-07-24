@@ -3,7 +3,7 @@ import * as BABYLON from '@babylonjs/core'
 import { Asset } from '../../base'
 import { BabylonAccessor } from '../../models/babylon-accessor'
 import { Logger } from '../../modules/logger'
-import { SceneType } from '../scene/scene-type'
+import { SceneInterface } from '../scene/scene-interface'
 import { SpriteProps } from './sprite-props'
 
 export class SpriteTexture {
@@ -11,11 +11,11 @@ export class SpriteTexture {
   width: number
   height: number
 
-  constructor(scene: SceneType, private readonly spriteProps: SpriteProps) {
+  constructor(scene: SceneInterface, private readonly spriteProps: SpriteProps) {
     this.babylon.scene = scene.babylon.scene
   }
 
-  setFromAsset(asset: Asset<SceneType>): void {
+  setFromAsset(asset: Asset<SceneInterface>): void {
     const width = this.spriteProps.width ?? this.spriteProps.cellWidth
     const height = this.spriteProps.height ?? this.spriteProps.cellHeight
     const texture = new BABYLON.Texture(asset.objectURL, this.babylon.scene, this.spriteProps.noMipmap, this.spriteProps.invertY, this.spriteProps.samplingMode)

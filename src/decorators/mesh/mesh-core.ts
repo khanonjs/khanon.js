@@ -3,14 +3,14 @@ import {
   LoadingProgress,
   Spawnable
 } from '../../base'
-import { SceneType } from '../scene/scene-type'
+import { SceneInterface } from '../scene/scene-interface'
 import { MeshInterface } from './mesh-interface'
 import { MeshProps } from './mesh-props'
 
-export abstract class MeshCore implements Loadable<SceneType>, Spawnable<MeshInterface> {
+export abstract class MeshCore implements Loadable<SceneInterface>, Spawnable<MeshInterface> {
   abstract props: MeshProps
   abstract Instance: MeshInterface
-  abstract load(scene: SceneType): LoadingProgress
-  abstract unload(scene: SceneType): void
-  abstract spawn(scene: SceneType): MeshInterface
+  abstract load(scene: SceneInterface): LoadingProgress
+  abstract unload(scene: SceneInterface): void
+  abstract spawn(scene: SceneInterface): MeshInterface
 }

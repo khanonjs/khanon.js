@@ -2,7 +2,7 @@ import * as BABYLON from '@babylonjs/core'
 
 import { AppCore } from './decorators/app/app-core'
 import { AppInterface } from './decorators/app/app-interface'
-import { SceneType } from './decorators/scene/scene-type'
+import { SceneInterface } from './decorators/scene/scene-interface'
 import { BabylonAccessor } from './models/babylon-accessor'
 import { Rect } from './models/rect'
 import { Timeout } from './models/timeout'
@@ -38,7 +38,7 @@ export class Core {
   private static onLoopUpdate: BABYLON.Observable<number> = new BABYLON.Observable<number>()
 
   // Render scenes
-  private static readonly renderScenes: Set<SceneType> = new Set<SceneType>()
+  private static readonly renderScenes: Set<SceneInterface> = new Set<SceneInterface>()
 
   // Timeouts // TODO thread here?
   private static timeouts: Set<Timeout> = new Set<Timeout>()
@@ -129,11 +129,11 @@ export class Core {
     return process.env.NODE_ENV === 'development'
   }
 
-  static startRenderScene(scene: SceneType): void {
+  static startRenderScene(scene: SceneInterface): void {
     Core.renderScenes.add(scene)
   }
 
-  static stopRenderScene(scene: SceneType): void {
+  static stopRenderScene(scene: SceneInterface): void {
     Core.renderScenes.delete(scene)
   }
 

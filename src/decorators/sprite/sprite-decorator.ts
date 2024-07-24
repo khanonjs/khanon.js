@@ -31,7 +31,6 @@ import { ActorInterface } from '../actor/actor-interface'
 import { ActorMetadata } from '../actor/actor-metadata'
 import { SceneInterface } from '../scene/scene-interface'
 import { SceneMetadata } from '../scene/scene-metadata'
-import { SceneType } from '../scene/scene-type'
 import { SpriteAnimation } from './sprite-animation'
 import { SpriteCore } from './sprite-core'
 import { SpriteInterface } from './sprite-interface'
@@ -44,7 +43,7 @@ export function Sprite(props: SpriteProps): any {
     const decorateClass = () => {
       const _className = constructorOrTarget.name
       const _classInterface = class extends constructorOrTarget implements SpriteInterface {
-        constructor(readonly scene: SceneType, private readonly props: SpriteProps) {
+        constructor(readonly scene: SceneInterface, private readonly props: SpriteProps) {
           super()
         }
 
@@ -256,9 +255,9 @@ export function Sprite(props: SpriteProps): any {
       const _classCore = class implements SpriteCore {
         props = applyDefaults(props, spritePropsDefault)
         Instance: SpriteInterface = new _classInterface(null, null)
-        textures: Map<SceneType, SpriteTexture> = new Map<SceneType, SpriteTexture>()
+        textures: Map<SceneInterface, SpriteTexture> = new Map<SceneInterface, SpriteTexture>()
 
-        load(scene: SceneType): LoadingProgress {
+        load(scene: SceneInterface): LoadingProgress {
           const progress = new LoadingProgress().complete()
           if (this.textures.get(scene)) {
             return progress.complete()
@@ -278,12 +277,12 @@ export function Sprite(props: SpriteProps): any {
           }
         }
 
-        unload(scene: SceneType): void {
+        unload(scene: SceneInterface): void {
           this.textures.delete(scene)
         // AssetsController. // TODO
         }
 
-        spawn(scene: SceneType): SpriteInterface {
+        spawn(scene: SceneInterface): SpriteInterface {
           const sprite = new _classInterface(scene, this.props)
           sprite.initialize(this.textures.get(scene))
           return sprite

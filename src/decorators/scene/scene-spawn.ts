@@ -9,14 +9,14 @@ import { MeshInterface } from '../mesh/mesh-interface'
 import { ParticleSourceInterface } from '../particle-source/particle-source-interface'
 import { ParticleInterface } from '../particle/particle-interface'
 import { SpriteInterface } from '../sprite/sprite-interface'
-import { SceneType } from './scene-type'
+import { SceneInterface } from './scene-interface'
 
 // TODO add support to inject a user defined SceneSpawn class into the scene?
 export class SceneSpawn {
-  private readonly scene?: SceneType
+  private readonly scene?: SceneInterface
   private readonly scenePrototype?: any
 
-  constructor(scene: SceneType, scenePrototype: any) {
+  constructor(scene: SceneInterface, scenePrototype: any) {
     this.scene = scene
     this.scenePrototype = scenePrototype
   }

@@ -42,7 +42,6 @@ import { ParticleInterface } from '../particle/particle-interface'
 import { SpriteInterface } from '../sprite'
 import { SceneActionInterface } from './scene-action/scene-action-interface'
 import { SceneActionOptions } from './scene-action/scene-action-options'
-import { SceneCore } from './scene-core'
 import { SceneInterface } from './scene-interface'
 import { SceneMetadata } from './scene-metadata'
 import { SceneProps } from './scene-props'
@@ -50,11 +49,10 @@ import { SceneRemove } from './scene-remove'
 import { SceneSpawn } from './scene-spawn'
 import { SceneStateInterface } from './scene-state/scene-state-interface'
 import { SceneStateOptions } from './scene-state/scene-state-options'
-import { SceneType } from './scene-type'
 
 export function Scene(props: SceneProps): any {
-  return function <T extends { new (...args: any[]): SceneType }>(constructor: T & SceneType, context: ClassDecoratorContext) {
-    const _class = class extends constructor implements SceneCore, SceneInterface {
+  return function <T extends { new (...args: any[]): SceneInterface }>(constructor: T & SceneInterface, context: ClassDecoratorContext) {
+    const _class = class extends constructor implements SceneInterface {
       constructor() {
         super()
         this._spawn = new SceneSpawn(this, _class.prototype)
