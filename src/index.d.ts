@@ -4,7 +4,7 @@ import { LoadingProgress } from './base'
 import { SceneConstructor } from './constructors/scene-constructor'
 import { SceneStateConstructor } from './constructors/scene-state-constructor'
 import { SceneStateOptions } from './decorators/scene/scene-state/'
-import { Timeout } from './models/timeout'
+import { Timeout } from './models'
 
 // **************
 //  Models
