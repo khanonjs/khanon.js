@@ -18,7 +18,6 @@ import {
 import { SceneInterface } from '../scene-interface'
 import { SceneMetadata } from '../scene-metadata'
 import { SceneStateInterface } from '../scene-state/scene-state-interface'
-import { SceneInterface } from '../scene-type'
 import { SceneActionCore } from './scene-action-core'
 import { SceneActionInterface } from './scene-action-interface'
 import { SceneActionProps } from './scene-action-props'
@@ -33,7 +32,7 @@ export function SceneAction(props: SceneActionProps = {}): any {
 
         props = props
 
-        onStart?(): void
+        onPlay?(): void
         onSetup?(): void
         onStop?(): void
         onLoopUpdate?(delta: number): void
@@ -58,7 +57,7 @@ export function SceneAction(props: SceneActionProps = {}): any {
               }
             })
           }
-          invokeCallback(this.onStart, this)
+          invokeCallback(this.onPlay, this)
           attachLoopUpdate(this)
           attachCanvasResize(this)
         }

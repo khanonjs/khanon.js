@@ -77,8 +77,9 @@ export declare namespace KJS {
    * Some browsers delay native timeouts when tab is unfocused to unweight cpu load, what could drive to app inconsistencies.
    * @param func Callback
    * @param ms Milliseconds
+   * @param context
    */
-  export function setTimeout(func: () => void, ms: number): Timeout
+  export function setTimeout(func: () => void, ms: number, context?: any): Timeout
 
   /**
    * Sets an interval.
@@ -86,8 +87,9 @@ export declare namespace KJS {
    * Some browsers delay native timeouts when tab is unfocused to unweight cpu load, what could drive to app inconsistencies.
    * @param func Callback
    * @param ms Milliseconds
+   * @param context
    */
-  export function setInterval(func: () => void, ms: number): Timeout
+  export function setInterval(func: () => void, ms: number, context?: any): Timeout
 
   /**
    * Clears a timeout.

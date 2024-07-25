@@ -42,7 +42,7 @@ export declare abstract class ActorActionInterface<S = any, A = ActorInterface<S
    * Invoked on action start. Use this method to setup the Actor according to the action start.
    * NOTE: Setup variables are not present at this point. Setup variables are applied at 'onSetup' callback.
    */
-  onStart?(): void
+  onPlay?(): void
 
   /**
    * Invoked after setup variables have been applied to the action.

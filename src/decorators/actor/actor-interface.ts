@@ -8,11 +8,14 @@ import { ActorActionConstructor } from '../../constructors/actor-action-construc
 import { ActorStateConstructor } from '../../constructors/actor-state-constructor'
 import { Rect } from '../../models/rect'
 import {
+  FlexId,
   MeshTransform,
   SpriteTransform
 } from '../../types'
+import { MeshAnimation } from '../mesh/mesh-animation'
 import { MeshInterface } from '../mesh/mesh-interface'
 import { SceneInterface } from '../scene/scene-interface'
+import { SpriteAnimation } from '../sprite/sprite-animation'
 import { SpriteInterface } from '../sprite/sprite-interface'
 import { ActorActionInterface } from './actor-action/actor-action-interface'
 import { ActorActionOptions } from './actor-action/actor-action-options'
@@ -50,6 +53,8 @@ export abstract class ActorInterface<B extends SpriteInterface | MeshInterface =
   abstract clearNodes(includeBody: boolean): void
   abstract setVisible(value: boolean): void
   abstract startState(state: ActorStateConstructor): ActorStateOptions<any>
+  abstract playAnimation(animation: (B extends SpriteInterface ? SpriteAnimation : MeshAnimation) | FlexId, loopOverride?: boolean, completed?: () => void): void
+  abstract stopAnimation(): void
   abstract playAction(action: ActorActionConstructor | ((delta: number) => void)): ActorActionOptions<any>
   abstract stopAction(action: ActorActionConstructor): void
   abstract stopActionGroup(group: number): void

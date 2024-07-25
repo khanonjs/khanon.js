@@ -1,5 +1,3 @@
-import * as BABYLON from '@babylonjs/core'
-
 import { MeshAnimation } from '../../decorators/mesh/mesh-animation'
 import { SpriteAnimation } from '../../decorators/sprite/sprite-animation'
 import {
@@ -25,7 +23,7 @@ export abstract class DisplayObject {
   abstract setFrameLast(): void
 
   abstract addAnimation(animation: SpriteAnimation | MeshAnimation): void
-  abstract playAnimation(animation: SpriteAnimation | MeshAnimation | string, loopOverride?: boolean, completed?: () => void): void
+  abstract playAnimation(animation: SpriteAnimation | MeshAnimation | FlexId, loopOverride?: boolean, completed?: () => void): void
   abstract stopAnimation(): void
 
   abstract subscribeToKeyframe(keyframeId: string, callback: () => void): void

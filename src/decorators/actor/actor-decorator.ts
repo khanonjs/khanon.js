@@ -13,6 +13,7 @@ import {
 import { Rect } from '../../models/rect'
 import { Logger } from '../../modules/logger'
 import {
+  FlexId,
   MeshTransform,
   SpriteTransform
 } from '../../types'
@@ -25,8 +26,10 @@ import {
   removeLoopUpdate,
   switchLoopUpdate
 } from '../../utils/utils'
+import { MeshAnimation } from '../mesh/mesh-animation'
 import { MeshInterface } from '../mesh/mesh-interface'
 import { SceneInterface } from '../scene/scene-interface'
+import { SpriteAnimation } from '../sprite/sprite-animation'
 import { SpriteInterface } from '../sprite/sprite-interface'
 import { ActorActionInterface } from './actor-action/actor-action-interface'
 import { ActorActionOptions } from './actor-action/actor-action-options'
@@ -133,6 +136,14 @@ export function Actor(props: ActorProps = {}): any {
         this._state = _state
         this._state.start()
         return new ActorStateOptions(this._state)
+      }
+
+      playAnimation(animation: SpriteAnimation | MeshAnimation | FlexId, loopOverride?: boolean, completed?: () => void): void {
+        this.body?.playAnimation(animation, loopOverride, completed)
+      }
+
+      stopAnimation(): void {
+        this.body?.stopAnimation()
       }
 
       playAction(actionConstructor: ActorActionConstructor): ActorActionOptions<any> {

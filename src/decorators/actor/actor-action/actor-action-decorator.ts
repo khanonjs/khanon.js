@@ -32,7 +32,7 @@ export function ActorAction(props: ActorActionProps = {}): any {
 
         props = props
 
-        onStart?(): void
+        onPlay?(): void
         onSetup?(): void
         onStop?(): void
         onLoopUpdate?(delta: number): void
@@ -59,7 +59,7 @@ export function ActorAction(props: ActorActionProps = {}): any {
               }
             })
           }
-          invokeCallback(this.onStart, this)
+          invokeCallback(this.onPlay, this)
           attachLoopUpdate(this)
           attachCanvasResize(this)
         }

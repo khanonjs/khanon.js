@@ -2,12 +2,18 @@ import { ActorActionConstructor } from '../../constructors/actor-action-construc
 import { ActorStateConstructor } from '../../constructors/actor-state-constructor'
 import { Rect } from '../../models'
 import {
+  FlexId,
   MeshTransform,
   SpriteTransform
 } from '../../types'
-import { MeshInterface } from '../mesh'
-import { SceneInterface } from '../scene'
-import { SpriteInterface } from '../sprite'
+import {
+  MeshAnimation,
+  MeshInterface
+} from '../mesh'
+import {
+  SpriteAnimation,
+  SpriteInterface
+} from '../sprite'
 import { ActorActionOptions } from './actor-action'
 import { ActorProps } from './actor-props'
 import {
@@ -97,6 +103,20 @@ export declare abstract class ActorInterface<B extends SpriteInterface | MeshInt
    * @param state
    */
   startState<S extends ActorStateConstructor>(state: S): ActorStateOptions<InstanceType<S>['setup']>
+
+  /**
+   * Plays the animation of the body. Equivalent to 'actor.body.playAnimation'.
+   * Animations are defined in the Sprite decorator 'props' or manually using 'MeshAnimation' interface.
+   * @param animation Animation object or ID of a predefined animation
+   * @param loopOverride Overrides the animation loop value in case needed
+   * @param completed Completed animation callback
+   */
+  playAnimation(animation: (B extends SpriteInterface ? SpriteAnimation : MeshAnimation) | FlexId, loopOverride?: boolean, completed?: () => void): void
+
+  /**
+   * Stops the animation of the body. Equiuvalent to 'actor.body.stopAnimation'.
+   */
+  stopAnimation(): void
 
   /**
    * Plays an Action. N actions can be played simultaneously.
