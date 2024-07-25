@@ -181,13 +181,15 @@ export function Sprite(props: SpriteProps): any {
           const playAnimation = () => {
             this.babylon.sprite.playAnimation(frameStart, frameEnd, false, this.animation.delay)
             if (completed || loop) {
-              this.endAnimationTimer = Core.setTimeout(() => onCompleted(), (frameEnd - frameStart + 1) * this.animation.delay, this)
+              this.endAnimationTimer = Core.setTimeout(() => onCompleted(), (frameEnd - frameStart + 1) * this.animation.delay)
             }
             this.keyFramesTimeouts = []
             this.animation.keyFrames?.forEach((animationKeyFrame) => {
-              animationKeyFrame.ms.forEach((ms) => {
-                this.keyFramesTimeouts.push(Core.setTimeout(() => animationKeyFrame.emitter.notifyObservers(), ms, this))
-              })
+              if (animationKeyFrame.emitter.hasObservers()) {
+                animationKeyFrame.ms.forEach((ms) => {
+                  this.keyFramesTimeouts.push(Core.setTimeout(() => animationKeyFrame.emitter.notifyObservers(), ms))
+                })
+              }
             })
           }
 

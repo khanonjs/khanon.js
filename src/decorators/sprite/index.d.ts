@@ -15,31 +15,19 @@ export interface SpriteAnimation extends AnimationBase {}
 
 export declare interface SpriteProps {
   /**
-   * Load the image file from a url.
+   * Load the image file from a url. Don't define to use a blank texture.
    */
   url?: string
 
   /**
-   * Width of the sprite. It is required in case of using a blank texture. Not required if 'cellWidth' is defined.
+   * Width of the sprite. In case it is an animated sprite, it represents each frame cell width.
    */
-  width?: number
+  width: number
 
   /**
-   * Height of the sprite. It is required in case of using a blank texture. Not required if 'cellHeight' is defined.
+   * Height of the sprite. In case it is an animated sprite, it represents each frame cell height.
    */
-  height?: number
-
-  /**
-   * Cells width. Each cell represents an animation frame. It is equivalent to the sprite width.
-   * Currently it is only supported all cells of the same size.
-   */
-  cellWidth?: number
-
-  /**
-   * Cells height. Each cell represents an animation frame. It is equivalent to the sprite height.
-   * Currently it is only supported all cells of the same size.
-   */
-  cellHeight?: number
+  height: number
 
   /**
    * Numnber of frames (total cells).

@@ -16,8 +16,8 @@ export class SpriteTexture {
   }
 
   setFromAsset(asset: Asset<SceneInterface>): void {
-    const width = this.spriteProps.width ?? this.spriteProps.cellWidth
-    const height = this.spriteProps.height ?? this.spriteProps.cellHeight
+    const width = this.spriteProps.width
+    const height = this.spriteProps.height
     const texture = new BABYLON.Texture(asset.objectURL, this.babylon.scene, this.spriteProps.noMipmap, this.spriteProps.invertY, this.spriteProps.samplingMode)
     texture.name = asset.definition.url
     this.setFromTexture(texture, asset.definition.url, width, height)
@@ -31,6 +31,7 @@ export class SpriteTexture {
   setFromTexture(texture: BABYLON.Texture | BABYLON.DynamicTexture, name: string, width?: number, height?: number): void {
     this.width = width ?? texture.getSize().width
     this.height = height ?? texture.getSize().height
+    if (this.width === 0 || this.height === 0) { Logger.debugError('Width and Height must be higher than 0:', this.spriteProps) }
     this.babylon.spriteManager = new BABYLON.SpriteManager(
       name,
       null,

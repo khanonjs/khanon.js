@@ -220,14 +220,22 @@ export class Core {
           Core.timeouts.forEach(timeout => {
             timeout.ms -= Core.loopUpdateMps
             if (timeout.ms < 0) {
-              timeout.func.bind(timeout.context)
+              if (timeout.context) {
+                timeout.func.bind(timeout.context)
+              } else {
+                timeout.func()
+              }
               Core.timeouts.delete(timeout)
             }
           })
           Core.intervals.forEach(interval => {
             interval.ms -= Core.loopUpdateMps
             if (interval.ms < 0) {
-              interval.func.bind(interval.context)
+              if (interval.context) {
+                interval.func.bind(interval.context)
+              } else {
+                interval.func()
+              }
               interval.ms = interval.oms + interval.ms
             }
           })

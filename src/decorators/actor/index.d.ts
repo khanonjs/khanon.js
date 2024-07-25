@@ -26,8 +26,8 @@ export declare function Actor(props?: ActorProps): any
 /**
  * Actor Interface to be extended from decorated Actors.
  * @param B alludes to what kind of interface this actor will have as Body and Nodes.
- * To use 2D Sprites set it as 'SpriteInterface'.
- * To use 3D Messhes set it as 'MeshInterface'.
+ * - To use 2D Sprites set it as 'SpriteInterface'.
+ * - To use 3D Messhes set it as 'MeshInterface'.
  */
 export declare abstract class ActorInterface<B extends SpriteInterface | MeshInterface> {
   /**
