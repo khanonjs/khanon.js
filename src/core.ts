@@ -125,6 +125,14 @@ export class Core {
     return process.env.NODE_ENV === 'development'
   }
 
+  static getApp(): AppInterface {
+    return this.app
+  }
+
+  static getActiveScenes(): Set<SceneInterface> {
+    return this.renderScenes
+  }
+
   static startRenderScene(scene: SceneInterface): void {
     Core.renderScenes.add(scene)
   }

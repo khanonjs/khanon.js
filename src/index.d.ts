@@ -51,7 +51,7 @@ export declare namespace KJS {
   }
 
   export namespace Notify {
-    function send(message: FlexId, elements: NotificableType): void
+    function send(message: FlexId, elements: NotificableType | NotificableType[], ...args: any[]): void
   }
 
   /**

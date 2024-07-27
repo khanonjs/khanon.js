@@ -1,12 +1,12 @@
-import { ActorInterface } from '../decorators/actor'
-import { ActorStateInterface } from '../decorators/actor/actor-state'
-import { AppInterface } from '../decorators/app'
-import { SceneInterface } from '../decorators/scene'
-import { SceneStateInterface } from '../decorators/scene/scene-state'
+import { ActorConstructor } from '../constructors/actor-constructor'
+import { ActorStateConstructor } from '../constructors/actor-state-constructor'
+import { AppConstructor } from '../constructors/app-constructor'
+import { SceneConstructor } from '../constructors/scene-constructor'
+import { SceneStateConstructor } from '../constructors/scene-state-constructor'
 
 export type NotificableType =
-  AppInterface |
-  ActorInterface<any> |
-  ActorStateInterface |
-  SceneInterface |
-  SceneStateInterface
+  AppConstructor |
+  ActorConstructor |
+  ActorStateConstructor |
+  SceneConstructor |
+  SceneStateConstructor

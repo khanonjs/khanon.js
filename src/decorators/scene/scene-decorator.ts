@@ -114,6 +114,8 @@ export function Scene(props: SceneProps): any {
 
       stop(): void {
         Logger.debug('Scene stop', _class.prototype)
+        this._started = false
+        this.state.end()
         Core.stopRenderScene(this)
         removeLoopUpdate(this)
         removeCanvasResize(this)

@@ -12,6 +12,7 @@ import { SpriteInterface } from '../sprite/sprite-interface'
 import { SceneInterface } from './scene-interface'
 
 // TODO add support to inject a user defined SceneSpawn class into the scene?
+// TODO add counter to methods, to spawn many elements in a single step
 export class SceneSpawn {
   private readonly scene?: SceneInterface
   private readonly scenePrototype?: any
@@ -21,7 +22,7 @@ export class SceneSpawn {
     this.scenePrototype = scenePrototype
   }
 
-  actor<A extends ActorInterface>(actor: new () => A): A { // 8a8f add counter to spawn many elements of this type in a single step
+  actor<A extends ActorInterface>(actor: new () => A): A {
     if (!this.scene.props.actors || this.scene.props.actors.indexOf(actor) === -1) { Logger.debugError('Trying to spawn an actor that doesn\'t belong to the scene. Please check the scene props.', this.scenePrototype, actor.prototype); return }
     Logger.debug('Actor spawn:', actor.prototype)
     const instance = ActorsController.get(actor).spawn(this.scene)
