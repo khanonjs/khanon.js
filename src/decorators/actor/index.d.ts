@@ -14,12 +14,8 @@ import {
   SpriteAnimation,
   SpriteInterface
 } from '../sprite'
-import { ActorActionOptions } from './actor-action'
 import { ActorProps } from './actor-props'
-import {
-  ActorStateInterface,
-  ActorStateOptions
-} from './actor-state'
+import { ActorStateInterface } from './actor-state'
 
 export { ActorProps } from './'
 export declare function Actor(props?: ActorProps): any
@@ -102,7 +98,7 @@ export declare abstract class ActorInterface<B extends SpriteInterface | MeshInt
    * Starts a state.
    * @param state
    */
-  startState<S extends ActorStateConstructor>(state: S): ActorStateOptions<InstanceType<S>['setup']>
+  startState<S extends ActorStateConstructor>(state: S, setup: InstanceType<S>['setup']): void // TODO is it possible to make 'setup' argument optional whether InstanceType<S>['setup'] type is 'any'?
 
   /**
    * Plays the animation of the body. Equivalent to 'actor.body.playAnimation'.
@@ -122,7 +118,7 @@ export declare abstract class ActorInterface<B extends SpriteInterface | MeshInt
    * Plays an Action. N actions can be played simultaneously.
    * @param action
    */
-  playAction<S extends ActorActionConstructor>(action: S | ((delta: number) => void)): ActorActionOptions<InstanceType<S>['setup']> // TODO don't return ActorActionOptions in case it is (delta:number) => void
+  playAction<S extends ActorActionConstructor>(action: S | ((delta: number, setup: any) => void), setup: InstanceType<S>['setup']): void // TODO is it possible to make 'setup' argument optional whether InstanceType<S>['setup'] type is 'any'?
 
   /**
    * Stops an action. Actions can be stopped also within the Action itself.

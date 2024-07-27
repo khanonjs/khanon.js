@@ -23,7 +23,6 @@ import KJS from '../../kjs'
 import { AssetDefinition } from '../../models/asset-definition'
 import { BabylonAccessor } from '../../models/babylon-accessor'
 import { Rect } from '../../models/rect'
-import { Arrays } from '../../modules/helper/arrays'
 import { Logger } from '../../modules/logger'
 import {
   attachCanvasResize,
@@ -41,14 +40,12 @@ import { ParticleSourceInterface } from '../particle-source/particle-source-inte
 import { ParticleInterface } from '../particle/particle-interface'
 import { SpriteInterface } from '../sprite'
 import { SceneActionInterface } from './scene-action/scene-action-interface'
-import { SceneActionOptions } from './scene-action/scene-action-options'
 import { SceneInterface } from './scene-interface'
 import { SceneMetadata } from './scene-metadata'
 import { SceneProps } from './scene-props'
 import { SceneRemove } from './scene-remove'
 import { SceneSpawn } from './scene-spawn'
 import { SceneStateInterface } from './scene-state/scene-state-interface'
-import { SceneStateOptions } from './scene-state/scene-state-options'
 
 export function Scene(props: SceneProps): any {
   return function <T extends { new (...args: any[]): SceneInterface }>(constructor: T & SceneInterface, context: ClassDecoratorContext) {
@@ -103,11 +100,11 @@ export function Scene(props: SceneProps): any {
       set loopUpdate(value: boolean) { switchLoopUpdate(value, this) }
       get loopUpdate(): boolean { return !!this.loopUpdate$ }
 
-      start(state: SceneStateConstructor): SceneStateInterface {
+      start(state: SceneStateConstructor, stateSetup: any): SceneStateInterface {
         Logger.debug('Scene start', _class.prototype)
         Core.startRenderScene(this)
         this._started = true
-        this.startState(state)
+        this.startState(state, stateSetup)
         invokeCallback(this.onStart, this)
         attachLoopUpdate(this)
         attachCanvasResize(this)
@@ -183,18 +180,17 @@ export function Scene(props: SceneProps): any {
         this._camera.start()
       }
 
-      startState(state: SceneStateConstructor): SceneStateOptions {
+      startState(state: SceneStateConstructor, setup: any): void {
         if (!this.props.states.find(_state => _state === state)) { Logger.debugError('Trying to set a state non available to the scene. Please check the scene props.', _class.prototype, state.prototype); return }
         const _state = SceneStatesController.get(state).spawn(this)
         if (this._state) {
           this._state.end()
         }
         this._state = _state
-        this._state.start()
-        return new SceneStateOptions(this._state)
+        this._state.start(setup)
       }
 
-      playAction(actionConstructor: SceneActionConstructor): SceneActionOptions<any> {
+      playAction(actionConstructor: SceneActionConstructor, setup: any): void {
         if (!this.props.actions?.find(_action => _action === actionConstructor) && !this.metadata.getProps().actions?.find(_action => _action === actionConstructor) && !this._state?.metadata.getProps().actions?.find(_action => _action === actionConstructor)) { Logger.debugError('Trying to play an action non available to the actor. Please check the actor props.', _class.prototype, actionConstructor.prototype); return }
         let action = this.actions.get(actionConstructor)
         if (!action) {
@@ -214,9 +210,8 @@ export function Scene(props: SceneProps): any {
           action.props.overrides?.forEach(actionOverride => {
             this.actions.get(actionOverride)?.end()
           })
-          action.start()
+          action.start(setup)
         }
-        return new SceneActionOptions(action)
       }
 
       stopActionFromInstance(instance: SceneActionInterface) {

@@ -10,12 +10,8 @@ import { MeshInterface } from '../mesh'
 import { ParticleSourceInterface } from '../particle-source/particle-source-interface'
 import { ParticleInterface } from '../particle/particle-interface'
 import { SpriteInterface } from '../sprite'
-import { SceneActionOptions } from './scene-action'
 import { SceneProps } from './scene-props'
-import {
-  SceneStateInterface,
-  SceneStateOptions
-} from './scene-state'
+import { SceneStateInterface } from './scene-state'
 
 export { SceneProps } from './decorators/scene/scene-props'
 export declare function Scene(props: SceneProps): any
@@ -140,7 +136,7 @@ export declare abstract class SceneInterface {
    * Start the scene.
    * @param state Initial state.
    */
-  start(state: SceneStateConstructor): SceneStateInterface
+  start<S extends SceneStateConstructor>(state: S, stateSetup: InstanceType<S>['setup']): SceneStateInterface
 
   /**
    * Stop the scene.
@@ -161,13 +157,13 @@ export declare abstract class SceneInterface {
    * Set the state.
    * @param state
    */
-  startState<S extends SceneStateConstructor>(state: S): SceneStateOptions<InstanceType<S>['setup']>
+  startState<S extends SceneStateConstructor>(state: S, setup: InstanceType<S>['setup']): void // TODO is it possible to make 'setup' argument optional whether InstanceType<S>['setup'] type is 'any'?
 
   /**
    * Plays an Action. N actions can be played simultaneously.
    * @param action
    */
-  playAction<S extends SceneActionConstructor>(action: S | ((delta: number) => void)): SceneActionOptions<InstanceType<S>['setup']> // TODO don't return ActorActionOptions in case it is (delta:number) => void
+  playAction<S extends SceneActionConstructor>(action: S | ((delta: number) => void), setup: InstanceType<S>['setup']): void // TODO is it possible to make 'setup' argument optional whether InstanceType<S>['setup'] type is 'any'?
 
   /**
    * Stops an action. Actions can be stopped also within the Action itself.

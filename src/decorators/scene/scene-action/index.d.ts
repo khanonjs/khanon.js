@@ -10,10 +10,7 @@ export { SceneActionProps } from './'
  * - To an 'SceneState' class method, where it will be called as the 'onLoopUpdate' callback.
  * @param props
  */
-export declare function SceneAction(props?: SceneActionProps): any // 8a8f force setup use if it is defined
-export declare class SceneActionOptions<S> {
-  setup(vars: S): void
-}
+export declare function SceneAction(props?: SceneActionProps): any
 export declare abstract class SceneActionInterface<S = any, C = SceneInterface> {
   /**
    * Scene owner of the action.
@@ -38,14 +35,8 @@ export declare abstract class SceneActionInterface<S = any, C = SceneInterface> 
 
   /**
    * Invoked on action start. Use this method to setup the Actor according to the action start.
-   * NOTE: Setup variables are not present at this point. Setup variables are applied at 'onSetup' callback.
    */
   onStart?(): void
-
-  /**
-   * Invoked after setup variables have been applied to the action.
-   */
-  onSetup?(): void
 
   /**
    * Invoked on action stop. If 'props.preserved' is 'true', the action instance will remain alive waiting for another 'playAction'.

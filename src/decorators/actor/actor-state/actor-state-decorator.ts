@@ -30,7 +30,6 @@ export function ActorState(props: ActorStateProps = {}): any {
       canvasResize$?: BABYLON.Observer<Rect>
 
       onStart?(): void
-      onSetup?(): void
       onEnd?(): void
       onLoopUpdate?(delta: number): void
       onCanvasResize?(size: Rect): void

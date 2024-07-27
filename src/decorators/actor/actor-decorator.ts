@@ -32,13 +32,11 @@ import { SceneInterface } from '../scene/scene-interface'
 import { SpriteAnimation } from '../sprite/sprite-animation'
 import { SpriteInterface } from '../sprite/sprite-interface'
 import { ActorActionInterface } from './actor-action/actor-action-interface'
-import { ActorActionOptions } from './actor-action/actor-action-options'
 import { ActorCore } from './actor-core'
 import { ActorInterface } from './actor-interface'
 import { ActorMetadata } from './actor-metadata'
 import { ActorProps } from './actor-props'
 import { ActorStateInterface } from './actor-state/actor-state-interface'
-import { ActorStateOptions } from './actor-state/actor-state-options'
 
 type B = SpriteInterface | MeshInterface
 
@@ -127,15 +125,14 @@ export function Actor(props: ActorProps = {}): any {
         // TODO
       }
 
-      startState(state: ActorStateConstructor): ActorStateOptions {
+      startState(state: ActorStateConstructor, setup: any): void {
         if (!this.props.states?.find(_state => _state === state)) { Logger.debugError('Trying to set a state non available to the actor. Please check the actor props.', _classInterface.prototype, state.prototype); return }
         const _state = ActorStatesController.get(state).spawn(this)
         if (this._state) {
           this._state.end()
         }
         this._state = _state
-        this._state.start()
-        return new ActorStateOptions(this._state)
+        this._state.start(setup)
       }
 
       playAnimation(animation: SpriteAnimation | MeshAnimation | FlexId, loopOverride?: boolean, completed?: () => void): void {
@@ -146,7 +143,7 @@ export function Actor(props: ActorProps = {}): any {
         this.body?.stopAnimation()
       }
 
-      playAction(actionConstructor: ActorActionConstructor): ActorActionOptions<any> {
+      playAction(actionConstructor: ActorActionConstructor, setup: any): void {
         if (!this.props.actions?.find(_action => _action === actionConstructor) && !this.metadata.getProps().actions?.find(_action => _action === actionConstructor) && !this._state?.metadata.getProps().actions?.find(_action => _action === actionConstructor)) { Logger.debugError('Trying to play an action non available to the actor. Please check the actor props.', _classInterface.prototype, actionConstructor.prototype); return }
         let action = this.actions.get(actionConstructor)
         if (!action) {
@@ -166,9 +163,8 @@ export function Actor(props: ActorProps = {}): any {
           action.props.overrides?.forEach(actionOverride => {
             this.actions.get(actionOverride)?.end()
           })
-          action.start()
+          action.start(setup)
         }
-        return new ActorActionOptions(action)
       }
 
       stopActionFromInstance(instance: ActorActionInterface) {

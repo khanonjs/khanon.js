@@ -19,12 +19,10 @@ import { ParticleInterface } from '../particle/particle-interface'
 import { SpriteInterface } from '../sprite'
 import { SceneRemove } from './'
 import { SceneActionInterface } from './scene-action/scene-action-interface'
-import { SceneActionOptions } from './scene-action/scene-action-options'
 import { SceneMetadata } from './scene-metadata'
 import { SceneProps } from './scene-props'
 import { SceneSpawn } from './scene-spawn'
 import { SceneStateInterface } from './scene-state/scene-state-interface'
-import { SceneStateOptions } from './scene-state/scene-state-options'
 
 export abstract class SceneInterface implements Loadable, LoopUpdatable, CanvasResizable {
   abstract props?: SceneProps
@@ -60,12 +58,12 @@ export abstract class SceneInterface implements Loadable, LoopUpdatable, CanvasR
   abstract get state(): SceneStateInterface
   abstract get spawn(): SceneSpawn
   abstract get remove(): SceneRemove
-  abstract start(state: SceneStateConstructor): SceneStateInterface
+  abstract start(state: SceneStateConstructor, stateSetup: any): SceneStateInterface
   abstract stop(): void
   abstract load(): LoadingProgress
   abstract unload(): void
-  abstract startState(state: SceneStateConstructor): SceneStateOptions<any>
-  abstract playAction(action: SceneActionConstructor | ((delta: number) => void)): SceneActionOptions<any>
+  abstract startState(state: SceneStateConstructor, setup: any): void
+  abstract playAction(action: SceneActionConstructor | ((delta: number) => void), setup: any): void
   abstract stopAction(action: SceneActionConstructor): void
   abstract stopActionGroup(group: number): void
   abstract stopActionAll(): void

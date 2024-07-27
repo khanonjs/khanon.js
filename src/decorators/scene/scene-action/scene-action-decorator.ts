@@ -33,7 +33,6 @@ export function SceneAction(props: SceneActionProps = {}): any {
         props = props
 
         onPlay?(): void
-        onSetup?(): void
         onStop?(): void
         onLoopUpdate?(delta: number): void
         onCanvasResize?(size: Rect): void
@@ -45,7 +44,8 @@ export function SceneAction(props: SceneActionProps = {}): any {
         set loopUpdate(value: boolean) { switchLoopUpdate(value, this) }
         get loopUpdate(): boolean { return !!this.loopUpdate$ }
 
-        start(): void {
+        start(setup: any): void {
+          this.setup = setup
           if (this.props.countFrames) {
             this.countFramesUpdate$ = Core.loopUpdateAddObserver((delta: number) => {
               this.countFrames += delta

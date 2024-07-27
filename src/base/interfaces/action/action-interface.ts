@@ -7,7 +7,7 @@ import { LoopUpdatable } from '../loop-updatable'
 export abstract class ActionInterface<S = any> implements LoopUpdatable, CanvasResizable {
   abstract loopUpdate$?: BABYLON.Observer<number>
   abstract canvasResize$?: BABYLON.Observer<Rect>
-  abstract start?(): void
+  abstract start?(setup: S): void
   abstract end?(): void
 
   /**
@@ -21,7 +21,6 @@ export abstract class ActionInterface<S = any> implements LoopUpdatable, CanvasR
    * User defined
    */
   onPlay?(): void
-  onSetup?(): void
   onStop?(): void
   onLoopUpdate?(delta: number): void
   onCanvasResize?(size: Rect): void

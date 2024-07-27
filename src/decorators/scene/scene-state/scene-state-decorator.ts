@@ -22,11 +22,12 @@ import { SceneStateProps } from './scene-state-props'
 export function SceneState(props: SceneStateProps): any {
   return function <T extends { new (...args: any[]): SceneStateInterface }>(constructor: T & SceneStateInterface, context: ClassDecoratorContext) {
     const _classInterface = class extends constructor implements SceneStateInterface {
-      constructor(readonly scene: SceneInterface, readonly setup: any) {
+      constructor(readonly scene: SceneInterface) {
         super()
         this.metadata.applyProps(this)
       }
 
+      setup: any
       loopUpdate$: BABYLON.Observer<number>
       canvasResize$: BABYLON.Observer<Rect>
       metadata: SceneMetadata = Reflect.getMetadata('metadata', this) ?? new SceneMetadata()
@@ -43,8 +44,9 @@ export function SceneState(props: SceneStateProps): any {
         this.scene.setCamera(camera)
       }
 
-      start(): void {
+      start(setup: any): void {
         Logger.debug('SceneState start', _classInterface.prototype, this.scene.constructor.prototype)
+        this.setup = setup
         if (props.useCamera === UseCamera.ON_START ||
             (props.useCamera === UseCamera.INHERIT && !this.scene.babylon.scene.activeCamera)) {
           this.setCamera(props.camera)
@@ -62,10 +64,10 @@ export function SceneState(props: SceneStateProps): any {
     }
     const _classCore = class implements SceneStateCore {
       props = props
-      Instance: SceneStateInterface = new _classInterface(null, null)
+      Instance: SceneStateInterface = new _classInterface(null)
 
       spawn(scene: SceneInterface): SceneStateInterface {
-        const state = new _classInterface(scene, null)
+        const state = new _classInterface(scene)
         return state
       }
     }

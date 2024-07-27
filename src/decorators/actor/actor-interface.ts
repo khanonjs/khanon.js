@@ -18,11 +18,9 @@ import { SceneInterface } from '../scene/scene-interface'
 import { SpriteAnimation } from '../sprite/sprite-animation'
 import { SpriteInterface } from '../sprite/sprite-interface'
 import { ActorActionInterface } from './actor-action/actor-action-interface'
-import { ActorActionOptions } from './actor-action/actor-action-options'
 import { ActorMetadata } from './actor-metadata'
 import { ActorProps } from './actor-props'
 import { ActorStateInterface } from './actor-state/actor-state-interface'
-import { ActorStateOptions } from './actor-state/actor-state-options'
 
 export abstract class ActorInterface<B extends SpriteInterface | MeshInterface = any> implements LoopUpdatable, CanvasResizable {
   abstract metadata?: ActorMetadata
@@ -52,10 +50,10 @@ export abstract class ActorInterface<B extends SpriteInterface | MeshInterface =
   abstract removeNode(name: string): void
   abstract clearNodes(includeBody: boolean): void
   abstract setVisible(value: boolean): void
-  abstract startState(state: ActorStateConstructor): ActorStateOptions<any>
+  abstract startState(state: ActorStateConstructor, setup: any): void
   abstract playAnimation(animation: (B extends SpriteInterface ? SpriteAnimation : MeshAnimation) | FlexId, loopOverride?: boolean, completed?: () => void): void
   abstract stopAnimation(): void
-  abstract playAction(action: ActorActionConstructor | ((delta: number) => void)): ActorActionOptions<any>
+  abstract playAction(action: ActorActionConstructor | ((delta: number) => void), setup: any): void
   abstract stopAction(action: ActorActionConstructor): void
   abstract stopActionGroup(group: number): void
   abstract stopActionAll(): void

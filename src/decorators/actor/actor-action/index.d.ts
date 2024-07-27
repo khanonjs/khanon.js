@@ -12,10 +12,7 @@ export { ActorActionProps } from './'
  * - To an 'ActorState' class method, where it will be called as the 'onLoopUpdate' callback.
  * @param props
  */
-export declare function ActorAction(props?: ActorActionProps): any // 8a8f force setup use if it is defined
-export declare class ActorActionOptions<S> {
-  setup(vars: S): void
-}
+export declare function ActorAction(props?: ActorActionProps): any
 export declare abstract class ActorActionInterface<S = any, A = ActorInterface<SpriteInterface | MeshInterface>> {
   /**
    * Actor owner of the action.
@@ -40,14 +37,8 @@ export declare abstract class ActorActionInterface<S = any, A = ActorInterface<S
 
   /**
    * Invoked on action start. Use this method to setup the Actor according to the action start.
-   * NOTE: Setup variables are not present at this point. Setup variables are applied at 'onSetup' callback.
    */
   onPlay?(): void
-
-  /**
-   * Invoked after setup variables have been applied to the action.
-   */
-  onSetup?(): void
 
   /**
    * Invoked on action stop. If 'props.preserved' is 'true', the action instance will remain alive waiting for another 'playAction'.

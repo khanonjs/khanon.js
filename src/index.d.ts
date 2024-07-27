@@ -3,7 +3,6 @@ import * as BABYLON from '@babylonjs/core'
 import { LoadingProgress } from './base'
 import { SceneConstructor } from './constructors/scene-constructor'
 import { SceneStateConstructor } from './constructors/scene-state-constructor'
-import { SceneStateOptions } from './decorators/scene/scene-state/'
 import { Timeout } from './models'
 import { Rect } from './models/rect'
 
@@ -45,7 +44,7 @@ export declare namespace KJS {
     function load(scene: SceneConstructor[]): LoadingProgress
     function unload(scene: SceneConstructor): void
     function unload(scene: SceneConstructor[]): void
-    function start<S extends SceneStateConstructor>(scene: SceneConstructor, state: S): SceneStateOptions<InstanceType<S>['setup']>
+    function start<S extends SceneStateConstructor>(scene: SceneConstructor, state: S, stateSetup: InstanceType<S>['setup']): void
     function stop(scene: SceneConstructor): void
   }
 
