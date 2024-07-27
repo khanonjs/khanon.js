@@ -39,7 +39,7 @@ export function Notification(props: NotificationProps): any {
         methodName: propertyKey
       })
     } else {
-      Logger.debugError(`Cannot apply Notification decorator to non allowed method '${propertyKey}' in element '${target.constructor.name}'.`)
+      Logger.debugError(`Cannot apply Notification decorator to non allowed method '${propertyKey}' in class '${target.constructor.name}'.`)
     }
   }
 }
