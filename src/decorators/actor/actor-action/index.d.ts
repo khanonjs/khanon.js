@@ -12,7 +12,7 @@ export { ActorActionProps } from './'
  * - To an 'ActorState' class method, where it will be called as the 'onLoopUpdate' callback.
  * @param props
  */
-export declare function ActorAction(props?: ActorActionProps): any
+export declare function ActorAction(props?: ActorActionProps): any // 8a8f force setup use if it is defined
 export declare class ActorActionOptions<S> {
   setup(vars: S): void
 }

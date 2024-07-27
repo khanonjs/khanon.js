@@ -10,7 +10,7 @@ export { SceneActionProps } from './'
  * - To an 'SceneState' class method, where it will be called as the 'onLoopUpdate' callback.
  * @param props
  */
-export declare function SceneAction(props?: SceneActionProps): any
+export declare function SceneAction(props?: SceneActionProps): any // 8a8f force setup use if it is defined
 export declare class SceneActionOptions<S> {
   setup(vars: S): void
 }

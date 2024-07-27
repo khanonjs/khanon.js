@@ -5,6 +5,7 @@ import { SceneConstructor } from './constructors/scene-constructor'
 import { SceneStateConstructor } from './constructors/scene-state-constructor'
 import { SceneStateOptions } from './decorators/scene/scene-state/'
 import { Timeout } from './models'
+import { Rect } from './models/rect'
 
 // **************
 //  Models
@@ -48,6 +49,10 @@ export declare namespace KJS {
     function stop(scene: SceneConstructor): void
   }
 
+  export namespace Notify {
+
+  }
+
   /**
    * Throws critical error and stops the application.
    * @param error
@@ -70,6 +75,11 @@ export declare namespace KJS {
    * Removes a subscription from loopUpdate event.
    */
   export function loopUpdateRemoveObserver(observer: BABYLON.Observer<number>): void
+
+  /**
+   * Returns the canvas rect.
+   */
+  export function getCanvasRect(): Rect
 
   /**
    * Sets a timeout.

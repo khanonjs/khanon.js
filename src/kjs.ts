@@ -1,11 +1,16 @@
 import * as BABYLON from '@babylonjs/core'
 
-import { ScenesController } from './controllers'
+import {
+  NotificationsController,
+  ScenesController
+} from './controllers'
 import { Core } from './core'
+import { Rect } from './models/rect'
 import { Timeout } from './models/timeout'
 
 export class KJS {
   static get Scene(): ScenesController { return ScenesController }
+  static get Notify(): NotificationsController { return NotificationsController }
 
   static throw(error?: any): void {
     Core.throw(error)
@@ -37,6 +42,10 @@ export class KJS {
 
   static loopUpdateRemoveObserver(observer: BABYLON.Observer<number>): void {
     Core.loopUpdateRemoveObserver(observer)
+  }
+
+  static getCanvasRect(): Rect {
+    return Core.canvasRect
   }
 }
 
