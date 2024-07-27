@@ -72,10 +72,6 @@ export function SceneAction(props: SceneActionProps = {}): any {
         stop(): void {
           this.scene.stopActionFromInstance(this)
         }
-
-        notify(message: FlexId, ...args: any[]): void {
-          // 8a8f
-        }
       }
       const _classCore = class implements SceneActionCore {
         props = props

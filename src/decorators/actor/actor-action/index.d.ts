@@ -32,11 +32,6 @@ export declare abstract class ActorActionInterface<S = any, A = ActorInterface<S
   get loopUpdate(): boolean
 
   /**
-   * Notifies a message to this action.
-   */
-  notify(message: FlexId, ...args: any[]): void
-
-  /**
    * Stops the action. Equivalent to calling 'actor.stopAction'.
    */
   stop(): void

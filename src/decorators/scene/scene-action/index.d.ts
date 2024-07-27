@@ -35,11 +35,6 @@ export declare abstract class SceneActionInterface<S = any, C = SceneInterface> 
   stop(): void
 
   /**
-   * Notifies a message to this action.
-   */
-  notify(message: FlexId, ...args: any[]): void
-
-  /**
    * Invoked on action start. Use this method to setup the Actor according to the action start.
    */
   onStart?(): void

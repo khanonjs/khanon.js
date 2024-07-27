@@ -74,10 +74,6 @@ export function ActorAction(props: ActorActionProps = {}): any {
         stop(): void {
           this.actor.stopActionFromInstance(this)
         }
-
-        notify(message: FlexId, ...args: any[]): void {
-          // 8a8f
-        }
       }
       const _classCore = class implements ActorActionCore {
         props = props
