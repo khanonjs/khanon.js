@@ -6,7 +6,7 @@ import { SceneStateInterface } from '../decorators/scene/scene-state'
 
 export type NotificableType =
   AppInterface |
-  ActorInterface<any> | ActorInterface<any>[] |
-  ActorStateInterface | ActorStateInterface[] |
-  SceneInterface | SceneInterface[] |
-  SceneStateInterface | SceneStateInterface[]
+  ActorInterface<any> |
+  ActorStateInterface |
+  SceneInterface |
+  SceneStateInterface

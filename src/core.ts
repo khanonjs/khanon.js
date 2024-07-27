@@ -1,6 +1,5 @@
 import * as BABYLON from '@babylonjs/core'
 
-import { AppCore } from './decorators/app/app-core'
 import { AppInterface } from './decorators/app/app-interface'
 import { SceneInterface } from './decorators/scene/scene-interface'
 import { BabylonAccessor } from './models/babylon-accessor'
@@ -13,7 +12,7 @@ import { TimeoutType } from './types'
 export class Core {
   static canvasRect: Rect
 
-  private static app: AppInterface & AppCore
+  private static app: AppInterface
 
   // HTML Layers
   private static htmlContainer: HTMLElement
@@ -65,7 +64,7 @@ export class Core {
    * Called once, on app decorator
    * @param app
    */
-  static initialize(app: AppInterface & AppCore) {
+  static initialize(app: AppInterface) {
     if (Core.app) {
       Logger.error(`App decorator '${Core.app.props.name}' applied more than one time. Please use a single App decorator to generate de application.`)
       return
