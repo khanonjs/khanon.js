@@ -4,7 +4,8 @@ import {
   CanvasResizable,
   Loadable,
   LoadingProgress,
-  LoopUpdatable
+  LoopUpdatable,
+  Notificable
 } from '../../base'
 import { CameraConstructor } from '../../constructors/camera-constructor'
 import { SceneActionConstructor } from '../../constructors/scene-action-constructor'
@@ -12,6 +13,7 @@ import { SceneStateConstructor } from '../../constructors/scene-state-constructo
 import { AssetDefinition } from '../../models/asset-definition'
 import { BabylonAccessor } from '../../models/babylon-accessor'
 import { Rect } from '../../models/rect'
+import { FlexId } from '../../types'
 import { ActorInterface } from '../actor/actor-interface'
 import { MeshInterface } from '../mesh'
 import { ParticleSourceInterface } from '../particle-source/particle-source-interface'
@@ -24,7 +26,7 @@ import { SceneProps } from './scene-props'
 import { SceneSpawn } from './scene-spawn'
 import { SceneStateInterface } from './scene-state/scene-state-interface'
 
-export abstract class SceneInterface implements Loadable, LoopUpdatable, CanvasResizable {
+export abstract class SceneInterface implements Loadable, LoopUpdatable, CanvasResizable, Notificable {
   abstract props?: SceneProps
   protected abstract _assets?: AssetDefinition[]
   protected abstract _loaded?: boolean
@@ -67,6 +69,7 @@ export abstract class SceneInterface implements Loadable, LoopUpdatable, CanvasR
   abstract stopAction(action: SceneActionConstructor): void
   abstract stopActionGroup(group: number): void
   abstract stopActionAll(): void
+  abstract notify(message: FlexId, ...args: any[]): void
 
   /**
    * User defined

@@ -5,6 +5,7 @@ import { SceneStatesController } from '../../../controllers'
 import { Rect } from '../../../models/rect'
 import { UseCamera } from '../../../models/use-camera'
 import { Logger } from '../../../modules/logger'
+import { FlexId } from '../../../types'
 import {
   attachCanvasResize,
   attachLoopUpdate,
@@ -60,6 +61,10 @@ export function SceneState(props: SceneStateProps): any {
         removeLoopUpdate(this)
         removeCanvasResize(this)
         invokeCallback(this.onEnd, this)
+      }
+
+      notify(message: FlexId, ...args: any[]): void {
+        // 8a8f
       }
     }
     const _classCore = class implements SceneStateCore {

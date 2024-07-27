@@ -10,9 +10,6 @@ import { Logger } from './modules/logger/logger'
 import { LoggerLevels } from './modules/logger/logger-levels'
 import { TimeoutType } from './types'
 
-// type SceneFunctionArg = (scene: Scene) => void
-
-// TODO avoid exporting this outside Khanon.js
 export class Core {
   static canvasRect: Rect
 

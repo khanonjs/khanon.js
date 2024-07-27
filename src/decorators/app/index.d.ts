@@ -1,12 +1,18 @@
 // **************
 // App decorator
 
+import { FlexId } from '../../types'
 import { AppProps } from './app-props'
 
 // **************
 export { AppProps } from './decorators/app/app-props'
 export declare function App(props: AppProps): any
 export declare abstract class AppInterface {
+  /**
+   * Notifies a message to App.
+   */
+  notify(message: FlexId, ...args: any[]): void
+
   /**
    * Entry point of the application.
    * Called after the application has been properly configured and started.

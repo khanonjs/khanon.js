@@ -7,6 +7,7 @@ import { ActorActionsController } from '../../../controllers'
 import { Core } from '../../../core'
 import { Rect } from '../../../models/rect'
 import { Logger } from '../../../modules/logger'
+import { FlexId } from '../../../types'
 import {
   attachCanvasResize,
   attachLoopUpdate,
@@ -72,6 +73,10 @@ export function ActorAction(props: ActorActionProps = {}): any {
 
         stop(): void {
           this.actor.stopActionFromInstance(this)
+        }
+
+        notify(message: FlexId, ...args: any[]): void {
+          // 8a8f
         }
       }
       const _classCore = class implements ActorActionCore {

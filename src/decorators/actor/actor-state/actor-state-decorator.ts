@@ -3,6 +3,7 @@ import * as BABYLON from '@babylonjs/core'
 import { ActorStatesController } from '../../../controllers'
 import { Rect } from '../../../models/rect'
 import { Logger } from '../../../modules/logger'
+import { FlexId } from '../../../types'
 import {
   attachCanvasResize,
   attachLoopUpdate,
@@ -50,6 +51,10 @@ export function ActorState(props: ActorStateProps = {}): any {
         removeLoopUpdate(this)
         removeCanvasResize(this)
         invokeCallback(this.onEnd, this)
+      }
+
+      notify(message: FlexId, ...args: any[]): void {
+        // 8a8f
       }
     }
     const _classCore = class implements ActorStateCore {

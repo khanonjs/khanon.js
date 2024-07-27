@@ -138,6 +138,11 @@ export declare abstract class ActorInterface<B extends SpriteInterface | MeshInt
   stopActionAll(): void
 
   /**
+   * Notifies a message to this actor.
+   */
+  notify(message: FlexId, ...args: any[]): void
+
+  /**
    * Removes the actor from the scene.
    */
   destroy(): void

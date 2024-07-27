@@ -1,6 +1,7 @@
 import { SceneInterface } from '../'
 import { CameraConstructor } from '../../../constructors/camera-constructor'
 import { Rect } from '../../../models'
+import { FlexId } from '../../../types'
 import { SceneStateProps } from './scene-state-props'
 
 export { SceneStateProps } from './decorators/scene-state/scene-state-props'
@@ -26,6 +27,11 @@ export declare abstract class SceneStateInterface<S = any, C = SceneInterface> {
    * Sets a camera. Use this method at any point or event of the state lifecycle.
    */
   setCamera(camera: CameraConstructor): void
+
+  /**
+   * Notifies a message to this sstate.
+   */
+  notify(message: FlexId, ...args: any[]): void
 
   /**
    * Invoked on State start. Use this method to setup the scene according to this State start.

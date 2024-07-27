@@ -2,7 +2,8 @@ import * as BABYLON from '@babylonjs/core'
 
 import {
   CanvasResizable,
-  LoopUpdatable
+  LoopUpdatable,
+  Notificable
 } from '../../base'
 import { ActorActionConstructor } from '../../constructors/actor-action-constructor'
 import { ActorStateConstructor } from '../../constructors/actor-state-constructor'
@@ -22,7 +23,7 @@ import { ActorMetadata } from './actor-metadata'
 import { ActorProps } from './actor-props'
 import { ActorStateInterface } from './actor-state/actor-state-interface'
 
-export abstract class ActorInterface<B extends SpriteInterface | MeshInterface = any> implements LoopUpdatable, CanvasResizable {
+export abstract class ActorInterface<B extends SpriteInterface | MeshInterface = any> implements LoopUpdatable, CanvasResizable, Notificable {
   abstract metadata?: ActorMetadata
   abstract props?: ActorProps
   abstract scene?: SceneInterface
@@ -57,6 +58,7 @@ export abstract class ActorInterface<B extends SpriteInterface | MeshInterface =
   abstract stopAction(action: ActorActionConstructor): void
   abstract stopActionGroup(group: number): void
   abstract stopActionAll(): void
+  abstract notify(message: FlexId, ...args: any[]): void
   abstract destroy(): void
 
   /**

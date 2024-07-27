@@ -5,6 +5,8 @@ import { SceneConstructor } from './constructors/scene-constructor'
 import { SceneStateConstructor } from './constructors/scene-state-constructor'
 import { Timeout } from './models'
 import { Rect } from './models/rect'
+import { FlexId } from './types/flex-id'
+import { NotificableType } from './types/notificable-type'
 
 // **************
 //  Models
@@ -49,7 +51,7 @@ export declare namespace KJS {
   }
 
   export namespace Notify {
-
+    function send(message: FlexId, elements: NotificableType): void
   }
 
   /**

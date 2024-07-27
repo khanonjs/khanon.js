@@ -1,5 +1,6 @@
 import { ActorInterface } from '../'
 import { Rect } from '../../../models/rect'
+import { FlexId } from '../../../types'
 import { MeshInterface } from '../../mesh'
 import { SpriteInterface } from '../../sprite'
 import { ActorStateProps } from './actor-state-props'
@@ -27,6 +28,11 @@ export declare abstract class ActorStateInterface<S = any, A = ActorInterface<Sp
    */
   set loopUpdate(value: boolean)
   get loopUpdate(): boolean
+
+  /**
+   * Notifies a message to this state.
+   */
+  notify(message: FlexId, ...args: any[]): void
 
   /**
    * Invoked on State start. Use this method to setup the Actor according to the State start.

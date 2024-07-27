@@ -23,6 +23,7 @@ export abstract class SpriteInterface extends DisplayObject {
   abstract get height(): number
   abstract set scale(scale: number)
   abstract get scale(): number
+  // abstract writeText(): void // 8a8f 'writeText' method to sprite to write texts in it. (x,y,width, height, aligment, etc)
 
   /**
    * User defined

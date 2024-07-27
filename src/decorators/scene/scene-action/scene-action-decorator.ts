@@ -7,6 +7,7 @@ import { SceneActionsController } from '../../../controllers'
 import { Core } from '../../../core'
 import { Rect } from '../../../models/rect'
 import { Logger } from '../../../modules/logger'
+import { FlexId } from '../../../types'
 import {
   attachCanvasResize,
   attachLoopUpdate,
@@ -70,6 +71,10 @@ export function SceneAction(props: SceneActionProps = {}): any {
 
         stop(): void {
           this.scene.stopActionFromInstance(this)
+        }
+
+        notify(message: FlexId, ...args: any[]): void {
+          // 8a8f
         }
       }
       const _classCore = class implements SceneActionCore {

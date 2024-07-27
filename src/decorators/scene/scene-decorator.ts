@@ -24,6 +24,7 @@ import { AssetDefinition } from '../../models/asset-definition'
 import { BabylonAccessor } from '../../models/babylon-accessor'
 import { Rect } from '../../models/rect'
 import { Logger } from '../../modules/logger'
+import { FlexId } from '../../types'
 import {
   attachCanvasResize,
   attachLoopUpdate,
@@ -247,6 +248,10 @@ export function Scene(props: SceneProps): any {
         this.actions.forEach((action, actionConstructor) => {
           this.stopAction(actionConstructor)
         })
+      }
+
+      notify(message: FlexId, ...args: any[]): void {
+        // 8a8f
       }
 
       debugInspector(): void {

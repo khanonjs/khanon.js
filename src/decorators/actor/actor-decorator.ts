@@ -121,6 +121,16 @@ export function Actor(props: ActorProps = {}): any {
         // TODO
       }
 
+      clearNodes(includeBody = true) {
+        this.nodes.forEach(node => {
+          node.release()
+        })
+        this.nodes.clear()
+        if (includeBody) {
+          this.removeBody()
+        }
+      }
+
       setVisible(value: boolean) {
         // TODO
       }
@@ -200,14 +210,8 @@ export function Actor(props: ActorProps = {}): any {
         })
       }
 
-      clearNodes(includeBody = true) {
-        this.nodes.forEach(node => {
-          node.release()
-        })
-        this.nodes.clear()
-        if (includeBody) {
-          this.removeBody()
-        }
+      notify(message: FlexId, ...args: any[]): void {
+        // 8a8f
       }
 
       destroy() {

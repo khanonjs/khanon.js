@@ -1,5 +1,6 @@
 import { SceneInterface } from '../'
 import { Rect } from '../../../models/rect'
+import { FlexId } from '../../../types'
 import { SceneActionProps } from './scene-action-props'
 
 export { SceneActionProps } from './'
@@ -32,6 +33,11 @@ export declare abstract class SceneActionInterface<S = any, C = SceneInterface> 
    * Stops the action. Equivalent to calling 'scene.stopAction'.
    */
   stop(): void
+
+  /**
+   * Notifies a message to this action.
+   */
+  notify(message: FlexId, ...args: any[]): void
 
   /**
    * Invoked on action start. Use this method to setup the Actor according to the action start.

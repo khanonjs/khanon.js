@@ -5,6 +5,7 @@ import {
   BabylonAccessor,
   Rect
 } from '../../models'
+import { FlexId } from '../../types'
 import { ActorInterface } from '../actor'
 import { MeshInterface } from '../mesh'
 import { ParticleSourceInterface } from '../particle-source/particle-source-interface'
@@ -181,6 +182,11 @@ export declare abstract class SceneInterface {
    * Stops all actions.
    */
   stopActionAll(): void
+
+  /**
+   * Notifies a message to this scene.
+   */
+  notify(message: FlexId, ...args: any[]): void
 
   /**
    * Callback invoked before the scene has been started.

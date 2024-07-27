@@ -1,5 +1,6 @@
 import { ActorInterface } from '../'
 import { Rect } from '../../../models/rect'
+import { FlexId } from '../../../types'
 import { MeshInterface } from '../../mesh'
 import { SpriteInterface } from '../../sprite'
 import { ActorActionProps } from './actor-action-props'
@@ -29,6 +30,11 @@ export declare abstract class ActorActionInterface<S = any, A = ActorInterface<S
    */
   set loopUpdate(value: boolean)
   get loopUpdate(): boolean
+
+  /**
+   * Notifies a message to this action.
+   */
+  notify(message: FlexId, ...args: any[]): void
 
   /**
    * Stops the action. Equivalent to calling 'actor.stopAction'.
