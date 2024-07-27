@@ -10,6 +10,7 @@ export { ActionProps } from './interfaces/action/action-props'
 
 export { MetadataActionDefinition } from './interfaces/metadata/metadata-action-definition'
 export { MetadataMeshDefinition } from './interfaces/metadata/metadata-mesh-definition'
+export { MetadataNotifierDefinition } from './interfaces/metadata/metadata-notifier-definition'
 export { MetadataSpriteDefinition } from './interfaces/metadata/metadata-sprite-definition'
 
 export { StateCore } from './interfaces/state/state-core'

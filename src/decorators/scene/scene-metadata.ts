@@ -1,15 +1,18 @@
 import {
   MetadataActionDefinition,
   MetadataMeshDefinition,
+  MetadataNotifierDefinition,
   MetadataSpriteDefinition
 } from '../../base'
 import { SceneActionConstructor } from '../../constructors/scene-action-constructor'
+import { FlexId } from '../../types'
 import { SceneProps } from './scene-props'
 
 export class SceneMetadata {
   actions: MetadataActionDefinition<SceneActionConstructor>[] = []
   sprites: MetadataSpriteDefinition[] = []
   meshes: MetadataMeshDefinition[] = []
+  notifiers: Map<FlexId, MetadataNotifierDefinition> = new Map<FlexId, MetadataNotifierDefinition>()
 
   applyProps(_class: any): void {
     this.actions.forEach(definition => {
@@ -23,6 +26,9 @@ export class SceneMetadata {
     })
   }
 
+  /**
+   * Returns the equivalent to the decorator props, that have been added through decorators
+   */
   getProps(): SceneProps {
     return {
       actions: this.actions.map(definition => definition.classDefinition),

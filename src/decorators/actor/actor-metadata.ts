@@ -1,9 +1,9 @@
 import {
   MetadataActionDefinition,
   MetadataMeshDefinition,
+  MetadataNotifierDefinition,
   MetadataSpriteDefinition
 } from '../../base'
-import { MetadataNotifierDefinition } from '../../base/interfaces/metadata/metadata-notifier-definition'
 import { ActorActionConstructor } from '../../constructors/actor-action-constructor'
 import { FlexId } from '../../types'
 import { ActorProps } from './actor-props'
@@ -26,6 +26,9 @@ export class ActorMetadata {
     })
   }
 
+  /**
+   * Returns the equivalent to the decorator props, that have been added through decorators
+   */
   getProps(): ActorProps {
     return {
       actions: this.actions.map(definition => definition.classDefinition),
