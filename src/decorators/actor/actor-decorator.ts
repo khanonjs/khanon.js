@@ -211,7 +211,10 @@ export function Actor(props: ActorProps = {}): any {
       }
 
       notify(message: FlexId, ...args: any[]): void {
-        // 8a8f
+        const definition = this.metadata.notifiers.get(message)
+        if (definition) {
+          this[definition.methodName](...args)
+        }
       }
 
       destroy() {

@@ -3,13 +3,16 @@ import {
   MetadataMeshDefinition,
   MetadataSpriteDefinition
 } from '../../base'
+import { MetadataNotifierDefinition } from '../../base/interfaces/metadata/metadata-notifier-definition'
 import { ActorActionConstructor } from '../../constructors/actor-action-constructor'
+import { FlexId } from '../../types'
 import { ActorProps } from './actor-props'
 
 export class ActorMetadata {
   actions: MetadataActionDefinition<ActorActionConstructor>[] = []
   sprites: MetadataSpriteDefinition[] = []
   meshes: MetadataMeshDefinition[] = []
+  notifiers: Map<FlexId, MetadataNotifierDefinition> = new Map<FlexId, MetadataNotifierDefinition>()
 
   applyProps(_class: any): void {
     this.actions.forEach(definition => {

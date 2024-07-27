@@ -31,6 +31,10 @@ export { ActorAction } from './decorators/actor/actor-action/actor-action-decora
 export { ActorActionProps } from './decorators/actor/actor-action/actor-action-props'
 export { ActorActionInterface } from './decorators/actor/actor-action/actor-action-interface'
 
+// Notification
+export { Notification } from './decorators/notification/notification-decorator'
+export { NotificationProps } from './decorators/notification/notification-props'
+
 // Sprite decorator
 export { Sprite } from './decorators/sprite/sprite-decorator'
 export { SpriteProps } from './decorators/sprite/sprite-props'
