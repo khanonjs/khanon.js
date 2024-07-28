@@ -137,7 +137,7 @@ export function Mesh(props: MeshProps): any {
         }
 
         unload(scene: SceneInterface): void {
-
+          // TODO
         }
 
         spawn(scene: SceneInterface): MeshInterface {

@@ -170,6 +170,9 @@ export function Scene(props: SceneProps): any {
 
       unload(): void {
         Logger.debug('Scene unload', _class.prototype)
+        ActorsController.unload(this.props.actors)
+        SpritesController.unload(this.metadata.getProps().sprites)
+        MeshesController.unload(this.metadata.getProps().meshes)
       }
 
       setCamera(constructor: CameraConstructor): void {
@@ -198,7 +201,7 @@ export function Scene(props: SceneProps): any {
         if (!this.actions.get(actionConstructor)) {
           const action = SceneActionsController.get(actionConstructor).spawn(this)
           if (!this.props.actions?.find(_action => _action === actionConstructor)) {
-            // Applies context to 'onLoopUpdate' as caller 'Actor' or 'ActorState' to preserve the 'this'
+            // Applies context 'Scene' or 'SceneState' to 'onLoopUpdate' method to preserve the 'this'
             // in case 'onLoopUpdate' is equivalent to a decorated method of some of those both interfaces.
             action.onLoopUpdate = action.onLoopUpdate.bind(
               this.metadata.getProps().actions?.find(_action => _action === actionConstructor)

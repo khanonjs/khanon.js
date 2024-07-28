@@ -235,7 +235,10 @@ export function Actor(props: ActorProps = {}): any {
       }
 
       unload(): void {
-        // TODO
+        SpritesController.load(this.props.sprites)
+        SpritesController.load(this.Instance.metadata.getProps().sprites)
+        MeshesController.load(this.props.meshes)
+        MeshesController.load(this.Instance.metadata.getProps().meshes)
       }
 
       spawn(scene: SceneInterface): ActorInterface {
