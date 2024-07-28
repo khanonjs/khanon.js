@@ -155,9 +155,8 @@ export function Actor(props: ActorProps = {}): any {
 
       playAction(actionConstructor: ActorActionConstructor, setup: any): void {
         if (!this.props.actions?.find(_action => _action === actionConstructor) && !this.metadata.getProps().actions?.find(_action => _action === actionConstructor) && !this._state?.metadata.getProps().actions?.find(_action => _action === actionConstructor)) { Logger.debugError('Trying to play an action non available to the actor. Please check the actor props.', _classInterface.prototype, actionConstructor.prototype); return }
-        let action = this.actions.get(actionConstructor)
-        if (!action) {
-          action = ActorActionsController.get(actionConstructor).spawn(this)
+        if (!this.actions.get(actionConstructor)) {
+          const action = ActorActionsController.get(actionConstructor).spawn(this)
           if (!this.props.actions?.find(_action => _action === actionConstructor)) {
             // Applies context to 'onLoopUpdate' as caller 'Actor' or 'ActorState' to preserve the 'this'
             // in case 'onLoopUpdate' is equivalent to a decorated method of some of those both interfaces.
