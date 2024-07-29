@@ -3,7 +3,10 @@ import 'reflect-metadata'
 import * as BABYLON from '@babylonjs/core'
 
 import { SpriteInterface as UserSpriteInterface } from '../../'
-import { LoadingProgress } from '../../base'
+import {
+  ActionInterface,
+  LoadingProgress
+} from '../../base'
 import {
   AssetsController,
   SpritesController
@@ -299,7 +302,8 @@ export function Sprite(props: SpriteProps): any {
       return decorateClass()
     } else if ((
       constructorOrTarget instanceof ActorInterface ||
-      constructorOrTarget instanceof SceneInterface
+      constructorOrTarget instanceof SceneInterface ||
+      constructorOrTarget instanceof ActionInterface
     ) && !descriptor) { // Undefined descriptor means it is a decorated property, otherwiese it is a decorated method
       @Sprite(props)
       class _spriteInterface extends UserSpriteInterface {}

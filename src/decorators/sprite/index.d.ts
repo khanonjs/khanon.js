@@ -1,5 +1,3 @@
-import * as BABYLON from '@babylonjs/core'
-
 import {
   AnimationBase,
   BabylonAccessor,
@@ -13,6 +11,7 @@ import { SceneInterface } from '../scene'
 
 export interface SpriteAnimation extends AnimationBase {}
 
+// TODO remove SpriteProps from here. To do so, SpriteAnimation public exported has to omit 'emitter' and 'ms' from keyframes
 export declare interface SpriteProps {
   /**
    * Load the image file from a url. Don't define to use a blank texture.
@@ -73,6 +72,7 @@ export declare interface SpriteProps {
  * - To a class itself, where it will inherit extended SpriteInterface lifecycle, methods and variables.
  * - To an 'Actor' class property, where it will be created as a SpriteConstructor using the decorator props.
  * - To a 'Scene' class property, where it will be created as a SpriteConstructor using the decorator props.
+ * - To a 'ActorAction' of 'SceneAction' class properties, where it will be created as a SpriteConstructor using the decorator props.
  * @param props
  */
 export declare function Sprite(props: SpriteProps): any

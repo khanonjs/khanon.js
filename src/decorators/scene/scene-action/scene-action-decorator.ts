@@ -3,6 +3,7 @@ import 'reflect-metadata'
 import * as BABYLON from '@babylonjs/core'
 
 import { SceneActionInterface as UserSceneActionInterface } from '../../..'
+import { ActionMetadata } from '../../../base/interfaces/action/action-metadata'
 import { SceneActionsController } from '../../../controllers'
 import { Core } from '../../../core'
 import { Rect } from '../../../models/rect'
@@ -29,6 +30,7 @@ export function SceneAction(props: SceneActionProps = {}): any {
       const _classInterface = class extends constructorOrTarget implements SceneActionInterface {
         constructor(readonly scene: SceneInterface) {
           super()
+          this.metadata.applyProps(this)
         }
 
         props = props
@@ -38,6 +40,7 @@ export function SceneAction(props: SceneActionProps = {}): any {
         onLoopUpdate?(delta: number): void
         onCanvasResize?(size: Rect): void
 
+        metadata: ActionMetadata = Reflect.getMetadata('metadata', this) ?? new ActionMetadata()
         loopUpdate$?: BABYLON.Observer<number>
         canvasResize$?: BABYLON.Observer<Rect>
         setup: any

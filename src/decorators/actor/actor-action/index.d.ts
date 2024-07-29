@@ -2,6 +2,7 @@ import { ActorInterface } from '../'
 import { Rect } from '../../../models/rect'
 import { FlexId } from '../../../types'
 import { MeshInterface } from '../../mesh'
+import { SceneInterface } from '../../scene'
 import { SpriteInterface } from '../../sprite'
 import { ActorActionProps } from './actor-action-props'
 
@@ -14,9 +15,14 @@ export { ActorActionProps } from './'
  * @param props
  */
 export declare function ActorAction(props?: ActorActionProps): any
-export declare abstract class ActorActionInterface<S = any, A = ActorInterface<SpriteInterface | MeshInterface>> {
+export declare abstract class ActorActionInterface</* Setup object */ S = any, /* Actor object */ A = ActorInterface<SpriteInterface | MeshInterface>, /* SCene object */ C = SceneInterface> {
   /**
-   * Actor owner of the action.
+   * Owner scene of this action.
+   */
+  get scene(): C
+
+  /**
+   * Owner actor of this action.
    */
   get actor(): A
 

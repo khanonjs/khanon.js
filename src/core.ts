@@ -225,7 +225,7 @@ export class Core {
             timeout.ms -= Core.loopUpdateMps
             if (timeout.ms < 0) {
               if (timeout.context) {
-                timeout.func.bind(timeout.context)
+                timeout.func.bind(timeout.context)()
               } else {
                 timeout.func()
               }

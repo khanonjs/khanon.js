@@ -3,7 +3,11 @@ import 'reflect-metadata'
 import * as BABYLON from '@babylonjs/core'
 
 import { MeshInterface as UserMeshInterface } from '../../'
-import { LoadingProgress } from '../../base'
+import {
+  ActionInterface,
+  LoadingProgress
+} from '../../base'
+import { ActionMetadata } from '../../base/interfaces/action/action-metadata'
 import { MeshesController } from '../../controllers'
 import { BabylonAccessor } from '../../models/babylon-accessor'
 import { Rect } from '../../models/rect'
@@ -155,15 +159,22 @@ export function Mesh(props: MeshProps): any {
       return decorateClass()
     } else if ((
       constructorOrTarget instanceof ActorInterface ||
-      constructorOrTarget instanceof SceneInterface
+      constructorOrTarget instanceof SceneInterface ||
+      constructorOrTarget instanceof ActionInterface
     ) && !descriptor) { // Undefined descriptor means it is a decorated property, otherwiese it is a decorated method
       @Mesh(props)
       class _meshInterface extends UserMeshInterface {}
 
       if (!Reflect.hasMetadata('metadata', constructorOrTarget)) {
-        Reflect.defineMetadata('metadata', constructorOrTarget instanceof ActorInterface ? new ActorMetadata() : new SceneMetadata(), constructorOrTarget)
+        const metadata = constructorOrTarget instanceof ActorInterface
+          ? new ActorMetadata()
+          : constructorOrTarget instanceof SceneInterface
+            ? new SceneMetadata()
+            : new ActionMetadata()
+
+        Reflect.defineMetadata('metadata', metadata, constructorOrTarget)
       }
-      const metadata = Reflect.getMetadata('metadata', constructorOrTarget) as (ActorMetadata | SceneMetadata)
+      const metadata = Reflect.getMetadata('metadata', constructorOrTarget) as (ActorMetadata | SceneMetadata | ActionMetadata)
       metadata.meshes.push({
         propertyName: contextOrProperty as string,
         classDefinition: _meshInterface

@@ -21,6 +21,7 @@ export { MeshAnimation } from './decorators/mesh/mesh-animation'
  * - To a class itself, where it will inherit extended MeshInterface lifecycle, methods and variables.
  * - To an 'Actor' class property, where it will be created as a MeshConstructor using the decorator props.
  * - To a 'Scene' class property, where it will be created as a MeshConstructor using the decorator props.
+ * - To a 'ActorAction' of 'SceneAction' class properties, where it will be created as a SpriteConstructor using the decorator props.
  * @param props
  */
 export declare function Mesh(props?: MeshProps): any

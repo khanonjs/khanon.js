@@ -10,6 +10,7 @@ import {
   MeshAnimation,
   MeshInterface
 } from '../mesh'
+import { SceneInterface } from '../scene'
 import {
   SpriteAnimation,
   SpriteInterface
@@ -26,6 +27,11 @@ export declare function Actor(props?: ActorProps): any
  * - To use 3D Messhes set it as 'MeshInterface'.
  */
 export declare abstract class ActorInterface<B extends SpriteInterface | MeshInterface> {
+  /**
+   * Owner scene of this actor.
+   */
+  get scene(): SceneInterface
+
   /**
    * Transform of the body.
    */
