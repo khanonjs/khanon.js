@@ -43,6 +43,7 @@ export declare interface AnimationBase {
    */
   keyFrames?: AnimationKeyFrame[];
 }
+
 export { BabylonAccessor } from './babylon-accessor'
 export { Rect } from './rect'
 export declare class Timeout {}
