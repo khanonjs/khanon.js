@@ -1,6 +1,6 @@
 import { StateProps } from '../../../base'
-import { CameraConstructor } from '../../../constructors/camera-constructor'
 import { UseCamera } from '../../../models/use-camera'
+import { CameraConstructor } from '../../camera/camera-constructor'
 
 export interface SceneStateProps extends StateProps {
   /**

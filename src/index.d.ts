@@ -1,38 +1,12 @@
 import * as BABYLON from '@babylonjs/core'
 
 import { LoadingProgress } from './base'
-import { SceneConstructor } from './constructors/scene-constructor'
-import { SceneStateConstructor } from './constructors/scene-state-constructor'
+import { SceneConstructor } from './decorators/scene'
+import { SceneStateConstructor } from './decorators/scene/scene-state'
 import { Timeout } from './models'
 import { Rect } from './models/rect'
 import { FlexId } from './types/flex-id'
 import { NotificableType } from './types/notificable-type'
-
-// **************
-//  Models
-// **************
-export { Rect } from './models/rect'
-export { UseCamera } from './models/use-camera'
-
-// **************
-//  Constructors
-// **************
-export { ActorConstructor } from './constructors/actor-constructor'
-export { ActorActionConstructor } from './constructors/actor-action-constructor'
-export { ActorStateConstructor } from './constructors/actor-state-constructor'
-export { AppConstructor } from './constructors/app-constructor'
-export { CameraConstructor } from './constructors/camera-constructor'
-export { GUIConstructor } from './constructors/gui-constructor'
-export { MeshConstructor } from './constructors/mesh-constructor'
-export { MeshMapConstructor } from './constructors/mesh-map-constructor'
-export { MotionConstructor } from './constructors/motion-constructor'
-export { ParticleConstructor } from './constructors/particle-constructor'
-export { ParticleSourceConstructor } from './constructors/particle-source-constructor'
-export { SceneConstructor } from './constructors/scene-constructor'
-export { SceneStateConstructor } from './constructors/scene-state-constructor'
-export { TileMapConstructor } from './constructors/tile-map-constructor'
-export { SceneMapConstructor } from './constructors/scene-map-constructor'
-export { SpriteConstructor } from './constructors/sprite-constructor'
 
 // ****************
 // KJS App handler

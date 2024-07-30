@@ -1,4 +1,4 @@
-import { SpriteConstructor } from '../../../constructors/sprite-constructor'
+import { SpriteConstructor } from '../../../decorators/sprite/sprite-constructor'
 
 export interface MetadataSpriteDefinition {
   propertyName: string

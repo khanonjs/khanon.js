@@ -8,7 +8,6 @@ import { ActorActionsController } from '../../../controllers'
 import { Core } from '../../../core'
 import { Rect } from '../../../models/rect'
 import { Logger } from '../../../modules/logger'
-import { FlexId } from '../../../types'
 import {
   attachCanvasResize,
   attachLoopUpdate,

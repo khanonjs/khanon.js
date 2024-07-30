@@ -1,5 +1,5 @@
 import { ControllerLoader } from '../base'
-import { ActorConstructor } from '../constructors/actor-constructor'
+import { ActorConstructor } from '../decorators/actor/actor-constructor'
 import { ActorCore } from '../decorators/actor/actor-core'
 import { SceneInterface } from '../decorators/scene/scene-interface'
 

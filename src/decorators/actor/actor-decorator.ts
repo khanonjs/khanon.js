@@ -1,8 +1,6 @@
 import * as BABYLON from '@babylonjs/core'
 
 import { LoadingProgress } from '../../base'
-import { ActorActionConstructor } from '../../constructors/actor-action-constructor'
-import { ActorStateConstructor } from '../../constructors/actor-state-constructor'
 import {
   ActorActionsController,
   ActorsController,
@@ -31,11 +29,13 @@ import { MeshInterface } from '../mesh/mesh-interface'
 import { SceneInterface } from '../scene/scene-interface'
 import { SpriteAnimation } from '../sprite/sprite-animation'
 import { SpriteInterface } from '../sprite/sprite-interface'
+import { ActorActionConstructor } from './actor-action/actor-action-constructor'
 import { ActorActionInterface } from './actor-action/actor-action-interface'
 import { ActorCore } from './actor-core'
 import { ActorInterface } from './actor-interface'
 import { ActorMetadata } from './actor-metadata'
 import { ActorProps } from './actor-props'
+import { ActorStateConstructor } from './actor-state/actor-state-constructor'
 import { ActorStateInterface } from './actor-state/actor-state-interface'
 
 type B = SpriteInterface | MeshInterface

@@ -4,8 +4,8 @@ import {
   MetadataNotifierDefinition,
   MetadataSpriteDefinition
 } from '../../base'
-import { ActorActionConstructor } from '../../constructors/actor-action-constructor'
 import { FlexId } from '../../types'
+import { ActorActionConstructor } from './actor-action/actor-action-constructor'
 import { ActorProps } from './actor-props'
 
 export class ActorMetadata {

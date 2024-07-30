@@ -5,7 +5,6 @@ import {
   Rect
 } from '../../models'
 
-export declare function Camera(): any
 export declare abstract class CameraInterface {
   get babylon(): Pick<BabylonAccessor<ReturnType<this['initialize']>>, 'camera'>
 
@@ -33,3 +32,7 @@ export declare abstract class CameraInterface {
    */
   onCanvasResize?(size: Rect): void
 }
+
+export type CameraConstructor = new () => CameraInterface
+
+export declare function Camera(): any

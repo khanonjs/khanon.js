@@ -5,9 +5,6 @@ import '@babylonjs/core/Debug/debugLayer'
 import * as BABYLON from '@babylonjs/core'
 
 import { LoadingProgress } from '../../base'
-import { CameraConstructor } from '../../constructors/camera-constructor'
-import { SceneActionConstructor } from '../../constructors/scene-action-constructor'
-import { SceneStateConstructor } from '../../constructors/scene-state-constructor'
 import {
   ActorsController,
   AssetsController,
@@ -35,17 +32,20 @@ import {
   switchLoopUpdate
 } from '../../utils/utils'
 import { ActorInterface } from '../actor/actor-interface'
+import { CameraConstructor } from '../camera/camera-constructor'
 import { CameraInterface } from '../camera/camera-interface'
 import { MeshInterface } from '../mesh'
 import { ParticleSourceInterface } from '../particle-source/particle-source-interface'
 import { ParticleInterface } from '../particle/particle-interface'
 import { SpriteInterface } from '../sprite'
+import { SceneActionConstructor } from './scene-action/scene-action-constructor'
 import { SceneActionInterface } from './scene-action/scene-action-interface'
 import { SceneInterface } from './scene-interface'
 import { SceneMetadata } from './scene-metadata'
 import { SceneProps } from './scene-props'
 import { SceneRemove } from './scene-remove'
 import { SceneSpawn } from './scene-spawn'
+import { SceneStateConstructor } from './scene-state/scene-state-constructor'
 import { SceneStateInterface } from './scene-state/scene-state-interface'
 
 export function Scene(props: SceneProps): any {

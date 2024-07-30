@@ -1,7 +1,7 @@
 import { ControllerLoader } from '../base'
-import { SceneConstructor } from '../constructors/scene-constructor'
-import { SceneStateConstructor } from '../constructors/scene-state-constructor'
+import { SceneConstructor } from '../decorators/scene/scene-constructor'
 import { SceneInterface } from '../decorators/scene/scene-interface'
+import { SceneStateConstructor } from '../decorators/scene/scene-state/scene-state-constructor'
 import { Logger } from '../modules/logger'
 
 export class ScenesController extends ControllerLoader<SceneInterface, SceneInterface>() {

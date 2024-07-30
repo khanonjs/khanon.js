@@ -11,71 +11,6 @@ import { SceneInterface } from '../scene'
 
 export interface SpriteAnimation extends AnimationBase {}
 
-// TODO remove SpriteProps from here. To do so, SpriteAnimation public exported has to omit 'emitter' and 'ms' from keyframes
-export declare interface SpriteProps {
-  /**
-   * Load the image file from a url. Don't define to use a blank texture.
-   */
-  url?: string
-
-  /**
-   * Width of the sprite. In case it is an animated sprite, it represents each frame cell width.
-   */
-  width: number
-
-  /**
-   * Height of the sprite. In case it is an animated sprite, it represents each frame cell height.
-   */
-  height: number
-
-  /**
-   * Numnber of frames (total cells).
-   */
-  numFrames?: number
-
-  /**
-   * Animations
-   */
-  animations?: SpriteAnimation[]
-
-  /**
-   * Defines if the texture has bitmaps (false by default).
-   */
-  noMipmap?: boolean
-
-  /**
-   * Defines if the texture is inverted on Y axis (false by default).
-   */
-  invertY?: boolean
-
-  /**
-   * Defines the sampling mode we want for the texture while fetching from it (BABYLON.Texture.NEAREST_SAMPLINGMODE...) (default: BABYLON.Texture.TRILINEAR_SAMPLINGMODE)
-   */
-  samplingMode?: number
-
-  /**
-   * Cache this sprite.
-   * Cached files are kept in memory and only removed after calling KJS.clearCache().
-   * Use cached files in case they are being used between more than one scene.
-   * Cached sprites make shorter loading time at the expense of memory usage.
-   */
-  cached?: boolean
-
-  /**
-   * Defines the maximum allowed number of sprites for this sprite sheet
-   */
-  maxAllowedSprites?: number
-}
-
-/**
- * Sprite decorator can be applied in three different places:
- * - To a class itself, where it will inherit extended SpriteInterface lifecycle, methods and variables.
- * - To an 'Actor' class property, where it will be created as a SpriteConstructor using the decorator props.
- * - To a 'Scene' class property, where it will be created as a SpriteConstructor using the decorator props.
- * - To a 'ActorAction' of 'SceneAction' class properties, where it will be created as a SpriteConstructor using the decorator props.
- * @param props
- */
-export declare function Sprite(props: SpriteProps): any
 export declare abstract class SpriteInterface {
   /**
    * Babylon.js objects.
@@ -196,3 +131,70 @@ export declare abstract class SpriteInterface {
    */
   onCanvasResize?(size: Rect): void
 }
+
+export type SpriteConstructor = new () => SpriteInterface
+
+export declare interface SpriteProps {
+  /**
+   * Load the image file from a url. Don't define to use a blank texture.
+   */
+  url?: string
+
+  /**
+   * Width of the sprite. In case it is an animated sprite, it represents each frame cell width.
+   */
+  width: number
+
+  /**
+   * Height of the sprite. In case it is an animated sprite, it represents each frame cell height.
+   */
+  height: number
+
+  /**
+   * Numnber of frames (total cells).
+   */
+  numFrames?: number
+
+  /**
+   * Animations
+   */
+  animations?: SpriteAnimation[]
+
+  /**
+   * Defines if the texture has bitmaps (false by default).
+   */
+  noMipmap?: boolean
+
+  /**
+   * Defines if the texture is inverted on Y axis (false by default).
+   */
+  invertY?: boolean
+
+  /**
+   * Defines the sampling mode we want for the texture while fetching from it (BABYLON.Texture.NEAREST_SAMPLINGMODE...) (default: BABYLON.Texture.TRILINEAR_SAMPLINGMODE)
+   */
+  samplingMode?: number
+
+  /**
+   * Cache this sprite.
+   * Cached files are kept in memory and only removed after calling KJS.clearCache().
+   * Use cached files in case they are being used between more than one scene.
+   * Cached sprites make shorter loading time at the expense of memory usage.
+   */
+  cached?: boolean
+
+  /**
+   * Defines the maximum allowed number of sprites for this sprite sheet
+   */
+  maxAllowedSprites?: number
+}
+
+/**
+ * Sprite decorator can be applied in three different places:
+ * - To a class itself, where it will inherit extended SpriteInterface lifecycle, methods and variables.
+ * - To an 'Actor' class property, where it will be created as a SpriteConstructor using the decorator props.
+ * - To a 'Scene' class property, where it will be created as a SpriteConstructor using the decorator props.
+ * - To a 'ActorAction' of 'SceneAction' class properties, where it will be created as a SpriteConstructor using the decorator props.
+ * @param props
+ */
+export declare function Sprite(props: SpriteProps): any

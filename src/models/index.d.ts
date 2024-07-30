@@ -44,4 +44,8 @@ export declare interface AnimationBase {
   keyFrames?: AnimationKeyFrame[];
 }
 
+export { Rect } from './rect'
+
+export { UseCamera } from './use-camera'
+
 export declare class Timeout {}

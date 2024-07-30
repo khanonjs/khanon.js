@@ -1,5 +1,5 @@
-import { MeshConstructor } from '../../../constructors/mesh-constructor'
-import { SpriteConstructor } from '../../../constructors/sprite-constructor'
+import { MeshConstructor } from '../../../decorators/mesh/mesh-constructor'
+import { SpriteConstructor } from '../../../decorators/sprite/sprite-constructor'
 
 export interface ActionProps<O> {
   /**

@@ -1,8 +1,8 @@
-import { ActorConstructor } from '../constructors/actor-constructor'
-import { ActorStateConstructor } from '../constructors/actor-state-constructor'
-import { AppConstructor } from '../constructors/app-constructor'
-import { SceneConstructor } from '../constructors/scene-constructor'
-import { SceneStateConstructor } from '../constructors/scene-state-constructor'
+import { ActorConstructor } from '../decorators/actor/actor-constructor'
+import { ActorStateConstructor } from '../decorators/actor/actor-state/actor-state-constructor'
+import { AppConstructor } from '../decorators/app/app-constructor'
+import { SceneConstructor } from '../decorators/scene/scene-constructor'
+import { SceneStateConstructor } from '../decorators/scene/scene-state/scene-state-constructor'
 
 export type NotificableType =
   AppConstructor |

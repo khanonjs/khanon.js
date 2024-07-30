@@ -1,5 +1,3 @@
-import { ActorActionConstructor } from '../../constructors/actor-action-constructor'
-import { ActorStateConstructor } from '../../constructors/actor-state-constructor'
 import { Rect } from '../../models'
 import {
   FlexId,
@@ -8,18 +6,21 @@ import {
 } from '../../types'
 import {
   MeshAnimation,
+  MeshConstructor,
   MeshInterface
 } from '../mesh'
 import { SceneInterface } from '../scene'
 import {
   SpriteAnimation,
+  SpriteConstructor,
   SpriteInterface
 } from '../sprite'
-import { ActorProps } from './actor-props'
-import { ActorStateInterface } from './actor-state'
+import { ActorActionConstructor } from './'
+import {
+  ActorStateConstructor,
+  ActorStateInterface
+} from './actor-state'
 
-export { ActorProps } from './'
-export declare function Actor(props?: ActorProps): any
 /**
  * Actor Interface to be extended from decorated Actors.
  * @param B alludes to what kind of interface this actor will have as Body and Nodes.
@@ -175,3 +176,16 @@ export declare abstract class ActorInterface<B extends SpriteInterface | MeshInt
    */
   onCanvasResize?(size: Rect): void
 }
+
+export type ActorConstructor = new () => ActorInterface
+
+export interface ActorProps {
+  sprites?: SpriteConstructor[]
+  meshes?: MeshConstructor[]
+  // guis?: GUIConstructor[]
+  states?: ActorStateConstructor[]
+  actions?: ActorActionConstructor[]
+  // particles?: (ParticleConstructor | ParticleSourceConstructor)[]  // 8a8f
+}
+
+export declare function Actor(props?: ActorProps): any

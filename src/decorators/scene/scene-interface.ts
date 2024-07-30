@@ -7,23 +7,23 @@ import {
   LoopUpdatable,
   Notificable
 } from '../../base'
-import { CameraConstructor } from '../../constructors/camera-constructor'
-import { SceneActionConstructor } from '../../constructors/scene-action-constructor'
-import { SceneStateConstructor } from '../../constructors/scene-state-constructor'
 import { AssetDefinition } from '../../models/asset-definition'
 import { BabylonAccessor } from '../../models/babylon-accessor'
 import { Rect } from '../../models/rect'
 import { FlexId } from '../../types'
 import { ActorInterface } from '../actor/actor-interface'
+import { CameraConstructor } from '../camera/camera-constructor'
 import { MeshInterface } from '../mesh'
 import { ParticleSourceInterface } from '../particle-source/particle-source-interface'
 import { ParticleInterface } from '../particle/particle-interface'
 import { SpriteInterface } from '../sprite'
 import { SceneRemove } from './'
+import { SceneActionConstructor } from './scene-action/scene-action-constructor'
 import { SceneActionInterface } from './scene-action/scene-action-interface'
 import { SceneMetadata } from './scene-metadata'
 import { SceneProps } from './scene-props'
 import { SceneSpawn } from './scene-spawn'
+import { SceneStateConstructor } from './scene-state/scene-state-constructor'
 import { SceneStateInterface } from './scene-state/scene-state-interface'
 
 export abstract class SceneInterface implements Loadable, LoopUpdatable, CanvasResizable, Notificable {

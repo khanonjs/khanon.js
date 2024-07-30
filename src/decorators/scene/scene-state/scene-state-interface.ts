@@ -1,5 +1,5 @@
 import { StateInterface } from '../../../base'
-import { CameraConstructor } from '../../../constructors/camera-constructor'
+import { CameraConstructor } from '../../camera/camera-constructor'
 import { SceneInterface } from '../scene-interface'
 import { SceneMetadata } from '../scene-metadata'
 

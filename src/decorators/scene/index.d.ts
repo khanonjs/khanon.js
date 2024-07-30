@@ -1,21 +1,32 @@
+import * as BABYLON from '@babylonjs/core'
+
+import { SceneConfiguration } from '../../babylon-config'
 import { LoadingProgress } from '../../base'
-import { SceneActionConstructor } from '../../constructors/scene-action-constructor'
-import { SceneStateConstructor } from '../../constructors/scene-state-constructor'
 import {
   BabylonAccessor,
   Rect
 } from '../../models'
 import { FlexId } from '../../types'
-import { ActorInterface } from '../actor'
-import { MeshInterface } from '../mesh'
+import {
+  ActorConstructor,
+  ActorInterface
+} from '../actor'
+import { CameraConstructor } from '../camera'
+import {
+  MeshConstructor,
+  MeshInterface
+} from '../mesh'
 import { ParticleSourceInterface } from '../particle-source/particle-source-interface'
 import { ParticleInterface } from '../particle/particle-interface'
-import { SpriteInterface } from '../sprite'
-import { SceneProps } from './scene-props'
-import { SceneStateInterface } from './scene-state'
-
-export { SceneProps } from './decorators/scene/scene-props'
-export declare function Scene(props: SceneProps): any
+import {
+  SpriteConstructor,
+  SpriteInterface
+} from '../sprite'
+import { SceneActionConstructor } from './scene-action'
+import {
+  SceneStateConstructor,
+  SceneStateInterface
+} from './scene-state'
 
 export declare class SceneSpawn {
   /**
@@ -221,3 +232,20 @@ export declare abstract class SceneInterface {
    */
   onCanvasResize?(size: Rect): void
 }
+
+export type SceneConstructor = new () => SceneInterface
+
+export interface SceneProps {
+  options?: BABYLON.SceneOptions
+  configuration?: SceneConfiguration
+  // guis?: GUIConstructor[]
+  cameras?: CameraConstructor[]
+  // maps?: SceneMapConstructor[]
+  states?: SceneStateConstructor[]
+  actors?: ActorConstructor[]
+  actions?: SceneActionConstructor[]
+  sprites?: SpriteConstructor[]
+  meshes?: MeshConstructor[]
+}
+
+export declare function Scene(props: SceneProps): any

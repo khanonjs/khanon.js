@@ -3,10 +3,7 @@ import { Rect } from '../../../models/rect'
 import { FlexId } from '../../../types'
 import { MeshInterface } from '../../mesh'
 import { SpriteInterface } from '../../sprite'
-import { ActorStateProps } from './actor-state-props'
 
-export { ActorStateProps } from './'
-export declare function ActorState(props?: ActorStateProps): any
 /**
  * Defines the state of an actor.
  * @param A Actor owner of hte state (optional).
@@ -56,3 +53,11 @@ export declare abstract class ActorStateInterface<S = any, A = ActorInterface<Sp
    */
   onCanvasResize?(size: Rect): void
 }
+
+export type ActorStateConstructor = new () => ActorStateInterface
+
+export interface ActorStateProps {
+
+}
+
+export declare function ActorState(props?: ActorStateProps): any

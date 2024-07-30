@@ -1,16 +1,15 @@
-import { ActorActionConstructor } from '../../constructors/actor-action-constructor'
-import { ActorStateConstructor } from '../../constructors/actor-state-constructor'
-import { GUIConstructor } from '../../constructors/gui-constructor'
-import { MeshConstructor } from '../../constructors/mesh-constructor'
-import { ParticleConstructor } from '../../constructors/particle-constructor'
-import { ParticleSourceConstructor } from '../../constructors/particle-source-constructor'
-import { SpriteConstructor } from '../../constructors/sprite-constructor'
+import { MeshConstructor } from '../mesh/mesh-constructor'
+// import { ParticleSourceConstructor } from '../particle-source/particle-source-constructor'
+// import { ParticleConstructor } from '../particle/particle-constructor'
+import { SpriteConstructor } from '../sprite/sprite-constructor'
+import { ActorActionConstructor } from './actor-action/actor-action-constructor'
+import { ActorStateConstructor } from './actor-state/actor-state-constructor'
 
 export interface ActorProps {
   sprites?: SpriteConstructor[]
   meshes?: MeshConstructor[]
-  guis?: GUIConstructor[]
+  // guis?: GUIConstructor[]
   states?: ActorStateConstructor[]
   actions?: ActorActionConstructor[]
-  particles?: (ParticleConstructor | ParticleSourceConstructor)[]
+  // particles?: (ParticleConstructor | ParticleSourceConstructor)[]
 }

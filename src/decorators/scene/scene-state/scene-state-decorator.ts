@@ -1,6 +1,5 @@
 import * as BABYLON from '@babylonjs/core'
 
-import { CameraConstructor } from '../../../constructors/camera-constructor'
 import { SceneStatesController } from '../../../controllers'
 import { Rect } from '../../../models/rect'
 import { UseCamera } from '../../../models/use-camera'
@@ -14,6 +13,7 @@ import {
   removeLoopUpdate,
   switchLoopUpdate
 } from '../../../utils/utils'
+import { CameraConstructor } from '../../camera/camera-constructor'
 import { SceneInterface } from '../scene-interface'
 import { SceneMetadata } from '../scene-metadata'
 import { SceneStateCore } from './scene-state-core'

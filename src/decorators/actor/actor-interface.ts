@@ -5,8 +5,6 @@ import {
   LoopUpdatable,
   Notificable
 } from '../../base'
-import { ActorActionConstructor } from '../../constructors/actor-action-constructor'
-import { ActorStateConstructor } from '../../constructors/actor-state-constructor'
 import { Rect } from '../../models/rect'
 import {
   FlexId,
@@ -18,9 +16,11 @@ import { MeshInterface } from '../mesh/mesh-interface'
 import { SceneInterface } from '../scene/scene-interface'
 import { SpriteAnimation } from '../sprite/sprite-animation'
 import { SpriteInterface } from '../sprite/sprite-interface'
+import { ActorActionConstructor } from './actor-action/actor-action-constructor'
 import { ActorActionInterface } from './actor-action/actor-action-interface'
 import { ActorMetadata } from './actor-metadata'
 import { ActorProps } from './actor-props'
+import { ActorStateConstructor } from './actor-state/actor-state-constructor'
 import { ActorStateInterface } from './actor-state/actor-state-interface'
 
 export abstract class ActorInterface<B extends SpriteInterface | MeshInterface = any> implements LoopUpdatable, CanvasResizable, Notificable {

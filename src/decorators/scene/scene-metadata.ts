@@ -4,8 +4,8 @@ import {
   MetadataNotifierDefinition,
   MetadataSpriteDefinition
 } from '../../base'
-import { SceneActionConstructor } from '../../constructors/scene-action-constructor'
 import { FlexId } from '../../types'
+import { SceneActionConstructor } from './scene-action/scene-action-constructor'
 import { SceneProps } from './scene-props'
 
 export class SceneMetadata {

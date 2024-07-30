@@ -1,11 +1,9 @@
 import { SceneInterface } from '../'
-import { CameraConstructor } from '../../../constructors/camera-constructor'
 import { Rect } from '../../../models'
+import { UseCamera } from '../../../models/use-camera'
 import { FlexId } from '../../../types'
-import { SceneStateProps } from './scene-state-props'
+import { CameraConstructor } from '../../camera'
 
-export { SceneStateProps } from './decorators/scene-state/scene-state-props'
-export declare function SceneState(props: SceneStateProps): any
 export declare abstract class SceneStateInterface<S = any, C = SceneInterface> {
   /**
    * Owner scene of this state.
@@ -55,3 +53,19 @@ export declare abstract class SceneStateInterface<S = any, C = SceneInterface> {
    */
   onCanvasResize?(size: Rect): void
 }
+
+export type SceneStateConstructor = new () => SceneStateInterface
+
+export interface SceneStateProps {
+  /**
+   * Camera to be used at state start in function of 'useCamera' property.
+   */
+  camera: CameraConstructor
+
+  /**
+   * Tells how to use the camera on state start.
+   */
+  useCamera: UseCamera
+}
+
+export declare function SceneState(props: SceneStateProps): any
