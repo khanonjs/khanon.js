@@ -24,7 +24,7 @@ export class SpriteTexture {
   }
 
   setFromBlank(): void {
-    const texture = new BABYLON.Texture('', this.babylon.scene, this.spriteProps.noMipmap, this.spriteProps.invertY, this.spriteProps.samplingMode)
+    const texture = new BABYLON.DynamicTexture('blank-texture', { width: this.spriteProps.width, height: this.spriteProps.height }, this.babylon.scene, !this.spriteProps.noMipmap, this.spriteProps.samplingMode, this.spriteProps.format, this.spriteProps.invertY)
     this.setFromTexture(texture, 'blank-texture', this.spriteProps.width, this.spriteProps.height)
   }
 

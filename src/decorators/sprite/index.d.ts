@@ -3,6 +3,7 @@ import {
   BabylonAccessor,
   Rect
 } from '../../models'
+import { DrawBlockProperties } from '../../models/draw-text-properties'
 import {
   FlexId,
   SpriteTransform
@@ -15,7 +16,7 @@ export declare abstract class SpriteInterface {
   /**
    * Babylon.js objects.
    */
-  get babylon(): Pick<BabylonAccessor, 'spriteManager' | 'sprite'>
+  get babylon(): Pick<BabylonAccessor, 'scene' | 'spriteManager' | 'sprite'>
 
   /**
    * Scene owner of this Sprite.
@@ -115,6 +116,12 @@ export declare abstract class SpriteInterface {
   clearKeyframeSubscriptions(keyframeId: string): void
 
   /**
+   * Writes a text on the sprite.
+   * @param text
+   */
+  drawText(text: string, properties: DrawBlockProperties): void
+
+  /**
    * Callback invoked after the sprite has been spawned in a scene.
    */
   onSpawn?(scene: SceneInterface): void
@@ -174,6 +181,11 @@ export declare interface SpriteProps {
    * Defines the sampling mode we want for the texture while fetching from it (BABYLON.Texture.NEAREST_SAMPLINGMODE...) (default: BABYLON.Texture.TRILINEAR_SAMPLINGMODE)
    */
   samplingMode?: number
+
+  /**
+   * Used only in Blank textures (url: undefined). Set it as 'BABYLON.Engine.TEXTUREFORMAT_???'. Default is 'BABYLON.Engine.TEXTUREFORMAT_RGBA'.
+   */
+  format?: number
 
   /**
    * Cache this sprite.

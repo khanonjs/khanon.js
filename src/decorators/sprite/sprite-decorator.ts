@@ -13,6 +13,7 @@ import {
 } from '../../controllers'
 import { Core } from '../../core'
 import { BabylonAccessor } from '../../models/babylon-accessor'
+import { DrawBlockProperties } from '../../models/draw-text-properties'
 import { Rect } from '../../models/rect'
 import { Timeout } from '../../models/timeout'
 import { Logger } from '../../modules/logger'
@@ -56,7 +57,7 @@ export function Sprite(props: SpriteProps): any {
         spriteTexture: SpriteTexture
         animation: SpriteAnimation = null
         animations: Map<FlexId, SpriteAnimation> = new Map<FlexId, SpriteAnimation>()
-        babylon: Pick<BabylonAccessor, 'spriteManager' | 'sprite'> = { spriteManager: null, sprite: null }
+        babylon: Pick<BabylonAccessor, 'scene' | 'spriteManager' | 'sprite'> = { scene: null, spriteManager: null, sprite: null }
         loopUpdate$: BABYLON.Observer<number>
         canvasResize$: BABYLON.Observer<Rect>
         _scale: number = 1
@@ -85,6 +86,7 @@ export function Sprite(props: SpriteProps): any {
         get scale(): number { return this._scale }
 
         initialize(spriteTexture: SpriteTexture) {
+          this.babylon.scene = this.scene.babylon.scene
           this.spriteTexture = spriteTexture
           const babylonSprite = new BABYLON.Sprite(_className, this.spriteTexture.babylon.spriteManager)
           babylonSprite.width = this.spriteTexture.width
@@ -238,6 +240,39 @@ export function Sprite(props: SpriteProps): any {
           })
         }
 
+        drawText(text: string, properties: DrawBlockProperties): void {
+          // TODO This algorithm should be improved in many different ways: add alignment, CSS style or whatever, avoid creating a secondary texture for boundaries, improve performance.
+          if (this.props.url) { Logger.debugError('Trying to draw text on an \'url\' texture. Texts can be only drawn on Blank textures (url: undefined).'); return }
+
+          const font = `${properties.fontStyle} ${properties.fontSize}px ${properties.fontName}`
+
+          const checkSizeTx = new BABYLON.DynamicTexture('DynamicTexture', 64, this.babylon.scene, false)
+          const ctx = checkSizeTx.getContext()
+          ctx.font = font
+          const metricsFirst = ctx.measureText(text)
+          let textWidth = 0
+          const lineHeight = metricsFirst.actualBoundingBoxAscent + metricsFirst.actualBoundingBoxDescent
+          const textHeiht = lineHeight
+          checkSizeTx.dispose()
+          textWidth = ctx.measureText(text).width
+          const textureWidth = properties.textureSize?.width ?? textWidth
+          const textureHeight = properties.textureSize?.height ?? textHeiht + properties.fontSize / 2
+
+          const dynamicTexture = new BABYLON.DynamicTexture('DynamicTexture', { width: textureWidth, height: textureHeight }, this.babylon.scene, false)
+          const ctxTx = dynamicTexture.getContext()
+          if (properties.bgColor) {
+            ctxTx.beginPath()
+            ctxTx.rect(0, 0, textureWidth, textureHeight)
+            ctxTx.fillStyle = properties.bgColor
+            ctxTx.fill()
+          }
+
+          const startY = properties.centerV && properties.textureSize ? textureHeight / 2 : lineHeight
+
+          const tx = this.babylon.spriteManager.texture as BABYLON.DynamicTexture
+          tx.drawText(text, properties.centerH ? null : 0, startY + lineHeight, font, properties.textColor, null, false)
+        }
+
         release(): void {
           this.stopAnimation()
           this.babylon.sprite.dispose()
@@ -274,9 +309,6 @@ export function Sprite(props: SpriteProps): any {
               this.textures.set(scene, texture)
               return progress
             } else {
-              const texture = new SpriteTexture(scene, this.props)
-              texture.setFromBlank()
-              this.textures.set(scene, texture)
               return progress.complete()
             }
           }
@@ -289,7 +321,13 @@ export function Sprite(props: SpriteProps): any {
 
         spawn(scene: SceneInterface): SpriteInterface {
           const sprite = new _classInterface(scene, this.props)
-          sprite.initialize(this.textures.get(scene))
+          if (!this.props.url) {
+            const texture = new SpriteTexture(scene, this.props)
+            texture.setFromBlank()
+            sprite.initialize(texture)
+          } else {
+            sprite.initialize(this.textures.get(scene))
+          }
           return sprite
         }
       }
