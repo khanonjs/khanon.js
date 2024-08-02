@@ -241,7 +241,11 @@ export function Sprite(props: SpriteProps): any {
         }
 
         drawText(text: string, properties: DrawBlockProperties): void {
-          // TODO This algorithm should be improved in many different ways: add alignment, CSS style or whatever, avoid creating a secondary texture for boundaries, improve performance.
+          // TODO This algorithm should be improved in many different ways:
+          // - Add CSS style or whatever.
+          // - Avoid creating a secondary texture for boundaries.
+          // - Improve performance.
+          // - Let the user draw over an 'url' loaded texture.
           if (this.props.url) { Logger.debugError('Trying to draw text on an \'url\' texture. Texts can be only drawn on Blank textures (url: undefined).'); return }
 
           const font = `${properties.fontStyle} ${properties.fontSize}px ${properties.fontName}`
