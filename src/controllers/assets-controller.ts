@@ -4,8 +4,10 @@ import {
   Asset,
   LoadingProgress
 } from '../base'
+import { ActorActionInterface } from '../decorators/actor/actor-action/actor-action-interface'
 import { ActorCore } from '../decorators/actor/actor-core'
 import { ActorInterface } from '../decorators/actor/actor-interface'
+import { SceneActionInterface } from '../decorators/scene/scene-action/scene-action-interface'
 import { SceneInterface } from '../decorators/scene/scene-interface'
 import { SpriteCore } from '../decorators/sprite/sprite-core'
 import { SpriteInterface } from '../decorators/sprite/sprite-interface'
@@ -16,7 +18,9 @@ import {
   isPrototypeOf,
   objectToString
 } from '../utils/utils'
+import { ActorActionsController } from './actors-actions-controller'
 import { ActorsController } from './actors-controller'
+import { SceneActionsController } from './scene-actions-controller'
 import { SpritesController } from './sprites-controller'
 
 export class AssetsController {
@@ -42,6 +46,16 @@ export class AssetsController {
       for (const property of Object.values(source)) {
         if (Array.isArray(property)) {
           property.forEach(value => {
+            if (isPrototypeOf(ActorActionInterface, value)) {
+              const action = ActorActionsController.get<ActorCore>(value)
+              definitions = [...definitions, ...AssetsController.findAssetsDefinitions(action.props, urls)]
+              definitions = [...definitions, ...AssetsController.findAssetsDefinitions(action.Instance.metadata.getProps(), urls)]
+            }
+            if (isPrototypeOf(SceneActionInterface, value)) {
+              const action = SceneActionsController.get<ActorCore>(value)
+              definitions = [...definitions, ...AssetsController.findAssetsDefinitions(action.props, urls)]
+              definitions = [...definitions, ...AssetsController.findAssetsDefinitions(action.Instance.metadata.getProps(), urls)]
+            }
             if (isPrototypeOf(ActorInterface, value)) {
               const actor = ActorsController.get<ActorCore>(value)
               definitions = [...definitions, ...AssetsController.findAssetsDefinitions(actor.props, urls)]

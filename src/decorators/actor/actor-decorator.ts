@@ -25,9 +25,11 @@ import {
   switchLoopUpdate
 } from '../../utils/utils'
 import { MeshAnimation } from '../mesh/mesh-animation'
+import { MeshConstructor } from '../mesh/mesh-constructor'
 import { MeshInterface } from '../mesh/mesh-interface'
 import { SceneInterface } from '../scene/scene-interface'
 import { SpriteAnimation } from '../sprite/sprite-animation'
+import { SpriteConstructor } from '../sprite/sprite-constructor'
 import { SpriteInterface } from '../sprite/sprite-interface'
 import { ActorActionConstructor } from './actor-action/actor-action-constructor'
 import { ActorActionInterface } from './actor-action/actor-action-interface'
@@ -84,10 +86,10 @@ export function Actor(props: ActorProps = {}): any {
 
       setBody<B>(Body: new () => B): B {
         if (new Body() instanceof SpriteInterface) { // TODO is there a better way to do this avoiding the 'new'?
-          if (!this.metadata.sprites.find(_definition => _definition.classDefinition === Body) && !this.props.sprites?.find(_sprite => _sprite === Body)) { Logger.debugError('Trying to use a sprite non available to the actor. Please check the actor props.', this.constructor.prototype, Body.prototype); return }
+          if (!this.scene.availableElements.hasSprite(Body as SpriteConstructor)) { Logger.debugError('Trying to use a sprite non available to the actor. Please check the actor props.', this.constructor.prototype, Body.prototype); return }
           this._body = SpritesController.get(Body).spawn(this.scene) as any
         } else {
-          if (!this.metadata.meshes.find(_definition => _definition.classDefinition === Body) && !this.props.meshes?.find(_mesh => _mesh === Body)) { Logger.debugError('Trying to use a mesh non available to the actor. Please check the actor props.', this.constructor.prototype, Body.prototype); return }
+          if (!this.scene.availableElements.hasMesh(Body as MeshConstructor)) { Logger.debugError('Trying to use a mesh non available to the actor. Please check the actor props.', this.constructor.prototype, Body.prototype); return }
           this._body = MeshesController.get(Body).spawn(this.scene) as any
         }
         this.transform = this._body.transform
@@ -136,7 +138,7 @@ export function Actor(props: ActorProps = {}): any {
       }
 
       startState(state: ActorStateConstructor, setup: any): void {
-        if (!this.props.states?.find(_state => _state === state)) { Logger.debugError('Trying to set a state non available to the actor. Please check the actor props.', _classInterface.prototype, state.prototype); return }
+        if (!this.scene.availableElements.hasActorState(state)) { Logger.debugError('Trying to set a state non available to the actor. Please check the actor props.', _classInterface.prototype, state.prototype); return }
         const _state = ActorStatesController.get(state).spawn(this)
         if (this._state) {
           this._state.end()
@@ -154,7 +156,7 @@ export function Actor(props: ActorProps = {}): any {
       }
 
       playAction(actionConstructor: ActorActionConstructor, setup: any): ActorActionInterface {
-        if (!this.props.actions?.find(_action => _action === actionConstructor) && !this.metadata.getProps().actions?.find(_action => _action === actionConstructor) && !this._state?.metadata.getProps().actions?.find(_action => _action === actionConstructor)) { Logger.debugError('Trying to play an action non available to the actor. Please check the actor props.', _classInterface.prototype, actionConstructor.prototype); return }
+        if (!this.scene.availableElements.hasActorAction(actionConstructor)) { Logger.debugError('Trying to play an action non available to the actor. Please check the actor props.', _classInterface.prototype, actionConstructor.prototype); return }
         let action = this.actions.get(actionConstructor)
         if (!action) {
           action = ActorActionsController.get(actionConstructor).spawn(this)
@@ -237,14 +239,18 @@ export function Actor(props: ActorProps = {}): any {
         SpritesController.load(this.Instance.metadata.getProps().sprites, scene)
         MeshesController.load(this.props.meshes, scene)
         MeshesController.load(this.Instance.metadata.getProps().meshes, scene)
+        ActorActionsController.load(this.props.actions, scene)
+        ActorActionsController.load(this.Instance.metadata.getProps().actions, scene)
         return progress
       }
 
-      unload(): void {
-        SpritesController.unload(this.props.sprites)
-        SpritesController.unload(this.Instance.metadata.getProps().sprites)
-        MeshesController.unload(this.props.meshes)
-        MeshesController.unload(this.Instance.metadata.getProps().meshes)
+      unload(scene: SceneInterface): void {
+        SpritesController.unload(this.props.sprites, scene)
+        SpritesController.unload(this.Instance.metadata.getProps().sprites, scene)
+        MeshesController.unload(this.props.meshes, scene)
+        MeshesController.unload(this.Instance.metadata.getProps().meshes, scene)
+        ActorActionsController.unload(this.props.actions, scene)
+        ActorActionsController.unload(this.Instance.metadata.getProps().actions, scene)
       }
 
       spawn(scene: SceneInterface): ActorInterface {

@@ -23,6 +23,7 @@ import {
   SpriteInterface
 } from '../sprite'
 import { SceneActionConstructor } from './scene-action'
+import { SceneAvailableElements } from './scene-available-elements'
 import {
   SceneStateConstructor,
   SceneStateInterface

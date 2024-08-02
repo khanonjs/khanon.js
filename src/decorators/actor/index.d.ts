@@ -185,7 +185,7 @@ export interface ActorProps {
   // guis?: GUIConstructor[]
   states?: ActorStateConstructor[]
   actions?: ActorActionConstructor[]
-  // particles?: (ParticleConstructor | ParticleSourceConstructor)[]  // 8a8f
+  // particles?: (ParticleConstructor | ParticleSourceConstructor)[]  // TODO
 }
 
 export declare function Actor(props?: ActorProps): any

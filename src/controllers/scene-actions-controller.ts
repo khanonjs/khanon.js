@@ -1,7 +1,6 @@
-import { Controller } from '../base'
+import { ControllerLoader } from '../base'
+import { SceneActionConstructor } from '../decorators/scene/scene-action/scene-action-constructor'
+import { SceneActionCore } from '../decorators/scene/scene-action/scene-action-core'
+import { SceneInterface } from '../decorators/scene/scene-interface'
 
-// import { SceneActionCore } from '../decorators/scene/scene-action/scene-action-core'
-
-export class SceneActionsController extends Controller</* SceneActionCore */any>() {
-
-}
+export class SceneActionsController extends ControllerLoader<SceneActionConstructor, SceneActionCore, SceneInterface>() {}

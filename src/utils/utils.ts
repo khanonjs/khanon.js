@@ -1,4 +1,21 @@
+import {
+  ActorActionsController,
+  ActorsController,
+  MeshesController,
+  SceneActionsController,
+  SpritesController
+} from '../controllers'
 import { Core } from '../core'
+import { ActorActionConstructor } from '../decorators/actor/actor-action/actor-action-constructor'
+import { ActorActionInterface } from '../decorators/actor/actor-action/actor-action-interface'
+import { ActorConstructor } from '../decorators/actor/actor-constructor'
+import { ActorInterface } from '../decorators/actor/actor-interface'
+import { MeshConstructor } from '../decorators/mesh/mesh-constructor'
+import { MeshInterface } from '../decorators/mesh/mesh-interface'
+import { SceneActionConstructor } from '../decorators/scene/scene-action/scene-action-constructor'
+import { SceneActionInterface } from '../decorators/scene/scene-action/scene-action-interface'
+import { SpriteConstructor } from '../decorators/sprite/sprite-constructor'
+import { SpriteInterface } from '../decorators/sprite/sprite-interface'
 import { Logger } from '../modules/logger'
 import { ExtractOptional } from '../types/extract-optional'
 

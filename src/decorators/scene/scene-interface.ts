@@ -11,15 +11,20 @@ import { AssetDefinition } from '../../models/asset-definition'
 import { BabylonAccessor } from '../../models/babylon-accessor'
 import { Rect } from '../../models/rect'
 import { FlexId } from '../../types'
+import { ActorActionConstructor } from '../actor/actor-action/actor-action-constructor'
+import { ActorConstructor } from '../actor/actor-constructor'
 import { ActorInterface } from '../actor/actor-interface'
 import { CameraConstructor } from '../camera/camera-constructor'
 import { MeshInterface } from '../mesh'
+import { MeshConstructor } from '../mesh/mesh-constructor'
 import { ParticleSourceInterface } from '../particle-source/particle-source-interface'
 import { ParticleInterface } from '../particle/particle-interface'
 import { SpriteInterface } from '../sprite'
+import { SpriteConstructor } from '../sprite/sprite-constructor'
 import { SceneRemove } from './'
 import { SceneActionConstructor } from './scene-action/scene-action-constructor'
 import { SceneActionInterface } from './scene-action/scene-action-interface'
+import { SceneAvailableElements } from './scene-available-elements'
 import { SceneMetadata } from './scene-metadata'
 import { SceneProps } from './scene-props'
 import { SceneSpawn } from './scene-spawn'
@@ -31,22 +36,21 @@ export abstract class SceneInterface implements Loadable, LoopUpdatable, CanvasR
   protected abstract _assets?: AssetDefinition[]
   protected abstract _loaded?: boolean
   protected abstract _started?: boolean
+  protected abstract _spawn?: SceneSpawn
+  protected abstract _remove?: SceneRemove
+  abstract availableElements?: SceneAvailableElements
   abstract assets?: AssetDefinition[]
   abstract metadata?: SceneMetadata
   abstract loopUpdate$?: BABYLON.Observer<number>
   abstract canvasResize$?: BABYLON.Observer<Rect>
   abstract actions?: Map<SceneActionConstructor, SceneActionInterface>
-  protected abstract _spawn?: SceneSpawn
-  protected abstract _remove?: SceneRemove
   abstract actors?: Set<ActorInterface>
   abstract particles?: Set<ParticleInterface>
   abstract particleSources?: Set<ParticleSourceInterface>
   abstract meshes?: Set<MeshInterface>
   abstract sprites?: Set<SpriteInterface>
   abstract setCamera?(camera: CameraConstructor): void
-  abstract setEngineParams?(): void
-  abstract renderStart?(id: string): void
-  abstract renderStop?(id: string): void
+  abstract setEngineParams?(): void // TODO ?
   abstract stopActionFromInstance?(instance: SceneActionInterface): void
 
   /**

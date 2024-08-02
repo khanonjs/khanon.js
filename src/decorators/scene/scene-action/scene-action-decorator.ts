@@ -3,8 +3,13 @@ import 'reflect-metadata'
 import * as BABYLON from '@babylonjs/core'
 
 import { SceneActionInterface as UserSceneActionInterface } from '../../..'
+import { LoadingProgress } from '../../../base'
 import { ActionMetadata } from '../../../base/interfaces/action/action-metadata'
-import { SceneActionsController } from '../../../controllers'
+import {
+  MeshesController,
+  SceneActionsController,
+  SpritesController
+} from '../../../controllers'
 import { Core } from '../../../core'
 import { Rect } from '../../../models/rect'
 import { Logger } from '../../../modules/logger'
@@ -79,6 +84,22 @@ export function SceneAction(props: SceneActionProps = {}): any {
       const _classCore = class implements SceneActionCore {
         props = props
         Instance: SceneActionInterface = new _classInterface(null)
+
+        load(scene: SceneInterface): LoadingProgress {
+          const progress = new LoadingProgress().complete()
+          SpritesController.load(this.props.sprites, scene)
+          SpritesController.load(this.Instance.metadata.getProps().sprites, scene)
+          MeshesController.load(this.props.meshes, scene)
+          MeshesController.load(this.Instance.metadata.getProps().meshes, scene)
+          return progress
+        }
+
+        unload(scene: SceneInterface): void {
+          SpritesController.unload(this.props.sprites, scene)
+          SpritesController.unload(this.Instance.metadata.getProps().sprites, scene)
+          MeshesController.unload(this.props.meshes, scene)
+          MeshesController.unload(this.Instance.metadata.getProps().meshes, scene)
+        }
 
         spawn(scene: SceneInterface): SceneActionInterface {
           const action = new _classInterface(scene)
