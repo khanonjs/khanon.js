@@ -5,6 +5,7 @@ import '@babylonjs/core/Debug/debugLayer'
 import * as BABYLON from '@babylonjs/core'
 
 import { LoadingProgress } from '../../base'
+import { Metadata } from '../../base/interfaces/metadata/metadata'
 import {
   ActorActionsController,
   ActorsController,
@@ -52,7 +53,6 @@ import { SceneActionConstructor } from './scene-action/scene-action-constructor'
 import { SceneActionInterface } from './scene-action/scene-action-interface'
 import { SceneAvailableElements } from './scene-available-elements'
 import { SceneInterface } from './scene-interface'
-import { SceneMetadata } from './scene-metadata'
 import { SceneProps } from './scene-props'
 import { SceneRemove } from './scene-remove'
 import { SceneSpawn } from './scene-spawn'
@@ -71,7 +71,7 @@ export function Scene(props: SceneProps): any {
       }
 
       props = removeArrayDuplicitiesInObject(props)
-      metadata: SceneMetadata = Reflect.getMetadata('metadata', this) ?? new SceneMetadata()
+      metadata: Metadata = Reflect.getMetadata('metadata', this) ?? new Metadata()
       actions: Map<SceneActionConstructor, SceneActionInterface> = new Map<SceneActionConstructor, SceneActionInterface>()
       availableElements: SceneAvailableElements
       protected _assets: AssetDefinition[]

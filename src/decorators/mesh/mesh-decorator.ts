@@ -7,7 +7,7 @@ import {
   ActionInterface,
   LoadingProgress
 } from '../../base'
-import { ActionMetadata } from '../../base/interfaces/action/action-metadata'
+import { Metadata } from '../../base/interfaces/metadata/metadata'
 import { MeshesController } from '../../controllers'
 import { BabylonAccessor } from '../../models/babylon-accessor'
 import { Rect } from '../../models/rect'
@@ -25,9 +25,7 @@ import {
   switchLoopUpdate
 } from '../../utils/utils'
 import { ActorInterface } from '../actor/actor-interface'
-import { ActorMetadata } from '../actor/actor-metadata'
 import { SceneInterface } from '../scene/scene-interface'
-import { SceneMetadata } from '../scene/scene-metadata'
 import { MeshAnimation } from './mesh-animation'
 import { MeshCore } from './mesh-core'
 import { MeshInterface } from './mesh-interface'
@@ -166,15 +164,11 @@ export function Mesh(props: MeshProps): any {
       class _meshInterface extends UserMeshInterface {}
 
       if (!Reflect.hasMetadata('metadata', constructorOrTarget)) {
-        const metadata = constructorOrTarget instanceof ActorInterface
-          ? new ActorMetadata()
-          : constructorOrTarget instanceof SceneInterface
-            ? new SceneMetadata()
-            : new ActionMetadata()
+        const metadata = new Metadata()
 
         Reflect.defineMetadata('metadata', metadata, constructorOrTarget)
       }
-      const metadata = Reflect.getMetadata('metadata', constructorOrTarget) as (ActorMetadata | SceneMetadata | ActionMetadata)
+      const metadata = Reflect.getMetadata('metadata', constructorOrTarget) as Metadata
       metadata.meshes.push({
         propertyName: contextOrProperty as string,
         classDefinition: _meshInterface

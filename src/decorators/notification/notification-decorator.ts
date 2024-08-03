@@ -1,13 +1,11 @@
 import 'reflect-metadata'
 
+import { Metadata } from '../../base/interfaces/metadata/metadata'
 import { Logger } from '../../modules/logger'
 import { ActorInterface } from '../actor/actor-interface'
-import { ActorMetadata } from '../actor/actor-metadata'
 import { ActorStateInterface } from '../actor/actor-state/actor-state-interface'
 import { AppInterface } from '../app/app-interface'
-import { AppMetadata } from '../app/app-metadata'
 import { SceneInterface } from '../scene/scene-interface'
-import { SceneMetadata } from '../scene/scene-metadata'
 import { SceneStateInterface } from '../scene/scene-state/scene-state-interface'
 import { NotificationProps } from './notification-props'
 
@@ -21,18 +19,9 @@ export function Notification(props: NotificationProps): any {
       target instanceof SceneStateInterface
     ) && descriptor) { // Defined descriptor means it is a decorated method
       if (!Reflect.hasMetadata('metadata', target)) {
-        let metadata: AppMetadata | ActorMetadata | SceneMetadata
-        if (target instanceof AppInterface) {
-          metadata = new AppMetadata()
-        } else if (target instanceof ActorInterface ||
-          target instanceof ActorStateInterface) {
-          metadata = new ActorMetadata()
-        } else {
-          metadata = new SceneMetadata()
-        }
-        Reflect.defineMetadata('metadata', metadata, target)
+        Reflect.defineMetadata('metadata', new Metadata(), target)
       }
-      const metadata = Reflect.getMetadata('metadata', target) as (AppMetadata | ActorMetadata | SceneMetadata)
+      const metadata = Reflect.getMetadata('metadata', target) as Metadata
       if (metadata.notifiers.get(props.message)) { Logger.debugError(`Trying to define duplicated Notification message '${props.message}' to element '${target.constructor.name}'.`); return }
       metadata.notifiers.set(props.message, {
         props,

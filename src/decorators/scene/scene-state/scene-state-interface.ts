@@ -1,10 +1,10 @@
 import { StateInterface } from '../../../base'
+import { Metadata } from '../../../base/interfaces/metadata/metadata'
 import { CameraConstructor } from '../../camera/camera-constructor'
 import { SceneInterface } from '../scene-interface'
-import { SceneMetadata } from '../scene-metadata'
 
 export abstract class SceneStateInterface<S = any, C = SceneInterface> extends StateInterface<S> {
-  abstract metadata?: SceneMetadata
+  abstract metadata?: Metadata
 
   /**
    * User available

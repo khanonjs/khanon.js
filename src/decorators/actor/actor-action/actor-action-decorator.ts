@@ -4,7 +4,7 @@ import * as BABYLON from '@babylonjs/core'
 
 import { ActorActionInterface as UserActorActionInterface } from '../../../'
 import { LoadingProgress } from '../../../base'
-import { ActionMetadata } from '../../../base/interfaces/action/action-metadata'
+import { Metadata } from '../../../base/interfaces/metadata/metadata'
 import {
   ActorActionsController,
   MeshesController,
@@ -23,7 +23,6 @@ import {
 } from '../../../utils/utils'
 import { SceneInterface } from '../../scene/scene-interface'
 import { ActorInterface } from '../actor-interface'
-import { ActorMetadata } from '../actor-metadata'
 import { ActorStateInterface } from '../actor-state/actor-state-interface'
 import { ActorActionCore } from './actor-action-core'
 import { ActorActionInterface } from './actor-action-interface'
@@ -46,7 +45,7 @@ export function ActorAction(props: ActorActionProps = {}): any {
         onCanvasResize?(size: Rect): void
 
         scene: SceneInterface
-        metadata: ActionMetadata = Reflect.getMetadata('metadata', this) ?? new ActionMetadata()
+        metadata: Metadata = Reflect.getMetadata('metadata', this) ?? new Metadata()
         countFramesUpdate$?: BABYLON.Observer<number>
         countFrames = 0
         loopUpdate$?: BABYLON.Observer<number>
@@ -127,9 +126,9 @@ export function ActorAction(props: ActorActionProps = {}): any {
       }
 
       if (!Reflect.hasMetadata('metadata', constructorOrTarget)) {
-        Reflect.defineMetadata('metadata', new ActorMetadata(), constructorOrTarget)
+        Reflect.defineMetadata('metadata', new Metadata(), constructorOrTarget)
       }
-      const metadata = Reflect.getMetadata('metadata', constructorOrTarget) as ActorMetadata
+      const metadata = Reflect.getMetadata('metadata', constructorOrTarget) as Metadata
       metadata.actions.push({
         methodName: contextOrMethod as string,
         classDefinition: _actionInterface

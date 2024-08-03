@@ -7,6 +7,7 @@ import {
   LoopUpdatable,
   Notificable
 } from '../../base'
+import { Metadata } from '../../base/interfaces/metadata/metadata'
 import { AssetDefinition } from '../../models/asset-definition'
 import { BabylonAccessor } from '../../models/babylon-accessor'
 import { Rect } from '../../models/rect'
@@ -21,7 +22,6 @@ import { SceneRemove } from './'
 import { SceneActionConstructor } from './scene-action/scene-action-constructor'
 import { SceneActionInterface } from './scene-action/scene-action-interface'
 import { SceneAvailableElements } from './scene-available-elements'
-import { SceneMetadata } from './scene-metadata'
 import { SceneProps } from './scene-props'
 import { SceneSpawn } from './scene-spawn'
 import { SceneStateConstructor } from './scene-state/scene-state-constructor'
@@ -36,7 +36,7 @@ export abstract class SceneInterface implements Loadable, LoopUpdatable, CanvasR
   protected abstract _remove?: SceneRemove
   abstract availableElements?: SceneAvailableElements
   abstract assets?: AssetDefinition[]
-  abstract metadata?: SceneMetadata
+  abstract metadata?: Metadata
   abstract loopUpdate$?: BABYLON.Observer<number>
   abstract canvasResize$?: BABYLON.Observer<Rect>
   abstract actions?: Map<SceneActionConstructor, SceneActionInterface>

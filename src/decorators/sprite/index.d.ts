@@ -208,7 +208,8 @@ export declare interface SpriteProps {
  * - To a class itself, where it will inherit extended SpriteInterface lifecycle, methods and variables.
  * - To an 'Actor' class property, where it will be created as a SpriteConstructor using the decorator props.
  * - To a 'Scene' class property, where it will be created as a SpriteConstructor using the decorator props.
- * - To a 'ActorAction' of 'SceneAction' class properties, where it will be created as a SpriteConstructor using the decorator props.
+ * - To a 'ActorState' or 'SceneState' class properties, where it will be created as a SpriteConstructor using the decorator props.
+ * - To a 'ActorAction' or 'SceneAction' class properties, where it will be created as a SpriteConstructor using the decorator props.
  * @param props
  */
 export declare function Sprite(props: SpriteProps): any

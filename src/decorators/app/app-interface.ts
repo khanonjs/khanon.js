@@ -1,12 +1,12 @@
 import { Notificable } from '../../base'
+import { Metadata } from '../../base/interfaces/metadata/metadata'
 import { FlexId } from '../../types'
-import { AppMetadata } from './app-metadata'
 import { AppProps } from './app-props'
 import { AppPropsDefault } from './app.props.deafult'
 
 export abstract class AppInterface implements Notificable {
   props?: AppProps & AppPropsDefault
-  metadata?: AppMetadata
+  metadata?: Metadata
 
   /**
    * User available

@@ -1,5 +1,6 @@
 import * as BABYLON from '@babylonjs/core'
 
+import { Metadata } from '../../../base/interfaces/metadata/metadata'
 import { SceneStatesController } from '../../../controllers'
 import { Rect } from '../../../models/rect'
 import { UseCamera } from '../../../models/use-camera'
@@ -15,7 +16,6 @@ import {
 } from '../../../utils/utils'
 import { CameraConstructor } from '../../camera/camera-constructor'
 import { SceneInterface } from '../scene-interface'
-import { SceneMetadata } from '../scene-metadata'
 import { SceneStateCore } from './scene-state-core'
 import { SceneStateInterface } from './scene-state-interface'
 import { SceneStateProps } from './scene-state-props'
@@ -31,7 +31,7 @@ export function SceneState(props: SceneStateProps): any {
       setup: any
       loopUpdate$: BABYLON.Observer<number>
       canvasResize$: BABYLON.Observer<Rect>
-      metadata: SceneMetadata = Reflect.getMetadata('metadata', this) ?? new SceneMetadata()
+      metadata: Metadata = Reflect.getMetadata('metadata', this) ?? new Metadata()
 
       onStart?(): void
       onEnd?(): void

@@ -5,8 +5,10 @@ import * as BABYLON from '@babylonjs/core'
 import { SpriteInterface as UserSpriteInterface } from '../../'
 import {
   ActionInterface,
-  LoadingProgress
+  LoadingProgress,
+  StateInterface
 } from '../../base'
+import { Metadata } from '../../base/interfaces/metadata/metadata'
 import {
   AssetsController,
   SpritesController
@@ -32,9 +34,7 @@ import {
   switchLoopUpdate
 } from '../../utils/utils'
 import { ActorInterface } from '../actor/actor-interface'
-import { ActorMetadata } from '../actor/actor-metadata'
 import { SceneInterface } from '../scene/scene-interface'
-import { SceneMetadata } from '../scene/scene-metadata'
 import { SpriteAnimation } from './sprite-animation'
 import { SpriteCore } from './sprite-core'
 import { SpriteInterface } from './sprite-interface'
@@ -357,15 +357,16 @@ export function Sprite(props: SpriteProps): any {
     } else if ((
       constructorOrTarget instanceof ActorInterface ||
       constructorOrTarget instanceof SceneInterface ||
-      constructorOrTarget instanceof ActionInterface
+      constructorOrTarget instanceof ActionInterface ||
+      constructorOrTarget instanceof StateInterface
     ) && !descriptor) { // Undefined descriptor means it is a decorated property, otherwiese it is a decorated method
       @Sprite(props)
       class _spriteInterface extends UserSpriteInterface {}
 
       if (!Reflect.hasMetadata('metadata', constructorOrTarget)) {
-        Reflect.defineMetadata('metadata', constructorOrTarget instanceof ActorInterface ? new ActorMetadata() : new SceneMetadata(), constructorOrTarget)
+        Reflect.defineMetadata('metadata', new Metadata(), constructorOrTarget)
       }
-      const metadata = Reflect.getMetadata('metadata', constructorOrTarget) as (ActorMetadata | SceneMetadata)
+      const metadata = Reflect.getMetadata('metadata', constructorOrTarget) as Metadata
       metadata.sprites.push({
         propertyName: contextOrProperty as string,
         classDefinition: _spriteInterface

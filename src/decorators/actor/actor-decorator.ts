@@ -1,6 +1,7 @@
 import * as BABYLON from '@babylonjs/core'
 
 import { LoadingProgress } from '../../base'
+import { Metadata } from '../../base/interfaces/metadata/metadata'
 import {
   ActorActionsController,
   ActorsController,
@@ -35,7 +36,6 @@ import { ActorActionConstructor } from './actor-action/actor-action-constructor'
 import { ActorActionInterface } from './actor-action/actor-action-interface'
 import { ActorCore } from './actor-core'
 import { ActorInterface } from './actor-interface'
-import { ActorMetadata } from './actor-metadata'
 import { ActorProps } from './actor-props'
 import { ActorStateConstructor } from './actor-state/actor-state-constructor'
 import { ActorStateInterface } from './actor-state/actor-state-interface'
@@ -56,7 +56,7 @@ export function Actor(props: ActorProps = {}): any {
       }
 
       props: ActorProps
-      metadata: ActorMetadata = Reflect.getMetadata('metadata', this) ?? new ActorMetadata()
+      metadata: Metadata = Reflect.getMetadata('metadata', this) ?? new Metadata()
       transform: SpriteTransform | MeshTransform
       loopUpdate$: BABYLON.Observer<number>
       canvasResize$: BABYLON.Observer<Rect>

@@ -1,5 +1,6 @@
 import * as BABYLON from '@babylonjs/core'
 
+import { Metadata } from '../../../base/interfaces/metadata/metadata'
 import { ActorStatesController } from '../../../controllers'
 import { Rect } from '../../../models/rect'
 import { Logger } from '../../../modules/logger'
@@ -13,7 +14,6 @@ import {
   switchLoopUpdate
 } from '../../../utils/utils'
 import { ActorInterface } from '../actor-interface'
-import { ActorMetadata } from '../actor-metadata'
 import { ActorStateCore } from './actor-state-core'
 import { ActorStateInterface } from './actor-state-interface'
 import { ActorStateProps } from './actor-state-props'
@@ -26,7 +26,7 @@ export function ActorState(props: ActorStateProps = {}): any {
         this.metadata.applyProps(this)
       }
 
-      metadata: ActorMetadata = Reflect.getMetadata('metadata', this) ?? new ActorMetadata()
+      metadata: Metadata = Reflect.getMetadata('metadata', this) ?? new Metadata()
       loopUpdate$?: BABYLON.Observer<number>
       canvasResize$?: BABYLON.Observer<Rect>
 

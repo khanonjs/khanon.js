@@ -5,6 +5,7 @@ import {
   LoopUpdatable,
   Notificable
 } from '../../base'
+import { Metadata } from '../../base/interfaces/metadata/metadata'
 import { Rect } from '../../models/rect'
 import {
   FlexId,
@@ -18,13 +19,12 @@ import { SpriteAnimation } from '../sprite/sprite-animation'
 import { SpriteInterface } from '../sprite/sprite-interface'
 import { ActorActionConstructor } from './actor-action/actor-action-constructor'
 import { ActorActionInterface } from './actor-action/actor-action-interface'
-import { ActorMetadata } from './actor-metadata'
 import { ActorProps } from './actor-props'
 import { ActorStateConstructor } from './actor-state/actor-state-constructor'
 import { ActorStateInterface } from './actor-state/actor-state-interface'
 
 export abstract class ActorInterface<B extends SpriteInterface | MeshInterface = any> implements LoopUpdatable, CanvasResizable, Notificable {
-  abstract metadata?: ActorMetadata
+  abstract metadata?: Metadata
   abstract props?: ActorProps
   abstract loopUpdate$?: BABYLON.Observer<number>
   abstract canvasResize$?: BABYLON.Observer<Rect>

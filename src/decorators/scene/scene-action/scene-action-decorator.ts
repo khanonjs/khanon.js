@@ -4,7 +4,7 @@ import * as BABYLON from '@babylonjs/core'
 
 import { SceneActionInterface as UserSceneActionInterface } from '../../..'
 import { LoadingProgress } from '../../../base'
-import { ActionMetadata } from '../../../base/interfaces/action/action-metadata'
+import { Metadata } from '../../../base/interfaces/metadata/metadata'
 import {
   MeshesController,
   SceneActionsController,
@@ -13,7 +13,6 @@ import {
 import { Core } from '../../../core'
 import { Rect } from '../../../models/rect'
 import { Logger } from '../../../modules/logger'
-import { FlexId } from '../../../types'
 import {
   attachCanvasResize,
   attachLoopUpdate,
@@ -23,7 +22,6 @@ import {
   switchLoopUpdate
 } from '../../../utils/utils'
 import { SceneInterface } from '../scene-interface'
-import { SceneMetadata } from '../scene-metadata'
 import { SceneStateInterface } from '../scene-state/scene-state-interface'
 import { SceneActionCore } from './scene-action-core'
 import { SceneActionInterface } from './scene-action-interface'
@@ -45,7 +43,7 @@ export function SceneAction(props: SceneActionProps = {}): any {
         onLoopUpdate?(delta: number): void
         onCanvasResize?(size: Rect): void
 
-        metadata: ActionMetadata = Reflect.getMetadata('metadata', this) ?? new ActionMetadata()
+        metadata: Metadata = Reflect.getMetadata('metadata', this) ?? new Metadata()
         loopUpdate$?: BABYLON.Observer<number>
         canvasResize$?: BABYLON.Observer<Rect>
         setup: any
@@ -123,9 +121,9 @@ export function SceneAction(props: SceneActionProps = {}): any {
       }
 
       if (!Reflect.hasMetadata('metadata', constructorOrTarget)) {
-        Reflect.defineMetadata('metadata', new SceneMetadata(), constructorOrTarget)
+        Reflect.defineMetadata('metadata', new Metadata(), constructorOrTarget)
       }
-      const metadata = Reflect.getMetadata('metadata', constructorOrTarget) as SceneMetadata
+      const metadata = Reflect.getMetadata('metadata', constructorOrTarget) as Metadata
       metadata.actions.push({
         methodName: contextOrMethod as string,
         classDefinition: _actionInterface
