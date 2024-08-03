@@ -1,7 +1,12 @@
 import * as BABYLON from '@babylonjs/core'
 
+import { LoadingProgress } from '../../../base'
 import { Metadata } from '../../../base/interfaces/metadata/metadata'
-import { ActorStatesController } from '../../../controllers'
+import {
+  ActorStatesController,
+  MeshesController,
+  SpritesController
+} from '../../../controllers'
 import { Rect } from '../../../models/rect'
 import { Logger } from '../../../modules/logger'
 import { FlexId } from '../../../types'
@@ -13,6 +18,7 @@ import {
   removeLoopUpdate,
   switchLoopUpdate
 } from '../../../utils/utils'
+import { SceneInterface } from '../../scene/scene-interface'
 import { ActorInterface } from '../actor-interface'
 import { ActorStateCore } from './actor-state-core'
 import { ActorStateInterface } from './actor-state-interface'
@@ -67,6 +73,22 @@ export function ActorState(props: ActorStateProps = {}): any {
       spawn(actor: ActorInterface): ActorStateInterface {
         const state = new _classInterface(actor)
         return state
+      }
+
+      load(scene: SceneInterface): LoadingProgress {
+        const progress = new LoadingProgress().complete()
+        SpritesController.load(this.props.sprites, scene)
+        SpritesController.load(this.Instance.metadata.getProps().sprites, scene)
+        MeshesController.load(this.props.meshes, scene)
+        MeshesController.load(this.Instance.metadata.getProps().meshes, scene)
+        return progress
+      }
+
+      unload(scene: SceneInterface): void {
+        SpritesController.unload(this.props.sprites, scene)
+        SpritesController.unload(this.Instance.metadata.getProps().sprites, scene)
+        MeshesController.unload(this.props.meshes, scene)
+        MeshesController.unload(this.Instance.metadata.getProps().meshes, scene)
       }
     }
     ActorStatesController.register(new _classCore())

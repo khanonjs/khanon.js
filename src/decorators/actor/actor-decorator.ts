@@ -235,6 +235,7 @@ export function Actor(props: ActorProps = {}): any {
 
       load(scene: SceneInterface): LoadingProgress {
         const progress = new LoadingProgress().complete()
+        ActorStatesController.load(this.props.states, scene)
         SpritesController.load(this.props.sprites, scene)
         SpritesController.load(this.Instance.metadata.getProps().sprites, scene)
         MeshesController.load(this.props.meshes, scene)
@@ -245,6 +246,7 @@ export function Actor(props: ActorProps = {}): any {
       }
 
       unload(scene: SceneInterface): void {
+        ActorStatesController.unload(this.props.states, scene)
         SpritesController.unload(this.props.sprites, scene)
         SpritesController.unload(this.Instance.metadata.getProps().sprites, scene)
         MeshesController.unload(this.props.meshes, scene)

@@ -1,7 +1,12 @@
 import * as BABYLON from '@babylonjs/core'
 
+import { LoadingProgress } from '../../../base'
 import { Metadata } from '../../../base/interfaces/metadata/metadata'
-import { SceneStatesController } from '../../../controllers'
+import {
+  MeshesController,
+  SceneStatesController,
+  SpritesController
+} from '../../../controllers'
 import { Rect } from '../../../models/rect'
 import { UseCamera } from '../../../models/use-camera'
 import { Logger } from '../../../modules/logger'
@@ -77,6 +82,22 @@ export function SceneState(props: SceneStateProps): any {
       spawn(scene: SceneInterface): SceneStateInterface {
         const state = new _classInterface(scene)
         return state
+      }
+
+      load(scene: SceneInterface): LoadingProgress {
+        const progress = new LoadingProgress().complete()
+        SpritesController.load(this.props.sprites, scene)
+        SpritesController.load(this.Instance.metadata.getProps().sprites, scene)
+        MeshesController.load(this.props.meshes, scene)
+        MeshesController.load(this.Instance.metadata.getProps().meshes, scene)
+        return progress
+      }
+
+      unload(scene: SceneInterface): void {
+        SpritesController.unload(this.props.sprites, scene)
+        SpritesController.unload(this.Instance.metadata.getProps().sprites, scene)
+        MeshesController.unload(this.props.meshes, scene)
+        MeshesController.unload(this.Instance.metadata.getProps().meshes, scene)
       }
     }
     SceneStatesController.register(new _classCore())

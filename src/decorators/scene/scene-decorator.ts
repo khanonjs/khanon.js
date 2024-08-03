@@ -162,7 +162,10 @@ export function Scene(props: SceneProps): any {
         assetsProgress.onComplete.add(() => {
           Logger.debug('Scene assets load completed', _class.prototype)
           ActorsController.load(this.props.actors, this)
+          SceneStatesController.load(this.props.states, this)
+          SpritesController.load(this.props.sprites, this)
           SpritesController.load(this.metadata.getProps().sprites, this)
+          MeshesController.load(this.props.meshes, this)
           MeshesController.load(this.metadata.getProps().meshes, this)
           SceneActionsController.load(this.props.actions, this)
           SceneActionsController.load(this.metadata.getProps().actions, this)
@@ -185,7 +188,10 @@ export function Scene(props: SceneProps): any {
       unload(): void {
         Logger.debug('Scene unload', _class.prototype, this)
         ActorsController.unload(this.props.actors, this)
+        SceneStatesController.unload(this.props.states, this)
+        SpritesController.unload(this.props.sprites, this)
         SpritesController.unload(this.metadata.getProps().sprites, this)
+        MeshesController.unload(this.props.meshes, this)
         MeshesController.unload(this.metadata.getProps().meshes, this)
         SceneActionsController.unload(this.props.actions, this)
         SceneActionsController.unload(this.metadata.getProps().actions, this)
