@@ -25,7 +25,7 @@ export class SpriteTexture {
 
   setFromBlank(): void {
     const texture = new BABYLON.DynamicTexture('blank-texture', { width: this.spriteProps.width, height: this.spriteProps.height }, this.babylon.scene, !this.spriteProps.noMipmap, this.spriteProps.samplingMode, this.spriteProps.format, this.spriteProps.invertY)
-    this.setFromTexture(texture, 'blank-texture', this.spriteProps.width, this.spriteProps.height)
+    this.setFromTexture(texture, 'no-url', this.spriteProps.width, this.spriteProps.height)
   }
 
   setFromTexture(texture: BABYLON.Texture | BABYLON.DynamicTexture, name: string, width?: number, height?: number): void {

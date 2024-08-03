@@ -117,6 +117,8 @@ export declare abstract class SpriteInterface {
 
   /**
    * Writes a text on the sprite.
+   * This method creates a new texture with the text size and uses it.
+   * Sprite size will be affeted using this method.
    * @param text
    */
   drawText(text: string, properties: DrawBlockProperties): void

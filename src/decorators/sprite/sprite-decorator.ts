@@ -55,6 +55,7 @@ export function Sprite(props: SpriteProps): any {
         // SpriteInterface
         // ***************
         spriteTexture: SpriteTexture
+        exclusiveTexture: boolean
         animation: SpriteAnimation = null
         animations: Map<FlexId, SpriteAnimation> = new Map<FlexId, SpriteAnimation>()
         babylon: Pick<BabylonAccessor, 'scene' | 'spriteManager' | 'sprite'> = { scene: null, spriteManager: null, sprite: null }
@@ -85,22 +86,20 @@ export function Sprite(props: SpriteProps): any {
 
         get scale(): number { return this._scale }
 
-        initialize(spriteTexture: SpriteTexture) {
+        setTexture(spriteTexture: SpriteTexture, isExclusive: boolean) {
+          if (this.babylon.sprite) {
+            // const transform = this.getTransform()  // TODO?
+            this.release()
+          }
           this.babylon.scene = this.scene.babylon.scene
           this.spriteTexture = spriteTexture
+          this.exclusiveTexture = isExclusive
           const babylonSprite = new BABYLON.Sprite(_className, this.spriteTexture.babylon.spriteManager)
           babylonSprite.width = this.spriteTexture.width
           babylonSprite.height = this.spriteTexture.height
           babylonSprite.isVisible = true
-          if (this.babylon.sprite) {
-            // const transform = this.getTransform()  // TODO
-            this.release()
-            this.babylon.sprite = babylonSprite
-            // this.setTransform(transform) // TODO
-          } else {
-            this.babylon.sprite = babylonSprite
-            this.babylon.spriteManager = this.spriteTexture.babylon.spriteManager
-          }
+          this.babylon.sprite = babylonSprite
+          this.babylon.spriteManager = this.spriteTexture.babylon.spriteManager
           this.transform = this.babylon.sprite
           this.props.animations?.forEach(animation => this.addAnimation(animation))
           attachLoopUpdate(this)
@@ -241,12 +240,12 @@ export function Sprite(props: SpriteProps): any {
         }
 
         drawText(text: string, properties: DrawBlockProperties): void {
-          // TODO This algorithm should be improved in many different ways:
+          // TODO This algorithm should be improved in different ways:
           // - Add CSS style or whatever.
           // - Avoid creating a secondary texture for boundaries.
           // - Improve performance.
-          // - Let the user draw over an 'url' loaded texture.
-          if (this.props.url) { Logger.debugError('Trying to draw text on an \'url\' texture. Texts can be only drawn on Blank textures (url: undefined).'); return }
+          // - Let the user draw text over an 'url' loaded texture.
+          if (this.props.url) { Logger.debugError('Trying to draw text on an \'url\' texture. Texts can be only drawn on blank textures (url: undefined).'); return }
 
           const font = `${properties.fontStyle} ${properties.fontSize}px ${properties.fontName}`
 
@@ -262,7 +261,7 @@ export function Sprite(props: SpriteProps): any {
           const textureWidth = properties.textureSize?.width ?? textWidth
           const textureHeight = properties.textureSize?.height ?? textHeiht + properties.fontSize / 2
 
-          const dynamicTexture = new BABYLON.DynamicTexture('DynamicTexture', { width: textureWidth, height: textureHeight }, this.babylon.scene, false)
+          const dynamicTexture = new BABYLON.DynamicTexture('draw-text-texture', { width: textureWidth, height: textureHeight }, this.babylon.scene, false)
           const ctxTx = dynamicTexture.getContext()
           if (properties.bgColor) {
             ctxTx.beginPath()
@@ -273,12 +272,25 @@ export function Sprite(props: SpriteProps): any {
 
           const startY = properties.centerV && properties.textureSize ? textureHeight / 2 : lineHeight
 
-          const tx = this.babylon.spriteManager.texture as BABYLON.DynamicTexture
-          tx.drawText(text, properties.centerH ? null : 0, startY + lineHeight, font, properties.textColor, null, false)
+          Logger.trace('aki create text A', text)
+          Logger.trace('aki create text B', textureWidth, textureHeight)
+          Logger.trace('aki create text C', properties)
+          Logger.trace('aki create text D', text, properties.centerH ? null : 0, startY, font, properties.textColor, null, false)
+
+          this.babylon.spriteManager.texture.dispose()
+          // const tx = this.babylon.spriteManager.texture as BABYLON.DynamicTexture
+          dynamicTexture.drawText(text, properties.centerH ? null : 0, startY, font, properties.textColor, null, false)
+          const texture = new SpriteTexture(this.scene, this.props)
+          texture.setFromTexture(dynamicTexture, 'draw-text-sprite-manager')
+          this.setTexture(texture, true)
         }
 
         release(): void {
           this.stopAnimation()
+          if (this.exclusiveTexture) {
+            this.spriteTexture.dispose()
+            this.spriteTexture = undefined
+          }
           this.babylon.sprite.dispose()
           removeLoopUpdate(this)
           removeCanvasResize(this)
@@ -328,9 +340,9 @@ export function Sprite(props: SpriteProps): any {
           if (!this.props.url) {
             const texture = new SpriteTexture(scene, this.props)
             texture.setFromBlank()
-            sprite.initialize(texture)
+            sprite.setTexture(texture, true)
           } else {
-            sprite.initialize(this.textures.get(scene))
+            sprite.setTexture(this.textures.get(scene), false)
           }
           return sprite
         }
