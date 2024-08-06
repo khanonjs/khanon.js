@@ -3,7 +3,7 @@ import { SpriteProps } from './sprite-props'
 
 export interface SpritePropsDefault extends ExtractOptional<SpriteProps> {
   maxAllowedSprites: number,
-  invertY: false
+  invertY: boolean
 }
 
 export const spritePropsDefault: SpritePropsDefault = {

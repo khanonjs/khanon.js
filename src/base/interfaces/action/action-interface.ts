@@ -4,10 +4,10 @@ import { SceneInterface } from '../../../decorators/scene/scene-interface'
 import { Rect } from '../../../models/rect'
 import { CanvasResizable } from '../canvas-resizable'
 import { LoopUpdatable } from '../loop-updatable'
-import { ActionMetadata } from './action-metadata'
+import { Metadata } from '../metadata/metadata'
 
 export abstract class ActionInterface<S = any> implements LoopUpdatable, CanvasResizable {
-  abstract metadata?: ActionMetadata
+  abstract metadata?: Metadata
   abstract loopUpdate$?: BABYLON.Observer<number>
   abstract canvasResize$?: BABYLON.Observer<Rect>
   abstract start?(setup: S): void

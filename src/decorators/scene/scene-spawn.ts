@@ -51,4 +51,6 @@ export class SceneSpawn {
     this.scene.sprites.add(instance)
     return instance as S
   }
+
+  // TODO Add lights here? That way scene would handle their release.
 }
