@@ -1,8 +1,10 @@
 import { SceneInterface } from '../'
 import { Rect } from '../../../models'
-import { UseCamera } from '../../../models/use-camera'
+import { UseCameraAt } from '../../../models/use-camera'
 import { FlexId } from '../../../types'
 import { CameraConstructor } from '../../camera'
+import { MeshConstructor } from '../../mesh'
+import { SpriteConstructor } from '../../sprite'
 
 export declare abstract class SceneStateInterface<S = any, C = SceneInterface> {
   /**
@@ -22,9 +24,9 @@ export declare abstract class SceneStateInterface<S = any, C = SceneInterface> {
   get loopUpdate(): boolean
 
   /**
-   * Sets a camera. Use this method at any point or event of the state lifecycle.
+   * Sets a camera.
    */
-  setCamera(camera: CameraConstructor): void
+  setCamera<C extends CameraConstructor>(camera: C, setup: InstanceType<C>['setup']): void
 
   /**
    * Notifies a message to this sstate.
@@ -58,14 +60,14 @@ export type SceneStateConstructor = new () => SceneStateInterface
 
 export interface SceneStateProps {
   /**
-   * Camera to be used at state start in function of 'useCamera' property.
+   * Sprites to use in this action.
    */
-  camera: CameraConstructor
+  sprites?: SpriteConstructor[]
 
   /**
-   * Tells how to use the camera on state start.
+   * Meshes to use in this action.
    */
-  useCamera: UseCamera
+  meshes?: MeshConstructor[]
 }
 
-export declare function SceneState(props: SceneStateProps): any
+export declare function SceneState(props?: SceneStateProps): any

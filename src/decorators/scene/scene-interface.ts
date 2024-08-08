@@ -45,7 +45,6 @@ export abstract class SceneInterface implements Loadable, LoopUpdatable, CanvasR
   abstract particleSources?: Set<ParticleSourceInterface>
   abstract meshes?: Set<MeshInterface>
   abstract sprites?: Set<SpriteInterface>
-  abstract setCamera?(camera: CameraConstructor): void
   abstract setEngineParams?(): void // TODO ?
   abstract stopActionFromInstance?(instance: SceneActionInterface): void
 
@@ -64,6 +63,7 @@ export abstract class SceneInterface implements Loadable, LoopUpdatable, CanvasR
   abstract stop(): void
   abstract load(): LoadingProgress
   abstract unload(): void
+  abstract setCamera(camera: CameraConstructor, setup: any): void
   abstract startState(state: SceneStateConstructor, setup: any): void
   abstract playAction(action: SceneActionConstructor | ((delta: number) => void), setup: any): void
   abstract stopAction(action: SceneActionConstructor): void

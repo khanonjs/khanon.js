@@ -23,7 +23,6 @@ import {
   SpriteInterface
 } from '../sprite'
 import { SceneActionConstructor } from './scene-action'
-import { SceneAvailableElements } from './scene-available-elements'
 import {
   SceneStateConstructor,
   SceneStateInterface
@@ -165,6 +164,13 @@ export declare abstract class SceneInterface {
    * Unload assets.
    */
   unload(): void
+
+  /**
+   * Sets a camera.
+   * @param camera
+   * @param setup
+   */
+  setCamera<C extends CameraConstructor>(camera: C, setup: InstanceType<C>['setup']): void // TODO is it possible to make 'setup' argument optional whether InstanceType<S>['setup'] type is 'any'?
 
   /**
    * Set the state.

@@ -48,4 +48,3 @@ export { BabylonAccessor } from './babylon-accessor'
 export { DrawBlockProperties } from './draaw-text-properties'
 export { Rect } from './rect'
 export declare class Timeout {}
-export { UseCamera } from './use-camera'

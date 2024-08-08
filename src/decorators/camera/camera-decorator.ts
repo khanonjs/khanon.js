@@ -17,6 +17,7 @@ export function Camera(): any {
   return function <T extends { new (...args: any[]): CameraInterface }>(constructor: T & CameraInterface, context: ClassDecoratorContext) {
     const _classInterface = class extends constructor implements CameraInterface {
       babylon: Pick<BabylonAccessor<BABYLON.Camera>, 'camera'> = { camera: null }
+      setup: any
       loopUpdate$: BABYLON.Observer<number>
       canvasResize$: BABYLON.Observer<Rect>
 

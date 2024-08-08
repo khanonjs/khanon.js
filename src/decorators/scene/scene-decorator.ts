@@ -115,10 +115,13 @@ export function Scene(props: SceneProps): any {
 
       start(state: SceneStateConstructor, stateSetup: any): SceneStateInterface {
         Logger.debug('Scene start', _class.prototype)
-        Core.startRenderScene(this)
         this._started = true
         this.startState(state, stateSetup)
         invokeCallback(this.onStart, this)
+        if (!this.camera) {
+          Logger.debugError('Please set a camera before starting the scene. Do it in the (Scene / SceneState) \'onSart\' method:', _class.prototype)
+        }
+        Core.startRenderScene(this)
         attachLoopUpdate(this)
         attachCanvasResize(this)
         return this.state

@@ -10,5 +10,5 @@ export abstract class SceneStateInterface<S = any, C = SceneInterface> extends S
    * User available
    */
   abstract scene: C
-  abstract setCamera(camera: CameraConstructor): void
+  abstract setCamera(camera: CameraConstructor, setup: any): void
 }

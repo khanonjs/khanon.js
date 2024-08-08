@@ -8,7 +8,6 @@ import {
   SpritesController
 } from '../../../controllers'
 import { Rect } from '../../../models/rect'
-import { UseCamera } from '../../../models/use-camera'
 import { Logger } from '../../../modules/logger'
 import { FlexId } from '../../../types'
 import {
@@ -25,7 +24,7 @@ import { SceneStateCore } from './scene-state-core'
 import { SceneStateInterface } from './scene-state-interface'
 import { SceneStateProps } from './scene-state-props'
 
-export function SceneState(props: SceneStateProps): any {
+export function SceneState(props: SceneStateProps = {}): any {
   return function <T extends { new (...args: any[]): SceneStateInterface }>(constructor: T & SceneStateInterface, context: ClassDecoratorContext) {
     const _classInterface = class extends constructor implements SceneStateInterface {
       constructor(readonly scene: SceneInterface) {
@@ -46,17 +45,13 @@ export function SceneState(props: SceneStateProps): any {
       set loopUpdate(value: boolean) { switchLoopUpdate(value, this) }
       get loopUpdate(): boolean { return !!this.loopUpdate$ }
 
-      setCamera(camera: CameraConstructor): void {
-        this.scene.setCamera(camera)
+      setCamera(camera: CameraConstructor, setup: any): void {
+        this.scene.setCamera(camera, setup)
       }
 
       start(setup: any): void {
         Logger.debug('SceneState start', _classInterface.prototype, this.scene.constructor.prototype)
         this.setup = setup
-        if (props.useCamera === UseCamera.ON_START ||
-            (props.useCamera === UseCamera.INHERIT && !this.scene.babylon.scene.activeCamera)) {
-          this.setCamera(props.camera)
-        }
         invokeCallback(this.onStart, this)
         attachLoopUpdate(this)
         attachCanvasResize(this)

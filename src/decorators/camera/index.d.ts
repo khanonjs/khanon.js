@@ -5,8 +5,16 @@ import {
   Rect
 } from '../../models'
 
-export declare abstract class CameraInterface {
+/**
+ * @param S Camera setup object.
+ */
+export declare abstract class CameraInterface<S = any> {
   get babylon(): Pick<BabylonAccessor<ReturnType<this['initialize']>>, 'camera'>
+
+  /**
+   * Gets teh setup object.
+   */
+  get setup(): S
 
   /**
    * Turns On/Off 'onLoopUpdate' callback.
@@ -17,11 +25,13 @@ export declare abstract class CameraInterface {
   /**
    * Initialize the camera. This method must return a valid Babylon camera.
    * It will be used from any SceneState requiring it, or from any Scene using 'setCamera' method.
+   * Setup object isn't availaable at this point.
    */
   abstract initialize(scene: BABYLON.Scene): BABYLON.Camera
 
   /**
    * Callback invoked on loop update.
+   * Setup object is availaable at this point.
    * @param delta Time differential since last frame.
    */
   onLoopUpdate?(delta: number): void
