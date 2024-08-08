@@ -12,7 +12,7 @@ import { SpriteInterface } from '../sprite/sprite-interface'
 import { SceneInterface } from './scene-interface'
 
 // TODO add support to inject a user defined SceneSpawn class into the scene?
-// TODO add counter argument in methods, to spawn many elements in a single step. 'index' would be sent to 'onSpawn' methods.
+// TODO add counter argument in methods to spawn many elements in a single step. 'index' would be sent to 'onSpawn' methods.
 // TODO add 'aggregateSpawnMethod' as argument to combine with 'onSpawn'.
 export class SceneSpawn {
   private readonly scene?: SceneInterface

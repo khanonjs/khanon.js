@@ -1,26 +1,9 @@
-import {
-  ActorActionsController,
-  ActorsController,
-  MeshesController,
-  SceneActionsController,
-  SpritesController
-} from '../controllers'
 import { Core } from '../core'
-import { ActorActionConstructor } from '../decorators/actor/actor-action/actor-action-constructor'
-import { ActorActionInterface } from '../decorators/actor/actor-action/actor-action-interface'
-import { ActorConstructor } from '../decorators/actor/actor-constructor'
-import { ActorInterface } from '../decorators/actor/actor-interface'
-import { MeshConstructor } from '../decorators/mesh/mesh-constructor'
-import { MeshInterface } from '../decorators/mesh/mesh-interface'
-import { SceneActionConstructor } from '../decorators/scene/scene-action/scene-action-constructor'
-import { SceneActionInterface } from '../decorators/scene/scene-action/scene-action-interface'
-import { SpriteConstructor } from '../decorators/sprite/sprite-constructor'
-import { SpriteInterface } from '../decorators/sprite/sprite-interface'
 import { Logger } from '../modules/logger'
 import { ExtractOptional } from '../types/extract-optional'
 
 /**
- * Attach LoopUpdate in context if exists
+ * Attach LoopUpdate in context if exists.
  */
 export function attachLoopUpdate(context: any): void {
   if (context.onLoopUpdate) {
@@ -29,16 +12,7 @@ export function attachLoopUpdate(context: any): void {
 }
 
 /**
- * Attach canvasResize in context if exists
- */
-export function attachCanvasResize(context: any): void {
-  if (context.onCanvasResize) {
-    context.canvasResize$ = Core.addCanvasResizeObserver(context.onCanvasResize.bind(context))
-  }
-}
-
-/**
- * Switch onLoopUpdate on/off
+ * Switch onLoopUpdate on/off.
  */
 export function switchLoopUpdate(value: boolean, context: any): void {
   if (value) {
@@ -49,7 +23,7 @@ export function switchLoopUpdate(value: boolean, context: any): void {
 }
 
 /**
- * Removes LoopUpdate in context if exists
+ * Removes LoopUpdate in context if exists.
  */
 export function removeLoopUpdate(context: any): void {
   if (context.loopUpdate$) {
@@ -59,7 +33,16 @@ export function removeLoopUpdate(context: any): void {
 }
 
 /**
- * Removes canvasResize in context if exists
+ * Attach canvasResize in context if exists.
+ */
+export function attachCanvasResize(context: any): void {
+  if (context.onCanvasResize) {
+    context.canvasResize$ = Core.addCanvasResizeObserver(context.onCanvasResize.bind(context))
+  }
+}
+
+/**
+ * Removes canvasResize in context if exists.
  */
 export function removeCanvasResize(context: any): void {
   if (context.canvasResize$) {
@@ -69,7 +52,7 @@ export function removeCanvasResize(context: any): void {
 }
 
 /**
- * Invokes optional callback
+ * Invokes optional callback.
  */
 export function invokeCallback(func?: (...args: any[]) => void, context?: any, ...params: any[]) {
   if (func !== undefined) {
@@ -78,7 +61,7 @@ export function invokeCallback(func?: (...args: any[]) => void, context?: any, .
 }
 
 /**
- * Applies default configuration to the not setted properties of an object
+ * Applies default configuration to the unsetted properties of an object.
  */
 export function applyDefaults<O, D extends ExtractOptional<O>>(object: O, defaults: D): O & D {
   return {
@@ -99,7 +82,7 @@ export function objectToString(data: unknown, stringfy = true): string {
       if (typeof value !== 'object' || value === null) {
         return value
       }
-      // `this` is the object that value is contained in,
+      // `this` is the object where value is contained in,
       // i.e., its direct parent.
       // @ts-ignore
       while (ancestors.length > 0 && ancestors.at(-1) !== this) {

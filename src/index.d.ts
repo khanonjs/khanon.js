@@ -8,12 +8,12 @@ import { Rect } from './models/rect'
 import { FlexId } from './types/flex-id'
 import { NotificableType } from './types/notificable-type'
 
-// ****************
-// KJS App handler
-// ****************
+// ******************
+//  KJS App handler
+// ******************
 export declare namespace KJS {
   /**
-   * Scene controller
+   * Scenes controller.
    */
   export namespace Scene {
     function load(scene: SceneConstructor): LoadingProgress
@@ -22,8 +22,12 @@ export declare namespace KJS {
     function unload(scene: SceneConstructor[]): void
     function start<S extends SceneStateConstructor>(scene: SceneConstructor, state: S, stateSetup: InstanceType<S>['setup']): void
     function stop(scene: SceneConstructor): void
+    function setState<S extends SceneStateConstructor>(scene: SceneConstructor, state: S, stateSetup: InstanceType<S>['setup']): void
   }
 
+  /**
+   * Notifications controller.
+   */
   export namespace Notify {
     function send(message: FlexId, elements: NotificableType | NotificableType[], ...args: any[]): void
   }
@@ -58,7 +62,7 @@ export declare namespace KJS {
 
   /**
    * Sets a timeout.
-   * This timeout relies on the app loopUpdate, meaning the application will trigger it at time, no matter if the tab is unfocused.
+   * This timeout relies on the app loopUpdate, meaning the application will trigger it at time, no matter if the browser tab is unfocused.
    * Some browsers delay native timeouts when tab is unfocused to unweight cpu load, what could drive to app inconsistencies.
    * @param func Callback
    * @param ms Milliseconds
@@ -68,7 +72,7 @@ export declare namespace KJS {
 
   /**
    * Sets an interval.
-   * This interval relies on the app loopUpdate, meaning the application will trigger it at time, no matter if the tab is unfocused.
+   * This interval relies on the app loopUpdate, meaning the application will trigger it at time, no matter if the browser tab is unfocused.
    * Some browsers delay native timeouts when tab is unfocused to unweight cpu load, what could drive to app inconsistencies.
    * @param func Callback
    * @param ms Milliseconds
