@@ -1,5 +1,6 @@
 import * as BABYLON from '@babylonjs/core'
 
+// TODO: Make it chainable.
 export class LoadingProgress<D = any> {
   private nodes: {
     completed: boolean,
