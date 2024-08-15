@@ -4,12 +4,18 @@ import {
   BabylonAccessor,
   Rect
 } from '../../models'
+import { SceneInterface } from '../scene'
 
 /**
  * @param S Camera setup object.
  */
 export declare abstract class CameraInterface<S = any> {
-  get babylon(): Pick<BabylonAccessor<ReturnType<this['initialize']>>, 'camera'>
+  get babylon(): Pick<BabylonAccessor<ReturnType<this['initialize']>>, 'camera' | 'scene'>
+
+  /**
+   * Owner scene.
+   */
+  get scene(): SceneInterface
 
   /**
    * Gets teh setup object.

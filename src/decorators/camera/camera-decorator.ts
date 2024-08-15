@@ -10,13 +10,19 @@ import {
   removeLoopUpdate,
   switchLoopUpdate
 } from '../../utils/utils'
+import { SceneInterface } from '../scene/scene-interface'
 import { CameraCore } from './camera-core'
 import { CameraInterface } from './camera-interface'
 
 export function Camera(): any {
   return function <T extends { new (...args: any[]): CameraInterface }>(constructor: T & CameraInterface, context: ClassDecoratorContext) {
     const _classInterface = class extends constructor implements CameraInterface {
-      babylon: Pick<BabylonAccessor<BABYLON.Camera>, 'camera'> = { camera: null }
+      constructor(readonly scene: SceneInterface) {
+        super()
+        this.babylon.scene = scene.babylon.scene
+      }
+
+      babylon: Pick<BabylonAccessor<BABYLON.Camera>, 'camera' | 'scene'> = { camera: null, scene: null }
       setup: any
       loopUpdate$: BABYLON.Observer<number>
       canvasResize$: BABYLON.Observer<Rect>
@@ -35,10 +41,10 @@ export function Camera(): any {
       }
     }
     const _classCore = class implements CameraCore {
-      Instance: CameraInterface = new _classInterface()
+      Instance: CameraInterface = new _classInterface(null)
 
-      spawn(): CameraInterface {
-        const camera = new _classInterface()
+      spawn(scene: SceneInterface): CameraInterface {
+        const camera = new _classInterface(scene)
         return camera
       }
     }

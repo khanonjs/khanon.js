@@ -6,6 +6,7 @@ import {
 } from '../../base'
 import { BabylonAccessor } from '../../models/babylon-accessor'
 import { Rect } from '../../models/rect'
+import { SceneInterface } from '../scene/scene-interface'
 
 export abstract class CameraInterface<S = any> implements LoopUpdatable, CanvasResizable {
   abstract loopUpdate$?: BABYLON.Observer<number>
@@ -16,9 +17,10 @@ export abstract class CameraInterface<S = any> implements LoopUpdatable, CanvasR
   /**
    * User available
    */
+  abstract scene: SceneInterface
   abstract setup: S
   abstract loopUpdate: boolean
-  abstract babylon: Pick<BabylonAccessor<BABYLON.Camera>, 'camera'>
+  abstract babylon: Pick<BabylonAccessor<BABYLON.Camera>, 'camera' | 'scene'>
 
   /**
    * User defined
