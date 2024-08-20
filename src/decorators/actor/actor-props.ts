@@ -1,5 +1,4 @@
 import { MeshConstructor } from '../mesh/mesh-constructor'
-// import { ParticleSourceConstructor } from '../particle-source/particle-source-constructor'
 // import { ParticleConstructor } from '../particle/particle-constructor'
 import { SpriteConstructor } from '../sprite/sprite-constructor'
 import { ActorActionConstructor } from './actor-action/actor-action-constructor'
@@ -11,5 +10,5 @@ export interface ActorProps {
   // guis?: GUIConstructor[]
   states?: ActorStateConstructor[]
   actions?: ActorActionConstructor[]
-  // particles?: (ParticleConstructor | ParticleSourceConstructor)[]
+  // particles?: ParticleConstructor[]  // 8a8f
 }

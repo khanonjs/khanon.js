@@ -6,7 +6,6 @@ import {
 import { Logger } from '../../modules/logger'
 import { ActorInterface } from '../actor/actor-interface'
 import { MeshInterface } from '../mesh/mesh-interface'
-import { ParticleSourceInterface } from '../particle-source/particle-source-interface'
 import { ParticleInterface } from '../particle/particle-interface'
 import { SpriteInterface } from '../sprite/sprite-interface'
 import { SceneInterface } from './scene-interface'
@@ -31,7 +30,7 @@ export class SceneSpawn {
     return instance as A
   }
 
-  particle<P extends (ParticleInterface | ParticleSourceInterface)>(particle: new () => P): P {
+  particle<P extends ParticleInterface>(particle: new () => P): P {
     Logger.debug('Particle spawn:', particle.prototype)
     // TODO
     return null

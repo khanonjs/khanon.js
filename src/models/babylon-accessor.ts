@@ -7,4 +7,5 @@ export interface BabylonAccessor<C extends BABYLON.Camera = any> {
   sprite: BABYLON.Sprite
   mesh: BABYLON.Mesh
   spriteManager: BABYLON.SpriteManager
+  particleSystem: BABYLON.ParticleSystem
 }

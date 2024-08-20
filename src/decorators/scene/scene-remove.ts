@@ -1,7 +1,6 @@
 import { Logger } from '../../modules/logger'
 import { ActorInterface } from '../actor/actor-interface'
 import { MeshInterface } from '../mesh/mesh-interface'
-import { ParticleSourceInterface } from '../particle-source/particle-source-interface'
 import { ParticleInterface } from '../particle/particle-interface'
 import { SpriteInterface } from '../sprite/sprite-interface'
 import { SceneInterface } from './scene-interface'
@@ -27,14 +26,14 @@ export class SceneRemove {
     })
   }
 
-  particle(particle: ParticleInterface | ParticleSourceInterface): void {
-    // TODO
+  particle(particle: ParticleInterface): void {
+    // 8a8f
     // particle.release()
     // this.scene.particles.delete(particle)
   }
 
   particleAll(): void {
-    // TODO
+    // 8a8f
     // this.scene.particles.forEach(particle => {
     //   this.particle(particle)
     // })

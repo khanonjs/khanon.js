@@ -45,7 +45,6 @@ import { CameraConstructor } from '../camera/camera-constructor'
 import { CameraInterface } from '../camera/camera-interface'
 import { MeshConstructor } from '../mesh/mesh-constructor'
 import { MeshInterface } from '../mesh/mesh-interface'
-import { ParticleSourceInterface } from '../particle-source/particle-source-interface'
 import { ParticleInterface } from '../particle/particle-interface'
 import { SpriteConstructor } from '../sprite/sprite-constructor'
 import { SpriteInterface } from '../sprite/sprite-interface'
@@ -85,7 +84,6 @@ export function Scene(props: SceneProps): any {
       // Spawned elements
       actors: Set<ActorInterface> = new Set<ActorInterface>()
       particles: Set<ParticleInterface> = new Set<ParticleInterface>()
-      particleSources: Set<ParticleSourceInterface> = new Set<ParticleSourceInterface>()
       meshes: Set<MeshInterface> = new Set<MeshInterface>()
       sprites: Set<SpriteInterface> = new Set<SpriteInterface>()
 
@@ -201,7 +199,7 @@ export function Scene(props: SceneProps): any {
       }
 
       setCamera(constructor: CameraConstructor): void {
-        const camera = CamerasController.get(constructor).spawn()
+        const camera = CamerasController.get(constructor).spawn(this)
         if (this._camera) {
           this._camera.stop()
         }
@@ -335,6 +333,7 @@ export function Scene(props: SceneProps): any {
                   this.getAvailableElements(state.props)
                   this.getAvailableElements(state.Instance.metadata?.getProps())
                 }
+                // 8a8f add particle here
               })
             }
           }

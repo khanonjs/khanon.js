@@ -16,7 +16,6 @@ import {
   MeshConstructor,
   MeshInterface
 } from '../mesh'
-import { ParticleSourceInterface } from '../particle-source/particle-source-interface'
 import { ParticleInterface } from '../particle/particle-interface'
 import {
   SpriteConstructor,
@@ -40,7 +39,7 @@ export declare class SceneSpawn {
    * Spawns a particle in the scene.
    * @param particle
    */
-  particle<P extends (ParticleInterface | ParticleSourceInterface)>(particle: new () => P): P
+  particle<P extends ParticleInterface>(particle: new () => P): P
 
   /**
    * Spawns a sprite in the scene.
@@ -71,7 +70,7 @@ export declare class SceneRemove {
    * Removes a particle from the scene.
    * @param particle
    */
-  particle(particle: ParticleInterface | ParticleSourceInterface): void
+  particle(particle: ParticleInterface): void
 
   /**
    * Removes all particles from the scene.

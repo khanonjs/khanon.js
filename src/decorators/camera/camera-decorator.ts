@@ -3,6 +3,7 @@ import * as BABYLON from '@babylonjs/core'
 import { CamerasController } from '../../controllers'
 import { BabylonAccessor } from '../../models/babylon-accessor'
 import { Rect } from '../../models/rect'
+import { Logger } from '../../modules/logger'
 import {
   attachCanvasResize,
   attachLoopUpdate,
@@ -19,7 +20,9 @@ export function Camera(): any {
     const _classInterface = class extends constructor implements CameraInterface {
       constructor(readonly scene: SceneInterface) {
         super()
-        this.babylon.scene = scene.babylon.scene
+        if (scene) {
+          this.babylon.scene = scene.babylon.scene
+        }
       }
 
       babylon: Pick<BabylonAccessor<BABYLON.Camera>, 'camera' | 'scene'> = { camera: null, scene: null }

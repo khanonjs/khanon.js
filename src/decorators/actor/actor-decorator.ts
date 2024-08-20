@@ -76,7 +76,7 @@ export function Actor(props: ActorProps = {}): any {
       get state(): ActorStateInterface { return this._state }
 
       release() {
-        // TODO particles
+        // 8a8f particles
         invokeCallback(this.onDestroy, this)
         this.stopActionAll()
         this.clearNodes()
