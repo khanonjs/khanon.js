@@ -12,9 +12,9 @@ import { SpriteConstructor } from '../sprite'
 export abstract class ParticleInterface {
   babylon: Pick<BabylonAccessor, 'scene' | 'particleSystem'>
   scene: SceneInterface
-
   loopUpdate: boolean
 
+  setSprite(sprite: SpriteConstructor): void
   notify(message: FlexId, ...args: any[]): void
 
   abstract initialize(particle: BABYLON.ParticleSystem): void

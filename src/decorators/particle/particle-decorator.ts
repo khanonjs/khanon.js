@@ -17,6 +17,7 @@ import {
 } from '../../utils/utils'
 import { ActorInterface } from '../actor/actor-interface'
 import { SceneInterface } from '../scene/scene-interface'
+import { SpriteConstructor } from '../sprite/sprite-constructor'
 import { ParticleCore } from './particle-core'
 import { ParticleInterface } from './particle-interface'
 import { ParticleProps } from './particle-props'
@@ -54,12 +55,14 @@ export function Particle(props: ParticleProps = {}): any {
         get loopUpdate(): boolean { return !!this.loopUpdate$ }
 
         start(): void {
-          Logger.trace('aki start particle')
           this.babylon.particleSystem.start()
-          // 8a8f
         }
 
         stop(): void {
+          this.babylon.particleSystem.stop()
+        }
+
+        setSprite(sprite: SpriteConstructor): void {
           // 8a8f
         }
 
