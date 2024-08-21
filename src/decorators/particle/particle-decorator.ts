@@ -85,15 +85,11 @@ export function Particle(props: ParticleProps): any {
     ) && !descriptor) { // Undefined descriptor means it is a decorated property, otherwiese it is a decorated method
       @Particle(props)
       class _particleInterface extends UserParticleInterface {
-        initialize(particle: BABYLON.ParticleSystem) {
-          // 8a8f
-        }
+        initialize = descriptor.value
       }
 
       if (!Reflect.hasMetadata('metadata', constructorOrTarget)) {
-        const metadata = new Metadata()
-
-        Reflect.defineMetadata('metadata', metadata, constructorOrTarget)
+        Reflect.defineMetadata('metadata', new Metadata(), constructorOrTarget)
       }
       const metadata = Reflect.getMetadata('metadata', constructorOrTarget) as Metadata
       metadata.particles.push({

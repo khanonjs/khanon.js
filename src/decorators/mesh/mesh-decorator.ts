@@ -166,9 +166,7 @@ export function Mesh(props: MeshProps): any {
       class _meshInterface extends UserMeshInterface {}
 
       if (!Reflect.hasMetadata('metadata', constructorOrTarget)) {
-        const metadata = new Metadata()
-
-        Reflect.defineMetadata('metadata', metadata, constructorOrTarget)
+        Reflect.defineMetadata('metadata', new Metadata(), constructorOrTarget)
       }
       const metadata = Reflect.getMetadata('metadata', constructorOrTarget) as Metadata
       metadata.meshes.push({
