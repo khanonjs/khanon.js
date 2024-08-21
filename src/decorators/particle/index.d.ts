@@ -5,11 +5,13 @@ import {
   Rect
 } from '../../models'
 import { FlexId } from '../../types'
+import { SceneInterface } from '../scene'
 import { SpriteConstructor } from '../sprite'
 
 // 8a8f doc
 export abstract class ParticleInterface {
   babylon: Pick<BabylonAccessor, 'scene' | 'particleSystem'>
+  scene: SceneInterface
 
   loopUpdate: boolean
 

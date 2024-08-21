@@ -7,6 +7,7 @@ import {
 import { ActorActionInterface } from '../decorators/actor/actor-action/actor-action-interface'
 import { ActorCore } from '../decorators/actor/actor-core'
 import { ActorInterface } from '../decorators/actor/actor-interface'
+import { ParticleInterface } from '../decorators/particle/particle-interface'
 import { SceneActionInterface } from '../decorators/scene/scene-action/scene-action-interface'
 import { SceneInterface } from '../decorators/scene/scene-interface'
 import { SpriteCore } from '../decorators/sprite/sprite-core'
@@ -20,6 +21,7 @@ import {
 } from '../utils/utils'
 import { ActorActionsController } from './actors-actions-controller'
 import { ActorsController } from './actors-controller'
+import { ParticlesController } from './particles-controller'
 import { SceneActionsController } from './scene-actions-controller'
 import { SpritesController } from './sprites-controller'
 
@@ -60,6 +62,11 @@ export class AssetsController {
               const actor = ActorsController.get<ActorCore>(value)
               definitions = [...definitions, ...AssetsController.findAssetsDefinitions(actor.props, urls)]
               definitions = [...definitions, ...AssetsController.findAssetsDefinitions(actor.Instance.metadata.getProps(), urls)]
+            }
+            if (isPrototypeOf(ParticleInterface, value)) {
+              const particle = ParticlesController.get<ActorCore>(value)
+              definitions = [...definitions, ...AssetsController.findAssetsDefinitions(particle.props, urls)]
+              definitions = [...definitions, ...AssetsController.findAssetsDefinitions(particle.Instance.metadata.getProps(), urls)]
             }
             if (isPrototypeOf(SpriteInterface, value)) {
               const sprite = SpritesController.get<SpriteCore>(value)
