@@ -1,3 +1,5 @@
+import * as BABYLON from '@babylonjs/core'
+
 import { FlexId } from '../types'
 
 export declare interface AnimationKeyFrame {
@@ -44,7 +46,16 @@ export declare interface AnimationBase {
   keyFrames?: AnimationKeyFrame[];
 }
 
-export { BabylonAccessor } from './babylon-accessor'
+export class BabylonAccessor<C extends BABYLON.Camera = any> {
+  get camera(): C
+  get engine(): BABYLON.Engine
+  get scene(): BABYLON.Scene
+  get sprite(): BABYLON.Sprite
+  get mesh(): BABYLON.Mesh
+  get spriteManager(): BABYLON.SpriteManager
+  get particleSystem(): BABYLON.ParticleSystem
+}
+
 export { DrawBlockProperties } from './draaw-text-properties'
 export { Rect } from './rect'
 export declare class Timeout {}

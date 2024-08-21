@@ -5,8 +5,10 @@ import { BabylonAccessor } from '../../models/babylon-accessor'
 import { Rect } from '../../models/rect'
 import { MeshTransform } from '../../types'
 import { SceneInterface } from '../scene/scene-interface'
+import { MeshProps } from './mesh-props'
 
 export abstract class MeshInterface extends DisplayObject {
+  abstract props?: MeshProps
   abstract loopUpdate$?: BABYLON.Observer<number>
   abstract canvasResize$?: BABYLON.Observer<Rect>
   abstract initialize?(): void

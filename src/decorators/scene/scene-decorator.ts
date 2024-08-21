@@ -13,6 +13,7 @@ import {
   AssetsController,
   CamerasController,
   MeshesController,
+  ParticlesController,
   SceneActionsController,
   ScenesController,
   SceneStatesController,
@@ -45,6 +46,7 @@ import { CameraConstructor } from '../camera/camera-constructor'
 import { CameraInterface } from '../camera/camera-interface'
 import { MeshConstructor } from '../mesh/mesh-constructor'
 import { MeshInterface } from '../mesh/mesh-interface'
+import { ParticleConstructor } from '../particle/particle-constructor'
 import { ParticleInterface } from '../particle/particle-interface'
 import { SpriteConstructor } from '../sprite/sprite-constructor'
 import { SpriteInterface } from '../sprite/sprite-interface'
@@ -322,6 +324,11 @@ export function Scene(props: SceneProps): any {
                   const state = ActorStatesController.get(value as ActorStateConstructor)
                   this.getAvailableElements(state.props)
                   this.getAvailableElements(state.Instance.metadata?.getProps())
+                } else if (isPrototypeOf(ParticleInterface, value)) {
+                  this.availableElements.particles.add(value)
+                  const particle = ParticlesController.get(value as ParticleConstructor)
+                  this.getAvailableElements(particle.props)
+                  this.getAvailableElements(particle.Instance.metadata?.getProps())
                 } else if (isPrototypeOf(SceneActionInterface, value)) {
                   this.availableElements.sceneActions.add(value)
                   const action = SceneActionsController.get(value as SceneActionConstructor)
@@ -333,7 +340,6 @@ export function Scene(props: SceneProps): any {
                   this.getAvailableElements(state.props)
                   this.getAvailableElements(state.Instance.metadata?.getProps())
                 }
-                // 8a8f add particle here
               })
             }
           }

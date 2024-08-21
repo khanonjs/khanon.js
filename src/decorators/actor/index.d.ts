@@ -164,6 +164,12 @@ export declare abstract class ActorInterface<B extends SpriteInterface | MeshInt
   startParticle(id: FlexId): void
 
   /**
+   * Stops a particle.
+   * @param id
+   */
+  stopsParticle(id: FlexId): void
+
+  /**
    * Removes a particle
    * @param id
    */
@@ -210,7 +216,7 @@ export interface ActorProps {
   // guis?: GUIConstructor[]
   states?: ActorStateConstructor[]
   actions?: ActorActionConstructor[]
-  // particles?: ParticleConstructor[]  // 8a8f
+  particles?: ParticleConstructor[]
 }
 
 export declare function Actor(props?: ActorProps): any

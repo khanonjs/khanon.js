@@ -31,4 +31,4 @@ export interface ParticleProps {
   capacity?: number
 }
 
-export function Particle(props: ParticleProps): any
+export function Particle(props?: ParticleProps): any

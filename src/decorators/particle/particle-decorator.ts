@@ -1,5 +1,6 @@
 import * as BABYLON from '@babylonjs/core'
 
+import { ParticleInterface as UserParticleInterface } from '../../'
 import { LoadingProgress } from '../../base'
 import { Metadata } from '../../base/interfaces/metadata/metadata'
 import {
@@ -10,16 +11,20 @@ import { BabylonAccessor } from '../../models/babylon-accessor'
 import { Rect } from '../../models/rect'
 import { Logger } from '../../modules/logger'
 import { FlexId } from '../../types'
-import { switchLoopUpdate } from '../../utils/utils'
+import {
+  applyDefaults,
+  switchLoopUpdate
+} from '../../utils/utils'
 import { ActorInterface } from '../actor/actor-interface'
 import { SceneInterface } from '../scene/scene-interface'
-import { ParticleInterface as UserParticleInterface } from './'
 import { ParticleCore } from './particle-core'
 import { ParticleInterface } from './particle-interface'
 import { ParticleProps } from './particle-props'
+import { particlePropsDefault } from './particle.props.deafult'
 
-export function Particle(props: ParticleProps): any {
+export function Particle(props: ParticleProps = {}): any {
   return function <T extends { new (...args: any[]): ParticleInterface }>(constructorOrTarget: (T & ParticleInterface) | any, contextOrProperty: ClassDecoratorContext | string, descriptor: PropertyDescriptor) {
+    const className = constructorOrTarget.prototype.constructor.name
     const decorateClass = () => {
       const _classInterface = class extends constructorOrTarget implements ParticleInterface {
         constructor(readonly scene: SceneInterface, props: ParticleProps) {
@@ -27,6 +32,8 @@ export function Particle(props: ParticleProps): any {
           this.props = props
           if (scene) {
             this.metadata.applyProps(this)
+            Logger.trace('aki new particle', this.props.capacity)
+            this.babylon.particleSystem = new BABYLON.ParticleSystem(className, this.props.capacity, scene.babylon.scene)
             this.initialize(this.babylon.particleSystem)
           }
         }
@@ -46,6 +53,16 @@ export function Particle(props: ParticleProps): any {
         set loopUpdate(value: boolean) { switchLoopUpdate(value, this) }
         get loopUpdate(): boolean { return !!this.loopUpdate$ }
 
+        start(): void {
+          Logger.trace('aki start particle')
+          this.babylon.particleSystem.start()
+          // 8a8f
+        }
+
+        stop(): void {
+          // 8a8f
+        }
+
         notify(message: FlexId, ...args: any[]): void {
           const definition = this.metadata.notifiers.get(message)
           if (definition) {
@@ -54,7 +71,7 @@ export function Particle(props: ParticleProps): any {
         }
       }
       const _classCore = class implements ParticleCore {
-        props = props
+        props = applyDefaults(props, particlePropsDefault)
         Instance: ParticleInterface = new _classInterface(null, null)
 
         load(scene: SceneInterface): LoadingProgress {

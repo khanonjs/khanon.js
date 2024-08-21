@@ -15,6 +15,7 @@ import {
 import { MeshAnimation } from '../mesh/mesh-animation'
 import { MeshInterface } from '../mesh/mesh-interface'
 import { ParticleConstructor } from '../particle/particle-constructor'
+import { ParticleInterface } from '../particle/particle-interface'
 import { SceneInterface } from '../scene/scene-interface'
 import { SpriteAnimation } from '../sprite/sprite-animation'
 import { SpriteInterface } from '../sprite/sprite-interface'
@@ -33,6 +34,7 @@ export abstract class ActorInterface<B extends SpriteInterface | MeshInterface =
   abstract nodes?: Map<string, B>
   abstract _state?: ActorStateInterface
   abstract actions?: Map<ActorActionConstructor, ActorActionInterface>
+  abstract particles?: Map<FlexId, ParticleInterface>
   abstract initialize?(props: ActorProps): void
   abstract release?(): void
   abstract stopActionFromInstance?(instance: ActorActionInterface): void
@@ -61,6 +63,7 @@ export abstract class ActorInterface<B extends SpriteInterface | MeshInterface =
   abstract stopActionAll(): void
   abstract attachParticle(Particle: ParticleConstructor, id: FlexId, offset: BABYLON.Vector3 | BABYLON.Matrix, nodeName?: string): void
   abstract startParticle(id: FlexId): void
+  abstract stopParticle(id: FlexId): void
   abstract removeParticle(id: FlexId): void
   abstract notify(message: FlexId, ...args: any[]): void
   abstract destroy(): void

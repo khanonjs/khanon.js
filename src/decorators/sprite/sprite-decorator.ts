@@ -284,13 +284,7 @@ export function Sprite(props: SpriteProps): any {
 
           const startY = properties.centerV && properties.textureSize ? textureHeight / 2 : lineHeight
 
-          Logger.trace('aki create text A', text)
-          Logger.trace('aki create text B', textureWidth, textureHeight)
-          Logger.trace('aki create text C', properties)
-          Logger.trace('aki create text D', text, properties.centerH ? null : 0, startY, font, properties.textColor, null, false)
-
           this.babylon.spriteManager.texture.dispose()
-          // const tx = this.babylon.spriteManager.texture as BABYLON.DynamicTexture
           dynamicTexture.drawText(text, properties.centerH ? null : 0, startY, font, properties.textColor, null, false)
           const texture = new SpriteTexture(this.scene, this.props)
           texture.setFromTexture(dynamicTexture, 'draw-text-sprite-manager')

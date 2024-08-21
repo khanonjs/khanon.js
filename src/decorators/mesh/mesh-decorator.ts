@@ -35,8 +35,9 @@ export function Mesh(props: MeshProps): any {
   return function <T extends { new (...args: any[]): MeshInterface }>(constructorOrTarget: (T & MeshInterface) | any, contextOrProperty: ClassDecoratorContext | string, descriptor: PropertyDescriptor) {
     const decorateClass = () => {
       const _classInterface = class extends constructorOrTarget implements MeshInterface {
-        constructor(readonly scene: SceneInterface, private readonly props: MeshProps) {
+        constructor(readonly scene: SceneInterface, props: MeshProps) {
           super()
+          this.props = props
           if (scene) {
             this.initialize()
           }
@@ -49,6 +50,7 @@ export function Mesh(props: MeshProps): any {
         // ***************
         // MeshInterface
         // ***************
+        props: MeshProps
         babylon: Pick<BabylonAccessor, 'mesh'> = { mesh: null }
         animation: MeshAnimation = null
         animations: Map<FlexId, MeshAnimation> = new Map<FlexId, MeshAnimation>()
