@@ -14,6 +14,7 @@ import {
 } from '../../types'
 import { MeshAnimation } from '../mesh/mesh-animation'
 import { MeshInterface } from '../mesh/mesh-interface'
+import { ParticleConstructor } from '../particle/particle-constructor'
 import { SceneInterface } from '../scene/scene-interface'
 import { SpriteAnimation } from '../sprite/sprite-animation'
 import { SpriteInterface } from '../sprite/sprite-interface'
@@ -45,7 +46,7 @@ export abstract class ActorInterface<B extends SpriteInterface | MeshInterface =
   abstract get body(): B
   abstract get state(): ActorStateInterface
   abstract setBody(Body: new () => B): B
-  abstract addNode(Node: B, name: string): B
+  abstract addNode(Node: B, name: string, offset: BABYLON.Vector3 | BABYLON.Matrix): B
   abstract getNode(name: string): B
   abstract removeBody(): void
   abstract removeNode(name: string): void
@@ -58,11 +59,14 @@ export abstract class ActorInterface<B extends SpriteInterface | MeshInterface =
   abstract stopAction(action: ActorActionConstructor): void
   abstract stopActionGroup(group: number): void
   abstract stopActionAll(): void
+  abstract attachParticle(Particle: ParticleConstructor, id: FlexId, offset: BABYLON.Vector3 | BABYLON.Matrix, nodeName?: string): void
+  abstract startParticle(id: FlexId): void
+  abstract removeParticle(id: FlexId): void
   abstract notify(message: FlexId, ...args: any[]): void
   abstract destroy(): void
 
   /**
-   * User defined
+   * User defined optional
    */
   onSpawn?(): void
   onDestroy?(): void

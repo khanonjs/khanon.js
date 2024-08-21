@@ -70,7 +70,7 @@ export abstract class SceneInterface implements Loadable, LoopUpdatable, CanvasR
   abstract notify(message: FlexId, ...args: any[]): void
 
   /**
-   * User defined
+   * User defined optional
    */
   onStart?(): void
   onStop?(): void

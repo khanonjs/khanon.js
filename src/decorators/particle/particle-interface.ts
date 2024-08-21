@@ -5,11 +5,15 @@ import {
   LoopUpdatable,
   Notificable
 } from '../../base'
+import { Metadata } from '../../base/interfaces/metadata/metadata'
 import { BabylonAccessor } from '../../models/babylon-accessor'
 import { Rect } from '../../models/rect'
 import { FlexId } from '../../types'
+import { ParticleProps } from './particle-props'
 
 export abstract class ParticleInterface implements LoopUpdatable, CanvasResizable, Notificable {
+  abstract props?: ParticleProps
+  abstract metadata?: Metadata
   abstract loopUpdate$?: BABYLON.Observer<number>
   abstract canvasResize$?: BABYLON.Observer<Rect>
 
@@ -21,7 +25,12 @@ export abstract class ParticleInterface implements LoopUpdatable, CanvasResizabl
   abstract notify(message: FlexId, ...args: any[]): void
 
   /**
-   * User defined
+   * User defined mandatory (abstract on .d.ts)
+   */
+  initialize?(particle: BABYLON.ParticleSystem): void
+
+  /**
+   * User defined optional
    */
   onStart?(): void
   onStop?(): void

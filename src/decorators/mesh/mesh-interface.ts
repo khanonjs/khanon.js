@@ -21,7 +21,7 @@ export abstract class MeshInterface extends DisplayObject {
   abstract setMesh(babylonMesh: BABYLON.Mesh): void
 
   /**
-   * User defined
+   * User defined optional
    */
   onSpawn?(scene: SceneInterface): void
   onLoopUpdate?(delta: number): void

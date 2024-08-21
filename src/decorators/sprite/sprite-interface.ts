@@ -6,9 +6,11 @@ import { DrawBlockProperties } from '../../models/draw-text-properties'
 import { Rect } from '../../models/rect'
 import { SpriteTransform } from '../../types'
 import { SceneInterface } from '../scene/scene-interface'
+import { SpriteProps } from './sprite-props'
 import { SpriteTexture } from './sprite-texture'
 
 export abstract class SpriteInterface extends DisplayObject {
+  abstract props?: SpriteProps
   abstract loopUpdate$?: BABYLON.Observer<number>
   abstract canvasResize$?: BABYLON.Observer<Rect>
   abstract exclusiveTexture?: boolean // Exclusive texture means this sprite has an exclusive texture that is not stored anywhere, so the sprite itself has to handle its release.
@@ -28,7 +30,7 @@ export abstract class SpriteInterface extends DisplayObject {
   abstract drawText(text: string, properties: DrawBlockProperties): void
 
   /**
-   * User defined
+   * User defined optional
    */
   onSpawn?(scene: SceneInterface): void
   onLoopUpdate?(delta: number): void

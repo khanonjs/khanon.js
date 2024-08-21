@@ -22,7 +22,7 @@ export abstract class ActionInterface<S = any> implements LoopUpdatable, CanvasR
   abstract stop(): void // Callable from user Action, it will call to 'owner.stopActionFromInstance', then owner calls 'action.end' after remove it.
 
   /**
-   * User defined
+   * User defined optional
    */
   onPlay?(): void
   onStop?(): void

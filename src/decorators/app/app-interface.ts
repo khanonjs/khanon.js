@@ -14,9 +14,13 @@ export abstract class AppInterface implements Notificable {
   abstract notify(message: FlexId, ...args: any[]): void
 
   /**
-   * User defined
+   * User defined mandatory (abstract on .d.ts)
    */
   onStart?(): void
   onError?(error?: string): void
+
+  /**
+   * User defined optional
+   */
   onClose?(): void
 }

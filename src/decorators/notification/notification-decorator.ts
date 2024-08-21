@@ -5,6 +5,7 @@ import { Logger } from '../../modules/logger'
 import { ActorInterface } from '../actor/actor-interface'
 import { ActorStateInterface } from '../actor/actor-state/actor-state-interface'
 import { AppInterface } from '../app/app-interface'
+import { ParticleInterface } from '../particle/particle-interface'
 import { SceneInterface } from '../scene/scene-interface'
 import { SceneStateInterface } from '../scene/scene-state/scene-state-interface'
 import { NotificationProps } from './notification-props'
@@ -16,7 +17,8 @@ export function Notification(props: NotificationProps): any {
       target instanceof ActorInterface ||
       target instanceof ActorStateInterface ||
       target instanceof SceneInterface ||
-      target instanceof SceneStateInterface
+      target instanceof SceneStateInterface ||
+      target instanceof ParticleInterface
     ) && descriptor) { // Defined descriptor means it is a decorated method
       if (!Reflect.hasMetadata('metadata', target)) {
         Reflect.defineMetadata('metadata', new Metadata(), target)

@@ -1,5 +1,4 @@
 import { ControllerLoader } from '../base'
-import { ActorInterface } from '../decorators/actor/actor-interface'
 import { MeshConstructor } from '../decorators/mesh/mesh-constructor'
 import { MeshCore } from '../decorators/mesh/mesh-core'
 import { SceneInterface } from '../decorators/scene/scene-interface'

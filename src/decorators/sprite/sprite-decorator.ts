@@ -34,6 +34,7 @@ import {
   switchLoopUpdate
 } from '../../utils/utils'
 import { ActorInterface } from '../actor/actor-interface'
+import { ParticleInterface } from '../particle/particle-interface'
 import { SceneInterface } from '../scene/scene-interface'
 import { SpriteAnimation } from './sprite-animation'
 import { SpriteCore } from './sprite-core'
@@ -47,13 +48,24 @@ export function Sprite(props: SpriteProps): any {
     const decorateClass = () => {
       const _className = constructorOrTarget.name
       const _classInterface = class extends constructorOrTarget implements SpriteInterface {
-        constructor(readonly scene: SceneInterface, private readonly props: SpriteProps) {
+        constructor(readonly scene: SceneInterface, props: SpriteProps) {
           super()
+          this.props = props
+          if (scene) {
+            if (!this.props.url) {
+              const texture = new SpriteTexture(scene, this.props)
+              texture.setFromBlank()
+              this.setTexture(texture, true)
+            } else {
+              this.setTexture(core.textures.get(scene), false)
+            }
+          }
         }
 
         // ***************
         // SpriteInterface
         // ***************
+        props: SpriteProps
         spriteTexture: SpriteTexture
         exclusiveTexture: boolean
         animation: SpriteAnimation = null
@@ -337,17 +349,11 @@ export function Sprite(props: SpriteProps): any {
 
         spawn(scene: SceneInterface): SpriteInterface {
           const sprite = new _classInterface(scene, this.props)
-          if (!this.props.url) {
-            const texture = new SpriteTexture(scene, this.props)
-            texture.setFromBlank()
-            sprite.setTexture(texture, true)
-          } else {
-            sprite.setTexture(this.textures.get(scene), false)
-          }
           return sprite
         }
       }
-      SpritesController.register(new _classCore())
+      const core = new _classCore()
+      SpritesController.register(core)
       return _classInterface
     }
 
@@ -358,7 +364,8 @@ export function Sprite(props: SpriteProps): any {
       constructorOrTarget instanceof ActorInterface ||
       constructorOrTarget instanceof SceneInterface ||
       constructorOrTarget instanceof ActionInterface ||
-      constructorOrTarget instanceof StateInterface
+      constructorOrTarget instanceof StateInterface ||
+      constructorOrTarget instanceof ParticleInterface
     ) && !descriptor) { // Undefined descriptor means it is a decorated property, otherwiese it is a decorated method
       @Sprite(props)
       class _spriteInterface extends UserSpriteInterface {}

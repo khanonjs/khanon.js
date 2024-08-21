@@ -37,6 +37,9 @@ export function Mesh(props: MeshProps): any {
       const _classInterface = class extends constructorOrTarget implements MeshInterface {
         constructor(readonly scene: SceneInterface, private readonly props: MeshProps) {
           super()
+          if (scene) {
+            this.initialize()
+          }
         }
 
         initialize() {
@@ -144,7 +147,6 @@ export function Mesh(props: MeshProps): any {
 
         spawn(scene: SceneInterface): MeshInterface {
           const mesh = new _classInterface(scene, this.props)
-          mesh.initialize()
           return mesh
         }
       }

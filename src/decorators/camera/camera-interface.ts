@@ -21,11 +21,16 @@ export abstract class CameraInterface<S = any> implements LoopUpdatable, CanvasR
   abstract setup: S
   abstract loopUpdate: boolean
   abstract babylon: Pick<BabylonAccessor<BABYLON.Camera>, 'camera' | 'scene'>
+  // 8a8f attach particles to camera to simulate environments?
 
   /**
-   * User defined
+   * User defined mandatory (abstract on .d.ts)
    */
   initialize?(scene: BABYLON.Scene): BABYLON.Camera
+
+  /**
+   * User defined optional
+   */
   onLoopUpdate?(delta: number): void
   onCanvasResize?(size: Rect): void
 }

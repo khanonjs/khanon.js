@@ -21,7 +21,7 @@ export abstract class StateInterface<S = any> implements LoopUpdatable, CanvasRe
   abstract notify(message: FlexId, ...args: any[]): void
 
   /**
-   * User defined
+   * User defined optional
    */
   onStart?(): void
   onEnd?(): void

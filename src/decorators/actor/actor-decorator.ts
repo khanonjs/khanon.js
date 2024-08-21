@@ -7,6 +7,7 @@ import {
   ActorsController,
   ActorStatesController,
   MeshesController,
+  ParticlesController,
   SpritesController
 } from '../../controllers'
 import { Rect } from '../../models/rect'
@@ -28,6 +29,7 @@ import {
 import { MeshAnimation } from '../mesh/mesh-animation'
 import { MeshConstructor } from '../mesh/mesh-constructor'
 import { MeshInterface } from '../mesh/mesh-interface'
+import { ParticleConstructor } from '../particle/particle-constructor'
 import { SceneInterface } from '../scene/scene-interface'
 import { SpriteAnimation } from '../sprite/sprite-animation'
 import { SpriteConstructor } from '../sprite/sprite-constructor'
@@ -105,7 +107,7 @@ export function Actor(props: ActorProps = {}): any {
         }
       }
 
-      addNode<B>(Node: B, name: string): B {
+      addNode<B>(Node: B, name: string, offset: BABYLON.Vector3 | BABYLON.Matrix): B {
         // TODO
         // if (!name) {
         //   name = (++this.fakeId).toString()
@@ -217,6 +219,18 @@ export function Actor(props: ActorProps = {}): any {
         })
       }
 
+      attachParticle(Particle: ParticleConstructor, id: FlexId, offset: BABYLON.Vector3 | BABYLON.Matrix, nodeName?: string): void {
+        // 8a8f
+      }
+
+      startParticle(id: FlexId): void {
+        // 8a8f
+      }
+
+      removeParticle(id: FlexId): void {
+        // 8a8f
+      }
+
       notify(message: FlexId, ...args: any[]): void {
         const definition = this.metadata.notifiers.get(message)
         if (definition) {
@@ -242,6 +256,8 @@ export function Actor(props: ActorProps = {}): any {
         MeshesController.load(this.Instance.metadata.getProps().meshes, scene)
         ActorActionsController.load(this.props.actions, scene)
         ActorActionsController.load(this.Instance.metadata.getProps().actions, scene)
+        ParticlesController.load(this.props.particles, scene)
+        ParticlesController.load(this.Instance.metadata.getProps().particles, scene)
         return progress
       }
 
@@ -253,6 +269,8 @@ export function Actor(props: ActorProps = {}): any {
         MeshesController.unload(this.Instance.metadata.getProps().meshes, scene)
         ActorActionsController.unload(this.props.actions, scene)
         ActorActionsController.unload(this.Instance.metadata.getProps().actions, scene)
+        ParticlesController.unload(this.props.particles, scene)
+        ParticlesController.unload(this.Instance.metadata.getProps().particles, scene)
       }
 
       spawn(scene: SceneInterface): ActorInterface {

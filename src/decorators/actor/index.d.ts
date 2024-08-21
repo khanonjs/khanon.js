@@ -1,3 +1,5 @@
+import * as BABYLON from '@babylonjs/core'
+
 import { Rect } from '../../models'
 import {
   FlexId,
@@ -9,6 +11,7 @@ import {
   MeshConstructor,
   MeshInterface
 } from '../mesh'
+import { ParticleConstructor } from '../particle/particle-constructor'
 import { SceneInterface } from '../scene'
 import {
   SpriteAnimation,
@@ -143,6 +146,28 @@ export declare abstract class ActorInterface<B extends SpriteInterface | MeshInt
    * Stops all actions.
    */
   stopActionAll(): void
+
+  /**
+   * Attachs a particle to this actor.
+   * If nodeName is 'undefined', the particle is attached to the Body of the actor.
+   * @param Particle
+   * @param id
+   * @param offset
+   * @param nodeName
+   */
+  attachParticle(Particle: ParticleConstructor, id: FlexId, offset: BABYLON.Vector3 | BABYLON.Matrix, nodeName?: string): void
+
+  /**
+   * Starts a particle.
+   * @param id
+   */
+  startParticle(id: FlexId): void
+
+  /**
+   * Removes a particle
+   * @param id
+   */
+  removeParticle(id: FlexId): void
 
   /**
    * Notifies a message to this actor.
