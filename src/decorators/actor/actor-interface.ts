@@ -65,6 +65,7 @@ export abstract class ActorInterface<B extends SpriteInterface | MeshInterface =
   abstract startParticle(id: FlexId): void
   abstract stopParticle(id: FlexId): void
   abstract removeParticle(id: FlexId): void
+  abstract clearParticles(): void
   abstract notify(message: FlexId, ...args: any[]): void
   abstract destroy(): void
 

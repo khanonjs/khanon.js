@@ -345,6 +345,10 @@ export function Sprite(props: SpriteProps): any {
           const sprite = new _classInterface(scene, this.props)
           return sprite
         }
+
+        spawnParticle(scene: SceneInterface): void {
+          // 8a8f devuelve textura y props, no acepta url vacía
+        }
       }
       const core = new _classCore()
       SpritesController.register(core)

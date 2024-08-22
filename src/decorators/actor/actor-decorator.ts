@@ -80,9 +80,9 @@ export function Actor(props: ActorProps = {}): any {
       get state(): ActorStateInterface { return this._state }
 
       release() {
-        // 8a8f particles
         invokeCallback(this.onDestroy, this)
         this.stopActionAll()
+        this.clearParticles()
         this.clearNodes()
         removeLoopUpdate(this)
         removeCanvasResize(this)
@@ -239,7 +239,15 @@ export function Actor(props: ActorProps = {}): any {
       }
 
       removeParticle(id: FlexId): void {
-        // 8a8f
+        if (!this.particles.get(id)) { Logger.debugError(`Trying to start particle '${id}', but it doesn't exist in actor:`, _classInterface.prototype); return }
+        this.particles.get(id).release()
+        this.particles.delete(id)
+      }
+
+      clearParticles(): void {
+        this.particles.forEach((value: ParticleInterface, key: FlexId) => {
+          this.removeParticle(key)
+        })
       }
 
       notify(message: FlexId, ...args: any[]): void {

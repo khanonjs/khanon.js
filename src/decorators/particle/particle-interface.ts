@@ -20,6 +20,7 @@ export abstract class ParticleInterface implements LoopUpdatable, CanvasResizabl
   abstract canvasResize$?: BABYLON.Observer<Rect>
   abstract start?(): void
   abstract stop?(): void
+  abstract release?(): void
 
   /**
    * User available
@@ -33,13 +34,14 @@ export abstract class ParticleInterface implements LoopUpdatable, CanvasResizabl
   /**
    * User defined mandatory (abstract on .d.ts)
    */
-  initialize?(particle: BABYLON.ParticleSystem): void
+  initialize?(particleSystem: BABYLON.ParticleSystem): void
 
   /**
    * User defined optional
    */
   onStart?(): void
   onStop?(): void
+  onRelease?(): void
   onLoopUpdate?(delta: number): void
   onCanvasResize?(size: Rect): void
 }

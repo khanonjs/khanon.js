@@ -17,10 +17,11 @@ export abstract class ParticleInterface {
   setSprite(sprite: SpriteConstructor): void
   notify(message: FlexId, ...args: any[]): void
 
-  abstract initialize(particle: BABYLON.ParticleSystem): void
+  abstract initialize(particleSystem: BABYLON.ParticleSystem): void
 
   onStart?(): void
   onStop?(): void
+  onRelease?(): void
   onLoopUpdate?(delta: number): void
   onCanvasResize?(size: Rect): void
 }

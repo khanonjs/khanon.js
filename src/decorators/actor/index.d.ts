@@ -170,10 +170,15 @@ export declare abstract class ActorInterface<B extends SpriteInterface | MeshInt
   stopsParticle(id: FlexId): void
 
   /**
-   * Removes a particle
+   * Removes a particle.
    * @param id
    */
   removeParticle(id: FlexId): void
+
+  /**
+   * Removes all the particles attached to this actor.
+   */
+  clearParticles(): void
 
   /**
    * Notifies a message to this actor.
@@ -191,9 +196,9 @@ export declare abstract class ActorInterface<B extends SpriteInterface | MeshInt
   onSpawn?(): void
 
   /**
-   * Callback invoked on actor release.
+   * Callback invoked on actor destroy (equivalent to onRelease).
    */
-  onRelease?(): void
+  onDestroy?(): void
 
   /**
    * Callback invoked on loop update.

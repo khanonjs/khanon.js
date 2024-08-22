@@ -14,7 +14,7 @@ export abstract class SpriteInterface extends DisplayObject {
   abstract loopUpdate$?: BABYLON.Observer<number>
   abstract canvasResize$?: BABYLON.Observer<Rect>
   abstract exclusiveTexture?: boolean // Exclusive texture means this sprite has an exclusive texture that is not stored anywhere, so the sprite itself has to handle its release.
-  abstract setTexture?(spriteTexture: SpriteTexture, isExclusive: boolean): void
+  abstract setTexture?(spriteTexture: SpriteTexture, isExclusive: boolean, isParticle: boolean): void
 
   /**
    * User available

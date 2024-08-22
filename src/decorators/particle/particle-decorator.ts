@@ -13,6 +13,7 @@ import { Logger } from '../../modules/logger'
 import { FlexId } from '../../types'
 import {
   applyDefaults,
+  invokeCallback,
   switchLoopUpdate
 } from '../../utils/utils'
 import { ActorInterface } from '../actor/actor-interface'
@@ -48,6 +49,7 @@ export function Particle(props: ParticleProps = {}): any {
         initialize?(particle: BABYLON.ParticleSystem): void
         onStart?(): void
         onStop?(): void
+        onRelease?(): void
         onLoopUpdate?(delta: number): void
         onCanvasResize?(size: Rect): void
 
@@ -62,8 +64,17 @@ export function Particle(props: ParticleProps = {}): any {
           this.babylon.particleSystem.stop()
         }
 
+        release(): void {
+          invokeCallback(this.onRelease, this)
+          // 8a8f
+        }
+
         setSprite(sprite: SpriteConstructor): void {
           // 8a8f
+          const spriteParticle = SpritesController.get(sprite).spawnParticle(this.scene)
+          // Setup de textura
+          // ajusta ancho mediante scaleX / scaleY
+          // agrega animaciones
         }
 
         notify(message: FlexId, ...args: any[]): void {
