@@ -39,7 +39,7 @@ import { SceneInterface } from '../scene/scene-interface'
 import { SpriteAnimation } from './sprite-animation'
 import { SpriteCore } from './sprite-core'
 import { SpriteInterface } from './sprite-interface'
-import { SpriteParticleData } from './sprite-particle-data'
+import { SpriteParticleInfo } from './sprite-particle-data'
 import { SpriteProps } from './sprite-props'
 import { SpriteTexture } from './sprite-texture'
 import { spritePropsDefault } from './sprite.props.deafult'
@@ -347,7 +347,7 @@ export function Sprite(props: SpriteProps): any {
           return sprite
         }
 
-        getParticleData(scene: SceneInterface): SpriteParticleData {
+        getParticleData(scene: SceneInterface): SpriteParticleInfo {
           // 8a8f devuelve textura y props, no acepta url vacía
           return null
         }

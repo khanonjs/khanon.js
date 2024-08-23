@@ -1,7 +1,7 @@
 import { SpriteProps } from './sprite-props'
 import { SpriteTexture } from './sprite-texture'
 
-export interface SpriteParticleData {
+export interface SpriteParticleInfo {
   texture: SpriteTexture
   props: SpriteProps
 }
