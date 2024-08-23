@@ -5,6 +5,7 @@ import {
 } from '../../base'
 import { SceneInterface } from '../scene/scene-interface'
 import { SpriteInterface } from './sprite-interface'
+import { SpriteParticleData } from './sprite-particle-data'
 import { SpriteProps } from './sprite-props'
 import { SpriteTexture } from './sprite-texture'
 import { SpritePropsDefault } from './sprite.props.deafult'
@@ -16,5 +17,5 @@ export abstract class SpriteCore implements Loadable<SceneInterface>, Spawnable<
   abstract load(scene: SceneInterface): LoadingProgress
   abstract unload(scene: SceneInterface): void
   abstract spawn(scene: SceneInterface): SpriteInterface
-  abstract spawnParticle(scene: SceneInterface): void // 8a8f
+  abstract getParticleData(scene: SceneInterface): SpriteParticleData
 }

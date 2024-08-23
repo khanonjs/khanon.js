@@ -71,7 +71,7 @@ export function Particle(props: ParticleProps = {}): any {
 
         setSprite(sprite: SpriteConstructor): void {
           // 8a8f
-          const spriteParticle = SpritesController.get(sprite).spawnParticle(this.scene)
+          const spriteParticle = SpritesController.get(sprite).getParticleData(this.scene)
           // Setup de textura
           // ajusta ancho mediante scaleX / scaleY
           // agrega animaciones
