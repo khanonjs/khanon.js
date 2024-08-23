@@ -10,7 +10,9 @@ import { BabylonAccessor } from '../../models/babylon-accessor'
 import { Rect } from '../../models/rect'
 import { FlexId } from '../../types'
 import { SceneInterface } from '../scene/scene-interface'
+import { SpriteAnimation } from '../sprite/sprite-animation'
 import { SpriteConstructor } from '../sprite/sprite-constructor'
+import { SpriteProps } from '../sprite/sprite-props'
 import { ParticleProps } from './particle-props'
 
 export abstract class ParticleInterface implements LoopUpdatable, CanvasResizable, Notificable {
@@ -18,8 +20,8 @@ export abstract class ParticleInterface implements LoopUpdatable, CanvasResizabl
   abstract metadata?: Metadata
   abstract loopUpdate$?: BABYLON.Observer<number>
   abstract canvasResize$?: BABYLON.Observer<Rect>
-  abstract start?(): void
-  abstract stop?(): void
+  abstract animations?: SpriteAnimation[]
+  abstract spriteProps?: SpriteProps
   abstract release?(): void
 
   /**
@@ -28,7 +30,10 @@ export abstract class ParticleInterface implements LoopUpdatable, CanvasResizabl
   abstract babylon: Pick<BabylonAccessor, 'scene' | 'particleSystem'>
   abstract scene: SceneInterface
   abstract loopUpdate: boolean
+  abstract start(): void
+  abstract stop(): void
   abstract setSprite(sprite: SpriteConstructor): void
+  abstract setAnimation(id: FlexId, cellChangeSpeed?: number, randomStartCell?: boolean): void
   abstract notify(message: FlexId, ...args: any[]): void
 
   /**

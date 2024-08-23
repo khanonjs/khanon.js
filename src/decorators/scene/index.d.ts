@@ -108,7 +108,7 @@ export declare class SceneRemove {
 
 export declare abstract class SceneInterface {
   /**
-   * Babylon container
+   * Babylon.js objects.
    */
   get babylon(): Pick<BabylonAccessor, 'scene'>
 

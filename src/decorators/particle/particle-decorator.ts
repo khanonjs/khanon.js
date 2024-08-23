@@ -13,12 +13,18 @@ import { Logger } from '../../modules/logger'
 import { FlexId } from '../../types'
 import {
   applyDefaults,
+  attachCanvasResize,
+  attachLoopUpdate,
   invokeCallback,
+  removeCanvasResize,
+  removeLoopUpdate,
   switchLoopUpdate
 } from '../../utils/utils'
 import { ActorInterface } from '../actor/actor-interface'
 import { SceneInterface } from '../scene/scene-interface'
+import { SpriteAnimation } from '../sprite/sprite-animation'
 import { SpriteConstructor } from '../sprite/sprite-constructor'
+import { SpriteProps } from '../sprite/sprite-props'
 import { ParticleCore } from './particle-core'
 import { ParticleInterface } from './particle-interface'
 import { ParticleProps } from './particle-props'
@@ -34,9 +40,14 @@ export function Particle(props: ParticleProps = {}): any {
           this.props = props
           if (scene) {
             this.metadata.applyProps(this)
-            Logger.trace('aki new particle', this.props.capacity)
             this.babylon.particleSystem = new BABYLON.ParticleSystem(className, this.props.capacity, scene.babylon.scene)
             this.initialize(this.babylon.particleSystem)
+            this.babylon.particleSystem.onStoppedObservable.add(() => {
+              switchLoopUpdate(false, this)
+              invokeCallback(this.onStop, this)
+            })
+            attachLoopUpdate(this)
+            attachCanvasResize(this)
           }
         }
 
@@ -45,6 +56,8 @@ export function Particle(props: ParticleProps = {}): any {
         babylon: Pick<BabylonAccessor, 'scene' | 'particleSystem'> = { scene: null, particleSystem: null }
         loopUpdate$: BABYLON.Observer<number>
         canvasResize$: BABYLON.Observer<Rect>
+        animations: SpriteAnimation[]
+        spriteProps: SpriteProps
 
         initialize?(particle: BABYLON.ParticleSystem): void
         onStart?(): void
@@ -57,7 +70,9 @@ export function Particle(props: ParticleProps = {}): any {
         get loopUpdate(): boolean { return !!this.loopUpdate$ }
 
         start(): void {
+          invokeCallback(this.onStart, this)
           this.babylon.particleSystem.start()
+          switchLoopUpdate(true, this)
         }
 
         stop(): void {
@@ -66,15 +81,51 @@ export function Particle(props: ParticleProps = {}): any {
 
         release(): void {
           invokeCallback(this.onRelease, this)
-          // 8a8f
+          this.babylon.particleSystem.dispose()
+          removeLoopUpdate(this)
+          removeCanvasResize(this)
         }
 
         setSprite(sprite: SpriteConstructor): void {
-          // 8a8f
-          const spriteParticle = SpritesController.get(sprite).getParticleData(this.scene)
-          // Setup de textura
-          // ajusta ancho mediante scaleX / scaleY
-          // agrega animaciones
+          const spriteParticleInfo = SpritesController.get(sprite).getParticleInfo(this.scene)
+          if (!spriteParticleInfo.props.url) { Logger.debugError('Cannot use a particle texture from a blank sprite. The sprite \'url\' must be defined.'); return }
+          this.spriteProps = spriteParticleInfo.props
+          this.babylon.particleSystem.particleTexture = spriteParticleInfo.texture.babylon.spriteManager.texture
+          if (spriteParticleInfo.props.width === spriteParticleInfo.props.height) {
+            this.babylon.particleSystem.minScaleX = 1
+            this.babylon.particleSystem.maxScaleX = 1
+            this.babylon.particleSystem.minScaleY = 1
+            this.babylon.particleSystem.maxScaleY = 1
+          } else if (spriteParticleInfo.props.width > spriteParticleInfo.props.height) {
+            this.babylon.particleSystem.minScaleX = spriteParticleInfo.props.width / spriteParticleInfo.props.height
+            this.babylon.particleSystem.maxScaleX = spriteParticleInfo.props.width / spriteParticleInfo.props.height
+            this.babylon.particleSystem.minScaleY = 1
+            this.babylon.particleSystem.maxScaleY = 1
+          } else {
+            this.babylon.particleSystem.minScaleX = 1
+            this.babylon.particleSystem.maxScaleX = 1
+            this.babylon.particleSystem.minScaleY = spriteParticleInfo.props.width / spriteParticleInfo.props.height
+            this.babylon.particleSystem.maxScaleY = spriteParticleInfo.props.width / spriteParticleInfo.props.height
+          }
+          if (spriteParticleInfo.props.animations) {
+            this.animations = spriteParticleInfo.props.animations
+            this.babylon.particleSystem.isAnimationSheetEnabled = true
+            this.babylon.particleSystem.spriteCellWidth = spriteParticleInfo.props.width
+            this.babylon.particleSystem.spriteCellHeight = spriteParticleInfo.props.height
+          }
+        }
+
+        setAnimation(id: FlexId, cellChangeSpeed?: number, randomStartCell?: boolean): void {
+          const animation = this.animations.find(animation => animation.id === id)
+          if (!animation) { Logger.debugError(`Animation Id '${id}' doesn't exist in particle sprite '${this.spriteProps.url}'.`); return }
+          this.babylon.particleSystem.startSpriteCellID = animation.frameStart
+          this.babylon.particleSystem.endSpriteCellID = animation.frameEnd
+          if (cellChangeSpeed) {
+            this.babylon.particleSystem.spriteCellChangeSpeed
+          }
+          if (randomStartCell) {
+            this.babylon.particleSystem.spriteRandomStartCell
+          }
         }
 
         notify(message: FlexId, ...args: any[]): void {

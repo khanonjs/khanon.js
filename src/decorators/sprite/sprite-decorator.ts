@@ -347,9 +347,11 @@ export function Sprite(props: SpriteProps): any {
           return sprite
         }
 
-        getParticleData(scene: SceneInterface): SpriteParticleInfo {
-          // 8a8f devuelve textura y props, no acepta url vacía
-          return null
+        getParticleInfo(scene: SceneInterface): SpriteParticleInfo {
+          return {
+            texture: this.textures.get(scene),
+            props: this.props
+          }
         }
       }
       const core = new _classCore()

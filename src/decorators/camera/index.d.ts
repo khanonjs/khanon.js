@@ -10,6 +10,9 @@ import { SceneInterface } from '../scene'
  * @param S Camera setup object.
  */
 export declare abstract class CameraInterface<S = any> {
+  /**
+   * Babylon.js objects.
+   */
   get babylon(): Pick<BabylonAccessor<ReturnType<this['initialize']>>, 'camera' | 'scene'>
 
   /**
