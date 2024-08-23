@@ -2,6 +2,7 @@ import { Core } from '../core'
 import { ActorInterface } from '../decorators/actor/actor-interface'
 import { ActorStateInterface } from '../decorators/actor/actor-state/actor-state-interface'
 import { AppInterface } from '../decorators/app/app-interface'
+import { ParticleInterface } from '../decorators/particle/particle-interface'
 import { SceneInterface } from '../decorators/scene/scene-interface'
 import { SceneStateInterface } from '../decorators/scene/scene-state/scene-state-interface'
 import { Logger } from '../modules/logger'
@@ -10,7 +11,7 @@ import { NotificableType } from '../types/notificable-type'
 import { isPrototypeOf } from '../utils/utils'
 import { ScenesController } from './scenes-controller'
 
-// TODO This could be optimized storing each actor in a Map<ActorConstructor, Observable>
+// TODO This must be optimized storing each actor, particle, etc.. in a Map<ActorConstructor, Observable>
 export class NotificationsController {
   static send(message: FlexId, elements: NotificableType | NotificableType[], ...args: any[]): void {
     if (Array.isArray(elements)) {
@@ -47,6 +48,14 @@ export class NotificationsController {
             scene.state.notify(message, ...args)
           }
         })
+      } else if (isPrototypeOf(ParticleInterface, constructor)) {
+        Core.getActiveScenes().forEach(scene => scene.actors.forEach(actor => {
+          actor.particles.forEach(particle => {
+            if (particle instanceof constructor) {
+              particle.notify(message, ...args)
+            }
+          })
+        }))
       }
     }
   }

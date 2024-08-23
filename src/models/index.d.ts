@@ -21,29 +21,31 @@ export declare interface AnimationBase {
   id: FlexId
 
   /**
-   * Delay between frames (in milliseconds)
+   * Delay between frames (in milliseconds). (100 by default)
+   * This property is omitted in particles.
    */
-  delay: number;
+  delay?: number
 
   /**
-   * Indicates if the animation is cyclic.
+   * Indicates if the animation is cyclic. (false by default)
+   * This property is omitted in particles.
    */
-  loop: boolean;
+  loop?: boolean
 
   /**
    * Frame start of the animation. If undefined, it is equivalent to 0.
    */
-  frameStart?: number;
+  frameStart?: number
 
   /**
    * Frame end of the animation. If undefined, it is equivalent to the last frame.
    */
-  frameEnd?: number;
+  frameEnd?: number
 
   /**
    * Each Key frame emit an event when the frame (or frames) are reached.
    */
-  keyFrames?: AnimationKeyFrame[];
+  keyFrames?: AnimationKeyFrame[]
 }
 
 export class BabylonAccessor<C extends BABYLON.Camera = any> {

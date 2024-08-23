@@ -91,32 +91,32 @@ export function Particle(props: ParticleProps = {}): any {
           if (!spriteParticleInfo.props.url) { Logger.debugError('Cannot use a particle texture from a blank sprite. The sprite \'url\' must be defined.'); return }
           this.spriteProps = spriteParticleInfo.props
           this.babylon.particleSystem.particleTexture = spriteParticleInfo.texture.babylon.spriteManager.texture
-          if (spriteParticleInfo.props.width === spriteParticleInfo.props.height) {
+          if (this.spriteProps.width === this.spriteProps.height) {
             this.babylon.particleSystem.minScaleX = 1
             this.babylon.particleSystem.maxScaleX = 1
             this.babylon.particleSystem.minScaleY = 1
             this.babylon.particleSystem.maxScaleY = 1
-          } else if (spriteParticleInfo.props.width > spriteParticleInfo.props.height) {
-            this.babylon.particleSystem.minScaleX = spriteParticleInfo.props.width / spriteParticleInfo.props.height
-            this.babylon.particleSystem.maxScaleX = spriteParticleInfo.props.width / spriteParticleInfo.props.height
+          } else if (this.spriteProps.width > this.spriteProps.height) {
+            this.babylon.particleSystem.minScaleX = this.spriteProps.width / this.spriteProps.height
+            this.babylon.particleSystem.maxScaleX = this.spriteProps.width / this.spriteProps.height
             this.babylon.particleSystem.minScaleY = 1
             this.babylon.particleSystem.maxScaleY = 1
           } else {
             this.babylon.particleSystem.minScaleX = 1
             this.babylon.particleSystem.maxScaleX = 1
-            this.babylon.particleSystem.minScaleY = spriteParticleInfo.props.width / spriteParticleInfo.props.height
-            this.babylon.particleSystem.maxScaleY = spriteParticleInfo.props.width / spriteParticleInfo.props.height
+            this.babylon.particleSystem.minScaleY = this.spriteProps.width / this.spriteProps.height
+            this.babylon.particleSystem.maxScaleY = this.spriteProps.width / this.spriteProps.height
           }
-          if (spriteParticleInfo.props.animations) {
-            this.animations = spriteParticleInfo.props.animations
+          this.animations = this.spriteProps.animations
+          if (this.animations) {
             this.babylon.particleSystem.isAnimationSheetEnabled = true
-            this.babylon.particleSystem.spriteCellWidth = spriteParticleInfo.props.width
-            this.babylon.particleSystem.spriteCellHeight = spriteParticleInfo.props.height
+            this.babylon.particleSystem.spriteCellWidth = this.spriteProps.width
+            this.babylon.particleSystem.spriteCellHeight = this.spriteProps.height
           }
         }
 
         setAnimation(id: FlexId, cellChangeSpeed?: number, randomStartCell?: boolean): void {
-          const animation = this.animations.find(animation => animation.id === id)
+          const animation = this.animations?.find(animation => animation.id === id)
           if (!animation) { Logger.debugError(`Animation Id '${id}' doesn't exist in particle sprite '${this.spriteProps.url}'.`); return }
           this.babylon.particleSystem.startSpriteCellID = animation.frameStart
           this.babylon.particleSystem.endSpriteCellID = animation.frameEnd

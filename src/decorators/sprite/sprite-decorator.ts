@@ -173,6 +173,12 @@ export function Sprite(props: SpriteProps): any {
 
         addAnimation(animation: SpriteAnimation): void {
           if (this.animations.get(animation.id)) { Logger.debugError(`Animation name '${animation.id}' already exists.`); return }
+          if (!animation.delay) {
+            animation.delay = 100
+          }
+          if (!animation.loop) {
+            animation.loop = false
+          }
           if (animation.keyFrames) {
             animation.keyFrames.forEach((keyFrame) => {
               keyFrame.emitter = new BABYLON.Observable<void>()

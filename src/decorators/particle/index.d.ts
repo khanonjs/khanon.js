@@ -55,13 +55,13 @@ export abstract class ParticleInterface {
   /**
    * Initialize the particle.
    * You can use a custom created texture (remember to release it in the 'onRelease' method).
-   * Or you can setup the texture sprite using 'setSprite' method.
-   * @param particleSystem
+   * Or you can set a sprite texture using 'setSprite' method.
+   * @param particleSystem Equivalent to 'this.babylon.partycleSystem'.
    */
   abstract initialize(particleSystem: BABYLON.ParticleSystem): void
 
   /**
-   * Notifies a message to this actor.
+   * Notifies a message to this particle.
    */
   notify(message: FlexId, ...args: any[]): void
 
