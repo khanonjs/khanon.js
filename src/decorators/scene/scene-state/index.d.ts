@@ -1,6 +1,5 @@
 import { SceneInterface } from '../'
 import { Rect } from '../../../models'
-import { UseCameraAt } from '../../../models/use-camera'
 import { FlexId } from '../../../types'
 import { CameraConstructor } from '../../camera'
 import { MeshConstructor } from '../../mesh'

@@ -4,7 +4,6 @@ import * as BABYLON from '@babylonjs/core'
 
 import { SpriteInterface as UserSpriteInterface } from '../../'
 import {
-  ActionInterface,
   LoadingProgress,
   StateInterface
 } from '../../base'
