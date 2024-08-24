@@ -2,7 +2,6 @@ import 'reflect-metadata'
 
 import * as BABYLON from '@babylonjs/core'
 
-import { ActorActionInterface as UserActorActionInterface } from '../../../'
 import { LoadingProgress } from '../../../base'
 import { Metadata } from '../../../base/interfaces/metadata/metadata'
 import {
@@ -117,7 +116,7 @@ export function ActorAction(props: ActorActionProps = {}): any {
       constructorOrTarget instanceof ActorInterface
     ) && descriptor) { // Defined descriptor means it is a method
       @ActorAction(props)
-      class _actionInterface extends UserActorActionInterface {
+      class _actionInterface {
         onLoopUpdate = descriptor.value
       }
 
