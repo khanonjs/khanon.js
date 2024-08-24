@@ -47,10 +47,10 @@ export function ActorAction(props: ActorActionProps = {}): any {
         actor: ActorInterface
         scene: SceneInterface
         metadata: Metadata = Reflect.getMetadata('metadata', this) ?? new Metadata()
-        countFramesUpdate$?: BABYLON.Observer<number>
+        countFramesUpdate$: BABYLON.Observer<number>
         countFrames = 0
-        loopUpdate$?: BABYLON.Observer<number>
-        canvasResize$?: BABYLON.Observer<Rect>
+        loopUpdate$: BABYLON.Observer<number>
+        canvasResize$: BABYLON.Observer<Rect>
         setup: any
 
         set loopUpdate(value: boolean) { switchLoopUpdate(value, this) }
