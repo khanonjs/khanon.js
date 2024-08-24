@@ -32,8 +32,8 @@ export abstract class ActorActionInterface<S = any, A = ActorInterface<SpriteInt
   /**
    * User defined optional
    */
-  abstract onPlay(): void
-  abstract onStop(): void
-  abstract onLoopUpdate(delta: number): void
-  abstract onCanvasResize(size: Rect): void
+  abstract onPlay?(): void
+  abstract onStop?(): void
+  abstract onLoopUpdate?(delta: number): void
+  abstract onCanvasResize?(size: Rect): void
 }

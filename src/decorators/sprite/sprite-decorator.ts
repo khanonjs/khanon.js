@@ -33,8 +33,10 @@ import {
   removeLoopUpdate,
   switchLoopUpdate
 } from '../../utils/utils'
+import { ActorActionInterface } from '../actor/actor-action/actor-action-interface'
 import { ActorInterface } from '../actor/actor-interface'
 import { ParticleInterface } from '../particle/particle-interface'
+import { SceneActionInterface } from '../scene/scene-action/scene-action-interface'
 import { SceneInterface } from '../scene/scene-interface'
 import { SpriteAnimation } from './sprite-animation'
 import { SpriteCore } from './sprite-core'
@@ -375,8 +377,9 @@ export function Sprite(props: SpriteProps): any {
       return decorateClass()
     } else if ((
       constructorOrTarget instanceof ActorInterface ||
+      constructorOrTarget instanceof ActorActionInterface ||
       constructorOrTarget instanceof SceneInterface ||
-      constructorOrTarget instanceof ActionInterface ||
+      constructorOrTarget instanceof SceneActionInterface ||
       constructorOrTarget instanceof StateInterface ||
       constructorOrTarget instanceof ParticleInterface
     ) && !descriptor) { // Undefined descriptor means it is a decorated property, otherwiese it is a decorated method

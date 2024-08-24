@@ -11,7 +11,7 @@ import {
   MeshConstructor,
   MeshInterface
 } from '../mesh'
-import { ParticleConstructor } from '../particle/particle-constructor'
+import { ParticleConstructor } from '../particle'
 import { SceneInterface } from '../scene'
 import {
   SpriteAnimation,

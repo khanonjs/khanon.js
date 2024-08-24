@@ -38,11 +38,6 @@ export function ActorAction(props: ActorActionProps = {}): any {
           this.metadata.applyProps(this)
         }
 
-        onPlay(): void {}
-        onStop(): void {}
-        onLoopUpdate(delta: number): void {}
-        onCanvasResize(size: Rect): void {}
-
         props = props
         actor: ActorInterface
         scene: SceneInterface
