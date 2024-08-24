@@ -37,6 +37,10 @@ export { ParticleInterface } from './decorators/particle/particle-interface'
 export { Scene } from './decorators/scene/scene-decorator'
 export { SceneInterface } from './decorators/scene/scene-interface'
 
+// Actos Action
+export { SceneAction } from './decorators/scene/scene-action/scene-action-decorator'
+export { SceneActionInterface } from './decorators/scene/scene-action/scene-action-interface'
+
 // Scene State decorator
 export { SceneState } from './decorators/scene/scene-state/scene-state-decorator'
 export { SceneStateInterface } from './decorators/scene/scene-state/scene-state-interface'
