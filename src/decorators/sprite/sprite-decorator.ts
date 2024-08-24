@@ -243,8 +243,7 @@ export function Sprite(props: SpriteProps): any {
         subscribeToKeyframe(keyframeId: FlexId, callback: () => void): BABYLON.Observer<void>[] {
           const observers: BABYLON.Observer<void>[] = []
           this.animations.forEach(animation => {
-            animation.keyFrames
-              .filter(keyframe => keyframe.id === keyframeId)
+            animation.keyFrames?.filter(keyframe => keyframe.id === keyframeId)
               .forEach(keyframe => observers.push(keyframe.emitter.add(callback)))
           })
           return observers

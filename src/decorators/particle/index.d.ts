@@ -96,9 +96,26 @@ export abstract class ParticleInterface {
 export type ParticleConstructor = new () => ParticleInterface
 
 export interface ParticleProps {
+  /**
+   * Sprites to be used in this particle.
+   */
   sprites?: SpriteConstructor[]
-  offset?: BABYLON.Vector3 | BABYLON.Matrix
+
+  /**
+   * Offset position respect the attachment in case the particle is attached to an actor.
+   * World position in case the particle is created by a scene.
+   */
+  offset?: BABYLON.Vector3
+
+  /**
+   * Maximum number of particles to be emitted.
+   */
   capacity?: number
+
+  /**
+   * Time in ms taken to stop the particle after the start.
+   */
+  delayStop?: number
 }
 
 export function Particle(props?: ParticleProps): any

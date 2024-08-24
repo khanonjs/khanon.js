@@ -221,10 +221,11 @@ export function Actor(props: ActorProps = {}): any {
         })
       }
 
-      attachParticle(particleConstructor: ParticleConstructor, id: FlexId, offset: BABYLON.Vector3 | BABYLON.Matrix, nodeName?: string): void {
+      attachParticle(particleConstructor: ParticleConstructor, id: FlexId, offset: BABYLON.Vector3, nodeName?: string): void {
+        const attachmentSprite = nodeName ? this.getNode(nodeName) : this.body
+        if (!attachmentSprite) { Logger.debugError('Cannot attach a particle to an empty body.', _classInterface.prototype, particleConstructor.prototype); return }
         if (!this.scene.availableElements.hasParticle(particleConstructor)) { Logger.debugError('Trying to attach a particle non available to the actor. Please check the actor props.', _classInterface.prototype, particleConstructor.prototype); return }
-        // 8a8f
-        const particle = ParticlesController.get(particleConstructor).spawn(this.scene)
+        const particle = ParticlesController.get(particleConstructor).spawn(this.scene, { attachment: attachmentSprite, offset })
         this.particles.set(id, particle)
       }
 

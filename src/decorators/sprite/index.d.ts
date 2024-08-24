@@ -107,7 +107,7 @@ export declare abstract class SpriteInterface {
    * @param keyframeId
    * @param callback
    */
-  subscribeToKeyframe(keyframeId: string, callback: () => void): void
+  subscribeToKeyframe(keyframeId: FlexId, callback: () => void): void
 
   /**
    * Clears all subscriptions to a keyframe.

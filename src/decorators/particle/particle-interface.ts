@@ -8,11 +8,13 @@ import {
 import { Metadata } from '../../base/interfaces/metadata/metadata'
 import { BabylonAccessor } from '../../models/babylon-accessor'
 import { Rect } from '../../models/rect'
+import { Timeout } from '../../models/timeout'
 import { FlexId } from '../../types'
 import { SceneInterface } from '../scene/scene-interface'
 import { SpriteAnimation } from '../sprite/sprite-animation'
 import { SpriteConstructor } from '../sprite/sprite-constructor'
 import { SpriteProps } from '../sprite/sprite-props'
+import { ParticleAttachmentInfo } from './particle-attachment-info'
 import { ParticleProps } from './particle-props'
 
 export abstract class ParticleInterface implements LoopUpdatable, CanvasResizable, Notificable {
@@ -20,8 +22,11 @@ export abstract class ParticleInterface implements LoopUpdatable, CanvasResizabl
   abstract metadata?: Metadata
   abstract loopUpdate$?: BABYLON.Observer<number>
   abstract canvasResize$?: BABYLON.Observer<Rect>
+  abstract attachmentInfo?: ParticleAttachmentInfo
+  abstract attachmentUpdate$?: BABYLON.Observer<number>
   abstract animations?: SpriteAnimation[]
   abstract spriteProps?: SpriteProps
+  abstract updatePosition?(): void
   abstract release?(): void
 
   /**

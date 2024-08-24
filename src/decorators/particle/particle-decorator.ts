@@ -7,8 +7,10 @@ import {
   ParticlesController,
   SpritesController
 } from '../../controllers'
+import { Core } from '../../core'
 import { BabylonAccessor } from '../../models/babylon-accessor'
 import { Rect } from '../../models/rect'
+import { Timeout } from '../../models/timeout'
 import { Logger } from '../../modules/logger'
 import { FlexId } from '../../types'
 import {
@@ -16,6 +18,7 @@ import {
   attachCanvasResize,
   attachLoopUpdate,
   invokeCallback,
+  isPrototypeOf,
   removeCanvasResize,
   removeLoopUpdate,
   switchLoopUpdate
@@ -25,6 +28,7 @@ import { SceneInterface } from '../scene/scene-interface'
 import { SpriteAnimation } from '../sprite/sprite-animation'
 import { SpriteConstructor } from '../sprite/sprite-constructor'
 import { SpriteProps } from '../sprite/sprite-props'
+import { ParticleAttachmentInfo } from './particle-attachment-info'
 import { ParticleCore } from './particle-core'
 import { ParticleInterface } from './particle-interface'
 import { ParticleProps } from './particle-props'
@@ -35,13 +39,18 @@ export function Particle(props: ParticleProps = {}): any {
     const className = constructorOrTarget.prototype.constructor.name
     const decorateClass = () => {
       const _classInterface = class extends constructorOrTarget implements ParticleInterface {
-        constructor(readonly scene: SceneInterface, props: ParticleProps) {
+        constructor(readonly scene: SceneInterface, props: ParticleProps, readonly attachmentInfo: ParticleAttachmentInfo) {
           super()
           this.props = props
           if (scene) {
             this.metadata.applyProps(this)
             this.babylon.particleSystem = new BABYLON.ParticleSystem(className, this.props.capacity, scene.babylon.scene)
             this.initialize(this.babylon.particleSystem)
+            if (attachmentInfo.attachment) {
+              this.updatePosition()
+            } else {
+              this.babylon.particleSystem.emitter = (this.babylon.particleSystem.emitter as BABYLON.Vector3).add(this.props.offset)
+            }
             this.babylon.particleSystem.onStoppedObservable.add(() => {
               switchLoopUpdate(false, this)
               invokeCallback(this.onStop, this)
@@ -56,6 +65,7 @@ export function Particle(props: ParticleProps = {}): any {
         babylon: Pick<BabylonAccessor, 'scene' | 'particleSystem'> = { scene: null, particleSystem: null }
         loopUpdate$: BABYLON.Observer<number>
         canvasResize$: BABYLON.Observer<Rect>
+        attachmentUpdate$?: BABYLON.Observer<number>
         animations: SpriteAnimation[]
         spriteProps: SpriteProps
 
@@ -69,17 +79,28 @@ export function Particle(props: ParticleProps = {}): any {
         set loopUpdate(value: boolean) { switchLoopUpdate(value, this) }
         get loopUpdate(): boolean { return !!this.loopUpdate$ }
 
+        updatePosition(): void {
+          this.babylon.particleSystem.emitter = this.attachmentInfo.attachment.transform.position.add(this.attachmentInfo.offset).add(this.props.offset)
+        }
+
         start(): void {
           invokeCallback(this.onStart, this)
+          if (this.attachmentInfo.attachment) {
+            this.attachmentUpdate$ = Core.loopUpdateAddObserver(() => this.updatePosition())
+          }
           this.babylon.particleSystem.start()
           switchLoopUpdate(true, this)
         }
 
         stop(): void {
           this.babylon.particleSystem.stop()
+          if (this.attachmentUpdate$) {
+            this.attachmentUpdate$.remove()
+          }
         }
 
         release(): void {
+          this.stop()
           invokeCallback(this.onRelease, this)
           this.babylon.particleSystem.dispose()
           removeLoopUpdate(this)
@@ -137,7 +158,7 @@ export function Particle(props: ParticleProps = {}): any {
       }
       const _classCore = class implements ParticleCore {
         props = applyDefaults(props, particlePropsDefault)
-        Instance: ParticleInterface = new _classInterface(null, null)
+        Instance: ParticleInterface = new _classInterface(null, null, null)
 
         load(scene: SceneInterface): LoadingProgress {
           SpritesController.load(this.props.sprites, scene)
@@ -150,8 +171,8 @@ export function Particle(props: ParticleProps = {}): any {
           SpritesController.unload(this.Instance.metadata.getProps().sprites, scene)
         }
 
-        spawn(scene: SceneInterface): ParticleInterface {
-          const particle = new _classInterface(scene, this.props)
+        spawn(scene: SceneInterface, attachmentInfo: ParticleAttachmentInfo): ParticleInterface {
+          const particle = new _classInterface(scene, this.props, attachmentInfo)
           return particle
         }
       }
