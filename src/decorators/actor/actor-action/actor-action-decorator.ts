@@ -112,25 +112,25 @@ export function ActorAction(props: ActorActionProps = {}): any {
     // Mutates decorator to class or property
     if (constructorOrTarget.prototype) {
       return decorateClass()
-    } /* else if ((
+    } else if ((
       constructorOrTarget instanceof ActorStateInterface ||
       constructorOrTarget instanceof ActorInterface
     ) && descriptor) { // Defined descriptor means it is a method
-      @ActorAction(props)
-      class _actionInterface extends UserActorActionInterface {
-        onLoopUpdate = descriptor.value
-      }
+      // @ActorAction(props)
+      // class _actionInterface extends UserActorActionInterface {
+      //   onLoopUpdate = descriptor.value
+      // }
 
       if (!Reflect.hasMetadata('metadata', constructorOrTarget)) {
         Reflect.defineMetadata('metadata', new Metadata(), constructorOrTarget)
       }
       const metadata = Reflect.getMetadata('metadata', constructorOrTarget) as Metadata
-      metadata.actions.push({
-        methodName: contextOrMethod as string,
-        classDefinition: _actionInterface
-      })
+      // metadata.actions.push({
+      //   methodName: contextOrMethod as string,
+      //   classDefinition: _actionInterface
+      // })
     } else {
       Logger.debugError('Cannot apply action decorator to non allowed method class:', constructorOrTarget, contextOrMethod)
-    } */
+    }
   }
 }
