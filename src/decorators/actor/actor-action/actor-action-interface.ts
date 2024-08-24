@@ -22,7 +22,7 @@ export abstract class ActorActionInterface<S = any, A = ActorInterface<SpriteInt
   /**
    * User available
    */
-  abstract actor: A
+  abstract actor: ActorInterface
   abstract setup: S
   abstract set loopUpdate(value: boolean)
   abstract get loopUpdate(): boolean
