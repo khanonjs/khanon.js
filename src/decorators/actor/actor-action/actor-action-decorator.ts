@@ -29,7 +29,7 @@ import { ActorActionInterface } from './actor-action-interface'
 import { ActorActionProps } from './actor-action-props'
 
 export function ActorAction(props: ActorActionProps = {}): any {
-  return function <T extends { new (...args: any[]): ActorActionInterface }>(constructorOrTarget: (T & ActorActionInterface) | any, contextOrMethod: ClassDecoratorContext | string, descriptor: PropertyDescriptor) {
+  return function <T extends { new (...args: any[]): ActorActionInterface }>(constructorOrTarget: (T & ActorActionInterface), contextOrMethod: ClassDecoratorContext | string, descriptor: PropertyDescriptor) {
     const decorateClass = () => {
       const _classInterface = class extends constructorOrTarget implements ActorActionInterface {
         constructor(actor: ActorInterface) {

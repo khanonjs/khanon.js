@@ -10,7 +10,6 @@ import {
 import { Core } from '../../core'
 import { BabylonAccessor } from '../../models/babylon-accessor'
 import { Rect } from '../../models/rect'
-import { Timeout } from '../../models/timeout'
 import { Logger } from '../../modules/logger'
 import { FlexId } from '../../types'
 import {
@@ -18,7 +17,6 @@ import {
   attachCanvasResize,
   attachLoopUpdate,
   invokeCallback,
-  isPrototypeOf,
   removeCanvasResize,
   removeLoopUpdate,
   switchLoopUpdate
@@ -70,7 +68,7 @@ export function Particle(props: ParticleProps = {}): any {
         babylon: Pick<BabylonAccessor, 'scene' | 'particleSystem'> = { scene: null, particleSystem: null }
         loopUpdate$: BABYLON.Observer<number>
         canvasResize$: BABYLON.Observer<Rect>
-        attachmentUpdate$?: BABYLON.Observer<number>
+        attachmentUpdate$: BABYLON.Observer<number>
         animations: SpriteAnimation[]
         spriteProps: SpriteProps
         offset: BABYLON.Vector3

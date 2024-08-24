@@ -33,14 +33,8 @@ export function ActorState(props: ActorStateProps = {}): any {
       }
 
       metadata: Metadata = Reflect.getMetadata('metadata', this) ?? new Metadata()
-      loopUpdate$?: BABYLON.Observer<number>
-      canvasResize$?: BABYLON.Observer<Rect>
-
-      onStart?(): void
-      onEnd?(): void
-      onLoopUpdate?(delta: number): void
-      onCanvasResize?(size: Rect): void
-
+      loopUpdate$: BABYLON.Observer<number>
+      canvasResize$: BABYLON.Observer<Rect>
       setup: any
 
       set loopUpdate(value: boolean) { switchLoopUpdate(value, this) }

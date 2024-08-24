@@ -9,10 +9,10 @@ import { Rect } from '../../models/rect'
 import { SceneInterface } from '../scene/scene-interface'
 
 export abstract class CameraInterface<S = any> implements LoopUpdatable, CanvasResizable {
-  abstract loopUpdate$?: BABYLON.Observer<number>
-  abstract canvasResize$?: BABYLON.Observer<Rect>
-  abstract start?(): void
-  abstract stop?(): void
+  abstract loopUpdate$: BABYLON.Observer<number>
+  abstract canvasResize$: BABYLON.Observer<Rect>
+  abstract start(): void
+  abstract stop(): void
 
   /**
    * User available

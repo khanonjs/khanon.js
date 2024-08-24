@@ -63,8 +63,8 @@ export function Actor(props: ActorProps = {}): any {
       transform: SpriteTransform | MeshTransform
       loopUpdate$: BABYLON.Observer<number>
       canvasResize$: BABYLON.Observer<Rect>
-      _body?: B
-      nodes?: Map<string, B> = new Map<string, B>()
+      _body: B
+      nodes: Map<string, B> = new Map<string, B>()
       _state: ActorStateInterface
       actions: Map<ActorActionConstructor, ActorActionInterface> = new Map<ActorActionConstructor, ActorActionInterface>()
       particles: Map<FlexId, ParticleInterface> = new Map<FlexId, ParticleInterface>()

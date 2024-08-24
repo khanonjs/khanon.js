@@ -26,18 +26,18 @@ import { ActorStateConstructor } from './actor-state/actor-state-constructor'
 import { ActorStateInterface } from './actor-state/actor-state-interface'
 
 export abstract class ActorInterface<B extends SpriteInterface | MeshInterface = any> implements LoopUpdatable, CanvasResizable, Notificable {
-  abstract metadata?: Metadata
-  abstract props?: ActorProps
-  abstract loopUpdate$?: BABYLON.Observer<number>
-  abstract canvasResize$?: BABYLON.Observer<Rect>
-  abstract _body?: B
-  abstract nodes?: Map<string, B>
-  abstract _state?: ActorStateInterface
-  abstract actions?: Map<ActorActionConstructor, ActorActionInterface>
-  abstract particles?: Map<FlexId, ParticleInterface>
-  abstract initialize?(props: ActorProps): void
-  abstract release?(): void
-  abstract stopActionFromInstance?(instance: ActorActionInterface): void
+  abstract metadata: Metadata
+  abstract props: ActorProps
+  abstract loopUpdate$: BABYLON.Observer<number>
+  abstract canvasResize$: BABYLON.Observer<Rect>
+  abstract _body: B
+  abstract nodes: Map<string, B>
+  abstract _state: ActorStateInterface
+  abstract actions: Map<ActorActionConstructor, ActorActionInterface>
+  abstract particles: Map<FlexId, ParticleInterface>
+  abstract initialize(props: ActorProps): void
+  abstract release(): void
+  abstract stopActionFromInstance(instance: ActorActionInterface): void
 
   /**
    * User available
