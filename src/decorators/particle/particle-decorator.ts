@@ -42,27 +42,6 @@ export function Particle(props: ParticleProps = {}): any {
         constructor(readonly scene: SceneInterface, props: ParticleProps, readonly attachmentInfo: ParticleAttachmentInfo) {
           super()
           this.props = props
-          if (scene) {
-            if (attachmentInfo.offset) {
-              this.offset = this.props.offset.add(attachmentInfo.offset)
-            } else {
-              this.offset = this.props.offset.clone()
-            }
-            this.metadata.applyProps(this)
-            this.babylon.particleSystem = new BABYLON.ParticleSystem(className, this.props.capacity, scene.babylon.scene)
-            this.initialize(this)
-            if (attachmentInfo.attachment) {
-              this.updatePosition()
-            } else {
-              this.babylon.particleSystem.emitter = (this.babylon.particleSystem.emitter as BABYLON.Vector3).add(this.offset)
-            }
-            this.babylon.particleSystem.onStoppedObservable.add(() => {
-              switchLoopUpdate(false, this)
-              invokeCallback(this.onStop, this)
-            })
-            attachLoopUpdate(this)
-            attachCanvasResize(this)
-          }
         }
 
         props: ParticleProps
@@ -77,6 +56,30 @@ export function Particle(props: ParticleProps = {}): any {
 
         set loopUpdate(value: boolean) { switchLoopUpdate(value, this) }
         get loopUpdate(): boolean { return !!this.loopUpdate$ }
+
+        create(): void {
+          if (this.scene) {
+            if (this.attachmentInfo.offset) {
+              this.offset = this.props.offset.add(this.attachmentInfo.offset)
+            } else {
+              this.offset = this.props.offset.clone()
+            }
+            this.metadata.applyProps(this)
+            this.babylon.particleSystem = new BABYLON.ParticleSystem(className, this.props.capacity, this.scene.babylon.scene)
+            this.initialize(this)
+            if (this.attachmentInfo.attachment) {
+              this.updatePosition()
+            } else {
+              this.babylon.particleSystem.emitter = (this.babylon.particleSystem.emitter as BABYLON.Vector3).add(this.offset)
+            }
+            this.babylon.particleSystem.onStoppedObservable.add(() => {
+              switchLoopUpdate(false, this)
+              invokeCallback(this.onStop, this)
+            })
+            attachLoopUpdate(this)
+            attachCanvasResize(this)
+          }
+        }
 
         updatePosition(): void {
           this.babylon.particleSystem.emitter = this.attachmentInfo.attachment.transform.position.add(this.offset)
@@ -170,8 +173,11 @@ export function Particle(props: ParticleProps = {}): any {
           SpritesController.unload(this.Instance.metadata.getProps().sprites, scene)
         }
 
-        spawn(scene: SceneInterface, attachmentInfo: ParticleAttachmentInfo): ParticleInterface {
+        spawn(scene: SceneInterface, attachmentInfo: ParticleAttachmentInfo, dontCreate?: boolean): ParticleInterface {
           const particle = new _classInterface(scene, this.props, attachmentInfo)
+          if (!dontCreate) {
+            particle.create()
+          }
           return particle
         }
       }

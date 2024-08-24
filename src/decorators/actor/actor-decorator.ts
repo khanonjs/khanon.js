@@ -2,6 +2,7 @@ import * as BABYLON from '@babylonjs/core'
 
 import { LoadingProgress } from '../../base'
 import { Metadata } from '../../base/interfaces/metadata/metadata'
+import { MetadataParticleDefinition } from '../../base/interfaces/metadata/metadata-particle-definition'
 import {
   ActorActionsController,
   ActorsController,
@@ -221,14 +222,25 @@ export function Actor(props: ActorProps = {}): any {
         })
       }
 
-      attachParticle(particleConstructor: ParticleConstructor | ((particle: ParticleInterface) => void), id: FlexId, offset: BABYLON.Vector3, nodeName?: string): void {
-        Logger.trace('aki attachParticle A', typeof particleConstructor)
-        // 8a8f
-        // const attachmentSprite = nodeName ? this.getNode(nodeName) : this.body
-        // if (!attachmentSprite) { Logger.debugError('Cannot attach a particle to an empty body.', _classInterface.prototype, particleConstructor.prototype); return }
-        // if (!this.scene.availableElements.hasParticle(particleConstructor)) { Logger.debugError('Trying to attach a particle non available to the actor. Please check the actor props.', _classInterface.prototype, particleConstructor.prototype); return }
-        // const particle = ParticlesController.get(particleConstructor).spawn(this.scene, { attachment: attachmentSprite, offset })
-        // this.particles.set(id, particle)
+      attachParticle(particleConstructorOrMethod: ParticleConstructor | ((particle: ParticleInterface) => void), id: FlexId, offset: BABYLON.Vector3, nodeName?: string): void {
+        let isMethod = false
+        if (!particleConstructorOrMethod.prototype?.constructor) {
+          isMethod = true
+          this.metadata.particles.forEach((value: MetadataParticleDefinition) => {
+            particleConstructorOrMethod = value.classDefinition
+          })
+        }
+        const attachmentSprite = nodeName ? this.getNode(nodeName) : this.body
+        if (!attachmentSprite) { Logger.debugError('Cannot attach a particle to an empty body.', _classInterface.prototype, particleConstructorOrMethod.prototype); return }
+        if (!this.scene.availableElements.hasParticle(particleConstructorOrMethod as ParticleConstructor)) { Logger.debugError('Trying to attach a particle non available to the actor. Please check the actor props.', _classInterface.prototype, particleConstructorOrMethod.prototype); return }
+        const particle = ParticlesController.get(particleConstructorOrMethod).spawn(this.scene, { attachment: attachmentSprite, offset }, isMethod)
+        if (isMethod) {
+          // Applies context to 'initialize' as caller 'Actor' to preserve the 'this'
+          // in case 'initialize' is equivalent to a decorated method of some of those both interfaces.
+          particle.initialize = particle.initialize.bind(this)
+          particle.create()
+        }
+        this.particles.set(id, particle)
       }
 
       startParticle(id: FlexId): void {
