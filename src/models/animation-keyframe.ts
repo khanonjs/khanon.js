@@ -1,26 +1,10 @@
-import { Subject } from 'rxjs'
+import * as BABYLON from '@babylonjs/core'
 
-export class AnimationKeyFrame {
-  /**
-     * Id of the keyframes group
-     */
-  id: number
+import { FlexId } from '../types'
 
-  /**
-     * Frames numbers
-     */
+export interface AnimationKeyFrame {
+  id: FlexId
   frames: number[]
-
-  /**
-     * Subject linked to this keyframe.
-     * Since can be more keyframes of this ID, all of them are linked to the same Subject.
-     * This is handled by Actor module.
-     */
-  linkedSubject?: Subject<void>
-
-  /**
-     * Timeouts to emit subject on animation start
-     * This is handled by Actor module.
-     */
-  timeouts?: number[]
+  emitter: BABYLON.Observable<void>
+  ms: number[]
 }

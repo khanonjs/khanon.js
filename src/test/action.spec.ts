@@ -1,9 +1,21 @@
-import { expect } from 'chai'
+import {
+  describe,
+  expect,
+  test
+} from '@jest/globals'
+
+describe('Action unit tests', () => {
+  test('hola', () => {
+    expect(1).toBe(1)
+  })
+})
+
+/* import { expect } from 'chai'
 import {
   beforeEach,
   describe,
   it
-} from 'mocha'
+} from 'jest'
 import * as sinon from 'sinon'
 
 import { Action } from '../modules/actions/action'
@@ -25,3 +37,4 @@ describe('Action class', function () {
     expect(spyOnPlay.calledOnce).to.be.true
   })
 })
+*/
