@@ -28,8 +28,7 @@
     "noUnusedLocals": false
   },
   "include": [
-    "src/**/*",
-    "src/index.d.ts"
+    "src/**/*"
   ],
   "exclude": [
       "src/**/*.spec.ts"
