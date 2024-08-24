@@ -125,10 +125,10 @@ export function ActorAction(props: ActorActionProps = {}): any {
         Reflect.defineMetadata('metadata', new Metadata(), constructorOrTarget)
       }
       const metadata = Reflect.getMetadata('metadata', constructorOrTarget) as Metadata
-      // metadata.actions.push({
-      //   methodName: contextOrMethod as string,
-      //   classDefinition: _actionInterface
-      // })
+      metadata.actions.push({
+        methodName: contextOrMethod as string,
+        classDefinition: _actionInterface
+      })
     } else {
       Logger.debugError('Cannot apply action decorator to non allowed method class:', constructorOrTarget, contextOrMethod)
     }

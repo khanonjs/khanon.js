@@ -10,7 +10,7 @@ import {
   SpriteInterface
 } from '../../sprite'
 
-export declare abstract class ActorActionInterface</* Setup object */ S = any, /* Actor object */ A = ActorInterface<SpriteInterface | MeshInterface>, /* SCene object */ C = SceneInterface> {
+export declare class ActorActionInterface</* Setup object */ S = any, /* Actor object */ A = ActorInterface<SpriteInterface | MeshInterface>, /* SCene object */ C = SceneInterface> {
   /**
    * Owner scene of this action.
    */
