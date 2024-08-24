@@ -9,7 +9,7 @@ import { SceneInterface } from '../../scene/scene-interface'
 import { SpriteInterface } from '../../sprite/sprite-interface'
 import { ActorInterface } from '../actor-interface'
 
-export abstract class ActorStateInterface<S = any, A = ActorInterface<SpriteInterface | MeshInterface>> implements StateInterface<S> {
+export abstract class ActorStateInterface<S = any, A = ActorInterface<SpriteInterface | MeshInterface>, C = SceneInterface> implements StateInterface<S> {
   abstract metadata: Metadata
   abstract loopUpdate$: BABYLON.Observer<number>
   abstract canvasResize$: BABYLON.Observer<Rect>
@@ -21,7 +21,7 @@ export abstract class ActorStateInterface<S = any, A = ActorInterface<SpriteInte
    */
   abstract actor: A
   abstract setup: S
-  abstract get scene(): SceneInterface
+  abstract scene: C
   abstract get loopUpdate(): boolean
   abstract set loopUpdate(value: boolean)
   abstract notify(message: FlexId, ...args: any[]): void
