@@ -32,18 +32,19 @@ export function ActorAction(props: ActorActionProps = {}): any {
   return function <T extends { new (...args: any[]): ActorActionInterface }>(constructorOrTarget: (T & ActorActionInterface) | any, contextOrMethod: ClassDecoratorContext | string, descriptor: PropertyDescriptor) {
     const decorateClass = () => {
       const _classInterface = class extends constructorOrTarget implements ActorActionInterface {
-        constructor(readonly actor: ActorInterface) {
+        constructor(actor: ActorInterface) {
           super()
+          this.actor = actor
           this.metadata.applyProps(this)
         }
-
-        props = props
 
         onPlay?(): void
         onStop?(): void
         onLoopUpdate?(delta: number): void
         onCanvasResize?(size: Rect): void
 
+        props = props
+        actor: ActorInterface
         scene: SceneInterface
         metadata: Metadata = Reflect.getMetadata('metadata', this) ?? new Metadata()
         countFramesUpdate$?: BABYLON.Observer<number>
