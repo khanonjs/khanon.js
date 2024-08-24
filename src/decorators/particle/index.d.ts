@@ -8,7 +8,6 @@ import { FlexId } from '../../types'
 import { SceneInterface } from '../scene'
 import { SpriteConstructor } from '../sprite'
 
-// 8a8f doc
 export abstract class ParticleInterface {
   /**
    * Babylon.js objects.
@@ -111,11 +110,6 @@ export interface ParticleProps {
    * Maximum number of particles to be emitted.
    */
   capacity?: number
-
-  /**
-   * Time in ms taken to stop the particle after the start.
-   */
-  delayStop?: number
 }
 
 export function Particle(props?: ParticleProps): any

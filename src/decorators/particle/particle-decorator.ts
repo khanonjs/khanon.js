@@ -43,13 +43,18 @@ export function Particle(props: ParticleProps = {}): any {
           super()
           this.props = props
           if (scene) {
+            if (attachmentInfo.offset) {
+              this.offset = this.props.offset.add(attachmentInfo.offset)
+            } else {
+              this.offset = this.props.offset.clone()
+            }
             this.metadata.applyProps(this)
             this.babylon.particleSystem = new BABYLON.ParticleSystem(className, this.props.capacity, scene.babylon.scene)
             this.initialize(this.babylon.particleSystem)
             if (attachmentInfo.attachment) {
               this.updatePosition()
             } else {
-              this.babylon.particleSystem.emitter = (this.babylon.particleSystem.emitter as BABYLON.Vector3).add(this.props.offset)
+              this.babylon.particleSystem.emitter = (this.babylon.particleSystem.emitter as BABYLON.Vector3).add(this.offset)
             }
             this.babylon.particleSystem.onStoppedObservable.add(() => {
               switchLoopUpdate(false, this)
@@ -68,6 +73,7 @@ export function Particle(props: ParticleProps = {}): any {
         attachmentUpdate$?: BABYLON.Observer<number>
         animations: SpriteAnimation[]
         spriteProps: SpriteProps
+        offset: BABYLON.Vector3
 
         initialize?(particle: BABYLON.ParticleSystem): void
         onStart?(): void
@@ -80,7 +86,7 @@ export function Particle(props: ParticleProps = {}): any {
         get loopUpdate(): boolean { return !!this.loopUpdate$ }
 
         updatePosition(): void {
-          this.babylon.particleSystem.emitter = this.attachmentInfo.attachment.transform.position.add(this.attachmentInfo.offset).add(this.props.offset)
+          this.babylon.particleSystem.emitter = this.attachmentInfo.attachment.transform.position.add(this.offset)
         }
 
         start(): void {

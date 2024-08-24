@@ -27,16 +27,14 @@ export class SceneRemove {
   }
 
   particle(particle: ParticleInterface): void {
-    // 8a8f
-    // particle.release()
-    // this.scene.particles.delete(particle)
+    particle.release()
+    this.scene.particles.delete(particle)
   }
 
   particleAll(): void {
-    // 8a8f
-    // this.scene.particles.forEach(particle => {
-    //   this.particle(particle)
-    // })
+    this.scene.particles.forEach(particle => {
+      this.particle(particle)
+    })
   }
 
   sprite(sprite: SpriteInterface): void {

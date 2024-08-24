@@ -1,6 +1,9 @@
+import * as BABYLON from '@babylonjs/core'
+
 import {
   ActorsController,
   MeshesController,
+  ParticlesController,
   SpritesController
 } from '../../controllers'
 import { Logger } from '../../modules/logger'
@@ -30,10 +33,12 @@ export class SceneSpawn {
     return instance as A
   }
 
-  particle<P extends ParticleInterface>(particle: new () => P): P {
+  particle<P extends ParticleInterface>(particle: new () => P, offset?: BABYLON.Vector3): P {
     Logger.debug('Particle spawn:', particle.prototype)
-    // TODO
-    return null
+    Logger.trace('aki EINS??', offset)
+    const instance = ParticlesController.get(particle).spawn(this.scene, { offset })
+    this.scene.particles.add(instance)
+    return instance as P
   }
 
   mesh<M extends MeshInterface>(mesh: new () => M): M {
