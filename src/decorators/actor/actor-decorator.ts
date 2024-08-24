@@ -168,13 +168,13 @@ export function Actor(props: ActorProps = {}): any {
           if (!this.props.actions?.find(_action => _action === actionConstructor)) {
             // Applies context to 'onLoopUpdate' as caller 'Actor' or 'ActorState' to preserve the 'this'
             // in case 'onLoopUpdate' is equivalent to a decorated method of some of those both interfaces.
-            // action.onLoopUpdate = action.onLoopUpdate.bind(  // 8a8f
-            //   this.metadata.getProps().actions?.find(_action => _action === actionConstructor)
-            //     ? this
-            //     : this._state?.metadata.getProps().actions?.find(_action => _action === actionConstructor)
-            //       ? this._state
-            //       : undefined
-            // )
+            action.onLoopUpdate = action.onLoopUpdate.bind(
+              this.metadata.getProps().actions?.find(_action => _action === actionConstructor)
+                ? this
+                : this._state?.metadata.getProps().actions?.find(_action => _action === actionConstructor)
+                  ? this._state
+                  : undefined
+            )
           }
           this.actions.set(actionConstructor, action)
           action.props.overrides?.forEach(actionOverride => {

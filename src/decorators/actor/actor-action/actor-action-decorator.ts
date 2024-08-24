@@ -65,7 +65,7 @@ export function ActorAction(props: ActorActionProps = {}): any {
               }
             })
           }
-          // invokeCallback(this.onPlay, this)  // 8a8f
+          invokeCallback(this.onPlay, this)
           attachLoopUpdate(this)
           attachCanvasResize(this)
         }
@@ -73,7 +73,7 @@ export function ActorAction(props: ActorActionProps = {}): any {
         end(): void {
           removeLoopUpdate(this)
           removeCanvasResize(this)
-          // invokeCallback(this.onStop, this)  // 8a8f
+          invokeCallback(this.onStop, this)
         }
 
         stop(): void {
