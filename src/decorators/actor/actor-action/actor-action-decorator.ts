@@ -116,10 +116,10 @@ export function ActorAction(props: ActorActionProps = {}): any {
       constructorOrTarget instanceof ActorStateInterface ||
       constructorOrTarget instanceof ActorInterface
     ) && descriptor) { // Defined descriptor means it is a method
-      // @ActorAction(props)
-      // class _actionInterface extends UserActorActionInterface {
-      //   onLoopUpdate = descriptor.value
-      // }
+      @ActorAction(props)
+      class _actionInterface extends UserActorActionInterface {
+        onLoopUpdate = descriptor.value
+      }
 
       if (!Reflect.hasMetadata('metadata', constructorOrTarget)) {
         Reflect.defineMetadata('metadata', new Metadata(), constructorOrTarget)
