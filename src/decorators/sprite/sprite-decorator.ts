@@ -2,7 +2,7 @@ import 'reflect-metadata'
 
 import * as BABYLON from '@babylonjs/core'
 
-import { SpriteInterface as UserSpriteInterface } from '../../'
+// import { SpriteInterface as UserSpriteInterface } from '../../' // TODO Why this imported declaration file (src/index.d.ts) is not found in Azure Ubutu tsc compiler?
 import {
   LoadingProgress,
   StateInterface
@@ -366,7 +366,7 @@ export function Sprite(props: SpriteProps): any {
       constructorOrTarget instanceof ParticleInterface
     ) && !descriptor) { // Undefined descriptor means it is a decorated property, otherwiese it is a decorated method
       @Sprite(props)
-      class _spriteInterface extends UserSpriteInterface {}
+      class _spriteInterface {}
 
       if (!Reflect.hasMetadata('metadata', constructorOrTarget)) {
         Reflect.defineMetadata('metadata', new Metadata(), constructorOrTarget)
