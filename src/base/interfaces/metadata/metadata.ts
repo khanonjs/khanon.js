@@ -12,7 +12,7 @@ export class Metadata<A extends ActorActionConstructor | SceneActionConstructor 
   actions: MetadataActionDefinition<A>[] = []
   sprites: MetadataSpriteDefinition[] = []
   meshes: MetadataMeshDefinition[] = []
-  particles: MetadataParticleDefinition[] = []
+  particles: Set<MetadataParticleDefinition> = new Set<MetadataParticleDefinition>()
   notifiers: Map<FlexId, MetadataNotifierDefinition> = new Map<FlexId, MetadataNotifierDefinition>()
 
   applyProps(_class: any): void {
@@ -25,9 +25,6 @@ export class Metadata<A extends ActorActionConstructor | SceneActionConstructor 
     this.meshes.forEach(definition => {
       _class[definition.propertyName] = definition.classDefinition
     })
-    this.particles.forEach(definition => {
-      _class[definition.propertyName] = definition.classDefinition
-    })
   }
 
   /**
@@ -38,7 +35,7 @@ export class Metadata<A extends ActorActionConstructor | SceneActionConstructor 
       actions: this.actions.map(definition => definition.classDefinition),
       sprites: this.sprites.map(definition => definition.classDefinition),
       meshes: this.meshes.map(definition => definition.classDefinition),
-      particles: this.particles.map(definition => definition.classDefinition)
+      particles: [...this.particles.values()].map(definition => definition.classDefinition)
     }
   }
 }

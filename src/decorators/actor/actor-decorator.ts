@@ -221,26 +221,28 @@ export function Actor(props: ActorProps = {}): any {
         })
       }
 
-      attachParticle(particleConstructor: ParticleConstructor, id: FlexId, offset: BABYLON.Vector3, nodeName?: string): void {
-        const attachmentSprite = nodeName ? this.getNode(nodeName) : this.body
-        if (!attachmentSprite) { Logger.debugError('Cannot attach a particle to an empty body.', _classInterface.prototype, particleConstructor.prototype); return }
-        if (!this.scene.availableElements.hasParticle(particleConstructor)) { Logger.debugError('Trying to attach a particle non available to the actor. Please check the actor props.', _classInterface.prototype, particleConstructor.prototype); return }
-        const particle = ParticlesController.get(particleConstructor).spawn(this.scene, { attachment: attachmentSprite, offset })
-        this.particles.set(id, particle)
+      attachParticle(particleConstructor: ParticleConstructor | ((particle: ParticleInterface) => void), id: FlexId, offset: BABYLON.Vector3, nodeName?: string): void {
+        Logger.trace('aki attachParticle A', typeof particleConstructor)
+        // 8a8f
+        // const attachmentSprite = nodeName ? this.getNode(nodeName) : this.body
+        // if (!attachmentSprite) { Logger.debugError('Cannot attach a particle to an empty body.', _classInterface.prototype, particleConstructor.prototype); return }
+        // if (!this.scene.availableElements.hasParticle(particleConstructor)) { Logger.debugError('Trying to attach a particle non available to the actor. Please check the actor props.', _classInterface.prototype, particleConstructor.prototype); return }
+        // const particle = ParticlesController.get(particleConstructor).spawn(this.scene, { attachment: attachmentSprite, offset })
+        // this.particles.set(id, particle)
       }
 
       startParticle(id: FlexId): void {
-        if (!this.particles.get(id)) { Logger.debugError(`Trying to start particle '${id}', but it doesn't exist in actor:`, _classInterface.prototype); return }
+        if (!this.particles.get(id)) { Logger.debugError(`Trying to start particle '${id}' that doesn't exist in actor:`, _classInterface.prototype); return }
         this.particles.get(id).start()
       }
 
       stopParticle(id: FlexId): void {
-        if (!this.particles.get(id)) { Logger.debugError(`Trying to start particle '${id}', but it doesn't exist in actor:`, _classInterface.prototype); return }
+        if (!this.particles.get(id)) { Logger.debugError(`Trying to start particle '${id}' that doesn't exist in actor:`, _classInterface.prototype); return }
         this.particles.get(id).stop()
       }
 
       removeParticle(id: FlexId): void {
-        if (!this.particles.get(id)) { Logger.debugError(`Trying to start particle '${id}', but it doesn't exist in actor:`, _classInterface.prototype); return }
+        if (!this.particles.get(id)) { Logger.debugError(`Trying to start particle '${id}' that doesn't exist in actor:`, _classInterface.prototype); return }
         this.particles.get(id).release()
         this.particles.delete(id)
       }

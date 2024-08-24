@@ -36,8 +36,8 @@ import { particlePropsDefault } from './particle.props.deafult'
 
 export function Particle(props: ParticleProps = {}): any {
   return function <T extends { new (...args: any[]): ParticleInterface }>(constructorOrTarget: (T & ParticleInterface) | any, contextOrProperty: ClassDecoratorContext | string, descriptor: PropertyDescriptor) {
-    const className = constructorOrTarget.prototype.constructor.name
     const decorateClass = () => {
+      const className = constructorOrTarget.prototype.constructor.name
       const _classInterface = class extends constructorOrTarget implements ParticleInterface {
         constructor(readonly scene: SceneInterface, props: ParticleProps, readonly attachmentInfo: ParticleAttachmentInfo) {
           super()
@@ -184,7 +184,7 @@ export function Particle(props: ParticleProps = {}): any {
       return decorateClass()
     } else if ((
       constructorOrTarget instanceof ActorInterface
-    ) && !descriptor) { // Undefined descriptor means it is a decorated property, otherwiese it is a decorated method
+    ) && descriptor) { // Defined descriptor means it is a decorated method
       @Particle(props)
       class _particleInterface extends UserParticleInterface {
         initialize = descriptor.value
@@ -194,9 +194,10 @@ export function Particle(props: ParticleProps = {}): any {
         Reflect.defineMetadata('metadata', new Metadata(), constructorOrTarget)
       }
       const metadata = Reflect.getMetadata('metadata', constructorOrTarget) as Metadata
-      metadata.particles.push({
+      metadata.particles.add({
         propertyName: contextOrProperty as string,
-        classDefinition: _particleInterface as any
+        classDefinition: _particleInterface as any,
+        methodName: contextOrProperty as string
       })
     } else {
       Logger.debugError('Cannot apply mesh decorator to non allowed property class:', constructorOrTarget, contextOrProperty)
