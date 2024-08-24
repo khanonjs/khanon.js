@@ -2,6 +2,7 @@ import { ActorInterface } from '../'
 import { Rect } from '../../../models/rect'
 import { FlexId } from '../../../types'
 import { MeshInterface } from '../../mesh'
+import { SceneInterface } from '../../scene'
 import { SpriteInterface } from '../../sprite'
 
 /**
@@ -10,6 +11,11 @@ import { SpriteInterface } from '../../sprite'
  * @param S Setup interface (optional).
  */
 export declare abstract class ActorStateInterface<S = any, A = ActorInterface<SpriteInterface | MeshInterface>> {
+  /**
+   * Scene owner of the state.
+   */
+  get scene(): SceneInterface
+
   /**
    * Actor owner of the state.
    */

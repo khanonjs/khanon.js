@@ -5,6 +5,7 @@ import { Metadata } from '../../../base/interfaces/metadata/metadata'
 import { Rect } from '../../../models/rect'
 import { FlexId } from '../../../types'
 import { MeshInterface } from '../../mesh/mesh-interface'
+import { SceneInterface } from '../../scene/scene-interface'
 import { SpriteInterface } from '../../sprite/sprite-interface'
 import { ActorInterface } from '../actor-interface'
 
@@ -20,6 +21,7 @@ export abstract class ActorStateInterface<S = any, A = ActorInterface<SpriteInte
    */
   abstract actor: A
   abstract setup: S
+  abstract get scene(): SceneInterface
   abstract get loopUpdate(): boolean
   abstract set loopUpdate(value: boolean)
   abstract notify(message: FlexId, ...args: any[]): void
