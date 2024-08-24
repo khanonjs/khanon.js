@@ -2,6 +2,7 @@ import 'reflect-metadata'
 
 import * as BABYLON from '@babylonjs/core'
 
+import { SpriteInterface as UserSpriteInterface } from '../../'
 import {
   LoadingProgress,
   StateInterface
@@ -365,7 +366,7 @@ export function Sprite(props: SpriteProps): any {
       constructorOrTarget instanceof ParticleInterface
     ) && !descriptor) { // Undefined descriptor means it is a decorated property, otherwiese it is a decorated method
       @Sprite(props)
-      class _spriteInterface {}
+      class _spriteInterface extends UserSpriteInterface {}
 
       if (!Reflect.hasMetadata('metadata', constructorOrTarget)) {
         Reflect.defineMetadata('metadata', new Metadata(), constructorOrTarget)
