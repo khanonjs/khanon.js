@@ -2,7 +2,7 @@ import 'reflect-metadata'
 
 import * as BABYLON from '@babylonjs/core'
 
-import { SceneActionInterface as UserSceneActionInterface } from '../../..'
+import { SceneActionInterface as UserSceneActionInterface } from '../../../'
 import { LoadingProgress } from '../../../base'
 import { Metadata } from '../../../base/interfaces/metadata/metadata'
 import {
