@@ -2,7 +2,6 @@ import 'reflect-metadata'
 
 import * as BABYLON from '@babylonjs/core'
 
-import { ParticleInterface as UserParticleInterface } from '../../'
 import { LoadingProgress } from '../../base'
 import { Metadata } from '../../base/interfaces/metadata/metadata'
 import {
@@ -192,7 +191,7 @@ export function Particle(props: ParticleProps = {}): any {
       constructorOrTarget instanceof ActorInterface
     ) && descriptor) { // Defined descriptor means it is a decorated method
       @Particle(props)
-      class _particleInterface extends UserParticleInterface {
+      class _particleInterface {
         initialize = descriptor.value
       }
 
