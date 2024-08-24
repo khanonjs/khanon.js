@@ -7,10 +7,10 @@ import {
 } from '../../types'
 
 export abstract class DisplayObject {
-  abstract animation?: SpriteAnimation | MeshAnimation
-  abstract animations?: Map<FlexId, SpriteAnimation | MeshAnimation>
+  abstract animation: SpriteAnimation | MeshAnimation
+  abstract animations: Map<FlexId, SpriteAnimation | MeshAnimation>
 
-  abstract release?(): void
+  abstract release(): void
 
   // User anailable
   abstract get transform(): SpriteTransform | MeshTransform

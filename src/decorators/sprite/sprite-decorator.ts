@@ -78,11 +78,6 @@ export function Sprite(props: SpriteProps): any {
         canvasResize$: BABYLON.Observer<Rect>
         _scale: number = 1
 
-        onSpawn?(scene: SceneInterface): void
-        onDestroy?(): void
-        onLoopUpdate?(delta: number): void
-        onCanvasResize?(size: Rect): void
-
         set loopUpdate(value: boolean) { switchLoopUpdate(value, this) }
         get loopUpdate(): boolean { return !!this.loopUpdate$ }
 
@@ -161,18 +156,6 @@ export function Sprite(props: SpriteProps): any {
         get visible(): boolean {
           return this._visible
         }
-
-        // setTransform(transform: BABYLON.Matrix): void { // TODO
-        // this.babylon.mesh.updatePoseMatrix(transform) // TODO: Test this
-        // this.setPosition(transform.getTranslation())
-        // this.setRotation(transform.getRotationMatrix())
-        // this.babylon.mesh.scaling = transform.sca
-        // this.babylon.mesh.rota = transform.getTranslation()
-        // }
-
-        // getTransform(): BABYLON.Matrix {  // TODO
-        // return null
-        // }
 
         addAnimation(animation: SpriteAnimation): void {
           if (this.animations.get(animation.id)) { Logger.debugError(`Animation name '${animation.id}' already exists.`); return }

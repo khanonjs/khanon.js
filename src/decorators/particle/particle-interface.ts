@@ -8,7 +8,6 @@ import {
 import { Metadata } from '../../base/interfaces/metadata/metadata'
 import { BabylonAccessor } from '../../models/babylon-accessor'
 import { Rect } from '../../models/rect'
-import { Timeout } from '../../models/timeout'
 import { FlexId } from '../../types'
 import { SceneInterface } from '../scene/scene-interface'
 import { SpriteAnimation } from '../sprite/sprite-animation'
