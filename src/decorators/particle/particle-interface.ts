@@ -44,7 +44,7 @@ export abstract class ParticleInterface implements LoopUpdatable, CanvasResizabl
   /**
    * User defined mandatory (abstract on .d.ts)
    */
-  initialize?(particleSystem: BABYLON.ParticleSystem): void
+  initialize?(particle: ParticleInterface): void
 
   /**
    * User defined optional

@@ -1,3 +1,5 @@
+import 'reflect-metadata'
+
 import * as BABYLON from '@babylonjs/core'
 
 import { ParticleInterface as UserParticleInterface } from '../../'
@@ -48,7 +50,7 @@ export function Particle(props: ParticleProps = {}): any {
             }
             this.metadata.applyProps(this)
             this.babylon.particleSystem = new BABYLON.ParticleSystem(className, this.props.capacity, scene.babylon.scene)
-            this.initialize(this.babylon.particleSystem)
+            this.initialize(this)
             if (attachmentInfo.attachment) {
               this.updatePosition()
             } else {
@@ -72,13 +74,6 @@ export function Particle(props: ParticleProps = {}): any {
         animations: SpriteAnimation[]
         spriteProps: SpriteProps
         offset: BABYLON.Vector3
-
-        initialize?(particle: BABYLON.ParticleSystem): void
-        onStart?(): void
-        onStop?(): void
-        onRelease?(): void
-        onLoopUpdate?(delta: number): void
-        onCanvasResize?(size: Rect): void
 
         set loopUpdate(value: boolean) { switchLoopUpdate(value, this) }
         get loopUpdate(): boolean { return !!this.loopUpdate$ }
