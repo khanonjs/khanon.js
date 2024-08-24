@@ -25,8 +25,8 @@ export abstract class ActionInterface<S = any> implements LoopUpdatable, CanvasR
   /**
    * User defined optional
    */
-  abstract onPlay?(): void
-  abstract onStop?(): void
-  abstract onLoopUpdate?(delta: number): void
-  abstract onCanvasResize?(size: Rect): void
+  // abstract onPlay?(): void // 8a8f
+  // abstract onStop?(): void
+  // abstract onLoopUpdate?(delta: number): void
+  // abstract onCanvasResize?(size: Rect): void
 }
