@@ -21,11 +21,13 @@ export abstract class MeshInterface extends DisplayObject {
   abstract get scene(): SceneInterface
   abstract get transform(): MeshTransform
   abstract setMesh(babylonMesh: BABYLON.Mesh): void
+  abstract destroy(): void
 
   /**
    * User defined optional
    */
   onSpawn?(scene: SceneInterface): void
+  onDestroy?(): void
   onLoopUpdate?(delta: number): void
   onCanvasResize?(size: Rect): void
 }

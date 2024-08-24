@@ -124,9 +124,19 @@ export declare abstract class SpriteInterface {
   drawText(text: string, properties: DrawBlockProperties): void
 
   /**
+   * Destroys the sprite (release it).
+   */
+  destroy(): void
+
+  /**
    * Callback invoked after the sprite has been spawned in a scene.
    */
   onSpawn?(scene: SceneInterface): void
+
+  /**
+   * Callback invoked on sprite destroy (equivalent to onRelease).
+   */
+  onDestroy?(): void
 
   /**
    * Callback invoked on loop update.

@@ -77,6 +77,7 @@ export function Sprite(props: SpriteProps): any {
         _scale: number = 1
 
         onSpawn?(scene: SceneInterface): void
+        onDestroy?(): void
         onLoopUpdate?(delta: number): void
         onCanvasResize?(size: Rect): void
 
@@ -298,6 +299,7 @@ export function Sprite(props: SpriteProps): any {
         }
 
         release(): void {
+          invokeCallback(this.onDestroy, this)
           this.stopAnimation()
           if (this.exclusiveTexture) {
             this.spriteTexture.dispose()
@@ -306,6 +308,10 @@ export function Sprite(props: SpriteProps): any {
           this.babylon.sprite.dispose()
           removeLoopUpdate(this)
           removeCanvasResize(this)
+        }
+
+        destroy(): void {
+          this.scene.remove.sprite(this)
         }
 
         private removeAnimationKeyFrames(): void {

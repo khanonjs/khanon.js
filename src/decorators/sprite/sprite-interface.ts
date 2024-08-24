@@ -28,11 +28,13 @@ export abstract class SpriteInterface extends DisplayObject {
   abstract set scale(scale: number)
   abstract get scale(): number
   abstract drawText(text: string, properties: DrawBlockProperties): void
+  abstract destroy(): void
 
   /**
    * User defined optional
    */
   onSpawn?(scene: SceneInterface): void
+  onDestroy?(): void
   onLoopUpdate?(delta: number): void
   onCanvasResize?(size: Rect): void
 }

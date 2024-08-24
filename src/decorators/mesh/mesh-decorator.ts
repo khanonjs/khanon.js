@@ -58,6 +58,7 @@ export function Mesh(props: MeshProps): any {
         canvasResize$: BABYLON.Observer<Rect>
 
         onSpawn?(scene: SceneInterface): void
+        onDestroy?(): void
         onLoopUpdate?(delta: number): void
         onCanvasResize?(size: Rect): void
 
@@ -129,10 +130,15 @@ export function Mesh(props: MeshProps): any {
         }
 
         release(): void {
+          invokeCallback(this.onDestroy, this)
           this.stopAnimation()
           this.babylon.mesh.dispose()
           removeLoopUpdate(this)
           removeCanvasResize(this)
+        }
+
+        destroy(): void {
+          this.scene.remove.mesh(this)
         }
       }
       const _classCore = class implements MeshCore {

@@ -105,9 +105,19 @@ export declare abstract class MeshInterface implements DisplayObject {
   clearKeyframeSubscriptions(keyframeId: string): void
 
   /**
+   * Removes the mesh from the scene.
+   */
+  destroy(): void
+
+  /**
    * Callback invoked after the mesh has been spawned in a scene.
    */
   onSpawn?(scene: SceneInterface): void
+
+  /**
+   * Callback invoked on mesh destroy (equivalent to onRelease).
+   */
+  onDestroy?(): void
 
   /**
    * Callback invoked on loop update.
