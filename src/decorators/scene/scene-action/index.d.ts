@@ -1,5 +1,5 @@
 import { SceneInterface } from '../'
-import { Rect } from '../../../models/rect'
+import { Rect } from '../../../models'
 import { MeshConstructor } from '../../mesh'
 import { SpriteConstructor } from '../../sprite'
 
