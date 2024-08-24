@@ -389,7 +389,7 @@ export function Sprite(props: SpriteProps): any {
       const metadata = Reflect.getMetadata('metadata', constructorOrTarget) as Metadata
       metadata.sprites.push({
         propertyName: contextOrProperty as string,
-        classDefinition: _spriteInterface
+        classDefinition: _spriteInterface as any
       })
     } else {
       Logger.debugError('Cannot apply sprite decorator to non allowed property class:', constructorOrTarget, contextOrProperty)

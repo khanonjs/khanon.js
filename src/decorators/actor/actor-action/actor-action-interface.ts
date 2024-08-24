@@ -3,9 +3,9 @@ import * as BABYLON from '@babylonjs/core'
 import { ActionInterface } from '../../../base'
 import { Metadata } from '../../../base/interfaces/metadata/metadata'
 import { Rect } from '../../../models/rect'
-import { MeshInterface } from '../../mesh'
+import { MeshInterface } from '../../mesh/mesh-interface'
 import { SceneInterface } from '../../scene/scene-interface'
-import { SpriteInterface } from '../../sprite'
+import { SpriteInterface } from '../../sprite/sprite-interface'
 import { ActorInterface } from '../actor-interface'
 import { ActorActionProps } from './actor-action-props'
 
@@ -32,8 +32,8 @@ export abstract class ActorActionInterface<S = any, A = ActorInterface<SpriteInt
   /**
    * User defined optional
    */
-  onPlay?(): void
-  onStop?(): void
-  onLoopUpdate?(delta: number): void
-  onCanvasResize?(size: Rect): void
+  abstract onPlay(): void
+  abstract onStop(): void
+  abstract onLoopUpdate(delta: number): void
+  abstract onCanvasResize(size: Rect): void
 }

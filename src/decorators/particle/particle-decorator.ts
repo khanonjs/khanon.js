@@ -203,7 +203,7 @@ export function Particle(props: ParticleProps = {}): any {
       const metadata = Reflect.getMetadata('metadata', constructorOrTarget) as Metadata
       metadata.particles.push({
         propertyName: contextOrProperty as string,
-        classDefinition: _particleInterface
+        classDefinition: _particleInterface as any
       })
     } else {
       Logger.debugError('Cannot apply mesh decorator to non allowed property class:', constructorOrTarget, contextOrProperty)

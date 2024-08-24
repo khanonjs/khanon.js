@@ -179,7 +179,7 @@ export function Mesh(props: MeshProps): any {
       const metadata = Reflect.getMetadata('metadata', constructorOrTarget) as Metadata
       metadata.meshes.push({
         propertyName: contextOrProperty as string,
-        classDefinition: _meshInterface
+        classDefinition: _meshInterface as any
       })
     } else {
       Logger.debugError('Cannot apply mesh decorator to non allowed property class:', constructorOrTarget, contextOrProperty)

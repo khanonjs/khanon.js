@@ -8,10 +8,7 @@ export { ActionCore } from './interfaces/action/action-core'
 export { ActionInterface } from './interfaces/action/action-interface'
 export { ActionProps } from './interfaces/action/action-props'
 
-export { MetadataActionDefinition } from './interfaces/metadata/metadata-action-definition'
-export { MetadataMeshDefinition } from './interfaces/metadata/metadata-mesh-definition'
-export { MetadataNotifierDefinition } from './interfaces/metadata/metadata-notifier-definition'
-export { MetadataSpriteDefinition } from './interfaces/metadata/metadata-sprite-definition'
+export { Metadata } from './interfaces/metadata/metadata'
 
 export { StateCore } from './interfaces/state/state-core'
 export { StateInterface } from './interfaces/state/state-interface'

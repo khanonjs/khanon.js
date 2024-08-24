@@ -1,14 +1,12 @@
-import {
-  MetadataActionDefinition,
-  MetadataMeshDefinition,
-  MetadataNotifierDefinition,
-  MetadataSpriteDefinition
-} from '../../../base'
 import { ActorActionConstructor } from '../../../decorators/actor/actor-action/actor-action-constructor'
 import { SceneActionConstructor } from '../../../decorators/scene/scene-action/scene-action-constructor'
 import { FlexId } from '../../../types'
+import { MetadataActionDefinition } from './metadata-action-definition'
+import { MetadataMeshDefinition } from './metadata-mesh-definition'
+import { MetadataNotifierDefinition } from './metadata-notifier-definition'
 import { MetadataParticleDefinition } from './metadata-particle-definition'
 import { MetadataProps } from './metadata-props'
+import { MetadataSpriteDefinition } from './metadata-sprite-definition'
 
 export class Metadata<A extends ActorActionConstructor | SceneActionConstructor = any> {
   actions: MetadataActionDefinition<A>[] = []

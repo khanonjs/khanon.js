@@ -10,11 +10,11 @@ import { SpriteProps } from './sprite-props'
 import { SpriteTexture } from './sprite-texture'
 
 export abstract class SpriteInterface extends DisplayObject {
-  abstract props?: SpriteProps
-  abstract loopUpdate$?: BABYLON.Observer<number>
-  abstract canvasResize$?: BABYLON.Observer<Rect>
-  abstract exclusiveTexture?: boolean // Exclusive texture means this sprite has an exclusive texture that is not stored anywhere, so the sprite itself has to handle its release.
-  abstract setTexture?(spriteTexture: SpriteTexture, isExclusive: boolean, isParticle: boolean): void
+  abstract props: SpriteProps
+  abstract loopUpdate$: BABYLON.Observer<number>
+  abstract canvasResize$: BABYLON.Observer<Rect>
+  abstract exclusiveTexture: boolean // Exclusive texture means this sprite has an exclusive texture that is not stored anywhere, so the sprite itself has to handle its release.
+  abstract setTexture(spriteTexture: SpriteTexture, isExclusive: boolean, isParticle: boolean): void
 
   /**
    * User available

@@ -36,16 +36,15 @@ export function SceneAction(props: SceneActionProps = {}): any {
           this.metadata.applyProps(this)
         }
 
+        onPlay(): void {}
+        onStop(): void {}
+        onLoopUpdate(delta: number): void {}
+        onCanvasResize(size: Rect): void {}
+
         props = props
-
-        onPlay?(): void
-        onStop?(): void
-        onLoopUpdate?(delta: number): void
-        onCanvasResize?(size: Rect): void
-
         metadata: Metadata = Reflect.getMetadata('metadata', this) ?? new Metadata()
-        loopUpdate$?: BABYLON.Observer<number>
-        canvasResize$?: BABYLON.Observer<Rect>
+        loopUpdate$: BABYLON.Observer<number>
+        canvasResize$: BABYLON.Observer<Rect>
         setup: any
 
         set loopUpdate(value: boolean) { switchLoopUpdate(value, this) }
