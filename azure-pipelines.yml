@@ -5,25 +5,60 @@ jobs:
 - job: Build_and_deploy
   pool:
     vmImage: ubuntu-latest
+
+  variables:
+  - name: tagRelease
+    value: tagTest
+
   steps:
-   - checkout: self
-     persistCredentials: true
-
+   - template: azure-pipelines-build.yml
    - script: |
-      git config user.name "development@khanon3d.com"
-      git config user.email "development@khanon3d.com"
-      npm run pipeline:create-version-tag
-     displayName: 'Tag test'
-#  - template: azure-pipelines-build.yml
-#
-#  - script: |
-#      npm run pipeline:validate-version
-#    displayName: 'Validate version'
+       npm run publish:validate-version
+     displayName: 'Validate version'
+   - script: |
+       npm run publish:docs -- url:http://82.223.97.22:3000/deploy/docs secret:$(khanonjs-deployer-secret)
+     displayName: 'Publish api-docs'
+   - task: DeleteFiles@1
+     inputs:
+       SourceFolder:
+       Contents: |
+             **/*
+             !dist/**
+       RemoveDotFiles: true
+     displayName: 'Setup folder - Delete root files'
+   - task: CopyFiles@2
+     inputs:
+       SourceFolder: 'dist'
+       Contents: '**/*'
+       TargetFolder: '.'
+     displayName: 'Setup folder - Copy dist to root'
+   - task: DeleteFiles@1
+     inputs:
+       SourceFolder: 'dist'
+       Contents: '**'
+       RemoveSourceFolder: true
+       RemoveDotFiles: true
+     displayName: 'Setup folder - Delete dist folder'
+   - task: Npm@1
+     inputs:
+       command: 'publish'
+       verbose: true
+       publishEndpoint: 'Npm public registry - Khanon.js'
+     displayName: 'Publish npm package'
+   - bash:
+       echo "##vso[task.setvariable variable=tagRelease;]$(node -p "require('./package.json').version")"
+     displayName: 'Get version'
+   - task: GitHubRelease@1
+     inputs:
+       gitHubConnection: 'khanon-js - access token'
+       repositoryName: 'khanon-js/khanon.js'
+       action: 'create'
+       title: 'Version $(tagRelease)'
+       target: '$(Build.SourceVersion)'
+       tagSource: 'userSpecifiedTag'
+       tag: 'v$(tagRelease)'
+       changeLogCompareToRelease: 'lastFullRelease'
+       changeLogType: 'commitBased'
+     displayName: 'Github publish'
 
-#  - task: Npm@1
-#    inputs:
-#      command: 'publish'
-#      verbose: true
-#      publishEndpoint: 'Npm public registry - Khanon.js'
-#    displayName: 'Npm publish'
 

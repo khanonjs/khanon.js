@@ -29,14 +29,23 @@
         "prefer-const": "warn",
         "no-empty": "warn",
         "comma-dangle": "warn",
+        "comma-spacing": "warn",
         "spaced-comment": "warn",
         "no-case-declarations": "off",
         "no-unused-vars": "off",
         "no-unused-expressions": "off",
+        "no-dupe-class-members": "off",
         "sort-imports": "off",
         "space-before-function-paren": "off",
+        "space-before-blocks": "warn",
+        "space-infix-ops": "warn",
         "no-useless-constructor": "off",
-        "eol-last": "warn",
+        "func-call-spacing": "off",
+        "keyword-spacing": "warn",
+        "n/handle-callback-err": "warn",
+        "array-bracket-spacing": "warn",
+        "space-in-parens": "warn",
+        "eol-last": ["warn", "always"],
         "dot-notation": "off",
         "lines-between-class-members": "warn",
         "@typescript-eslint/no-unused-vars": ["warn", { "vars": "all", "args": "none", "ignoreRestSiblings": false }],
@@ -44,6 +53,7 @@
         "@typescript-eslint/no-explicit-any": "off",
         "@typescript-eslint/no-empty-interface": "off",
         "@typescript-eslint/ban-ts-comment": "off",
-        "@typescript-eslint/no-inferrable-types": "off"
+        "@typescript-eslint/no-inferrable-types": "off",
+        "@typescript-eslint/no-namespace": "off"
     }
 }

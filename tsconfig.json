@@ -1,8 +1,8 @@
 {
   "compilerOptions": {
+    "target": "ES2022",
+    "module": "CommonJS",
     "moduleResolution": "node",
-    "module": "es6",
-    "target": "es6",
     "lib": [
       "dom",
       "es6"
@@ -21,13 +21,16 @@
     "strictPropertyInitialization": false,
     "strictNullChecks": false,
     "experimentalDecorators": true,
+    "emitDecoratorMetadata": true,
     "sourceMap": true,
-    "preserveConstEnums":true
+    "preserveConstEnums":true,
+    "esModuleInterop": true,
+    "noUnusedLocals": false
   },
+  "include": [
+    "src/**/*"
+  ],
   "exclude": [
-      "dist",
-      "docs",
-      "pipeline",
       "src/**/*.spec.ts"
   ]
 }
