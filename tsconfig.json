@@ -32,5 +32,9 @@
   ],
   "exclude": [
       "src/**/*.spec.ts"
+  ],
+  "files": [
+    "src/index.d.ts",
+    "src/modules/logger/index.d.ts"
   ]
 }
