@@ -64,9 +64,9 @@ export function ActorAction(props: ActorActionProps = {}): any {
               }
             })
           }
-          invokeCallback(this.onPlay, this)
           attachLoopUpdate(this)
           attachCanvasResize(this)
+          invokeCallback(this.onPlay, this)
         }
 
         end(): void {

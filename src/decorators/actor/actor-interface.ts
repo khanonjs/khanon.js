@@ -57,7 +57,8 @@ export abstract class ActorInterface<B extends SpriteInterface | MeshInterface =
   abstract startState(state: ActorStateConstructor, setup: any): void
   abstract playAnimation(animation: (B extends SpriteInterface ? SpriteAnimation : MeshAnimation) | FlexId, loopOverride?: boolean, completed?: () => void): void
   abstract stopAnimation(): void
-  abstract playAction(action: ActorActionConstructor | ((delta: number) => void), setup: any): void
+  abstract playAction(action: ActorActionConstructor | ((delta: number) => void), setup: any): ActorActionInterface
+  abstract getAction(actionConstructor: ActorActionConstructor): ActorActionInterface | undefined
   abstract stopAction(action: ActorActionConstructor): void
   abstract stopActionGroup(group: number): void
   abstract stopActionAll(): void

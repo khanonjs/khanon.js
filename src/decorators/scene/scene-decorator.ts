@@ -214,10 +214,11 @@ export function Scene(props: SceneProps): any {
         this._state.start(setup)
       }
 
-      playAction(actionConstructor: SceneActionConstructor, setup: any): void {
+      playAction(actionConstructor: SceneActionConstructor, setup: any): SceneActionInterface {
         if (!this.availableElements.hasSceneAction(actionConstructor)) { Logger.debugError('Trying to play an action non available to the actor. Please check the actor props.', _class.prototype, actionConstructor.prototype); return }
-        if (!this.actions.get(actionConstructor)) {
-          const action = SceneActionsController.get(actionConstructor).spawn(this)
+        let action = this.actions.get(actionConstructor)
+        if (!action) {
+          action = SceneActionsController.get(actionConstructor).spawn(this)
           if (!this.props.actions?.find(_action => _action === actionConstructor)) {
             // Applies context 'Scene' or 'SceneState' to 'onLoopUpdate' method to preserve the 'this'
             // in case 'onLoopUpdate' is equivalent to a decorated method of some of those both interfaces.
@@ -235,6 +236,11 @@ export function Scene(props: SceneProps): any {
           })
           action.start(setup)
         }
+        return action
+      }
+
+      getAction(actionConstructor: SceneActionConstructor): SceneActionInterface | undefined {
+        return this.actions.get(actionConstructor)
       }
 
       stopActionFromInstance(instance: SceneActionInterface, forceRemove?: boolean) {

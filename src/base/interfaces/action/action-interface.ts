@@ -6,6 +6,8 @@ import { CanvasResizable } from '../canvas-resizable'
 import { LoopUpdatable } from '../loop-updatable'
 import { Metadata } from '../metadata/metadata'
 
+// TODO: Use mixings for derived classes and add a single implementation!!
+
 export abstract class ActionInterface<S = any> implements LoopUpdatable, CanvasResizable {
   abstract metadata: Metadata
   abstract loopUpdate$: BABYLON.Observer<number>

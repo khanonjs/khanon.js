@@ -21,7 +21,10 @@ import {
   SpriteConstructor,
   SpriteInterface
 } from '../sprite'
-import { SceneActionConstructor } from './scene-action'
+import {
+  SceneActionConstructor,
+  SceneActionInterface
+} from './scene-action'
 import {
   SceneStateConstructor,
   SceneStateInterface
@@ -181,7 +184,13 @@ export declare abstract class SceneInterface {
    * Plays an Action. N actions can be played simultaneously.
    * @param action
    */
-  playAction<S extends SceneActionConstructor>(action: S | ((delta: number) => void), setup: InstanceType<S>['setup']): void // TODO is it possible to make 'setup' argument optional whether InstanceType<S>['setup'] type is 'any'?
+  playAction<S extends SceneActionConstructor>(action: S | ((delta: number) => void), setup: InstanceType<S>['setup']): InstanceType<S> // TODO is it possible to make 'setup' argument optional whether InstanceType<S>['setup'] type is 'any'?
+
+  /**
+   * Gets an action.
+   * @param actionConstructor
+   */
+  getAction(actionConstructor: SceneActionConstructor): SceneActionInterface | undefined
 
   /**
    * Stops an action. If the actions prop 'preserve' prop is 'false', it will be removed.

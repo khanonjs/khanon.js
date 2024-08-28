@@ -57,9 +57,9 @@ export function SceneAction(props: SceneActionProps = {}): any {
               }
             })
           }
-          invokeCallback(this.onPlay, this)
           attachLoopUpdate(this)
           attachCanvasResize(this)
+          invokeCallback(this.onPlay, this)
         }
 
         end(): void {
