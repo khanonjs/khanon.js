@@ -237,10 +237,10 @@ export function Scene(props: SceneProps): any {
         }
       }
 
-      stopActionFromInstance(instance: SceneActionInterface) {
+      stopActionFromInstance(instance: SceneActionInterface, forceRemove?: boolean) {
         for (const [key, value] of this.actions.entries()) {
           if (value === instance) {
-            this.stopAction(key)
+            this.stopAction(key, forceRemove)
             return
           }
         }

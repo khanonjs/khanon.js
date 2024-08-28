@@ -44,7 +44,7 @@ export abstract class SceneInterface implements Loadable, LoopUpdatable, CanvasR
   abstract meshes: Set<MeshInterface>
   abstract sprites: Set<SpriteInterface>
   abstract setEngineParams(): void // TODO ?
-  abstract stopActionFromInstance(instance: SceneActionInterface): void
+  abstract stopActionFromInstance(instance: SceneActionInterface, forceRemove?: boolean): void
 
   /**
    * User available

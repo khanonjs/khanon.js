@@ -78,6 +78,10 @@ export function ActorAction(props: ActorActionProps = {}): any {
         stop(): void {
           this.actor.stopActionFromInstance(this)
         }
+
+        remove(): void {
+          this.actor.stopActionFromInstance(this, true)
+        }
       }
       const _classCore = class implements ActorActionCore {
         props = props

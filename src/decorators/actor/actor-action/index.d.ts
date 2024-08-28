@@ -38,6 +38,11 @@ export declare class ActorActionInterface</* Setup object */ S = any, /* Actor o
   stop(): void
 
   /**
+   * Removes the action. Equivalent to calling 'actor.removeAction'.
+   */
+  remove(): void
+
+  /**
    * Invoked on action start. Use this method to setup the Actor according to the action start.
    */
   onPlay?(): void

@@ -71,6 +71,10 @@ export function SceneAction(props: SceneActionProps = {}): any {
         stop(): void {
           this.scene.stopActionFromInstance(this)
         }
+
+        remove(): void {
+          this.scene.stopActionFromInstance(this, true)
+        }
       }
       const _classCore = class implements SceneActionCore {
         props = props

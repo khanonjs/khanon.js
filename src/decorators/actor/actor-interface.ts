@@ -37,7 +37,7 @@ export abstract class ActorInterface<B extends SpriteInterface | MeshInterface =
   abstract particles: Map<FlexId, ParticleInterface>
   abstract initialize(props: ActorProps): void
   abstract release(): void
-  abstract stopActionFromInstance(instance: ActorActionInterface): void
+  abstract stopActionFromInstance(instance: ActorActionInterface, forceRemove?: boolean): void
 
   /**
    * User available

@@ -26,6 +26,11 @@ export declare abstract class SceneActionInterface</* Setup object */ S = any, /
   stop(): void
 
   /**
+   * Removes the action. Equivalent to calling 'actor.removeAction'.
+   */
+  remove(): void
+
+  /**
    * Invoked on action start. Use this method to setup the Actor according to the action start.
    */
   onStart?(): void

@@ -22,6 +22,7 @@ export abstract class SceneActionInterface<S = any, C extends SceneInterface = S
   abstract set loopUpdate(value: boolean)
   abstract get loopUpdate(): boolean
   abstract stop(): void // Callable from user Action, it will call to 'owner.stopActionFromInstance', then owner calls 'action.end' after remove it.
+  abstract remove(): void
 
   /**
    * User defined optional
