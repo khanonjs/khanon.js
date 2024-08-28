@@ -27,20 +27,20 @@ import { ActorStateProps } from './actor-state-props'
 export function ActorState(props: ActorStateProps = {}): any {
   return function <T extends { new (...args: any[]): ActorStateInterface }>(constructor: T & ActorStateInterface, context: ClassDecoratorContext) {
     const _classInterface = class extends constructor implements ActorStateInterface {
-      constructor(readonly actor: ActorInterface) {
+      constructor(actor: ActorInterface) {
         super()
-        this.metadata.applyProps(this)
+        if (actor) {
+          this.actor = actor
+          this.scene = this.actor.scene
+          this.metadata.applyProps(this)
+        }
       }
 
+      actor: ActorInterface
       metadata: Metadata = Reflect.getMetadata('metadata', this) ?? new Metadata()
-      loopUpdate$?: BABYLON.Observer<number>
-      canvasResize$?: BABYLON.Observer<Rect>
-
-      onStart?(): void
-      onEnd?(): void
-      onLoopUpdate?(delta: number): void
-      onCanvasResize?(size: Rect): void
-
+      loopUpdate$: BABYLON.Observer<number>
+      canvasResize$: BABYLON.Observer<Rect>
+      scene: SceneInterface
       setup: any
 
       set loopUpdate(value: boolean) { switchLoopUpdate(value, this) }

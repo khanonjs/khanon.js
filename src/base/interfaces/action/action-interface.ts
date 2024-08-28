@@ -7,25 +7,26 @@ import { LoopUpdatable } from '../loop-updatable'
 import { Metadata } from '../metadata/metadata'
 
 export abstract class ActionInterface<S = any> implements LoopUpdatable, CanvasResizable {
-  abstract metadata?: Metadata
-  abstract loopUpdate$?: BABYLON.Observer<number>
-  abstract canvasResize$?: BABYLON.Observer<Rect>
-  abstract start?(setup: S): void
-  abstract end?(): void
+  abstract metadata: Metadata
+  abstract loopUpdate$: BABYLON.Observer<number>
+  abstract canvasResize$: BABYLON.Observer<Rect>
+  abstract start(setup: S): void
+  abstract end(): void
 
   /**
    * User available
    */
-  abstract setup: S
-  abstract loopUpdate: boolean
+  abstract get setup(): S
+  abstract set loopUpdate(value: boolean)
+  abstract get loopUpdate(): boolean
   abstract get scene(): SceneInterface
   abstract stop(): void // Callable from user Action, it will call to 'owner.stopActionFromInstance', then owner calls 'action.end' after remove it.
 
   /**
    * User defined optional
    */
-  onPlay?(): void
-  onStop?(): void
-  onLoopUpdate?(delta: number): void
-  onCanvasResize?(size: Rect): void
+  abstract onPlay?(): void
+  abstract onStop?(): void
+  abstract onLoopUpdate?(delta: number): void
+  abstract onCanvasResize?(size: Rect): void
 }

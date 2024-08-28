@@ -14,37 +14,37 @@ import { Rect } from '../../models/rect'
 import { FlexId } from '../../types'
 import { ActorInterface } from '../actor/actor-interface'
 import { CameraConstructor } from '../camera/camera-constructor'
-import { MeshInterface } from '../mesh'
+import { MeshInterface } from '../mesh/mesh-interface'
 import { ParticleInterface } from '../particle/particle-interface'
-import { SpriteInterface } from '../sprite'
-import { SceneRemove } from './'
+import { SpriteInterface } from '../sprite/sprite-interface'
 import { SceneActionConstructor } from './scene-action/scene-action-constructor'
 import { SceneActionInterface } from './scene-action/scene-action-interface'
 import { SceneAvailableElements } from './scene-available-elements'
 import { SceneProps } from './scene-props'
+import { SceneRemove } from './scene-remove'
 import { SceneSpawn } from './scene-spawn'
 import { SceneStateConstructor } from './scene-state/scene-state-constructor'
 import { SceneStateInterface } from './scene-state/scene-state-interface'
 
 export abstract class SceneInterface implements Loadable, LoopUpdatable, CanvasResizable, Notificable {
-  abstract props?: SceneProps
-  protected abstract _assets?: AssetDefinition[]
-  protected abstract _loaded?: boolean
-  protected abstract _started?: boolean
-  protected abstract _spawn?: SceneSpawn
-  protected abstract _remove?: SceneRemove
-  abstract availableElements?: SceneAvailableElements
-  abstract assets?: AssetDefinition[]
-  abstract metadata?: Metadata
-  abstract loopUpdate$?: BABYLON.Observer<number>
-  abstract canvasResize$?: BABYLON.Observer<Rect>
-  abstract actions?: Map<SceneActionConstructor, SceneActionInterface>
-  abstract actors?: Set<ActorInterface>
-  abstract particles?: Set<ParticleInterface>
-  abstract meshes?: Set<MeshInterface>
-  abstract sprites?: Set<SpriteInterface>
-  abstract setEngineParams?(): void // TODO ?
-  abstract stopActionFromInstance?(instance: SceneActionInterface): void
+  abstract props: SceneProps
+  protected abstract _assets: AssetDefinition[]
+  protected abstract _loaded: boolean
+  protected abstract _started: boolean
+  protected abstract _spawn: SceneSpawn
+  protected abstract _remove: SceneRemove
+  abstract availableElements: SceneAvailableElements
+  abstract assets: AssetDefinition[]
+  abstract metadata: Metadata
+  abstract loopUpdate$: BABYLON.Observer<number>
+  abstract canvasResize$: BABYLON.Observer<Rect>
+  abstract actions: Map<SceneActionConstructor, SceneActionInterface>
+  abstract actors: Set<ActorInterface>
+  abstract particles: Set<ParticleInterface>
+  abstract meshes: Set<MeshInterface>
+  abstract sprites: Set<SpriteInterface>
+  abstract setEngineParams(): void // TODO ?
+  abstract stopActionFromInstance(instance: SceneActionInterface): void
 
   /**
    * User available

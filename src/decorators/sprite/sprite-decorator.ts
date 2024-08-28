@@ -2,9 +2,8 @@ import 'reflect-metadata'
 
 import * as BABYLON from '@babylonjs/core'
 
-import { SpriteInterface as UserSpriteInterface } from '../../'
+// import { SpriteInterface as UserSpriteInterface } from '../../' // TODO Why this imported declaration file (src/index.d.ts) is not found in Azure Ubutu tsc compiler?
 import {
-  ActionInterface,
   LoadingProgress,
   StateInterface
 } from '../../base'
@@ -33,8 +32,10 @@ import {
   removeLoopUpdate,
   switchLoopUpdate
 } from '../../utils/utils'
+import { ActorActionInterface } from '../actor/actor-action/actor-action-interface'
 import { ActorInterface } from '../actor/actor-interface'
 import { ParticleInterface } from '../particle/particle-interface'
+import { SceneActionInterface } from '../scene/scene-action/scene-action-interface'
 import { SceneInterface } from '../scene/scene-interface'
 import { SpriteAnimation } from './sprite-animation'
 import { SpriteCore } from './sprite-core'
@@ -75,11 +76,6 @@ export function Sprite(props: SpriteProps): any {
         loopUpdate$: BABYLON.Observer<number>
         canvasResize$: BABYLON.Observer<Rect>
         _scale: number = 1
-
-        onSpawn?(scene: SceneInterface): void
-        onDestroy?(): void
-        onLoopUpdate?(delta: number): void
-        onCanvasResize?(size: Rect): void
 
         set loopUpdate(value: boolean) { switchLoopUpdate(value, this) }
         get loopUpdate(): boolean { return !!this.loopUpdate$ }
@@ -159,18 +155,6 @@ export function Sprite(props: SpriteProps): any {
         get visible(): boolean {
           return this._visible
         }
-
-        // setTransform(transform: BABYLON.Matrix): void { // TODO
-        // this.babylon.mesh.updatePoseMatrix(transform) // TODO: Test this
-        // this.setPosition(transform.getTranslation())
-        // this.setRotation(transform.getRotationMatrix())
-        // this.babylon.mesh.scaling = transform.sca
-        // this.babylon.mesh.rota = transform.getTranslation()
-        // }
-
-        // getTransform(): BABYLON.Matrix {  // TODO
-        // return null
-        // }
 
         addAnimation(animation: SpriteAnimation): void {
           if (this.animations.get(animation.id)) { Logger.debugError(`Animation name '${animation.id}' already exists.`); return }
@@ -375,13 +359,14 @@ export function Sprite(props: SpriteProps): any {
       return decorateClass()
     } else if ((
       constructorOrTarget instanceof ActorInterface ||
+      constructorOrTarget instanceof ActorActionInterface ||
       constructorOrTarget instanceof SceneInterface ||
-      constructorOrTarget instanceof ActionInterface ||
+      constructorOrTarget instanceof SceneActionInterface ||
       constructorOrTarget instanceof StateInterface ||
       constructorOrTarget instanceof ParticleInterface
     ) && !descriptor) { // Undefined descriptor means it is a decorated property, otherwiese it is a decorated method
       @Sprite(props)
-      class _spriteInterface extends UserSpriteInterface {}
+      class _spriteInterface {}
 
       if (!Reflect.hasMetadata('metadata', constructorOrTarget)) {
         Reflect.defineMetadata('metadata', new Metadata(), constructorOrTarget)
@@ -389,7 +374,7 @@ export function Sprite(props: SpriteProps): any {
       const metadata = Reflect.getMetadata('metadata', constructorOrTarget) as Metadata
       metadata.sprites.push({
         propertyName: contextOrProperty as string,
-        classDefinition: _spriteInterface
+        classDefinition: _spriteInterface as any
       })
     } else {
       Logger.debugError('Cannot apply sprite decorator to non allowed property class:', constructorOrTarget, contextOrProperty)

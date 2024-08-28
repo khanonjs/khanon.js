@@ -21,29 +21,29 @@ export declare interface AnimationBase {
   id: FlexId
 
   /**
-   * Delay between frames (in milliseconds). (100 by default)
+   * Delay between frames (in milliseconds), '100' by default.
    * This property is omitted in particles.
    */
   delay?: number
 
   /**
-   * Indicates if the animation is cyclic. (false by default)
+   * Indicates if the animation is cyclic, 'false' by default.
    * This property is omitted in particles.
    */
   loop?: boolean
 
   /**
-   * Frame start of the animation. If undefined, it is equivalent to 0.
+   * Frame start of the animation, '0' by default.
    */
   frameStart?: number
 
   /**
-   * Frame end of the animation. If undefined, it is equivalent to the last frame.
+   * Frame end of the animation. It is equivalent to the last frame by default.
    */
   frameEnd?: number
 
   /**
-   * Each Key frame emit an event when the frame (or frames) are reached.
+   * Each Key frame emit an event when the frame/s are reached.
    */
   keyFrames?: AnimationKeyFrame[]
 }

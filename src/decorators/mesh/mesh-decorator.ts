@@ -2,7 +2,6 @@ import 'reflect-metadata'
 
 import * as BABYLON from '@babylonjs/core'
 
-import { MeshInterface as UserMeshInterface } from '../../'
 import {
   ActionInterface,
   LoadingProgress
@@ -171,7 +170,7 @@ export function Mesh(props: MeshProps): any {
       constructorOrTarget instanceof ActionInterface
     ) && !descriptor) { // Undefined descriptor means it is a decorated property, otherwiese it is a decorated method
       @Mesh(props)
-      class _meshInterface extends UserMeshInterface {}
+      class _meshInterface {}
 
       if (!Reflect.hasMetadata('metadata', constructorOrTarget)) {
         Reflect.defineMetadata('metadata', new Metadata(), constructorOrTarget)
@@ -179,7 +178,7 @@ export function Mesh(props: MeshProps): any {
       const metadata = Reflect.getMetadata('metadata', constructorOrTarget) as Metadata
       metadata.meshes.push({
         propertyName: contextOrProperty as string,
-        classDefinition: _meshInterface
+        classDefinition: _meshInterface as any
       })
     } else {
       Logger.debugError('Cannot apply mesh decorator to non allowed property class:', constructorOrTarget, contextOrProperty)

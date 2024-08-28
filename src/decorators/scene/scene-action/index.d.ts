@@ -1,9 +1,9 @@
 import { SceneInterface } from '../'
-import { Rect } from '../../../models/rect'
+import { Rect } from '../../../models'
 import { MeshConstructor } from '../../mesh'
 import { SpriteConstructor } from '../../sprite'
 
-export declare abstract class SceneActionInterface<S = any, C = SceneInterface> {
+export declare abstract class SceneActionInterface</* Setup object */ S = any, /* Scene object */ C = SceneInterface> {
   /**
    * Scene owner of the action.
    */

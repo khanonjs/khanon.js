@@ -2,7 +2,6 @@ import 'reflect-metadata'
 
 import * as BABYLON from '@babylonjs/core'
 
-import { SceneActionInterface as UserSceneActionInterface } from '../../..'
 import { LoadingProgress } from '../../../base'
 import { Metadata } from '../../../base/interfaces/metadata/metadata'
 import {
@@ -36,16 +35,15 @@ export function SceneAction(props: SceneActionProps = {}): any {
           this.metadata.applyProps(this)
         }
 
+        onPlay(): void {}
+        onStop(): void {}
+        onLoopUpdate(delta: number): void {}
+        onCanvasResize(size: Rect): void {}
+
         props = props
-
-        onPlay?(): void
-        onStop?(): void
-        onLoopUpdate?(delta: number): void
-        onCanvasResize?(size: Rect): void
-
         metadata: Metadata = Reflect.getMetadata('metadata', this) ?? new Metadata()
-        loopUpdate$?: BABYLON.Observer<number>
-        canvasResize$?: BABYLON.Observer<Rect>
+        loopUpdate$: BABYLON.Observer<number>
+        canvasResize$: BABYLON.Observer<Rect>
         setup: any
 
         set loopUpdate(value: boolean) { switchLoopUpdate(value, this) }
@@ -116,7 +114,7 @@ export function SceneAction(props: SceneActionProps = {}): any {
       constructorOrTarget instanceof SceneInterface
     ) && descriptor) { // Defined descriptor means it is a method
       @SceneAction(props)
-      class _actionInterface extends UserSceneActionInterface {
+      class _actionInterface {
         onLoopUpdate = descriptor.value
       }
 

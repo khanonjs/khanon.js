@@ -11,7 +11,10 @@ import {
   MeshConstructor,
   MeshInterface
 } from '../mesh'
-import { ParticleConstructor } from '../particle/particle-constructor'
+import {
+  ParticleConstructor,
+  ParticleInterface
+} from '../particle'
 import { SceneInterface } from '../scene'
 import {
   SpriteAnimation,
@@ -149,13 +152,14 @@ export declare abstract class ActorInterface<B extends SpriteInterface | MeshInt
 
   /**
    * Attachs a particle to this actor.
+   *
    * If nodeName is 'undefined', the particle is attached to the Body of the actor.
-   * @param Particle
+   * @param Particle Particle constructor or an Actor class method.
    * @param id
    * @param offset
    * @param nodeName
    */
-  attachParticle(Particle: ParticleConstructor, id: FlexId, offset: BABYLON.Vector3, nodeName?: string): void
+  attachParticle(Particle: ParticleConstructor | ((particle: ParticleInterface) => void), id: FlexId, offset: BABYLON.Vector3, nodeName?: string): void
 
   /**
    * Starts a particle.

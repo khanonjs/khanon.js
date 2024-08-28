@@ -3,4 +3,5 @@ import { ParticleConstructor } from '../../../decorators/particle/particle-const
 export interface MetadataParticleDefinition {
   propertyName: string
   classDefinition: ParticleConstructor
+  methodName: string
 }

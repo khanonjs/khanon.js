@@ -2,6 +2,7 @@ import * as BABYLON from '@babylonjs/core'
 
 import { LoadingProgress } from '../../base'
 import { Metadata } from '../../base/interfaces/metadata/metadata'
+import { MetadataParticleDefinition } from '../../base/interfaces/metadata/metadata-particle-definition'
 import {
   ActorActionsController,
   ActorsController,
@@ -63,8 +64,8 @@ export function Actor(props: ActorProps = {}): any {
       transform: SpriteTransform | MeshTransform
       loopUpdate$: BABYLON.Observer<number>
       canvasResize$: BABYLON.Observer<Rect>
-      _body?: B
-      nodes?: Map<string, B> = new Map<string, B>()
+      _body: B
+      nodes: Map<string, B> = new Map<string, B>()
       _state: ActorStateInterface
       actions: Map<ActorActionConstructor, ActorActionInterface> = new Map<ActorActionConstructor, ActorActionInterface>()
       particles: Map<FlexId, ParticleInterface> = new Map<FlexId, ParticleInterface>()
@@ -221,26 +222,39 @@ export function Actor(props: ActorProps = {}): any {
         })
       }
 
-      attachParticle(particleConstructor: ParticleConstructor, id: FlexId, offset: BABYLON.Vector3, nodeName?: string): void {
+      attachParticle(particleConstructorOrMethod: ParticleConstructor | ((particle: ParticleInterface) => void), id: FlexId, offset: BABYLON.Vector3, nodeName?: string): void {
+        let isMethod = false
+        if (!particleConstructorOrMethod.prototype?.constructor) {
+          isMethod = true
+          this.metadata.particles.forEach((value: MetadataParticleDefinition) => {
+            particleConstructorOrMethod = value.classDefinition
+          })
+        }
         const attachmentSprite = nodeName ? this.getNode(nodeName) : this.body
-        if (!attachmentSprite) { Logger.debugError('Cannot attach a particle to an empty body.', _classInterface.prototype, particleConstructor.prototype); return }
-        if (!this.scene.availableElements.hasParticle(particleConstructor)) { Logger.debugError('Trying to attach a particle non available to the actor. Please check the actor props.', _classInterface.prototype, particleConstructor.prototype); return }
-        const particle = ParticlesController.get(particleConstructor).spawn(this.scene, { attachment: attachmentSprite, offset })
+        if (!attachmentSprite) { Logger.debugError('Cannot attach a particle to an empty body.', _classInterface.prototype, particleConstructorOrMethod.prototype); return }
+        if (!this.scene.availableElements.hasParticle(particleConstructorOrMethod as ParticleConstructor)) { Logger.debugError('Trying to attach a particle non available to the actor. Please check the actor props.', _classInterface.prototype, particleConstructorOrMethod.prototype); return }
+        const particle = ParticlesController.get(particleConstructorOrMethod).spawn(this.scene, { attachment: attachmentSprite, offset }, isMethod)
+        if (isMethod) {
+          // Applies context to 'initialize' as caller 'Actor' to preserve the 'this'
+          // in case 'initialize' is equivalent to a decorated method of some of those both interfaces.
+          particle.initialize = particle.initialize.bind(this)
+          particle.create()
+        }
         this.particles.set(id, particle)
       }
 
       startParticle(id: FlexId): void {
-        if (!this.particles.get(id)) { Logger.debugError(`Trying to start particle '${id}', but it doesn't exist in actor:`, _classInterface.prototype); return }
+        if (!this.particles.get(id)) { Logger.debugError(`Trying to start particle '${id}' that doesn't exist in actor:`, _classInterface.prototype); return }
         this.particles.get(id).start()
       }
 
       stopParticle(id: FlexId): void {
-        if (!this.particles.get(id)) { Logger.debugError(`Trying to start particle '${id}', but it doesn't exist in actor:`, _classInterface.prototype); return }
+        if (!this.particles.get(id)) { Logger.debugError(`Trying to start particle '${id}' that doesn't exist in actor:`, _classInterface.prototype); return }
         this.particles.get(id).stop()
       }
 
       removeParticle(id: FlexId): void {
-        if (!this.particles.get(id)) { Logger.debugError(`Trying to start particle '${id}', but it doesn't exist in actor:`, _classInterface.prototype); return }
+        if (!this.particles.get(id)) { Logger.debugError(`Trying to start particle '${id}' that doesn't exist in actor:`, _classInterface.prototype); return }
         this.particles.get(id).release()
         this.particles.delete(id)
       }

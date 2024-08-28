@@ -26,18 +26,18 @@ import { ActorStateConstructor } from './actor-state/actor-state-constructor'
 import { ActorStateInterface } from './actor-state/actor-state-interface'
 
 export abstract class ActorInterface<B extends SpriteInterface | MeshInterface = any> implements LoopUpdatable, CanvasResizable, Notificable {
-  abstract metadata?: Metadata
-  abstract props?: ActorProps
-  abstract loopUpdate$?: BABYLON.Observer<number>
-  abstract canvasResize$?: BABYLON.Observer<Rect>
-  abstract _body?: B
-  abstract nodes?: Map<string, B>
-  abstract _state?: ActorStateInterface
-  abstract actions?: Map<ActorActionConstructor, ActorActionInterface>
-  abstract particles?: Map<FlexId, ParticleInterface>
-  abstract initialize?(props: ActorProps): void
-  abstract release?(): void
-  abstract stopActionFromInstance?(instance: ActorActionInterface): void
+  abstract metadata: Metadata
+  abstract props: ActorProps
+  abstract loopUpdate$: BABYLON.Observer<number>
+  abstract canvasResize$: BABYLON.Observer<Rect>
+  abstract _body: B
+  abstract nodes: Map<string, B>
+  abstract _state: ActorStateInterface
+  abstract actions: Map<ActorActionConstructor, ActorActionInterface>
+  abstract particles: Map<FlexId, ParticleInterface>
+  abstract initialize(props: ActorProps): void
+  abstract release(): void
+  abstract stopActionFromInstance(instance: ActorActionInterface): void
 
   /**
    * User available
@@ -61,7 +61,7 @@ export abstract class ActorInterface<B extends SpriteInterface | MeshInterface =
   abstract stopAction(action: ActorActionConstructor): void
   abstract stopActionGroup(group: number): void
   abstract stopActionAll(): void
-  abstract attachParticle(Particle: ParticleConstructor, id: FlexId, offset: BABYLON.Vector3, nodeName?: string): void
+  abstract attachParticle(Particle: ParticleConstructor | ((particle: ParticleInterface) => void), id: FlexId, offset: BABYLON.Vector3, nodeName?: string): void
   abstract startParticle(id: FlexId): void
   abstract stopParticle(id: FlexId): void
   abstract removeParticle(id: FlexId): void

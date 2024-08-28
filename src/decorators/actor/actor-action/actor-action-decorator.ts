@@ -2,7 +2,6 @@ import 'reflect-metadata'
 
 import * as BABYLON from '@babylonjs/core'
 
-import { ActorActionInterface as UserActorActionInterface } from '../../../'
 import { LoadingProgress } from '../../../base'
 import { Metadata } from '../../../base/interfaces/metadata/metadata'
 import {
@@ -29,27 +28,23 @@ import { ActorActionInterface } from './actor-action-interface'
 import { ActorActionProps } from './actor-action-props'
 
 export function ActorAction(props: ActorActionProps = {}): any {
-  return function <T extends { new (...args: any[]): ActorActionInterface }>(constructorOrTarget: (T & ActorActionInterface) | any, contextOrMethod: ClassDecoratorContext | string, descriptor: PropertyDescriptor) {
+  return function <T extends { new (...args: any[]): ActorActionInterface }>(constructorOrTarget: (T & ActorActionInterface), contextOrMethod: ClassDecoratorContext | string, descriptor: PropertyDescriptor) {
     const decorateClass = () => {
       const _classInterface = class extends constructorOrTarget implements ActorActionInterface {
-        constructor(readonly actor: ActorInterface) {
+        constructor(actor: ActorInterface) {
           super()
+          this.actor = actor
           this.metadata.applyProps(this)
         }
 
         props = props
-
-        onPlay?(): void
-        onStop?(): void
-        onLoopUpdate?(delta: number): void
-        onCanvasResize?(size: Rect): void
-
+        actor: ActorInterface
         scene: SceneInterface
         metadata: Metadata = Reflect.getMetadata('metadata', this) ?? new Metadata()
-        countFramesUpdate$?: BABYLON.Observer<number>
+        countFramesUpdate$: BABYLON.Observer<number>
         countFrames = 0
-        loopUpdate$?: BABYLON.Observer<number>
-        canvasResize$?: BABYLON.Observer<Rect>
+        loopUpdate$: BABYLON.Observer<number>
+        canvasResize$: BABYLON.Observer<Rect>
         setup: any
 
         set loopUpdate(value: boolean) { switchLoopUpdate(value, this) }
@@ -121,7 +116,7 @@ export function ActorAction(props: ActorActionProps = {}): any {
       constructorOrTarget instanceof ActorInterface
     ) && descriptor) { // Defined descriptor means it is a method
       @ActorAction(props)
-      class _actionInterface extends UserActorActionInterface {
+      class _actionInterface {
         onLoopUpdate = descriptor.value
       }
 

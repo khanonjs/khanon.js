@@ -35,7 +35,6 @@ export class SceneSpawn {
 
   particle<P extends ParticleInterface>(particle: new () => P, offset?: BABYLON.Vector3): P {
     Logger.debug('Particle spawn:', particle.prototype)
-    Logger.trace('aki EINS??', offset)
     const instance = ParticlesController.get(particle).spawn(this.scene, { offset })
     this.scene.particles.add(instance)
     return instance as P

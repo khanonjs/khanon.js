@@ -1,6 +1,7 @@
+import 'reflect-metadata'
+
 import * as BABYLON from '@babylonjs/core'
 
-import { ParticleInterface as UserParticleInterface } from '../../'
 import { LoadingProgress } from '../../base'
 import { Metadata } from '../../base/interfaces/metadata/metadata'
 import {
@@ -10,7 +11,6 @@ import {
 import { Core } from '../../core'
 import { BabylonAccessor } from '../../models/babylon-accessor'
 import { Rect } from '../../models/rect'
-import { Timeout } from '../../models/timeout'
 import { Logger } from '../../modules/logger'
 import { FlexId } from '../../types'
 import {
@@ -18,7 +18,6 @@ import {
   attachCanvasResize,
   attachLoopUpdate,
   invokeCallback,
-  isPrototypeOf,
   removeCanvasResize,
   removeLoopUpdate,
   switchLoopUpdate
@@ -36,22 +35,38 @@ import { particlePropsDefault } from './particle.props.deafult'
 
 export function Particle(props: ParticleProps = {}): any {
   return function <T extends { new (...args: any[]): ParticleInterface }>(constructorOrTarget: (T & ParticleInterface) | any, contextOrProperty: ClassDecoratorContext | string, descriptor: PropertyDescriptor) {
-    const className = constructorOrTarget.prototype.constructor.name
     const decorateClass = () => {
+      const className = constructorOrTarget.prototype.constructor.name
       const _classInterface = class extends constructorOrTarget implements ParticleInterface {
         constructor(readonly scene: SceneInterface, props: ParticleProps, readonly attachmentInfo: ParticleAttachmentInfo) {
           super()
           this.props = props
-          if (scene) {
-            if (attachmentInfo.offset) {
-              this.offset = this.props.offset.add(attachmentInfo.offset)
+        }
+
+        props: ParticleProps
+        metadata: Metadata = Reflect.getMetadata('metadata', this) ?? new Metadata()
+        babylon: Pick<BabylonAccessor, 'scene' | 'particleSystem'> = { scene: null, particleSystem: null }
+        loopUpdate$: BABYLON.Observer<number>
+        canvasResize$: BABYLON.Observer<Rect>
+        attachmentUpdate$: BABYLON.Observer<number>
+        animations: SpriteAnimation[]
+        spriteProps: SpriteProps
+        offset: BABYLON.Vector3
+
+        set loopUpdate(value: boolean) { switchLoopUpdate(value, this) }
+        get loopUpdate(): boolean { return !!this.loopUpdate$ }
+
+        create(): void {
+          if (this.scene) {
+            if (this.attachmentInfo.offset) {
+              this.offset = this.props.offset.add(this.attachmentInfo.offset)
             } else {
               this.offset = this.props.offset.clone()
             }
             this.metadata.applyProps(this)
-            this.babylon.particleSystem = new BABYLON.ParticleSystem(className, this.props.capacity, scene.babylon.scene)
-            this.initialize(this.babylon.particleSystem)
-            if (attachmentInfo.attachment) {
+            this.babylon.particleSystem = new BABYLON.ParticleSystem(className, this.props.capacity, this.scene.babylon.scene)
+            this.initialize(this)
+            if (this.attachmentInfo.attachment) {
               this.updatePosition()
             } else {
               this.babylon.particleSystem.emitter = (this.babylon.particleSystem.emitter as BABYLON.Vector3).add(this.offset)
@@ -64,26 +79,6 @@ export function Particle(props: ParticleProps = {}): any {
             attachCanvasResize(this)
           }
         }
-
-        props: ParticleProps
-        metadata: Metadata = Reflect.getMetadata('metadata', this) ?? new Metadata()
-        babylon: Pick<BabylonAccessor, 'scene' | 'particleSystem'> = { scene: null, particleSystem: null }
-        loopUpdate$: BABYLON.Observer<number>
-        canvasResize$: BABYLON.Observer<Rect>
-        attachmentUpdate$?: BABYLON.Observer<number>
-        animations: SpriteAnimation[]
-        spriteProps: SpriteProps
-        offset: BABYLON.Vector3
-
-        initialize?(particle: BABYLON.ParticleSystem): void
-        onStart?(): void
-        onStop?(): void
-        onRelease?(): void
-        onLoopUpdate?(delta: number): void
-        onCanvasResize?(size: Rect): void
-
-        set loopUpdate(value: boolean) { switchLoopUpdate(value, this) }
-        get loopUpdate(): boolean { return !!this.loopUpdate$ }
 
         updatePosition(): void {
           this.babylon.particleSystem.emitter = this.attachmentInfo.attachment.transform.position.add(this.offset)
@@ -177,8 +172,11 @@ export function Particle(props: ParticleProps = {}): any {
           SpritesController.unload(this.Instance.metadata.getProps().sprites, scene)
         }
 
-        spawn(scene: SceneInterface, attachmentInfo: ParticleAttachmentInfo): ParticleInterface {
+        spawn(scene: SceneInterface, attachmentInfo: ParticleAttachmentInfo, dontCreate?: boolean): ParticleInterface {
           const particle = new _classInterface(scene, this.props, attachmentInfo)
+          if (!dontCreate) {
+            particle.create()
+          }
           return particle
         }
       }
@@ -191,9 +189,9 @@ export function Particle(props: ParticleProps = {}): any {
       return decorateClass()
     } else if ((
       constructorOrTarget instanceof ActorInterface
-    ) && !descriptor) { // Undefined descriptor means it is a decorated property, otherwiese it is a decorated method
+    ) && descriptor) { // Defined descriptor means it is a decorated method
       @Particle(props)
-      class _particleInterface extends UserParticleInterface {
+      class _particleInterface {
         initialize = descriptor.value
       }
 
@@ -201,9 +199,10 @@ export function Particle(props: ParticleProps = {}): any {
         Reflect.defineMetadata('metadata', new Metadata(), constructorOrTarget)
       }
       const metadata = Reflect.getMetadata('metadata', constructorOrTarget) as Metadata
-      metadata.particles.push({
+      metadata.particles.add({
         propertyName: contextOrProperty as string,
-        classDefinition: _particleInterface
+        classDefinition: _particleInterface as any,
+        methodName: contextOrProperty as string
       })
     } else {
       Logger.debugError('Cannot apply mesh decorator to non allowed property class:', constructorOrTarget, contextOrProperty)
