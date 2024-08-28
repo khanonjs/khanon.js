@@ -366,7 +366,7 @@ export function Sprite(props: SpriteProps): any {
       constructorOrTarget instanceof ParticleInterface
     ) && !descriptor) { // Undefined descriptor means it is a decorated property, otherwiese it is a decorated method
       @Sprite(props)
-      class _spriteInterface {}
+      abstract class _spriteInterface extends SpriteInterface {}
 
       if (!Reflect.hasMetadata('metadata', constructorOrTarget)) {
         Reflect.defineMetadata('metadata', new Metadata(), constructorOrTarget)

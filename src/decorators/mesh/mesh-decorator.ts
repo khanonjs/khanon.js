@@ -56,11 +56,6 @@ export function Mesh(props: MeshProps): any {
         loopUpdate$: BABYLON.Observer<number>
         canvasResize$: BABYLON.Observer<Rect>
 
-        onSpawn?(scene: SceneInterface): void
-        onDestroy?(): void
-        onLoopUpdate?(delta: number): void
-        onCanvasResize?(size: Rect): void
-
         set loopUpdate(value: boolean) { switchLoopUpdate(value, this) }
         get loopUpdate(): boolean { return !!this.loopUpdate$ }
 
@@ -170,7 +165,7 @@ export function Mesh(props: MeshProps): any {
       constructorOrTarget instanceof ActionInterface
     ) && !descriptor) { // Undefined descriptor means it is a decorated property, otherwiese it is a decorated method
       @Mesh(props)
-      class _meshInterface {}
+      abstract class _meshInterface extends MeshInterface {}
 
       if (!Reflect.hasMetadata('metadata', constructorOrTarget)) {
         Reflect.defineMetadata('metadata', new Metadata(), constructorOrTarget)

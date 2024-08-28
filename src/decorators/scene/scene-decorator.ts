@@ -103,13 +103,6 @@ export function Scene(props: SceneProps): any {
       get spawn(): SceneSpawn { return this._spawn }
       get remove(): SceneRemove { return this._remove }
 
-      onStart?(): void
-      onStop?(): void
-      onLoaded?(): void
-      onUnload?(): void
-      onLoopUpdate?(delta: number): void
-      onCanvasResize?(size: Rect): void
-
       set loopUpdate(value: boolean) { switchLoopUpdate(value, this) }
       get loopUpdate(): boolean { return !!this.loopUpdate$ }
 

@@ -4,10 +4,13 @@ import {
   Asset,
   LoadingProgress
 } from '../base'
+import { ActorActionCore } from '../decorators/actor/actor-action/actor-action-core'
 import { ActorActionInterface } from '../decorators/actor/actor-action/actor-action-interface'
 import { ActorCore } from '../decorators/actor/actor-core'
 import { ActorInterface } from '../decorators/actor/actor-interface'
+import { ParticleCore } from '../decorators/particle/particle-core'
 import { ParticleInterface } from '../decorators/particle/particle-interface'
+import { SceneActionCore } from '../decorators/scene/scene-action/scene-action-core'
 import { SceneActionInterface } from '../decorators/scene/scene-action/scene-action-interface'
 import { SceneInterface } from '../decorators/scene/scene-interface'
 import { SpriteCore } from '../decorators/sprite/sprite-core'
@@ -48,13 +51,14 @@ export class AssetsController {
       for (const property of Object.values(source)) {
         if (Array.isArray(property)) {
           property.forEach(value => {
+            Logger.trace('aki findAssetsDefinitions A', value.prototype?.constructor.name, isPrototypeOf(SpriteInterface, value))
             if (isPrototypeOf(ActorActionInterface, value)) {
-              const action = ActorActionsController.get<ActorCore>(value)
+              const action = ActorActionsController.get<ActorActionCore>(value)
               definitions = [...definitions, ...AssetsController.findAssetsDefinitions(action.props, urls)]
               definitions = [...definitions, ...AssetsController.findAssetsDefinitions(action.Instance.metadata.getProps(), urls)]
             }
             if (isPrototypeOf(SceneActionInterface, value)) {
-              const action = SceneActionsController.get<ActorCore>(value)
+              const action = SceneActionsController.get<SceneActionCore>(value)
               definitions = [...definitions, ...AssetsController.findAssetsDefinitions(action.props, urls)]
               definitions = [...definitions, ...AssetsController.findAssetsDefinitions(action.Instance.metadata.getProps(), urls)]
             }
@@ -62,13 +66,15 @@ export class AssetsController {
               const actor = ActorsController.get<ActorCore>(value)
               definitions = [...definitions, ...AssetsController.findAssetsDefinitions(actor.props, urls)]
               definitions = [...definitions, ...AssetsController.findAssetsDefinitions(actor.Instance.metadata.getProps(), urls)]
+              Logger.trace('aki findAssetsDefinitions WTF', actor.Instance.metadata.getProps())
             }
             if (isPrototypeOf(ParticleInterface, value)) {
-              const particle = ParticlesController.get<ActorCore>(value)
+              const particle = ParticlesController.get<ParticleCore>(value)
               definitions = [...definitions, ...AssetsController.findAssetsDefinitions(particle.props, urls)]
               definitions = [...definitions, ...AssetsController.findAssetsDefinitions(particle.Instance.metadata.getProps(), urls)]
             }
             if (isPrototypeOf(SpriteInterface, value)) {
+              Logger.trace('aki findAssetsDefinitions NEW SPRITE')
               const sprite = SpritesController.get<SpriteCore>(value)
               if (sprite.props.url && !urls[sprite.props.url]) {
                 urls[sprite.props.url] = true

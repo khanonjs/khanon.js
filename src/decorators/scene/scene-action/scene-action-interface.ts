@@ -26,8 +26,8 @@ export abstract class SceneActionInterface<S = any, C extends SceneInterface = S
   /**
    * User defined optional
    */
-  abstract onPlay(): void
-  abstract onStop(): void
-  abstract onLoopUpdate(delta: number): void
-  abstract onCanvasResize(size: Rect): void
+  abstract onPlay?(): void
+  abstract onStop?(): void
+  abstract onLoopUpdate?(delta: number): void
+  abstract onCanvasResize?(size: Rect): void
 }

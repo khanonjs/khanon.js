@@ -32,8 +32,8 @@ export function ActorState(props: ActorStateProps = {}): any {
         if (actor) {
           this.actor = actor
           this.scene = this.actor.scene
-          this.metadata.applyProps(this)
         }
+        this.metadata.applyProps(this)
       }
 
       actor: ActorInterface

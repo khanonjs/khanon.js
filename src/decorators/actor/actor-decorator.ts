@@ -70,11 +70,6 @@ export function Actor(props: ActorProps = {}): any {
       actions: Map<ActorActionConstructor, ActorActionInterface> = new Map<ActorActionConstructor, ActorActionInterface>()
       particles: Map<FlexId, ParticleInterface> = new Map<FlexId, ParticleInterface>()
 
-      onSpawn?(): void
-      onDestroy?(): void
-      onLoopUpdate?(delta: number): void
-      onCanvasResize?(size: Rect): void
-
       set loopUpdate(value: boolean) { switchLoopUpdate(value, this) }
       get loopUpdate(): boolean { return !!this.loopUpdate$ }
       get body(): SpriteInterface | MeshInterface { return this._body }

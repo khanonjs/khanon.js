@@ -35,11 +35,6 @@ export function SceneAction(props: SceneActionProps = {}): any {
           this.metadata.applyProps(this)
         }
 
-        onPlay(): void {}
-        onStop(): void {}
-        onLoopUpdate(delta: number): void {}
-        onCanvasResize(size: Rect): void {}
-
         props = props
         metadata: Metadata = Reflect.getMetadata('metadata', this) ?? new Metadata()
         loopUpdate$: BABYLON.Observer<number>
@@ -114,7 +109,7 @@ export function SceneAction(props: SceneActionProps = {}): any {
       constructorOrTarget instanceof SceneInterface
     ) && descriptor) { // Defined descriptor means it is a method
       @SceneAction(props)
-      class _actionInterface {
+      abstract class _actionInterface extends SceneActionInterface {
         onLoopUpdate = descriptor.value
       }
 

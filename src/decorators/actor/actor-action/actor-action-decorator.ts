@@ -116,7 +116,7 @@ export function ActorAction(props: ActorActionProps = {}): any {
       constructorOrTarget instanceof ActorInterface
     ) && descriptor) { // Defined descriptor means it is a method
       @ActorAction(props)
-      class _actionInterface {
+      abstract class _actionInterface extends ActorActionInterface {
         onLoopUpdate = descriptor.value
       }
 

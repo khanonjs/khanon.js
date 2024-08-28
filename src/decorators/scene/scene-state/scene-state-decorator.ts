@@ -37,11 +37,6 @@ export function SceneState(props: SceneStateProps = {}): any {
       canvasResize$: BABYLON.Observer<Rect>
       metadata: Metadata = Reflect.getMetadata('metadata', this) ?? new Metadata()
 
-      onStart?(): void
-      onEnd?(): void
-      onLoopUpdate?(delta: number): void
-      onCanvasResize?(size: Rect): void
-
       set loopUpdate(value: boolean) { switchLoopUpdate(value, this) }
       get loopUpdate(): boolean { return !!this.loopUpdate$ }
 
