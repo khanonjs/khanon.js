@@ -101,9 +101,11 @@ export function Particle(props: ParticleProps = {}): any {
         }
 
         release(): void {
+          if (!this.babylon.particleSystem) { Logger.debugError('Trying to remove a Particle that has been already removed.', _classInterface.prototype); return }
           this.stop()
           invokeCallback(this.onRelease, this)
           this.babylon.particleSystem.dispose()
+          this.babylon.particleSystem = undefined
           removeLoopUpdate(this)
           removeCanvasResize(this)
         }
