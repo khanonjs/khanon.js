@@ -57,7 +57,7 @@ export interface SceneActionProps {
   group?: number
 
   /**
-   * 'false' by default. Preserves the action, not removing it after stop.
+   * 'false' by default. Preserves the action instance, not removing it after stop.
    */
   preserve?: boolean
 

@@ -246,30 +246,40 @@ export function Scene(props: SceneProps): any {
         }
       }
 
-      stopAction(actionConstructor: SceneActionConstructor): void {
+      stopAction(actionConstructor: SceneActionConstructor, forceRemove?: boolean): void {
         const action = this.actions.get(actionConstructor)
         if (action) {
           action.end()
-          if (!action.props.preserve) {
+          if (!action.props.preserve || forceRemove) {
             this.actions.delete(actionConstructor)
           }
         }
       }
 
-      stopActionGroup(group: number): void {
-        const actionsStop: SceneActionConstructor[] = []
+      stopActionGroup(group: number, forceRemove?: boolean): void {
         this.actions.forEach((action, actionConstructor) => {
           if (action.props.group !== undefined && action.props.group === group) {
-            actionsStop.push(actionConstructor)
+            this.stopAction(actionConstructor, forceRemove)
           }
         })
-        actionsStop.forEach(actionConstructor => this.stopAction(actionConstructor))
       }
 
-      stopActionAll(): void {
+      stopActionAll(forceRemove?: boolean): void {
         this.actions.forEach((action, actionConstructor) => {
-          this.stopAction(actionConstructor)
+          this.stopAction(actionConstructor, forceRemove)
         })
+      }
+
+      removeAction(actionConstructor: ActorActionConstructor): void {
+        this.stopAction(actionConstructor, true)
+      }
+
+      removeActionGroup(group: number): void {
+        this.stopActionGroup(group, true)
+      }
+
+      removeActionAll(): void {
+        this.stopActionAll(true)
       }
 
       notify(message: FlexId, ...args: any[]): void {

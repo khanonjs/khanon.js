@@ -184,21 +184,38 @@ export declare abstract class SceneInterface {
   playAction<S extends SceneActionConstructor>(action: S | ((delta: number) => void), setup: InstanceType<S>['setup']): void // TODO is it possible to make 'setup' argument optional whether InstanceType<S>['setup'] type is 'any'?
 
   /**
-   * Stops an action. Actions can be stopped also within the Action itself.
+   * Stops an action. If the actions prop 'preserve' prop is 'false', it will be removed.
+   * Actions can be stopped also within the Action itself.
    * @param action
    */
   stopAction(action: SceneActionConstructor | ((delta: number) => void)): void
 
   /**
-   * Stops all actions of a group.
+   * Stops all actions of a group. All the actions with 'preserve' prop as 'false' will be removed.
    * @param group
    */
   stopActionGroup(group: number): void
 
   /**
-   * Stops all actions.
+   * Stops all actions. All the actions with 'preserve' prop as 'false' will be removed.
    */
   stopActionAll(): void
+
+  /**
+   * Stops and removes an action.
+   */
+  removeAction(actionConstructor: SceneActionConstructor): void
+
+  /**
+   * Stops and removes all actions of a group.
+   * @param group
+   */
+  removeActionGroup(group: number): void
+
+  /**
+   * Stops and removes all actions.
+   */
+  removeActionAll(): void
 
   /**
    * Notifies a message to this scene.

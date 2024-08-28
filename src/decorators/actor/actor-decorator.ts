@@ -193,28 +193,40 @@ export function Actor(props: ActorProps = {}): any {
         }
       }
 
-      stopAction(actionConstructor: ActorActionConstructor): void {
+      stopAction(actionConstructor: ActorActionConstructor, forceRemove?: boolean): void {
         const action = this.actions.get(actionConstructor)
         if (action) {
           action.end()
-          if (!action.props.preserve) {
+          if (!action.props.preserve || forceRemove) {
             this.actions.delete(actionConstructor)
           }
         }
       }
 
-      stopActionGroup(group: number): void {
+      stopActionGroup(group: number, forceRemove?: boolean): void {
         this.actions.forEach((action, actionConstructor) => {
           if (action.props.group !== undefined && action.props.group === group) {
-            this.stopAction(actionConstructor)
+            this.stopAction(actionConstructor, forceRemove)
           }
         })
       }
 
-      stopActionAll(): void {
+      stopActionAll(forceRemove?: boolean): void {
         this.actions.forEach((action, actionConstructor) => {
-          this.stopAction(actionConstructor)
+          this.stopAction(actionConstructor, forceRemove)
         })
+      }
+
+      removeAction(actionConstructor: ActorActionConstructor): void {
+        this.stopAction(actionConstructor, true)
+      }
+
+      removeActionGroup(group: number): void {
+        this.stopActionGroup(group, true)
+      }
+
+      removeActionAll(): void {
+        this.stopActionAll(true)
       }
 
       attachParticle(particleConstructorOrMethod: ParticleConstructor | ((particle: ParticleInterface) => void), id: FlexId, offset: BABYLON.Vector3, nodeName?: string): void {

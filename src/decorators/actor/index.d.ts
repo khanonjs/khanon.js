@@ -134,21 +134,38 @@ export declare abstract class ActorInterface<B extends SpriteInterface | MeshInt
   playAction<S extends ActorActionConstructor>(action: S | ((delta: number, setup: any) => void), setup: InstanceType<S>['setup']): void // TODO is it possible to make 'setup' argument optional whether InstanceType<S>['setup'] type is 'any'?
 
   /**
-   * Stops an action. Actions can be stopped also within the Action itself.
+   * Stops an action. If the actions prop 'preserve' prop is 'false', it will be removed.
+   * Actions can be stopped also within the Action itself.
    * @param action
    */
-  stopAction(action: ActorActionConstructor | ((delta: number) => void)): void
+  stopAction(action: ActorActionConstructor | ((delta: number) => void), forceRemove?: boolean): void
 
   /**
-   * Stops all actions of a group.
+   * Stops all actions of a group. All the actions with 'preserve' prop as 'false' will be removed.
    * @param group
    */
-  stopActionGroup(group: number): void
+  stopActionGroup(group: number, forceRemove?: boolean): void
 
   /**
-   * Stops all actions.
+   * Stops all actions. All the actions with 'preserve' prop as 'false' will be removed.
    */
-  stopActionAll(): void
+  stopActionAll(forceRemove?: boolean): void
+
+  /**
+   * Stops and removes an action.
+   */
+  removeAction(actionConstructor: ActorActionConstructor): void
+
+  /**
+   * Stops and removes all actions of a group.
+   * @param group
+   */
+  removeActionGroup(group: number): void
+
+  /**
+   * Stops and removes all actions.
+   */
+  removeActionAll(): void
 
   /**
    * Attachs a particle to this actor.
