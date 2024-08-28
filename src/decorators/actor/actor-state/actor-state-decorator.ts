@@ -29,9 +29,11 @@ export function ActorState(props: ActorStateProps = {}): any {
     const _classInterface = class extends constructor implements ActorStateInterface {
       constructor(actor: ActorInterface) {
         super()
-        this.actor = actor
-        this.scene = this.actor.scene
-        this.metadata.applyProps(this)
+        if (actor) {
+          this.actor = actor
+          this.scene = this.actor.scene
+          this.metadata.applyProps(this)
+        }
       }
 
       actor: ActorInterface
