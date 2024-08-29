@@ -41,6 +41,11 @@ export declare abstract class SceneActionInterface</* Setup object */ S = any, /
   onStop?(): void
 
   /**
+   * Invoked on action remove.
+   */
+  onRemove?(): void
+
+  /**
    * Callback invoked on loop update.
    * @param delta Time differential since last frame.
    */

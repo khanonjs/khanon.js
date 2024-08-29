@@ -231,9 +231,7 @@ export function Scene(props: SceneProps): any {
             )
           }
           this.actions.set(actionConstructor, action)
-          action.props.overrides?.forEach(actionOverride => {
-            this.actions.get(actionOverride)?.end()
-          })
+          action.props.overrides?.forEach(actionOverride => this.stopAction(actionOverride))
           action.start(setup)
         }
         return action
@@ -255,8 +253,11 @@ export function Scene(props: SceneProps): any {
       stopAction(actionConstructor: SceneActionConstructor, forceRemove?: boolean): void {
         const action = this.actions.get(actionConstructor)
         if (action) {
-          action.end()
+          removeLoopUpdate(action)
+          removeCanvasResize(action)
+          invokeCallback(action.onStop, action)
           if (!action.props.preserve || forceRemove) {
+            invokeCallback(action.onRemove, action)
             this.actions.delete(actionConstructor)
           }
         }

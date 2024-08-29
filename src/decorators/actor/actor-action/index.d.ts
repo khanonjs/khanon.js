@@ -53,6 +53,11 @@ export declare class ActorActionInterface</* Setup object */ S = any, /* Actor o
   onStop?(): void
 
   /**
+   * Invoked on action remove.
+   */
+  onRemove?(): void
+
+  /**
    * Callback invoked on loop update.
    * @param delta Time differential since last frame.
    */

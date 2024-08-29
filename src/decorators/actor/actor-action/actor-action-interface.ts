@@ -17,7 +17,6 @@ export abstract class ActorActionInterface<S = any, A = ActorInterface<SpriteInt
   abstract loopUpdate$: BABYLON.Observer<number>
   abstract canvasResize$: BABYLON.Observer<Rect>
   abstract start(setup: S): void
-  abstract end(): void
 
   /**
    * User available
@@ -35,6 +34,7 @@ export abstract class ActorActionInterface<S = any, A = ActorInterface<SpriteInt
    */
   onPlay?(): void
   onStop?(): void
+  onRemove?(): void
   onLoopUpdate?(delta: number): void
   onCanvasResize?(size: Rect): void
 }

@@ -172,9 +172,7 @@ export function Actor(props: ActorProps = {}): any {
             )
           }
           this.actions.set(actionConstructor, action)
-          action.props.overrides?.forEach(actionOverride => {
-            this.actions.get(actionOverride)?.end()
-          })
+          action.props.overrides?.forEach(actionOverride => this.stopAction(actionOverride))
           action.start(setup)
         }
         return action
@@ -196,8 +194,11 @@ export function Actor(props: ActorProps = {}): any {
       stopAction(actionConstructor: ActorActionConstructor, forceRemove?: boolean): void {
         const action = this.actions.get(actionConstructor)
         if (action) {
-          action.end()
+          removeLoopUpdate(action)
+          removeCanvasResize(action)
+          invokeCallback(action.onStop, action)
           if (!action.props.preserve || forceRemove) {
+            invokeCallback(action.onRemove, action)
             this.actions.delete(actionConstructor)
           }
         }

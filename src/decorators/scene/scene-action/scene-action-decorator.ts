@@ -62,12 +62,6 @@ export function SceneAction(props: SceneActionProps = {}): any {
           invokeCallback(this.onPlay, this)
         }
 
-        end(): void {
-          removeLoopUpdate(this)
-          removeCanvasResize(this)
-          invokeCallback(this.onStop, this)
-        }
-
         stop(): void {
           this.scene.stopActionFromInstance(this)
         }

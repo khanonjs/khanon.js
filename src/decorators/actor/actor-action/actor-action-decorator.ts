@@ -69,12 +69,6 @@ export function ActorAction(props: ActorActionProps = {}): any {
           invokeCallback(this.onPlay, this)
         }
 
-        end(): void {
-          removeLoopUpdate(this)
-          removeCanvasResize(this)
-          invokeCallback(this.onStop, this)
-        }
-
         stop(): void {
           this.actor.stopActionFromInstance(this)
         }
