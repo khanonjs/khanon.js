@@ -12,7 +12,6 @@ export abstract class SceneActionInterface<S = any, C extends SceneInterface = S
   abstract loopUpdate$: BABYLON.Observer<number>
   abstract canvasResize$: BABYLON.Observer<Rect>
   abstract start(setup: S): void
-  abstract end(): void
 
   /**
    * User available
@@ -22,12 +21,14 @@ export abstract class SceneActionInterface<S = any, C extends SceneInterface = S
   abstract set loopUpdate(value: boolean)
   abstract get loopUpdate(): boolean
   abstract stop(): void // Callable from user Action, it will call to 'owner.stopActionFromInstance', then owner calls 'action.end' after remove it.
+  abstract remove(): void
 
   /**
    * User defined optional
    */
-  abstract onPlay?(): void
-  abstract onStop?(): void
-  abstract onLoopUpdate?(delta: number): void
-  abstract onCanvasResize?(size: Rect): void
+  onPlay?(): void
+  onStop?(): void
+  onRemove?(): void
+  onLoopUpdate?(delta: number): void
+  onCanvasResize?(size: Rect): void
 }

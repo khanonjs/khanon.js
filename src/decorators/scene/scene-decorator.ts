@@ -214,10 +214,11 @@ export function Scene(props: SceneProps): any {
         this._state.start(setup)
       }
 
-      playAction(actionConstructor: SceneActionConstructor, setup: any): void {
+      playAction(actionConstructor: SceneActionConstructor, setup: any): SceneActionInterface {
         if (!this.availableElements.hasSceneAction(actionConstructor)) { Logger.debugError('Trying to play an action non available to the actor. Please check the actor props.', _class.prototype, actionConstructor.prototype); return }
-        if (!this.actions.get(actionConstructor)) {
-          const action = SceneActionsController.get(actionConstructor).spawn(this)
+        let action = this.actions.get(actionConstructor)
+        if (!action) {
+          action = SceneActionsController.get(actionConstructor).spawn(this)
           if (!this.props.actions?.find(_action => _action === actionConstructor)) {
             // Applies context 'Scene' or 'SceneState' to 'onLoopUpdate' method to preserve the 'this'
             // in case 'onLoopUpdate' is equivalent to a decorated method of some of those both interfaces.
@@ -230,46 +231,62 @@ export function Scene(props: SceneProps): any {
             )
           }
           this.actions.set(actionConstructor, action)
-          action.props.overrides?.forEach(actionOverride => {
-            this.actions.get(actionOverride)?.end()
-          })
+          action.props.overrides?.forEach(actionOverride => this.stopAction(actionOverride))
           action.start(setup)
         }
+        return action
       }
 
-      stopActionFromInstance(instance: SceneActionInterface) {
+      getAction(actionConstructor: SceneActionConstructor): SceneActionInterface | undefined {
+        return this.actions.get(actionConstructor)
+      }
+
+      stopActionFromInstance(instance: SceneActionInterface, forceRemove?: boolean) {
         for (const [key, value] of this.actions.entries()) {
           if (value === instance) {
-            this.stopAction(key)
+            this.stopAction(key, forceRemove)
             return
           }
         }
       }
 
-      stopAction(actionConstructor: SceneActionConstructor): void {
+      stopAction(actionConstructor: SceneActionConstructor, forceRemove?: boolean): void {
         const action = this.actions.get(actionConstructor)
         if (action) {
-          action.end()
-          if (!action.props.preserve) {
+          removeLoopUpdate(action)
+          removeCanvasResize(action)
+          invokeCallback(action.onStop, action)
+          if (!action.props.preserve || forceRemove) {
+            invokeCallback(action.onRemove, action)
             this.actions.delete(actionConstructor)
           }
         }
       }
 
-      stopActionGroup(group: number): void {
-        const actionsStop: SceneActionConstructor[] = []
+      stopActionGroup(group: number, forceRemove?: boolean): void {
         this.actions.forEach((action, actionConstructor) => {
           if (action.props.group !== undefined && action.props.group === group) {
-            actionsStop.push(actionConstructor)
+            this.stopAction(actionConstructor, forceRemove)
           }
         })
-        actionsStop.forEach(actionConstructor => this.stopAction(actionConstructor))
       }
 
-      stopActionAll(): void {
+      stopActionAll(forceRemove?: boolean): void {
         this.actions.forEach((action, actionConstructor) => {
-          this.stopAction(actionConstructor)
+          this.stopAction(actionConstructor, forceRemove)
         })
+      }
+
+      removeAction(actionConstructor: ActorActionConstructor): void {
+        this.stopAction(actionConstructor, true)
+      }
+
+      removeActionGroup(group: number): void {
+        this.stopActionGroup(group, true)
+      }
+
+      removeActionAll(): void {
+        this.stopActionAll(true)
       }
 
       notify(message: FlexId, ...args: any[]): void {

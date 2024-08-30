@@ -64,19 +64,17 @@ export function ActorAction(props: ActorActionProps = {}): any {
               }
             })
           }
-          invokeCallback(this.onPlay, this)
           attachLoopUpdate(this)
           attachCanvasResize(this)
-        }
-
-        end(): void {
-          removeLoopUpdate(this)
-          removeCanvasResize(this)
-          invokeCallback(this.onStop, this)
+          invokeCallback(this.onPlay, this)
         }
 
         stop(): void {
           this.actor.stopActionFromInstance(this)
+        }
+
+        remove(): void {
+          this.actor.stopActionFromInstance(this, true)
         }
       }
       const _classCore = class implements ActorActionCore {

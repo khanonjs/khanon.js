@@ -6,7 +6,7 @@ import { ExtractOptional } from '../types/extract-optional'
  * Attach LoopUpdate in context if exists.
  */
 export function attachLoopUpdate(context: any): void {
-  if (context.onLoopUpdate) {
+  if (context.onLoopUpdate && !context.loopUpdate$) {
     context.loopUpdate$ = Core.loopUpdateAddObserver(context.onLoopUpdate.bind(context))
   }
 }

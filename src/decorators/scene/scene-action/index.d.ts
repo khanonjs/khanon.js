@@ -26,6 +26,11 @@ export declare abstract class SceneActionInterface</* Setup object */ S = any, /
   stop(): void
 
   /**
+   * Removes the action. Equivalent to calling 'actor.removeAction'.
+   */
+  remove(): void
+
+  /**
    * Invoked on action start. Use this method to setup the Actor according to the action start.
    */
   onStart?(): void
@@ -34,6 +39,11 @@ export declare abstract class SceneActionInterface</* Setup object */ S = any, /
    * Invoked on action stop. If 'props.preserved' is 'true', the action instance will remain alive waiting for another 'playAction'.
    */
   onStop?(): void
+
+  /**
+   * Invoked on action remove.
+   */
+  onRemove?(): void
 
   /**
    * Callback invoked on loop update.
@@ -57,7 +67,7 @@ export interface SceneActionProps {
   group?: number
 
   /**
-   * 'false' by default. Preserves the action, not removing it after stop.
+   * 'false' by default. Preserves the action instance, not removing it after stop.
    */
   preserve?: boolean
 

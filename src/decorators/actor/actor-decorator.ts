@@ -172,9 +172,7 @@ export function Actor(props: ActorProps = {}): any {
             )
           }
           this.actions.set(actionConstructor, action)
-          action.props.overrides?.forEach(actionOverride => {
-            this.actions.get(actionOverride)?.end()
-          })
+          action.props.overrides?.forEach(actionOverride => this.stopAction(actionOverride))
           action.start(setup)
         }
         return action
@@ -184,37 +182,52 @@ export function Actor(props: ActorProps = {}): any {
         return this.actions.get(actionConstructor)
       }
 
-      stopActionFromInstance(instance: ActorActionInterface) {
+      stopActionFromInstance(instance: ActorActionInterface, forceRemove?: boolean) {
         for (const [key, value] of this.actions.entries()) {
           if (value === instance) {
-            this.stopAction(key)
+            this.stopAction(key, forceRemove)
             return
           }
         }
       }
 
-      stopAction(actionConstructor: ActorActionConstructor): void {
+      stopAction(actionConstructor: ActorActionConstructor, forceRemove?: boolean): void {
         const action = this.actions.get(actionConstructor)
         if (action) {
-          action.end()
-          if (!action.props.preserve) {
+          removeLoopUpdate(action)
+          removeCanvasResize(action)
+          invokeCallback(action.onStop, action)
+          if (!action.props.preserve || forceRemove) {
+            invokeCallback(action.onRemove, action)
             this.actions.delete(actionConstructor)
           }
         }
       }
 
-      stopActionGroup(group: number): void {
+      stopActionGroup(group: number, forceRemove?: boolean): void {
         this.actions.forEach((action, actionConstructor) => {
           if (action.props.group !== undefined && action.props.group === group) {
-            this.stopAction(actionConstructor)
+            this.stopAction(actionConstructor, forceRemove)
           }
         })
       }
 
-      stopActionAll(): void {
+      stopActionAll(forceRemove?: boolean): void {
         this.actions.forEach((action, actionConstructor) => {
-          this.stopAction(actionConstructor)
+          this.stopAction(actionConstructor, forceRemove)
         })
+      }
+
+      removeAction(actionConstructor: ActorActionConstructor): void {
+        this.stopAction(actionConstructor, true)
+      }
+
+      removeActionGroup(group: number): void {
+        this.stopActionGroup(group, true)
+      }
+
+      removeActionAll(): void {
+        this.stopActionAll(true)
       }
 
       attachParticle(particleConstructorOrMethod: ParticleConstructor | ((particle: ParticleInterface) => void), id: FlexId, offset: BABYLON.Vector3, nodeName?: string): void {

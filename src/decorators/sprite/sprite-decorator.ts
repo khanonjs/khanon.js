@@ -247,8 +247,8 @@ export function Sprite(props: SpriteProps): any {
           // - Add CSS style or whatever.
           // - Avoid creating a secondary texture for boundaries.
           // - Improve performance.
-          // - Let the user draw text over an 'url' loaded texture.
-          if (this.props.url) { Logger.debugError('Trying to draw text on an \'url\' texture. Texts can be only drawn on blank textures (url: undefined).'); return }
+          // - Let the user draw text over an 'url' loaded texture (not only blank textures).
+          if (this.props.url) { Logger.debugError('Trying to draw text on an \'url\' texture. Texts can be only drawn on blank textures (url: undefined).', _classInterface.prototype); return }
 
           const font = `${properties.fontStyle} ${properties.fontSize}px ${properties.fontName}`
 
@@ -283,13 +283,15 @@ export function Sprite(props: SpriteProps): any {
         }
 
         release(): void {
+          if (!this.babylon.sprite) { Logger.debugError('Trying to remove a Sprite that has been already removed.', _classInterface.prototype); return }
           invokeCallback(this.onDestroy, this)
           this.stopAnimation()
           if (this.exclusiveTexture) {
-            this.spriteTexture.dispose()
+            this.spriteTexture?.dispose()
             this.spriteTexture = undefined
           }
-          this.babylon.sprite.dispose()
+          this.babylon.sprite?.dispose()
+          this.babylon.sprite = undefined
           removeLoopUpdate(this)
           removeCanvasResize(this)
         }
@@ -334,7 +336,6 @@ export function Sprite(props: SpriteProps): any {
 
         unload(scene: SceneInterface): void {
           this.textures.delete(scene)
-        // AssetsController. // TODO
         }
 
         spawn(scene: SceneInterface): SpriteInterface {
@@ -367,6 +368,7 @@ export function Sprite(props: SpriteProps): any {
     ) && !descriptor) { // Undefined descriptor means it is a decorated property, otherwiese it is a decorated method
       @Sprite(props)
       abstract class _spriteInterface extends SpriteInterface {}
+      // TODO: Store the 'className' to debug it in logs.
 
       if (!Reflect.hasMetadata('metadata', constructorOrTarget)) {
         Reflect.defineMetadata('metadata', new Metadata(), constructorOrTarget)

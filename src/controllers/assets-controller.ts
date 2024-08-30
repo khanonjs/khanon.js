@@ -51,7 +51,6 @@ export class AssetsController {
       for (const property of Object.values(source)) {
         if (Array.isArray(property)) {
           property.forEach(value => {
-            Logger.trace('aki findAssetsDefinitions A', value.prototype?.constructor.name, isPrototypeOf(SpriteInterface, value))
             if (isPrototypeOf(ActorActionInterface, value)) {
               const action = ActorActionsController.get<ActorActionCore>(value)
               definitions = [...definitions, ...AssetsController.findAssetsDefinitions(action.props, urls)]
@@ -66,7 +65,6 @@ export class AssetsController {
               const actor = ActorsController.get<ActorCore>(value)
               definitions = [...definitions, ...AssetsController.findAssetsDefinitions(actor.props, urls)]
               definitions = [...definitions, ...AssetsController.findAssetsDefinitions(actor.Instance.metadata.getProps(), urls)]
-              Logger.trace('aki findAssetsDefinitions WTF', actor.Instance.metadata.getProps())
             }
             if (isPrototypeOf(ParticleInterface, value)) {
               const particle = ParticlesController.get<ParticleCore>(value)
@@ -74,7 +72,6 @@ export class AssetsController {
               definitions = [...definitions, ...AssetsController.findAssetsDefinitions(particle.Instance.metadata.getProps(), urls)]
             }
             if (isPrototypeOf(SpriteInterface, value)) {
-              Logger.trace('aki findAssetsDefinitions NEW SPRITE')
               const sprite = SpritesController.get<SpriteCore>(value)
               if (sprite.props.url && !urls[sprite.props.url]) {
                 urls[sprite.props.url] = true

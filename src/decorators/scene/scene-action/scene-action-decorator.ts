@@ -57,19 +57,17 @@ export function SceneAction(props: SceneActionProps = {}): any {
               }
             })
           }
-          invokeCallback(this.onPlay, this)
           attachLoopUpdate(this)
           attachCanvasResize(this)
-        }
-
-        end(): void {
-          removeLoopUpdate(this)
-          removeCanvasResize(this)
-          invokeCallback(this.onStop, this)
+          invokeCallback(this.onPlay, this)
         }
 
         stop(): void {
           this.scene.stopActionFromInstance(this)
+        }
+
+        remove(): void {
+          this.scene.stopActionFromInstance(this, true)
         }
       }
       const _classCore = class implements SceneActionCore {

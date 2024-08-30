@@ -37,7 +37,7 @@ export abstract class ActorInterface<B extends SpriteInterface | MeshInterface =
   abstract particles: Map<FlexId, ParticleInterface>
   abstract initialize(props: ActorProps): void
   abstract release(): void
-  abstract stopActionFromInstance(instance: ActorActionInterface): void
+  abstract stopActionFromInstance(instance: ActorActionInterface, forceRemove?: boolean): void
 
   /**
    * User available
@@ -57,10 +57,14 @@ export abstract class ActorInterface<B extends SpriteInterface | MeshInterface =
   abstract startState(state: ActorStateConstructor, setup: any): void
   abstract playAnimation(animation: (B extends SpriteInterface ? SpriteAnimation : MeshAnimation) | FlexId, loopOverride?: boolean, completed?: () => void): void
   abstract stopAnimation(): void
-  abstract playAction(action: ActorActionConstructor | ((delta: number) => void), setup: any): void
+  abstract playAction(action: ActorActionConstructor | ((delta: number) => void), setup: any): ActorActionInterface
+  abstract getAction(actionConstructor: ActorActionConstructor): ActorActionInterface | undefined
   abstract stopAction(action: ActorActionConstructor): void
   abstract stopActionGroup(group: number): void
   abstract stopActionAll(): void
+  abstract removeAction(actionConstructor: ActorActionConstructor, forceRemove?: boolean): void
+  abstract removeActionGroup(group: number, forceRemove?: boolean): void
+  abstract removeActionAll(forceRemove?: boolean): void
   abstract attachParticle(Particle: ParticleConstructor | ((particle: ParticleInterface) => void), id: FlexId, offset: BABYLON.Vector3, nodeName?: string): void
   abstract startParticle(id: FlexId): void
   abstract stopParticle(id: FlexId): void
