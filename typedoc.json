@@ -17,17 +17,9 @@
     "./src/modules/helper/index.d.ts",
     "./src/modules/logger/index.d.ts",
   ],
-  // "entryPointStrategy": "resolve",
-  // "basePath": "./src",
   "out": "api-docs",
   "plugin": [
     "@mxssfd/typedoc-theme"
   ],
-  "theme": "my-theme",
-  "categorizeByGroup": true,
-  // "categoryOrder": ["App", "Actor", "*"],
-  // "groupOrder": ["App", "Actor", "*"],
-  // "sort": [
-  //   "documents-first"
-  // ],
+  "theme": "my-theme"
 }
