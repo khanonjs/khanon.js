@@ -29,6 +29,10 @@ import {
 } from './actor-state'
 
 /**
+ * @group Actor
+ */
+
+/**
  * Actor Interface to be extended from decorated Actors.
  * @param B alludes to what kind of interface this actor will have as Body and Nodes.
  * - To use 2D Sprites set it as 'SpriteInterface'.

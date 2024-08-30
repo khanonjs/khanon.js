@@ -1,11 +1,13 @@
 @media (prefers-color-scheme: light) {
   :root {
     --menu-item-active-bg: #dfe0e2;
+    --dark-color-ts-module: #ffffff;
   }
 }
 @media (prefers-color-scheme: dark) {
   :root {
     --menu-item-active-bg: #1e2024;
+    --dark-color-ts-module: #ffffff;
   }
 }
 :root[data-theme='light'] {
