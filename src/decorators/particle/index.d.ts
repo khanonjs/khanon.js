@@ -20,7 +20,7 @@ export abstract class ParticleInterface {
   get scene(): SceneInterface
 
   /**
-   * Turns On/Off 'onLoopUpdate' callback.
+   * Turns on/off the 'onLoopUpdate' callback.
    */
   set loopUpdate(value: boolean)
   get loopUpdate(): boolean

@@ -15,7 +15,7 @@ export declare abstract class SceneActionInterface</* Setup object */ S = any, /
   get setup(): S
 
   /**
-   * Turns On/Off 'onLoopUpdate' callback.
+   * Turns on/off the 'onLoopUpdate' callback.
    */
   set loopUpdate(value: boolean)
   get loopUpdate(): boolean

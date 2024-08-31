@@ -141,7 +141,7 @@ export declare abstract class SceneInterface {
   get remove(): SceneRemove
 
   /**
-   * Turns On/Off 'onLoopUpdate' callback.
+   * Turns on/off the 'onLoopUpdate' callback.
    */
   set loopUpdate(value: boolean)
   get loopUpdate(): boolean

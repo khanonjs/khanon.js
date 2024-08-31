@@ -26,7 +26,7 @@ export declare abstract class CameraInterface<S = any> {
   get setup(): S
 
   /**
-   * Turns On/Off 'onLoopUpdate' callback.
+   * Turns on/off the 'onLoopUpdate' callback.
    */
   set loopUpdate(value: boolean)
   get loopUpdate(): boolean

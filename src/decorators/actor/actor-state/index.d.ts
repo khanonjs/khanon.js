@@ -27,7 +27,7 @@ export declare abstract class ActorStateInterface<S = any, A = ActorInterface<Sp
   get setup(): S
 
   /**
-   * Turns On/Off 'onLoopUpdate' callback.
+   * Turns on/off the 'onLoopUpdate' callback.
    */
   set loopUpdate(value: boolean)
   get loopUpdate(): boolean
