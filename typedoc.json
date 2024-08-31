@@ -18,7 +18,7 @@
     "./src/models/index.d.ts",
     "./src/modules/helper/index.d.ts",
     "./src/modules/logger/index.d.ts",
-    "./src/types/index.ts",
+    "./src/types/index.d.ts",
   ],
   "out": "api-docs",
   "plugin": [

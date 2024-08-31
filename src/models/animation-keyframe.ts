@@ -1,6 +1,6 @@
 import * as BABYLON from '@babylonjs/core'
 
-import { FlexId } from '../types'
+import { FlexId } from '../types/flex-id'
 
 export interface AnimationKeyFrame {
   id: FlexId

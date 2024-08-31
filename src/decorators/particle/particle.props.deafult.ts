@@ -1,6 +1,6 @@
 import * as BABYLON from '@babylonjs/core'
 
-import { ExtractOptional } from '../../types'
+import { ExtractOptional } from '../../types/extract-optional'
 import { ParticleProps } from './particle-props'
 
 export interface ParticlePropsDefault extends ExtractOptional<ParticleProps> {

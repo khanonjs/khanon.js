@@ -3,7 +3,7 @@ import * as BABYLON from '@babylonjs/core'
 import { StateInterface } from '../../../base'
 import { Metadata } from '../../../base/interfaces/metadata/metadata'
 import { Rect } from '../../../models/rect'
-import { FlexId } from '../../../types'
+import { FlexId } from '../../../types/flex-id'
 import { AppStateProps } from './app-state-props'
 
 export abstract class AppStateInterface<S = any> implements StateInterface<S> {

@@ -1,6 +1,6 @@
 import { Notificable } from '../../base'
 import { Metadata } from '../../base/interfaces/metadata/metadata'
-import { FlexId } from '../../types'
+import { FlexId } from '../../types/flex-id'
 import { AppProps } from './app-props'
 import { AppStateConstructor } from './app-state/app-state-constructor'
 import { AppStateInterface } from './app-state/app-state-interface'

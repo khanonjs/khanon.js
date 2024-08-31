@@ -1,7 +1,7 @@
 import { Metadata } from '../../base/interfaces/metadata/metadata'
 import { AppStatesController } from '../../controllers'
 import { Core } from '../../core'
-import { FlexId } from '../../types'
+import { FlexId } from '../../types/flex-id'
 import { applyDefaults } from '../../utils/utils'
 import { AppInterface } from './app-interface'
 import { AppProps } from './app-props'

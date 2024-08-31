@@ -9,7 +9,7 @@ import {
 } from '../../../controllers'
 import { Rect } from '../../../models/rect'
 import { Logger } from '../../../modules/logger'
-import { FlexId } from '../../../types'
+import { FlexId } from '../../../types/flex-id'
 import {
   attachCanvasResize,
   attachLoopUpdate,

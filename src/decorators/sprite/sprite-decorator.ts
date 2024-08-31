@@ -18,10 +18,8 @@ import { DrawBlockProperties } from '../../models/draw-text-properties'
 import { Rect } from '../../models/rect'
 import { Timeout } from '../../models/timeout'
 import { Logger } from '../../modules/logger'
-import {
-  FlexId,
-  SpriteTransform
-} from '../../types'
+import { FlexId } from '../../types/flex-id'
+import { SpriteTransform } from '../../types/sprite-transform'
 import {
   applyDefaults,
   attachCanvasResize,

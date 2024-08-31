@@ -1,4 +1,4 @@
-import { ExtractOptional } from '../../types'
+import { ExtractOptional } from '../../types/extract-optional'
 import { AppProps } from './app-props'
 
 export interface AppPropsDefault extends ExtractOptional<AppProps> {

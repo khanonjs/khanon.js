@@ -1,9 +1,5 @@
-import { ActorInterface } from '../'
 import { Rect } from '../../../models/rect'
 import { FlexId } from '../../../types'
-import { MeshInterface } from '../../mesh'
-import { SceneInterface } from '../../scene'
-import { SpriteInterface } from '../../sprite'
 
 // 8a8f
 

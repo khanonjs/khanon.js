@@ -25,7 +25,7 @@ import { AssetDefinition } from '../../models/asset-definition'
 import { BabylonAccessor } from '../../models/babylon-accessor'
 import { Rect } from '../../models/rect'
 import { Logger } from '../../modules/logger'
-import { FlexId } from '../../types'
+import { FlexId } from '../../types/flex-id'
 import {
   attachCanvasResize,
   attachLoopUpdate,

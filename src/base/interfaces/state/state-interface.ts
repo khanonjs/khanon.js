@@ -1,7 +1,7 @@
 import * as BABYLON from '@babylonjs/core'
 
 import { Rect } from '../../../models/rect'
-import { FlexId } from '../../../types'
+import { FlexId } from '../../../types/flex-id'
 import { CanvasResizable } from '../canvas-resizable'
 import { LoopUpdatable } from '../loop-updatable'
 import { Notificable } from '../notificable'

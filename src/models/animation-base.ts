@@ -1,4 +1,4 @@
-import { FlexId } from '../types'
+import { FlexId } from '../types/flex-id'
 import { AnimationKeyFrame } from './animation-keyframe'
 
 export interface AnimationBase {

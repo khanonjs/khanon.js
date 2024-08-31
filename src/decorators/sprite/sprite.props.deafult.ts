@@ -1,4 +1,4 @@
-import { ExtractOptional } from '../../types'
+import { ExtractOptional } from '../../types/extract-optional'
 import { SpriteProps } from './sprite-props'
 
 export interface SpritePropsDefault extends ExtractOptional<SpriteProps> {

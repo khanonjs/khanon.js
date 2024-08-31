@@ -7,11 +7,9 @@ import {
 } from '../../base'
 import { Metadata } from '../../base/interfaces/metadata/metadata'
 import { Rect } from '../../models/rect'
-import {
-  FlexId,
-  MeshTransform,
-  SpriteTransform
-} from '../../types'
+import { FlexId } from '../../types/flex-id'
+import { MeshTransform } from '../../types/mesh-transform'
+import { SpriteTransform } from '../../types/sprite-transform'
 import { MeshAnimation } from '../mesh/mesh-animation'
 import { MeshInterface } from '../mesh/mesh-interface'
 import { ParticleConstructor } from '../particle/particle-constructor'

@@ -13,11 +13,9 @@ import {
 } from '../../controllers'
 import { Rect } from '../../models/rect'
 import { Logger } from '../../modules/logger'
-import {
-  FlexId,
-  MeshTransform,
-  SpriteTransform
-} from '../../types'
+import { FlexId } from '../../types/flex-id'
+import { MeshTransform } from '../../types/mesh-transform'
+import { SpriteTransform } from '../../types/sprite-transform'
 import {
   attachCanvasResize,
   attachLoopUpdate,

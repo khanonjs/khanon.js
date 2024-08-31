@@ -1,4 +1,4 @@
-import { FlexId } from '../../types'
+import { FlexId } from '../../types/flex-id'
 
 /**
  * NOTE: Any new notificable interface must be added to NotificationController methods.

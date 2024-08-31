@@ -3,10 +3,8 @@ import * as BABYLON from '@babylonjs/core'
 import { DisplayObject } from '../../base'
 import { BabylonAccessor } from '../../models/babylon-accessor'
 import { Rect } from '../../models/rect'
-import {
-  FlexId,
-  MeshTransform
-} from '../../types'
+import { FlexId } from '../../types/flex-id'
+import { MeshTransform } from '../../types/mesh-transform'
 import { SceneInterface } from '../scene/scene-interface'
 import { SpriteAnimation } from '../sprite/sprite-animation'
 import { MeshAnimation } from './mesh-animation'

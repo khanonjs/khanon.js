@@ -9,8 +9,10 @@ import { SceneConstructor } from '../decorators/scene'
 import { SceneStateConstructor } from '../decorators/scene/scene-state'
 import { Timeout } from '../models'
 import { Rect } from '../models/rect'
-import { FlexId } from '../types/flex-id'
-import { NotificableType } from '../types/notificable-type'
+import {
+  FlexId,
+  NotificableType
+} from '../types'
 
 // ******************
 //  KJS App handler

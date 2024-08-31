@@ -1,3 +1,5 @@
+import 'reflect-metadata'
+
 import * as BABYLON from '@babylonjs/core'
 
 import { LoadingProgress } from '../../../base'
@@ -5,7 +7,7 @@ import { Metadata } from '../../../base/interfaces/metadata/metadata'
 import { AppStatesController } from '../../../controllers'
 import { Rect } from '../../../models/rect'
 import { Logger } from '../../../modules/logger'
-import { FlexId } from '../../../types'
+import { FlexId } from '../../../types/flex-id'
 import {
   attachCanvasResize,
   attachLoopUpdate,

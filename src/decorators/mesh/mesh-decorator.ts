@@ -11,10 +11,8 @@ import { MeshesController } from '../../controllers'
 import { BabylonAccessor } from '../../models/babylon-accessor'
 import { Rect } from '../../models/rect'
 import { Logger } from '../../modules/logger'
-import {
-  FlexId,
-  MeshTransform
-} from '../../types'
+import { FlexId } from '../../types/flex-id'
+import { MeshTransform } from '../../types/mesh-transform'
 import {
   attachCanvasResize,
   attachLoopUpdate,

@@ -9,7 +9,7 @@ import { Rect } from './models/rect'
 import { Timeout } from './models/timeout'
 import { Logger } from './modules/logger/logger'
 import { LoggerLevels } from './modules/logger/logger-levels'
-import { TimeoutType } from './types'
+import { TimeoutType } from './types/timeout-type'
 
 export class Core {
   static canvasRect: Rect

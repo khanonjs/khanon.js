@@ -4,10 +4,8 @@ import { DisplayObject } from '../../base'
 import { BabylonAccessor } from '../../models/babylon-accessor'
 import { DrawBlockProperties } from '../../models/draw-text-properties'
 import { Rect } from '../../models/rect'
-import {
-  FlexId,
-  SpriteTransform
-} from '../../types'
+import { FlexId } from '../../types/flex-id'
+import { SpriteTransform } from '../../types/sprite-transform'
 import { MeshAnimation } from '../mesh/mesh-animation'
 import { SceneInterface } from '../scene/scene-interface'
 import { SpriteAnimation } from './sprite-animation'
