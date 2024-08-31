@@ -1,6 +1,8 @@
 import * as BABYLON from '@babylonjs/core'
 
 import { AppInterface } from './decorators/app/app-interface'
+import { AppStateConstructor } from './decorators/app/app-state/app-state-constructor'
+import { AppStateInterface } from './decorators/app/app-state/app-state-interface'
 import { SceneInterface } from './decorators/scene/scene-interface'
 import { BabylonAccessor } from './models/babylon-accessor'
 import { Rect } from './models/rect'
@@ -127,6 +129,10 @@ export class Core {
 
   static getApp(): AppInterface {
     return this.app
+  }
+
+  static setAppState(state: AppStateConstructor, setup: any): AppStateInterface {
+    return this.app.startState(state, setup)
   }
 
   static getActiveScenes(): Set<SceneInterface> {

@@ -31,6 +31,7 @@ export abstract class SceneInterface implements Loadable, LoopUpdatable, CanvasR
   protected abstract _assets: AssetDefinition[]
   protected abstract _loaded: boolean
   protected abstract _started: boolean
+  protected abstract _state: SceneStateInterface
   protected abstract _spawn: SceneSpawn
   protected abstract _remove: SceneRemove
   abstract availableElements: SceneAvailableElements

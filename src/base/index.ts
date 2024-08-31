@@ -12,7 +12,6 @@ export { Metadata } from './interfaces/metadata/metadata'
 
 export { StateCore } from './interfaces/state/state-core'
 export { StateInterface } from './interfaces/state/state-interface'
-export { StateProps } from './interfaces/state/state-props'
 
 export { CanvasResizable } from './interfaces/canvas-resizable'
 export { DisplayObject } from './interfaces/display-object'

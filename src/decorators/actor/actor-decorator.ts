@@ -137,7 +137,7 @@ export function Actor(props: ActorProps = {}): any {
         // TODO
       }
 
-      startState(state: ActorStateConstructor, setup: any): void {
+      startState(state: ActorStateConstructor, setup: any): ActorStateInterface {
         if (!this.scene.availableElements.hasActorState(state)) { Logger.debugError('Trying to set a state non available to the actor. Please check the actor props.', _classInterface.prototype, state.prototype); return }
         const _state = ActorStatesController.get(state).spawn(this)
         if (this._state) {
@@ -145,6 +145,7 @@ export function Actor(props: ActorProps = {}): any {
         }
         this._state = _state
         this._state.start(setup)
+        return this._state
       }
 
       playAnimation(animation: SpriteAnimation | MeshAnimation | FlexId, loopOverride?: boolean, completed?: () => void): void {

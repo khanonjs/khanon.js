@@ -4,14 +4,10 @@ import { StateInterface } from '../../../base'
 import { Metadata } from '../../../base/interfaces/metadata/metadata'
 import { Rect } from '../../../models/rect'
 import { FlexId } from '../../../types'
-import { MeshInterface } from '../../mesh/mesh-interface'
-import { SceneInterface } from '../../scene/scene-interface'
-import { SpriteInterface } from '../../sprite/sprite-interface'
-import { ActorInterface } from '../actor-interface'
-import { ActorStateProps } from './actor-state-props'
+import { AppStateProps } from './app-state-props'
 
-export abstract class ActorStateInterface<S = any, A = ActorInterface<SpriteInterface | MeshInterface>, C = SceneInterface> implements StateInterface<S> {
-  abstract props: ActorStateProps
+export abstract class AppStateInterface<S = any> implements StateInterface<S> {
+  abstract props: AppStateProps
   abstract metadata: Metadata
   abstract loopUpdate$: BABYLON.Observer<number>
   abstract canvasResize$: BABYLON.Observer<Rect>
@@ -21,8 +17,6 @@ export abstract class ActorStateInterface<S = any, A = ActorInterface<SpriteInte
   /**
    * User available
    */
-  abstract scene: C
-  abstract actor: A
   abstract setup: S
   abstract get loopUpdate(): boolean
   abstract set loopUpdate(value: boolean)

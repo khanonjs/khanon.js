@@ -1,5 +1,5 @@
 // Khanon.js
-export { KJS } from './kjs'
+export { KJS } from './kjs/kjs'
 
 // Actor decorator
 export { Actor } from './decorators/actor/actor-decorator'

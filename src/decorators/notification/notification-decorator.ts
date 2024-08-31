@@ -5,6 +5,7 @@ import { Logger } from '../../modules/logger'
 import { ActorInterface } from '../actor/actor-interface'
 import { ActorStateInterface } from '../actor/actor-state/actor-state-interface'
 import { AppInterface } from '../app/app-interface'
+import { AppStateInterface } from '../app/app-state/app-state-interface'
 import { ParticleInterface } from '../particle/particle-interface'
 import { SceneInterface } from '../scene/scene-interface'
 import { SceneStateInterface } from '../scene/scene-state/scene-state-interface'
@@ -14,6 +15,7 @@ export function Notification(props: NotificationProps): any {
   return function(target: any, propertyKey: string, descriptor: PropertyDescriptor) {
     if (!target.prototype && (
       target instanceof AppInterface ||
+      target instanceof AppStateInterface ||
       target instanceof ActorInterface ||
       target instanceof ActorStateInterface ||
       target instanceof SceneInterface ||

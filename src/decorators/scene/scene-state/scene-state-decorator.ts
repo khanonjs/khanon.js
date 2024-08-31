@@ -27,11 +27,13 @@ import { SceneStateProps } from './scene-state-props'
 export function SceneState(props: SceneStateProps = {}): any {
   return function <T extends { new (...args: any[]): SceneStateInterface }>(constructor: T & SceneStateInterface, context: ClassDecoratorContext) {
     const _classInterface = class extends constructor implements SceneStateInterface {
-      constructor(readonly scene: SceneInterface) {
+      constructor(readonly scene: SceneInterface, props: SceneStateProps) {
         super()
+        this.props = props
         this.metadata.applyProps(this)
       }
 
+      props: SceneStateProps
       setup: any
       loopUpdate$: BABYLON.Observer<number>
       canvasResize$: BABYLON.Observer<Rect>
@@ -67,10 +69,10 @@ export function SceneState(props: SceneStateProps = {}): any {
     }
     const _classCore = class implements SceneStateCore {
       props = props
-      Instance: SceneStateInterface = new _classInterface(null)
+      Instance: SceneStateInterface = new _classInterface(null, null)
 
       spawn(scene: SceneInterface): SceneStateInterface {
-        const state = new _classInterface(scene)
+        const state = new _classInterface(scene, this.props)
         return state
       }
 

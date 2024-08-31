@@ -27,15 +27,17 @@ import { ActorStateProps } from './actor-state-props'
 export function ActorState(props: ActorStateProps = {}): any {
   return function <T extends { new (...args: any[]): ActorStateInterface }>(constructor: T & ActorStateInterface, context: ClassDecoratorContext) {
     const _classInterface = class extends constructor implements ActorStateInterface {
-      constructor(actor: ActorInterface) {
+      constructor(actor: ActorInterface, props: ActorStateProps) {
         super()
         if (actor) {
+          this.props = props
           this.actor = actor
           this.scene = this.actor.scene
         }
         this.metadata.applyProps(this)
       }
 
+      props: ActorStateProps
       actor: ActorInterface
       metadata: Metadata = Reflect.getMetadata('metadata', this) ?? new Metadata()
       loopUpdate$: BABYLON.Observer<number>
@@ -68,10 +70,10 @@ export function ActorState(props: ActorStateProps = {}): any {
     }
     const _classCore = class implements ActorStateCore {
       props = props
-      Instance: ActorStateInterface = new _classInterface(null)
+      Instance: ActorStateInterface = new _classInterface(null, null)
 
       spawn(actor: ActorInterface): ActorStateInterface {
-        const state = new _classInterface(actor)
+        const state = new _classInterface(actor, this.props)
         return state
       }
 

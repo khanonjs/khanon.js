@@ -1,8 +1,24 @@
 import { EngineConfiguration } from '../../babylon-config'
 import { FlexId } from '../../types'
 import { AppPropLoopUpdate } from './app-props-loop-update'
+import {
+  AppStateConstructor,
+  AppStateInterface
+} from './app-state'
 
 export declare abstract class AppInterface {
+  /**
+   * Gets the current state.
+   */
+  get state(): AppStateInterface
+
+  /**
+   * Starts a new state.
+   * @param state
+   * @param setup
+   */
+  startState(state: AppStateConstructor, setup: any): AppStateInterface
+
   /**
    * Notifies a message to App.
    */

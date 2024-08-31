@@ -3,10 +3,12 @@ import * as BABYLON from '@babylonjs/core'
 import {
   NotificationsController,
   ScenesController
-} from './controllers'
-import { Core } from './core'
-import { Rect } from './models/rect'
-import { Timeout } from './models/timeout'
+} from '../controllers'
+import { Core } from '../core'
+import { AppStateConstructor } from '../decorators/app/app-state/app-state-constructor'
+import { AppStateInterface } from '../decorators/app/app-state/app-state-interface'
+import { Rect } from '../models/rect'
+import { Timeout } from '../models/timeout'
 
 export class KJS {
   static get Scene(): ScenesController { return ScenesController }
@@ -18,6 +20,10 @@ export class KJS {
 
   static clearCache(): void {
     // TODO
+  }
+
+  static setAppState(state: AppStateConstructor, setup: any): AppStateInterface {
+    return Core.setAppState(state, setup)
   }
 
   static setTimeout(func: () => void, ms: number, context?: any): Timeout {
