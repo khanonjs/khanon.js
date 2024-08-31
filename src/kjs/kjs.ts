@@ -22,7 +22,7 @@ export class KJS {
     // TODO
   }
 
-  static setAppState(state: AppStateConstructor, setup: any): AppStateInterface {
+  static startAppState(state: AppStateConstructor, setup: any): AppStateInterface {
     return Core.setAppState(state, setup)
   }
 

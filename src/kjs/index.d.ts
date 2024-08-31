@@ -1,12 +1,16 @@
 import * as BABYLON from '@babylonjs/core'
 
-import { LoadingProgress } from './base'
-import { SceneConstructor } from './decorators/scene'
-import { SceneStateConstructor } from './decorators/scene/scene-state'
-import { Timeout } from './models'
-import { Rect } from './models/rect'
-import { FlexId } from './types/flex-id'
-import { NotificableType } from './types/notificable-type'
+import { LoadingProgress } from '../base'
+import {
+  AppStateConstructor,
+  AppStateInterface
+} from '../decorators/app/app-state'
+import { SceneConstructor } from '../decorators/scene'
+import { SceneStateConstructor } from '../decorators/scene/scene-state'
+import { Timeout } from '../models'
+import { Rect } from '../models/rect'
+import { FlexId } from '../types/flex-id'
+import { NotificableType } from '../types/notificable-type'
 
 // ******************
 //  KJS App handler
@@ -41,6 +45,11 @@ export declare namespace KJS {
    */
   function throw_(error?: any): void;
   export { throw_ as throw } // Hack function name :)
+
+  /**
+   * Sets the app state.
+   */
+  export function startAppState<S extends AppStateConstructor>(state: S, setup: InstanceType<S>['setup']): AppStateInterface // TODO is it possible to make 'setup' argument optional whether InstanceType<S>['setup'] type is 'any'?
 
   /**
    * Clears cache.

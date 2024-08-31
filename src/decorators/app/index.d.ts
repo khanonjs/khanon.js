@@ -17,7 +17,7 @@ export declare abstract class AppInterface {
    * @param state
    * @param setup
    */
-  startState(state: AppStateConstructor, setup: any): AppStateInterface
+  startState<S extends AppStateConstructor>(state: S, setup: InstanceType<S>['setup']): AppStateInterface // TODO is it possible to make 'setup' argument optional whether InstanceType<S>['setup'] type is 'any'?
 
   /**
    * Notifies a message to App.
