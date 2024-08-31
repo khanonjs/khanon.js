@@ -40,13 +40,13 @@ output.on('close', function () {
       console.log('Data sent successfully:', response)
     } else {
       console.log(`Error ${code}:`, response)
-      process.exit(1)
+      process.exit(5)
     }
   },
   (error) => {
     fs.rmSync(`${fileName}.zip`)
     console.log('There was an error sending data:', error)
-    process.exit(1)
+    process.exit(5)
   })
 })
 

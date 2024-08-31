@@ -15,5 +15,5 @@ if (semver.gt(localVersion, registryVersion)) {
   process.exit(0)
 } else {
   console.log('Local version is equal or lower than registry, won\'t deploy.')
-  process.exit(1)
+  process.exit(3)
 }
