@@ -1,8 +1,24 @@
 import { EngineConfiguration } from '../../babylon-config'
 import { FlexId } from '../../types'
 import { AppPropLoopUpdate } from './app-props-loop-update'
+import {
+  AppStateConstructor,
+  AppStateInterface
+} from './app-state'
 
 export declare abstract class AppInterface {
+  /**
+   * Gets the current state.
+   */
+  get state(): AppStateInterface
+
+  /**
+   * Starts a new state.
+   * @param state
+   * @param setup
+   */
+  startState<S extends AppStateConstructor>(state: S, setup: InstanceType<S>['setup']): AppStateInterface // TODO is it possible to make 'setup' argument optional whether InstanceType<S>['setup'] type is 'any'?
+
   /**
    * Notifies a message to App.
    */

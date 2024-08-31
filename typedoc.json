@@ -1,7 +1,9 @@
 {
   "$schema": "https://typedoc.org/schema.json",
   "entryPoints": [
+    "./src/kjs/index.d.ts",
     "./src/decorators/app/index.d.ts",
+    "./src/decorators/app/app-state/index.d.ts",
     "./src/decorators/actor/index.d.ts",
     "./src/decorators/actor/actor-action/index.d.ts",
     "./src/decorators/actor/actor-state/index.d.ts",
@@ -17,17 +19,9 @@
     "./src/modules/helper/index.d.ts",
     "./src/modules/logger/index.d.ts",
   ],
-  // "entryPointStrategy": "resolve",
-  // "basePath": "./src",
   "out": "api-docs",
   "plugin": [
     "@mxssfd/typedoc-theme"
   ],
-  "theme": "my-theme",
-  "categorizeByGroup": true,
-  // "categoryOrder": ["App", "Actor", "*"],
-  // "groupOrder": ["App", "Actor", "*"],
-  // "sort": [
-  //   "documents-first"
-  // ],
+  "theme": "my-theme"
 }

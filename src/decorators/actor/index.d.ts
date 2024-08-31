@@ -116,7 +116,7 @@ export declare abstract class ActorInterface<B extends SpriteInterface | MeshInt
    * Starts a state.
    * @param state
    */
-  startState<S extends ActorStateConstructor>(state: S, setup: InstanceType<S>['setup']): void // TODO is it possible to make 'setup' argument optional whether InstanceType<S>['setup'] type is 'any'?
+  startState<S extends ActorStateConstructor>(state: S, setup: InstanceType<S>['setup']): ActorStateInterface // TODO is it possible to make 'setup' argument optional whether InstanceType<S>['setup'] type is 'any'?
 
   /**
    * Plays the animation of the body. Equivalent to 'actor.body.playAnimation'.

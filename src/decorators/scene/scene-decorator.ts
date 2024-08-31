@@ -20,7 +20,7 @@ import {
   SpritesController
 } from '../../controllers'
 import { Core } from '../../core'
-import KJS from '../../kjs'
+import KJS from '../../kjs/kjs'
 import { AssetDefinition } from '../../models/asset-definition'
 import { BabylonAccessor } from '../../models/babylon-accessor'
 import { Rect } from '../../models/rect'
@@ -204,7 +204,7 @@ export function Scene(props: SceneProps): any {
         this._camera.start()
       }
 
-      startState(state: SceneStateConstructor, setup: any): void {
+      startState(state: SceneStateConstructor, setup: any): SceneStateInterface {
         if (!this.availableElements.hasSceneState(state)) { Logger.debugError('Trying to set a state non available to the scene. Please check the scene props.', _class.prototype, state.prototype); return }
         const _state = SceneStatesController.get(state).spawn(this)
         if (this._state) {
@@ -212,6 +212,7 @@ export function Scene(props: SceneProps): any {
         }
         this._state = _state
         this._state.start(setup)
+        return this._state
       }
 
       playAction(actionConstructor: SceneActionConstructor, setup: any): SceneActionInterface {

@@ -1,6 +1,7 @@
 export { ActorsController } from './actors-controller'
 export { ActorActionsController } from './actors-actions-controller'
 export { ActorStatesController } from './actor-states-controller'
+export { AppStatesController } from './app-states-controller'
 export { AssetsController } from './assets-controller'
 export { CamerasController } from './cameras-controller'
 export { GUIController } from './gui-controller'
