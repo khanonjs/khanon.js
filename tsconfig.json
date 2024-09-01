@@ -10,7 +10,7 @@
     "rootDir": "src",
     "outDir": "dist",
     "importHelpers": true,
-    "declaration": true,
+    "declaration": false,
     "noResolve": false,
     "noImplicitThis": true,
     "noImplicitAny": false,
