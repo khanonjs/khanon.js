@@ -7,7 +7,7 @@ export type EngineConfiguration = {
   antialias?: boolean
 
   /**
-   * Babylon engine options
+   * Refers to Babylon engine options: https://doc.babylonjs.com/typedoc/interfaces/BABYLON.EngineOptions
    */
   options?: BABYLON.EngineOptions
 

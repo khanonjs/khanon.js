@@ -48,6 +48,8 @@ export declare abstract class AppInterface {
 
 export type AppConstructor = new () => AppInterface
 
+export { AppPropLoopUpdate } from './app-props-loop-update'
+
 export interface AppProps {
   /**
    * Name of the application.
