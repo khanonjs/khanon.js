@@ -127,19 +127,25 @@ export class AssetsController {
   }
 
   /**
-   * Unload all existing assets of a Scene that are not cached.
+   * Unload all existing and non-cached assets of a Scene.
    */
   static sceneUnload(scene: SceneInterface) {
     // TODO
   }
 
   /**
-   * Remove non cached assets with no sources
+   * Remove non-cached assets without sources.
    */
   private purgeAssets() {
     // TODO
   }
 
+  /**
+   * Loads a non-existing asset. This method is called after checking 'definition.url' has no associated asset.
+   * @param definition
+   * @param source
+   * @returns
+   */
   private static loadFileFromUrl(definition: AssetDefinition, source: SceneInterface): LoadingProgress<ArrayBuffer> {
     const asset = new Asset(definition, source)
     AssetsController.assets.set(definition.url, asset)

@@ -1,6 +1,6 @@
 import * as BABYLON from '@babylonjs/core'
 
-import { SceneConfiguration } from '../../babylon-config'
+import { SceneConfiguration } from '../../types/scene-configuration'
 import { ActorConstructor } from '../actor/actor-constructor'
 import { CameraConstructor } from '../camera/camera-constructor'
 import { MeshConstructor } from '../mesh/mesh-constructor'
