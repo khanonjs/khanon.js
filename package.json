@@ -14,7 +14,7 @@
   "main": "index.d.ts",
   "types": "index.d.ts",
   "scripts": {
-    "build": "npm run clean && tsc && cpy package.json ./dist && cd src && cpy ./*.d.ts ../dist && cpy ./**/*.d.ts ../dist",
+    "build": "npm run clean && tsc && cpy package.json ./dist && cd src && cpy ./**/*.d.ts ../dist --concurrency",
     "build:docs": "typedoc --options typedoc.json",
     "publish:docs": "node ./publish/publish-docs.mjs",
     "publish:validate-version": "node ./publish/validate-version.js",
