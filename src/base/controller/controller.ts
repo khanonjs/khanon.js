@@ -3,7 +3,7 @@ import { Spawnable } from '../interfaces/spawnable'
 
 export function Controller<T>() {
   abstract class BaseController {
-    protected static items: T[] = []
+    static items: T[] = []
 
     static register(item: T) {
       BaseController.items.push(item)
