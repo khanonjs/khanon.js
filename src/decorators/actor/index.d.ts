@@ -21,8 +21,10 @@ import {
   SpriteConstructor,
   SpriteInterface
 } from '../sprite'
-import { ActorActionConstructor } from './'
-import { ActorActionInterface } from './actor-action'
+import {
+  ActorActionConstructor,
+  ActorActionInterface
+} from './actor-action'
 import {
   ActorStateConstructor,
   ActorStateInterface

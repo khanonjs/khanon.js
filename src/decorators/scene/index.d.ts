@@ -270,6 +270,9 @@ export declare abstract class SceneInterface {
 export type SceneConstructor = new () => SceneInterface
 
 export interface SceneProps {
+  /**
+   * Refers to BABYLON.SceneOptions: https://doc.babylonjs.com/typedoc/interfaces/BABYLON.SceneOptions
+   */
   options?: BABYLON.SceneOptions
   configuration?: SceneConfiguration
   // guis?: GUIConstructor[]
