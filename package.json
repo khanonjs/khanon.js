@@ -1,6 +1,6 @@
 {
   "name": "@khanonjs/engine",
-  "version": "0.0.48",
+  "version": "0.0.49",
   "description": "A typescript game engine extending Babylon.js",
   "private": false,
   "author": {
@@ -11,7 +11,7 @@
     "type": "git",
     "url": "https://github.com/Khanon-js/khanon.js.git"
   },
-  "main": "index.ts",
+  "main": "index.d.ts",
   "types": "index.d.ts",
   "scripts": {
     "build": "npm run clean && tsc && cpy package.json ./dist && cpy src/**/*.d.ts ./dist",
