@@ -11,7 +11,6 @@
     "outDir": "dist",
     "importHelpers": true,
     "declaration": true,
-    "declarationMap": true,
     "noResolve": false,
     "noImplicitThis": true,
     "noImplicitAny": false,
@@ -29,7 +28,7 @@
     "noUnusedLocals": false
   },
   "include": [
-    "src/**/*"
+    "src/models/asset-type.ts"
   ],
   "exclude": [
       "src/**/*.spec.ts"
