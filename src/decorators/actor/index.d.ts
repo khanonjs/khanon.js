@@ -247,7 +247,7 @@ export declare abstract class ActorInterface<B extends SpriteInterface | MeshInt
   onCanvasResize?(size: Rect): void
 }
 
-export type ActorConstructor = new () => ActorInterface
+export type ActorConstructor = new () => ActorInterface<any>
 
 export interface ActorProps {
   sprites?: SpriteConstructor[]
