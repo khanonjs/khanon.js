@@ -1,12 +1,14 @@
 import * as BABYLON from '@babylonjs/core'
 
-import { SceneConfiguration } from '../../babylon-config'
 import { LoadingProgress } from '../../base'
 import {
   BabylonAccessor,
   Rect
 } from '../../models'
-import { FlexId } from '../../types'
+import {
+  FlexId,
+  SceneConfiguration
+} from '../../types'
 import {
   ActorConstructor,
   ActorInterface

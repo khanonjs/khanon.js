@@ -1,5 +1,7 @@
-import { EngineConfiguration } from '../../babylon-config'
-import { FlexId } from '../../types'
+import {
+  EngineConfiguration,
+  FlexId
+} from '../../types'
 import { AppPropLoopUpdate } from './app-props-loop-update'
 import {
   AppStateConstructor,
