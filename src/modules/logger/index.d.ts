@@ -1,4 +1,4 @@
-import { LoggerLevels } from './'
+import { LoggerLevels } from './logger-levels'
 
 export declare class Logger {
   static get level(): LoggerLevels

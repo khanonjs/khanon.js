@@ -112,7 +112,7 @@ export declare abstract class ActorInterface<B extends SpriteInterface | MeshInt
    * Sets the visibility of Body and all Nodes.
    * @param value
    */
-  setVisible(value: boolean)
+  setVisible(value: boolean): void
 
   /**
    * Starts a state.

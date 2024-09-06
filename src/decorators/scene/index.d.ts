@@ -38,7 +38,7 @@ export declare class SceneSpawn {
    * @param actor
    * @returns
    */
-  actor<A extends ActorInterface>(actor: new () => A): A
+  actor<A extends ActorInterface<any>>(actor: new () => A): A
 
   /**
    * Spawns a particle in the scene.

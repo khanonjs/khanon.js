@@ -1,0 +1,18 @@
+{
+  "compilerOptions": {
+    "target": "ES2022",
+    "module": "CommonJS",
+    "moduleResolution": "node",
+    "lib": [
+      "dom",
+      "es6"
+    ],
+    "outDir": "./public",
+    "strict": true,
+    "experimentalDecorators": true,
+    "preserveConstEnums":true,
+  },
+  "include": [
+    "src/**/*"
+  ],
+}

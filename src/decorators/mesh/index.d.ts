@@ -1,6 +1,5 @@
 import * as BABYLON from '@babylonjs/core'
 
-import { DisplayObject } from '../../base'
 import {
   AnimationBase,
   BabylonAccessor,
@@ -14,7 +13,7 @@ import { SceneInterface } from '../scene'
 
 export interface MeshAnimation extends AnimationBase {}
 
-export declare abstract class MeshInterface implements DisplayObject {
+export declare abstract class MeshInterface {
   /**
    * Babylon.js objects.
    */
