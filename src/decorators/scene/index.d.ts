@@ -64,7 +64,7 @@ export declare class SceneRemove {
    * Removes an actor from the scene.
    * @param actor
    */
-  actor(actor: ActorInterface): void
+  actor(actor: ActorInterface<any>): void
 
   /**
    * Removes all actors from the scene.
