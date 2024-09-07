@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-var-requires */
 const fs = require('fs')
-const HtmlWebpackPlugin = require('html-webpack-plugin')
 const CopyPlugin = require('copy-webpack-plugin')
+const HtmlWebpackPlugin = require('html-webpack-plugin')
 
 const path = require('path')
 const appDirectory = fs.realpathSync(process.cwd())
@@ -24,19 +24,19 @@ module.exports = {
     ]
   },
   plugins: [
-    // new CopyPlugin({
-    //   patterns: [
-    //     {
-    //       from: 'public',
-    //       to: '.',
-    //       globOptions: {
-    //         dot: true,
-    //         gitignore: true,
-    //         ignore: ['**/index.html']
-    //       }
-    //     }
-    //   ]
-    // }),
+    new CopyPlugin({
+      patterns: [
+        {
+          from: 'public',
+          to: '.',
+          globOptions: {
+            dot: true,
+            gitignore: true,
+            ignore: ['**/index.html']
+          }
+        }
+      ]
+    }),
     new HtmlWebpackPlugin({
       inject: true,
       template: path.resolve(appDirectory, 'public/index.html')

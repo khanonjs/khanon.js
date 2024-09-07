@@ -1,20 +1,16 @@
 import {
   App,
   AppInterface,
+  KJS,
   Logger
 } from '@khanonjs/engine'
 
-console.log('aki STARTING APP???')
-
 @App({
-  name: 'Khanon.js blank project',
-  loopUpdate: {
-    fps: 165
-  }
+  name: 'Khanon.js blank project'
 })
-export class LPWebsite extends AppInterface {
+export class MyApp extends AppInterface {
   onStart() {
-    // Entrypoint of your application
+    // Entrypoint of your app
     Logger.trace('App onStart')
   }
 

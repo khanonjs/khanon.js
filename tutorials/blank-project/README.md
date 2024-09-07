@@ -1,2 +1,1 @@
-Khanon.js blank project README.md
-
+Khanon.js blank project

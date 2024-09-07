@@ -1,7 +1,7 @@
 {
   "name": "khanonjs-blank-project",
   "version": "0.0.1",
-  "description": "",
+  "description": "Khanon.js blank project",
   "main": "index.html",
   "scripts": {
     "start": "webpack serve --port 8080 --config webpack.dev.js",
@@ -12,14 +12,11 @@
   "devDependencies": {
     "@babylonjs/inspector": "~7.2.1",
     "copy-webpack-plugin": "^12.0.2",
+    "html-webpack-plugin": "^5.3.1",
     "rimraf": "^3.0.2",
-    "ts-loader": "^9.5.1",
+    "ts-loader": "^9.1.2",
     "typescript": "^5.3.3",
-    "webpack": "^5.36.2",
-    "webpack-bundle-analyzer": "^4.4.2",
-    "webpack-cli": "^4.9.2",
-    "webpack-dev-middleware": "^5.3.1",
-    "webpack-dev-server": "^4.8.1"
+    "webpack": "^5.94.0"
   },
   "dependencies": {
     "@babylonjs/core": "~7.2.1",
