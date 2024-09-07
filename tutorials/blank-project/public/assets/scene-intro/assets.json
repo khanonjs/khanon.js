@@ -1,0 +1,28 @@
+{
+    "spriteTextures": [
+        {
+            "id": "sun",
+            "url": "./assets/scene-intro/sprites/wtf.png",
+            "cellWidth": 270,
+            "cellHeight": 270
+        },
+        {
+            "id": "robocillo",
+            "url": "./assets/scene-intro/sprites/robocillo.png",
+            "cellWidth": 34,
+            "cellHeight": 34
+        },
+        {
+            "id": "logo",
+            "url": "./assets/scene-intro/sprites/logo.png",
+            "cellWidth": 402,
+            "cellHeight": 83
+        },
+        {
+            "id": "particle-walk-dust",
+            "url": "./assets/scene-intro/sprites/particle-walk-dust.png",
+            "cellWidth": 34,
+            "cellHeight": 34
+        }
+    ]
+}

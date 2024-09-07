@@ -1,7 +1,6 @@
 import {
   App,
   AppInterface,
-  KJS,
   Logger
 } from '@khanonjs/engine'
 
