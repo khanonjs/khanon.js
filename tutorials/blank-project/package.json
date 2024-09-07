@@ -6,7 +6,8 @@
   "scripts": {
     "start": "webpack serve --port 8080 --config webpack.dev.js",
     "start:prod": "webpack serve --port 8080 --config webpack.prod.js",
-    "build": "npm run build:clean && webpack --config webpack.prod.js",
+    "build": "npm run build:clean && webpack --config webpack.dev.js",
+    "build:prod": "npm run build:clean && webpack --config webpack.prod.js",
     "build:clean": "rimraf dist"
   },
   "devDependencies": {

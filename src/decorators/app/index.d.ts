@@ -57,8 +57,8 @@ export interface AppProps {
   name: string
 
   /**
-   * HTML div element 'id' where Khanon.js will render the application.
-   * Default value: 'khanonjs'
+   * HTML div element 'id' where Khanon.js will create the canvas for Babylon.js.
+   * Default value is 'khanonjs'.
    */
   htmlCanvasContainerId?: string
 
