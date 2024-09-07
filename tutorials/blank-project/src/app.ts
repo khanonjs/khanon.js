@@ -1,27 +1,29 @@
-import {
-  App,
-  AppInterface,
-  KJS,
-  Logger
-} from '@khanonjs/engine'
+// import {
+//   App,
+//   AppInterface,
+//   KJS,
+//   Logger
+// } from '@khanonjs/engine'
 
-@App({
-  name: 'Khanon.js blank project',
-  loopUpdate: {
-    fps: 165
-  }
-})
-export class LPWebsite extends AppInterface {
-  onStart() {
-    // Entrypoint
-    Logger.trace('App onStart')
-  }
+console.log('aki STARTING APP???')
 
-  onClose() {
-    Logger.trace('App onClose')
-  }
+// @App({
+//   name: 'Khanon.js blank project',
+//   loopUpdate: {
+//     fps: 165
+//   }
+// })
+// export class LPWebsite extends AppInterface {
+//   onStart() {
+//     // Entrypoint of your application
+//     Logger.trace('App onStart')
+//   }
 
-  onError(error?: string) {
-    Logger.error('App onError:', error)
-  }
-}
+//   onClose() {
+//     Logger.trace('App onClose')
+//   }
+
+//   onError(error?: string) {
+//     Logger.error('App onError:', error)
+//   }
+// }

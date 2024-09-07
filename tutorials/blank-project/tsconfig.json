@@ -1,6 +1,6 @@
 {
   "compilerOptions": {
-    "target": "ES2022",
+    "target": "ES6",
     "module": "CommonJS",
     "moduleResolution": "node",
     "lib": [
@@ -8,9 +8,23 @@
       "es6"
     ],
     "outDir": "./public",
+    "rootDir": "src",
+    "importHelpers": true,
+    "declaration": false,
+    "noResolve": false,
+    "noImplicitThis": true,
+    "noImplicitAny": false,
+    "noImplicitReturns": false,
+    "strictFunctionTypes": true,
+    "skipLibCheck": true,
     "strict": true,
+    "strictPropertyInitialization": false,
+    "strictNullChecks": false,
     "experimentalDecorators": true,
+    "sourceMap": true,
     "preserveConstEnums":true,
+    "esModuleInterop": true,
+    "noUnusedLocals": false
   },
   "include": [
     "src/**/*"
