@@ -9,7 +9,6 @@ import { Rect } from './models/rect'
 import { Timeout } from './models/timeout'
 import { Logger } from './modules/logger/logger'
 import { LoggerLevels } from './modules/logger/logger-levels'
-import { TimeoutType } from './types/timeout-type'
 
 export class Core {
   static canvasRect: Rect
@@ -28,7 +27,7 @@ export class Core {
   private static onCanvasResize: BABYLON.Observable<Rect> = new BABYLON.Observable<Rect>(undefined, true)
 
   // Loop update
-  private static loopUpdateInterval: TimeoutType
+  private static loopUpdateInterval: ReturnType<typeof setInterval>
   private static loopUpdateLastMs: number
   private static loopUpdateMps: number // Number of logical steps per frame
   private static loopUpdateLag: number

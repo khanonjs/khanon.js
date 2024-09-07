@@ -58,6 +58,7 @@ export class BabylonAccessor<C extends BABYLON.Camera = any> {
   get particleSystem(): BABYLON.ParticleSystem
 }
 
-export { DrawBlockProperties } from './draaw-text-properties'
+export { AssetType } from './asset-type'
+export { DrawBlockProperties } from './draw-text-properties'
 export { Rect } from './rect'
 export declare class Timeout {}

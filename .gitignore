@@ -8,7 +8,7 @@ api-docs.zip
 azure-pipelines.yml
 
 # dependencies
-node_modules/
+**/node_modules/
 /.pnp
 .pnp.js
 
@@ -21,7 +21,7 @@ src/package-lock.json
 
 # production
 /build
-/dist
+**/dist
 
 # misc
 .DS_Store

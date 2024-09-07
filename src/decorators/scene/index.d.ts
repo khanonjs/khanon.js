@@ -38,7 +38,7 @@ export declare class SceneSpawn {
    * @param actor
    * @returns
    */
-  actor<A extends ActorInterface>(actor: new () => A): A
+  actor<A extends ActorInterface<any>>(actor: new () => A): A
 
   /**
    * Spawns a particle in the scene.
@@ -64,7 +64,7 @@ export declare class SceneRemove {
    * Removes an actor from the scene.
    * @param actor
    */
-  actor(actor: ActorInterface): void
+  actor(actor: ActorInterface<any>): void
 
   /**
    * Removes all actors from the scene.

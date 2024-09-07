@@ -15,4 +15,5 @@
     },
     "typescript.tsdk": "node_modules\\typescript\\lib",
     "typescript.preferences.importModuleSpecifier": "relative",
+    "files.associations": { "*.json": "jsonc" }
 }

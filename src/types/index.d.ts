@@ -14,7 +14,6 @@ export { FlexId } from './flex-id'
 export { MeshTransform } from './mesh-transform'
 export { SceneConfiguration } from './scene-configuration'
 export { SpriteTransform } from './sprite-transform'
-export { TimeoutType } from './timeout-type'
 
 export type NotificableType =
   AppConstructor |

@@ -1,6 +1,6 @@
 {
   "name": "@khanonjs/engine",
-  "version": "0.0.48",
+  "version": "0.0.66",
   "description": "A typescript game engine extending Babylon.js",
   "private": false,
   "author": {
@@ -11,10 +11,13 @@
     "type": "git",
     "url": "https://github.com/Khanon-js/khanon.js.git"
   },
-  "main": "index.ts",
+  "main": "index.js",
   "types": "index.d.ts",
   "scripts": {
-    "build": "npm run clean && tsc && cpy package.json ./dist && cpy src/**/*.d.ts ./dist",
+    "build": "npm run clean && tsc && cpy package.json ./dist && npm run cpy-declarations",
+    "cpy-declarations": "run-script-os",
+    "cpy-declarations:win32": "cpy ./src/**/*.d.ts ./dist",
+    "cpy-declarations:default": "cd src && find . -name '*.d.ts' | cpio -pumd ../dist",
     "build:docs": "typedoc --options typedoc.json",
     "publish:docs": "node ./publish/publish-docs.mjs",
     "publish:validate-version": "node ./publish/validate-version.js",
@@ -47,7 +50,6 @@
     "archiver": "^6.0.1",
     "axios": "^1.6.2",
     "chai": "^4.3.10",
-    "clean-webpack-plugin": "^4.0.0",
     "cpy-cli": "^5.0.0",
     "cross-env": "^7.0.3",
     "dpdm": "^3.14.0",
@@ -63,6 +65,7 @@
     "npm-check-updates": "^16.14.11",
     "recursive-copy": "^2.0.14",
     "rimraf": "^5.0.5",
+    "run-script-os": "^1.1.6",
     "semver": "^7.5.4",
     "sinon": "^17.0.1",
     "string-replace-loader": "^3.1.0",
@@ -79,13 +82,7 @@
   "peerDependencies": {
     "@babylonjs/core": "~7.2.1",
     "@babylonjs/gui": "~7.2.1",
-    "@babylonjs/inspector": "~7.2.1",
-    "form-data": "~4.0.0"
-  },
-  "peerDependenciesMeta": {
-    "form-data": {
-      "optional": true
-    }
+    "@babylonjs/inspector": "~7.2.1"
   },
   "dependencies": {
     "reflect-metadata": "^0.2.2"
