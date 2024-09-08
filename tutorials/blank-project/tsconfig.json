@@ -19,5 +19,8 @@
     },
     "include": [
       "src/**/*"
+    ],
+    "types": [
+        "babylonjs"
     ]
 }

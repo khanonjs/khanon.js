@@ -18,7 +18,7 @@ export function App(props: AppProps): any {
 
       get state(): AppStateInterface { return this._state }
 
-      startState(state: AppStateConstructor, setup: any): AppStateInterface {
+      switchState(state: AppStateConstructor, setup: any): AppStateInterface {
         const _state = AppStatesController.get(state).spawn()
         if (this._state) {
           this._state.end()

@@ -1,6 +1,6 @@
 import { AssetDefinition } from '../../models/asset-definition'
 import { Logger } from '../../modules/logger'
-import { LoadingProgress } from './loading-progress'
+import { LoadingProgress } from '../loading-progress/loading-progress'
 
 export class Asset<S> {
   progress: LoadingProgress<ArrayBuffer> = new LoadingProgress<ArrayBuffer>()

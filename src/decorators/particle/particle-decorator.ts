@@ -174,9 +174,9 @@ export function Particle(props: ParticleProps = {}): any {
           SpritesController.unload(this.Instance.metadata.getProps().sprites, scene)
         }
 
-        spawn(scene: SceneInterface, attachmentInfo: ParticleAttachmentInfo, dontCreate?: boolean): ParticleInterface {
+        spawn(scene: SceneInterface, attachmentInfo: ParticleAttachmentInfo, create = true): ParticleInterface {
           const particle = new _classInterface(scene, this.props, attachmentInfo)
-          if (!dontCreate) {
+          if (create) {
             particle.create()
           }
           return particle

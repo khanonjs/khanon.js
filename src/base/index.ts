@@ -1,5 +1,5 @@
-export { Asset } from './classes/asset'
-export { LoadingProgress } from './classes/loading-progress'
+export { Asset } from './asset/asset'
+export { LoadingProgress } from './loading-progress/loading-progress'
 
 export { ControllerLoader } from './controller/controller-loadable'
 export { Controller } from './controller/controller'

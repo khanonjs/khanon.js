@@ -23,7 +23,7 @@ export class KJS {
   }
 
   static startAppState(state: AppStateConstructor, setup: any): AppStateInterface {
-    return Core.setAppState(state, setup)
+    return Core.switchAppState(state, setup)
   }
 
   static setTimeout(func: () => void, ms: number, context?: any): Timeout {

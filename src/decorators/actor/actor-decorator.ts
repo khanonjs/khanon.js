@@ -135,7 +135,7 @@ export function Actor(props: ActorProps = {}): any {
         // TODO
       }
 
-      startState(state: ActorStateConstructor, setup: any): ActorStateInterface {
+      switchState(state: ActorStateConstructor, setup: any): ActorStateInterface {
         if (!this.scene.availableElements.hasActorState(state)) { Logger.debugError('Trying to set a state non available to the actor. Please check the actor props.', _classInterface.prototype, state.prototype); return }
         const _state = ActorStatesController.get(state).spawn(this)
         if (this._state) {
@@ -240,7 +240,7 @@ export function Actor(props: ActorProps = {}): any {
         const attachmentSprite = nodeName ? this.getNode(nodeName) : this.body
         if (!attachmentSprite) { Logger.debugError('Cannot attach a particle to an empty body.', _classInterface.prototype, particleConstructorOrMethod.prototype); return }
         if (!this.scene.availableElements.hasParticle(particleConstructorOrMethod as ParticleConstructor)) { Logger.debugError('Trying to attach a particle non available to the actor. Please check the actor props.', _classInterface.prototype, particleConstructorOrMethod.prototype); return }
-        const particle = ParticlesController.get(particleConstructorOrMethod).spawn(this.scene, { attachment: attachmentSprite, offset }, isMethod)
+        const particle = ParticlesController.get(particleConstructorOrMethod).spawn(this.scene, { attachment: attachmentSprite, offset }, !isMethod)
         if (isMethod) {
           // Applies context to 'initialize' as caller 'Actor' to preserve the 'this'
           // in case 'initialize' is equivalent to a decorated method of some of those both interfaces.

@@ -1,5 +1,5 @@
-import { LoadingProgress } from '../classes/loading-progress'
 import { Loadable } from '../interfaces/loadable'
+import { LoadingProgress } from '../loading-progress/loading-progress'
 import { Controller } from './controller'
 
 export function ControllerLoader</* Constructor type to load from */ L, /* Instance or constructor type to get */ T extends Loadable, /* User data for 'load' method */ D = any>(useInstance?: boolean) {

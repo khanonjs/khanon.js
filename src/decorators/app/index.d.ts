@@ -19,10 +19,10 @@ export declare abstract class AppInterface {
    * @param state
    * @param setup
    */
-  startState<S extends AppStateConstructor>(state: S, setup: InstanceType<S>['setup']): AppStateInterface // TODO is it possible to make 'setup' argument optional whether InstanceType<S>['setup'] type is 'any'?
+  switchState<S extends AppStateConstructor>(state: S, setup: InstanceType<S>['setup']): AppStateInterface // TODO is it possible to make 'setup' argument optional whether InstanceType<S>['setup'] type is 'any'?
 
   /**
-   * Notifies a message to App.
+   * Notifies a message to the App.
    */
   notify(message: FlexId, ...args: any[]): void
 
@@ -34,12 +34,13 @@ export declare abstract class AppInterface {
   abstract onStart(): void
 
   /**
-   * Callback invoked on app error. This error could happen at any point of the app lifetime and is critical, it will stop the application.
+   * Callback invoked on app error. This error could happen at any point of the app's lifetime and it is critical, it will stop the application.
+   * Otherwise the error would be shown in the browser console.
    */
-  abstract onError(error?: any): void
+  onError?(error?: any): void
 
   /**
-   * Called on browser tab closed (Optional).
+   * Called on browser tab closed.
    * Release any app resource.
    * The application progress should be saved at this point.
    */

@@ -130,8 +130,8 @@ export class Core {
     return this.app
   }
 
-  static setAppState(state: AppStateConstructor, setup: any): AppStateInterface {
-    return this.app.startState(state, setup)
+  static switchAppState(state: AppStateConstructor, setup: any): AppStateInterface {
+    return this.app.switchState(state, setup)
   }
 
   static getActiveScenes(): Set<SceneInterface> {

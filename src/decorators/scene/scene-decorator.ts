@@ -109,7 +109,7 @@ export function Scene(props: SceneProps): any {
       start(state: SceneStateConstructor, stateSetup: any): SceneStateInterface {
         Logger.debug('Scene start', _class.prototype)
         this._started = true
-        this.startState(state, stateSetup)
+        this.switchState(state, stateSetup)
         invokeCallback(this.onStart, this)
         if (!this.camera) {
           Logger.debugError('Please set a camera before starting the scene. Do it in the (Scene / SceneState) \'onSart\' method:', _class.prototype)
@@ -204,7 +204,7 @@ export function Scene(props: SceneProps): any {
         this._camera.start()
       }
 
-      startState(state: SceneStateConstructor, setup: any): SceneStateInterface {
+      switchState(state: SceneStateConstructor, setup: any): SceneStateInterface {
         if (!this.availableElements.hasSceneState(state)) { Logger.debugError('Trying to set a state non available to the scene. Please check the scene props.', _class.prototype, state.prototype); return }
         const _state = SceneStatesController.get(state).spawn(this)
         if (this._state) {
@@ -312,7 +312,7 @@ export function Scene(props: SceneProps): any {
           for (const property of Object.values(props)) {
             if (Array.isArray(property)) {
               property.forEach(value => {
-                if (isPrototypeOf(ActorInterface, value)) {
+                if (isPrototypeOf(ActorInterface, value)) { // TODO insert all these constructors in a list and avoid the 'callback hell'
                   this.availableElements.actors.add(value)
                   const actor = ActorsController.get(value as ActorConstructor)
                   this.getAvailableElements(actor.props)

@@ -2,7 +2,7 @@ export * from './kjs'
 
 export * from './models'
 
-export * from './base/classes'
+export * from './base/loading-progress'
 
 export * from './modules/helper'
 export * from './modules/logger'

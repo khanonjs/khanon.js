@@ -2,6 +2,7 @@
   "$schema": "https://typedoc.org/schema.json",
   "entryPoints": [
     "./src/kjs/index.d.ts",
+    "./src/base/loading-progress/index.d.ts",
     "./src/decorators/app/index.d.ts",
     "./src/decorators/app/app-state/index.d.ts",
     "./src/decorators/actor/index.d.ts",
@@ -24,5 +25,8 @@
   "plugin": [
     "@mxssfd/typedoc-theme"
   ],
-  "theme": "my-theme"
+  "theme": "my-theme",
+  "sort": [
+    "source-order"
+  ]
 }

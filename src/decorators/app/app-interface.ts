@@ -15,7 +15,7 @@ export abstract class AppInterface implements Notificable {
    * User available
    */
   abstract get state(): AppStateInterface
-  abstract startState(state: AppStateConstructor, setup: any): AppStateInterface
+  abstract switchState(state: AppStateConstructor, setup: any): AppStateInterface
   abstract notify(message: FlexId, ...args: any[]): void
 
   /**
