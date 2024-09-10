@@ -63,7 +63,7 @@ export declare namespace KJS {
   /**
    * Sets the app state.
    */
-  export function startAppState<S extends AppStateConstructor>(state: S, setup: InstanceType<S>['setup']): AppStateInterface // TODO is it possible to make 'setup' argument optional whether InstanceType<S>['setup'] type is 'any'?
+  export function switchAppState<S extends AppStateConstructor>(state: S, setup: InstanceType<S>['setup']): AppStateInterface // TODO is it possible to make 'setup' argument optional whether InstanceType<S>['setup'] type is 'any'?
 
   /**
    * Clears cache.
