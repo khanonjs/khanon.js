@@ -71,15 +71,26 @@ export declare namespace KJS {
   export function clearCache(): void
 
   /**
-   * Subsscribes to loopUpdate event.
+   * Subsscribes to loopUpdate observable.
    * @param func
    */
   export function loopUpdateAddObserver(func: (delta: number) => void): BABYLON.Observer<number>
 
   /**
-   * Removes a subscription from loopUpdate event.
+   * Removes a subscription from loopUpdate observable.
    */
   export function loopUpdateRemoveObserver(observer: BABYLON.Observer<number>): void
+
+  /**
+   * Subsscribes to canvasResize observable.
+   * @param func
+   */
+  export function addCanvasResizeObserver(func: (size: Rect) => void): BABYLON.Observer<Rect>
+
+  /**
+   * Removes a subscription from canvasResize observable.
+   */
+  export function removeCanvasResizeObserver(observer: BABYLON.Observer<Rect>): void
 
   /**
    * Returns the canvas rect.
