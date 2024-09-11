@@ -8,6 +8,7 @@ export * from './modules/helper'
 export * from './modules/logger'
 
 export * from './decorators/app'
+export * from './decorators/app/app-state'
 export * from './decorators/actor'
 export * from './decorators/actor/actor-action'
 export * from './decorators/actor/actor-state'

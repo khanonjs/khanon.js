@@ -17,6 +17,10 @@ export { ActorStateInterface } from './decorators/actor/actor-state/actor-state-
 export { App } from './decorators/app/app-decorator'
 export { AppInterface } from './decorators/app/app-interface'
 
+// App decorator
+export { AppState } from './decorators/app/app-state/app-state-decorator'
+export { AppStateInterface } from './decorators/app/app-state/app-state-interface'
+
 // Camera decorator
 export { Camera } from './decorators/camera/camera-decorator'
 export { CameraInterface } from './decorators/camera/camera-interface'
