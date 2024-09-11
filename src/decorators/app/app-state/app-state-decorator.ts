@@ -68,6 +68,7 @@ export function AppState(props: AppStateProps = {}): any {
       }
 
       load(): LoadingProgress {
+        // 8a8f should load new state before ending prev state (add Scenes and GUIS here)
         const progress = new LoadingProgress().complete()
         return progress
       }

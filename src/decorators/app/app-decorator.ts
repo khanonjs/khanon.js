@@ -18,6 +18,7 @@ export function App(props: AppProps): any {
 
       get state(): AppStateInterface { return this._state }
 
+      // 8a8f should load new state before ending prev state
       switchState(state: AppStateConstructor, setup: any): AppStateInterface {
         const _state = AppStatesController.get(state).spawn()
         if (this._state) {

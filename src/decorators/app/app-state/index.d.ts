@@ -1,5 +1,7 @@
 import { Rect } from '../../../models/rect'
 import { FlexId } from '../../../types'
+import { GUIConstructor } from '../../gui'
+import { SceneConstructor } from '../../scene'
 
 // 8a8f
 
@@ -50,6 +52,20 @@ export declare abstract class AppStateInterface<S = any> {
 
 export type AppStateConstructor = new () => AppStateInterface
 
-export interface AppStateProps {}
+export interface AppStateProps {
+  /**
+   * Scenes to load on state start.
+   * The previous state won't end and the app won't switch to thjis state until it has been loaded loaded.
+   * These Scenes will be automatically unloaded on state end in case they are not used in the next state.
+   */
+  scenes?: SceneConstructor[]
+
+  /**
+   * GUIs to load in this state.
+   * The previous state won't end and the app won't switch to thjis state until it has been loaded loaded.
+   * These GUIs will be automatically unloaded on state end in case they are not used in the next state.
+   */
+  guis?: GUIConstructor[]
+}
 
 export declare function AppState(props?: AppStateProps): any
