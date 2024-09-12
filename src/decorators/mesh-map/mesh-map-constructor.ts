@@ -1,3 +1,3 @@
-import { MeshMapInterface } from './meshmap-interface'
+import { MeshMapInterface } from './mesh-map-interface'
 
 export type MeshMapConstructor = new () => MeshMapInterface
