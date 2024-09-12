@@ -50,12 +50,12 @@ export class KJS {
     Core.loopUpdateRemoveObserver(observer)
   }
 
-  static addCanvasResizeObserver(func: (size: Rect) => void): BABYLON.Observer<Rect> {
-    return Core.addCanvasResizeObserver(func)
+  static canvasResizeAddObserver(func: (size: Rect) => void): BABYLON.Observer<Rect> {
+    return Core.canvasResizeAddObserver(func)
   }
 
-  static removeCanvasResizeObserver(observer: BABYLON.Observer<Rect>): void {
-    Core.removeCanvasResizeObserver(observer)
+  static canvasResizeRemoveObserver(observer: BABYLON.Observer<Rect>): void {
+    Core.canvasResizeRemoveObserver(observer)
   }
 
   static getCanvasRect(): Rect {

@@ -154,11 +154,11 @@ export class Core {
     Core.onLoopUpdate.remove(observer)
   }
 
-  static addCanvasResizeObserver(func: (size: Rect) => void): BABYLON.Observer<Rect> {
+  static canvasResizeAddObserver(func: (size: Rect) => void): BABYLON.Observer<Rect> {
     return Core.onCanvasResize.add(func)
   }
 
-  static removeCanvasResizeObserver(observer: BABYLON.Observer<Rect>): void {
+  static canvasResizeRemoveObserver(observer: BABYLON.Observer<Rect>): void {
     Core.onCanvasResize.remove(observer)
   }
 

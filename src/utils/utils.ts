@@ -37,7 +37,7 @@ export function removeLoopUpdate(context: any): void {
  */
 export function attachCanvasResize(context: any): void {
   if (context.onCanvasResize) {
-    context.canvasResize$ = Core.addCanvasResizeObserver(context.onCanvasResize.bind(context))
+    context.canvasResize$ = Core.canvasResizeAddObserver(context.onCanvasResize.bind(context))
   }
 }
 
@@ -46,7 +46,7 @@ export function attachCanvasResize(context: any): void {
  */
 export function removeCanvasResize(context: any): void {
   if (context.canvasResize$) {
-    Core.removeCanvasResizeObserver(context.canvasResize$)
+    Core.canvasResizeRemoveObserver(context.canvasResize$)
     context.canvasResize$ = undefined
   }
 }

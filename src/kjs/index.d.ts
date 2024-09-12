@@ -85,12 +85,12 @@ export declare namespace KJS {
    * Subsscribes to canvasResize observable.
    * @param func
    */
-  export function addCanvasResizeObserver(func: (size: Rect) => void): BABYLON.Observer<Rect>
+  export function canvasResizeAddObserver(func: (size: Rect) => void): BABYLON.Observer<Rect>
 
   /**
    * Removes a subscription from canvasResize observable.
    */
-  export function removeCanvasResizeObserver(observer: BABYLON.Observer<Rect>): void
+  export function canvasResizeRemoveObserver(observer: BABYLON.Observer<Rect>): void
 
   /**
    * Returns the canvas rect.
