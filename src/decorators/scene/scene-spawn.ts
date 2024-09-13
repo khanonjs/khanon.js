@@ -14,8 +14,7 @@ import { SpriteInterface } from '../sprite/sprite-interface'
 import { SceneInterface } from './scene-interface'
 
 // TODO add support to inject a user defined SceneSpawn class into the scene?
-// TODO add counter argument in methods to spawn many elements in a single step. 'index' would be sent to 'onSpawn' methods.
-// TODO add 'aggregateSpawnMethod' as argument to combine with 'onSpawn'.
+// TODO Add lights here? That way scene would handle their release.
 export class SceneSpawn {
   private readonly scene: SceneInterface
   private readonly scenePrototype: any
@@ -25,7 +24,6 @@ export class SceneSpawn {
     this.scenePrototype = scenePrototype
   }
 
-  // 8a8f test it
   actor<A extends ActorInterface, C extends number>(actor: new () => A, counter?: C, altOnSpawn?: (actor: A, index: number) => void): undefined extends C ? A : A[] {
     if (!this.scene?.availableElements.hasActor(actor)) { Logger.debugError('Trying to spawn an actor that doesn\'t belong to the scene. Please check the scene props.', this.scenePrototype, actor.prototype); return null as any }
     Logger.debug(`Actor spawn (${counter ?? 1}):`, actor.prototype)
@@ -57,19 +55,45 @@ export class SceneSpawn {
 
   mesh<M extends MeshInterface>(mesh: new () => M, counter?: number, altOnSpawn?: (mesh: M, index: number) => void): M {
     if (!this.scene.availableElements.hasMesh(mesh)) { Logger.debugError('Trying to spawn a mesh that doesn\'t belong to the scene. Please check the scene props.', this.scenePrototype, mesh.prototype); return null as any }
-    Logger.debug('Mesh spawned:', mesh.prototype)
-    const instance = MeshesController.get(mesh).spawn(this.scene)
-    this.scene.meshes.add(instance)
-    return instance as M
+    Logger.debug(`Mesh spawn (${counter ?? 1}):`, mesh.prototype)
+    if (counter === undefined) {
+      const instance = MeshesController.get(mesh).spawn(this.scene)
+      this.scene.meshes.add(instance)
+      return instance as any
+    } else {
+      const retInstances: MeshInterface[] = []
+      const actorCore = MeshesController.get(mesh)
+      for (let i = 0; i < counter; i++) {
+        const instance = actorCore.spawn(this.scene)
+        this.scene.meshes.add(instance)
+        retInstances.push(instance)
+        if (altOnSpawn) {
+          altOnSpawn(instance as M, i)
+        }
+      }
+      return retInstances as any
+    }
   }
 
   sprite<S extends SpriteInterface>(sprite: new () => S, counter?: number, altOnSpawn?: (sprite: S, index: number) => void): S {
     if (!this.scene.availableElements.hasSprite(sprite)) { Logger.debugError('Trying to spawn a sprite that doesn\'t belong to the scene. Please check the scene props.', this.scenePrototype, sprite.prototype); return null as any }
-    Logger.debug('Sprite spawned:', sprite.prototype)
-    const instance = SpritesController.get(sprite).spawn(this.scene)
-    this.scene.sprites.add(instance)
-    return instance as S
+    Logger.debug(`Sprite spawn (${counter ?? 1}):`, sprite.prototype)
+    if (counter === undefined) {
+      const instance = SpritesController.get(sprite).spawn(this.scene)
+      this.scene.sprites.add(instance)
+      return instance as any
+    } else {
+      const retInstances: SpriteInterface[] = []
+      const actorCore = SpritesController.get(sprite)
+      for (let i = 0; i < counter; i++) {
+        const instance = actorCore.spawn(this.scene)
+        this.scene.sprites.add(instance)
+        retInstances.push(instance)
+        if (altOnSpawn) {
+          altOnSpawn(instance as S, i)
+        }
+      }
+      return retInstances as any
+    }
   }
-
-  // TODO Add lights here? That way scene would handle their release.
 }

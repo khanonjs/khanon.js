@@ -38,8 +38,7 @@ export declare class SceneSpawn {
    * @param actor
    * @returns
    */
-  actor<A extends ActorInterface<any>>(actor: new () => A): A
-  actor<A extends ActorInterface<any>>(actor: new () => A, counter: number, altOnSpawn?: (actor: A, index: number) => void): A[]
+  actor<A extends ActorInterface<any>, C extends undefined | number = undefined>(actor: new () => A, counter?: C, altOnSpawn?: (actor: A, index: number) => void): undefined extends C ? A : A[]
 
   /**
    * Spawns a particle in the scene.
@@ -51,15 +50,13 @@ export declare class SceneSpawn {
    * Spawns a sprite in the scene.
    * @param sprite
    */
-  sprite<S extends SpriteInterface>(sprite: new () => S): S
-  sprite<S extends SpriteInterface>(sprite: new () => S, counter: number, altOnSpawn?: (sprite: S, index: number) => void): S[]
+  sprite<S extends SpriteInterface, C extends undefined | number = undefined>(sprite: new () => S, counter?: C, altOnSpawn?: (sprite: S, index: number) => void): undefined extends C ? S : S[]
 
   /**
    * Spawns a mesh in the scene.
    * @param mesh
    */
-  mesh<M extends MeshInterface>(mesh: new () => M): M
-  mesh<M extends MeshInterface>(mesh: new () => M, counter: number, altOnSpawn?: (mesh: M, index: number) => void): M[]
+  mesh<M extends MeshInterface, C extends undefined | number = undefined>(mesh: new () => M, counter?: C, altOnSpawn?: (mesh: M, index: number) => void): undefined extends C ? M : M[]
 }
 
 export declare class SceneRemove {
