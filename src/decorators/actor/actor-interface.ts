@@ -29,9 +29,9 @@ export abstract class ActorInterface<B extends SpriteInterface | MeshInterface =
   abstract props: ActorProps
   abstract loopUpdate$: BABYLON.Observer<number>
   abstract canvasResize$: BABYLON.Observer<Rect>
-  abstract _body: B
+  abstract _body: B | undefined
   abstract nodes: Map<string, B>
-  abstract _state: ActorStateInterface
+  abstract _state: ActorStateInterface | null
   abstract actions: Map<ActorActionConstructor, ActorActionInterface>
   abstract particles: Map<FlexId, ParticleInterface>
   abstract initialize(props: ActorProps): void
@@ -42,10 +42,10 @@ export abstract class ActorInterface<B extends SpriteInterface | MeshInterface =
    * User available
    */
   abstract loopUpdate: boolean
-  abstract get transform(): B extends SpriteInterface ? SpriteTransform : MeshTransform
+  abstract get transform(): (B extends SpriteInterface ? SpriteTransform : MeshTransform) | null
   abstract get scene(): SceneInterface
-  abstract get body(): B
-  abstract get state(): ActorStateInterface
+  abstract get body(): B | null
+  abstract get state(): ActorStateInterface | null
   abstract setBody(Body: new () => B): B
   abstract addNode(Node: B, name: string, offset: BABYLON.Vector3 | BABYLON.Matrix): B
   abstract getNode(name: string): B

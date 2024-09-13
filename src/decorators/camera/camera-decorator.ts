@@ -25,7 +25,7 @@ export function Camera(): any {
         }
       }
 
-      babylon: Pick<BabylonAccessor<BABYLON.Camera>, 'camera' | 'scene'> = { camera: null, scene: null }
+      babylon: Pick<BabylonAccessor<BABYLON.Camera>, 'camera' | 'scene'> = { camera: null as any, scene: null as any }
       setup: any
       loopUpdate$: BABYLON.Observer<number>
       canvasResize$: BABYLON.Observer<Rect>
@@ -44,7 +44,7 @@ export function Camera(): any {
       }
     }
     const _classCore = class implements CameraCore {
-      Instance: CameraInterface = new _classInterface(null)
+      Instance: CameraInterface = new _classInterface(null as any)
 
       spawn(scene: SceneInterface): CameraInterface {
         const camera = new _classInterface(scene)

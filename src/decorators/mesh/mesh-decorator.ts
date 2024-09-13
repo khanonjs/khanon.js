@@ -48,8 +48,8 @@ export function Mesh(props: MeshProps): any {
         // MeshInterface
         // ***************
         props: MeshProps
-        babylon: Pick<BabylonAccessor, 'mesh'> = { mesh: null }
-        animation: MeshAnimation = null
+        babylon: Pick<BabylonAccessor, 'mesh'> = { mesh: null as any }
+        animation: MeshAnimation | null = null
         animations: Map<FlexId, MeshAnimation> = new Map<FlexId, MeshAnimation>()
         loopUpdate$: BABYLON.Observer<number>
         canvasResize$: BABYLON.Observer<Rect>
@@ -114,7 +114,7 @@ export function Mesh(props: MeshProps): any {
 
         subscribeToKeyframe(keyframeId: string, callback: () => void): BABYLON.Observer<void>[] {
         // TODO
-          return null
+          return null as any
         }
 
         clearKeyframeSubscriptions(keyframeId: string): void {
@@ -135,7 +135,7 @@ export function Mesh(props: MeshProps): any {
       }
       const _classCore = class implements MeshCore {
         props = props
-        Instance: MeshInterface = new _classInterface(null, null)
+        Instance: MeshInterface = new _classInterface(null as any, null as any)
 
         load(scene: SceneInterface): LoadingProgress {
           return new LoadingProgress().complete()

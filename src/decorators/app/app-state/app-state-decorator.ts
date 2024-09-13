@@ -60,7 +60,7 @@ export function AppState(props: AppStateProps = {}): any {
     }
     const _classCore = class implements AppStateCore {
       props = props
-      Instance: AppStateInterface = new _classInterface(null)
+      Instance: AppStateInterface = new _classInterface(null as any)
 
       spawn(): AppStateInterface {
         const state = new _classInterface(this.props)

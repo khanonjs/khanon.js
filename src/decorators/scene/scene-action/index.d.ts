@@ -31,7 +31,7 @@ export declare abstract class SceneActionInterface</* Setup object */ S = any, /
   remove(): void
 
   /**
-   * Invoked on action start. Use this method to setup the Actor according to the action start.
+   * Invoked on action start.
    */
   onStart?(): void
 

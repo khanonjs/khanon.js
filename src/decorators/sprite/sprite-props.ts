@@ -7,9 +7,9 @@ export interface SpriteProps {
   numFrames?: number
   animations?: SpriteAnimation[]
   noMipmap?: boolean
-  invertY?: boolean
+  invertY: boolean
   format?: number
   samplingMode?: number
   cached?: boolean
-  maxAllowedSprites?: number
+  maxAllowedSprites: number
 }

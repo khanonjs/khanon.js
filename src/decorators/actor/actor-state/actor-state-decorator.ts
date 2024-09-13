@@ -70,7 +70,7 @@ export function ActorState(props: ActorStateProps = {}): any {
     }
     const _classCore = class implements ActorStateCore {
       props = props
-      Instance: ActorStateInterface = new _classInterface(null, null)
+      Instance: ActorStateInterface = new _classInterface(null as any, null as any)
 
       spawn(actor: ActorInterface): ActorStateInterface {
         const state = new _classInterface(actor, this.props)

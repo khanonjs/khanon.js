@@ -21,7 +21,7 @@ export class Core {
   private static htmlGui: HTMLDivElement // TODO
 
   // Babylon
-  private static babylon: Pick<BabylonAccessor, 'engine'> = { engine: null }
+  private static babylon: Pick<BabylonAccessor, 'engine'> = { engine: null as any }
 
   // Canvas
   private static onCanvasResize: BABYLON.Observable<Rect> = new BABYLON.Observable<Rect>(undefined, true)
@@ -94,7 +94,9 @@ export class Core {
       Core.babylon.engine.resize() // TODO: Test this besides 'Core.app.props.engineConfiguration.adaptToDeviceRatio = true'
     })
 
-    Core.app.onStart()
+    if (Core.app.onStart) {
+      Core.app.onStart()
+    }
   }
 
   static throw(error?: any) {

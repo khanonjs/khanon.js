@@ -39,6 +39,7 @@ export declare class SceneSpawn {
    * @returns
    */
   actor<A extends ActorInterface<any>>(actor: new () => A): A
+  actor<A extends ActorInterface<any>>(actor: new () => A, counter: number, altOnSpawn?: (actor: A, index: number) => void): A[]
 
   /**
    * Spawns a particle in the scene.
@@ -51,12 +52,14 @@ export declare class SceneSpawn {
    * @param sprite
    */
   sprite<S extends SpriteInterface>(sprite: new () => S): S
+  sprite<S extends SpriteInterface>(sprite: new () => S, counter: number, altOnSpawn?: (sprite: S, index: number) => void): S[]
 
   /**
    * Spawns a mesh in the scene.
    * @param mesh
    */
   mesh<M extends MeshInterface>(mesh: new () => M): M
+  mesh<M extends MeshInterface>(mesh: new () => M, counter: number, altOnSpawn?: (mesh: M, index: number) => void): M[]
 }
 
 export declare class SceneRemove {
@@ -64,7 +67,7 @@ export declare class SceneRemove {
    * Removes an actor from the scene.
    * @param actor
    */
-  actor(actor: ActorInterface<any>): void
+  actor(actor: ActorInterface<any> | ActorInterface<any>[]): void
 
   /**
    * Removes all actors from the scene.
@@ -75,7 +78,7 @@ export declare class SceneRemove {
    * Removes a particle from the scene.
    * @param particle
    */
-  particle(particle: ParticleInterface): void
+  particle(particle: ParticleInterface | ParticleInterface[]): void
 
   /**
    * Removes all particles from the scene.
@@ -86,7 +89,7 @@ export declare class SceneRemove {
    * Removes a sprite from the scene.
    * @param sprite
    */
-  sprite(sprite: SpriteInterface): void
+  sprite(sprite: SpriteInterface | SpriteInterface[]): void
 
   /**
    * Removes all sprites from the scene.
@@ -97,7 +100,7 @@ export declare class SceneRemove {
    * Removes a mesh from the scene.
    * @param mesh
    */
-  mesh(mesh: MeshInterface): void
+  mesh(mesh: MeshInterface | MeshInterface[]): void
 
   /**
    * Removes all meshes from the scene.

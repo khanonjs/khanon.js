@@ -78,7 +78,7 @@ export class AssetsController {
                 definitions = [...definitions, {
                   url: sprite.props.url,
                   type: AssetType.IMAGE,
-                  cached: sprite.props.cached
+                  cached: sprite.props.cached ?? false
                 }]
               }
             }
@@ -102,9 +102,9 @@ export class AssetsController {
     if (scene.assets.length === 0) {
       progress.complete()
     } else {
-      const progresses = []
+      const progresses: LoadingProgress[] = []
       scene.assets.forEach(assetDef => {
-        const asset: Asset<SceneInterface> = AssetsController.assets.get(assetDef.url)
+        const asset: Asset<SceneInterface> | undefined = AssetsController.assets.get(assetDef.url)
         if (asset) {
           asset.addSource(scene, assetDef.cached)
           progresses.push(asset.progress)

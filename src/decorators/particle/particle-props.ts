@@ -4,6 +4,6 @@ import { SpriteConstructor } from '../sprite/sprite-constructor'
 
 export interface ParticleProps {
   sprites?: SpriteConstructor[]
-  offset?: BABYLON.Vector3
-  capacity?: number
+  offset: BABYLON.Vector3
+  capacity: number
 }

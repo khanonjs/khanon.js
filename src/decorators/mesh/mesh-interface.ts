@@ -14,7 +14,7 @@ export abstract class MeshInterface implements DisplayObject {
   abstract props: MeshProps
   abstract loopUpdate$: BABYLON.Observer<number>
   abstract canvasResize$: BABYLON.Observer<Rect>
-  abstract animation: SpriteAnimation | MeshAnimation
+  abstract animation: SpriteAnimation | MeshAnimation | null
   abstract animations: Map<FlexId, SpriteAnimation | MeshAnimation>
   abstract release(): void
   abstract initialize(): void

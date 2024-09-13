@@ -3,8 +3,6 @@ import { FlexId } from '../../../types'
 import { GUIConstructor } from '../../gui'
 import { SceneConstructor } from '../../scene'
 
-// 8a8f
-
 /**
  * Defines the state of the application.
  * @param A Actor owner of hte state (optional).
@@ -28,12 +26,12 @@ export declare abstract class AppStateInterface<S = any> {
   notify(message: FlexId, ...args: any[]): void
 
   /**
-   * Invoked on State start. Use this method to setup the Actor according to the State start.
+   * Invoked on State start. Use this method to setup the App according to the State start.
    */
   onStart?(): void
 
   /**
-   * Invoked on State end. Use this method to setup the actor according to the State end.
+   * Invoked on State end. Use this method to setup the App according to the State end.
    */
   onEnd?(): void
 

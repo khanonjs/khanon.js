@@ -49,7 +49,7 @@ export function SceneAction(props: SceneActionProps = {}): any {
           if (this.props.countFrames) {
             this.countFramesUpdate$ = Core.loopUpdateAddObserver((delta: number) => {
               this.countFrames += delta
-              if (this.countFrames > this.props.countFrames) {
+              if (this.countFrames > (this.props.countFrames as any)) {
                 this.countFramesUpdate$.remove()
                 this.countFramesUpdate$ = undefined
                 this.countFrames = 0
@@ -72,7 +72,7 @@ export function SceneAction(props: SceneActionProps = {}): any {
       }
       const _classCore = class implements SceneActionCore {
         props = props
-        Instance: SceneActionInterface = new _classInterface(null)
+        Instance: SceneActionInterface = new _classInterface(null as any)
 
         load(scene: SceneInterface): LoadingProgress {
           const progress = new LoadingProgress().complete()

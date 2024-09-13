@@ -52,12 +52,14 @@ export function Sprite(props: SpriteProps): any {
           super()
           this.props = props
           if (scene) {
+            this.babylon.scene = this.scene.babylon.scene
             if (!this.props.url) {
               const texture = new SpriteTexture(scene, this.props)
               texture.setFromBlank()
               this.setTexture(texture, true)
             } else {
-              this.setTexture(core.textures.get(scene), false)
+              if (!core.textures.get(scene)) { Logger.debugError('Sprite texture not found for scene in sprite constructor:', _classInterface.prototype, scene.constructor.name) } // TODO get sprite and scene names
+              this.setTexture(core.textures.get(scene) as any, false)
             }
           }
         }
@@ -68,9 +70,9 @@ export function Sprite(props: SpriteProps): any {
         props: SpriteProps
         spriteTexture: SpriteTexture
         exclusiveTexture: boolean
-        animation: SpriteAnimation = null
+        animation: SpriteAnimation | null = null
         animations: Map<FlexId, SpriteAnimation> = new Map<FlexId, SpriteAnimation>()
-        babylon: Pick<BabylonAccessor, 'scene' | 'spriteManager' | 'sprite'> = { scene: null, spriteManager: null, sprite: null }
+        babylon: Pick<BabylonAccessor, 'scene' | 'spriteManager' | 'sprite'> = { scene: null as any, spriteManager: null as any, sprite: null as any }
         loopUpdate$: BABYLON.Observer<number>
         canvasResize$: BABYLON.Observer<Rect>
         _scale: number = 1
@@ -99,7 +101,6 @@ export function Sprite(props: SpriteProps): any {
             // const transform = this.getTransform()  // TODO?
             this.release()
           }
-          this.babylon.scene = this.scene.babylon.scene
           this.spriteTexture = spriteTexture
           this.exclusiveTexture = isExclusive
           const babylonSprite = new BABYLON.Sprite(_className, this.spriteTexture.babylon.spriteManager)
@@ -135,7 +136,7 @@ export function Sprite(props: SpriteProps): any {
         }
 
         private getLastFrame(): number {
-          return this.animation?.frameEnd ?? this.props.numFrames - 1 ?? 0
+          return this.animation?.frameEnd ?? (this.props.numFrames ? this.props.numFrames - 1 : 0)
         }
 
         // ***************
@@ -144,7 +145,7 @@ export function Sprite(props: SpriteProps): any {
         transform: SpriteTransform
         private _visible: boolean
         private keyFramesTimeouts: Timeout[] = []
-        private endAnimationTimer: Timeout
+        private endAnimationTimer: Timeout | null
 
         set visible(value: boolean) {
           this._visible = value
@@ -177,20 +178,22 @@ export function Sprite(props: SpriteProps): any {
         playAnimation(animation: SpriteAnimation | FlexId, loopOverride?: boolean, completed?: () => void): void {
           if (isFlexId(animation)) {
             if (!this.animations.get(animation as FlexId)) { Logger.debugError(`Animation '${animation}' doesn't exist in sprite:`, _classInterface.prototype); return }
-            animation = this.animations.get(animation as FlexId)
+            animation = this.animations.get(animation as FlexId) as SpriteAnimation
           }
           this.animation = animation as SpriteAnimation
-          const loop = loopOverride ?? this.animation.loop
           const frameStart = this.getFirstFrame()
           const frameEnd = this.getLastFrame()
+          const delay = this.animation.delay
+          const loop = loopOverride ?? this.animation.loop
+          const keyFrames = this.animation.keyFrames
 
           const playAnimation = () => {
-            this.babylon.sprite.playAnimation(frameStart, frameEnd, false, this.animation.delay)
+            this.babylon.sprite.playAnimation(frameStart, frameEnd, false, delay)
             if (completed || loop) {
-              this.endAnimationTimer = Core.setTimeout(() => onCompleted(), (frameEnd - frameStart + 1) * this.animation.delay)
+              this.endAnimationTimer = Core.setTimeout(() => onCompleted(), (frameEnd - frameStart + 1) * delay)
             }
             this.keyFramesTimeouts = []
-            this.animation.keyFrames?.forEach((animationKeyFrame) => {
+            keyFrames?.forEach((animationKeyFrame) => {
               if (animationKeyFrame.emitter.hasObservers()) {
                 animationKeyFrame.ms.forEach((ms) => {
                   this.keyFramesTimeouts.push(Core.setTimeout(() => animationKeyFrame.emitter.notifyObservers(), ms))
@@ -235,7 +238,7 @@ export function Sprite(props: SpriteProps): any {
         clearKeyframeSubscriptions(keyframeId: FlexId): void {
           this.animations.forEach(animation => {
             animation.keyFrames
-              .filter(keyframe => keyframe.id === keyframeId)
+              ?.filter(keyframe => keyframe.id === keyframeId)
               .forEach(keyframe => keyframe.emitter.clear())
           })
         }
@@ -273,7 +276,7 @@ export function Sprite(props: SpriteProps): any {
 
           const startY = properties.centerV && properties.textureSize ? textureHeight / 2 : lineHeight
 
-          this.babylon.spriteManager.texture.dispose()
+          this.babylon.spriteManager?.texture.dispose()
           dynamicTexture.drawText(text, properties.centerH ? null : 0, startY, font, properties.textColor, null, false)
           const texture = new SpriteTexture(this.scene, this.props)
           texture.setFromTexture(dynamicTexture, 'draw-text-sprite-manager')
@@ -286,10 +289,10 @@ export function Sprite(props: SpriteProps): any {
           this.stopAnimation()
           if (this.exclusiveTexture) {
             this.spriteTexture?.dispose()
-            this.spriteTexture = undefined
+            this.spriteTexture = null as any
           }
           this.babylon.sprite?.dispose()
-          this.babylon.sprite = undefined
+          this.babylon.sprite = null as any
           removeLoopUpdate(this)
           removeCanvasResize(this)
         }
@@ -306,13 +309,13 @@ export function Sprite(props: SpriteProps): any {
         private removeEndAnimationTimer(): void {
           if (this.endAnimationTimer) {
             Core.clearTimeout(this.endAnimationTimer)
-            this.endAnimationTimer = undefined
+            this.endAnimationTimer = null
           }
         }
       }
       const _classCore = class implements SpriteCore {
         props = applyDefaults(props, spritePropsDefault)
-        Instance: SpriteInterface = new _classInterface(null, null)
+        Instance: SpriteInterface = new _classInterface(null as any, null as any)
         textures: Map<SceneInterface, SpriteTexture> = new Map<SceneInterface, SpriteTexture>()
 
         load(scene: SceneInterface): LoadingProgress {
@@ -322,8 +325,9 @@ export function Sprite(props: SpriteProps): any {
           } else {
             if (this.props.url) {
               const asset = AssetsController.getAsset(this.props.url)
+              if (!asset) { Logger.debugError(`Asset '${this.props.url}' not found on sprite load:`, _classInterface.prototype) }
               const texture = new SpriteTexture(scene, this.props)
-              texture.setFromAsset(asset)
+              texture.setFromAsset(asset as any)
               this.textures.set(scene, texture)
               return progress
             } else {
@@ -342,8 +346,9 @@ export function Sprite(props: SpriteProps): any {
         }
 
         getParticleInfo(scene: SceneInterface): SpriteParticleInfo {
+          if (!core.textures.get(scene)) { Logger.debugError('Sprite texture not found for scene in getParticleInfo:', _classInterface.prototype, scene.constructor.name) } // TODO get sprite and scene names
           return {
-            texture: this.textures.get(scene),
+            texture: this.textures.get(scene) as any,
             props: this.props
           }
         }

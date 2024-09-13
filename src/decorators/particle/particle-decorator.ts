@@ -33,7 +33,7 @@ import { ParticleInterface } from './particle-interface'
 import { ParticleProps } from './particle-props'
 import { particlePropsDefault } from './particle.props.deafult'
 
-export function Particle(props: ParticleProps = {}): any {
+export function Particle(props: ParticleProps): any {
   return function <T extends { new (...args: any[]): ParticleInterface }>(constructorOrTarget: (T & ParticleInterface) | any, contextOrProperty: ClassDecoratorContext | string, descriptor: PropertyDescriptor) {
     const decorateClass = () => {
       const className = constructorOrTarget.prototype.constructor.name
@@ -46,11 +46,11 @@ export function Particle(props: ParticleProps = {}): any {
 
         props: ParticleProps
         metadata: Metadata = Reflect.getMetadata('metadata', this) ?? new Metadata()
-        babylon: Pick<BabylonAccessor, 'scene' | 'particleSystem'> = { scene: null, particleSystem: null }
+        babylon: Pick<BabylonAccessor, 'scene' | 'particleSystem'> = { scene: null as any, particleSystem: null as any }
         loopUpdate$: BABYLON.Observer<number>
         canvasResize$: BABYLON.Observer<Rect>
         attachmentUpdate$: BABYLON.Observer<number>
-        animations: SpriteAnimation[]
+        animations: SpriteAnimation[] | null = null
         spriteProps: SpriteProps
         offset: BABYLON.Vector3
 
@@ -81,7 +81,7 @@ export function Particle(props: ParticleProps = {}): any {
         }
 
         updatePosition(): void {
-          this.babylon.particleSystem.emitter = this.attachmentInfo.attachment.transform.position.add(this.offset)
+          this.babylon.particleSystem.emitter = (this.attachmentInfo.attachment as any).transform.position.add(this.offset)
         }
 
         start(): void {
@@ -105,7 +105,7 @@ export function Particle(props: ParticleProps = {}): any {
           this.stop()
           invokeCallback(this.onRelease, this)
           this.babylon.particleSystem.dispose()
-          this.babylon.particleSystem = undefined
+          this.babylon.particleSystem = null as any
           removeLoopUpdate(this)
           removeCanvasResize(this)
         }
@@ -131,7 +131,7 @@ export function Particle(props: ParticleProps = {}): any {
             this.babylon.particleSystem.minScaleY = this.spriteProps.width / this.spriteProps.height
             this.babylon.particleSystem.maxScaleY = this.spriteProps.width / this.spriteProps.height
           }
-          this.animations = this.spriteProps.animations
+          this.animations = this.spriteProps.animations ?? null
           if (this.animations) {
             this.babylon.particleSystem.isAnimationSheetEnabled = true
             this.babylon.particleSystem.spriteCellWidth = this.spriteProps.width
@@ -161,7 +161,7 @@ export function Particle(props: ParticleProps = {}): any {
       }
       const _classCore = class implements ParticleCore {
         props = applyDefaults(props, particlePropsDefault)
-        Instance: ParticleInterface = new _classInterface(null, null, null)
+        Instance: ParticleInterface = new _classInterface(null as any, null as any, null as any)
 
         load(scene: SceneInterface): LoadingProgress {
           SpritesController.load(this.props.sprites, scene)

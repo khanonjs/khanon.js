@@ -115,16 +115,14 @@ export function removeArrayDuplicitiesInObject<T extends object>(values: T): T {
       return vals
     }
   }
-  if (values) {
-    if (typeof values === 'object') {
-      for (const [key, value] of Object.entries(values)) {
-        values[key] = remove(value)
-      }
-      return values
-    } else {
-      Logger.error('Trying to remove array duplicities in a non-object variable.')
-      return values
+  if (typeof values === 'object') {
+    for (const [key, value] of Object.entries(values)) {
+      values[key] = remove(value)
     }
+    return values
+  } else {
+    Logger.error('Trying to remove array duplicities in a non-object variable.')
+    return values
   }
 }
 

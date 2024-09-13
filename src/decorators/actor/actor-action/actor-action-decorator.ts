@@ -41,7 +41,7 @@ export function ActorAction(props: ActorActionProps = {}): any {
         actor: ActorInterface
         scene: SceneInterface
         metadata: Metadata = Reflect.getMetadata('metadata', this) ?? new Metadata()
-        countFramesUpdate$: BABYLON.Observer<number>
+        countFramesUpdate$: BABYLON.Observer<number> | null = null
         countFrames = 0
         loopUpdate$: BABYLON.Observer<number>
         canvasResize$: BABYLON.Observer<Rect>
@@ -56,9 +56,9 @@ export function ActorAction(props: ActorActionProps = {}): any {
           if (this.props.countFrames) {
             this.countFramesUpdate$ = Core.loopUpdateAddObserver((delta: number) => {
               this.countFrames += delta
-              if (this.countFrames > this.props.countFrames) {
-                this.countFramesUpdate$.remove()
-                this.countFramesUpdate$ = undefined
+              if (this.countFrames > (this.props.countFrames as any)) {
+                this.countFramesUpdate$?.remove()
+                this.countFramesUpdate$ = null
                 this.countFrames = 0
                 this.stop()
               }
@@ -79,7 +79,7 @@ export function ActorAction(props: ActorActionProps = {}): any {
       }
       const _classCore = class implements ActorActionCore {
         props = props
-        Instance: ActorActionInterface = new _classInterface(null)
+        Instance: ActorActionInterface = new _classInterface(null as any)
 
         load(scene: SceneInterface): LoadingProgress {
           const progress = new LoadingProgress().complete()

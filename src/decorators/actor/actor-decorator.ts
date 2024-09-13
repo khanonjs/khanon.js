@@ -59,19 +59,19 @@ export function Actor(props: ActorProps = {}): any {
 
       props: ActorProps
       metadata: Metadata = Reflect.getMetadata('metadata', this) ?? new Metadata()
-      transform: SpriteTransform | MeshTransform
+      transform: SpriteTransform | MeshTransform | null
       loopUpdate$: BABYLON.Observer<number>
       canvasResize$: BABYLON.Observer<Rect>
-      _body: B
+      _body: B | null = null
       nodes: Map<string, B> = new Map<string, B>()
-      _state: ActorStateInterface
+      _state: ActorStateInterface | null = null
       actions: Map<ActorActionConstructor, ActorActionInterface> = new Map<ActorActionConstructor, ActorActionInterface>()
       particles: Map<FlexId, ParticleInterface> = new Map<FlexId, ParticleInterface>()
 
       set loopUpdate(value: boolean) { switchLoopUpdate(value, this) }
       get loopUpdate(): boolean { return !!this.loopUpdate$ }
-      get body(): SpriteInterface | MeshInterface { return this._body }
-      get state(): ActorStateInterface { return this._state }
+      get body(): SpriteInterface | MeshInterface | null { return this._body }
+      get state(): ActorStateInterface | null { return this._state }
 
       release() {
         invokeCallback(this.onDestroy, this)
@@ -84,13 +84,13 @@ export function Actor(props: ActorProps = {}): any {
 
       setBody<B>(Body: new () => B): B {
         if (new Body() instanceof SpriteInterface) { // TODO is there a better way to do this avoiding the 'new'?
-          if (!this.scene.availableElements.hasSprite(Body as SpriteConstructor)) { Logger.debugError('Trying to use a sprite non available to the actor. Please check the actor props.', this.constructor.prototype, Body.prototype); return }
+          if (!this.scene.availableElements.hasSprite(Body as SpriteConstructor)) { Logger.debugError('Trying to use a sprite non available to the actor. Please check the actor props.', this.constructor.prototype, Body.prototype); return null as any }
           this._body = SpritesController.get(Body).spawn(this.scene) as any
         } else {
-          if (!this.scene.availableElements.hasMesh(Body as MeshConstructor)) { Logger.debugError('Trying to use a mesh non available to the actor. Please check the actor props.', this.constructor.prototype, Body.prototype); return }
+          if (!this.scene.availableElements.hasMesh(Body as MeshConstructor)) { Logger.debugError('Trying to use a mesh non available to the actor. Please check the actor props.', this.constructor.prototype, Body.prototype); return null as any }
           this._body = MeshesController.get(Body).spawn(this.scene) as any
         }
-        this.transform = this._body.transform
+        this.transform = this._body?.transform ?? null
         attachLoopUpdate(this)
         attachCanvasResize(this)
         return this._body as B
@@ -99,7 +99,7 @@ export function Actor(props: ActorProps = {}): any {
       removeBody(): void {
         if (this._body) {
           this._body.release()
-          this._body = undefined
+          this._body = null
         }
       }
 
@@ -109,12 +109,12 @@ export function Actor(props: ActorProps = {}): any {
         //   name = (++this.fakeId).toString()
         // }
         // if (this.nodes.get(name)) { Logger.debugError(`ActorCompositionDefinition - Adding a node with name already defined '${name}'`); return }
-        return null
+        return null as any
       }
 
       getNode(name: string): SpriteInterface | MeshInterface {
         // TODO
-        return null
+        return null as any
       }
 
       removeNode(name: string): void {
@@ -136,7 +136,7 @@ export function Actor(props: ActorProps = {}): any {
       }
 
       switchState(state: ActorStateConstructor, setup: any): ActorStateInterface {
-        if (!this.scene.availableElements.hasActorState(state)) { Logger.debugError('Trying to set a state non available to the actor. Please check the actor props.', _classInterface.prototype, state.prototype); return }
+        if (!this.scene.availableElements.hasActorState(state)) { Logger.debugError('Trying to set a state non available to the actor. Please check the actor props.', _classInterface.prototype, state.prototype); return null as any }
         const _state = ActorStatesController.get(state).spawn(this)
         if (this._state) {
           this._state.end()
@@ -155,14 +155,14 @@ export function Actor(props: ActorProps = {}): any {
       }
 
       playAction(actionConstructor: ActorActionConstructor, setup: any): ActorActionInterface {
-        if (!this.scene.availableElements.hasActorAction(actionConstructor)) { Logger.debugError('Trying to play an action non available to the actor. Please check the actor props.', _classInterface.prototype, actionConstructor.prototype); return }
+        if (!this.scene.availableElements.hasActorAction(actionConstructor)) { Logger.debugError('Trying to play an action non available to the actor. Please check the actor props.', _classInterface.prototype, actionConstructor.prototype); return null as any }
         let action = this.actions.get(actionConstructor)
         if (!action) {
           action = ActorActionsController.get(actionConstructor).spawn(this)
           if (!this.props.actions?.find(_action => _action === actionConstructor)) {
             // Applies context to 'onLoopUpdate' as caller 'Actor' or 'ActorState' to preserve the 'this'
             // in case 'onLoopUpdate' is equivalent to a decorated method of some of those both interfaces.
-            action.onLoopUpdate = action.onLoopUpdate.bind(
+            action.onLoopUpdate = action.onLoopUpdate?.bind(
               this.metadata.getProps().actions?.find(_action => _action === actionConstructor)
                 ? this
                 : this._state?.metadata.getProps().actions?.find(_action => _action === actionConstructor)
@@ -244,7 +244,7 @@ export function Actor(props: ActorProps = {}): any {
         if (isMethod) {
           // Applies context to 'initialize' as caller 'Actor' to preserve the 'this'
           // in case 'initialize' is equivalent to a decorated method of some of those both interfaces.
-          particle.initialize = particle.initialize.bind(this)
+          particle.initialize = particle.initialize?.bind(this)
           particle.create()
         }
         this.particles.set(id, particle)
@@ -252,17 +252,17 @@ export function Actor(props: ActorProps = {}): any {
 
       startParticle(id: FlexId): void {
         if (!this.particles.get(id)) { Logger.debugError(`Trying to start particle '${id}' that doesn't exist in actor:`, _classInterface.prototype); return }
-        this.particles.get(id).start()
+        this.particles.get(id)?.start()
       }
 
       stopParticle(id: FlexId): void {
         if (!this.particles.get(id)) { Logger.debugError(`Trying to start particle '${id}' that doesn't exist in actor:`, _classInterface.prototype); return }
-        this.particles.get(id).stop()
+        this.particles.get(id)?.stop()
       }
 
       removeParticle(id: FlexId): void {
         if (!this.particles.get(id)) { Logger.debugError(`Trying to start particle '${id}' that doesn't exist in actor:`, _classInterface.prototype); return }
-        this.particles.get(id).release()
+        this.particles.get(id)?.release()
         this.particles.delete(id)
       }
 
@@ -285,7 +285,7 @@ export function Actor(props: ActorProps = {}): any {
     }
     const _classCore = class implements ActorCore {
       props = removeArrayDuplicitiesInObject(props)
-      Instance: ActorInterface = new _classInterface(null)
+      Instance: ActorInterface = new _classInterface(null as any)
       loaded = false
 
       load(scene: SceneInterface): LoadingProgress {

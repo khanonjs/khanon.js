@@ -7,17 +7,23 @@ import { SceneInterface } from './scene-interface'
 
 // TODO add support to inject a user defined SceneRemove class into the scene?
 export class SceneRemove {
-  private readonly scene?: SceneInterface
-  private readonly scenePrototype?: any
+  private readonly scene: SceneInterface
+  private readonly scenePrototype: any
 
   constructor(scene: SceneInterface, scenePrototype: any) {
     this.scene = scene
     this.scenePrototype = scenePrototype
   }
 
-  actor(actor: ActorInterface): void {
-    actor.release()
-    this.scene.actors.delete(actor)
+  actor(actor: ActorInterface | ActorInterface[]): void {
+    if (Array.isArray(actor)) {
+      actor.forEach(_actor => {
+        this.actor(_actor)
+      })
+    } else {
+      actor.release()
+      this.scene.actors.delete(actor)
+    }
   }
 
   actorAll(): void {
@@ -26,9 +32,15 @@ export class SceneRemove {
     })
   }
 
-  particle(particle: ParticleInterface): void {
-    particle.release()
-    this.scene.particles.delete(particle)
+  particle(particle: ParticleInterface | ParticleInterface[]): void {
+    if (Array.isArray(particle)) {
+      particle.forEach(_particle => {
+        this.particle(_particle)
+      })
+    } else {
+      particle.release()
+      this.scene.particles.delete(particle)
+    }
   }
 
   particleAll(): void {
@@ -37,9 +49,15 @@ export class SceneRemove {
     })
   }
 
-  sprite(sprite: SpriteInterface): void {
-    sprite.release()
-    this.scene.sprites.delete(sprite)
+  sprite(sprite: SpriteInterface | SpriteInterface[]): void {
+    if (Array.isArray(sprite)) {
+      sprite.forEach(_sprite => {
+        this.sprite(_sprite)
+      })
+    } else {
+      sprite.release()
+      this.scene.sprites.delete(sprite)
+    }
   }
 
   spriteAll(): void {
@@ -48,9 +66,15 @@ export class SceneRemove {
     })
   }
 
-  mesh(mesh: MeshInterface): void {
-    mesh.release()
-    this.scene.meshes.delete(mesh)
+  mesh(mesh: MeshInterface | MeshInterface[]): void {
+    if (Array.isArray(mesh)) {
+      mesh.forEach(_mesh => {
+        this.mesh(_mesh)
+      })
+    } else {
+      mesh.release()
+      this.scene.meshes.delete(mesh)
+    }
   }
 
   meshAll(): void {

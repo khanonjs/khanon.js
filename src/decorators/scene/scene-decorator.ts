@@ -92,7 +92,7 @@ export function Scene(props: SceneProps): any {
       setEngineParams(): void {} // TODO ?
 
       // User available
-      babylon: Pick<BabylonAccessor, 'scene'> = { scene: null }
+      babylon: Pick<BabylonAccessor, 'scene'> = { scene: null as any }
       loopUpdate$: BABYLON.Observer<number>
       canvasResize$: BABYLON.Observer<Rect>
       get assets(): AssetDefinition[] { return this._assets }
@@ -165,7 +165,7 @@ export function Scene(props: SceneProps): any {
           MeshesController.load(this.metadata.getProps().meshes, this)
           SceneActionsController.load(this.props.actions, this)
           SceneActionsController.load(this.metadata.getProps().actions, this)
-          this.babylon.scene.executeWhenReady(() => {
+          this.babylon.scene?.executeWhenReady(() => {
             invokeCallback(this.onLoaded, this)
             sceneProgress.complete()
           })
@@ -199,13 +199,13 @@ export function Scene(props: SceneProps): any {
           this._camera.stop()
         }
         this._camera = camera
-        this._camera.babylon.camera = this._camera.initialize(this.babylon.scene)
+        this._camera.babylon.camera = (this._camera.initialize as any)(this.babylon.scene)
         this._camera.babylon.camera.attachControl(Core.canvas, true)
         this._camera.start()
       }
 
       switchState(state: SceneStateConstructor, setup: any): SceneStateInterface {
-        if (!this.availableElements.hasSceneState(state)) { Logger.debugError('Trying to set a state non available to the scene. Please check the scene props.', _class.prototype, state.prototype); return }
+        if (!this.availableElements.hasSceneState(state)) { Logger.debugError('Trying to set a state non available to the scene. Please check the scene props.', _class.prototype, state.prototype); return null as any }
         const _state = SceneStatesController.get(state).spawn(this)
         if (this._state) {
           this._state.end()
@@ -216,17 +216,17 @@ export function Scene(props: SceneProps): any {
       }
 
       playAction(actionConstructor: SceneActionConstructor, setup: any): SceneActionInterface {
-        if (!this.availableElements.hasSceneAction(actionConstructor)) { Logger.debugError('Trying to play an action non available to the actor. Please check the actor props.', _class.prototype, actionConstructor.prototype); return }
+        if (!this.availableElements.hasSceneAction(actionConstructor)) { Logger.debugError('Trying to play an action non available to the actor. Please check the actor props.', _class.prototype, actionConstructor.prototype); return null as any }
         let action = this.actions.get(actionConstructor)
         if (!action) {
           action = SceneActionsController.get(actionConstructor).spawn(this)
           if (!this.props.actions?.find(_action => _action === actionConstructor)) {
             // Applies context 'Scene' or 'SceneState' to 'onLoopUpdate' method to preserve the 'this'
             // in case 'onLoopUpdate' is equivalent to a decorated method of some of those both interfaces.
-            action.onLoopUpdate = action.onLoopUpdate.bind(
+            action.onLoopUpdate = action.onLoopUpdate?.bind(
               this.metadata.getProps().actions?.find(_action => _action === actionConstructor)
                 ? this
-                : this._state?.metadata.getProps().actions?.find(_action => _action === actionConstructor)
+                : this._state?.metadata?.getProps().actions?.find(_action => _action === actionConstructor)
                   ? this._state
                   : undefined
             )
@@ -307,7 +307,7 @@ export function Scene(props: SceneProps): any {
         this.getAvailableElements(this.metadata.getProps())
       }
 
-      private getAvailableElements(props: object): void {
+      private getAvailableElements(props: object | undefined): void {
         if (props && typeof props === 'object') {
           for (const property of Object.values(props)) {
             if (Array.isArray(property)) {

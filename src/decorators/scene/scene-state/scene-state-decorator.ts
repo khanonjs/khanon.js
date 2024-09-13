@@ -69,7 +69,7 @@ export function SceneState(props: SceneStateProps = {}): any {
     }
     const _classCore = class implements SceneStateCore {
       props = props
-      Instance: SceneStateInterface = new _classInterface(null, null)
+      Instance: SceneStateInterface = new _classInterface(null as any, null as any)
 
       spawn(scene: SceneInterface): SceneStateInterface {
         const state = new _classInterface(scene, this.props)
@@ -79,17 +79,17 @@ export function SceneState(props: SceneStateProps = {}): any {
       load(scene: SceneInterface): LoadingProgress {
         const progress = new LoadingProgress().complete()
         SpritesController.load(this.props.sprites, scene)
-        SpritesController.load(this.Instance.metadata.getProps().sprites, scene)
+        SpritesController.load(this.Instance.metadata?.getProps().sprites, scene)
         MeshesController.load(this.props.meshes, scene)
-        MeshesController.load(this.Instance.metadata.getProps().meshes, scene)
+        MeshesController.load(this.Instance.metadata?.getProps().meshes, scene)
         return progress
       }
 
       unload(scene: SceneInterface): void {
         SpritesController.unload(this.props.sprites, scene)
-        SpritesController.unload(this.Instance.metadata.getProps().sprites, scene)
+        SpritesController.unload(this.Instance.metadata?.getProps().sprites, scene)
         MeshesController.unload(this.props.meshes, scene)
-        MeshesController.unload(this.Instance.metadata.getProps().meshes, scene)
+        MeshesController.unload(this.Instance.metadata?.getProps().meshes, scene)
       }
     }
     SceneStatesController.register(new _classCore())

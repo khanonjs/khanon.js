@@ -43,7 +43,7 @@ export declare abstract class ActorStateInterface<S = any, A = ActorInterface<Sp
   onStart?(): void
 
   /**
-   * Invoked on State end. Use this method to setup the actor according to the State end.
+   * Invoked on State end. Use this method to setup the Actor according to the State end.
    */
   onEnd?(): void
 

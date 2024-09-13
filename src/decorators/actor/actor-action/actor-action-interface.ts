@@ -11,7 +11,7 @@ import { ActorActionProps } from './actor-action-props'
 
 export abstract class ActorActionInterface<S = any, A = ActorInterface<SpriteInterface | MeshInterface>> implements ActionInterface<S> {
   abstract props: ActorActionProps
-  abstract countFramesUpdate$: BABYLON.Observer<number>
+  abstract countFramesUpdate$: BABYLON.Observer<number> | null
   abstract countFrames: number
   abstract metadata: Metadata
   abstract loopUpdate$: BABYLON.Observer<number>

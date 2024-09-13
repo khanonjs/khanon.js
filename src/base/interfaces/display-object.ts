@@ -5,7 +5,7 @@ import { MeshTransform } from '../../types/mesh-transform'
 import { SpriteTransform } from '../../types/sprite-transform'
 
 export abstract class DisplayObject {
-  abstract animation: SpriteAnimation | MeshAnimation
+  abstract animation: SpriteAnimation | MeshAnimation | null
   abstract animations: Map<FlexId, SpriteAnimation | MeshAnimation>
 
   abstract release(): void

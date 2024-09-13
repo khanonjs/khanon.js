@@ -5,6 +5,7 @@ import { BabylonAccessor } from '../../models/babylon-accessor'
 import { DrawBlockProperties } from '../../models/draw-text-properties'
 import { Rect } from '../../models/rect'
 import { FlexId } from '../../types/flex-id'
+import { NullableExceptProps } from '../../types/nullable-except-props'
 import { SpriteTransform } from '../../types/sprite-transform'
 import { MeshAnimation } from '../mesh/mesh-animation'
 import { SceneInterface } from '../scene/scene-interface'
@@ -17,8 +18,8 @@ export abstract class SpriteInterface implements DisplayObject {
   abstract loopUpdate$: BABYLON.Observer<number>
   abstract canvasResize$: BABYLON.Observer<Rect>
   abstract exclusiveTexture: boolean // Exclusive texture means this sprite has an exclusive texture that is not stored anywhere, so the sprite itself has to handle its release.
-  abstract animation: SpriteAnimation | MeshAnimation
-  abstract animations: Map<FlexId, SpriteAnimation | MeshAnimation>
+  abstract animation: SpriteAnimation | null
+  abstract animations: Map<FlexId, SpriteAnimation>
   abstract _scale: number
   abstract setTexture(spriteTexture: SpriteTexture, isExclusive: boolean, isParticle: boolean): void
   abstract release(): void
@@ -27,7 +28,7 @@ export abstract class SpriteInterface implements DisplayObject {
    * User available
    */
   abstract loopUpdate: boolean
-  abstract get babylon(): Pick<BabylonAccessor, 'scene' | 'spriteManager' | 'sprite'>
+  abstract get babylon(): NullableExceptProps<Pick<BabylonAccessor, 'scene' | 'spriteManager' | 'sprite'>, 'spriteManager'>
   abstract get scene(): SceneInterface
   abstract get transform(): SpriteTransform
   abstract get width(): number

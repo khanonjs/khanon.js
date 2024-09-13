@@ -8,6 +8,7 @@ import {
   FlexId,
   SpriteTransform
 } from '../../types'
+import { NullableExceptProps } from '../../types/nullable-except-props'
 import { SceneInterface } from '../scene'
 
 export interface SpriteAnimation extends AnimationBase {}
@@ -16,7 +17,7 @@ export declare abstract class SpriteInterface {
   /**
    * Babylon.js objects.
    */
-  get babylon(): Pick<BabylonAccessor, 'scene' | 'spriteManager' | 'sprite'>
+  get babylon(): NullableExceptProps<Pick<BabylonAccessor, 'scene' | 'spriteManager' | 'sprite'>, 'spriteManager'>
 
   /**
    * Scene owner of this Sprite.

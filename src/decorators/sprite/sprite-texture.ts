@@ -7,7 +7,7 @@ import { SceneInterface } from '../scene/scene-interface'
 import { SpriteProps } from './sprite-props'
 
 export class SpriteTexture {
-  babylon: Pick<BabylonAccessor, 'spriteManager' | 'scene'> = { spriteManager: null, scene: null }
+  babylon: Pick<BabylonAccessor, 'spriteManager' | 'scene'> = { spriteManager: null as any, scene: null as any }
   width: number
   height: number
 
@@ -34,7 +34,7 @@ export class SpriteTexture {
     if (this.width === 0 || this.height === 0) { Logger.debugError('Width and Height must be higher than 0:', this.spriteProps) }
     this.babylon.spriteManager = new BABYLON.SpriteManager(
       name,
-      null,
+      '',
       this.spriteProps.maxAllowedSprites,
       { width: this.width, height: this.height },
       this.babylon.scene
@@ -44,6 +44,6 @@ export class SpriteTexture {
 
   dispose(): void {
     this.babylon.spriteManager.dispose()
-    this.babylon.spriteManager = null
+    this.babylon.spriteManager = null as any
   }
 }
