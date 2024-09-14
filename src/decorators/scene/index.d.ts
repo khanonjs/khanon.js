@@ -20,6 +20,7 @@ import {
   MeshInterface
 } from '../mesh'
 import { MeshMapConstructor } from '../mesh-map'
+import { ParticleConstructor } from '../particle'
 import { ParticleInterface } from '../particle/particle-interface'
 import {
   SpriteConstructor,
@@ -323,6 +324,11 @@ export interface SceneProps {
    * Meshes to use in this Scene.
    */
   meshes?: MeshConstructor[]
+
+  /**
+   * Particles to use in this Scene.
+   */
+  particles?: ParticleConstructor[]
 }
 
 export declare function Scene(props?: SceneProps): any
