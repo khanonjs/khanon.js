@@ -50,7 +50,7 @@ export abstract class SceneInterface implements Loadable, LoopUpdatable, CanvasR
   /**
    * User available
    */
-  abstract babylon: Pick<BabylonAccessor, 'scene'>
+  abstract get babylon(): Pick<BabylonAccessor, 'scene'>
   abstract get loopUpdate(): boolean
   abstract set loopUpdate(value: boolean)
   abstract get loaded(): boolean

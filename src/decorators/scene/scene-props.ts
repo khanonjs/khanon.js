@@ -7,6 +7,7 @@ import { GUIConstructor } from '../gui/gui-constructor'
 import { MeshConstructor } from '../mesh/mesh-constructor'
 import { SpriteConstructor } from '../sprite/sprite-constructor'
 import { SceneActionConstructor } from './scene-action/scene-action-constructor'
+import { SceneMapConstructor } from './scene-map-constructor'
 import { SceneStateConstructor } from './scene-state/scene-state-constructor'
 
 export interface SceneProps {
@@ -14,7 +15,7 @@ export interface SceneProps {
     configuration?: SceneConfiguration
     guis?: GUIConstructor[]
     cameras?: CameraConstructor[]
-    // maps?: SceneMapConstructor[]
+    maps?: SceneMapConstructor[]
     states?: SceneStateConstructor[]
     actors?: ActorConstructor[]
     actions?: SceneActionConstructor[]

@@ -14,15 +14,18 @@ import {
   ActorInterface
 } from '../actor'
 import { CameraConstructor } from '../camera'
+import { GUIConstructor } from '../gui'
 import {
   MeshConstructor,
   MeshInterface
 } from '../mesh'
+import { MeshMapConstructor } from '../mesh-map'
 import { ParticleInterface } from '../particle/particle-interface'
 import {
   SpriteConstructor,
   SpriteInterface
 } from '../sprite'
+import { SpriteMapConstructor } from '../sprite-map'
 import {
   SceneActionConstructor,
   SceneActionInterface
@@ -268,21 +271,58 @@ export declare abstract class SceneInterface {
 }
 
 export type SceneConstructor = new () => SceneInterface
+export type SceneMapConstructor = SpriteMapConstructor | MeshMapConstructor
 
 export interface SceneProps {
   /**
    * Refers to BABYLON.SceneOptions: https://doc.babylonjs.com/typedoc/interfaces/BABYLON.SceneOptions
    */
   options?: BABYLON.SceneOptions
+
+  /**
+   * Babylon Scene accessors to configure the Scene.
+   */
   configuration?: SceneConfiguration
-  // guis?: GUIConstructor[]
-  cameras?: CameraConstructor[]
-  // maps?: SceneMapConstructor[]
+
+  /**
+   * States to use in this Scene.
+   */
   states?: SceneStateConstructor[]
-  actors?: ActorConstructor[]
+
+  /**
+   * Actions to use in this Scene.
+   */
   actions?: SceneActionConstructor[]
+
+  /**
+   * Cameras to use in this Scene.
+   */
+  cameras?: CameraConstructor[]
+
+  /**
+   * GUIs to use in this Scene.
+   */
+  guis?: GUIConstructor[]
+
+  /**
+   * Maps to use in this Scene.
+   */
+  maps?: SceneMapConstructor[]
+
+  /**
+   * Actors that will be spawned in this Scene.
+   */
+  actors?: ActorConstructor[]
+
+  /**
+   * Sprites to use in this Scene.
+   */
   sprites?: SpriteConstructor[]
+
+  /**
+   * Meshes to use in this Scene.
+   */
   meshes?: MeshConstructor[]
 }
 
-export declare function Scene(props: SceneProps): any
+export declare function Scene(props?: SceneProps): any

@@ -60,7 +60,7 @@ import { SceneSpawn } from './scene-spawn'
 import { SceneStateConstructor } from './scene-state/scene-state-constructor'
 import { SceneStateInterface } from './scene-state/scene-state-interface'
 
-export function Scene(props: SceneProps): any {
+export function Scene(props: SceneProps = {}): any {
   return function <T extends { new (...args: any[]): SceneInterface }>(constructor: T & SceneInterface, context: ClassDecoratorContext) {
     const _class = class extends constructor implements SceneInterface {
       constructor() {
