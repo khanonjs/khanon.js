@@ -1,6 +1,7 @@
 import { SceneInterface } from '../'
 import { Rect } from '../../../models'
 import { MeshConstructor } from '../../mesh'
+import { ParticleConstructor } from '../../particle'
 import { SpriteConstructor } from '../../sprite'
 
 export declare abstract class SceneActionInterface</* Setup object */ S = any, /* Scene object */ C = SceneInterface> {
@@ -91,6 +92,11 @@ export interface SceneActionProps {
    * Meshes to use in this action.
    */
   meshes?: MeshConstructor[]
+
+  /**
+   * Particles to use in this action.
+   */
+  particles?: ParticleConstructor[]
 }
 
 /**

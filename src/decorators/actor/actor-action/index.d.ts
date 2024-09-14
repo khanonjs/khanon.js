@@ -4,6 +4,7 @@ import {
   MeshConstructor,
   MeshInterface
 } from '../../mesh'
+import { ParticleConstructor } from '../../particle'
 import { SceneInterface } from '../../scene'
 import {
   SpriteConstructor,
@@ -103,6 +104,11 @@ export interface ActorActionProps {
    * Meshes to use in this action.
    */
   meshes?: MeshConstructor[]
+
+  /**
+   * Particles to use in this action.
+   */
+  particles?: ParticleConstructor[]
 }
 
 /**

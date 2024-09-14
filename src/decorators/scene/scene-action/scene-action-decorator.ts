@@ -6,6 +6,7 @@ import { LoadingProgress } from '../../../base'
 import { Metadata } from '../../../base/interfaces/metadata/metadata'
 import {
   MeshesController,
+  ParticlesController,
   SceneActionsController,
   SpritesController
 } from '../../../controllers'
@@ -80,6 +81,8 @@ export function SceneAction(props: SceneActionProps = {}): any {
           SpritesController.load(this.Instance.metadata.getProps().sprites, scene)
           MeshesController.load(this.props.meshes, scene)
           MeshesController.load(this.Instance.metadata.getProps().meshes, scene)
+          ParticlesController.load(this.props.particles, scene)
+          ParticlesController.load(this.Instance.metadata.getProps().particles, scene)
           return progress
         }
 
@@ -88,6 +91,8 @@ export function SceneAction(props: SceneActionProps = {}): any {
           SpritesController.unload(this.Instance.metadata.getProps().sprites, scene)
           MeshesController.unload(this.props.meshes, scene)
           MeshesController.unload(this.Instance.metadata.getProps().meshes, scene)
+          ParticlesController.unload(this.props.particles, scene)
+          ParticlesController.unload(this.Instance.metadata.getProps().particles, scene)
         }
 
         spawn(scene: SceneInterface): SceneActionInterface {

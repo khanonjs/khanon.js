@@ -22,8 +22,10 @@ import {
   removeLoopUpdate,
   switchLoopUpdate
 } from '../../utils/utils'
+import { ActorActionInterface } from '../actor/actor-action/actor-action-interface'
 import { ActorInterface } from '../actor/actor-interface'
 import { ActorStateInterface } from '../actor/actor-state/actor-state-interface'
+import { SceneActionInterface } from '../scene/scene-action/scene-action-interface'
 import { SceneInterface } from '../scene/scene-interface'
 import { SceneStateInterface } from '../scene/scene-state/scene-state-interface'
 import { SpriteAnimation } from '../sprite/sprite-animation'
@@ -194,8 +196,10 @@ export function Particle(props: ParticleProps): any {
     } else if ((
       constructorOrTarget instanceof ActorInterface ||
       constructorOrTarget instanceof ActorStateInterface ||
+      constructorOrTarget instanceof ActorActionInterface ||
       constructorOrTarget instanceof SceneInterface ||
-      constructorOrTarget instanceof SceneStateInterface
+      constructorOrTarget instanceof SceneStateInterface ||
+      constructorOrTarget instanceof SceneActionInterface
     ) && descriptor) { // Defined descriptor means it is a decorated method
       @Particle(props)
       abstract class _particleInterface extends ParticleInterface {
