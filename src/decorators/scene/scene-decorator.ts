@@ -85,9 +85,9 @@ export function Scene(props: SceneProps = {}): any {
 
       // Spawned elements
       actors: Set<ActorInterface> = new Set<ActorInterface>()
-      particles: Set<ParticleInterface> = new Set<ParticleInterface>()
       meshes: Set<MeshInterface> = new Set<MeshInterface>()
       sprites: Set<SpriteInterface> = new Set<SpriteInterface>()
+      particles: Set<ParticleInterface> = new Set<ParticleInterface>()
 
       setEngineParams(): void {} // TODO ?
 
@@ -157,14 +157,16 @@ export function Scene(props: SceneProps = {}): any {
 
         assetsProgress.onComplete.add(() => {
           Logger.debug('Scene assets load completed', _class.prototype)
-          ActorsController.load(this.props.actors, this)
           SceneStatesController.load(this.props.states, this)
+          SceneActionsController.load(this.props.actions, this)
+          SceneActionsController.load(this.metadata.getProps().actions, this)
+          ActorsController.load(this.props.actors, this)
           SpritesController.load(this.props.sprites, this)
           SpritesController.load(this.metadata.getProps().sprites, this)
           MeshesController.load(this.props.meshes, this)
           MeshesController.load(this.metadata.getProps().meshes, this)
-          SceneActionsController.load(this.props.actions, this)
-          SceneActionsController.load(this.metadata.getProps().actions, this)
+          ParticlesController.load(this.props.particles, this)
+          ParticlesController.load(this.metadata.getProps().particles, this)
           this.babylon.scene?.executeWhenReady(() => {
             invokeCallback(this.onLoaded, this)
             sceneProgress.complete()
@@ -183,14 +185,16 @@ export function Scene(props: SceneProps = {}): any {
 
       unload(): void {
         Logger.debug('Scene unload', _class.prototype, this)
-        ActorsController.unload(this.props.actors, this)
         SceneStatesController.unload(this.props.states, this)
+        SceneActionsController.unload(this.props.actions, this)
+        SceneActionsController.unload(this.metadata.getProps().actions, this)
+        ActorsController.unload(this.props.actors, this)
         SpritesController.unload(this.props.sprites, this)
         SpritesController.unload(this.metadata.getProps().sprites, this)
         MeshesController.unload(this.props.meshes, this)
         MeshesController.unload(this.metadata.getProps().meshes, this)
-        SceneActionsController.unload(this.props.actions, this)
-        SceneActionsController.unload(this.metadata.getProps().actions, this)
+        ParticlesController.unload(this.props.particles, this)
+        ParticlesController.unload(this.metadata.getProps().particles, this)
       }
 
       setCamera(constructor: CameraConstructor): void {

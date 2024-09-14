@@ -3,6 +3,7 @@ import { Rect } from '../../../models'
 import { FlexId } from '../../../types'
 import { CameraConstructor } from '../../camera'
 import { MeshConstructor } from '../../mesh'
+import { ParticleConstructor } from '../../particle'
 import { SpriteConstructor } from '../../sprite'
 
 export declare abstract class SceneStateInterface<S = any, C = SceneInterface> {
@@ -67,6 +68,11 @@ export interface SceneStateProps {
    * Meshes to use in this action.
    */
   meshes?: MeshConstructor[]
+
+  /**
+   * Particles to use in this state.
+   */
+  particles?: ParticleConstructor[]
 }
 
 export declare function SceneState(props?: SceneStateProps): any

@@ -1,9 +1,16 @@
 import { ActorInterface } from '../'
 import { Rect } from '../../../models/rect'
 import { FlexId } from '../../../types'
-import { MeshInterface } from '../../mesh'
+import {
+  MeshConstructor,
+  MeshInterface
+} from '../../mesh'
+import { ParticleConstructor } from '../../particle'
 import { SceneInterface } from '../../scene'
-import { SpriteInterface } from '../../sprite'
+import {
+  SpriteConstructor,
+  SpriteInterface
+} from '../../sprite'
 
 /**
  * Defines the state of an actor.
@@ -63,7 +70,20 @@ export declare abstract class ActorStateInterface<S = any, A = ActorInterface<Sp
 export type ActorStateConstructor = new () => ActorStateInterface
 
 export interface ActorStateProps {
+  /**
+   * Sprites to use in this state.
+   */
+  sprites?: SpriteConstructor[]
 
+  /**
+   * Meshes to use in this state.
+   */
+  meshes?: MeshConstructor[]
+
+  /**
+   * Particles to use in this state.
+   */
+  particles?: ParticleConstructor[]
 }
 
 export declare function ActorState(props?: ActorStateProps): any

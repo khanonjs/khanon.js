@@ -4,6 +4,7 @@ import { LoadingProgress } from '../../../base'
 import { Metadata } from '../../../base/interfaces/metadata/metadata'
 import {
   MeshesController,
+  ParticlesController,
   SceneStatesController,
   SpritesController
 } from '../../../controllers'
@@ -82,6 +83,8 @@ export function SceneState(props: SceneStateProps = {}): any {
         SpritesController.load(this.Instance.metadata?.getProps().sprites, scene)
         MeshesController.load(this.props.meshes, scene)
         MeshesController.load(this.Instance.metadata?.getProps().meshes, scene)
+        ParticlesController.load(this.props.particles, scene)
+        ParticlesController.load(this.Instance.metadata?.getProps().particles, scene)
         return progress
       }
 
@@ -90,6 +93,8 @@ export function SceneState(props: SceneStateProps = {}): any {
         SpritesController.unload(this.Instance.metadata?.getProps().sprites, scene)
         MeshesController.unload(this.props.meshes, scene)
         MeshesController.unload(this.Instance.metadata?.getProps().meshes, scene)
+        ParticlesController.unload(this.props.particles, scene)
+        ParticlesController.unload(this.Instance.metadata?.getProps().particles, scene)
       }
     }
     SceneStatesController.register(new _classCore())

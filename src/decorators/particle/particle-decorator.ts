@@ -23,7 +23,9 @@ import {
   switchLoopUpdate
 } from '../../utils/utils'
 import { ActorInterface } from '../actor/actor-interface'
+import { ActorStateInterface } from '../actor/actor-state/actor-state-interface'
 import { SceneInterface } from '../scene/scene-interface'
+import { SceneStateInterface } from '../scene/scene-state/scene-state-interface'
 import { SpriteAnimation } from '../sprite/sprite-animation'
 import { SpriteConstructor } from '../sprite/sprite-constructor'
 import { SpriteProps } from '../sprite/sprite-props'
@@ -190,7 +192,10 @@ export function Particle(props: ParticleProps): any {
     if (constructorOrTarget.prototype) { // Defined prototype means it is a decorated class
       return decorateClass()
     } else if ((
-      constructorOrTarget instanceof ActorInterface
+      constructorOrTarget instanceof ActorInterface ||
+      constructorOrTarget instanceof ActorStateInterface ||
+      constructorOrTarget instanceof SceneInterface ||
+      constructorOrTarget instanceof SceneStateInterface
     ) && descriptor) { // Defined descriptor means it is a decorated method
       @Particle(props)
       abstract class _particleInterface extends ParticleInterface {

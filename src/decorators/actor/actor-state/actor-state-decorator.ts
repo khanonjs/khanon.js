@@ -5,6 +5,7 @@ import { Metadata } from '../../../base/interfaces/metadata/metadata'
 import {
   ActorStatesController,
   MeshesController,
+  ParticlesController,
   SpritesController
 } from '../../../controllers'
 import { Rect } from '../../../models/rect'
@@ -83,6 +84,8 @@ export function ActorState(props: ActorStateProps = {}): any {
         SpritesController.load(this.Instance.metadata.getProps().sprites, scene)
         MeshesController.load(this.props.meshes, scene)
         MeshesController.load(this.Instance.metadata.getProps().meshes, scene)
+        ParticlesController.load(this.props.particles, scene)
+        ParticlesController.load(this.Instance.metadata?.getProps().particles, scene)
         return progress
       }
 
@@ -91,6 +94,8 @@ export function ActorState(props: ActorStateProps = {}): any {
         SpritesController.unload(this.Instance.metadata.getProps().sprites, scene)
         MeshesController.unload(this.props.meshes, scene)
         MeshesController.unload(this.Instance.metadata.getProps().meshes, scene)
+        ParticlesController.unload(this.props.particles, scene)
+        ParticlesController.unload(this.Instance.metadata?.getProps().particles, scene)
       }
     }
     ActorStatesController.register(new _classCore())
