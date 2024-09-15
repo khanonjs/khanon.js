@@ -1,3 +1,5 @@
+import 'reflect-metadata'
+
 // Khanon.js
 export { KJS } from './kjs/kjs'
 

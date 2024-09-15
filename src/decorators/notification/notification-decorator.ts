@@ -1,5 +1,3 @@
-import 'reflect-metadata'
-
 import { Metadata } from '../../base/interfaces/metadata/metadata'
 import { Logger } from '../../modules/logger'
 import { ActorInterface } from '../actor/actor-interface'

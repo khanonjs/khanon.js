@@ -1,5 +1,3 @@
-import 'reflect-metadata'
-
 import * as BABYLON from '@babylonjs/core'
 
 import { LoadingProgress } from '../../base'

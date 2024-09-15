@@ -1,5 +1,3 @@
-import 'reflect-metadata'
-
 import * as BABYLON from '@babylonjs/core'
 
 // import { SpriteInterface as UserSpriteInterface } from '../../' // TODO Why this imported declaration file (src/index.d.ts) is not found in Azure Ubutu tsc compiler?
