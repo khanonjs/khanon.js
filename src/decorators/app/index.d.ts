@@ -58,6 +58,11 @@ export interface AppProps {
   name: string
 
   /**
+   * Initial state of the application
+   */
+  startState: AppStateConstructor // 8a8f
+
+  /**
    * HTML div element 'id' where Khanon.js will create the canvas for Babylon.js.
    * Default value is 'khanonjs'.
    */
@@ -80,16 +85,6 @@ export interface AppProps {
    * This feature is only present in development mode (NODE_ENV = 'development').
    */
   debugLog?: boolean
-
-  /**
-   * Logs canvas size in case it has been resized
-   */
-  logCanvasSize?: boolean
-
-  /**
-   * List of available GUIs at any time
-   */
-  // guis?: GUIConstructor[]
 }
 
 export declare function App(props: AppProps): any
