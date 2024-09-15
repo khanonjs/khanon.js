@@ -1,6 +1,10 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.getDisplayName = exports.getReadme = exports.getComment = exports.classNames = exports.wbr = void 0;
+exports.wbr = wbr;
+exports.classNames = classNames;
+exports.getComment = getComment;
+exports.getReadme = getReadme;
+exports.getDisplayName = getDisplayName;
 const typedoc_1 = require("typedoc");
 /**
  * Insert word break tags ``<wbr>`` into the given string.
@@ -23,7 +27,6 @@ function wbr(str) {
     ret.push(str.slice(i));
     return ret;
 }
-exports.wbr = wbr;
 function classNames(names, extraCss) {
     const css = Object.keys(names)
         .filter((key) => names[key])
@@ -33,7 +36,6 @@ function classNames(names, extraCss) {
         .replace(/\s+/g, ' ');
     return css.length ? css : undefined;
 }
-exports.classNames = classNames;
 function getComment(model) {
     const comment = model.comment || model.signatures?.[0].comment;
     const summary = comment?.summary;
@@ -56,12 +58,10 @@ function getComment(model) {
         ? typedoc_1.JSX.createElement('div', { class: 'menu-item-desc' }, parsedCommentContent)
         : '';
 }
-exports.getComment = getComment;
 function getReadme(model) {
     const readme = model.readme?.[0]?.text.split(/(\r?\n)+/)[0].replace(/#+\s*/, '');
     return readme ? typedoc_1.JSX.createElement("div", { class: "menu-item-desc" }, readme) : '';
 }
-exports.getReadme = getReadme;
 function getDisplayName(refl) {
     let version = '';
     if ((refl instanceof typedoc_1.DeclarationReflection || refl instanceof typedoc_1.ProjectReflection) &&
@@ -70,4 +70,3 @@ function getDisplayName(refl) {
     }
     return `${refl.name}${version}`;
 }
-exports.getDisplayName = getDisplayName;

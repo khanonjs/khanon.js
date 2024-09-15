@@ -25,9 +25,7 @@
     "./src/types/index.d.ts",
   ],
   "out": "api-docs",
-  "plugin": [
-    "@mxssfd/typedoc-theme"
-  ],
+  "plugin": ["@mxssfd/typedoc-theme"],
   "theme": "my-theme",
   "sort": [
     "source-order"

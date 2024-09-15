@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.navigation = void 0;
+exports.navigation = navigation;
 const typedoc_1 = require("typedoc");
 const utils_1 = require("../utils");
 function navigation(context, props) {
@@ -8,14 +8,16 @@ function navigation(context, props) {
     // Recurse to children if the parent is some kind of module
     return (typedoc_1.JSX.createElement("nav", { class: "tsd-navigation" },
         link(props.project),
-        typedoc_1.JSX.createElement("ul", { class: "tsd-small-nested-navigation" }, props.project.children?.map((c) => typedoc_1.JSX.createElement("li", null, links(c))))));
+        typedoc_1.JSX.createElement("ul", { class: "tsd-small-nested-navigation" },
+            props.project.documents?.map((c) => typedoc_1.JSX.createElement("li", null, links(c))),
+            props.project.children?.map((c) => typedoc_1.JSX.createElement("li", null, links(c))))));
     function links(mod) {
         const children = (mod.kindOf(typedoc_1.ReflectionKind.SomeModule | typedoc_1.ReflectionKind.Project) && mod.children) || [];
         const nameClasses = (0, utils_1.classNames)({ deprecated: mod.isDeprecated() }, mod.isProject() ? void 0 : context.getReflectionClasses(mod));
         if (!children.length) {
             return link(mod, utils_1.getComment, nameClasses);
         }
-        return (typedoc_1.JSX.createElement("details", { class: (0, utils_1.classNames)({ 'tsd-index-accordion': true }, nameClasses), open: inPath(mod), "data-key": mod.getFullName() },
+        return (typedoc_1.JSX.createElement("details", { class: (0, utils_1.classNames)({ 'tsd-accordion': true }, nameClasses), open: inPath(mod), "data-key": mod.getFullName() },
             typedoc_1.JSX.createElement("summary", { class: "tsd-accordion-summary" },
                 context.icons.chevronDown(),
                 link(mod)),
@@ -54,4 +56,3 @@ function navigation(context, props) {
         return capitalString[0].toUpperCase() + capitalString.slice(1);
     }
 }
-exports.navigation = navigation;
