@@ -58,11 +58,6 @@ export interface AppProps {
   name: string
 
   /**
-   * Initial state of the application
-   */
-  startState: AppStateConstructor // 8a8f
-
-  /**
    * HTML div element 'id' where Khanon.js will create the canvas for Babylon.js.
    * Default value is 'khanonjs'.
    */
