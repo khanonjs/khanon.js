@@ -111,9 +111,10 @@ export function Scene(props: SceneProps = {}): any {
         this._started = true
         this.switchState(state, stateSetup)
         invokeCallback(this.onStart, this)
-        if (!this.camera) {
-          Logger.debugError('Please set a camera before starting the scene. Do it in the (Scene / SceneState) \'onSart\' method:', _class.prototype)
+        if (!this.loaded) {
+          Logger.warn('Starting a scene that hasn\'t been loaded. Are you sure you want to do this?', _class.prototype)
         }
+        if (!this.camera) { Logger.debugError('Please set a camera before starting the scene. Do it in the (Scene / SceneState) \'onSart\' method:', _class.prototype); return null as any }
         Core.startRenderScene(this)
         attachLoopUpdate(this)
         attachCanvasResize(this)
@@ -136,13 +137,12 @@ export function Scene(props: SceneProps = {}): any {
         this.babylon.scene = new BABYLON.Scene(Core.engine, this.props.options)
         if (this.props.configuration) {
           for (const [key, value] of Object.entries(this.props.configuration)) {
-            // TODO test this
             this.babylon.scene[key] = value
           }
         }
 
         // Babylon inspector (only DEV mode). Babylon inspector's imports are removed on webpack build.
-        if (Core.isDevelopmentMode()) { // TODO uno por escena, permitir solo uno activo
+        if (Core.isDevelopmentMode()) { // TODO one per scene, allow only one at the same time
           this.debugInspector()
         }
 

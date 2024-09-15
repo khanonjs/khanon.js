@@ -3,6 +3,7 @@ import * as BABYLON from '@babylonjs/core'
 /**
  * Shortcut to basic babylon transform methods and variables
  */
+/** @interface */
 export type MeshTransform = Pick<BABYLON.Mesh,
     'absolutePosition'
   | 'absoluteRotationQuaternion'

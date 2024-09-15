@@ -1,10 +1,7 @@
 import * as BABYLON from '@babylonjs/core'
 
-// import { Scene as BabylonJsScene } from '@babylonjs/core/scene'
-// interface SceneClone extends BabylonJsScene {}
-
 // VERSION: Review on each babylon update
-// TODO: How to show this properly in typedoc?
+/** @interface */
 export type SceneConfiguration = Partial<Pick<BABYLON.Scene,
   'ambientColor' |
   'animationTimeScale' |

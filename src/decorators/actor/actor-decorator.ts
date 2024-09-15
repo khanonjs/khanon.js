@@ -291,12 +291,12 @@ export function Actor(props: ActorProps = {}): any {
       load(scene: SceneInterface): LoadingProgress {
         const progress = new LoadingProgress().complete()
         ActorStatesController.load(this.props.states, scene)
+        ActorActionsController.load(this.props.actions, scene)
+        ActorActionsController.load(this.Instance.metadata.getProps().actions, scene)
         SpritesController.load(this.props.sprites, scene)
         SpritesController.load(this.Instance.metadata.getProps().sprites, scene)
         MeshesController.load(this.props.meshes, scene)
         MeshesController.load(this.Instance.metadata.getProps().meshes, scene)
-        ActorActionsController.load(this.props.actions, scene)
-        ActorActionsController.load(this.Instance.metadata.getProps().actions, scene)
         ParticlesController.load(this.props.particles, scene)
         ParticlesController.load(this.Instance.metadata.getProps().particles, scene)
         return progress
@@ -304,12 +304,12 @@ export function Actor(props: ActorProps = {}): any {
 
       unload(scene: SceneInterface): void {
         ActorStatesController.unload(this.props.states, scene)
+        ActorActionsController.unload(this.props.actions, scene)
+        ActorActionsController.unload(this.Instance.metadata.getProps().actions, scene)
         SpritesController.unload(this.props.sprites, scene)
         SpritesController.unload(this.Instance.metadata.getProps().sprites, scene)
         MeshesController.unload(this.props.meshes, scene)
         MeshesController.unload(this.Instance.metadata.getProps().meshes, scene)
-        ActorActionsController.unload(this.props.actions, scene)
-        ActorActionsController.unload(this.Instance.metadata.getProps().actions, scene)
         ParticlesController.unload(this.props.particles, scene)
         ParticlesController.unload(this.Instance.metadata.getProps().particles, scene)
       }
