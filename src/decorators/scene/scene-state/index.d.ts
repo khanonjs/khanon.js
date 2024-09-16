@@ -1,6 +1,7 @@
 import { SceneInterface } from '../'
 import { Rect } from '../../../models'
 import { FlexId } from '../../../types'
+import { ActorConstructor } from '../../actor'
 import { CameraConstructor } from '../../camera'
 import { MeshConstructor } from '../../mesh'
 import { ParticleConstructor } from '../../particle'
@@ -59,6 +60,11 @@ export declare abstract class SceneStateInterface<S = any, C = SceneInterface> {
 export type SceneStateConstructor = new () => SceneStateInterface
 
 export interface SceneStateProps {
+  /**
+   * Actors to spawn in this state.
+   */
+  actors?: ActorConstructor[]
+
   /**
    * Sprites to use in this action.
    */

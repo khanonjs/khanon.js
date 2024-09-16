@@ -8,11 +8,15 @@ import { ActorActionCore } from '../decorators/actor/actor-action/actor-action-c
 import { ActorActionInterface } from '../decorators/actor/actor-action/actor-action-interface'
 import { ActorCore } from '../decorators/actor/actor-core'
 import { ActorInterface } from '../decorators/actor/actor-interface'
+import { ActorStateCore } from '../decorators/actor/actor-state/actor-state-core'
+import { ActorStateInterface } from '../decorators/actor/actor-state/actor-state-interface'
 import { ParticleCore } from '../decorators/particle/particle-core'
 import { ParticleInterface } from '../decorators/particle/particle-interface'
 import { SceneActionCore } from '../decorators/scene/scene-action/scene-action-core'
 import { SceneActionInterface } from '../decorators/scene/scene-action/scene-action-interface'
 import { SceneInterface } from '../decorators/scene/scene-interface'
+import { SceneStateCore } from '../decorators/scene/scene-state/scene-state-core'
+import { SceneStateInterface } from '../decorators/scene/scene-state/scene-state-interface'
 import { SpriteCore } from '../decorators/sprite/sprite-core'
 import { SpriteInterface } from '../decorators/sprite/sprite-interface'
 import { AssetDefinition } from '../models/asset-definition'
@@ -22,10 +26,12 @@ import {
   isPrototypeOf,
   objectToString
 } from '../utils/utils'
+import { ActorStatesController } from './actor-states-controller'
 import { ActorActionsController } from './actors-actions-controller'
 import { ActorsController } from './actors-controller'
 import { ParticlesController } from './particles-controller'
 import { SceneActionsController } from './scene-actions-controller'
+import { SceneStatesController } from './scene-states-controller'
 import { SpritesController } from './sprites-controller'
 
 export class AssetsController {
@@ -51,6 +57,21 @@ export class AssetsController {
       for (const property of Object.values(source)) {
         if (Array.isArray(property)) {
           property.forEach(value => {
+            if (isPrototypeOf(SceneStateInterface, value)) {
+              const state = SceneStatesController.get<SceneStateCore>(value)
+              definitions = [...definitions, ...AssetsController.findAssetsDefinitions(state.props, urls)]
+              definitions = [...definitions, ...AssetsController.findAssetsDefinitions(state.Instance.metadata.getProps(), urls)]
+            }
+            if (isPrototypeOf(ActorStateInterface, value)) {
+              const state = ActorStatesController.get<ActorStateCore>(value)
+              definitions = [...definitions, ...AssetsController.findAssetsDefinitions(state.props, urls)]
+              definitions = [...definitions, ...AssetsController.findAssetsDefinitions(state.Instance.metadata.getProps(), urls)]
+            }
+            if (isPrototypeOf(SceneActionInterface, value)) {
+              const action = SceneActionsController.get<SceneActionCore>(value)
+              definitions = [...definitions, ...AssetsController.findAssetsDefinitions(action.props, urls)]
+              definitions = [...definitions, ...AssetsController.findAssetsDefinitions(action.Instance.metadata.getProps(), urls)]
+            }
             if (isPrototypeOf(ActorActionInterface, value)) {
               const action = ActorActionsController.get<ActorActionCore>(value)
               definitions = [...definitions, ...AssetsController.findAssetsDefinitions(action.props, urls)]

@@ -3,6 +3,7 @@ import * as BABYLON from '@babylonjs/core'
 import { LoadingProgress } from '../../../base'
 import { Metadata } from '../../../base/interfaces/metadata/metadata'
 import {
+  ActorsController,
   MeshesController,
   ParticlesController,
   SceneStatesController,
@@ -79,6 +80,7 @@ export function SceneState(props: SceneStateProps = {}): any {
 
       load(scene: SceneInterface): LoadingProgress {
         const progress = new LoadingProgress().complete()
+        ActorsController.load(this.props.actors, scene)
         SpritesController.load(this.props.sprites, scene)
         SpritesController.load(this.Instance.metadata?.getProps().sprites, scene)
         MeshesController.load(this.props.meshes, scene)
@@ -89,6 +91,7 @@ export function SceneState(props: SceneStateProps = {}): any {
       }
 
       unload(scene: SceneInterface): void {
+        ActorsController.unload(this.props.actors, scene)
         SpritesController.unload(this.props.sprites, scene)
         SpritesController.unload(this.Instance.metadata?.getProps().sprites, scene)
         MeshesController.unload(this.props.meshes, scene)
