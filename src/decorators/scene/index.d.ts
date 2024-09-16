@@ -137,12 +137,12 @@ export declare abstract class SceneInterface {
   get state(): SceneStateInterface
 
   /**
-   * Scene spawn methods.
+   * Scene spawn class.
    */
   get spawn(): SceneSpawn
 
   /**
-   * Scene remove methods.
+   * Scene remove class.
    */
   get remove(): SceneRemove
 

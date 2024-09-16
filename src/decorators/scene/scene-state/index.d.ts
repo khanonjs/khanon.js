@@ -1,4 +1,8 @@
-import { SceneInterface } from '../'
+import {
+  SceneInterface,
+  SceneRemove,
+  SceneSpawn
+} from '../'
 import { Rect } from '../../../models'
 import { FlexId } from '../../../types'
 import { ActorConstructor } from '../../actor'
@@ -17,6 +21,16 @@ export declare abstract class SceneStateInterface<S = any, C = SceneInterface> {
    * Initial setup of the state.
    */
   get setup(): S
+
+  /**
+   * Scene spawn class.
+   */
+  get spawn(): SceneSpawn
+
+  /**
+   * Scene remove class.
+   */
+  get remove(): SceneRemove
 
   /**
    * Turns on/off the 'onLoopUpdate' callback.

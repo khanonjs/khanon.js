@@ -22,6 +22,8 @@ import {
 } from '../../../utils/utils'
 import { CameraConstructor } from '../../camera/camera-constructor'
 import { SceneInterface } from '../scene-interface'
+import { SceneRemove } from '../scene-remove'
+import { SceneSpawn } from '../scene-spawn'
 import { SceneStateCore } from './scene-state-core'
 import { SceneStateInterface } from './scene-state-interface'
 import { SceneStateProps } from './scene-state-props'
@@ -32,17 +34,26 @@ export function SceneState(props: SceneStateProps = {}): any {
       constructor(readonly scene: SceneInterface, props: SceneStateProps) {
         super()
         this.props = props
-        this.metadata.applyProps(this)
+        if (this.scene) {
+          this._spawn = this.scene.spawn
+          this._remove = this.scene.remove
+          this.metadata.applyProps(this)
+        }
       }
 
       props: SceneStateProps
       setup: any
       loopUpdate$: BABYLON.Observer<number>
       canvasResize$: BABYLON.Observer<Rect>
+      _spawn: SceneSpawn
+      _remove: SceneRemove
       metadata: Metadata = Reflect.getMetadata('metadata', this) ?? new Metadata()
 
       set loopUpdate(value: boolean) { switchLoopUpdate(value, this) }
       get loopUpdate(): boolean { return !!this.loopUpdate$ }
+
+      get spawn(): SceneSpawn { return this._spawn }
+      get remove(): SceneRemove { return this._remove }
 
       setCamera(camera: CameraConstructor, setup: any): void {
         this.scene.setCamera(camera, setup)

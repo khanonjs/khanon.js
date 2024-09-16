@@ -6,6 +6,8 @@ import { Rect } from '../../../models/rect'
 import { FlexId } from '../../../types/flex-id'
 import { CameraConstructor } from '../../camera/camera-constructor'
 import { SceneInterface } from '../scene-interface'
+import { SceneRemove } from '../scene-remove'
+import { SceneSpawn } from '../scene-spawn'
 import { SceneStateProps } from './scene-state-props'
 
 export abstract class SceneStateInterface<S = any, C = SceneInterface> implements StateInterface<S> {
@@ -13,6 +15,8 @@ export abstract class SceneStateInterface<S = any, C = SceneInterface> implement
   abstract metadata: Metadata
   abstract loopUpdate$: BABYLON.Observer<number>
   abstract canvasResize$: BABYLON.Observer<Rect>
+  abstract _spawn: SceneSpawn
+  abstract _remove: SceneRemove
   abstract start(setup: any): void
   abstract end(): void
 
@@ -21,6 +25,8 @@ export abstract class SceneStateInterface<S = any, C = SceneInterface> implement
    */
   abstract scene: C
   abstract setup: S
+  abstract get spawn(): SceneSpawn
+  abstract get remove(): SceneRemove
   abstract get loopUpdate(): boolean
   abstract set loopUpdate(value: boolean)
   abstract setCamera(camera: CameraConstructor, setup: any): void
