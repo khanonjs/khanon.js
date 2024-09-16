@@ -14,6 +14,7 @@ import { Rect } from '../../models/rect'
 import { FlexId } from '../../types/flex-id'
 import { ActorInterface } from '../actor/actor-interface'
 import { CameraConstructor } from '../camera/camera-constructor'
+import { CameraInterface } from '../camera/camera-interface'
 import { MeshInterface } from '../mesh/mesh-interface'
 import { ParticleInterface } from '../particle/particle-interface'
 import { SpriteInterface } from '../sprite/sprite-interface'
@@ -34,6 +35,7 @@ export abstract class SceneInterface implements Loadable, LoopUpdatable, CanvasR
   protected abstract _state: SceneStateInterface
   protected abstract _spawn: SceneSpawn
   protected abstract _remove: SceneRemove
+  protected abstract _camera: CameraInterface
   abstract availableElements: SceneAvailableElements
   abstract assets: AssetDefinition[]
   abstract metadata: Metadata
@@ -63,6 +65,7 @@ export abstract class SceneInterface implements Loadable, LoopUpdatable, CanvasR
   abstract load(): LoadingProgress
   abstract unload(): void
   abstract setCamera(camera: CameraConstructor, setup: any): void
+  abstract getCamera<C extends CameraInterface = CameraInterface>(): C
   abstract switchState(state: SceneStateConstructor, setup: any): void
   abstract playAction(action: SceneActionConstructor | ((delta: number) => void), setup: any): void
   abstract getAction(actionConstructor: SceneActionConstructor): SceneActionInterface | undefined

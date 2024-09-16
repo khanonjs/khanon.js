@@ -21,6 +21,7 @@ import {
   switchLoopUpdate
 } from '../../../utils/utils'
 import { CameraConstructor } from '../../camera/camera-constructor'
+import { CameraInterface } from '../../camera/camera-interface'
 import { SceneInterface } from '../scene-interface'
 import { SceneRemove } from '../scene-remove'
 import { SceneSpawn } from '../scene-spawn'
@@ -57,6 +58,10 @@ export function SceneState(props: SceneStateProps = {}): any {
 
       setCamera(camera: CameraConstructor, setup: any): void {
         this.scene.setCamera(camera, setup)
+      }
+
+      getCamera<C extends CameraInterface = CameraInterface>(): C {
+        return this.scene.getCamera()
       }
 
       start(setup: any): void {

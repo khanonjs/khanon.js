@@ -13,7 +13,10 @@ import {
   ActorConstructor,
   ActorInterface
 } from '../actor'
-import { CameraConstructor } from '../camera'
+import {
+  CameraConstructor,
+  CameraInterface
+} from '../camera'
 import { GUIConstructor } from '../gui'
 import {
   MeshConstructor,
@@ -179,6 +182,11 @@ export declare abstract class SceneInterface {
    * @param setup
    */
   setCamera<C extends CameraConstructor>(camera: C, setup: InstanceType<C>['setup']): void // TODO is it possible to make 'setup' argument optional whether InstanceType<S>['setup'] type is 'any'?
+
+  /**
+   * Gets the camera. Use the generic 'C' to set the returning camera type.
+   */
+  getCamera<C extends CameraInterface = CameraInterface>(): C
 
   /**
    * Set the state.

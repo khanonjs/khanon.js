@@ -6,7 +6,10 @@ import {
 import { Rect } from '../../../models'
 import { FlexId } from '../../../types'
 import { ActorConstructor } from '../../actor'
-import { CameraConstructor } from '../../camera'
+import {
+  CameraConstructor,
+  CameraInterface
+} from '../../camera'
 import { MeshConstructor } from '../../mesh'
 import { ParticleConstructor } from '../../particle'
 import { SpriteConstructor } from '../../sprite'
@@ -42,6 +45,11 @@ export declare abstract class SceneStateInterface<S = any, C = SceneInterface> {
    * Sets a camera.
    */
   setCamera<C extends CameraConstructor>(camera: C, setup: InstanceType<C>['setup']): void
+
+  /**
+   * Gets the camera. Use the generic 'C' to set the returning camera type.
+   */
+  getCamera<C extends CameraInterface = CameraInterface>(): C
 
   /**
    * Notifies a message to this sstate.

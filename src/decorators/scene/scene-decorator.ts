@@ -209,6 +209,10 @@ export function Scene(props: SceneProps = {}): any {
         this._camera.start()
       }
 
+      getCamera<C extends CameraInterface = CameraInterface>(): C {
+        return this._camera as C
+      }
+
       switchState(state: SceneStateConstructor, setup: any): SceneStateInterface {
         if (!this.availableElements.hasSceneState(state)) { Logger.debugError('Trying to set a state non available to the scene. Please check the scene props.', _class.prototype, state.prototype); return null as any }
         const _state = SceneStatesController.get(state).spawn(this)

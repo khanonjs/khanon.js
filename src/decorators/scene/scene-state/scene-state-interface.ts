@@ -5,6 +5,7 @@ import { Metadata } from '../../../base/interfaces/metadata/metadata'
 import { Rect } from '../../../models/rect'
 import { FlexId } from '../../../types/flex-id'
 import { CameraConstructor } from '../../camera/camera-constructor'
+import { CameraInterface } from '../../camera/camera-interface'
 import { SceneInterface } from '../scene-interface'
 import { SceneRemove } from '../scene-remove'
 import { SceneSpawn } from '../scene-spawn'
@@ -30,6 +31,7 @@ export abstract class SceneStateInterface<S = any, C = SceneInterface> implement
   abstract get loopUpdate(): boolean
   abstract set loopUpdate(value: boolean)
   abstract setCamera(camera: CameraConstructor, setup: any): void
+  abstract getCamera<C extends CameraInterface = CameraInterface>(): C
   abstract notify(message: FlexId, ...args: any[]): void
 
   /**
