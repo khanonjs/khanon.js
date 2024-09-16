@@ -14,9 +14,11 @@ function load(app) {
     app.renderer.hooks.on('body.begin', (_) => (typedoc_1.JSX.createElement("script", null,
         typedoc_1.JSX.createElement(typedoc_1.JSX.Raw, { html: "console.log(`Loaded ${location.href}`)" }))));
     app.renderer.on(typedoc_1.RendererEvent.END, () => {
-        const from = (0, path_1.resolve)(__dirname, '../assets/style.css');
-        const to = (0, path_1.resolve)(app.options.getValue('out'), 'assets/my-theme.css');
-        (0, fs_1.cpSync)(from, to);
+        const moveList = [
+            ['style.css', 'my-theme.css'],
+            ['onload.js', 'onload.js'],
+        ];
+        moveList.forEach(([from, to]) => (0, fs_1.cpSync)((0, path_1.resolve)(__dirname, '../assets', from), (0, path_1.resolve)(app.options.getValue('out'), 'assets', to)));
     });
     app.renderer.defineTheme('my-theme', MyTheme_1.MyTheme);
 }

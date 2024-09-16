@@ -19,6 +19,7 @@ const defaultLayout = (context, template, props) => {
             typedoc_1.JSX.createElement("link", { rel: "stylesheet", href: context.relativeURL('assets/my-theme.css') }),
             context.options.getValue('customCss') && (typedoc_1.JSX.createElement("link", { rel: "stylesheet", href: context.relativeURL('assets/custom.css', true) })),
             typedoc_1.JSX.createElement("script", { defer: true, src: context.relativeURL('assets/main.js', true) }),
+            typedoc_1.JSX.createElement("script", { defer: true, src: context.relativeURL('assets/onload.js', true) }),
             typedoc_1.JSX.createElement("script", { async: true, src: context.relativeURL('assets/icons.js', true), id: "tsd-icons-script" }),
             typedoc_1.JSX.createElement("script", { async: true, src: context.relativeURL('assets/search.js', true), id: "tsd-search-script" }),
             typedoc_1.JSX.createElement("script", { async: true, src: context.relativeURL('assets/navigation.js', true), id: "tsd-nav-script" }),
