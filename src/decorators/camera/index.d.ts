@@ -39,6 +39,16 @@ export declare abstract class CameraInterface<S = any> {
   abstract initialize(scene: BABYLON.Scene): BABYLON.Camera
 
   /**
+   * Callback invoked on camera start.
+   */
+  onStart?(): void
+
+  /**
+   * Callback invoked on camera stop.
+   */
+  onStop?(): void
+
+  /**
    * Callback invoked on loop update.
    * Setup object is availaable at this point.
    * @param delta Time differential since last frame.

@@ -7,6 +7,7 @@ import { Logger } from '../../modules/logger'
 import {
   attachCanvasResize,
   attachLoopUpdate,
+  invokeCallback,
   removeCanvasResize,
   removeLoopUpdate,
   switchLoopUpdate
@@ -36,9 +37,11 @@ export function Camera(): any {
       start(): void {
         attachLoopUpdate(this)
         attachCanvasResize(this)
+        invokeCallback(this.onStart, this)
       }
 
       stop(): void {
+        invokeCallback(this.onStop, this)
         removeLoopUpdate(this)
         removeCanvasResize(this)
       }

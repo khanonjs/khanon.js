@@ -31,6 +31,8 @@ export abstract class CameraInterface<S = any> implements LoopUpdatable, CanvasR
   /**
    * User defined optional
    */
+  onStart?(): void
+  onStop?(): void
   onLoopUpdate?(delta: number): void
   onCanvasResize?(size: Rect): void
 }
