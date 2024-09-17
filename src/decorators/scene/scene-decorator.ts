@@ -199,7 +199,7 @@ export function Scene(props: SceneProps = {}): any {
         ParticlesController.unload(this.metadata.getProps().particles, this)
       }
 
-      setCamera(constructor: CameraConstructor): void {
+      switchCamera(constructor: CameraConstructor): void {
         const camera = CamerasController.get(constructor).spawn(this)
         if (this._camera) {
           this._camera.stop()

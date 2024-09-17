@@ -44,7 +44,7 @@ export declare abstract class SceneStateInterface<S = any, C = SceneInterface> {
   /**
    * Sets a camera.
    */
-  setCamera<C extends CameraConstructor>(camera: C, setup: InstanceType<C>['setup']): void
+  switchCamera<C extends CameraConstructor>(camera: C, setup: InstanceType<C>['setup']): void
 
   /**
    * Gets the camera. Use the generic 'C' to set the returning camera type.

@@ -30,7 +30,7 @@ export abstract class SceneStateInterface<S = any, C = SceneInterface> implement
   abstract get remove(): SceneRemove
   abstract get loopUpdate(): boolean
   abstract set loopUpdate(value: boolean)
-  abstract setCamera(camera: CameraConstructor, setup: any): void
+  abstract switchCamera(camera: CameraConstructor, setup: any): void
   abstract getCamera<C extends CameraInterface = CameraInterface>(): C
   abstract notify(message: FlexId, ...args: any[]): void
 

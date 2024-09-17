@@ -56,8 +56,8 @@ export function SceneState(props: SceneStateProps = {}): any {
       get spawn(): SceneSpawn { return this._spawn }
       get remove(): SceneRemove { return this._remove }
 
-      setCamera(camera: CameraConstructor, setup: any): void {
-        this.scene.setCamera(camera, setup)
+      switchCamera(camera: CameraConstructor, setup: any): void {
+        this.scene.switchCamera(camera, setup)
       }
 
       getCamera<C extends CameraInterface = CameraInterface>(): C {

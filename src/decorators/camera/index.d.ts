@@ -33,7 +33,7 @@ export declare abstract class CameraInterface<S = any> {
 
   /**
    * Initialize the camera. This method must return a valid Babylon camera.
-   * It will be used from any SceneState requiring it, or from any scene using 'setCamera' method.
+   * It will be used from any SceneState requiring it, or from any scene using 'switchCamera' method.
    * Setup object isn't availaable at this point.
    */
   abstract initialize(scene: BABYLON.Scene): BABYLON.Camera

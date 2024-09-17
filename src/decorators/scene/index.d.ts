@@ -181,7 +181,7 @@ export declare abstract class SceneInterface {
    * @param camera
    * @param setup
    */
-  setCamera<C extends CameraConstructor>(camera: C, setup: InstanceType<C>['setup']): void // TODO is it possible to make 'setup' argument optional whether InstanceType<S>['setup'] type is 'any'?
+  switchCamera<C extends CameraConstructor>(camera: C, setup: InstanceType<C>['setup']): void // TODO is it possible to make 'setup' argument optional whether InstanceType<S>['setup'] type is 'any'?
 
   /**
    * Gets the camera. Use the generic 'C' to set the returning camera type.
