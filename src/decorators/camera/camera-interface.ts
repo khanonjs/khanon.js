@@ -2,13 +2,17 @@ import * as BABYLON from '@babylonjs/core'
 
 import {
   CanvasResizable,
-  LoopUpdatable
+  LoopUpdatable,
+  Metadata,
+  Notificable
 } from '../../base'
 import { BabylonAccessor } from '../../models/babylon-accessor'
 import { Rect } from '../../models/rect'
+import { FlexId } from '../../types/flex-id'
 import { SceneInterface } from '../scene/scene-interface'
 
-export abstract class CameraInterface<S = any> implements LoopUpdatable, CanvasResizable {
+export abstract class CameraInterface<S = any> implements LoopUpdatable, CanvasResizable, Notificable {
+  abstract metadata: Metadata
   abstract loopUpdate$: BABYLON.Observer<number>
   abstract canvasResize$: BABYLON.Observer<Rect>
   abstract start(): void
@@ -21,6 +25,7 @@ export abstract class CameraInterface<S = any> implements LoopUpdatable, CanvasR
   abstract setup: S
   abstract loopUpdate: boolean
   abstract babylon: Pick<BabylonAccessor<BABYLON.Camera>, 'camera' | 'scene'>
+  abstract notify(message: FlexId, ...args: any[]): void
   // TODO attach particles to camera to simulate environment effects?
 
   /**
