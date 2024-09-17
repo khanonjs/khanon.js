@@ -168,6 +168,7 @@ export function Scene(props: SceneProps = {}): any {
           MeshesController.load(this.metadata.getProps().meshes, this)
           ParticlesController.load(this.props.particles, this)
           ParticlesController.load(this.metadata.getProps().particles, this)
+          this._loaded = true
           this.babylon.scene?.executeWhenReady(() => {
             invokeCallback(this.onLoaded, this)
             sceneProgress.complete()
@@ -224,24 +225,38 @@ export function Scene(props: SceneProps = {}): any {
         return this._state
       }
 
+      getActionOwner(actionConstructor: SceneActionConstructor): SceneInterface | SceneStateInterface | undefined {
+        return this.metadata.getProps().actions?.find(_action => _action === actionConstructor)
+          ? this
+          : this._state?.metadata?.getProps().actions?.find(_action => _action === actionConstructor)
+            ? this._state
+            : undefined
+      }
+
       playAction(actionConstructor: SceneActionConstructor, setup: any): SceneActionInterface {
         if (!this.availableElements.hasSceneAction(actionConstructor)) { Logger.debugError('Trying to play an action non available to the actor. Please check the actor props.', _class.prototype, actionConstructor.prototype); return null as any }
         let action = this.actions.get(actionConstructor)
         if (!action) {
           action = SceneActionsController.get(actionConstructor).spawn(this)
+          let actionOwner: any
           if (!this.props.actions?.find(_action => _action === actionConstructor)) {
             // Applies context 'Scene' or 'SceneState' to 'onLoopUpdate' method to preserve the 'this'
             // in case 'onLoopUpdate' is equivalent to a decorated method of some of those both interfaces.
-            action.onLoopUpdate = action.onLoopUpdate?.bind(
-              this.metadata.getProps().actions?.find(_action => _action === actionConstructor)
-                ? this
-                : this._state?.metadata?.getProps().actions?.find(_action => _action === actionConstructor)
-                  ? this._state
-                  : undefined
-            )
+            actionOwner = this.getActionOwner(actionConstructor)
+            action.onLoopUpdate = action.onLoopUpdate?.bind(actionOwner)
           }
           this.actions.set(actionConstructor, action)
-          action.props.overrides?.forEach(actionOverride => this.stopAction(actionOverride))
+          action.props.overrides?.forEach(actionOverride => {
+            if (typeof actionOverride === 'string') {
+              const overrideConstructor = this.getActionOwner(actionConstructor)?.metadata.actions.find(_action => _action.methodName === actionOverride)?.classDefinition
+              if (!overrideConstructor) { Logger.debugError(`Action class method not found to override: '${actionOverride}'`) }
+              if (actionConstructor) {
+                this.stopAction(overrideConstructor)
+              }
+            } else {
+              this.stopAction(actionOverride)
+            }
+          })
           action.start(setup)
         }
         return action

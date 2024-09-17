@@ -74,9 +74,9 @@ export interface SceneActionProps {
 
   /**
    * List of actions to be overriden on action play.
-   * NOTE: Overrides don't apply to method decorators.
+   * In case it is a string, it makes reference to the method name of an action defined as a class method.
    */
-  overrides?: SceneActionConstructor[]
+  overrides?: (SceneActionConstructor | string)[]
 
   /**
    * Count of number of frames this action is executed.

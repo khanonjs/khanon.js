@@ -154,24 +154,38 @@ export function Actor(props: ActorProps = {}): any {
         this.body?.stopAnimation()
       }
 
+      getActionOwner(actionConstructor: ActorActionConstructor): ActorInterface | ActorStateInterface | undefined {
+        return this.metadata.getProps().actions?.find(_action => _action === actionConstructor)
+          ? this
+          : this._state?.metadata?.getProps().actions?.find(_action => _action === actionConstructor)
+            ? this._state
+            : undefined
+      }
+
       playAction(actionConstructor: ActorActionConstructor, setup: any): ActorActionInterface {
         if (!this.scene.availableElements.hasActorAction(actionConstructor)) { Logger.debugError('Trying to play an action non available to the actor. Please check the actor props.', _classInterface.prototype, actionConstructor.prototype); return null as any }
         let action = this.actions.get(actionConstructor)
         if (!action) {
           action = ActorActionsController.get(actionConstructor).spawn(this)
+          let actionOwner: any
           if (!this.props.actions?.find(_action => _action === actionConstructor)) {
-            // Applies context to 'onLoopUpdate' as caller 'Actor' or 'ActorState' to preserve the 'this'
+            // Applies context 'ActorInterface' or 'ActorStateInterface' to 'onLoopUpdate' method to preserve the 'this'
             // in case 'onLoopUpdate' is equivalent to a decorated method of some of those both interfaces.
-            action.onLoopUpdate = action.onLoopUpdate?.bind(
-              this.metadata.getProps().actions?.find(_action => _action === actionConstructor)
-                ? this
-                : this._state?.metadata.getProps().actions?.find(_action => _action === actionConstructor)
-                  ? this._state
-                  : undefined
-            )
+            actionOwner = this.getActionOwner(actionConstructor)
+            action.onLoopUpdate = action.onLoopUpdate?.bind(actionOwner)
           }
           this.actions.set(actionConstructor, action)
-          action.props.overrides?.forEach(actionOverride => this.stopAction(actionOverride))
+          action.props.overrides?.forEach(actionOverride => {
+            if (typeof actionOverride === 'string') {
+              const overrideConstructor = this.getActionOwner(actionConstructor)?.metadata.actions.find(_action => _action.methodName === actionOverride)?.classDefinition
+              if (!overrideConstructor) { Logger.debugError(`Action class method not found to override: '${actionOverride}'`) }
+              if (actionConstructor) {
+                this.stopAction(overrideConstructor)
+              }
+            } else {
+              this.stopAction(actionOverride)
+            }
+          })
           action.start(setup)
         }
         return action

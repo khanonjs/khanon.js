@@ -67,6 +67,7 @@ export abstract class SceneInterface implements Loadable, LoopUpdatable, CanvasR
   abstract setCamera(camera: CameraConstructor, setup: any): void
   abstract getCamera<C extends CameraInterface = CameraInterface>(): C
   abstract switchState(state: SceneStateConstructor, setup: any): void
+  abstract getActionOwner(actionConstructor: SceneActionConstructor): SceneInterface | SceneStateInterface | undefined
   abstract playAction(action: SceneActionConstructor | ((delta: number) => void), setup: any): void
   abstract getAction(actionConstructor: SceneActionConstructor): SceneActionInterface | undefined
   abstract stopAction(action: SceneActionConstructor): void
