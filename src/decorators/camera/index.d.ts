@@ -4,6 +4,7 @@ import {
   BabylonAccessor,
   Rect
 } from '../../models'
+import { FlexId } from '../../types'
 import { SceneInterface } from '../scene'
 
 /**
@@ -32,14 +33,20 @@ export declare abstract class CameraInterface<S = any> {
   get loopUpdate(): boolean
 
   /**
-   * Initialize the camera. This method must return a valid Babylon camera.
-   * It will be used from any SceneState requiring it, or from any scene using 'switchCamera' method.
-   * Setup object isn't availaable at this point.
+   * Notifies a message to this camera.
+   */
+  notify(message: FlexId, ...args: any[]): void
+
+  /**
+   * Callback you need to implement to initialize the camera.
+   * This method must return a valid Babylon camera.
+   * 'setup' object isn't available at this point.
    */
   abstract initialize(scene: BABYLON.Scene): BABYLON.Camera
 
   /**
    * Callback invoked on camera start.
+   * Use this callback to setup the camera, the 'setup' object is available here.
    */
   onStart?(): void
 
