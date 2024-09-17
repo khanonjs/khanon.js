@@ -195,6 +195,15 @@ export function Actor(props: ActorProps = {}): any {
         return this.actions.get(actionConstructor)
       }
 
+      playActionFromInstance(instance: ActorActionInterface): void {
+        for (const [key, value] of this.actions.entries()) {
+          if (value === instance) {
+            this.playAction(key, {})
+            return
+          }
+        }
+      }
+
       stopActionFromInstance(instance: ActorActionInterface, forceRemove?: boolean) {
         for (const [key, value] of this.actions.entries()) {
           if (value === instance) {

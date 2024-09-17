@@ -266,6 +266,15 @@ export function Scene(props: SceneProps = {}): any {
         return this.actions.get(actionConstructor)
       }
 
+      playActionFromInstance(instance: SceneActionInterface): void {
+        for (const [key, value] of this.actions.entries()) {
+          if (value === instance) {
+            this.playAction(key, {})
+            return
+          }
+        }
+      }
+
       stopActionFromInstance(instance: SceneActionInterface, forceRemove?: boolean) {
         for (const [key, value] of this.actions.entries()) {
           if (value === instance) {

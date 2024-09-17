@@ -22,12 +22,18 @@ export declare abstract class SceneActionInterface</* Setup object */ S = any, /
   get loopUpdate(): boolean
 
   /**
-   * Stops the action. Equivalent to calling 'scene.stopAction'.
+   * Plays the action in case it has been stopped before and it is preserved (props.preserve = true).
+   * This way the action itself controls when it has to stop and play.
+   */
+  play(): void
+
+  /**
+   * Stops the action. The action is if it is not preserved (props.preserve = false).
    */
   stop(): void
 
   /**
-   * Removes the action. Equivalent to calling 'actor.removeAction'.
+   * Removes the action.
    */
   remove(): void
 

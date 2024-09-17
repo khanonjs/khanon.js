@@ -61,6 +61,10 @@ export function SceneAction(props: SceneActionProps = {}): any {
           invokeCallback(this.onPlay, this)
         }
 
+        play(): void {
+          this.scene.playActionFromInstance(this)
+        }
+
         stop(): void {
           this.scene.stopActionFromInstance(this)
         }

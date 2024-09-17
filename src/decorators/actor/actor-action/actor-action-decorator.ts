@@ -15,8 +15,6 @@ import {
   attachCanvasResize,
   attachLoopUpdate,
   invokeCallback,
-  removeCanvasResize,
-  removeLoopUpdate,
   switchLoopUpdate
 } from '../../../utils/utils'
 import { SceneInterface } from '../../scene/scene-interface'
@@ -66,6 +64,10 @@ export function ActorAction(props: ActorActionProps = {}): any {
           attachLoopUpdate(this)
           attachCanvasResize(this)
           invokeCallback(this.onPlay, this)
+        }
+
+        play(): void {
+          // 8a8f
         }
 
         stop(): void {

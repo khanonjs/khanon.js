@@ -21,6 +21,7 @@ export abstract class ActionInterface<S = any> implements LoopUpdatable, CanvasR
   abstract set loopUpdate(value: boolean)
   abstract get loopUpdate(): boolean
   abstract get scene(): SceneInterface
+  abstract play(): void
   abstract stop(): void // Callable from user Action, it will call to 'owner.stopActionFromInstance', then owner calls 'action.end' after remove it.
   abstract remove(): void
 
