@@ -256,9 +256,9 @@ export function Actor(props: ActorProps = {}): any {
         if (!this.scene.availableElements.hasParticle(particleConstructorOrMethod as ParticleConstructor)) { Logger.debugError('Trying to attach a particle non available to the actor. Please check the actor props.', _classInterface.prototype, particleConstructorOrMethod.prototype); return }
         const particle = ParticlesController.get(particleConstructorOrMethod).spawn(this.scene, { attachment: attachmentSprite, offset }, !isMethod)
         if (isMethod) {
-          // Applies context to 'initialize' as caller 'Actor' to preserve the 'this'
+          // Applies context to 'onInitialize' as caller 'Actor' to preserve the 'this'
           // in case 'initialize' is equivalent to a decorated method of some of those both interfaces.
-          particle.initialize = particle.initialize?.bind(this)
+          particle.onInitialize = particle.onInitialize?.bind(this)
           particle.create()
         }
         this.particles.set(id, particle)

@@ -67,7 +67,7 @@ export function Particle(props: ParticleProps): any {
               this.offset = this.props.offset.clone()
             }
             this.babylon.particleSystem = new BABYLON.ParticleSystem(className, this.props.capacity, this.scene.babylon.scene)
-            this.initialize(this)
+            this.onInitialize(this)
             if (this.attachmentInfo.attachment) {
               this.updatePosition()
             } else {
@@ -201,7 +201,7 @@ export function Particle(props: ParticleProps): any {
     ) && descriptor) { // Defined descriptor means it is a decorated method
       @Particle(props)
       abstract class _particleInterface extends ParticleInterface {
-        initialize = descriptor.value
+        onInitialize = descriptor.value
       }
 
       if (!Reflect.hasMetadata('metadata', constructorOrTarget)) {

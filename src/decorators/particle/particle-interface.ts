@@ -45,7 +45,7 @@ export abstract class ParticleInterface implements LoopUpdatable, CanvasResizabl
   /**
    * User defined mandatory (abstract on .d.ts)
    */
-  initialize?(particle: ParticleInterface): void
+  onInitialize?(particle: ParticleInterface): void
 
   /**
    * User defined optional

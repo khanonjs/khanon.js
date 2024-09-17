@@ -205,7 +205,7 @@ export function Scene(props: SceneProps = {}): any {
           this._camera.stop()
         }
         this._camera = camera
-        this._camera.babylon.camera = (this._camera.initialize as any)(this.babylon.scene)
+        this._camera.babylon.camera = (this._camera.onInitialize as any)(this.babylon.scene)
         this._camera.babylon.camera.attachControl(Core.canvas, true)
         this._camera.start()
       }

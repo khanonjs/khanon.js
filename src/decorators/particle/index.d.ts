@@ -52,12 +52,12 @@ export abstract class ParticleInterface {
   setAnimation(id: FlexId, cellChangeSpeed?: number, randomStartCell?: boolean): void
 
   /**
-   * Initialize the particle.
-   * You can use a custom created texture (remember to release it in the 'onRelease' method).
-   * Or you can set a sprite texture using 'setSprite' method.
+   * You need to implement this method to initialize the particle.
+   * Use the 'setSprite' method to use a sprite in the particle.
+   * Or you can use a custom created texture, but don't forget to release it in the 'onRelease' method.
    * @param particle
    */
-  abstract initialize(particle: ParticleInterface): void
+  abstract onInitialize(particle: ParticleInterface): void
 
   /**
    * Notifies a message to this particle.

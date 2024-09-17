@@ -31,7 +31,7 @@ export abstract class CameraInterface<S = any> implements LoopUpdatable, CanvasR
   /**
    * User defined mandatory (abstract on .d.ts)
    */
-  initialize?(scene: BABYLON.Scene): BABYLON.Camera
+  onInitialize?(scene: BABYLON.Scene): BABYLON.Camera
 
   /**
    * User defined optional

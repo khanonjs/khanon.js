@@ -14,7 +14,7 @@ export declare abstract class CameraInterface<S = any> {
   /**
    * Babylon.js objects.
    */
-  get babylon(): Pick<BabylonAccessor<ReturnType<this['initialize']>>, 'camera' | 'scene'>
+  get babylon(): Pick<BabylonAccessor<ReturnType<this['onInitialize']>>, 'camera' | 'scene'>
 
   /**
    * Owner scene.
@@ -42,7 +42,7 @@ export declare abstract class CameraInterface<S = any> {
    * This method must return a valid Babylon camera.
    * 'setup' object isn't available at this point.
    */
-  abstract initialize(scene: BABYLON.Scene): BABYLON.Camera
+  abstract onInitialize(scene: BABYLON.Scene): BABYLON.Camera
 
   /**
    * Callback invoked on camera start.
