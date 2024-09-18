@@ -18,6 +18,7 @@ import { SceneInterface } from '../scene/scene-interface'
 import { CameraCore } from './camera-core'
 import { CameraInterface } from './camera-interface'
 
+// TODO add CameraAction
 export function Camera(): any {
   return function <T extends { new (...args: any[]): CameraInterface }>(constructor: T & CameraInterface, context: ClassDecoratorContext) {
     const _classInterface = class extends constructor implements CameraInterface {

@@ -191,10 +191,6 @@ export function Actor(props: ActorProps = {}): any {
         return action
       }
 
-      getAction(actionConstructor: ActorActionConstructor): ActorActionInterface | undefined {
-        return this.actions.get(actionConstructor)
-      }
-
       playActionFromInstance(instance: ActorActionInterface): void {
         for (const [key, value] of this.actions.entries()) {
           if (value === instance) {
@@ -226,7 +222,15 @@ export function Actor(props: ActorProps = {}): any {
         }
       }
 
-      stopActionGroup(group: number, forceRemove?: boolean): void {
+      playActionGroup(group: FlexId): void {
+        this.actions.forEach((action, actionConstructor) => {
+          if (action.props.group !== undefined && action.props.group === group) {
+            this.playAction(actionConstructor, {})
+          }
+        })
+      }
+
+      stopActionGroup(group: FlexId, forceRemove?: boolean): void {
         this.actions.forEach((action, actionConstructor) => {
           if (action.props.group !== undefined && action.props.group === group) {
             this.stopAction(actionConstructor, forceRemove)
@@ -244,12 +248,16 @@ export function Actor(props: ActorProps = {}): any {
         this.stopAction(actionConstructor, true)
       }
 
-      removeActionGroup(group: number): void {
+      removeActionGroup(group: FlexId): void {
         this.stopActionGroup(group, true)
       }
 
       removeActionAll(): void {
         this.stopActionAll(true)
+      }
+
+      getAction(actionConstructor: ActorActionConstructor): ActorActionInterface | undefined {
+        return this.actions.get(actionConstructor)
       }
 
       attachParticle(particleConstructorOrMethod: ParticleConstructor | ((particle: ParticleInterface) => void), id: FlexId, offset: BABYLON.Vector3, nodeName?: string): void {

@@ -1,5 +1,6 @@
 import { ActorInterface } from '../'
 import { Rect } from '../../../models'
+import { FlexId } from '../../../types'
 import {
   MeshConstructor,
   MeshInterface
@@ -83,10 +84,12 @@ export interface ActorActionProps {
   /**
    * All actions of a group can be stopped from 'actor.stopActionGroup'.
    */
-  group?: number
+  group?: FlexId
 
   /**
-   * 'false' by default. Preserves the action instance, not removing it after stop.
+   * 'false' by default.
+   * If preserve is 'false', the action is removed after stop it. The next action play will create a new instance.
+   * If preserve is 'true', the action is preserved after stop it, keeping the instance and being able to be played again with last values.
    */
   preserve?: boolean
 

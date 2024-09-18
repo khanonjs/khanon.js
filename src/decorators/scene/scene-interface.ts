@@ -70,13 +70,14 @@ export abstract class SceneInterface implements Loadable, LoopUpdatable, CanvasR
   abstract switchState(state: SceneStateConstructor, setup: any): void
   abstract getActionOwner(actionConstructor: SceneActionConstructor): SceneInterface | SceneStateInterface | undefined
   abstract playAction(action: SceneActionConstructor | ((delta: number) => void), setup: any): void
-  abstract getAction(actionConstructor: SceneActionConstructor): SceneActionInterface | undefined
   abstract stopAction(action: SceneActionConstructor): void
-  abstract stopActionGroup(group: number): void
+  abstract playActionGroup(group: FlexId): void
+  abstract stopActionGroup(group: FlexId): void
   abstract stopActionAll(): void
   abstract removeAction(actionConstructor: SceneActionConstructor, forceRemove?: boolean): void
-  abstract removeActionGroup(group: number, forceRemove?: boolean): void
+  abstract removeActionGroup(group: FlexId, forceRemove?: boolean): void
   abstract removeActionAll(forceRemove?: boolean): void
+  abstract getAction(actionConstructor: SceneActionConstructor): SceneActionInterface | undefined
   abstract notify(message: FlexId, ...args: any[]): void
 
   /**

@@ -141,10 +141,10 @@ export declare abstract class ActorInterface<B extends SpriteInterface | MeshInt
   playAction<S extends ActorActionConstructor>(action: S | ((delta: number, setup: any) => void), setup: InstanceType<S>['setup']): InstanceType<S> // TODO is it possible to make 'setup' argument optional whether InstanceType<S>['setup'] type is 'any'?
 
   /**
-   * Gets an action.
-   * @param actionConstructor
+   * Plays all actions of a group that have been previously stopped.
+   * @param group
    */
-  getAction(actionConstructor: ActorActionConstructor): ActorActionInterface | undefined
+  playActionGroup(group: FlexId): void
 
   /**
    * Stops an action. If the actions prop 'preserve' prop is 'false', it will be removed.
@@ -157,7 +157,7 @@ export declare abstract class ActorInterface<B extends SpriteInterface | MeshInt
    * Stops all actions of a group. All the actions with 'preserve' prop as 'false' will be removed.
    * @param group
    */
-  stopActionGroup(group: number, forceRemove?: boolean): void
+  stopActionGroup(group: FlexId, forceRemove?: boolean): void
 
   /**
    * Stops all actions. All the actions with 'preserve' prop as 'false' will be removed.
@@ -173,12 +173,18 @@ export declare abstract class ActorInterface<B extends SpriteInterface | MeshInt
    * Stops and removes all actions of a group.
    * @param group
    */
-  removeActionGroup(group: number): void
+  removeActionGroup(group: FlexId): void
 
   /**
    * Stops and removes all actions.
    */
   removeActionAll(): void
+
+  /**
+   * Gets an action.
+   * @param actionConstructor
+   */
+  getAction(actionConstructor: ActorActionConstructor): ActorActionInterface | undefined
 
   /**
    * Attachs a particle to this actor.

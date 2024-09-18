@@ -262,10 +262,6 @@ export function Scene(props: SceneProps = {}): any {
         return action
       }
 
-      getAction(actionConstructor: SceneActionConstructor): SceneActionInterface | undefined {
-        return this.actions.get(actionConstructor)
-      }
-
       playActionFromInstance(instance: SceneActionInterface): void {
         for (const [key, value] of this.actions.entries()) {
           if (value === instance) {
@@ -297,7 +293,15 @@ export function Scene(props: SceneProps = {}): any {
         }
       }
 
-      stopActionGroup(group: number, forceRemove?: boolean): void {
+      playActionGroup(group: FlexId): void {
+        this.actions.forEach((action, actionConstructor) => {
+          if (action.props.group !== undefined && action.props.group === group) {
+            this.playAction(actionConstructor, {})
+          }
+        })
+      }
+
+      stopActionGroup(group: FlexId, forceRemove?: boolean): void {
         this.actions.forEach((action, actionConstructor) => {
           if (action.props.group !== undefined && action.props.group === group) {
             this.stopAction(actionConstructor, forceRemove)
@@ -315,12 +319,16 @@ export function Scene(props: SceneProps = {}): any {
         this.stopAction(actionConstructor, true)
       }
 
-      removeActionGroup(group: number): void {
+      removeActionGroup(group: FlexId): void {
         this.stopActionGroup(group, true)
       }
 
       removeActionAll(): void {
         this.stopActionAll(true)
+      }
+
+      getAction(actionConstructor: SceneActionConstructor): SceneActionInterface | undefined {
+        return this.actions.get(actionConstructor)
       }
 
       notify(message: FlexId, ...args: any[]): void {
