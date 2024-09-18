@@ -10,7 +10,7 @@ import { SceneInterface } from '../scene'
 /**
  * @param S Camera setup object.
  */
-export declare abstract class CameraInterface<S = any> {
+export declare abstract class CameraInterface</* Setup object */ S = any, /* Scene object */ C = SceneInterface> {
   /**
    * Babylon.js objects.
    */
@@ -19,7 +19,7 @@ export declare abstract class CameraInterface<S = any> {
   /**
    * Owner scene.
    */
-  get scene(): SceneInterface
+  get scene(): C
 
   /**
    * Gets teh setup object.

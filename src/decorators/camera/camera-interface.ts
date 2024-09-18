@@ -11,7 +11,7 @@ import { Rect } from '../../models/rect'
 import { FlexId } from '../../types/flex-id'
 import { SceneInterface } from '../scene/scene-interface'
 
-export abstract class CameraInterface<S = any> implements LoopUpdatable, CanvasResizable, Notificable {
+export abstract class CameraInterface<S = any, C extends SceneInterface = SceneInterface> implements LoopUpdatable, CanvasResizable, Notificable {
   abstract metadata: Metadata
   abstract loopUpdate$: BABYLON.Observer<number>
   abstract canvasResize$: BABYLON.Observer<Rect>
@@ -21,7 +21,7 @@ export abstract class CameraInterface<S = any> implements LoopUpdatable, CanvasR
   /**
    * User available
    */
-  abstract scene: SceneInterface
+  abstract scene: C
   abstract setup: S
   abstract loopUpdate: boolean
   abstract babylon: Pick<BabylonAccessor<BABYLON.Camera>, 'camera' | 'scene'>

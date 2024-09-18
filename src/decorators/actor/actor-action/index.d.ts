@@ -87,7 +87,8 @@ export interface ActorActionProps {
   group?: FlexId
 
   /**
-   * 'false' by default.
+   * By default 'false'.
+   *
    * If preserve is 'false', the action is removed after stop it. The next action play will create a new instance.
    * If preserve is 'true', the action is preserved after stop it, keeping the instance and being able to be played again with last values.
    */
