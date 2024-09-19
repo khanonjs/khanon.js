@@ -6,7 +6,7 @@ import { CanvasResizable } from '../canvas-resizable'
 import { LoopUpdatable } from '../loop-updatable'
 import { Metadata } from '../metadata/metadata'
 
-// TODO: Use mixings for derived classes and add a single implementation!!
+// TODO: Use mixings for derived classes and use a single implementation!!
 
 export abstract class ActionInterface<S = any> implements LoopUpdatable, CanvasResizable {
   abstract metadata: Metadata
@@ -22,7 +22,7 @@ export abstract class ActionInterface<S = any> implements LoopUpdatable, CanvasR
   abstract get loopUpdate(): boolean
   abstract get scene(): SceneInterface
   abstract play(): void
-  abstract stop(): void // Callable from user Action, it will call to 'owner.stopActionFromInstance', then owner calls 'action.end' after remove it.
+  abstract stop(): void
   abstract remove(): void
 
   /**

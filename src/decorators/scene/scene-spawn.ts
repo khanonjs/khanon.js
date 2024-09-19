@@ -24,7 +24,7 @@ export class SceneSpawn {
     this.scenePrototype = scenePrototype
   }
 
-  actor<A extends ActorInterface, C extends number>(actor: new () => A, counter?: C, altOnSpawn?: (actor: A, index: number) => void): undefined extends C ? A : A[] {
+  actor<A extends ActorInterface, C extends number>(actor: new () => A, counter?: C, alternativeOnSpawn?: (actor: A, index: number) => void): undefined extends C ? A : A[] {
     if (!this.scene?.availableElements.hasActor(actor)) { Logger.debugError('Trying to spawn an actor that doesn\'t belong to the scene. Please check the scene props.', this.scenePrototype, actor.prototype); return null as any }
     Logger.debug(`Actor spawn (${counter ?? 1}):`, actor.prototype)
     if (counter === undefined) {
@@ -38,8 +38,8 @@ export class SceneSpawn {
         const instance = actorCore.spawn(this.scene)
         this.scene.actors.add(instance)
         retInstances.push(instance)
-        if (altOnSpawn) {
-          altOnSpawn(instance as A, i)
+        if (alternativeOnSpawn) {
+          alternativeOnSpawn(instance as A, i)
         }
       }
       return retInstances as any
@@ -53,7 +53,7 @@ export class SceneSpawn {
     return instance as P
   }
 
-  mesh<M extends MeshInterface>(mesh: new () => M, counter?: number, altOnSpawn?: (mesh: M, index: number) => void): M {
+  mesh<M extends MeshInterface>(mesh: new () => M, counter?: number, alternativeOnSpawn?: (mesh: M, index: number) => void): M {
     if (!this.scene.availableElements.hasMesh(mesh)) { Logger.debugError('Trying to spawn a mesh that doesn\'t belong to the scene. Please check the scene props.', this.scenePrototype, mesh.prototype); return null as any }
     Logger.debug(`Mesh spawn (${counter ?? 1}):`, mesh.prototype)
     if (counter === undefined) {
@@ -67,15 +67,15 @@ export class SceneSpawn {
         const instance = actorCore.spawn(this.scene)
         this.scene.meshes.add(instance)
         retInstances.push(instance)
-        if (altOnSpawn) {
-          altOnSpawn(instance as M, i)
+        if (alternativeOnSpawn) {
+          alternativeOnSpawn(instance as M, i)
         }
       }
       return retInstances as any
     }
   }
 
-  sprite<S extends SpriteInterface>(sprite: new () => S, counter?: number, altOnSpawn?: (sprite: S, index: number) => void): S {
+  sprite<S extends SpriteInterface>(sprite: new () => S, counter?: number, alternativeOnSpawn?: (sprite: S, index: number) => void): S {
     if (!this.scene.availableElements.hasSprite(sprite)) { Logger.debugError('Trying to spawn a sprite that doesn\'t belong to the scene. Please check the scene props.', this.scenePrototype, sprite.prototype); return null as any }
     Logger.debug(`Sprite spawn (${counter ?? 1}):`, sprite.prototype)
     if (counter === undefined) {
@@ -89,8 +89,8 @@ export class SceneSpawn {
         const instance = actorCore.spawn(this.scene)
         this.scene.sprites.add(instance)
         retInstances.push(instance)
-        if (altOnSpawn) {
-          altOnSpawn(instance as S, i)
+        if (alternativeOnSpawn) {
+          alternativeOnSpawn(instance as S, i)
         }
       }
       return retInstances as any
