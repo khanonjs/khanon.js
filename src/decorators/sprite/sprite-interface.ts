@@ -20,6 +20,7 @@ export abstract class SpriteInterface implements DisplayObject {
   abstract exclusiveTexture: boolean // Exclusive texture means this sprite has an exclusive texture that is not stored anywhere, so the sprite itself has to handle its release.
   abstract animation: SpriteAnimation | null
   abstract animations: Map<FlexId, SpriteAnimation>
+  abstract transform: SpriteTransform
   abstract _scale: number
   abstract setTexture(spriteTexture: SpriteTexture, isExclusive: boolean, isParticle: boolean): void
   abstract release(): void
@@ -30,9 +31,20 @@ export abstract class SpriteInterface implements DisplayObject {
   abstract loopUpdate: boolean
   abstract get babylon(): NullableExceptProps<Pick<BabylonAccessor, 'scene' | 'spriteManager' | 'sprite'>, 'spriteManager'>
   abstract get scene(): SceneInterface
-  abstract get transform(): SpriteTransform
+  abstract set position(value: BABYLON.Vector3)
+  abstract get position(): BABYLON.Vector3
+  abstract set angle(value: number)
+  abstract get angle(): number
+  abstract set width(value: number)
   abstract get width(): number
+  abstract set height(value: number)
   abstract get height(): number
+  abstract set size(value: number)
+  abstract get size(): number
+  abstract set color(color: BABYLON.Color4)
+  abstract get color(): BABYLON.Color4
+  abstract set isVisible(visible: boolean)
+  abstract get isVisible(): boolean
   abstract set scale(scale: number)
   abstract get scale(): number
   abstract setFrame(frame: number): void

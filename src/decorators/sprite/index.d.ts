@@ -1,3 +1,5 @@
+import * as BABYLON from '@babylonjs/core'
+
 import {
   AnimationBase,
   BabylonAccessor,
@@ -25,26 +27,86 @@ export declare abstract class SpriteInterface {
   get scene(): SceneInterface
 
   /**
-   * Shortcut to basic transform methods and accessors.
-   * Using this object is the same than accesing it through 'this.babylon.sprite'
-   */
-  get transform(): SpriteTransform
-
-  /**
    * Turns on/off the 'onLoopUpdate' callback.
    */
   set loopUpdate(value: boolean)
   get loopUpdate(): boolean
 
   /**
-   * Gets the width of the sprite
+   * Sets position
+   */
+  set position(value: BABYLON.Vector3)
+
+  /**
+   * Gets position
+   */
+  get position(): BABYLON.Vector3
+
+  /**
+   * Sets angle
+   */
+  set angle(value: number)
+
+  /**
+   * Gets angle
+   */
+  get angle(): number
+
+  /**
+   * Sets width
+   */
+  set width(value: number)
+
+  /**
+   * Gets width
    */
   get width(): number
 
   /**
-   * Gets the height of the sprite
+   * Sets height
+   */
+  set height(value: number)
+
+  /**
+   * Gets height
    */
   get height(): number
+
+  /**
+   * Sets size
+   */
+  set size(value: number)
+
+  /**
+   * Gets size
+   */
+  get size(): number
+
+  /**
+   * Sets color
+   */
+  set color(color: BABYLON.Color4)
+
+  /**
+   * Gets color
+   */
+  get color(): BABYLON.Color4
+
+  /**
+   * Sets isVisible
+   */
+  set isVisible(visible: boolean)
+
+  /**
+   * Gets isVisible
+   */
+  get isVisible(): boolean
+
+  /**
+   * Sets position
+   */
+  set scale(scale: number)
+  get scale(): number
 
   /**
    * Sets the scale of the sprite

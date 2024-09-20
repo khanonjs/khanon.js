@@ -9,13 +9,9 @@ export abstract class DisplayObject {
   abstract animations: Map<FlexId, SpriteAnimation | MeshAnimation>
 
   abstract release(): void
-
-  // User anailable
   abstract get transform(): SpriteTransform | MeshTransform
 
-  // abstract setTransform(transform: BABYLON.Matrix): void // TODO
-  // abstract getTransform(): BABYLON.Matrix // TODO
-
+  // User anailable
   abstract setFrame(frame: number): void
   abstract setFrameFirst(): void
   abstract setFrameLast(): void

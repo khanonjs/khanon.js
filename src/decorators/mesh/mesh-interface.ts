@@ -16,6 +16,7 @@ export abstract class MeshInterface implements DisplayObject {
   abstract canvasResize$: BABYLON.Observer<Rect>
   abstract animation: SpriteAnimation | MeshAnimation | null
   abstract animations: Map<FlexId, SpriteAnimation | MeshAnimation>
+  abstract get transform(): MeshTransform
   abstract release(): void
   abstract initialize(): void
 
@@ -25,7 +26,6 @@ export abstract class MeshInterface implements DisplayObject {
   abstract loopUpdate: boolean
   abstract get babylon(): Pick<BabylonAccessor, 'mesh'>
   abstract get scene(): SceneInterface
-  abstract get transform(): MeshTransform
   abstract setFrame(frame: number): void
   abstract setFrameFirst(): void
   abstract setFrameLast(): void

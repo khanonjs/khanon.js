@@ -49,6 +49,8 @@ export declare abstract class ActorInterface<B extends SpriteInterface | MeshInt
   /**
    * Transform of the body.
    */
+  // TODO is there a way to implement SpriteTransform or MeshTransform properties directly in the class conditionally based on B generic type?
+  // This way we avoid transform accessor and user can access sprite or mesh transform properties directly.
   get transform(): B extends SpriteInterface ? SpriteTransform : MeshTransform
 
   /**
@@ -58,7 +60,7 @@ export declare abstract class ActorInterface<B extends SpriteInterface | MeshInt
   get loopUpdate(): boolean
 
   /**
-   * Body of this actor.
+   * Body of the actor.
    * This is the main 'Sprite' or 'Mesh. The rest of nodes are attached to this object.
    * 'actor.transform' references to 'actor.body.transform'.
    */

@@ -73,26 +73,45 @@ export function Sprite(props: SpriteProps): any {
         babylon: Pick<BabylonAccessor, 'scene' | 'spriteManager' | 'sprite'> = { scene: null as any, spriteManager: null as any, sprite: null as any }
         loopUpdate$: BABYLON.Observer<number>
         canvasResize$: BABYLON.Observer<Rect>
+        keyFramesTimeouts: Timeout[] = []
+        endAnimationTimer: Timeout | null
+        transform: SpriteTransform
+        _visible: boolean
         _scale: number = 1
 
         set loopUpdate(value: boolean) { switchLoopUpdate(value, this) }
         get loopUpdate(): boolean { return !!this.loopUpdate$ }
 
-        get width(): number {
-          return this.spriteTexture.width
-        }
-
-        get height(): number {
-          return this.spriteTexture.height
-        }
+        set position(value: BABYLON.Vector3) { this.babylon.sprite.position = value }
+        get position(): BABYLON.Vector3 { return this.babylon.sprite.position }
+        set angle(value: number) { this.babylon.sprite.angle = value }
+        get angle(): number { return this.babylon.sprite.angle }
+        set width(value: number) { this.babylon.sprite.width = value }
+        get width(): number { return this.babylon.sprite.width }
+        set height(value: number) { this.babylon.sprite.height = value }
+        get height(): number { return this.babylon.sprite.height }
+        set size(value: number) { this.babylon.sprite.size = value }
+        get size(): number { return this.babylon.sprite.size }
+        set color(value: BABYLON.Color4) { this.babylon.sprite.color = value }
+        get color(): BABYLON.Color4 { return this.babylon.sprite.color }
+        set isVisible(value: boolean) { this.babylon.sprite.isVisible = value }
+        get isVisible(): boolean { return this.babylon.sprite.isVisible }
 
         set scale(scale: number) {
           this._scale = scale
-          this.transform.width = this.width * this._scale
-          this.transform.height = this.height * this.scale
+          this.width = this.spriteTexture.width * this._scale
+          this.height = this.spriteTexture.height * this.scale
         }
 
         get scale(): number { return this._scale }
+
+        set visible(value: boolean) {
+          this._visible = value
+        }
+
+        get visible(): boolean {
+          return this._visible
+        }
 
         setTexture(spriteTexture: SpriteTexture, isExclusive: boolean) {
           if (this.babylon.sprite) {
@@ -135,22 +154,6 @@ export function Sprite(props: SpriteProps): any {
 
         private getLastFrame(): number {
           return this.animation?.frameEnd ?? (this.props.numFrames ? this.props.numFrames - 1 : 0)
-        }
-
-        // ***************
-        // DisplayObject
-        // ***************
-        transform: SpriteTransform
-        private _visible: boolean
-        private keyFramesTimeouts: Timeout[] = []
-        private endAnimationTimer: Timeout | null
-
-        set visible(value: boolean) {
-          this._visible = value
-        }
-
-        get visible(): boolean {
-          return this._visible
         }
 
         addAnimation(animation: SpriteAnimation): void {
