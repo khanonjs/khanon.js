@@ -132,7 +132,7 @@ export declare abstract class SpriteInterface {
   /**
    * Callback invoked after the sprite has been spawned in a scene.
    */
-  onSpawn?(scene: SceneInterface): void
+  onSpawn?(): void
 
   /**
    * Callback invoked on sprite destroy (equivalent to onRelease).

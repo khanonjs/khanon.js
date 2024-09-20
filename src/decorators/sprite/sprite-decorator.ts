@@ -111,7 +111,7 @@ export function Sprite(props: SpriteProps): any {
           this.props.animations?.forEach(animation => this.addAnimation(animation))
           attachLoopUpdate(this)
           attachCanvasResize(this)
-          invokeCallback(this.onSpawn, this, this.scene)
+          invokeCallback(this.onSpawn, this)
         }
 
         setFrame(frame: number): void {

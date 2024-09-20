@@ -49,7 +49,7 @@ export abstract class SpriteInterface implements DisplayObject {
   /**
    * User defined optional
    */
-  onSpawn?(scene: SceneInterface): void
+  onSpawn?(): void
   onDestroy?(): void
   onLoopUpdate?(delta: number): void
 }
