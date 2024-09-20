@@ -86,21 +86,33 @@ export function Sprite(props: SpriteProps): any {
         get position(): BABYLON.Vector3 { return this.babylon.sprite.position }
         set angle(value: number) { this.babylon.sprite.angle = value }
         get angle(): number { return this.babylon.sprite.angle }
-        set width(value: number) { this.babylon.sprite.width = value }
         get width(): number { return this.babylon.sprite.width }
-        set height(value: number) { this.babylon.sprite.height = value }
         get height(): number { return this.babylon.sprite.height }
-        set size(value: number) { this.babylon.sprite.size = value }
         get size(): number { return this.babylon.sprite.size }
         set color(value: BABYLON.Color4) { this.babylon.sprite.color = value }
         get color(): BABYLON.Color4 { return this.babylon.sprite.color }
         set isVisible(value: boolean) { this.babylon.sprite.isVisible = value }
         get isVisible(): boolean { return this.babylon.sprite.isVisible }
 
+        set width(value: number) {
+          if (this._scale !== 1) { Logger.debugError('Changing sprite \'width\' after having scalated it. This practice is not recommended, it can drive to inconsistencies. Setting scale to 1.', _classInterface.prototype); this._scale = 1 }
+          this.babylon.sprite.width = value
+        }
+
+        set height(value: number) {
+          if (this._scale !== 1) { Logger.debugError('Changing sprite \'height\' after having scalated it. This practice is not recommended, it can drive to inconsistencies. Setting scale to 1.', _classInterface.prototype); this._scale = 1 }
+          this.babylon.sprite.height = value
+        }
+
+        set size(value: number) {
+          if (this._scale !== 1) { Logger.debugError('Changing sprite \'size\' after having scalated it. This practice is not recommended, it can drive to inconsistencies. Setting scale to 1.', _classInterface.prototype); this._scale = 1 }
+          this.babylon.sprite.size = value
+        }
+
         set scale(scale: number) {
           this._scale = scale
-          this.width = this.spriteTexture.width * this._scale
-          this.height = this.spriteTexture.height * this.scale
+          this.babylon.sprite.width = this.spriteTexture.width * this._scale
+          this.babylon.sprite.height = this.spriteTexture.height * this.scale
         }
 
         get scale(): number { return this._scale }
