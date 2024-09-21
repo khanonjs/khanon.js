@@ -105,7 +105,7 @@ export function Actor(props: ActorProps = {}): any {
         }
       }
 
-      addNode<B>(Node: B, name: string, offset: BABYLON.Vector3 | BABYLON.Matrix): B {
+      addNode<B>(Node: new () => B, name: string, offset?: BABYLON.Vector3 | BABYLON.Matrix): B {
         // TODO
         // if (!name) {
         //   name = (++this.fakeId).toString()

@@ -90,7 +90,7 @@ export declare abstract class ActorInterface<B extends SpriteInterface | MeshInt
    * @param name
    * @returns
    */
-  addNode(Node: B, name: string): B
+  addNode(Node: new () => B, name: string, offset?: BABYLON.Vector3 | BABYLON.Matrix): B
 
   /**
    * Gets a Node by name.
