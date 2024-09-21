@@ -60,6 +60,7 @@ export function Actor(props: ActorProps = {}): any {
       props: ActorProps
       metadata: Metadata = Reflect.getMetadata('metadata', this) ?? new Metadata()
       transform: SpriteTransform | MeshTransform | null
+      t: SpriteTransform | MeshTransform | null
       loopUpdate$: BABYLON.Observer<number>
       canvasResize$: BABYLON.Observer<Rect>
       _body: B | null = null
@@ -91,6 +92,7 @@ export function Actor(props: ActorProps = {}): any {
           this._body = MeshesController.get(Body).spawn(this.scene) as any
         }
         this.transform = this._body?.transform ?? null
+        this.t = this.transform
         attachLoopUpdate(this)
         attachCanvasResize(this)
         return this._body as B

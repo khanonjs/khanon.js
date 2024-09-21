@@ -44,6 +44,7 @@ export abstract class ActorInterface<B extends SpriteInterface | MeshInterface =
    */
   abstract loopUpdate: boolean
   abstract get transform(): (B extends SpriteInterface ? SpriteTransform : MeshTransform) | null
+  abstract get t(): (B extends SpriteInterface ? SpriteTransform : MeshTransform) | null
   abstract get scene(): SceneInterface
   abstract get body(): B | null
   abstract get state(): ActorStateInterface | null
