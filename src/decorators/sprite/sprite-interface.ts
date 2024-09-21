@@ -29,7 +29,7 @@ export abstract class SpriteInterface implements DisplayObject {
    * User available
    */
   abstract loopUpdate: boolean
-  abstract get babylon(): NullableExceptProps<Pick<BabylonAccessor, 'scene' | 'spriteManager' | 'sprite'>, 'spriteManager'>
+  abstract get babylon(): Pick<BabylonAccessor, 'scene' | 'spriteManager' | 'sprite'>
   abstract get scene(): SceneInterface
   abstract set position(value: BABYLON.Vector3)
   abstract get position(): BABYLON.Vector3

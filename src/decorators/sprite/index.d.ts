@@ -6,11 +6,7 @@ import {
   Rect
 } from '../../models'
 import { DrawBlockProperties } from '../../models/draw-text-properties'
-import {
-  FlexId,
-  SpriteTransform
-} from '../../types'
-import { NullableExceptProps } from '../../types/nullable-except-props'
+import { FlexId } from '../../types'
 import { SceneInterface } from '../scene'
 
 export interface SpriteAnimation extends AnimationBase {}
@@ -19,7 +15,7 @@ export declare abstract class SpriteInterface {
   /**
    * Babylon.js objects.
    */
-  get babylon(): NullableExceptProps<Pick<BabylonAccessor, 'scene' | 'spriteManager' | 'sprite'>, 'spriteManager'>
+  get babylon(): Pick<BabylonAccessor, 'scene' | 'spriteManager' | 'sprite'>
 
   /**
    * Scene owner of this Sprite.
@@ -271,7 +267,7 @@ export declare interface SpriteProps {
   cached?: boolean
 
   /**
-   * Defines the maximum allowed number of sprites for this sprite sheet
+   * Defines the maximum allowed number of sprites for the spriteManager associated to the texture of this sprite
    */
   maxAllowedSprites?: number
 }

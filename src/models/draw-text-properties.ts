@@ -2,7 +2,7 @@ import { Rect } from './rect'
 
 export interface DrawBlockProperties {
   /**
-   * Font name (fontface).
+   * Font name (CSS fontface).
    */
   fontName: string
 
@@ -12,7 +12,7 @@ export interface DrawBlockProperties {
   fontSize: number
 
   /**
-   * Text color.
+   * Text color (HTML format).
    */
   textColor: string
 
