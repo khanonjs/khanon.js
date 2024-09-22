@@ -134,12 +134,13 @@ export declare abstract class ActorInterface<B extends SpriteInterface | MeshInt
    * @param loopOverride Overrides the animation loop value in case needed
    * @param completed Completed animation callback
    */
-  playAnimation(animation: (B extends SpriteInterface ? SpriteAnimation : MeshAnimation) | FlexId, loopOverride?: boolean, completed?: () => void): void
+  // TODO system to animate body and nodes all together somehow
+  // playAnimation(animation: (B extends SpriteInterface ? SpriteAnimation : MeshAnimation) | FlexId, loopOverride?: boolean, completed?: () => void): void
 
   /**
    * Stops the animation of the body. Equiuvalent to 'actor.body.stopAnimation'.
    */
-  stopAnimation(): void
+  // stopAnimation(): void
 
   /**
    * Plays an Action. N actions can be played simultaneously.

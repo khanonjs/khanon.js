@@ -109,6 +109,7 @@ export function Sprite(props: SpriteProps): any {
         }
 
         set scale(scale: number) {
+          // TODO use diferential instead spriteTexture original size, to avoid inconsistencies if width, height, or size have been changed?
           this._scale = scale
           this.babylon.sprite.width = this.spriteTexture.width * this._scale
           this.babylon.sprite.height = this.spriteTexture.height * this.scale

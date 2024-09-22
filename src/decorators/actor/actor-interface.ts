@@ -36,6 +36,7 @@ export abstract class ActorInterface<B extends SpriteInterface | MeshInterface =
   abstract particles: Map<FlexId, ParticleInterface>
   abstract initialize(props: ActorProps): void
   abstract release(): void
+  abstract getActionOwner(actionConstructor: ActorActionConstructor): ActorInterface | ActorStateInterface | undefined
   abstract playActionFromInstance(instance: ActorActionInterface): void
   abstract stopActionFromInstance(instance: ActorActionInterface, forceRemove?: boolean): void
 
@@ -56,9 +57,8 @@ export abstract class ActorInterface<B extends SpriteInterface | MeshInterface =
   abstract clearNodes(includeBody: boolean): void
   abstract setVisible(value: boolean): void
   abstract switchState(state: ActorStateConstructor, setup: any): ActorStateInterface
-  abstract getActionOwner(actionConstructor: ActorActionConstructor): ActorInterface | ActorStateInterface | undefined
-  abstract playAnimation(animation: (B extends SpriteInterface ? SpriteAnimation : MeshAnimation) | FlexId, loopOverride?: boolean, completed?: () => void): void
-  abstract stopAnimation(): void
+  // abstract playAnimation(animation: (B extends SpriteInterface ? SpriteAnimation : MeshAnimation) | FlexId, loopOverride?: boolean, completed?: () => void): void  // TODO system to animate body and nodes all together somehow
+  // abstract stopAnimation(): void
   abstract playAction(action: ActorActionConstructor | ((delta: number) => void), setup: any): ActorActionInterface
   abstract stopAction(action: ActorActionConstructor): void
   abstract playActionGroup(group: FlexId): void
