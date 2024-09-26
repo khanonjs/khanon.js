@@ -6,8 +6,8 @@ import {
   MeshTransform,
   SpriteTransform
 } from '../../types'
+import { GUIConstructor } from '../gui'
 import {
-  MeshAnimation,
   MeshConstructor,
   MeshInterface
 } from '../mesh'
@@ -17,7 +17,6 @@ import {
 } from '../particle'
 import { SceneInterface } from '../scene'
 import {
-  SpriteAnimation,
   SpriteConstructor,
   SpriteInterface
 } from '../sprite'
@@ -264,11 +263,34 @@ export declare abstract class ActorInterface<B extends SpriteInterface | MeshInt
 export type ActorConstructor = new () => ActorInterface<any>
 
 export interface ActorProps {
-  sprites?: SpriteConstructor[]
-  meshes?: MeshConstructor[]
-  // guis?: GUIConstructor[]
+  /**
+   * States to use in this actor.
+   */
   states?: ActorStateConstructor[]
+
+  /**
+   * Actions to use in this actor.
+   */
   actions?: ActorActionConstructor[]
+
+  /**
+   * Sprites to use by this actor.
+   */
+  sprites?: SpriteConstructor[]
+
+  /**
+   * Meshes to use by this actor.
+   */
+  meshes?: MeshConstructor[]
+
+  /**
+   * GUIs to use in this actor.
+   */
+  guis?: GUIConstructor[]
+
+  /**
+   * Particles this actor will attach.
+   */
   particles?: ParticleConstructor[]
 }
 

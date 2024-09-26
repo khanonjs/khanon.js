@@ -295,42 +295,42 @@ export interface SceneProps {
   options?: BABYLON.SceneOptions
 
   /**
-   * Babylon Scene accessors to configure the Scene.
+   * Babylon Scene accessors to configure the scene.
    */
   configuration?: SceneConfiguration
 
   /**
-   * States to use in this Scene.
+   * States to use in this scene.
    */
   states?: SceneStateConstructor[]
 
   /**
-   * Actions to use in this Scene.
+   * Actions to use in this scene.
    */
   actions?: SceneActionConstructor[]
 
   /**
-   * Cameras to use in this Scene.
+   * Cameras to use in this scene.
    */
   cameras?: CameraConstructor[]
 
   /**
-   * GUIs to use in this Scene.
+   * GUIs to use in this scene.
    */
   guis?: GUIConstructor[]
 
   /**
-   * Maps to use in this Scene.
+   * Maps to use in this scene.
    */
   maps?: SceneMapConstructor[]
 
   /**
-   * Actors that will be spawned in this Scene.
+   * Actors that will be spawned in this scene.
    */
   actors?: ActorConstructor[]
 
   /**
-   * Sprites to use in this Scene.
+   * Sprites to use in this scene.
    */
   sprites?: SpriteConstructor[]
 
@@ -340,7 +340,7 @@ export interface SceneProps {
   meshes?: MeshConstructor[]
 
   /**
-   * Particles to use in this Scene.
+   * Particles to use in this scene.
    */
   particles?: ParticleConstructor[]
 }
