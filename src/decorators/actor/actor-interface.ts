@@ -50,7 +50,7 @@ export abstract class ActorInterface<B extends SpriteInterface | MeshInterface =
   abstract get body(): B | null
   abstract get state(): ActorStateInterface | null
   abstract setBody(Body: new () => B): B
-  abstract addNode(Node: new () => B, name: string, offset?: BABYLON.Vector3 | BABYLON.Matrix): B
+  abstract addNode(Node: new () => B, name: string, transform?: BABYLON.Vector3 | BABYLON.Matrix): B
   abstract getNode(name: string): B
   abstract removeBody(): void
   abstract removeNode(name: string): void

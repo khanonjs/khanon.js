@@ -89,7 +89,7 @@ export declare abstract class ActorInterface<B extends SpriteInterface | MeshInt
    * @param name
    * @returns
    */
-  addNode(Node: new () => B, name: string, offset?: BABYLON.Vector3 | BABYLON.Matrix): B
+  addNode(Node: new () => B, name: string, transform?: BABYLON.Vector3 | BABYLON.Matrix): B
 
   /**
    * Gets a Node by name.
@@ -196,7 +196,7 @@ export declare abstract class ActorInterface<B extends SpriteInterface | MeshInt
   /**
    * Attachs a particle to this actor.
    *
-   * If nodeName is 'undefined', the particle is attached to the Body of the actor.
+   * If nodeName is 'undefined', the particle is attached to the actor's body.
    * @param Particle Particle constructor or an Actor class method.
    * @param id
    * @param offset
@@ -214,7 +214,7 @@ export declare abstract class ActorInterface<B extends SpriteInterface | MeshInt
    * Stops a particle.
    * @param id
    */
-  stopsParticle(id: FlexId): void
+  stopParticle(id: FlexId): void
 
   /**
    * Removes a particle.
