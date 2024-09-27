@@ -12,7 +12,12 @@ import {
   SpriteInterface
 } from '../../sprite'
 
-export declare class ActorActionInterface</* Setup object */ S = any, /* Actor object */ A = ActorInterface<SpriteInterface | MeshInterface>, /* SCene object */ C = SceneInterface> {
+export declare class ActorActionInterface</* Setup object */ S = any, /* Scene object */ C = SceneInterface, /* Actor object */ A = ActorInterface<SpriteInterface | MeshInterface>> {
+  /**
+   * Setup of the action.
+   */
+  get setup(): S
+
   /**
    * Owner scene of this action.
    */
@@ -22,11 +27,6 @@ export declare class ActorActionInterface</* Setup object */ S = any, /* Actor o
    * Owner actor of this action.
    */
   get actor(): A
-
-  /**
-   * Setup of the action.
-   */
-  get setup(): S
 
   /**
    * Turns on/off the 'onLoopUpdate' callback.

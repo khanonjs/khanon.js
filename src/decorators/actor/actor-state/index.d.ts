@@ -17,7 +17,12 @@ import {
  * @param A Actor owner of hte state (optional).
  * @param S Setup interface (optional).
  */
-export declare abstract class ActorStateInterface<S = any, A = ActorInterface<SpriteInterface | MeshInterface>, C = SceneInterface> { // TODO add scene generic interface
+export declare abstract class ActorStateInterface</* Setup object */ S = any, /* Scene type */ C = SceneInterface, /* Actor type */ A = ActorInterface<SpriteInterface | MeshInterface>> {
+  /**
+   * Setup of the state.
+   */
+  get setup(): S
+
   /**
    * Scene owner of the state.
    */
@@ -27,11 +32,6 @@ export declare abstract class ActorStateInterface<S = any, A = ActorInterface<Sp
    * Actor owner of the state.
    */
   get actor(): A
-
-  /**
-   * Setup of the state.
-   */
-  get setup(): S
 
   /**
    * Turns on/off the 'onLoopUpdate' callback.

@@ -16,14 +16,14 @@ import { SpriteConstructor } from '../../sprite'
 
 export declare abstract class SceneStateInterface<S = any, C = SceneInterface> {
   /**
-   * Owner scene of this state.
-   */
-  get scene(): C
-
-  /**
    * Initial setup of the state.
    */
   get setup(): S
+
+  /**
+   * Owner scene of this state.
+   */
+  get scene(): C
 
   /**
    * Scene spawn class.

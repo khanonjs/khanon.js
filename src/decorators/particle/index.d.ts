@@ -54,7 +54,7 @@ export abstract class ParticleInterface {
   /**
    * You need to implement this method to initialize the particle.
    * Use the 'setSprite' method to use a sprite in the particle.
-   * Or you can use a custom created texture, but don't forget to release it in the 'onRelease' method.
+   * Or you can use a custom created texture, but don't forget to release it in the 'onRemove' method.
    * @param particle
    */
   abstract onInitialize(particle: ParticleInterface): void
@@ -77,7 +77,7 @@ export abstract class ParticleInterface {
   /**
    * Callback invoked on particle release (dispose).
    */
-  onRelease?(): void
+  onRemove?(): void
 
   /**
    * Callback invoked on loop update.

@@ -7,14 +7,14 @@ import { SpriteConstructor } from '../../sprite'
 
 export declare abstract class SceneActionInterface</* Setup object */ S = any, /* Scene object */ C = SceneInterface> {
   /**
-   * Scene owner of the action.
-   */
-  get scene(): C
-
-  /**
    * Setup of the action.
    */
   get setup(): S
+
+  /**
+   * Scene owner of the action.
+   */
+  get scene(): C
 
   /**
    * Turns on/off the 'onLoopUpdate' callback.

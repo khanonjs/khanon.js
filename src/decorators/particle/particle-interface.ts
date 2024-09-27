@@ -52,7 +52,7 @@ export abstract class ParticleInterface implements LoopUpdatable, CanvasResizabl
    */
   onStart?(): void
   onStop?(): void
-  onRelease?(): void
+  onRemove?(): void
   onLoopUpdate?(delta: number): void
   onCanvasResize?(size: Rect): void
 }
