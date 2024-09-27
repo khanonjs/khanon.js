@@ -50,7 +50,7 @@ export declare namespace KJS {
    * @param args Method arguments received by the 'Notification' decorated method.
    */
   export namespace Notify {
-    function send(message: FlexId, receivers: NotificableType | NotificableType[], ...args: any[]): void
+    function send(message: FlexId, receivers?: NotificableType | NotificableType[], ...args: any[]): void
   }
 
   /**

@@ -13,12 +13,15 @@ import { ScenesController } from './scenes-controller'
 
 // TODO This must be optimized storing each actor, particle, etc.. in a Map<ActorConstructor, Observable>
 export class NotificationsController {
-  static send(message: FlexId, elements: NotificableType | NotificableType[], ...args: any[]): void {
-    if (Array.isArray(elements)) {
-      elements.forEach(element => NotificationsController.sendConstructor(message, element, args))
-    } else {
-      NotificationsController.sendConstructor(message, elements, args)
-    }
+  static send(message: FlexId, elements?: NotificableType | NotificableType[], ...args: any[]): void {
+    if (!elements) {
+      // 8a8f send message to all elements of the game. Improve the performance before implement this
+    } else
+      if (Array.isArray(elements)) {
+        elements.forEach(element => NotificationsController.sendConstructor(message, element, args))
+      } else {
+        NotificationsController.sendConstructor(message, elements, args)
+      }
   }
 
   private static sendConstructor(message: FlexId, constructor: NotificableType, args: any[]) {
