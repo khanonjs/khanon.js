@@ -116,7 +116,7 @@ export function Particle(props: ParticleProps): any {
           const spriteParticleInfo = SpritesController.get(sprite).getParticleInfo(this.scene)
           if (!spriteParticleInfo.props.url) { Logger.debugError('Cannot use a particle texture from a blank sprite. The sprite \'url\' must be defined.'); return }
           this.spriteProps = spriteParticleInfo.props
-          this.babylon.particleSystem.particleTexture = spriteParticleInfo.texture.babylon.spriteManager.texture
+          this.babylon.particleSystem.particleTexture = spriteParticleInfo.texture.babylon.texture
           if (this.spriteProps.width === this.spriteProps.height) {
             this.babylon.particleSystem.minScaleX = 1
             this.babylon.particleSystem.maxScaleX = 1
