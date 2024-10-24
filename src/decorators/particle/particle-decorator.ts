@@ -166,9 +166,10 @@ export function Particle(props: ParticleProps): any {
         Instance: ParticleInterface = new _classInterface(null as any, null as any, null as any)
 
         load(scene: SceneInterface): LoadingProgress {
-          SpritesController.load(this.props.sprites, scene)
-          SpritesController.load(this.Instance.metadata.getProps().sprites, scene)
-          return new LoadingProgress().complete()
+          return new LoadingProgress().fromNodes([
+            SpritesController.load(this.props.sprites, scene),
+            SpritesController.load(this.Instance.metadata.getProps().sprites, scene)
+          ])
         }
 
         unload(scene: SceneInterface): void {

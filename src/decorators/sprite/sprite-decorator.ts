@@ -381,7 +381,7 @@ export function Sprite(props: SpriteProps): any {
         textures: Map<SceneInterface, SpriteMesh> = new Map<SceneInterface, SpriteMesh>()
 
         load(scene: SceneInterface): LoadingProgress {
-          const progress = new LoadingProgress().complete()
+          const progress = new LoadingProgress()
           if (this.textures.get(scene)) {
             return progress.complete()
           } else {
@@ -389,8 +389,11 @@ export function Sprite(props: SpriteProps): any {
               const asset = AssetsController.getAsset(this.props.url)
               if (!asset) { Logger.debugError(`Asset '${this.props.url}' not found on sprite load:`, _classInterface.prototype) }
               const texture = new SpriteMesh(scene, this.props)
-              texture.setFromAsset(asset as any)
               this.textures.set(scene, texture)
+              texture.setFromAsset(asset as any)
+                .then(() => {
+                  progress.complete()
+                })
               return progress
             } else {
               return progress.complete()

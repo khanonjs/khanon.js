@@ -155,23 +155,26 @@ export function Scene(props: SceneProps = {}): any {
           ]
         }
         const assetsProgress = AssetsController.sceneLoad(this)
-
         assetsProgress.onComplete.add(() => {
           Logger.debug('Scene assets load completed', _class.prototype)
-          SceneStatesController.load(this.props.states, this)
-          SceneActionsController.load(this.props.actions, this)
-          SceneActionsController.load(this.metadata.getProps().actions, this)
-          ActorsController.load(this.props.actors, this)
-          SpritesController.load(this.props.sprites, this)
-          SpritesController.load(this.metadata.getProps().sprites, this)
-          MeshesController.load(this.props.meshes, this)
-          MeshesController.load(this.metadata.getProps().meshes, this)
-          ParticlesController.load(this.props.particles, this)
-          ParticlesController.load(this.metadata.getProps().particles, this)
-          this._loaded = true
-          this.babylon.scene?.executeWhenReady(() => {
-            invokeCallback(this.onLoaded, this)
-            sceneProgress.complete()
+          const elementsLoading = new LoadingProgress().fromNodes([
+            SceneStatesController.load(this.props.states, this),
+            SceneActionsController.load(this.props.actions, this),
+            SceneActionsController.load(this.metadata.getProps().actions, this),
+            ActorsController.load(this.props.actors, this),
+            SpritesController.load(this.props.sprites, this),
+            SpritesController.load(this.metadata.getProps().sprites, this),
+            MeshesController.load(this.props.meshes, this),
+            MeshesController.load(this.metadata.getProps().meshes, this),
+            ParticlesController.load(this.props.particles, this),
+            ParticlesController.load(this.metadata.getProps().particles, this)
+          ])
+          elementsLoading.onComplete.add(() => {
+            this._loaded = true
+            this.babylon.scene?.executeWhenReady(() => {
+              invokeCallback(this.onLoaded, this)
+              sceneProgress.complete()
+            })
           })
         })
         assetsProgress.onError.add((error: string) => {
@@ -181,7 +184,6 @@ export function Scene(props: SceneProps = {}): any {
         assetsProgress.onProgress.add((progress: number) => {
           sceneProgress.setProgress(progress)
         })
-
         return sceneProgress
       }
 

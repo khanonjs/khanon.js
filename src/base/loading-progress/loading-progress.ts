@@ -65,26 +65,32 @@ export class LoadingProgress<D = any> {
    * Handles multiple LoadingProgress instances and behaves like all of them are one
    */
   fromNodes(progresses: LoadingProgress[]): LoadingProgress<D> {
-    progresses.forEach(progress => {
-      const node = {
-        completed: false,
-        progress: 0
-      }
-      this.nodes.push(node)
-      progress.onComplete.add(() => {
-        node.completed = true
-        if (!this.nodes.find(_node => !_node.completed)) {
-          this.complete()
+    if (progresses.length === 0) {
+      this.complete()
+    } else {
+      progresses.forEach(progress => {
+        const node = {
+          completed: false,
+          progress: 0
         }
+        this.nodes.push(node)
       })
-      progress.onError.add((error) => {
-        this.error(error)
+      progresses.forEach((progress, index) => {
+        progress.onComplete.add(() => {
+          this.nodes[index].completed = true
+          if (!this.nodes.find(_node => !_node.completed)) {
+            this.complete()
+          }
+        })
+        progress.onError.add((error) => {
+          this.error(error)
+        })
+        progress.onProgress.add((value: number) => {
+          this.nodes[index].progress = value
+          this.setProgress(this.nodes.reduce((acc, curr) => curr.progress < acc.progress ? curr : acc).progress)
+        })
       })
-      progress.onProgress.add((value: number) => {
-        node.progress = value
-        this.setProgress(this.nodes.reduce((acc, curr) => curr.progress < acc.progress ? curr : acc).progress)
-      })
-    })
+    }
     return this
   }
 }

@@ -322,17 +322,17 @@ export function Actor(props: ActorProps = {}): any {
       loaded = false
 
       load(scene: SceneInterface): LoadingProgress {
-        const progress = new LoadingProgress().complete()
-        ActorStatesController.load(this.props.states, scene)
-        ActorActionsController.load(this.props.actions, scene)
-        ActorActionsController.load(this.Instance.metadata.getProps().actions, scene)
-        SpritesController.load(this.props.sprites, scene)
-        SpritesController.load(this.Instance.metadata.getProps().sprites, scene)
-        MeshesController.load(this.props.meshes, scene)
-        MeshesController.load(this.Instance.metadata.getProps().meshes, scene)
-        ParticlesController.load(this.props.particles, scene)
-        ParticlesController.load(this.Instance.metadata.getProps().particles, scene)
-        return progress
+        return new LoadingProgress().fromNodes([
+          ActorStatesController.load(this.props.states, scene),
+          ActorActionsController.load(this.props.actions, scene),
+          ActorActionsController.load(this.Instance.metadata.getProps().actions, scene),
+          SpritesController.load(this.props.sprites, scene),
+          SpritesController.load(this.Instance.metadata.getProps().sprites, scene),
+          MeshesController.load(this.props.meshes, scene),
+          MeshesController.load(this.Instance.metadata.getProps().meshes, scene),
+          ParticlesController.load(this.props.particles, scene),
+          ParticlesController.load(this.Instance.metadata.getProps().particles, scene)
+        ])
       }
 
       unload(scene: SceneInterface): void {

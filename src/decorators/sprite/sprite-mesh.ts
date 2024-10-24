@@ -14,32 +14,41 @@ export class SpriteMesh {
 
   constructor(scene: SceneInterface, private readonly spriteProps: SpriteProps) {
     this.babylon.scene = scene.babylon.scene
+    this.width = this.spriteProps.width
+    this.height = this.spriteProps.height
   }
 
-  setFromAsset(asset: Asset<SceneInterface>): void {
-    // const width = this.spriteProps.width
-    // const height = this.spriteProps.height
-    this.asset = asset
-    this.babylon.texture = new BABYLON.Texture(asset.objectURL, this.babylon.scene, this.spriteProps.noMipmap, this.spriteProps.invertY, this.spriteProps.samplingMode)
-    this.babylon.texture.name = asset.definition.url
-    // this.setFromTexture(texture, asset.definition.url, width, height)
-    this.buildMesh()
+  setFromAsset(asset: Asset<SceneInterface>): Promise<void> {
+    return new Promise((resolve) => {
+      this.asset = asset
+      this.babylon.texture = new BABYLON.Texture(asset.objectURL, this.babylon.scene, this.spriteProps.noMipmap, this.spriteProps.invertY, this.spriteProps.samplingMode)
+      this.babylon.texture.name = asset.definition.url
+      this.babylon.texture.onLoadObservable.add(() => {
+        this.buildMesh()
+        resolve()
+      })
+    })
   }
 
+  // TODO is this okay being sync? We need it sync because the texture is created on real-time execution (one exclusive texture per sprite spwan).
   setFromBlank(): void {
     this.babylon.texture = new BABYLON.DynamicTexture('blank-texture', { width: this.spriteProps.width, height: this.spriteProps.height }, this.babylon.scene, !this.spriteProps.noMipmap, this.spriteProps.samplingMode, this.spriteProps.format, this.spriteProps.invertY)
-    // this.setFromTexture(texture, 'no-url', this.spriteProps.width, this.spriteProps.height)
     this.buildMesh()
   }
 
   buildMesh(): void {
     const quadVertexData = new BABYLON.VertexData()
+
+    const w = this.width / 2
+    const h = this.height / 2
+
+    // Logger.trace('aki w, h', w, h)
     // The 4 vertices, clockwise starting from bottom left
     const positions = [
-      -1, -1, 0,
-      -1, 1, 0,
-      1, 1, 0,
-      1, -1, 0
+      -w, -h, 0,
+      -w, h, 0,
+      w, h, 0,
+      w, -h, 0
     ]
     // 2 triangles making a quad
     const indices = [
@@ -57,17 +66,21 @@ export class SpriteMesh {
     quadVertexData.indices = indices
     quadVertexData.uvs = uvs
 
-    this.babylon.mesh = new BABYLON.Mesh(this.asset?.definition.url)
+    this.babylon.mesh = new BABYLON.Mesh(this.asset?.definition.url, this.babylon.scene)
+    this.babylon.mesh.visibility = 0
     quadVertexData.applyToMesh(this.babylon.mesh, true)
-
     this.babylon.material = new BABYLON.StandardMaterial(this.asset?.definition.url)
-    this.babylon.material.emissiveTexture = this.babylon.texture
-
     this.babylon.mesh.material = this.babylon.material
   }
 
   spawn(): BABYLON.Mesh {
-    return this.babylon.mesh.clone(`Sprite - ${this.asset?.definition.url}`)
+    const mesh = this.babylon.mesh.clone(`Sprite - ${this.asset?.definition.url}`)
+    mesh.material = this.babylon.material.clone(`Sprite Material - ${this.asset?.definition.url}`);
+    (mesh.material as BABYLON.StandardMaterial).emissiveTexture = this.babylon.texture
+    mesh.visibility = 1
+    mesh.billboardMode = 7
+
+    return mesh
   }
 
   // setFromTexture(texture: BABYLON.Texture | BABYLON.DynamicTexture, name: string, width?: number, height?: number): void {
@@ -85,8 +98,8 @@ export class SpriteMesh {
   // }
 
   release(): void {
-    this.babylon.texture?.dispose()
     this.babylon.material?.dispose()
+    this.babylon.texture?.dispose()
     this.babylon.mesh?.dispose()
     // this.babylon.spriteManager = null as any
   }

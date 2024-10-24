@@ -95,15 +95,15 @@ export function SceneState(props: SceneStateProps = {}): any {
       }
 
       load(scene: SceneInterface): LoadingProgress {
-        const progress = new LoadingProgress().complete()
-        ActorsController.load(this.props.actors, scene)
-        SpritesController.load(this.props.sprites, scene)
-        SpritesController.load(this.Instance.metadata?.getProps().sprites, scene)
-        MeshesController.load(this.props.meshes, scene)
-        MeshesController.load(this.Instance.metadata?.getProps().meshes, scene)
-        ParticlesController.load(this.props.particles, scene)
-        ParticlesController.load(this.Instance.metadata?.getProps().particles, scene)
-        return progress
+        return new LoadingProgress().fromNodes([
+          ActorsController.load(this.props.actors, scene),
+          SpritesController.load(this.props.sprites, scene),
+          SpritesController.load(this.Instance.metadata?.getProps().sprites, scene),
+          MeshesController.load(this.props.meshes, scene),
+          MeshesController.load(this.Instance.metadata?.getProps().meshes, scene),
+          ParticlesController.load(this.props.particles, scene),
+          ParticlesController.load(this.Instance.metadata?.getProps().particles, scene)
+        ])
       }
 
       unload(scene: SceneInterface): void {
