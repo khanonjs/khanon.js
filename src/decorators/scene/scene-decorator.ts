@@ -171,7 +171,7 @@ export function Scene(props: SceneProps = {}): any {
           ])
           elementsLoading.onComplete.add(() => {
             this._loaded = true
-            this.babylon.scene?.executeWhenReady(() => {
+            this.babylon.scene.executeWhenReady(() => {
               invokeCallback(this.onLoaded, this)
               sceneProgress.complete()
             })

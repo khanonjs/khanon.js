@@ -52,12 +52,12 @@ export function Sprite(props: SpriteProps): any {
           if (scene) {
             this.babylon.scene = this.scene.babylon.scene
             if (!this.props.url) {
-              const texture = new SpriteMesh(scene, this.props)
-              texture.setFromBlank()
-              this.setMesh(texture, true)
+              const spriteMesh = new SpriteMesh(scene, this.props)
+              spriteMesh.setFromBlank()
+              this.setMesh(spriteMesh, true)
             } else {
-              if (!core.textures.get(scene)) { Logger.debugError('Sprite texture not found for scene in sprite constructor:', _classInterface.prototype, scene.constructor.name) } // TODO get sprite and scene names
-              this.setMesh(core.textures.get(scene) as any, false)
+              if (!core.spriteMeshes.get(scene)) { Logger.debugError('Sprite texture not found for scene in sprite constructor:', _classInterface.prototype, scene.constructor.name) } // TODO get sprite and scene names
+              this.setMesh(core.spriteMeshes.get(scene) as any, false)
             }
           }
         }
@@ -378,19 +378,19 @@ export function Sprite(props: SpriteProps): any {
       const _classCore = class implements SpriteCore {
         props = applyDefaults(props, spritePropsDefault)
         Instance: SpriteInterface = new _classInterface(null as any, null as any)
-        textures: Map<SceneInterface, SpriteMesh> = new Map<SceneInterface, SpriteMesh>()
+        spriteMeshes: Map<SceneInterface, SpriteMesh> = new Map<SceneInterface, SpriteMesh>()
 
         load(scene: SceneInterface): LoadingProgress {
           const progress = new LoadingProgress()
-          if (this.textures.get(scene)) {
+          if (this.spriteMeshes.get(scene)) {
             return progress.complete()
           } else {
             if (this.props.url) {
               const asset = AssetsController.getAsset(this.props.url)
               if (!asset) { Logger.debugError(`Asset '${this.props.url}' not found on sprite load:`, _classInterface.prototype) }
-              const texture = new SpriteMesh(scene, this.props)
-              this.textures.set(scene, texture)
-              texture.setFromAsset(asset as any)
+              const spriteMesh = new SpriteMesh(scene, this.props)
+              this.spriteMeshes.set(scene, spriteMesh)
+              spriteMesh.setFromAsset(asset as any)
                 .then(() => {
                   progress.complete()
                 })
@@ -402,7 +402,7 @@ export function Sprite(props: SpriteProps): any {
         }
 
         unload(scene: SceneInterface): void {
-          this.textures.delete(scene)
+          this.spriteMeshes.delete(scene)
         }
 
         spawn(scene: SceneInterface): SpriteInterface {
@@ -411,9 +411,9 @@ export function Sprite(props: SpriteProps): any {
         }
 
         getParticleInfo(scene: SceneInterface): SpriteParticleInfo {
-          if (!core.textures.get(scene)) { Logger.debugError('Sprite texture not found for scene in getParticleInfo:', _classInterface.prototype, scene.constructor.name) } // TODO get sprite and scene names
+          if (!core.spriteMeshes.get(scene)) { Logger.debugError('Sprite texture not found for scene in getParticleInfo:', _classInterface.prototype, scene.constructor.name) } // TODO get sprite and scene names
           return {
-            texture: this.textures.get(scene) as any,
+            spriteMesh: this.spriteMeshes.get(scene) as any,
             props: this.props
           }
         }
