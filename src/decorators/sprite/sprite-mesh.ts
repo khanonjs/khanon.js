@@ -7,10 +7,16 @@ import { SceneInterface } from '../scene/scene-interface'
 import { SpriteProps } from './sprite-props'
 
 export class SpriteMesh {
-  babylon: Pick<BabylonAccessor<any, BABYLON.Mesh, BABYLON.StandardMaterial>, 'texture' | 'mesh' | 'material' | 'scene'> = { texture: null as any, mesh: null as any, material: null as any, scene: null as any }
+  static idShader = 0
+  babylon: Pick<BabylonAccessor<any, BABYLON.Mesh, BABYLON.ShaderMaterial>, 'texture' | 'mesh' | 'material' | 'scene'> = { texture: null as any, mesh: null as any, material: null as any, scene: null as any }
   asset: Asset<SceneInterface>
+  idShader: number
   width: number
   height: number
+  numCols:number
+  numRows:number
+  propCol:number
+  propRow:number
 
   constructor(scene: SceneInterface, private readonly spriteProps: SpriteProps) {
     this.babylon.scene = scene.babylon.scene
@@ -21,7 +27,7 @@ export class SpriteMesh {
   setFromAsset(asset: Asset<SceneInterface>): Promise<void> {
     return new Promise((resolve) => {
       this.asset = asset
-      this.babylon.texture = new BABYLON.Texture(asset.objectURL, this.babylon.scene, this.spriteProps.noMipmap, this.spriteProps.invertY, this.spriteProps.samplingMode)
+      this.babylon.texture = new BABYLON.Texture(asset.objectURL, this.babylon.scene, this.spriteProps.noMipmap, !this.spriteProps.invertY, this.spriteProps.samplingMode)
       this.babylon.texture.name = asset.definition.url
       this.babylon.texture.onLoadObservable.add(() => {
         this.buildMesh()
@@ -32,17 +38,15 @@ export class SpriteMesh {
 
   // TODO is this okay being sync? We need it sync because the texture is created on real-time execution (one exclusive texture per sprite spwan).
   setFromBlank(): void {
-    this.babylon.texture = new BABYLON.DynamicTexture('blank-texture', { width: this.spriteProps.width, height: this.spriteProps.height }, this.babylon.scene, !this.spriteProps.noMipmap, this.spriteProps.samplingMode, this.spriteProps.format, this.spriteProps.invertY)
+    this.babylon.texture = new BABYLON.DynamicTexture('blank-texture', { width: this.spriteProps.width, height: this.spriteProps.height }, this.babylon.scene, this.spriteProps.noMipmap, this.spriteProps.samplingMode, this.spriteProps.format, !this.spriteProps.invertY)
     this.buildMesh()
   }
 
   buildMesh(): void {
-    const quadVertexData = new BABYLON.VertexData()
-
     const w = this.width / 2
     const h = this.height / 2
 
-    // Logger.trace('aki w, h', w, h)
+    const quadVertexData = new BABYLON.VertexData()
     // The 4 vertices, clockwise starting from bottom left
     const positions = [
       -w, -h, 0,
@@ -57,10 +61,10 @@ export class SpriteMesh {
     ]
     // Default unfolding showing the entire spritesheet. UVs will be updated in the update loop.
     const uvs = [
-      0, 0,
       0, 1,
-      1, 1,
-      1, 0
+      0, 0,
+      1, 0,
+      1, 1
     ]
     quadVertexData.positions = positions
     quadVertexData.indices = indices
@@ -69,14 +73,74 @@ export class SpriteMesh {
     this.babylon.mesh = new BABYLON.Mesh(this.asset?.definition.url, this.babylon.scene)
     this.babylon.mesh.visibility = 0
     quadVertexData.applyToMesh(this.babylon.mesh, true)
-    this.babylon.material = new BABYLON.StandardMaterial(this.asset?.definition.url)
-    this.babylon.mesh.material = this.babylon.material
+
+    const size = this.babylon.texture.getSize()
+    this.idShader = SpriteMesh.idShader
+    SpriteMesh.idShader++
+    this.numCols = size.width / this.width
+    this.numRows = size.height / this.height
+    this.propCol = 1 / this.numCols
+    this.propRow = 1 / this.numRows
+    Logger.trace('aki name', this.babylon.texture.name)
+    Logger.trace('aki this.spriteProps.noMipmap', this.spriteProps.noMipmap)
+    Logger.trace('aki this.babylon.texture.getBaseSize()', this.babylon.texture.getBaseSize())
+    Logger.trace('aki this.babylon.texture.getSize()', this.babylon.texture.getSize())
+    Logger.trace('aki numCols, numRows', this.numCols, this.numRows)
+    Logger.trace('aki propCol, propRow', this.propCol, this.propRow)
+
+    BABYLON.Effect.ShadersStore[`spriteMesh${this.idShader}VertexShader`] = `
+    precision highp float;
+    attribute vec3 position;
+    attribute vec2 uv;
+    uniform mat4 worldViewProjection;
+    varying vec2 vUv;
+
+    void main() {
+        vec4 p = vec4(position, 1.);
+        gl_Position = worldViewProjection * p;
+        vUv = uv;
+    }
+`
+    // 8a8f test if two different sprites have different frames
+    BABYLON.Effect.ShadersStore[`spriteMesh${this.idShader}FragmentShader`] = `
+    precision highp float;
+    varying vec2 vUv;
+    uniform sampler2D textureSampler;
+    uniform int frame;
+
+    void main() {
+        int uOffset = frame % ${this.numCols};
+        int vOffset = frame / ${this.numCols};
+        vec2 computedUV = vec2(vUv.x * ${this.propCol.toPrecision(7)} + float(uOffset) * ${this.propCol.toPrecision(7)}, vUv.y * ${this.propRow.toPrecision(7)} + float(vOffset) * ${this.propRow.toPrecision(7)});
+        vec4 color = texture2D(textureSampler, computedUV);
+        gl_FragColor = color;
+    }
+`
+
+    const shaderMaterial = new BABYLON.ShaderMaterial('custom', this.babylon.scene, `spriteMesh${this.idShader}`, {
+      attributes: ['position', 'uv'],
+      uniforms: ['worldViewProjection'],
+      samplers: ['textureSampler'],
+      needAlphaBlending: true
+    })
+
+    const spritesheetTexture = this.babylon.texture
+    shaderMaterial.setTexture('textureSampler', spritesheetTexture)
+    shaderMaterial.setInt('frame', 0)
+    this.babylon.material = shaderMaterial
+
+    // 8a8f Old
+    // this.babylon.material = new BABYLON.StandardMaterial(this.asset?.definition.url)
+    // this.babylon.mesh.material = this.babylon.material
   }
 
   spawn(): BABYLON.Mesh {
     const mesh = this.babylon.mesh.clone(`Sprite - ${this.asset?.definition.url}`)
-    mesh.material = this.babylon.material.clone(`Sprite Material - ${this.asset?.definition.url}`);
-    (mesh.material as BABYLON.StandardMaterial).emissiveTexture = this.babylon.texture
+    mesh.material = this.babylon.material.clone(`Sprite Material - ${this.asset?.definition.url}`)
+
+    // 8a8f Old
+    // (mesh.material as BABYLON.StandardMaterial).emissiveTexture = this.babylon.texture
+
     mesh.visibility = 1
     mesh.billboardMode = 7
 
