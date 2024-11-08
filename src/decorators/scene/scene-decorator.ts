@@ -5,6 +5,7 @@ import '@babylonjs/core/Debug/debugLayer'
 import * as BABYLON from '@babylonjs/core'
 
 import { LoadingProgress } from '../../base'
+import { Core } from '../../base/core/core'
 import { Metadata } from '../../base/interfaces/metadata/metadata'
 import {
   ActorActionsController,
@@ -19,7 +20,6 @@ import {
   SceneStatesController,
   SpritesController
 } from '../../controllers'
-import { Core } from '../../core'
 import KJS from '../../kjs/kjs'
 import { AssetDefinition } from '../../models/asset-definition'
 import { BabylonAccessor } from '../../models/babylon-accessor'

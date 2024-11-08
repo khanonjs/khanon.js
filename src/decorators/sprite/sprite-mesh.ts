@@ -81,12 +81,6 @@ export class SpriteMesh {
     this.numRows = size.height / this.height
     this.propCol = 1 / this.numCols
     this.propRow = 1 / this.numRows
-    Logger.trace('aki name', this.babylon.texture.name)
-    Logger.trace('aki this.spriteProps.noMipmap', this.spriteProps.noMipmap)
-    Logger.trace('aki this.babylon.texture.getBaseSize()', this.babylon.texture.getBaseSize())
-    Logger.trace('aki this.babylon.texture.getSize()', this.babylon.texture.getSize())
-    Logger.trace('aki numCols, numRows', this.numCols, this.numRows)
-    Logger.trace('aki propCol, propRow', this.propCol, this.propRow)
 
     BABYLON.Effect.ShadersStore[`spriteMesh${this.idShader}VertexShader`] = `
     precision highp float;
@@ -124,9 +118,9 @@ export class SpriteMesh {
       needAlphaBlending: true
     })
 
-    const spritesheetTexture = this.babylon.texture
-    shaderMaterial.setTexture('textureSampler', spritesheetTexture)
+    shaderMaterial.setTexture('textureSampler', this.babylon.texture)
     shaderMaterial.setInt('frame', 0)
+    this.babylon.mesh.material = shaderMaterial
     this.babylon.material = shaderMaterial
 
     // 8a8f Old
@@ -136,7 +130,6 @@ export class SpriteMesh {
 
   spawn(): BABYLON.Mesh {
     const mesh = this.babylon.mesh.clone(`Sprite - ${this.asset?.definition.url}`)
-    mesh.material = this.babylon.material.clone(`Sprite Material - ${this.asset?.definition.url}`)
 
     // 8a8f Old
     // (mesh.material as BABYLON.StandardMaterial).emissiveTexture = this.babylon.texture

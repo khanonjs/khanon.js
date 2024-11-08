@@ -4,14 +4,14 @@ import {
   LoadingProgress,
   StateInterface
 } from '../../base'
+import { Core } from '../../base/core/core'
 import { Metadata } from '../../base/interfaces/metadata/metadata'
 import {
   AssetsController,
   SpritesController
 } from '../../controllers'
-import { Core } from '../../core'
 import { BabylonAccessor } from '../../models/babylon-accessor'
-import { DrawBlockProperties } from '../../models/draw-text-properties'
+import { DrawBlockProperties } from '../../models/draw-block-properties'
 import { Rect } from '../../models/rect'
 import { Timeout } from '../../models/timeout'
 import { Logger } from '../../modules/logger'
@@ -193,11 +193,15 @@ export function Sprite(props: SpriteProps): any {
         //   invokeCallback(this.onSpawn, this)
         // }
 
+        setShaderMaterialTextureFrame(frame: number): void {
+          (this.babylon.mesh.material as BABYLON.ShaderMaterial).setInt('frame', frame)
+        }
+
         setFrame(frame: number): void {
           if (frame < this.getFirstFrame() || frame > this.getLastFrame()) { Logger.debugError(`Calling out of bound setFrame(${frame}) - Start: ${this.getFirstFrame()}, End: ${this.getLastFrame()}`) }
           this.stopAnimation()
           this.visible = true
-          // this.babylon.sprite.cellIndex = frame  // 8a8f
+          this.setShaderMaterialTextureFrame(frame)
         }
 
         setFrameFirst(): void {
@@ -237,53 +241,63 @@ export function Sprite(props: SpriteProps): any {
         }
 
         playAnimation(animation: SpriteAnimation | FlexId, loopOverride?: boolean, completed?: () => void): void {
-          // if (isFlexId(animation)) { // 8a8f
-          //   if (!this.animations.get(animation as FlexId)) { Logger.debugError(`Animation '${animation}' doesn't exist in sprite:`, _classInterface.prototype); return }
-          //   animation = this.animations.get(animation as FlexId) as SpriteAnimation
-          // }
-          // this.animation = animation as SpriteAnimation
-          // const frameStart = this.getFirstFrame()
-          // const frameEnd = this.getLastFrame()
-          // const delay = this.animation.delay
-          // const loop = loopOverride ?? this.animation.loop
-          // const keyFrames = this.animation.keyFrames
+          if (isFlexId(animation)) {
+            if (!this.animations.get(animation as FlexId)) { Logger.debugError(`Animation '${animation}' doesn't exist in sprite:`, _classInterface.prototype); return }
+            animation = this.animations.get(animation as FlexId) as SpriteAnimation
+          }
+          this.animation = animation as SpriteAnimation
+          const frameStart = this.getFirstFrame()
+          const frameEnd = this.getLastFrame()
+          const delay = this.animation.delay
+          const loop = loopOverride ?? this.animation.loop
+          const keyFrames = this.animation.keyFrames
 
-          // const playAnimation = () => {
-          //   this.babylon.sprite.playAnimation(frameStart, frameEnd, false, delay)
-          //   if (completed || loop) {
-          //     this.endAnimationTimer = Core.setTimeout(() => onCompleted(), (frameEnd - frameStart + 1) * delay)
-          //   }
-          //   this.keyFramesTimeouts = []
-          //   keyFrames?.forEach((animationKeyFrame) => {
-          //     if (animationKeyFrame.emitter.hasObservers()) {
-          //       animationKeyFrame.ms.forEach((ms) => {
-          //         this.keyFramesTimeouts.push(Core.setTimeout(() => animationKeyFrame.emitter.notifyObservers(), ms))
-          //       })
-          //     }
-          //   })
-          // }
+          this.visible = true
+          this.removeEndAnimationTimer()
+          this.removeAnimationKeyFrames()
 
-          // // To support 'keyframes' and 'completed' callback for each loop tt is neccesary to do the loop manually since Babylon only notify the first end of animation
-          // // Otherwise would need to use setInterval for keyframes, which would't be synchronized after some loops
-          // const onCompleted = () => {
-          //   if (completed) {
-          //     completed()
-          //   }
-          //   if (loop) {
-          //     playAnimation()
-          //   }
-          // }
+          const onCompleted = () => {
+            if (completed) {
+              completed()
+            }
+            if (loop) {
+              startKeyframes()
+            }
+          }
 
-          // this.visible = true
-          // this.removeEndAnimationTimer()
-          // this.removeAnimationKeyFrames()
-          // playAnimation()
+          const startKeyframes = () => {
+            this.keyFramesTimeouts = []
+            keyFrames?.forEach((animationKeyFrame) => {
+              if (animationKeyFrame.emitter.hasObservers()) {
+                animationKeyFrame.ms.forEach((ms) => {
+                  this.keyFramesTimeouts.push(Core.setTimeout(() => animationKeyFrame.emitter.notifyObservers(), ms))
+                })
+              }
+            })
+          }
+
+          if (completed || (keyFrames && keyFrames.length > 0)) {
+            if (loop) {
+              this.endAnimationTimer = Core.setInterval(() => onCompleted(), (frameEnd - frameStart + 1) * delay)
+            } else {
+              this.endAnimationTimer = Core.setTimeout(() => onCompleted(), (frameEnd - frameStart + 1) * delay)
+            }
+            startKeyframes()
+          }
+
+          Core.setAnimationHandler(this, {
+            id: this.animation.id,
+            frameStart,
+            frameEnd,
+            delay,
+            loop
+          })
         }
 
         stopAnimation(): void {
           this.removeEndAnimationTimer()
           this.removeAnimationKeyFrames()
-          // this.babylon.sprite.stopAnimation() // 8a8f
+          Core.stopAnimationHandler(this)
           this.animation = null
         }
 

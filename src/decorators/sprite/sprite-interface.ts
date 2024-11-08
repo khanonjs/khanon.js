@@ -2,7 +2,7 @@ import * as BABYLON from '@babylonjs/core'
 
 import { DisplayObject } from '../../base'
 import { BabylonAccessor } from '../../models/babylon-accessor'
-import { DrawBlockProperties } from '../../models/draw-text-properties'
+import { DrawBlockProperties } from '../../models/draw-block-properties'
 import { Rect } from '../../models/rect'
 import { MeshTransform } from '../../types'
 import { FlexId } from '../../types/flex-id'
@@ -25,6 +25,7 @@ export abstract class SpriteInterface implements DisplayObject {
   abstract transform: MeshTransform
   abstract _scale: number
   abstract setMesh(spriteMesh: SpriteMesh, isExclusive: boolean, isParticle: boolean): void
+  abstract setShaderMaterialTextureFrame(frame: number): void
   // abstract setTexture(spriteTexture: SpriteMesh, isExclusive: boolean, isParticle: boolean): void
   abstract release(): void
 

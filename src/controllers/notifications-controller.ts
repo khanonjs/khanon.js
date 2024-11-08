@@ -1,4 +1,4 @@
-import { Core } from '../core'
+import { Core } from '../base/core/core'
 import { ActorInterface } from '../decorators/actor/actor-interface'
 import { ActorStateInterface } from '../decorators/actor/actor-state/actor-state-interface'
 import { AppInterface } from '../decorators/app/app-interface'

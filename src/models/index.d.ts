@@ -1,6 +1,7 @@
 import * as BABYLON from '@babylonjs/core'
 
 import { FlexId } from '../types'
+import { Rect } from './rect'
 
 export declare interface AnimationKeyFrame {
   /**
@@ -58,7 +59,49 @@ export class BabylonAccessor<C extends BABYLON.Camera = any> {
   get particleSystem(): BABYLON.ParticleSystem
 }
 
+export interface DrawBlockProperties {
+  /**
+   * Font name (CSS fontface).
+   */
+  fontName: string
+
+  /**
+   * Font size.
+   */
+  fontSize: number
+
+  /**
+   * Text color (HTML format).
+   */
+  textColor: string
+
+  /**
+   * Font style (bold, italic, etc..).
+   */
+  fontStyle?: string
+
+  /**
+   * Background color (Deefault is transparent background).
+   */
+  bgColor?: string
+
+  /**
+   * Center horizontally ('true' by default).
+   */
+  centerH?: boolean
+
+  /**
+   * Center vertically ('true' by default).
+   */
+  centerV?: boolean
+
+  /**
+   * Texture size (Default fits text to whole area).
+   */
+  textureSize?: Rect
+}
+
 export { AssetType } from './asset-type'
-export { DrawBlockProperties } from './draw-text-properties'
+export { DrawBlockProperties } from './draw-block-properties'
 export { Rect } from './rect'
 export declare class Timeout {}

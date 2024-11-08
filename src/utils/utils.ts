@@ -1,4 +1,4 @@
-import { Core } from '../core'
+import { Core } from '../base/core/core'
 import { Logger } from '../modules/logger'
 import { ExtractOptional } from '../types/extract-optional'
 

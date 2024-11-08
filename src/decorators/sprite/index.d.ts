@@ -5,7 +5,7 @@ import {
   BabylonAccessor,
   Rect
 } from '../../models'
-import { DrawBlockProperties } from '../../models/draw-text-properties'
+import { DrawBlockProperties } from '../../models/draw-block-properties'
 import { FlexId } from '../../types'
 import { SceneInterface } from '../scene'
 
