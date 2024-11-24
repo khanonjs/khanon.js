@@ -49,6 +49,7 @@ export function Particle(props: ParticleProps): any {
         props: ParticleProps
         metadata: Metadata = Reflect.getMetadata('metadata', this) ?? new Metadata()
         babylon: Pick<BabylonAccessor, 'scene' | 'particleSystem'> = { scene: null as any, particleSystem: null as any }
+        _loopUpdate: boolean
         loopUpdate$: BABYLON.Observer<number>
         canvasResize$: BABYLON.Observer<Rect>
         attachmentUpdate$: BABYLON.Observer<number>
@@ -57,7 +58,7 @@ export function Particle(props: ParticleProps): any {
         offset: BABYLON.Vector3
 
         set loopUpdate(value: boolean) { switchLoopUpdate(value, this) }
-        get loopUpdate(): boolean { return !!this.loopUpdate$ }
+        get loopUpdate(): boolean { return this._loopUpdate }
 
         create(): void {
           if (this.scene) {

@@ -29,12 +29,13 @@ export function AppState(props: AppStateProps = {}): any {
 
       props: AppStateProps
       metadata: Metadata = Reflect.getMetadata('metadata', this) ?? new Metadata()
+      _loopUpdate: boolean
       loopUpdate$: BABYLON.Observer<number>
       canvasResize$: BABYLON.Observer<Rect>
       setup: any
 
       set loopUpdate(value: boolean) { switchLoopUpdate(value, this) }
-      get loopUpdate(): boolean { return !!this.loopUpdate$ }
+      get loopUpdate(): boolean { return this._loopUpdate }
 
       start(): void {
         Logger.debug('AppState start', _classInterface.prototype)

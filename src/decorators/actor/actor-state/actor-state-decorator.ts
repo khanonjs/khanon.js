@@ -41,13 +41,14 @@ export function ActorState(props: ActorStateProps = {}): any {
       props: ActorStateProps
       actor: ActorInterface
       metadata: Metadata = Reflect.getMetadata('metadata', this) ?? new Metadata()
+      _loopUpdate: boolean
       loopUpdate$: BABYLON.Observer<number>
       canvasResize$: BABYLON.Observer<Rect>
       scene: SceneInterface
       setup: any
 
       set loopUpdate(value: boolean) { switchLoopUpdate(value, this) }
-      get loopUpdate(): boolean { return !!this.loopUpdate$ }
+      get loopUpdate(): boolean { return this._loopUpdate }
 
       start(): void {
         Logger.debug('ActorState start', _classInterface.prototype, this.actor.constructor.prototype)

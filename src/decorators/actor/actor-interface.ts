@@ -27,6 +27,7 @@ import { ActorStateInterface } from './actor-state/actor-state-interface'
 export abstract class ActorInterface<B extends SpriteInterface | MeshInterface = any> implements LoopUpdatable, CanvasResizable, Notificable {
   abstract metadata: Metadata
   abstract props: ActorProps
+  abstract _loopUpdate: boolean
   abstract loopUpdate$: BABYLON.Observer<number>
   abstract canvasResize$: BABYLON.Observer<Rect>
   abstract _body: B | undefined

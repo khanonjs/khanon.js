@@ -43,13 +43,19 @@ export function ActorAction(props: ActorActionProps = {}): any {
         loopUpdate$: BABYLON.Observer<number>
         canvasResize$: BABYLON.Observer<Rect>
         setup: any
+        _loopUpdate = false
+        _isPlaying = false
 
         set loopUpdate(value: boolean) { switchLoopUpdate(value, this) }
-        get loopUpdate(): boolean { return !!this.loopUpdate$ }
+        get loopUpdate(): boolean { return this._loopUpdate }
+
+        get isPlaying(): boolean { return this._isPlaying }
 
         start(setup: any): void {
+          Logger.trace('aki action start')
           this.scene = this.actor.scene
           this.setup = setup
+          this._isPlaying = true
           if (this.props.countFrames) {
             this.countFramesUpdate$ = Core.loopUpdateAddObserver((delta: number) => {
               this.countFrames += delta
@@ -61,13 +67,24 @@ export function ActorAction(props: ActorActionProps = {}): any {
               }
             })
           }
+          this._loopUpdate = true
           attachLoopUpdate(this)
           attachCanvasResize(this)
           invokeCallback(this.onPlay, this)
         }
 
         play(): void {
-          // 8a8f
+          if (!this.props.preserve) { Logger.debugError('Cannot play an action which is not preserved in context.', _classInterface.prototype) }
+          if (!this.isPlaying) {
+            this._isPlaying = true
+            if (this.loopUpdate) {
+              Logger.trace('aki action play WTF', !!this.onLoopUpdate, this.loopUpdate$)
+              Logger.trace('aki action play FUNC', this.onLoopUpdate)
+              attachLoopUpdate(this)
+            }
+            attachCanvasResize(this)
+            invokeCallback(this.onPlay, this)
+          }
         }
 
         stop(): void {
@@ -75,6 +92,7 @@ export function ActorAction(props: ActorActionProps = {}): any {
         }
 
         remove(): void {
+          this._isPlaying = false
           this.actor.stopActionFromInstance(this, true)
         }
       }

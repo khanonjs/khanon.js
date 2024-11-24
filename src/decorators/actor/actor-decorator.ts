@@ -64,6 +64,7 @@ export function Actor(props: ActorProps = {}): any {
       metadata: Metadata = Reflect.getMetadata('metadata', this) ?? new Metadata()
       transform: SpriteInterface | MeshInterface | null
       t: SpriteInterface | MeshInterface | null
+      _loopUpdate: boolean
       loopUpdate$: BABYLON.Observer<number>
       canvasResize$: BABYLON.Observer<Rect>
       _body: B | null = null
@@ -74,7 +75,7 @@ export function Actor(props: ActorProps = {}): any {
       particles: Map<FlexId, ParticleInterface> = new Map<FlexId, ParticleInterface>()
 
       set loopUpdate(value: boolean) { switchLoopUpdate(value, this) }
-      get loopUpdate(): boolean { return !!this.loopUpdate$ }
+      get loopUpdate(): boolean { return this._loopUpdate }
       get body(): SpriteInterface | MeshInterface | null { return this._body }
       get state(): ActorStateInterface | null { return this._state }
 
@@ -255,8 +256,9 @@ export function Actor(props: ActorProps = {}): any {
             }
           })
           action.start(setup)
+        } else {
+          action.play()
         }
-        // 8a8f ...else if this action is stopped...
         return action
       }
 
@@ -281,6 +283,8 @@ export function Actor(props: ActorProps = {}): any {
       stopAction(actionConstructor: ActorActionConstructor, forceRemove?: boolean): void {
         const action = this.actions.get(actionConstructor)
         if (action) {
+          Logger.trace('aki remove loop update')
+          action._isPlaying = false
           removeLoopUpdate(action)
           removeCanvasResize(action)
           invokeCallback(action.onStop, action)

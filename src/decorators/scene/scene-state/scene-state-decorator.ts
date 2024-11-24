@@ -44,6 +44,7 @@ export function SceneState(props: SceneStateProps = {}): any {
 
       props: SceneStateProps
       setup: any
+      _loopUpdate: boolean
       loopUpdate$: BABYLON.Observer<number>
       canvasResize$: BABYLON.Observer<Rect>
       _spawn: SceneSpawn
@@ -51,7 +52,7 @@ export function SceneState(props: SceneStateProps = {}): any {
       metadata: Metadata = Reflect.getMetadata('metadata', this) ?? new Metadata()
 
       set loopUpdate(value: boolean) { switchLoopUpdate(value, this) }
-      get loopUpdate(): boolean { return !!this.loopUpdate$ }
+      get loopUpdate(): boolean { return this._loopUpdate }
 
       get spawn(): SceneSpawn { return this._spawn }
       get remove(): SceneRemove { return this._remove }

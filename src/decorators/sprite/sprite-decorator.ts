@@ -81,7 +81,7 @@ export function Sprite(props: SpriteProps): any {
         _scale: number = 1
 
         set loopUpdate(value: boolean) { switchLoopUpdate(value, this) }
-        get loopUpdate(): boolean { return !!this.loopUpdate$ }
+        get loopUpdate(): boolean { return this._loopUpdate }
 
         get absolutePosition(): BABYLON.Vector3 { return this.babylon.mesh.absolutePosition }
         set position(value: BABYLON.Vector3) { this.babylon.mesh.position = value }

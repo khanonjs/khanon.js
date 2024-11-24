@@ -77,13 +77,14 @@ export function Scene(props: SceneProps = {}): any {
       actions: Map<SceneActionConstructor, SceneActionInterface> = new Map<SceneActionConstructor, SceneActionInterface>()
       availableElements: SceneAvailableElements
       animationHandler: Map<SpriteInterface, () => void> = new Map<SpriteInterface, () => void>()
-      protected _assets: AssetDefinition[]
-      protected _loaded: boolean
-      protected _started: boolean
-      protected _state: SceneStateInterface
-      protected _camera: CameraInterface
-      protected _spawn: SceneSpawn
-      protected _remove: SceneRemove
+      _assets: AssetDefinition[]
+      _loaded: boolean
+      _started: boolean
+      _state: SceneStateInterface
+      _camera: CameraInterface
+      _spawn: SceneSpawn
+      _remove: SceneRemove
+      _loopUpdate: boolean
 
       // Spawned elements
       actors: Set<ActorInterface> = new Set<ActorInterface>()
@@ -106,7 +107,7 @@ export function Scene(props: SceneProps = {}): any {
       get remove(): SceneRemove { return this._remove }
 
       set loopUpdate(value: boolean) { switchLoopUpdate(value, this) }
-      get loopUpdate(): boolean { return !!this.loopUpdate$ }
+      get loopUpdate(): boolean { return this._loopUpdate }
 
       start(state: SceneStateConstructor, stateSetup: any): SceneStateInterface {
         Logger.debug('Scene start', _class.prototype)

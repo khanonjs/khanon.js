@@ -7,6 +7,7 @@ import { ExtractOptional } from '../types/extract-optional'
  */
 export function attachLoopUpdate(context: any): void {
   if (context.onLoopUpdate && !context.loopUpdate$) {
+    Logger.trace('aki ATTACH LOOPUPDATE!')
     context.loopUpdate$ = Core.loopUpdateAddObserver(context.onLoopUpdate.bind(context))
   }
 }

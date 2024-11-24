@@ -30,13 +30,14 @@ import { SceneStateInterface } from './scene-state/scene-state-interface'
 
 export abstract class SceneInterface implements Loadable, LoopUpdatable, CanvasResizable, Notificable {
   abstract props: SceneProps
-  protected abstract _assets: AssetDefinition[]
-  protected abstract _loaded: boolean
-  protected abstract _started: boolean
-  protected abstract _state: SceneStateInterface
-  protected abstract _spawn: SceneSpawn
-  protected abstract _remove: SceneRemove
-  protected abstract _camera: CameraInterface
+  abstract _assets: AssetDefinition[]
+  abstract _loaded: boolean
+  abstract _started: boolean
+  abstract _state: SceneStateInterface
+  abstract _spawn: SceneSpawn
+  abstract _remove: SceneRemove
+  abstract _camera: CameraInterface
+  abstract _loopUpdate: boolean
   abstract availableElements: SceneAvailableElements
   abstract assets: AssetDefinition[]
   abstract metadata: Metadata

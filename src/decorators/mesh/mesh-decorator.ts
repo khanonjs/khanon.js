@@ -53,7 +53,7 @@ export function Mesh(props: MeshProps): any {
         canvasResize$: BABYLON.Observer<Rect>
 
         set loopUpdate(value: boolean) { switchLoopUpdate(value, this) }
-        get loopUpdate(): boolean { return !!this.loopUpdate$ }
+        get loopUpdate(): boolean { return this._loopUpdate }
 
         get absolutePosition(): BABYLON.Vector3 { return this.babylon.mesh.absolutePosition }
         get absoluteRotationQuaternion(): BABYLON.Quaternion { return this.babylon.mesh.absoluteRotationQuaternion }
