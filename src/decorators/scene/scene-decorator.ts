@@ -21,6 +21,7 @@ import {
   SpritesController
 } from '../../controllers'
 import KJS from '../../kjs/kjs'
+import { AnimationBase } from '../../models/animation-base'
 import { AssetDefinition } from '../../models/asset-definition'
 import { BabylonAccessor } from '../../models/babylon-accessor'
 import { Rect } from '../../models/rect'
@@ -75,6 +76,7 @@ export function Scene(props: SceneProps = {}): any {
       metadata: Metadata = Reflect.getMetadata('metadata', this) ?? new Metadata()
       actions: Map<SceneActionConstructor, SceneActionInterface> = new Map<SceneActionConstructor, SceneActionInterface>()
       availableElements: SceneAvailableElements
+      animationHandler: Map<SpriteInterface, () => void> = new Map<SpriteInterface, () => void>()
       protected _assets: AssetDefinition[]
       protected _loaded: boolean
       protected _started: boolean
@@ -116,6 +118,7 @@ export function Scene(props: SceneProps = {}): any {
         }
         if (!this.camera) { Logger.debugError('Please set a camera before starting the scene. Do it in the (Scene / SceneState) \'onSart\' method:', _class.prototype); return null as any }
         Core.startRenderScene(this)
+        this.startRenderObservable()
         attachLoopUpdate(this)
         attachCanvasResize(this)
         return this.state
@@ -127,6 +130,7 @@ export function Scene(props: SceneProps = {}): any {
         this.state.end()
         this._started = false
         Core.stopRenderScene(this)
+        this.stopRenderObservable()
         removeLoopUpdate(this)
         removeCanvasResize(this)
       }
@@ -201,10 +205,23 @@ export function Scene(props: SceneProps = {}): any {
         ParticlesController.unload(this.metadata.getProps().particles, this)
       }
 
+      startRenderObservable(): void {
+        this.babylon.scene.onBeforeRenderObservable.add(() => {
+          this.animationHandler.forEach(handler => {
+            handler()
+          })
+        })
+      }
+
+      stopRenderObservable(): void {
+        this.babylon.scene.onBeforeRenderObservable.clear()
+      }
+
       switchCamera(constructor: CameraConstructor): void {
         const camera = CamerasController.get(constructor).spawn(this)
         if (this._camera) {
-          this._camera.stop()
+          this._camera.babylon.camera.onViewMatrixChangedObservable.clear()
+          this._camera.stop() // TODO should I stop and start the camera on scene stop and start?
         }
         this._camera = camera
         this._camera.babylon.camera = (this._camera.onInitialize as any)(this.babylon.scene)
@@ -225,6 +242,29 @@ export function Scene(props: SceneProps = {}): any {
         this._state = _state
         this._state.start(setup)
         return this._state
+      }
+
+      setAnimationHandler(sprite: SpriteInterface, animation: AnimationBase): void {
+        const startMs = Core.getLoopUpdateLastMs()
+        const numSprites = animation.frameEnd - animation.frameStart
+        const totalTimeMs = numSprites * animation.delay
+        const handleLoop = () => {
+          sprite.setShaderMaterialTextureFrame(animation.frameStart + (Math.trunc(((Core.getLoopUpdateLastMs() - startMs) % totalTimeMs) / animation.delay)))
+        }
+        const handleNoLoop = () => {
+          const loopUpdateLastMs = Core.getLoopUpdateLastMs()
+          if (loopUpdateLastMs - startMs >= totalTimeMs) {
+            sprite.setShaderMaterialTextureFrame(animation.frameEnd)
+            this.animationHandler.delete(sprite)
+          } else {
+            sprite.setShaderMaterialTextureFrame(animation.frameStart + (Math.trunc(((Core.getLoopUpdateLastMs() - startMs) % totalTimeMs) / animation.delay)))
+          }
+        }
+        this.animationHandler.set(sprite, animation.loop ? handleLoop : handleNoLoop)
+      }
+
+      stopAnimationHandler(sprite: SpriteInterface): void {
+        this.animationHandler.delete(sprite)
       }
 
       getActionOwner(actionConstructor: SceneActionConstructor): SceneInterface | SceneStateInterface | undefined {

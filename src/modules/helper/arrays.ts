@@ -12,4 +12,17 @@ export class Arrays {
   static clear(arr: any[]): void {
     arr.splice(0, arr.length)
   }
+
+  static removeValue(arr: any[] | undefined, value: any): void {
+    if (arr) {
+      let i = 0
+      while (i < arr.length) {
+        if (arr[i] === value) {
+          arr.splice(i, 1)
+        } else {
+          ++i
+        }
+      }
+    }
+  }
 }

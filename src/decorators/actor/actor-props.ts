@@ -11,4 +11,6 @@ export interface ActorProps {
   states?: ActorStateConstructor[]
   actions?: ActorActionConstructor[]
   particles?: ParticleConstructor[]
+  renderingGroupId?: number
+  visibility?: number
 }

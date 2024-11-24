@@ -15,7 +15,7 @@ export declare abstract class SpriteInterface {
   /**
    * Babylon.js objects.
    */
-  get babylon(): Pick<BabylonAccessor, 'scene' | 'spriteManager' | 'sprite'>
+  get babylon(): Pick<BabylonAccessor, 'mesh' | 'scene'>
 
   /**
    * Scene owner of this Sprite.
@@ -127,29 +127,29 @@ export declare abstract class SpriteInterface {
   // // getTransform(): BABYLON.Matrix // TODO
 
   get absolutePosition(): BABYLON.Vector3
-  get absoluteRotationQuaternion(): BABYLON.Quaternion
-  get absoluteScaling(): BABYLON.Vector3
+  // get absoluteRotationQuaternion(): BABYLON.Quaternion
+  // get absoluteScaling(): BABYLON.Vector3
   set position(value: BABYLON.Vector3)
   get position(): BABYLON.Vector3
-  set rotation(value: BABYLON.Vector3)
-  get rotation(): BABYLON.Vector3
-  set rotationQuaternion(value: BABYLON.Quaternion)
-  get rotationQuaternion(): BABYLON.Nullable<BABYLON.Quaternion>
-  set scaling(value: BABYLON.Vector3)
-  get scaling(): BABYLON.Vector3
-  addRotation(x: number, y: number, z: number): BABYLON.TransformNode
+  // set rotation(value: BABYLON.Vector3)
+  // get rotation(): BABYLON.Vector3
+  // set rotationQuaternion(value: BABYLON.Quaternion)
+  // get rotationQuaternion(): BABYLON.Nullable<BABYLON.Quaternion>
+  // set scaling(value: BABYLON.Vector3)
+  // get scaling(): BABYLON.Vector3
+  // addRotation(x: number, y: number, z: number): BABYLON.TransformNode
   getAbsolutePivotPoint(): BABYLON.Vector3
   getAbsolutePivotPointToRef(result: BABYLON.Vector3): BABYLON.TransformNode
   getAbsolutePosition(): BABYLON.Vector3
-  getDirection(localAxis: BABYLON.Vector3): BABYLON.Vector3
-  getDirectionToRef(localAxis: BABYLON.Vector3, result: BABYLON.Vector3): BABYLON.TransformNode
+  // getDirection(localAxis: BABYLON.Vector3): BABYLON.Vector3
+  // getDirectionToRef(localAxis: BABYLON.Vector3, result: BABYLON.Vector3): BABYLON.TransformNode
   getPivotPoint(): BABYLON.Vector3
   getPivotPointToRef(result: BABYLON.Vector3): BABYLON.TransformNode
   locallyTranslate(vector3: BABYLON.Vector3): BABYLON.TransformNode
-  lookAt(targetPoint: BABYLON.Vector3, yawCor?: number, pitchCor?: number, rollCor?: number, space?: BABYLON.Space): BABYLON.TransformNode
-  rotate(axis: BABYLON.Vector3, amount: number, space?: BABYLON.Space): BABYLON.TransformNode
+  // lookAt(targetPoint: BABYLON.Vector3, yawCor?: number, pitchCor?: number, rollCor?: number, space?: BABYLON.Space): BABYLON.TransformNode
+  // rotate(axis: BABYLON.Vector3, amount: number, space?: BABYLON.Space): BABYLON.TransformNode
   rotateAround(point: BABYLON.Vector3, axis: BABYLON.Vector3, amount: number): BABYLON.TransformNode
-  rotatePOV(flipBack: number, twirlClockwise: number, tiltRight: number): BABYLON.AbstractMesh
+  // rotatePOV(flipBack: number, twirlClockwise: number, tiltRight: number): BABYLON.AbstractMesh
   setAbsolutePosition(absolutePosition: BABYLON.Vector3): BABYLON.TransformNode
   setDirection(localAxis: BABYLON.Vector3, yawCor?: number, pitchCor?: number, rollCor?: number): BABYLON.TransformNode
   setPivotMatrix(matrix: BABYLON.DeepImmutable<BABYLON.Matrix>, postMultiplyPivotMatrix?: boolean): BABYLON.TransformNode
@@ -158,6 +158,15 @@ export declare abstract class SpriteInterface {
   translate(axis: BABYLON.Vector3, distance: number, space?: BABYLON.Space): BABYLON.TransformNode
   set visibility(value: number)
   get visibility(): number
+
+  set rotation(value: number)
+  get rotation(): number
+  set scale(value: number)
+  get scale(): number
+  set scaleX(value: number)
+  get scaleX(): number
+  set scaleY(value: number)
+  get scaleY(): number
 
   /**
    * Sets current frame (stops current animation).

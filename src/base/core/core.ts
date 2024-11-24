@@ -4,8 +4,6 @@ import { AppInterface } from '../../decorators/app/app-interface'
 import { AppStateConstructor } from '../../decorators/app/app-state/app-state-constructor'
 import { AppStateInterface } from '../../decorators/app/app-state/app-state-interface'
 import { SceneInterface } from '../../decorators/scene/scene-interface'
-import { SpriteInterface } from '../../decorators/sprite/sprite-interface'
-import { AnimationBase } from '../../models/animation-base'
 import { BabylonAccessor } from '../../models/babylon-accessor'
 import { Rect } from '../../models/rect'
 import { Timeout } from '../../models/timeout'
@@ -42,9 +40,6 @@ export class Core {
   // Timeouts // TODO thread here?
   private static timeouts: Set<Timeout> = new Set<Timeout>()
   private static intervals: Set<Timeout> = new Set<Timeout>()
-
-  // Sprite animations
-  private static animationHandler: Map<SpriteInterface, () => void> = new Map<SpriteInterface, () => void>()
 
   // ********************************************************
 
@@ -222,26 +217,8 @@ export class Core {
     Core.intervals.delete(timeout)
   }
 
-  static setAnimationHandler(sprite: SpriteInterface, animation: AnimationBase): void {
-    const startMs = this.loopUpdateLastMs
-    const numSprites = animation.frameEnd - animation.frameStart
-    const totalTimeMs = numSprites * animation.delay
-    const handleLoop = () => {
-      sprite.setShaderMaterialTextureFrame(animation.frameStart + (Math.trunc(((this.loopUpdateLastMs - startMs) % totalTimeMs) / animation.delay)))
-    }
-    const handleNoLoop = () => {
-      if (this.loopUpdateLastMs - startMs >= totalTimeMs) {
-        sprite.setShaderMaterialTextureFrame(animation.frameEnd)
-        this.animationHandler.delete(sprite)
-      } else {
-        sprite.setShaderMaterialTextureFrame(animation.frameStart + (Math.trunc(((this.loopUpdateLastMs - startMs) % totalTimeMs) / animation.delay)))
-      }
-    }
-    this.animationHandler.set(sprite, animation.loop ? handleLoop : handleNoLoop)
-  }
-
-  static stopAnimationHandler(sprite: SpriteInterface) {
-    this.animationHandler.delete(sprite)
+  static getLoopUpdateLastMs() {
+    return Core.loopUpdateLastMs
   }
 
   private static loopUpdate(): void {
@@ -253,9 +230,6 @@ export class Core {
         const currentMs = performance.now()
         Core.loopUpdateLag += currentMs - Core.loopUpdateLastMs
         Core.loopUpdateLastMs = currentMs
-        Core.animationHandler.forEach(handler => {
-          handler()
-        })
         while (Core.loopUpdateLag > Core.loopUpdateMps) {
           Core.onLoopUpdate.notifyObservers(Core.loopUpdateDeltaTime)
           Core.timeouts.forEach(timeout => {

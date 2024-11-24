@@ -53,11 +53,11 @@ export function Sprite(props: SpriteProps): any {
             this.babylon.scene = this.scene.babylon.scene
             if (!this.props.url) {
               const spriteMesh = new SpriteMesh(scene, this.props)
-              spriteMesh.setFromBlank()
-              this.setMesh(spriteMesh, true)
+              spriteMesh.setFromBlank(_className)
+              this.setSpriteMesh(spriteMesh, true)
             } else {
               if (!core.spriteMeshes.get(scene)) { Logger.debugError('Sprite texture not found for scene in sprite constructor:', _classInterface.prototype, scene.constructor.name) } // TODO get sprite and scene names
-              this.setMesh(core.spriteMeshes.get(scene) as any, false)
+              this.setSpriteMesh(core.spriteMeshes.get(scene) as any, false)
             }
           }
         }
@@ -74,7 +74,8 @@ export function Sprite(props: SpriteProps): any {
         loopUpdate$: BABYLON.Observer<number>
         canvasResize$: BABYLON.Observer<Rect>
         keyFramesTimeouts: Timeout[] = []
-        endAnimationTimer: Timeout | null
+        endAnimationTimerInterval: Timeout | null
+        endAnimationTimerTimeout: Timeout | null
         transform: MeshTransform
         _visible: boolean
         _scale: number = 1
@@ -83,83 +84,41 @@ export function Sprite(props: SpriteProps): any {
         get loopUpdate(): boolean { return !!this.loopUpdate$ }
 
         get absolutePosition(): BABYLON.Vector3 { return this.babylon.mesh.absolutePosition }
-        get absoluteRotationQuaternion(): BABYLON.Quaternion { return this.babylon.mesh.absoluteRotationQuaternion }
-        get absoluteScaling(): BABYLON.Vector3 { return this.babylon.mesh.absoluteScaling }
         set position(value: BABYLON.Vector3) { this.babylon.mesh.position = value }
         get position(): BABYLON.Vector3 { return this.babylon.mesh.position }
-        set rotation(value: BABYLON.Vector3) { this.babylon.mesh.rotation = value }
-        get rotation(): BABYLON.Vector3 { return this.babylon.mesh.rotation }
-        set rotationQuaternion(value: BABYLON.Quaternion) { this.babylon.mesh.rotationQuaternion = value }
-        get rotationQuaternion(): BABYLON.Nullable<BABYLON.Quaternion> { return this.babylon.mesh.rotationQuaternion }
-        set scaling(value: BABYLON.Vector3) { this.babylon.mesh.scaling = value }
-        get scaling(): BABYLON.Vector3 { return this.babylon.mesh.scaling }
-        addRotation(x: number, y: number, z: number): BABYLON.TransformNode { return this.babylon.mesh.addRotation(x, y, z) }
         getAbsolutePivotPoint(): BABYLON.Vector3 { return this.babylon.mesh.getAbsolutePivotPoint() }
         getAbsolutePivotPointToRef(result: BABYLON.Vector3): BABYLON.TransformNode { return this.babylon.mesh.getAbsolutePivotPointToRef(result) }
         getAbsolutePosition(): BABYLON.Vector3 { return this.babylon.mesh.getAbsolutePosition() }
-        getDirection(localAxis: BABYLON.Vector3): BABYLON.Vector3 { return this.babylon.mesh.getDirection(localAxis) }
-        getDirectionToRef(localAxis: BABYLON.Vector3, result: BABYLON.Vector3): BABYLON.TransformNode { return this.babylon.mesh.getDirectionToRef(localAxis, result) }
         getPivotPoint(): BABYLON.Vector3 { return this.babylon.mesh.getPivotPoint() }
         getPivotPointToRef(result: BABYLON.Vector3): BABYLON.TransformNode { return this.babylon.mesh.getPivotPointToRef(result) }
         locallyTranslate(vector3: BABYLON.Vector3): BABYLON.TransformNode { return this.babylon.mesh.locallyTranslate(vector3) }
-        lookAt(targetPoint: BABYLON.Vector3, yawCor?: number, pitchCor?: number, rollCor?: number, space?: BABYLON.Space): BABYLON.TransformNode { return this.babylon.mesh.lookAt(targetPoint, yawCor, pitchCor, rollCor, space) }
-        rotate(axis: BABYLON.Vector3, amount: number, space?: BABYLON.Space): BABYLON.TransformNode { return this.babylon.mesh.rotate(axis, amount, space) }
         rotateAround(point: BABYLON.Vector3, axis: BABYLON.Vector3, amount: number): BABYLON.TransformNode { return this.babylon.mesh.rotateAround(point, axis, amount) }
-        rotatePOV(flipBack: number, twirlClockwise: number, tiltRight: number): BABYLON.AbstractMesh { return this.babylon.mesh.rotatePOV(flipBack, twirlClockwise, tiltRight) }
         setAbsolutePosition(absolutePosition: BABYLON.Vector3): BABYLON.TransformNode { return this.babylon.mesh.setAbsolutePosition(absolutePosition) }
-        setDirection(localAxis: BABYLON.Vector3, yawCor?: number, pitchCor?: number, rollCor?: number): BABYLON.TransformNode { return this.babylon.mesh.setDirection(localAxis, yawCor, pitchCor, rollCor) }
         setPivotMatrix(matrix: BABYLON.DeepImmutable<BABYLON.Matrix>, postMultiplyPivotMatrix?: boolean): BABYLON.TransformNode { return this.babylon.mesh.setPivotMatrix(matrix, postMultiplyPivotMatrix) }
         setPivotPoint(point: BABYLON.Vector3, space?: BABYLON.Space): BABYLON.TransformNode { return this.babylon.mesh.setPivotPoint(point, space) }
         setPositionWithLocalVector(vector3: BABYLON.Vector3): BABYLON.TransformNode { return this.babylon.mesh.setPositionWithLocalVector(vector3) }
         translate(axis: BABYLON.Vector3, distance: number, space?: BABYLON.Space): BABYLON.TransformNode { return this.babylon.mesh.translate(axis, distance, space) }
-        set visibility(value: number) { this.babylon.mesh.visibility = value }
+        set visibility(value: number) {
+          this.babylon.mesh.visibility = value;
+          (this.babylon.mesh.material as BABYLON.ShaderMaterial).setFloat('alpha', this.babylon.mesh.visibility)
+        }
+
         get visibility(): number { return this.babylon.mesh.visibility }
 
-        /* set position(value: BABYLON.Vector3) { this.babylon.sprite.position = value }
-        get position(): BABYLON.Vector3 { return this.babylon.sprite.position }
-        set angle(value: number) { this.babylon.sprite.angle = value }
-        get angle(): number { return this.babylon.sprite.angle }
-        get width(): number { return this.babylon.sprite.width }
-        get height(): number { return this.babylon.sprite.height }
-        get size(): number { return this.babylon.sprite.size }
-        set color(value: BABYLON.Color4) { this.babylon.sprite.color = value }
-        get color(): BABYLON.Color4 { return this.babylon.sprite.color }
-        set isVisible(value: boolean) { this.babylon.sprite.isVisible = value }
-        get isVisible(): boolean { return this.babylon.sprite.isVisible }
-
-        set width(value: number) {
-          if (this._scale !== 1) { Logger.debugError('Changing sprite \'width\' after having scalated it. This practice is not recommended, it can drive to inconsistencies. Setting scale to 1.', _classInterface.prototype); this._scale = 1 }
-          this.babylon.sprite.width = value
+        set rotation(value: number) { this.babylon.mesh.rotation.z = value }
+        get rotation(): number { return this.babylon.mesh.rotation.z }
+        set scale(value: number) { this.babylon.mesh.scaling.set(value, value, 1.0) }
+        get scale(): number {
+          if (this.babylon.mesh.scaling.x !== this.babylon.mesh.scaling.y) { Logger.debugError(`ScaleX '${this.babylon.mesh.scaling.x}' is different than ScaleY '${this.babylon.mesh.scaling.y}', it is a mistake to setup different scales for both coordinates treating them as equals through 'get scale' method.`, _classInterface.prototype) }
+          return this.babylon.mesh.scaling.x
         }
 
-        set height(value: number) {
-          if (this._scale !== 1) { Logger.debugError('Changing sprite \'height\' after having scalated it. This practice is not recommended, it can drive to inconsistencies. Setting scale to 1.', _classInterface.prototype); this._scale = 1 }
-          this.babylon.sprite.height = value
-        }
+        set scaleX(value: number) { this.babylon.mesh.scaling.set(value, this.babylon.mesh.scaling.y, 1.0) }
+        get scaleX(): number { return this.babylon.mesh.scaling.x }
+        set scaleY(value: number) { this.babylon.mesh.scaling.set(this.babylon.mesh.scaling.x, value, 1.0) }
+        get scaleY(): number { return this.babylon.mesh.scaling.y }
 
-        set size(value: number) {
-          if (this._scale !== 1) { Logger.debugError('Changing sprite \'size\' after having scalated it. This practice is not recommended, it can drive to inconsistencies. Setting scale to 1.', _classInterface.prototype); this._scale = 1 }
-          this.babylon.sprite.size = value
-        }
-
-        set scale(scale: number) {
-          // TODO use diferential instead spriteTexture original size, to avoid inconsistencies if width, height, or size have been changed?
-          this._scale = scale
-          this.babylon.sprite.width = this.spriteTexture.width * this._scale
-          this.babylon.sprite.height = this.spriteTexture.height * this.scale
-        }
-
-        get scale(): number { return this._scale }
-
-        set visible(value: boolean) {
-          this._visible = value
-        }
-
-        get visible(): boolean {
-          return this._visible
-        } */
-
-        setMesh(spriteMesh: SpriteMesh, isExclusive: boolean) {
+        setSpriteMesh(spriteMesh: SpriteMesh, isExclusive: boolean) {
           if (this.babylon.mesh) {
             this.release()
           }
@@ -172,26 +131,6 @@ export function Sprite(props: SpriteProps): any {
           attachCanvasResize(this)
           invokeCallback(this.onSpawn, this)
         }
-
-        // setTexture(spriteTexture: SpriteMesh, isExclusive: boolean) {
-        //   if (this.babylon.sprite) {
-        //     // const transform = this.getTransform()  // TODO?
-        //     this.release()
-        //   }
-        //   this.spriteTexture = spriteTexture
-        //   this.exclusiveTexture = isExclusive
-        //   const babylonSprite = new BABYLON.Sprite(_className, this.spriteTexture.babylon.spriteManager)
-        //   babylonSprite.width = this.spriteTexture.width
-        //   babylonSprite.height = this.spriteTexture.height
-        //   babylonSprite.isVisible = true
-        //   this.babylon.sprite = babylonSprite
-        //   this.babylon.spriteManager = this.spriteTexture.babylon.spriteManager
-        //   this.transform = this.babylon.sprite
-        //   this.props.animations?.forEach(animation => this.addAnimation(animation))
-        //   attachLoopUpdate(this)
-        //   attachCanvasResize(this)
-        //   invokeCallback(this.onSpawn, this)
-        // }
 
         setShaderMaterialTextureFrame(frame: number): void {
           (this.babylon.mesh.material as BABYLON.ShaderMaterial).setInt('frame', frame)
@@ -256,15 +195,6 @@ export function Sprite(props: SpriteProps): any {
           this.removeEndAnimationTimer()
           this.removeAnimationKeyFrames()
 
-          const onCompleted = () => {
-            if (completed) {
-              completed()
-            }
-            if (loop) {
-              startKeyframes()
-            }
-          }
-
           const startKeyframes = () => {
             this.keyFramesTimeouts = []
             keyFrames?.forEach((animationKeyFrame) => {
@@ -276,16 +206,25 @@ export function Sprite(props: SpriteProps): any {
             })
           }
 
+          const onCompleted = () => {
+            if (completed) {
+              completed()
+            }
+            if (loop) {
+              startKeyframes()
+            }
+          }
+
           if (completed || (keyFrames && keyFrames.length > 0)) {
             if (loop) {
-              this.endAnimationTimer = Core.setInterval(() => onCompleted(), (frameEnd - frameStart + 1) * delay)
+              this.endAnimationTimerInterval = Core.setInterval(() => onCompleted(), (frameEnd - frameStart + 1) * delay)
             } else {
-              this.endAnimationTimer = Core.setTimeout(() => onCompleted(), (frameEnd - frameStart + 1) * delay)
+              this.endAnimationTimerTimeout = Core.setTimeout(() => onCompleted(), (frameEnd - frameStart + 1) * delay)
             }
             startKeyframes()
           }
 
-          Core.setAnimationHandler(this, {
+          this.scene.setAnimationHandler(this, {
             id: this.animation.id,
             frameStart,
             frameEnd,
@@ -297,7 +236,7 @@ export function Sprite(props: SpriteProps): any {
         stopAnimation(): void {
           this.removeEndAnimationTimer()
           this.removeAnimationKeyFrames()
-          Core.stopAnimationHandler(this)
+          this.scene.stopAnimationHandler(this)
           this.animation = null
         }
 
@@ -324,39 +263,38 @@ export function Sprite(props: SpriteProps): any {
           // - Avoid creating a secondary texture for boundaries.
           // - Improve performance.
           // - Let the user draw text over an 'url' loaded texture (not only blank textures).
-          // 8a8f
-          // if (this.props.url) { Logger.debugError('Trying to draw text on an \'url\' texture. Texts can be only drawn on blank textures (url: undefined).', _classInterface.prototype); return }
 
-          // const font = `${properties.fontStyle} ${properties.fontSize}px ${properties.fontName}`
+          if (this.props.url) { Logger.debugError('Trying to draw text on an \'url\' texture. Texts can be only drawn on blank textures (url: undefined).', _classInterface.prototype); return }
 
-          // const checkSizeTx = new BABYLON.DynamicTexture('DynamicTexture', 64, this.babylon.scene, false)
-          // const ctx = checkSizeTx.getContext()
-          // ctx.font = font
-          // const metricsFirst = ctx.measureText(text)
-          // let textWidth = 0
-          // const lineHeight = metricsFirst.actualBoundingBoxAscent + metricsFirst.actualBoundingBoxDescent
-          // const textHeiht = lineHeight
-          // checkSizeTx.dispose()
-          // textWidth = ctx.measureText(text).width
-          // const textureWidth = properties.textureSize?.width ?? textWidth
-          // const textureHeight = properties.textureSize?.height ?? textHeiht + properties.fontSize / 2
+          const font = `${properties.fontStyle} ${properties.fontSize}px ${properties.fontName}`
 
-          // const dynamicTexture = new BABYLON.DynamicTexture('draw-text-texture', { width: textureWidth, height: textureHeight }, this.babylon.scene, false)
-          // const ctxTx = dynamicTexture.getContext()
-          // if (properties.bgColor) {
-          //   ctxTx.beginPath()
-          //   ctxTx.rect(0, 0, textureWidth, textureHeight)
-          //   ctxTx.fillStyle = properties.bgColor
-          //   ctxTx.fill()
-          // }
+          const checkSizeTx = new BABYLON.DynamicTexture('DynamicTexture', 64, this.babylon.scene, false)
+          const ctx = checkSizeTx.getContext()
+          ctx.font = font
+          const metricsFirst = ctx.measureText(text)
+          let textWidth = 0
+          const lineHeight = metricsFirst.actualBoundingBoxAscent + metricsFirst.actualBoundingBoxDescent
+          const textHeiht = lineHeight
+          checkSizeTx.dispose()
+          textWidth = ctx.measureText(text).width
+          const textureWidth = properties.textureSize?.width ?? textWidth
+          const textureHeight = properties.textureSize?.height ?? textHeiht + properties.fontSize / 2
 
-          // const startY = properties.centerV && properties.textureSize ? textureHeight / 2 : lineHeight
+          const dynamicTexture = new BABYLON.DynamicTexture('draw-text-texture', { width: textureWidth, height: textureHeight }, this.babylon.scene, false)
+          const ctxTx = dynamicTexture.getContext()
+          if (properties.bgColor) {
+            ctxTx.beginPath()
+            ctxTx.rect(0, 0, textureWidth, textureHeight)
+            ctxTx.fillStyle = properties.bgColor
+            ctxTx.fill()
+          }
 
-          // this.babylon.spriteManager?.texture.dispose()
-          // dynamicTexture.drawText(text, properties.centerH ? null : 0, startY, font, properties.textColor, null, false)
-          // const texture = new SpriteMesh(this.scene, this.props)
-          // texture.setFromTexture(dynamicTexture, 'draw-text-sprite-manager')
-          // this.setTexture(texture, true)
+          const startY = properties.centerV && properties.textureSize ? textureHeight / 2 : lineHeight
+
+          dynamicTexture.drawText(text, properties.centerH ? null : 0, startY, font, properties.textColor, null, false)
+          const spriteMesh = new SpriteMesh(this.scene, this.props)
+          spriteMesh.setFromTexture(dynamicTexture, text.slice(0, 10) + (text.length > 10 ? '...' : ''))
+          this.setSpriteMesh(spriteMesh, true)
         }
 
         release(): void {
@@ -383,9 +321,13 @@ export function Sprite(props: SpriteProps): any {
         }
 
         private removeEndAnimationTimer(): void {
-          if (this.endAnimationTimer) {
-            Core.clearTimeout(this.endAnimationTimer)
-            this.endAnimationTimer = null
+          if (this.endAnimationTimerInterval) {
+            Core.clearInterval(this.endAnimationTimerInterval)
+            this.endAnimationTimerInterval = null
+          }
+          if (this.endAnimationTimerTimeout) {
+            Core.clearTimeout(this.endAnimationTimerTimeout)
+            this.endAnimationTimerTimeout = null
           }
         }
       }

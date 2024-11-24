@@ -105,3 +105,4 @@ export { AssetType } from './asset-type'
 export { DrawBlockProperties } from './draw-block-properties'
 export { Rect } from './rect'
 export declare class Timeout {}
+export { TransformComposition } from './transform-composition'

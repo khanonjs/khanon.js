@@ -7,9 +7,8 @@ import {
 } from '../../base'
 import { Metadata } from '../../base/interfaces/metadata/metadata'
 import { Rect } from '../../models/rect'
+import { TransformComposition } from '../../models/transform-composition'
 import { FlexId } from '../../types/flex-id'
-import { MeshTransform } from '../../types/mesh-transform'
-import { SpriteTransform } from '../../types/sprite-transform'
 import { MeshAnimation } from '../mesh/mesh-animation'
 import { MeshInterface } from '../mesh/mesh-interface'
 import { ParticleConstructor } from '../particle/particle-constructor'
@@ -19,6 +18,7 @@ import { SpriteAnimation } from '../sprite/sprite-animation'
 import { SpriteInterface } from '../sprite/sprite-interface'
 import { ActorActionConstructor } from './actor-action/actor-action-constructor'
 import { ActorActionInterface } from './actor-action/actor-action-interface'
+import { ActorNode } from './actor-node'
 import { ActorProps } from './actor-props'
 import { ActorStateConstructor } from './actor-state/actor-state-constructor'
 import { ActorStateInterface } from './actor-state/actor-state-interface'
@@ -31,12 +31,14 @@ export abstract class ActorInterface<B extends SpriteInterface | MeshInterface =
   abstract canvasResize$: BABYLON.Observer<Rect>
   abstract _body: B | undefined
   abstract nodes: Map<string, B>
+  abstract _visibility: number
   abstract _state: ActorStateInterface | null
   abstract actions: Map<ActorActionConstructor, ActorActionInterface>
   abstract particles: Map<FlexId, ParticleInterface>
   abstract initialize(props: ActorProps): void
   abstract release(): void
   abstract getActionOwner(actionConstructor: ActorActionConstructor): ActorInterface | ActorStateInterface | undefined
+  abstract getNodeElement<N extends B>(Element: new () => N): N
   abstract playActionFromInstance(instance: ActorActionInterface): void
   abstract stopActionFromInstance(instance: ActorActionInterface, forceRemove?: boolean): void
 
@@ -44,21 +46,22 @@ export abstract class ActorInterface<B extends SpriteInterface | MeshInterface =
    * User available
    */
   abstract loopUpdate: boolean
-  abstract get transform(): (B extends SpriteInterface ? SpriteTransform : MeshTransform) | null
-  abstract get t(): (B extends SpriteInterface ? SpriteTransform : MeshTransform) | null
+  abstract get transform(): B | null
+  abstract get t(): B | null
   abstract get scene(): SceneInterface
   abstract get body(): B | null
   abstract get state(): ActorStateInterface | null
+  abstract set visibility(value: number)
+  abstract get visibility(): number
   abstract setBody(Body: new () => B): B
-  abstract addNode(Node: new () => B, name: string, transform?: BABYLON.Vector3 | BABYLON.Matrix): B
-  abstract getNode(name: string): B
+  abstract addNode(Node: new () => B, name: string, transform?: TransformComposition): ActorNode<B> | undefined
+  abstract getNode(name: string): ActorNode<B> | undefined
   abstract removeBody(): void
   abstract removeNode(name: string): void
-  abstract clearNodes(includeBody: boolean): void
-  abstract setVisible(value: boolean): void
+  abstract clearNodes(): void
   abstract switchState(state: ActorStateConstructor, setup: any): ActorStateInterface
-  // abstract playAnimation(animation: (B extends SpriteInterface ? SpriteAnimation : MeshAnimation) | FlexId, loopOverride?: boolean, completed?: () => void): void  // TODO system to animate body and nodes all together somehow
-  // abstract stopAnimation(): void
+  abstract playAnimation(animation: (B extends SpriteInterface ? SpriteAnimation : MeshAnimation) | FlexId, loopOverride?: boolean, completed?: () => void): void // TODO system to animate body and nodes all together somehow
+  abstract stopAnimation(): void
   abstract playAction(action: ActorActionConstructor | ((delta: number) => void), setup: any): ActorActionInterface
   abstract stopAction(action: ActorActionConstructor): void
   abstract playActionGroup(group: FlexId): void

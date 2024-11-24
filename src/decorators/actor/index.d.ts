@@ -1,6 +1,9 @@
 import * as BABYLON from '@babylonjs/core'
 
-import { Rect } from '../../models'
+import {
+  Rect,
+  TransformComposition
+} from '../../models'
 import {
   FlexId,
   MeshTransform,
@@ -32,6 +35,14 @@ import {
 /**
  * @group Actor
  */
+
+/**
+ * Represets a part (node) attached to the body of the actor.
+ */
+export interface ActorNode<B extends SpriteInterface | MeshInterface> {
+  element: B
+  bone: BABYLON.Bone
+}
 
 /**
  * Actor Interface to be extended from decorated Actors.
@@ -76,6 +87,12 @@ export declare abstract class ActorInterface<B extends SpriteInterface | MeshInt
   get state(): ActorStateInterface
 
   /**
+   * 'visibility' of the meshes and sprites of this actor
+   */
+  set visibility(value: number)
+  get visibility(): number
+
+  /**
    * Sets the Body of the Actor.
    * Setting a new Body removes any previously added Node.
    * @param Node
@@ -84,19 +101,20 @@ export declare abstract class ActorInterface<B extends SpriteInterface | MeshInt
   setBody(Body: new () => B): B
 
   /**
-   * Adds a Node hooked to the actor's body.
+   * Adds a node attached to the actor's body, or another node in case *parentName* is defined.
    * @param Node
    * @param name
+   * @param parentName
    * @returns
    */
-  addNode(Node: new () => B, name: string, transform?: BABYLON.Vector3 | BABYLON.Matrix): B
+  addNode(Node: new () => B, name: string, transform?: TransformComposition, parentName?: string): ActorNode<B> | undefined
 
   /**
    * Gets a Node by name.
    * @param name
    * @returns
    */
-  getNode(name: string): B
+  getNode(name: string): ActorNode<B> | undefined
 
   /**
    * Removes the body.
@@ -112,7 +130,7 @@ export declare abstract class ActorInterface<B extends SpriteInterface | MeshInt
   /**
    * Clear all nodes of this actor.
    */
-  clearNodes(includeBody?: boolean): void
+  clearNodes(): void
 
   /**
    * Sets the visibility of Body and all Nodes.
@@ -292,6 +310,18 @@ export interface ActorProps {
    * Particles this actor will attach.
    */
   particles?: ParticleConstructor[]
+
+  /**
+   * Rendering group Id. This will be applied to all meshes or sprites used by this actor.
+   * Use rendering group Id as the rendering layer in ascending order by ID, starting by 0 (default).
+   * https://doc.babylonjs.com/features/featuresDeepDive/materials/advanced/transparent_rendering#rendering-groups
+   */
+  renderingGroupId?: number
+
+  /**
+   * Initial visibility
+   */
+  visibility?: number
 }
 
 export declare function Actor(props?: ActorProps): any
