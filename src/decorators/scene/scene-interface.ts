@@ -8,6 +8,7 @@ import {
   Notificable
 } from '../../base'
 import { Metadata } from '../../base/interfaces/metadata/metadata'
+import { AnimationBase } from '../../models/animation-base'
 import { AssetDefinition } from '../../models/asset-definition'
 import { BabylonAccessor } from '../../models/babylon-accessor'
 import { Rect } from '../../models/rect'
@@ -29,13 +30,14 @@ import { SceneStateInterface } from './scene-state/scene-state-interface'
 
 export abstract class SceneInterface implements Loadable, LoopUpdatable, CanvasResizable, Notificable {
   abstract props: SceneProps
-  protected abstract _assets: AssetDefinition[]
-  protected abstract _loaded: boolean
-  protected abstract _started: boolean
-  protected abstract _state: SceneStateInterface
-  protected abstract _spawn: SceneSpawn
-  protected abstract _remove: SceneRemove
-  protected abstract _camera: CameraInterface
+  abstract _assets: AssetDefinition[]
+  abstract _loaded: boolean
+  abstract _started: boolean
+  abstract _state: SceneStateInterface
+  abstract _spawn: SceneSpawn
+  abstract _remove: SceneRemove
+  abstract _camera: CameraInterface
+  abstract _loopUpdate: boolean
   abstract availableElements: SceneAvailableElements
   abstract assets: AssetDefinition[]
   abstract metadata: Metadata
@@ -46,9 +48,14 @@ export abstract class SceneInterface implements Loadable, LoopUpdatable, CanvasR
   abstract particles: Set<ParticleInterface>
   abstract meshes: Set<MeshInterface>
   abstract sprites: Set<SpriteInterface>
+  abstract animationHandler: Map<SpriteInterface, () => void>
   abstract setEngineParams(): void // TODO ?
   abstract playActionFromInstance(instance: SceneActionInterface): void
   abstract stopActionFromInstance(instance: SceneActionInterface, forceRemove?: boolean): void
+  abstract setAnimationHandler(sprite: SpriteInterface, animation: AnimationBase): void
+  abstract stopAnimationHandler(sprite: SpriteInterface): void
+  abstract startRenderObservable(): void
+  abstract stopRenderObservable(): void
 
   /**
    * User available

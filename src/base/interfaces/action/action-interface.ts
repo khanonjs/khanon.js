@@ -10,6 +10,7 @@ import { Metadata } from '../metadata/metadata'
 
 export abstract class ActionInterface<S = any> implements LoopUpdatable, CanvasResizable {
   abstract metadata: Metadata
+  abstract _loopUpdate: boolean
   abstract loopUpdate$: BABYLON.Observer<number>
   abstract canvasResize$: BABYLON.Observer<Rect>
   abstract start(setup: S): void

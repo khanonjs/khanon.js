@@ -1,12 +1,12 @@
 import * as BABYLON from '@babylonjs/core'
 
 import { LoadingProgress } from '../../base'
+import { Core } from '../../base/core/core'
 import { Metadata } from '../../base/interfaces/metadata/metadata'
 import {
   ParticlesController,
   SpritesController
 } from '../../controllers'
-import { Core } from '../../core'
 import { BabylonAccessor } from '../../models/babylon-accessor'
 import { Rect } from '../../models/rect'
 import { Logger } from '../../modules/logger'
@@ -49,6 +49,7 @@ export function Particle(props: ParticleProps): any {
         props: ParticleProps
         metadata: Metadata = Reflect.getMetadata('metadata', this) ?? new Metadata()
         babylon: Pick<BabylonAccessor, 'scene' | 'particleSystem'> = { scene: null as any, particleSystem: null as any }
+        _loopUpdate: boolean
         loopUpdate$: BABYLON.Observer<number>
         canvasResize$: BABYLON.Observer<Rect>
         attachmentUpdate$: BABYLON.Observer<number>
@@ -57,7 +58,7 @@ export function Particle(props: ParticleProps): any {
         offset: BABYLON.Vector3
 
         set loopUpdate(value: boolean) { switchLoopUpdate(value, this) }
-        get loopUpdate(): boolean { return !!this.loopUpdate$ }
+        get loopUpdate(): boolean { return this._loopUpdate }
 
         create(): void {
           if (this.scene) {
@@ -116,7 +117,7 @@ export function Particle(props: ParticleProps): any {
           const spriteParticleInfo = SpritesController.get(sprite).getParticleInfo(this.scene)
           if (!spriteParticleInfo.props.url) { Logger.debugError('Cannot use a particle texture from a blank sprite. The sprite \'url\' must be defined.'); return }
           this.spriteProps = spriteParticleInfo.props
-          this.babylon.particleSystem.particleTexture = spriteParticleInfo.texture.babylon.spriteManager.texture
+          this.babylon.particleSystem.particleTexture = spriteParticleInfo.spriteMesh.babylon.texture
           if (this.spriteProps.width === this.spriteProps.height) {
             this.babylon.particleSystem.minScaleX = 1
             this.babylon.particleSystem.maxScaleX = 1
@@ -166,9 +167,10 @@ export function Particle(props: ParticleProps): any {
         Instance: ParticleInterface = new _classInterface(null as any, null as any, null as any)
 
         load(scene: SceneInterface): LoadingProgress {
-          SpritesController.load(this.props.sprites, scene)
-          SpritesController.load(this.Instance.metadata.getProps().sprites, scene)
-          return new LoadingProgress().complete()
+          return new LoadingProgress().fromNodes([
+            SpritesController.load(this.props.sprites, scene),
+            SpritesController.load(this.Instance.metadata.getProps().sprites, scene)
+          ])
         }
 
         unload(scene: SceneInterface): void {

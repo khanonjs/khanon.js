@@ -8,5 +8,5 @@ export interface SpritePropsDefault extends ExtractOptional<SpriteProps> {
 
 export const spritePropsDefault: SpritePropsDefault = {
   maxAllowedSprites: 9999,
-  invertY: false
+  invertY: true
 }

@@ -45,12 +45,12 @@ export declare abstract class ActorStateInterface</* Setup object */ S = any, /*
   notify(message: FlexId, ...args: any[]): void
 
   /**
-   * Invoked on State start. Use this method to setup the Actor according to the State start.
+   * Invoked on state start. Use this method to setup the Actor according to the State start.
    */
   onStart?(): void
 
   /**
-   * Invoked on State end. Use this method to setup the Actor according to the State end.
+   * Invoked on state end. Use this method to setup the Actor according to the State end.
    */
   onEnd?(): void
 

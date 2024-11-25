@@ -9,6 +9,7 @@ import { AppStateProps } from './app-state-props'
 export abstract class AppStateInterface<S = any> implements StateInterface<S> {
   abstract props: AppStateProps
   abstract metadata: Metadata
+  abstract _loopUpdate: boolean
   abstract loopUpdate$: BABYLON.Observer<number>
   abstract canvasResize$: BABYLON.Observer<Rect>
   abstract start(setup: any): void

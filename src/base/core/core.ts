@@ -1,14 +1,14 @@
 import * as BABYLON from '@babylonjs/core'
 
-import { AppInterface } from './decorators/app/app-interface'
-import { AppStateConstructor } from './decorators/app/app-state/app-state-constructor'
-import { AppStateInterface } from './decorators/app/app-state/app-state-interface'
-import { SceneInterface } from './decorators/scene/scene-interface'
-import { BabylonAccessor } from './models/babylon-accessor'
-import { Rect } from './models/rect'
-import { Timeout } from './models/timeout'
-import { Logger } from './modules/logger/logger'
-import { LoggerLevels } from './modules/logger/logger-levels'
+import { AppInterface } from '../../decorators/app/app-interface'
+import { AppStateConstructor } from '../../decorators/app/app-state/app-state-constructor'
+import { AppStateInterface } from '../../decorators/app/app-state/app-state-interface'
+import { SceneInterface } from '../../decorators/scene/scene-interface'
+import { BabylonAccessor } from '../../models/babylon-accessor'
+import { Rect } from '../../models/rect'
+import { Timeout } from '../../models/timeout'
+import { Logger } from '../../modules/logger/logger'
+import { LoggerLevels } from '../../modules/logger/logger-levels'
 
 export class Core {
   static canvasRect: Rect
@@ -99,6 +99,39 @@ export class Core {
     }
   }
 
+  private static initializeHTMLLayers(): void {
+    const parentId = Core.app.props.htmlCanvasContainerId
+    const parentElement = document.getElementById(parentId)
+    if (parentElement) {
+      Core.htmlContainer = parentElement
+      Core.htmlCanvas = document.createElement('canvas')
+      Core.htmlCanvas.id = 'khanonjs-canvas'
+      Core.htmlCanvas.style.width = '100%'
+      Core.htmlCanvas.style.height = '100%'
+      Core.htmlContainer.appendChild(Core.htmlCanvas)
+    } else {
+      Core.throw(`Canvas container id '${parentId}' not found.`)
+    }
+  }
+
+  private static initializeBabylon(): void {
+    Core.babylon.engine = new BABYLON.Engine(
+      Core.htmlCanvas,
+      Core.app.props.engineConfiguration.antialias,
+      Core.app.props.engineConfiguration.options,
+      Core.app.props.engineConfiguration.adaptToDeviceRatio
+    )
+    Core.babylon.engine.runRenderLoop(() => {
+      Core.renderScenes.forEach((scene) => scene.babylon.scene.render())
+
+      // TODO: add FPS updater here
+      /* if (Core.properties?.fpsContainer) {
+        const divFps = document.getElementById(Core.properties.fpsContainer)
+        divFps.innerHTML = Core.babylon.getFps().toFixed() + ' fps'
+      } */
+    })
+  }
+
   static throw(error?: any) {
     const response = error ?? 'Uncaught error'
     Logger.error('Fatal error:', response)
@@ -184,37 +217,8 @@ export class Core {
     Core.intervals.delete(timeout)
   }
 
-  private static initializeHTMLLayers(): void {
-    const parentId = Core.app.props.htmlCanvasContainerId
-    const parentElement = document.getElementById(parentId)
-    if (parentElement) {
-      Core.htmlContainer = parentElement
-      Core.htmlCanvas = document.createElement('canvas')
-      Core.htmlCanvas.id = 'khanonjs-canvas'
-      Core.htmlCanvas.style.width = '100%'
-      Core.htmlCanvas.style.height = '100%'
-      Core.htmlContainer.appendChild(Core.htmlCanvas)
-    } else {
-      Core.throw(`Canvas container id '${parentId}' not found.`)
-    }
-  }
-
-  private static initializeBabylon(): void {
-    Core.babylon.engine = new BABYLON.Engine(
-      Core.htmlCanvas,
-      Core.app.props.engineConfiguration.antialias,
-      Core.app.props.engineConfiguration.options,
-      Core.app.props.engineConfiguration.adaptToDeviceRatio
-    )
-    Core.babylon.engine.runRenderLoop(() => {
-      Core.renderScenes.forEach((scene) => scene.babylon.scene.render())
-
-      // TODO: add FPS updater here
-      /* if (Core.properties?.fpsContainer) {
-        const divFps = document.getElementById(Core.properties.fpsContainer)
-        divFps.innerHTML = Core.babylon.getFps().toFixed() + ' fps'
-      } */
-    })
+  static getLoopUpdateLastMs() {
+    return Core.loopUpdateLastMs
   }
 
   private static loopUpdate(): void {

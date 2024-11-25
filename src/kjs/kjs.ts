@@ -1,10 +1,10 @@
 import * as BABYLON from '@babylonjs/core'
 
+import { Core } from '../base/core/core'
 import {
   NotificationsController,
   ScenesController
 } from '../controllers'
-import { Core } from '../core'
 import { AppStateConstructor } from '../decorators/app/app-state/app-state-constructor'
 import { AppStateInterface } from '../decorators/app/app-state/app-state-interface'
 import { Rect } from '../models/rect'

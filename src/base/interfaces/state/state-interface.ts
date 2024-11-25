@@ -7,6 +7,7 @@ import { LoopUpdatable } from '../loop-updatable'
 import { Notificable } from '../notificable'
 
 export abstract class StateInterface<S = any> implements LoopUpdatable, CanvasResizable, Notificable {
+  abstract _loopUpdate: boolean
   abstract loopUpdate$: BABYLON.Observer<number>
   abstract canvasResize$: BABYLON.Observer<Rect>
   abstract start(setup: any): void

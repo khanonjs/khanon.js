@@ -2,51 +2,38 @@ import * as BABYLON from '@babylonjs/core'
 
 import { DisplayObject } from '../../base'
 import { BabylonAccessor } from '../../models/babylon-accessor'
-import { DrawBlockProperties } from '../../models/draw-text-properties'
+import { DrawBlockProperties } from '../../models/draw-block-properties'
 import { Rect } from '../../models/rect'
+import { MeshTransform } from '../../types'
 import { FlexId } from '../../types/flex-id'
 import { NullableExceptProps } from '../../types/nullable-except-props'
 import { SpriteTransform } from '../../types/sprite-transform'
 import { MeshAnimation } from '../mesh/mesh-animation'
 import { SceneInterface } from '../scene/scene-interface'
 import { SpriteAnimation } from './sprite-animation'
+import { SpriteMesh } from './sprite-mesh'
 import { SpriteProps } from './sprite-props'
-import { SpriteTexture } from './sprite-texture'
 
 export abstract class SpriteInterface implements DisplayObject {
   abstract props: SpriteProps
+  abstract spriteMesh: SpriteMesh
   abstract loopUpdate$: BABYLON.Observer<number>
   abstract canvasResize$: BABYLON.Observer<Rect>
   abstract exclusiveTexture: boolean // Exclusive texture means this sprite has an exclusive texture that is not stored anywhere, so the sprite itself has to handle its release.
   abstract animation: SpriteAnimation | null
   abstract animations: Map<FlexId, SpriteAnimation>
-  abstract transform: SpriteTransform
+  abstract transform: MeshTransform
   abstract _scale: number
-  abstract setTexture(spriteTexture: SpriteTexture, isExclusive: boolean, isParticle: boolean): void
+  abstract setSpriteMesh(spriteMesh: SpriteMesh, isExclusive: boolean, isParticle: boolean): void
+  abstract setShaderMaterialTextureFrame(frame: number): void
   abstract release(): void
 
   /**
    * User available
    */
   abstract loopUpdate: boolean
-  abstract get babylon(): Pick<BabylonAccessor, 'scene' | 'spriteManager' | 'sprite'>
+  abstract get babylon(): Pick<BabylonAccessor, 'mesh' | 'scene'>
   abstract get scene(): SceneInterface
-  abstract set position(value: BABYLON.Vector3)
-  abstract get position(): BABYLON.Vector3
-  abstract set angle(value: number)
-  abstract get angle(): number
-  abstract set width(value: number)
-  abstract get width(): number
-  abstract set height(value: number)
-  abstract get height(): number
-  abstract set size(value: number)
-  abstract get size(): number
-  abstract set color(color: BABYLON.Color4)
-  abstract get color(): BABYLON.Color4
-  abstract set isVisible(visible: boolean)
-  abstract get isVisible(): boolean
-  abstract set scale(scale: number)
-  abstract get scale(): number
   abstract setFrame(frame: number): void
   abstract setFrameFirst(): void
   abstract setFrameLast(): void
@@ -57,6 +44,33 @@ export abstract class SpriteInterface implements DisplayObject {
   abstract clearKeyframeSubscriptions(keyframeId: string): void
   abstract drawText(text: string, properties: DrawBlockProperties): void
   abstract destroy(): void
+
+  // Transform
+  abstract get absolutePosition(): BABYLON.Vector3
+  abstract set position(value: BABYLON.Vector3)
+  abstract get position(): BABYLON.Vector3
+  abstract set rotation(value: number)
+  abstract get rotation(): number
+  abstract set scale(value: number)
+  abstract get scaleX(): number
+  abstract set scaleX(value: number)
+  abstract get scale(): number
+  abstract set scaleY(value: number)
+  abstract get scaleY(): number
+  abstract getAbsolutePivotPoint(): BABYLON.Vector3
+  abstract getAbsolutePivotPointToRef(result: BABYLON.Vector3): BABYLON.TransformNode
+  abstract getAbsolutePosition(): BABYLON.Vector3
+  abstract getPivotPoint(): BABYLON.Vector3
+  abstract getPivotPointToRef(result: BABYLON.Vector3): BABYLON.TransformNode
+  abstract locallyTranslate(vector3: BABYLON.Vector3): BABYLON.TransformNode
+  abstract rotateAround(point: BABYLON.Vector3, axis: BABYLON.Vector3, amount: number): BABYLON.TransformNode
+  abstract setAbsolutePosition(absolutePosition: BABYLON.Vector3): BABYLON.TransformNode
+  abstract setPivotMatrix(matrix: BABYLON.DeepImmutable<BABYLON.Matrix>, postMultiplyPivotMatrix?: boolean): BABYLON.TransformNode
+  abstract setPivotPoint(point: BABYLON.Vector3, space?: BABYLON.Space): BABYLON.TransformNode
+  abstract setPositionWithLocalVector(vector3: BABYLON.Vector3): BABYLON.TransformNode
+  abstract translate(axis: BABYLON.Vector3, distance: number, space?: BABYLON.Space): BABYLON.TransformNode
+  abstract set visibility(value: number)
+  abstract get visibility(): number
 
   /**
    * User defined optional
