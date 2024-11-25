@@ -283,7 +283,6 @@ export function Actor(props: ActorProps = {}): any {
       stopAction(actionConstructor: ActorActionConstructor, forceRemove?: boolean): void {
         const action = this.actions.get(actionConstructor)
         if (action) {
-          Logger.trace('aki remove loop update')
           action._isPlaying = false
           removeLoopUpdate(action)
           removeCanvasResize(action)

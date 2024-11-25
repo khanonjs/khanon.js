@@ -52,7 +52,6 @@ export function ActorAction(props: ActorActionProps = {}): any {
         get isPlaying(): boolean { return this._isPlaying }
 
         start(setup: any): void {
-          Logger.trace('aki action start')
           this.scene = this.actor.scene
           this.setup = setup
           this._isPlaying = true
@@ -78,8 +77,6 @@ export function ActorAction(props: ActorActionProps = {}): any {
           if (!this.isPlaying) {
             this._isPlaying = true
             if (this.loopUpdate) {
-              Logger.trace('aki action play WTF', !!this.onLoopUpdate, this.loopUpdate$)
-              Logger.trace('aki action play FUNC', this.onLoopUpdate)
               attachLoopUpdate(this)
             }
             attachCanvasResize(this)
