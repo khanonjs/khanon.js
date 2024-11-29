@@ -9,6 +9,7 @@ import { Rect } from '../../models/rect'
 import { Timeout } from '../../models/timeout'
 import { Logger } from '../../modules/logger/logger'
 import { LoggerLevels } from '../../modules/logger/logger-levels'
+import { LoadingProgress } from '../loading-progress/loading-progress'
 
 export class Core {
   static canvasRect: Rect
@@ -165,7 +166,7 @@ export class Core {
     return this.app
   }
 
-  static switchAppState(state: AppStateConstructor, setup: any): AppStateInterface {
+  static switchAppState(state: AppStateConstructor, setup: any): LoadingProgress {
     return this.app.switchState(state, setup)
   }
 
@@ -215,6 +216,11 @@ export class Core {
 
   static clearInterval(timeout: Timeout): void {
     Core.intervals.delete(timeout)
+  }
+
+  static clearAllTimeouts(): void {
+    Core.timeouts.clear()
+    Core.intervals.clear()
   }
 
   static getLoopUpdateLastMs() {

@@ -1,12 +1,12 @@
 import * as BABYLON from '@babylonjs/core'
 
 import { Core } from '../base/core/core'
+import { LoadingProgress } from '../base/loading-progress/loading-progress'
 import {
   NotificationsController,
   ScenesController
 } from '../controllers'
 import { AppStateConstructor } from '../decorators/app/app-state/app-state-constructor'
-import { AppStateInterface } from '../decorators/app/app-state/app-state-interface'
 import { Rect } from '../models/rect'
 import { Timeout } from '../models/timeout'
 
@@ -22,7 +22,7 @@ export class KJS {
     // TODO
   }
 
-  static switchAppState(state: AppStateConstructor, setup: any): AppStateInterface {
+  static switchAppState(state: AppStateConstructor, setup: any): LoadingProgress {
     return Core.switchAppState(state, setup)
   }
 
@@ -40,6 +40,10 @@ export class KJS {
 
   static clearInterval(timeout: Timeout): void {
     Core.clearInterval(timeout)
+  }
+
+  static clearAllTimeouts(): void {
+    Core.clearAllTimeouts()
   }
 
   static loopUpdateAddObserver(func: (delta: number) => void): BABYLON.Observer<number> {

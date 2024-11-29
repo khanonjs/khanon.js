@@ -52,7 +52,7 @@ export function Particle(props: ParticleProps): any {
         _loopUpdate: boolean
         loopUpdate$: BABYLON.Observer<number>
         canvasResize$: BABYLON.Observer<Rect>
-        attachmentUpdate$: BABYLON.Observer<number>
+        attachmentUpdate$: BABYLON.Observer<number> | undefined
         animations: SpriteAnimation[] | null = null
         spriteProps: SpriteProps
         offset: BABYLON.Vector3
@@ -89,7 +89,7 @@ export function Particle(props: ParticleProps): any {
 
         start(): void {
           invokeCallback(this.onStart, this)
-          if (this.attachmentInfo.attachment) {
+          if (this.attachmentInfo.attachment && !this.attachmentUpdate$) {
             this.attachmentUpdate$ = Core.loopUpdateAddObserver(() => this.updatePosition())
           }
           this.babylon.particleSystem.start()
@@ -100,6 +100,7 @@ export function Particle(props: ParticleProps): any {
           this.babylon.particleSystem.stop()
           if (this.attachmentUpdate$) {
             this.attachmentUpdate$.remove()
+            this.attachmentUpdate$ = undefined
           }
         }
 

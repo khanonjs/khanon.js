@@ -265,7 +265,7 @@ export declare abstract class SceneInterface {
    * Callback invoked on scene load.
    * @param progress Loading Progress.
    */
-  onLoad?(progress: LoadingProgress): void
+  onLoaded?(progress: LoadingProgress): void
 
   /**
    * Callback invoked on scene unload.
@@ -343,6 +343,11 @@ export interface SceneProps {
    * Particles to use in this scene.
    */
   particles?: ParticleConstructor[]
+
+  /**
+   * Assign the Babylon debug inspector to this scene.
+   */
+  debugInspector?: boolean
 }
 
 export declare function Scene(props?: SceneProps): any
