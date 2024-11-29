@@ -44,6 +44,7 @@ export function SceneState(props: SceneStateProps = {}): any {
 
       props: SceneStateProps
       setup: any
+      _loopUpdate: boolean
       loopUpdate$: BABYLON.Observer<number>
       canvasResize$: BABYLON.Observer<Rect>
       _spawn: SceneSpawn
@@ -51,7 +52,7 @@ export function SceneState(props: SceneStateProps = {}): any {
       metadata: Metadata = Reflect.getMetadata('metadata', this) ?? new Metadata()
 
       set loopUpdate(value: boolean) { switchLoopUpdate(value, this) }
-      get loopUpdate(): boolean { return !!this.loopUpdate$ }
+      get loopUpdate(): boolean { return this._loopUpdate }
 
       get spawn(): SceneSpawn { return this._spawn }
       get remove(): SceneRemove { return this._remove }
@@ -95,15 +96,15 @@ export function SceneState(props: SceneStateProps = {}): any {
       }
 
       load(scene: SceneInterface): LoadingProgress {
-        const progress = new LoadingProgress().complete()
-        ActorsController.load(this.props.actors, scene)
-        SpritesController.load(this.props.sprites, scene)
-        SpritesController.load(this.Instance.metadata?.getProps().sprites, scene)
-        MeshesController.load(this.props.meshes, scene)
-        MeshesController.load(this.Instance.metadata?.getProps().meshes, scene)
-        ParticlesController.load(this.props.particles, scene)
-        ParticlesController.load(this.Instance.metadata?.getProps().particles, scene)
-        return progress
+        return new LoadingProgress().fromNodes([
+          ActorsController.load(this.props.actors, scene),
+          SpritesController.load(this.props.sprites, scene),
+          SpritesController.load(this.Instance.metadata?.getProps().sprites, scene),
+          MeshesController.load(this.props.meshes, scene),
+          MeshesController.load(this.Instance.metadata?.getProps().meshes, scene),
+          ParticlesController.load(this.props.particles, scene),
+          ParticlesController.load(this.Instance.metadata?.getProps().particles, scene)
+        ])
       }
 
       unload(scene: SceneInterface): void {

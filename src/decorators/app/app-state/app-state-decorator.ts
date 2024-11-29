@@ -2,8 +2,13 @@ import * as BABYLON from '@babylonjs/core'
 
 import { LoadingProgress } from '../../../base'
 import { Metadata } from '../../../base/interfaces/metadata/metadata'
-import { AppStatesController } from '../../../controllers'
+import {
+  AppStatesController,
+  GUIController,
+  ScenesController
+} from '../../../controllers'
 import { Rect } from '../../../models/rect'
+import { Arrays } from '../../../modules/helper/arrays'
 import { Logger } from '../../../modules/logger'
 import { FlexId } from '../../../types/flex-id'
 import {
@@ -14,6 +19,7 @@ import {
   removeLoopUpdate,
   switchLoopUpdate
 } from '../../../utils/utils'
+import { SceneConstructor } from '../../scene/scene-constructor'
 import { AppStateCore } from './app-state-core'
 import { AppStateInterface } from './app-state-interface'
 import { AppStateProps } from './app-state-props'
@@ -29,12 +35,13 @@ export function AppState(props: AppStateProps = {}): any {
 
       props: AppStateProps
       metadata: Metadata = Reflect.getMetadata('metadata', this) ?? new Metadata()
+      _loopUpdate: boolean
       loopUpdate$: BABYLON.Observer<number>
       canvasResize$: BABYLON.Observer<Rect>
       setup: any
 
       set loopUpdate(value: boolean) { switchLoopUpdate(value, this) }
-      get loopUpdate(): boolean { return !!this.loopUpdate$ }
+      get loopUpdate(): boolean { return this._loopUpdate }
 
       start(): void {
         Logger.debug('AppState start', _classInterface.prototype)
@@ -66,12 +73,19 @@ export function AppState(props: AppStateProps = {}): any {
       }
 
       load(): LoadingProgress {
-        // 8a8f should load new state before ending prev state (add Scenes and GUIS here)
-        const progress = new LoadingProgress().complete()
+        const progress = new LoadingProgress().fromNodes([
+          ScenesController.load(this.props.scenes, null),
+          GUIController.load(this.props.guis, null)
+        ])
         return progress
       }
 
-      unload(): void {
+      unload(_newStateCore: AppStateCore): void {
+        const unloadScenes = Arrays.removeDuplicatesInBoth(this.props.scenes ?? [], _newStateCore.props.scenes ?? [])
+        const unloadGuis = Arrays.removeDuplicatesInBoth(this.props.guis ?? [], _newStateCore.props.guis ?? [])
+        ScenesController.stop(unloadScenes)
+        ScenesController.unload(unloadScenes, null)
+        GUIController.unload(unloadGuis, null)
       }
     }
     AppStatesController.register(new _classCore())

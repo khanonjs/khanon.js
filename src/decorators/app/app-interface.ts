@@ -1,5 +1,6 @@
 import { Notificable } from '../../base'
 import { Metadata } from '../../base/interfaces/metadata/metadata'
+import { LoadingProgress } from '../../base/loading-progress/loading-progress'
 import { FlexId } from '../../types/flex-id'
 import { AppProps } from './app-props'
 import { AppStateConstructor } from './app-state/app-state-constructor'
@@ -15,7 +16,7 @@ export abstract class AppInterface implements Notificable {
    * User available
    */
   abstract get state(): AppStateInterface
-  abstract switchState(state: AppStateConstructor, setup: any): AppStateInterface
+  abstract switchState(state: AppStateConstructor, setup: any): LoadingProgress
   abstract notify(message: FlexId, ...args: any[]): void
 
   /**

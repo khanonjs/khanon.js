@@ -41,13 +41,14 @@ export function ActorState(props: ActorStateProps = {}): any {
       props: ActorStateProps
       actor: ActorInterface
       metadata: Metadata = Reflect.getMetadata('metadata', this) ?? new Metadata()
+      _loopUpdate: boolean
       loopUpdate$: BABYLON.Observer<number>
       canvasResize$: BABYLON.Observer<Rect>
       scene: SceneInterface
       setup: any
 
       set loopUpdate(value: boolean) { switchLoopUpdate(value, this) }
-      get loopUpdate(): boolean { return !!this.loopUpdate$ }
+      get loopUpdate(): boolean { return this._loopUpdate }
 
       start(): void {
         Logger.debug('ActorState start', _classInterface.prototype, this.actor.constructor.prototype)
@@ -79,14 +80,14 @@ export function ActorState(props: ActorStateProps = {}): any {
       }
 
       load(scene: SceneInterface): LoadingProgress {
-        const progress = new LoadingProgress().complete()
-        SpritesController.load(this.props.sprites, scene)
-        SpritesController.load(this.Instance.metadata.getProps().sprites, scene)
-        MeshesController.load(this.props.meshes, scene)
-        MeshesController.load(this.Instance.metadata.getProps().meshes, scene)
-        ParticlesController.load(this.props.particles, scene)
-        ParticlesController.load(this.Instance.metadata?.getProps().particles, scene)
-        return progress
+        return new LoadingProgress().fromNodes([
+          SpritesController.load(this.props.sprites, scene),
+          SpritesController.load(this.Instance.metadata.getProps().sprites, scene),
+          MeshesController.load(this.props.meshes, scene),
+          MeshesController.load(this.Instance.metadata.getProps().meshes, scene),
+          ParticlesController.load(this.props.particles, scene),
+          ParticlesController.load(this.Instance.metadata?.getProps().particles, scene)
+        ])
       }
 
       unload(scene: SceneInterface): void {

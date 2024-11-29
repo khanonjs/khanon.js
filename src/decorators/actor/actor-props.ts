@@ -1,3 +1,4 @@
+import { GUIConstructor } from '../gui/gui-constructor'
 import { MeshConstructor } from '../mesh/mesh-constructor'
 import { ParticleConstructor } from '../particle/particle-constructor'
 import { SpriteConstructor } from '../sprite/sprite-constructor'
@@ -7,8 +8,10 @@ import { ActorStateConstructor } from './actor-state/actor-state-constructor'
 export interface ActorProps {
   sprites?: SpriteConstructor[]
   meshes?: MeshConstructor[]
-  // guis?: GUIConstructor[]
+  guis?: GUIConstructor[]
   states?: ActorStateConstructor[]
   actions?: ActorActionConstructor[]
   particles?: ParticleConstructor[]
+  renderingGroupId?: number
+  visibility?: number
 }

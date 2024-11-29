@@ -12,4 +12,21 @@ export class Arrays {
   static clear(arr: any[]): void {
     arr.splice(0, arr.length)
   }
+
+  static removeValue(arr: any[] | undefined, value: any): void {
+    if (arr) {
+      let i = 0
+      while (i < arr.length) {
+        if (arr[i] === value) {
+          arr.splice(i, 1)
+        } else {
+          ++i
+        }
+      }
+    }
+  }
+
+  static removeDuplicatesInBoth(arr1: any[], arr2: any[]): any[] {
+    return arr1.filter(val => arr2.indexOf(val) === -1)
+  }
 }

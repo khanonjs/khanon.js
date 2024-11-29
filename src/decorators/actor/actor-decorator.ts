@@ -7,15 +7,17 @@ import {
   ActorActionsController,
   ActorsController,
   ActorStatesController,
+  GUIController,
   MeshesController,
   ParticlesController,
   SpritesController
 } from '../../controllers'
 import { Rect } from '../../models/rect'
+import { TransformComposition } from '../../models/transform-composition'
+import { Arrays } from '../../modules/helper/arrays'
+import { Helper } from '../../modules/helper/helper'
 import { Logger } from '../../modules/logger'
 import { FlexId } from '../../types/flex-id'
-import { MeshTransform } from '../../types/mesh-transform'
-import { SpriteTransform } from '../../types/sprite-transform'
 import {
   attachCanvasResize,
   attachLoopUpdate,
@@ -38,6 +40,7 @@ import { ActorActionConstructor } from './actor-action/actor-action-constructor'
 import { ActorActionInterface } from './actor-action/actor-action-interface'
 import { ActorCore } from './actor-core'
 import { ActorInterface } from './actor-interface'
+import { ActorNode } from './actor-node'
 import { ActorProps } from './actor-props'
 import { ActorStateConstructor } from './actor-state/actor-state-constructor'
 import { ActorStateInterface } from './actor-state/actor-state-interface'
@@ -54,87 +57,152 @@ export function Actor(props: ActorProps = {}): any {
 
       initialize(props: ActorProps) {
         this.props = props
+        this.visibility = props.visibility ?? 1
         invokeCallback(this.onSpawn, this)
       }
 
       props: ActorProps
       metadata: Metadata = Reflect.getMetadata('metadata', this) ?? new Metadata()
-      transform: SpriteTransform | MeshTransform | null
-      t: SpriteTransform | MeshTransform | null
+      transform: SpriteInterface | MeshInterface | null
+      t: SpriteInterface | MeshInterface | null
+      _loopUpdate: boolean
       loopUpdate$: BABYLON.Observer<number>
       canvasResize$: BABYLON.Observer<Rect>
       _body: B | null = null
-      nodes: Map<string, B> = new Map<string, B>()
+      nodes: Map<string, ActorNode<B>> = new Map<string, ActorNode<B>>()
+      _visibility = 1
       _state: ActorStateInterface | null = null
       actions: Map<ActorActionConstructor, ActorActionInterface> = new Map<ActorActionConstructor, ActorActionInterface>()
       particles: Map<FlexId, ParticleInterface> = new Map<FlexId, ParticleInterface>()
 
       set loopUpdate(value: boolean) { switchLoopUpdate(value, this) }
-      get loopUpdate(): boolean { return !!this.loopUpdate$ }
+      get loopUpdate(): boolean { return this._loopUpdate }
       get body(): SpriteInterface | MeshInterface | null { return this._body }
       get state(): ActorStateInterface | null { return this._state }
+
+      set visibility(value: number) {
+        this._visibility = value
+        if (this.body) {
+          this.body.visibility = value
+        }
+        this.nodes.forEach(node => { node.element.visibility = value })
+      }
+
+      get visibility(): number {
+        return this._visibility
+      }
 
       release() {
         invokeCallback(this.onDestroy, this)
         this.stopActionAll()
         this.clearParticles()
-        this.clearNodes()
+        this.removeBody()
         removeLoopUpdate(this)
         removeCanvasResize(this)
       }
 
-      setBody<B>(Body: new () => B): B {
-        if (new Body() instanceof SpriteInterface) { // TODO is there a better way to do this avoiding the 'new'?
-          if (!this.scene.availableElements.hasSprite(Body as SpriteConstructor)) { Logger.debugError('Trying to use a sprite non available to the actor. Please check the actor props.', this.constructor.prototype, Body.prototype); return null as any }
-          this._body = SpritesController.get(Body).spawn(this.scene) as any
+      getNodeElement<N extends B>(Element: new () => N): N {
+        if (new Element() instanceof SpriteInterface) { // TODO is there a better way to do this avoiding the 'new'?
+          if (!this.scene.availableElements.hasSprite(Element as SpriteConstructor)) { Logger.debugError('Trying to use a sprite non available to the actor. Please check the actor props.', this.constructor.prototype, Element.prototype); return null as any }
+          return SpritesController.get(Element).spawn(this.scene) as any
         } else {
-          if (!this.scene.availableElements.hasMesh(Body as MeshConstructor)) { Logger.debugError('Trying to use a mesh non available to the actor. Please check the actor props.', this.constructor.prototype, Body.prototype); return null as any }
-          this._body = MeshesController.get(Body).spawn(this.scene) as any
+          if (!this.scene.availableElements.hasMesh(Element as MeshConstructor)) { Logger.debugError('Trying to use a mesh non available to the actor. Please check the actor props.', this.constructor.prototype, Element.prototype); return null as any }
+          return MeshesController.get(Element).spawn(this.scene) as any
         }
-        this.transform = this._body?.transform ?? null
+      }
+
+      setBody<N extends B>(Body: new () => N): N {
+        if (this._body) {
+          this.removeBody()
+        }
+        this._body = this.getNodeElement(Body)
+        this._body.visibility = this.visibility
+        if (this.props.renderingGroupId) {
+          this._body.babylon.mesh.renderingGroupId = this.props.renderingGroupId
+        }
+        this.transform = this._body
         this.t = this.transform
         attachLoopUpdate(this)
         attachCanvasResize(this)
-        return this._body as B
+        return this._body as N
       }
 
       removeBody(): void {
         if (this._body) {
+          this.clearNodes()
           this._body.release()
           this._body = null
         }
       }
 
-      addNode<B>(Node: new () => B, name: string, transform?: BABYLON.Vector3 | BABYLON.Matrix): B {
-        // TODO
-        // if (!name) {
-        //   name = (++this.fakeId).toString()
-        // }
-        // if (this.nodes.get(name)) { Logger.debugError(`ActorCompositionDefinition - Adding a node with name already defined '${name}'`); return }
-        return null as any
-      }
+      addNode<N extends B>(Node: new () => N, name: string, transform?: TransformComposition, parentName?: string): ActorNode<B> | undefined {
+        if (!this._body) { Logger.debugError(`Cannot add node '${name}' without a body.`, _classInterface.prototype); return undefined }
+        if (this.nodes.has(name)) { Logger.warn(`Trying to add node '${name}' that already exists.`, _classInterface.prototype); return this.nodes.get(name) }
+        if (name === 'boneRoot' || parentName === 'boneRoot') { Logger.debugError('Cannot use \'boneRoot\' as node \'name\' or \'parentName\'.', _classInterface.prototype); return undefined }
+        if (parentName && this.nodes.size === 0) { Logger.debugError('Cannot use \'parentName\' without a previous added node.', _classInterface.prototype); return undefined }
+        const element = this.getNodeElement(Node)
+        if (element) {
+          if (!this._body.babylon.mesh.skeleton) {
+            this._body.babylon.mesh.skeleton = new BABYLON.Skeleton('skeleton', '', this.scene.babylon.scene)
+            const boneRoot = new BABYLON.Bone('boneRoot', this._body.babylon.mesh.skeleton, null, BABYLON.Matrix.Identity())
+          }
+          const boneParentIndex = this._body.babylon.mesh.skeleton.getBoneIndexByName(parentName ?? 'boneRoot')
+          const bone = new BABYLON.Bone(name, this._body.babylon.mesh.skeleton, this._body.babylon.mesh.skeleton.bones[boneParentIndex], BABYLON.Matrix.Identity())
+          element.babylon.mesh.billboardMode = 0
+          element.babylon.mesh.attachToBone(bone, this._body.babylon.mesh)
 
-      getNode(name: string): SpriteInterface | MeshInterface {
-        // TODO
-        return null as any
-      }
-
-      removeNode(name: string): void {
-        // TODO
-      }
-
-      clearNodes(includeBody = true) {
-        this.nodes.forEach(node => {
-          node.release()
-        })
-        this.nodes.clear()
-        if (includeBody) {
-          this.removeBody()
+          const node = { element, bone }
+          this.nodes.set(name, node)
+          if (this.props.renderingGroupId) {
+            element.babylon.mesh.renderingGroupId = this.props.renderingGroupId
+          }
+          element.visibility = this._visibility
+          if (transform?.position) {
+            bone.setPosition(transform.position)
+          }
+          if (transform?.rotation) {
+            bone.setRotation(transform.rotation)
+          }
+          if (transform?.scale) {
+            bone.scale(transform.scale.x, transform.scale.y, transform.scale.z)
+          }
+          return node
+        } else {
+          return undefined
         }
       }
 
-      setVisible(value: boolean) {
-        // TODO
+      getNode(name: string): ActorNode<B> | undefined {
+        return this.nodes.get(name)
+      }
+
+      removeNode(name: string): void {
+        const node = this.nodes.get(name)
+        if (node) {
+          const array = [...node.bone.children]
+          array.forEach(bone => {
+            this.removeNode(bone.name)
+          })
+          node.element.release()
+          node.bone.dispose()
+          this.nodes.delete(name)
+          if (this._body && this.nodes.size <= 0) {
+            this._body.babylon.mesh.skeleton?.dispose()
+            this._body.babylon.mesh.skeleton = null
+          }
+        }
+      }
+
+      clearNodes() {
+        this.nodes.forEach(node => {
+          node.element.release()
+          node.bone.dispose()
+        })
+        this.nodes.clear()
+        if (this._body) {
+          this._body.babylon.mesh.skeleton?.dispose()
+          this._body.babylon.mesh.skeleton = null
+        }
       }
 
       switchState(state: ActorStateConstructor, setup: any): ActorStateInterface {
@@ -189,6 +257,8 @@ export function Actor(props: ActorProps = {}): any {
             }
           })
           action.start(setup)
+        } else {
+          action.play()
         }
         return action
       }
@@ -214,6 +284,7 @@ export function Actor(props: ActorProps = {}): any {
       stopAction(actionConstructor: ActorActionConstructor, forceRemove?: boolean): void {
         const action = this.actions.get(actionConstructor)
         if (action) {
+          action._isPlaying = false
           removeLoopUpdate(action)
           removeCanvasResize(action)
           invokeCallback(action.onStop, action)
@@ -270,22 +341,29 @@ export function Actor(props: ActorProps = {}): any {
             particleConstructorOrMethod = value.classDefinition
           })
         }
-        const attachmentSprite = nodeName ? this.getNode(nodeName) : this.body
+        const attachmentSprite = nodeName ? this.getNode(nodeName)?.element : this.body
         if (!attachmentSprite) { Logger.debugError('Cannot attach a particle to an empty body.', _classInterface.prototype, particleConstructorOrMethod.prototype); return }
         if (!this.scene.availableElements.hasParticle(particleConstructorOrMethod as ParticleConstructor)) { Logger.debugError('Trying to attach a particle non available to the actor. Please check the actor props.', _classInterface.prototype, particleConstructorOrMethod.prototype); return }
         const particle = ParticlesController.get(particleConstructorOrMethod).spawn(this.scene, { attachment: attachmentSprite, offset }, !isMethod)
+
         if (isMethod) {
           // Applies context to 'onInitialize' as caller 'Actor' to preserve the 'this'
           // in case 'initialize' is equivalent to a decorated method of some of those both interfaces.
           particle.onInitialize = particle.onInitialize?.bind(this)
           particle.create()
         }
+        if (this.props.renderingGroupId) {
+          particle.babylon.particleSystem.renderingGroupId = this.props.renderingGroupId
+        }
+        // TODO visibility should affect to particles, is it possible?
         this.particles.set(id, particle)
       }
 
       startParticle(id: FlexId): void {
         if (!this.particles.get(id)) { Logger.debugError(`Trying to start particle '${id}' that doesn't exist in actor:`, _classInterface.prototype); return }
-        this.particles.get(id)?.start()
+        if (this.visibility > 0) {
+          this.particles.get(id)?.start()
+        }
       }
 
       stopParticle(id: FlexId): void {
@@ -322,17 +400,18 @@ export function Actor(props: ActorProps = {}): any {
       loaded = false
 
       load(scene: SceneInterface): LoadingProgress {
-        const progress = new LoadingProgress().complete()
-        ActorStatesController.load(this.props.states, scene)
-        ActorActionsController.load(this.props.actions, scene)
-        ActorActionsController.load(this.Instance.metadata.getProps().actions, scene)
-        SpritesController.load(this.props.sprites, scene)
-        SpritesController.load(this.Instance.metadata.getProps().sprites, scene)
-        MeshesController.load(this.props.meshes, scene)
-        MeshesController.load(this.Instance.metadata.getProps().meshes, scene)
-        ParticlesController.load(this.props.particles, scene)
-        ParticlesController.load(this.Instance.metadata.getProps().particles, scene)
-        return progress
+        return new LoadingProgress().fromNodes([
+          ActorStatesController.load(this.props.states, scene),
+          ActorActionsController.load(this.props.actions, scene),
+          ActorActionsController.load(this.Instance.metadata.getProps().actions, scene),
+          SpritesController.load(this.props.sprites, scene),
+          SpritesController.load(this.Instance.metadata.getProps().sprites, scene),
+          MeshesController.load(this.props.meshes, scene),
+          MeshesController.load(this.Instance.metadata.getProps().meshes, scene),
+          ParticlesController.load(this.props.particles, scene),
+          ParticlesController.load(this.Instance.metadata.getProps().particles, scene),
+          GUIController.load(this.props.guis, scene)
+        ])
       }
 
       unload(scene: SceneInterface): void {
@@ -345,6 +424,7 @@ export function Actor(props: ActorProps = {}): any {
         MeshesController.unload(this.Instance.metadata.getProps().meshes, scene)
         ParticlesController.unload(this.props.particles, scene)
         ParticlesController.unload(this.Instance.metadata.getProps().particles, scene)
+        GUIController.unload(this.props.guis, scene)
       }
 
       spawn(scene: SceneInterface): ActorInterface {

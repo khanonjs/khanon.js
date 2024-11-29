@@ -12,6 +12,7 @@ import { FlexId } from '../../types/flex-id'
 import { SceneInterface } from '../scene/scene-interface'
 
 export abstract class CameraInterface<S = any, C extends SceneInterface = SceneInterface> implements LoopUpdatable, CanvasResizable, Notificable {
+  abstract _loopUpdate: boolean
   abstract metadata: Metadata
   abstract loopUpdate$: BABYLON.Observer<number>
   abstract canvasResize$: BABYLON.Observer<Rect>

@@ -37,6 +37,39 @@ export abstract class MeshInterface implements DisplayObject {
   abstract setMesh(babylonMesh: BABYLON.Mesh): void
   abstract destroy(): void
 
+  abstract get absolutePosition(): BABYLON.Vector3
+  abstract get absoluteRotationQuaternion(): BABYLON.Quaternion
+  abstract get absoluteScaling(): BABYLON.Vector3
+  abstract set position(value: BABYLON.Vector3)
+  abstract get position(): BABYLON.Vector3
+  abstract set rotation(value: BABYLON.Vector3)
+  abstract get rotation(): BABYLON.Vector3
+  abstract set rotationQuaternion(value: BABYLON.Quaternion)
+  abstract get rotationQuaternion(): BABYLON.Nullable<BABYLON.Quaternion>
+  abstract set scaling(value: BABYLON.Vector3)
+  abstract get scaling(): BABYLON.Vector3
+  abstract addRotation(x: number, y: number, z: number): BABYLON.TransformNode
+  abstract getAbsolutePivotPoint(): BABYLON.Vector3
+  abstract getAbsolutePivotPointToRef(result: BABYLON.Vector3): BABYLON.TransformNode
+  abstract getAbsolutePosition(): BABYLON.Vector3
+  abstract getDirection(localAxis: BABYLON.Vector3): BABYLON.Vector3
+  abstract getDirectionToRef(localAxis: BABYLON.Vector3, result: BABYLON.Vector3): BABYLON.TransformNode
+  abstract getPivotPoint(): BABYLON.Vector3
+  abstract getPivotPointToRef(result: BABYLON.Vector3): BABYLON.TransformNode
+  abstract locallyTranslate(vector3: BABYLON.Vector3): BABYLON.TransformNode
+  abstract lookAt(targetPoint: BABYLON.Vector3, yawCor?: number, pitchCor?: number, rollCor?: number, space?: BABYLON.Space): BABYLON.TransformNode
+  abstract rotate(axis: BABYLON.Vector3, amount: number, space?: BABYLON.Space): BABYLON.TransformNode
+  abstract rotateAround(point: BABYLON.Vector3, axis: BABYLON.Vector3, amount: number): BABYLON.TransformNode
+  abstract rotatePOV(flipBack: number, twirlClockwise: number, tiltRight: number): BABYLON.AbstractMesh
+  abstract setAbsolutePosition(absolutePosition: BABYLON.Vector3): BABYLON.TransformNode
+  abstract setDirection(localAxis: BABYLON.Vector3, yawCor?: number, pitchCor?: number, rollCor?: number): BABYLON.TransformNode
+  abstract setPivotMatrix(matrix: BABYLON.DeepImmutable<BABYLON.Matrix>, postMultiplyPivotMatrix?: boolean): BABYLON.TransformNode
+  abstract setPivotPoint(point: BABYLON.Vector3, space?: BABYLON.Space): BABYLON.TransformNode
+  abstract setPositionWithLocalVector(vector3: BABYLON.Vector3): BABYLON.TransformNode
+  abstract translate(axis: BABYLON.Vector3, distance: number, space?: BABYLON.Space): BABYLON.TransformNode
+  abstract set visibility(value: number)
+  abstract get visibility(): number
+
   /**
    * User defined optional
    */

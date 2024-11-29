@@ -53,7 +53,40 @@ export function Mesh(props: MeshProps): any {
         canvasResize$: BABYLON.Observer<Rect>
 
         set loopUpdate(value: boolean) { switchLoopUpdate(value, this) }
-        get loopUpdate(): boolean { return !!this.loopUpdate$ }
+        get loopUpdate(): boolean { return this._loopUpdate }
+
+        get absolutePosition(): BABYLON.Vector3 { return this.babylon.mesh.absolutePosition }
+        get absoluteRotationQuaternion(): BABYLON.Quaternion { return this.babylon.mesh.absoluteRotationQuaternion }
+        get absoluteScaling(): BABYLON.Vector3 { return this.babylon.mesh.absoluteScaling }
+        set position(value: BABYLON.Vector3) { this.babylon.mesh.position = value }
+        get position(): BABYLON.Vector3 { return this.babylon.mesh.position }
+        set rotation(value: BABYLON.Vector3) { this.babylon.mesh.rotation = value }
+        get rotation(): BABYLON.Vector3 { return this.babylon.mesh.rotation }
+        set rotationQuaternion(value: BABYLON.Quaternion) { this.babylon.mesh.rotationQuaternion = value }
+        get rotationQuaternion(): BABYLON.Nullable<BABYLON.Quaternion> { return this.babylon.mesh.rotationQuaternion }
+        set scaling(value: BABYLON.Vector3) { this.babylon.mesh.scaling = value }
+        get scaling(): BABYLON.Vector3 { return this.babylon.mesh.scaling }
+        addRotation(x: number, y: number, z: number): BABYLON.TransformNode { return this.babylon.mesh.addRotation(x, y, z) }
+        getAbsolutePivotPoint(): BABYLON.Vector3 { return this.babylon.mesh.getAbsolutePivotPoint() }
+        getAbsolutePivotPointToRef(result: BABYLON.Vector3): BABYLON.TransformNode { return this.babylon.mesh.getAbsolutePivotPointToRef(result) }
+        getAbsolutePosition(): BABYLON.Vector3 { return this.babylon.mesh.getAbsolutePosition() }
+        getDirection(localAxis: BABYLON.Vector3): BABYLON.Vector3 { return this.babylon.mesh.getDirection(localAxis) }
+        getDirectionToRef(localAxis: BABYLON.Vector3, result: BABYLON.Vector3): BABYLON.TransformNode { return this.babylon.mesh.getDirectionToRef(localAxis, result) }
+        getPivotPoint(): BABYLON.Vector3 { return this.babylon.mesh.getPivotPoint() }
+        getPivotPointToRef(result: BABYLON.Vector3): BABYLON.TransformNode { return this.babylon.mesh.getPivotPointToRef(result) }
+        locallyTranslate(vector3: BABYLON.Vector3): BABYLON.TransformNode { return this.babylon.mesh.locallyTranslate(vector3) }
+        lookAt(targetPoint: BABYLON.Vector3, yawCor?: number, pitchCor?: number, rollCor?: number, space?: BABYLON.Space): BABYLON.TransformNode { return this.babylon.mesh.lookAt(targetPoint, yawCor, pitchCor, rollCor, space) }
+        rotate(axis: BABYLON.Vector3, amount: number, space?: BABYLON.Space): BABYLON.TransformNode { return this.babylon.mesh.rotate(axis, amount, space) }
+        rotateAround(point: BABYLON.Vector3, axis: BABYLON.Vector3, amount: number): BABYLON.TransformNode { return this.babylon.mesh.rotateAround(point, axis, amount) }
+        rotatePOV(flipBack: number, twirlClockwise: number, tiltRight: number): BABYLON.AbstractMesh { return this.babylon.mesh.rotatePOV(flipBack, twirlClockwise, tiltRight) }
+        setAbsolutePosition(absolutePosition: BABYLON.Vector3): BABYLON.TransformNode { return this.babylon.mesh.setAbsolutePosition(absolutePosition) }
+        setDirection(localAxis: BABYLON.Vector3, yawCor?: number, pitchCor?: number, rollCor?: number): BABYLON.TransformNode { return this.babylon.mesh.setDirection(localAxis, yawCor, pitchCor, rollCor) }
+        setPivotMatrix(matrix: BABYLON.DeepImmutable<BABYLON.Matrix>, postMultiplyPivotMatrix?: boolean): BABYLON.TransformNode { return this.babylon.mesh.setPivotMatrix(matrix, postMultiplyPivotMatrix) }
+        setPivotPoint(point: BABYLON.Vector3, space?: BABYLON.Space): BABYLON.TransformNode { return this.babylon.mesh.setPivotPoint(point, space) }
+        setPositionWithLocalVector(vector3: BABYLON.Vector3): BABYLON.TransformNode { return this.babylon.mesh.setPositionWithLocalVector(vector3) }
+        translate(axis: BABYLON.Vector3, distance: number, space?: BABYLON.Space): BABYLON.TransformNode { return this.babylon.mesh.translate(axis, distance, space) }
+        set visibility(value: number) { this.babylon.mesh.visibility = value }
+        get visibility(): number { return this.babylon.mesh.visibility }
 
         setMesh(babylonMesh: BABYLON.Mesh): void {
           if (this.babylon.mesh) {
@@ -136,6 +169,14 @@ export function Mesh(props: MeshProps): any {
         Instance: MeshInterface = new _classInterface(null as any, null as any)
 
         load(scene: SceneInterface): LoadingProgress {
+          // 8a8f
+          // this.addLoadStackItem('Scene: ' + url);
+          // const indexSlash = url.lastIndexOf('/') + 1;
+          // const path = url.slice(0, indexSlash);
+          // const file = url.slice(indexSlash);
+          // SceneLoader.ShowLoadingScreen = false;
+          // SceneLoader.AppendAsync(path, file, this.babylonJsScene);
+          // SceneLoader.ImportMeshAsync
           return new LoadingProgress().complete()
         }
 

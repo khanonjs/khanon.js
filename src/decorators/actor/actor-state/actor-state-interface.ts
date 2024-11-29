@@ -13,6 +13,7 @@ import { ActorStateProps } from './actor-state-props'
 export abstract class ActorStateInterface<S = any, A = ActorInterface<SpriteInterface | MeshInterface>, C = SceneInterface> implements StateInterface<S> {
   abstract props: ActorStateProps
   abstract metadata: Metadata
+  abstract _loopUpdate: boolean
   abstract loopUpdate$: BABYLON.Observer<number>
   abstract canvasResize$: BABYLON.Observer<Rect>
   abstract start(setup: any): void

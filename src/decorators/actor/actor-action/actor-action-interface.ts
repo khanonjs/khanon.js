@@ -16,6 +16,8 @@ export abstract class ActorActionInterface<S = any, A = ActorInterface<SpriteInt
   abstract metadata: Metadata
   abstract loopUpdate$: BABYLON.Observer<number>
   abstract canvasResize$: BABYLON.Observer<Rect>
+  abstract _loopUpdate: boolean
+  abstract _isPlaying: boolean
   abstract start(setup: S): void
 
   /**
@@ -26,6 +28,7 @@ export abstract class ActorActionInterface<S = any, A = ActorInterface<SpriteInt
   abstract set loopUpdate(value: boolean)
   abstract get loopUpdate(): boolean
   abstract get scene(): SceneInterface
+  abstract get isPlaying(): boolean
   abstract play(): void
   abstract stop(): void // Callable from user Action, it will call to 'owner.stopActionFromInstance', then owner calls 'action.end' after remove it.
   abstract remove(): void

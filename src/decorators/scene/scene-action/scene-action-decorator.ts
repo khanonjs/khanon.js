@@ -1,6 +1,7 @@
 import * as BABYLON from '@babylonjs/core'
 
 import { LoadingProgress } from '../../../base'
+import { Core } from '../../../base/core/core'
 import { Metadata } from '../../../base/interfaces/metadata/metadata'
 import {
   MeshesController,
@@ -8,7 +9,6 @@ import {
   SceneActionsController,
   SpritesController
 } from '../../../controllers'
-import { Core } from '../../../core'
 import { Rect } from '../../../models/rect'
 import { Logger } from '../../../modules/logger'
 import {
@@ -36,12 +36,13 @@ export function SceneAction(props: SceneActionProps = {}): any {
 
         props = props
         metadata: Metadata = Reflect.getMetadata('metadata', this) ?? new Metadata()
+        _loopUpdate: boolean
         loopUpdate$: BABYLON.Observer<number>
         canvasResize$: BABYLON.Observer<Rect>
         setup: any
 
         set loopUpdate(value: boolean) { switchLoopUpdate(value, this) }
-        get loopUpdate(): boolean { return !!this.loopUpdate$ }
+        get loopUpdate(): boolean { return this._loopUpdate }
 
         start(setup: any): void {
           this.setup = setup
@@ -78,14 +79,14 @@ export function SceneAction(props: SceneActionProps = {}): any {
         Instance: SceneActionInterface = new _classInterface(null as any)
 
         load(scene: SceneInterface): LoadingProgress {
-          const progress = new LoadingProgress().complete()
-          SpritesController.load(this.props.sprites, scene)
-          SpritesController.load(this.Instance.metadata.getProps().sprites, scene)
-          MeshesController.load(this.props.meshes, scene)
-          MeshesController.load(this.Instance.metadata.getProps().meshes, scene)
-          ParticlesController.load(this.props.particles, scene)
-          ParticlesController.load(this.Instance.metadata.getProps().particles, scene)
-          return progress
+          return new LoadingProgress().fromNodes([
+            SpritesController.load(this.props.sprites, scene),
+            SpritesController.load(this.Instance.metadata.getProps().sprites, scene),
+            MeshesController.load(this.props.meshes, scene),
+            MeshesController.load(this.Instance.metadata.getProps().meshes, scene),
+            ParticlesController.load(this.props.particles, scene),
+            ParticlesController.load(this.Instance.metadata.getProps().particles, scene)
+          ])
         }
 
         unload(scene: SceneInterface): void {
