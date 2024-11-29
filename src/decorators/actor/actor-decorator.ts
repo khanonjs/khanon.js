@@ -7,6 +7,7 @@ import {
   ActorActionsController,
   ActorsController,
   ActorStatesController,
+  GUIController,
   MeshesController,
   ParticlesController,
   SpritesController
@@ -408,7 +409,8 @@ export function Actor(props: ActorProps = {}): any {
           MeshesController.load(this.props.meshes, scene),
           MeshesController.load(this.Instance.metadata.getProps().meshes, scene),
           ParticlesController.load(this.props.particles, scene),
-          ParticlesController.load(this.Instance.metadata.getProps().particles, scene)
+          ParticlesController.load(this.Instance.metadata.getProps().particles, scene),
+          GUIController.load(this.props.guis, scene)
         ])
       }
 
@@ -422,6 +424,7 @@ export function Actor(props: ActorProps = {}): any {
         MeshesController.unload(this.Instance.metadata.getProps().meshes, scene)
         ParticlesController.unload(this.props.particles, scene)
         ParticlesController.unload(this.Instance.metadata.getProps().particles, scene)
+        GUIController.unload(this.props.guis, scene)
       }
 
       spawn(scene: SceneInterface): ActorInterface {

@@ -6,5 +6,6 @@ export interface AppProps {
   htmlCanvasContainerId?: string
   loopUpdate?: AppPropLoopUpdate
   engineConfiguration?: EngineConfiguration
+  removeTimeoutsOnStateSwitch?: boolean
   debugLog?: boolean
 }

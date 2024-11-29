@@ -25,4 +25,8 @@ export class Arrays {
       }
     }
   }
+
+  static removeDuplicatesInBoth(arr1: any[], arr2: any[]): any[] {
+    return arr1.filter(val => arr2.indexOf(val) === -1)
+  }
 }

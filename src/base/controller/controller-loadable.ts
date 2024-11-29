@@ -19,10 +19,12 @@ export function ControllerLoader</* Constructor type to load from */ L, /* Insta
     }
 
     static unload(constructors: L | L[] | undefined, owner: D) {
-      if (Array.isArray(constructors)) {
-        ControllerLoadable.get(constructors, useInstance).forEach(item => item.unload(owner))
-      } else {
-        (ControllerLoadable.get(constructors, useInstance) as T).unload(owner) // TODO: TS bug?: Does not correctly infer conditional type
+      if (constructors) {
+        if (Array.isArray(constructors)) {
+          ControllerLoadable.get(constructors, useInstance).forEach(item => item.unload(owner))
+        } else {
+          (ControllerLoadable.get(constructors, useInstance) as T).unload(owner) // TODO: TS bug?: Does not correctly infer conditional type
+        }
       }
     }
   }

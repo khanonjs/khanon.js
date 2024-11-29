@@ -169,6 +169,14 @@ export function Mesh(props: MeshProps): any {
         Instance: MeshInterface = new _classInterface(null as any, null as any)
 
         load(scene: SceneInterface): LoadingProgress {
+          // 8a8f
+          // this.addLoadStackItem('Scene: ' + url);
+          // const indexSlash = url.lastIndexOf('/') + 1;
+          // const path = url.slice(0, indexSlash);
+          // const file = url.slice(indexSlash);
+          // SceneLoader.ShowLoadingScreen = false;
+          // SceneLoader.AppendAsync(path, file, this.babylonJsScene);
+          // SceneLoader.ImportMeshAsync
           return new LoadingProgress().complete()
         }
 

@@ -1,11 +1,14 @@
 import { Core } from '../../base/core/core'
 import { Metadata } from '../../base/interfaces/metadata/metadata'
+import { LoadingProgress } from '../../base/loading-progress/loading-progress'
 import { AppStatesController } from '../../controllers'
+import { Logger } from '../../modules/logger'
 import { FlexId } from '../../types/flex-id'
 import { applyDefaults } from '../../utils/utils'
 import { AppInterface } from './app-interface'
 import { AppProps } from './app-props'
 import { AppStateConstructor } from './app-state/app-state-constructor'
+import { AppStateCore } from './app-state/app-state-core'
 import { AppStateInterface } from './app-state/app-state-interface'
 import { appPropsDefault } from './app.props.deafult'
 
@@ -14,19 +17,27 @@ export function App(props: AppProps): any {
     const _class = class extends constructor implements AppInterface {
       props = applyDefaults(props, appPropsDefault)
       metadata: Metadata = Reflect.getMetadata('metadata', this) ?? new Metadata()
+      _stateCore: AppStateCore
       _state: AppStateInterface
 
       get state(): AppStateInterface { return this._state }
 
-      // 8a8f should load new state before ending prev state
-      switchState(state: AppStateConstructor, setup: any): AppStateInterface {
-        const _state = AppStatesController.get(state).spawn()
+      switchState(state: AppStateConstructor, setup: any): LoadingProgress {
+        if (this.props.removeTimeoutsOnStateSwitch) {
+          Core.clearAllTimeouts()
+        }
+        const _newStateCore = AppStatesController.get(state)
         if (this._state) {
           this._state.end()
+          this._stateCore.unload(_newStateCore)
         }
-        this._state = _state
-        this._state.start(setup)
-        return this._state
+        const progress = _newStateCore.load()
+        progress.onComplete.add(() => {
+          this._stateCore = _newStateCore
+          this._state = this._stateCore.spawn()
+          this._state.start(setup)
+        })
+        return progress
       }
 
       notify(message: FlexId, ...args: any[]): void {

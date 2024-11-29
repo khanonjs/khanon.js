@@ -1,3 +1,4 @@
+import { LoadingProgress } from '../../base/loading-progress/loading-progress'
 import {
   EngineConfiguration,
   FlexId
@@ -19,7 +20,7 @@ export declare abstract class AppInterface {
    * @param state
    * @param setup
    */
-  switchState<S extends AppStateConstructor>(state: S, setup: InstanceType<S>['setup']): AppStateInterface // TODO is it possible to make 'setup' argument optional whether InstanceType<S>['setup'] type is 'any'?
+  switchState<S extends AppStateConstructor>(state: S, setup: InstanceType<S>['setup']): LoadingProgress // TODO is it possible to make 'setup' argument optional whether InstanceType<S>['setup'] type is 'any'?
 
   /**
    * Notifies a message to the App.
@@ -74,6 +75,13 @@ export interface AppProps {
    * Babylon.js engine configuration
    */
   engineConfiguration?: EngineConfiguration
+
+  /**
+   * If 'true', all intervals and timeouts created trought KJS.setTimeout or KJS.setInterval are removed.
+   * This helps to keep the consistency of the app, avoiding to perform actions after an app state scene is removed.
+   * Use it ONLY if you are setting timeouts and intervals within scene elements.
+   */
+  removeTimeoutsOnStateSwitch?: boolean
 
   /**
    * Logs Khanon.js debug information.

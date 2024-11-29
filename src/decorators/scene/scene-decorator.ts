@@ -13,6 +13,7 @@ import {
   ActorStatesController,
   AssetsController,
   CamerasController,
+  GUIController,
   MeshesController,
   ParticlesController,
   SceneActionsController,
@@ -79,12 +80,14 @@ export function Scene(props: SceneProps = {}): any {
       animationHandler: Map<SpriteInterface, () => void> = new Map<SpriteInterface, () => void>()
       _assets: AssetDefinition[]
       _loaded: boolean
+      _loadingProgress: LoadingProgress | undefined
       _started: boolean
       _state: SceneStateInterface
       _camera: CameraInterface
       _spawn: SceneSpawn
       _remove: SceneRemove
       _loopUpdate: boolean
+      _hasDebugInspector: boolean
 
       // Spawned elements
       actors: Set<ActorInterface> = new Set<ActorInterface>()
@@ -111,6 +114,9 @@ export function Scene(props: SceneProps = {}): any {
 
       start(state: SceneStateConstructor, stateSetup: any): SceneStateInterface {
         Logger.debug('Scene start', _class.prototype)
+        if (this._started) {
+          this.stop()
+        }
         this._started = true
         this.switchState(state, stateSetup)
         invokeCallback(this.onStart, this)
@@ -127,8 +133,8 @@ export function Scene(props: SceneProps = {}): any {
 
       stop(): void {
         Logger.debug('Scene stop', _class.prototype)
-        this.remove.all()
         this.state.end()
+        this.remove.all()
         this._started = false
         Core.stopRenderScene(this)
         this.stopRenderObservable()
@@ -139,61 +145,72 @@ export function Scene(props: SceneProps = {}): any {
       load(): LoadingProgress {
         Logger.debug('Scene load', _class.prototype)
 
-        // Create babylon scene and apply configuration
-        this.babylon.scene = new BABYLON.Scene(Core.engine, this.props.options)
-        if (this.props.configuration) {
-          for (const [key, value] of Object.entries(this.props.configuration)) {
-            this.babylon.scene[key] = value
+        if (this._loaded) {
+          return new LoadingProgress().complete()
+        }
+
+        if (this._loadingProgress) {
+          return this._loadingProgress
+        } else {
+          // Create babylon scene and apply configuration
+          this.babylon.scene = new BABYLON.Scene(Core.engine, this.props.options)
+          if (this.props.configuration) {
+            for (const [key, value] of Object.entries(this.props.configuration)) {
+              this.babylon.scene[key] = value
+            }
           }
-        }
 
-        // Babylon inspector (only DEV mode). Babylon inspector's imports are removed on webpack build.
-        if (Core.isDevelopmentMode()) { // TODO one per scene, allow only one at the same time
-          this.debugInspector()
-        }
+          // Babylon inspector (only DEV mode). Babylon inspector's imports are removed on webpack build.
+          if (Core.isDevelopmentMode()) { // TODO one per scene, allow only one at the same time
+            this.debugInspector()
+          }
 
-        const sceneProgress = new LoadingProgress()
-        if (!this.assets) {
-          this._assets = [
-            ...AssetsController.findAssetsDefinitions(this.props),
-            ...AssetsController.findAssetsDefinitions(this.metadata.getProps())
-          ]
-        }
-        const assetsProgress = AssetsController.sceneLoad(this)
-        assetsProgress.onComplete.add(() => {
-          Logger.debug('Scene assets load completed', _class.prototype)
-          const elementsLoading = new LoadingProgress().fromNodes([
-            SceneStatesController.load(this.props.states, this),
-            SceneActionsController.load(this.props.actions, this),
-            SceneActionsController.load(this.metadata.getProps().actions, this),
-            ActorsController.load(this.props.actors, this),
-            SpritesController.load(this.props.sprites, this),
-            SpritesController.load(this.metadata.getProps().sprites, this),
-            MeshesController.load(this.props.meshes, this),
-            MeshesController.load(this.metadata.getProps().meshes, this),
-            ParticlesController.load(this.props.particles, this),
-            ParticlesController.load(this.metadata.getProps().particles, this)
-          ])
-          elementsLoading.onComplete.add(() => {
-            this._loaded = true
-            this.babylon.scene.executeWhenReady(() => {
-              invokeCallback(this.onLoaded, this)
-              sceneProgress.complete()
+          this._loadingProgress = new LoadingProgress()
+          if (!this.assets) {
+            this._assets = [
+              ...AssetsController.findAssetsDefinitions(this.props),
+              ...AssetsController.findAssetsDefinitions(this.metadata.getProps())
+            ]
+          }
+          const assetsProgress = AssetsController.sceneLoad(this)
+          assetsProgress.onComplete.add(() => {
+            Logger.debug('Scene assets load completed', _class.prototype)
+            const elementsLoading = new LoadingProgress().fromNodes([
+              SceneStatesController.load(this.props.states, this),
+              SceneActionsController.load(this.props.actions, this),
+              SceneActionsController.load(this.metadata.getProps().actions, this),
+              ActorsController.load(this.props.actors, this),
+              SpritesController.load(this.props.sprites, this),
+              SpritesController.load(this.metadata.getProps().sprites, this),
+              MeshesController.load(this.props.meshes, this),
+              MeshesController.load(this.metadata.getProps().meshes, this),
+              ParticlesController.load(this.props.particles, this),
+              ParticlesController.load(this.metadata.getProps().particles, this),
+              GUIController.load(this.props.guis, this)
+            ])
+            elementsLoading.onComplete.add(() => {
+              this.babylon.scene.executeWhenReady(() => {
+                this._loaded = true
+                invokeCallback(this.onLoaded, this)
+                this._loadingProgress?.complete()
+                this._loadingProgress = undefined
+              })
             })
           })
-        })
-        assetsProgress.onError.add((error: string) => {
-          Logger.debugError('Scene assets load error', error, _class.prototype)
-          KJS.throw(error)
-        })
-        assetsProgress.onProgress.add((progress: number) => {
-          sceneProgress.setProgress(progress)
-        })
-        return sceneProgress
+          assetsProgress.onError.add((error: string) => {
+            Logger.debugError('Scene assets load error', error, _class.prototype)
+            KJS.throw(error)
+          })
+          assetsProgress.onProgress.add((progress: number) => {
+            this._loadingProgress?.setProgress(progress)
+          })
+          return this._loadingProgress
+        }
       }
 
       unload(): void {
         Logger.debug('Scene unload', _class.prototype, this)
+        this._loaded = false
         SceneStatesController.unload(this.props.states, this)
         SceneActionsController.unload(this.props.actions, this)
         SceneActionsController.unload(this.metadata.getProps().actions, this)
@@ -204,6 +221,7 @@ export function Scene(props: SceneProps = {}): any {
         MeshesController.unload(this.metadata.getProps().meshes, this)
         ParticlesController.unload(this.props.particles, this)
         ParticlesController.unload(this.metadata.getProps().particles, this)
+        GUIController.unload(this.props.guis, this)
       }
 
       startRenderObservable(): void {
@@ -443,15 +461,18 @@ export function Scene(props: SceneProps = {}): any {
 
       debugInspector(): void {
         // TODO handle this for each scene (only one can be active at once)
-        window.addEventListener('keyup', (ev) => {
-          if (ev.shiftKey && ev.ctrlKey && ev.altKey && ev.key === 'I') {
-            if (this.babylon.scene.debugLayer.isVisible()) {
-              this.babylon.scene.debugLayer.hide()
-            } else {
-              this.babylon.scene.debugLayer.show()
+        if (!this._hasDebugInspector) {
+          this._hasDebugInspector = true
+          window.addEventListener('keyup', (ev) => {
+            if (ev.shiftKey && ev.ctrlKey && ev.altKey && ev.key === 'I') {
+              if (this.babylon.scene.debugLayer.isVisible()) {
+                this.babylon.scene.debugLayer.hide()
+              } else {
+                this.babylon.scene.debugLayer.show()
+              }
             }
-          }
-        })
+          })
+        }
       }
     }
     ScenesController.register(new _class())
