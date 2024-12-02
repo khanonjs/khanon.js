@@ -37,9 +37,10 @@ export abstract class SceneInterface implements Loadable, LoopUpdatable, CanvasR
   abstract _state: SceneStateInterface
   abstract _spawn: SceneSpawn
   abstract _remove: SceneRemove
-  abstract _camera: CameraInterface
+  abstract _camera: CameraInterface | undefined
+  abstract _cameraConstructor: CameraConstructor
   abstract _loopUpdate: boolean
-  abstract _hasDebugInspector: boolean
+  abstract _debugInspector: (event: KeyboardEvent) => void
   abstract availableElements: SceneAvailableElements
   abstract assets: AssetDefinition[]
   abstract metadata: Metadata
@@ -58,6 +59,8 @@ export abstract class SceneInterface implements Loadable, LoopUpdatable, CanvasR
   abstract stopAnimationHandler(sprite: SpriteInterface): void
   abstract startRenderObservable(): void
   abstract stopRenderObservable(): void
+  abstract useDebugInspector(): void
+  abstract denyDebugInspector(): void
 
   /**
    * User available

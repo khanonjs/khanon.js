@@ -23,13 +23,13 @@ export function App(props: AppProps): any {
       get state(): AppStateInterface { return this._state }
 
       switchState(state: AppStateConstructor, setup: any): LoadingProgress {
-        if (this.props.removeTimeoutsOnStateSwitch) {
-          Core.clearAllTimeouts()
-        }
         const _newStateCore = AppStatesController.get(state)
         if (this._state) {
           this._state.end()
           this._stateCore.unload(_newStateCore)
+        }
+        if (this.props.removeTimeoutsOnStateSwitch) {
+          Core.clearAllTimeouts()
         }
         const progress = _newStateCore.load()
         progress.onComplete.add(() => {

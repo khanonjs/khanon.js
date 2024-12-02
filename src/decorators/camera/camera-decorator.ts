@@ -17,9 +17,10 @@ import {
 import { SceneInterface } from '../scene/scene-interface'
 import { CameraCore } from './camera-core'
 import { CameraInterface } from './camera-interface'
+import { CameraProps } from './camera-props'
 
 // TODO add CameraAction
-export function Camera(): any {
+export function Camera(props: CameraProps = {}): any {
   return function <T extends { new (...args: any[]): CameraInterface }>(constructor: T & CameraInterface, context: ClassDecoratorContext) {
     const _classInterface = class extends constructor implements CameraInterface {
       constructor(readonly scene: SceneInterface) {
@@ -58,6 +59,11 @@ export function Camera(): any {
         removeLoopUpdate(this)
         removeCanvasResize(this)
       }
+
+      release(): void {
+        this.stop()
+        this.babylon.camera.dispose()
+      }
     }
     const _classCore = class implements CameraCore {
       Instance: CameraInterface = new _classInterface(null as any)
@@ -68,6 +74,6 @@ export function Camera(): any {
       }
     }
     CamerasController.register(new _classCore())
-    return CameraInterface
+    return _classInterface
   }
 }
