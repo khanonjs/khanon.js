@@ -10,6 +10,8 @@ import { ActorCore } from '../decorators/actor/actor-core'
 import { ActorInterface } from '../decorators/actor/actor-interface'
 import { ActorStateCore } from '../decorators/actor/actor-state/actor-state-core'
 import { ActorStateInterface } from '../decorators/actor/actor-state/actor-state-interface'
+import { MeshCore } from '../decorators/mesh/mesh-core'
+import { MeshInterface } from '../decorators/mesh/mesh-interface'
 import { ParticleCore } from '../decorators/particle/particle-core'
 import { ParticleInterface } from '../decorators/particle/particle-interface'
 import { SceneActionCore } from '../decorators/scene/scene-action/scene-action-core'
@@ -22,13 +24,11 @@ import { SpriteInterface } from '../decorators/sprite/sprite-interface'
 import { AssetDefinition } from '../models/asset-definition'
 import { AssetType } from '../models/asset-type'
 import { Logger } from '../modules/logger'
-import {
-  isPrototypeOf,
-  objectToString
-} from '../utils/utils'
+import { isPrototypeOf } from '../utils/utils'
 import { ActorStatesController } from './actor-states-controller'
 import { ActorActionsController } from './actors-actions-controller'
 import { ActorsController } from './actors-controller'
+import { MeshesController } from './meshes-controller'
 import { ParticlesController } from './particles-controller'
 import { SceneActionsController } from './scene-actions-controller'
 import { SceneStatesController } from './scene-states-controller'
@@ -49,57 +49,56 @@ export class AssetsController {
   }
 
   /**
-   * Get all assets definitions within a class (Scene, GUI, Actor, Particle, etc..)
+   * Get all assets definitions within a source class decorator *props* (Scene, State, Actor, Sprite, Mesh, GUI, Particle, etc..)
    */
   static findAssetsDefinitions(source: any, urls: object = {}): AssetDefinition[] {
     let definitions: AssetDefinition[] = []
     if (typeof source === 'object') {
       for (const property of Object.values(source)) {
         if (Array.isArray(property)) {
-          property.forEach(value => {
-            if (isPrototypeOf(SceneStateInterface, value)) {
-              const state = SceneStatesController.get<SceneStateCore>(value)
+          property.forEach(element => {
+            if (isPrototypeOf(SceneStateInterface, element)) {
+              const state = SceneStatesController.get<SceneStateCore>(element)
               definitions = [...definitions, ...AssetsController.findAssetsDefinitions(state.props, urls)]
               definitions = [...definitions, ...AssetsController.findAssetsDefinitions(state.Instance.metadata.getProps(), urls)]
-            }
-            if (isPrototypeOf(ActorStateInterface, value)) {
-              const state = ActorStatesController.get<ActorStateCore>(value)
+            } else if (isPrototypeOf(ActorStateInterface, element)) {
+              const state = ActorStatesController.get<ActorStateCore>(element)
               definitions = [...definitions, ...AssetsController.findAssetsDefinitions(state.props, urls)]
               definitions = [...definitions, ...AssetsController.findAssetsDefinitions(state.Instance.metadata.getProps(), urls)]
-            }
-            if (isPrototypeOf(SceneActionInterface, value)) {
-              const action = SceneActionsController.get<SceneActionCore>(value)
+            } else if (isPrototypeOf(ActorActionInterface, element)) {
+              const action = ActorActionsController.get<ActorActionCore>(element)
               definitions = [...definitions, ...AssetsController.findAssetsDefinitions(action.props, urls)]
               definitions = [...definitions, ...AssetsController.findAssetsDefinitions(action.Instance.metadata.getProps(), urls)]
-            }
-            if (isPrototypeOf(ActorActionInterface, value)) {
-              const action = ActorActionsController.get<ActorActionCore>(value)
+            } else if (isPrototypeOf(SceneActionInterface, element)) {
+              const action = SceneActionsController.get<SceneActionCore>(element)
               definitions = [...definitions, ...AssetsController.findAssetsDefinitions(action.props, urls)]
               definitions = [...definitions, ...AssetsController.findAssetsDefinitions(action.Instance.metadata.getProps(), urls)]
-            }
-            if (isPrototypeOf(SceneActionInterface, value)) {
-              const action = SceneActionsController.get<SceneActionCore>(value)
-              definitions = [...definitions, ...AssetsController.findAssetsDefinitions(action.props, urls)]
-              definitions = [...definitions, ...AssetsController.findAssetsDefinitions(action.Instance.metadata.getProps(), urls)]
-            }
-            if (isPrototypeOf(ActorInterface, value)) {
-              const actor = ActorsController.get<ActorCore>(value)
+            } else if (isPrototypeOf(ActorInterface, element)) {
+              const actor = ActorsController.get<ActorCore>(element)
               definitions = [...definitions, ...AssetsController.findAssetsDefinitions(actor.props, urls)]
               definitions = [...definitions, ...AssetsController.findAssetsDefinitions(actor.Instance.metadata.getProps(), urls)]
-            }
-            if (isPrototypeOf(ParticleInterface, value)) {
-              const particle = ParticlesController.get<ParticleCore>(value)
+            } else if (isPrototypeOf(ParticleInterface, element)) {
+              const particle = ParticlesController.get<ParticleCore>(element)
               definitions = [...definitions, ...AssetsController.findAssetsDefinitions(particle.props, urls)]
               definitions = [...definitions, ...AssetsController.findAssetsDefinitions(particle.Instance.metadata.getProps(), urls)]
-            }
-            if (isPrototypeOf(SpriteInterface, value)) {
-              const sprite = SpritesController.get<SpriteCore>(value)
+            } else if (isPrototypeOf(SpriteInterface, element)) {
+              const sprite = SpritesController.get<SpriteCore>(element)
               if (sprite.props.url && !urls[sprite.props.url]) {
                 urls[sprite.props.url] = true
                 definitions = [...definitions, {
                   url: sprite.props.url,
                   type: AssetType.IMAGE,
                   cached: sprite.props.cached ?? false
+                }]
+              }
+            } else if (isPrototypeOf(MeshInterface, element)) {
+              const mesh = MeshesController.get<MeshCore>(element)
+              if (mesh.props.url && !urls[mesh.props.url]) {
+                urls[mesh.props.url] = true
+                definitions = [...definitions, {
+                  url: mesh.props.url,
+                  type: AssetType.MESH,
+                  cached: mesh.props.cached ?? false
                 }]
               }
             }
@@ -181,7 +180,8 @@ export class AssetsController {
       (data) => {
         Logger.debug(`LoadFileFromUrl: Loaded '${definition.url}', cached: ${!!definition.cached}`)
         const buffer = data as ArrayBuffer
-        if (definition.type === AssetType.IMAGE) {
+        if (definition.type === AssetType.IMAGE ||
+            definition.type === AssetType.MESH) {
           asset.setObjectURL(buffer)
         } else {
           asset.setBuffer(buffer)
@@ -193,8 +193,8 @@ export class AssetsController {
       },
       undefined,
       true,
-      (error) => {
-        throwError(`LoadFileFromUrl: Error loading file '${definition.url}': ${objectToString(error)}`)
+      (_error, exception) => {
+        throwError(`LoadFileFromUrl: Error loading file '${definition.url}': ${exception}`)
       }
     )
     return asset.progress

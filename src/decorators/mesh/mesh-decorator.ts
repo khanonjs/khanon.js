@@ -5,7 +5,10 @@ import {
   LoadingProgress
 } from '../../base'
 import { Metadata } from '../../base/interfaces/metadata/metadata'
-import { MeshesController } from '../../controllers'
+import {
+  AssetsController,
+  MeshesController
+} from '../../controllers'
 import { BabylonAccessor } from '../../models/babylon-accessor'
 import { Rect } from '../../models/rect'
 import { Logger } from '../../modules/logger'
@@ -15,6 +18,7 @@ import {
   attachCanvasResize,
   attachLoopUpdate,
   invokeCallback,
+  objectToString,
   removeCanvasResize,
   removeLoopUpdate,
   switchLoopUpdate
@@ -26,7 +30,7 @@ import { MeshCore } from './mesh-core'
 import { MeshInterface } from './mesh-interface'
 import { MeshProps } from './mesh-props'
 
-export function Mesh(props: MeshProps): any {
+export function Mesh(props: MeshProps/* = {} */): any { // 8a8f desocmentar
   return function <T extends { new (...args: any[]): MeshInterface }>(constructorOrTarget: (T & MeshInterface) | any, contextOrProperty: ClassDecoratorContext | string, descriptor: PropertyDescriptor) {
     const decorateClass = () => {
       const _classInterface = class extends constructorOrTarget implements MeshInterface {
@@ -167,17 +171,40 @@ export function Mesh(props: MeshProps): any {
       const _classCore = class implements MeshCore {
         props = props
         Instance: MeshInterface = new _classInterface(null as any, null as any)
+        meshes: Map<SceneInterface, BABYLON.AbstractMesh> = new Map<SceneInterface, BABYLON.AbstractMesh>()
 
         load(scene: SceneInterface): LoadingProgress {
-          // 8a8f
-          // this.addLoadStackItem('Scene: ' + url);
-          // const indexSlash = url.lastIndexOf('/') + 1;
-          // const path = url.slice(0, indexSlash);
-          // const file = url.slice(indexSlash);
-          // SceneLoader.ShowLoadingScreen = false;
-          // SceneLoader.AppendAsync(path, file, this.babylonJsScene);
-          // SceneLoader.ImportMeshAsync
-          return new LoadingProgress().complete()
+          const progress = new LoadingProgress()
+          if (this.meshes.get(scene)) {
+            return progress.complete()
+          } else {
+            if (this.props.url) {
+              if (!this.props.meshId) { Logger.debugError(`'meshId' must be defined to load a mesh from a babylon scene file. Mesh url: '${this.props.url}'.`); return null as any }
+              const asset = AssetsController.getAsset(this.props.url)
+              if (!asset) { Logger.debugError(`Asset '${this.props.url}' not found on mesh load:`, _classInterface.prototype) }
+              // 8a8f hay que indicar path y file para que SceneLoader cargue las texturas de la misma carpeta ya que el archivo lo requiere.
+              // Por tanto no es suficiente con almacenar únicamente el archivo .babylon como asset, sino que habría que almacenar todos los archivos necesarios para la malla.
+              // Cuando no se indica escena, parece que babylon asocia la malla a la última escena creada, lo cual no es lo deseado ya que quiero almacenar la malla (y sus assets) en memoria para utilziarla en cualquier escena.
+              BABYLON.SceneLoader.ImportMeshAsync('', '', asset?.objectURL/*, scene.babylon.scene */)
+              // BABYLON.SceneLoader.AppendAsync('', asset?.objectURL, scene.babylon.scene) // 8a8f where is the texture?
+                .then(babylonScene => {
+                  const mesh = babylonScene.meshes.find(mesh => mesh.id === this.props.meshId)
+                  if (mesh) {
+                    this.meshes.set(scene, mesh)
+                  } else {
+                    Logger.error(`Mesh Id '${this.props.meshId}' not found in babylon scene '${this.props.url}'`, _classInterface.prototype)
+                  }
+                  progress.complete()
+                })
+                .catch(error => {
+                  Logger.error('Error loading mesh:', objectToString(error), _classInterface.prototype)
+                  progress.error(error)
+                })
+              return progress
+            } else {
+              return progress.complete()
+            }
+          }
         }
 
         unload(scene: SceneInterface): void {

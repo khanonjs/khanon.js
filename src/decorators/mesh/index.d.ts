@@ -134,11 +134,29 @@ export declare abstract class MeshInterface {
 export type MeshConstructor = new () => MeshInterface
 
 export interface MeshProps {
+  /**
+   * Url of the babylon scene file.
+   * The loaded mesh will be the 'meshId' mesh within the babylon file, ignoring all other elements.
+   */
+  url?: string
+
+  /**
+   * Mesh Id to be loaded from the .babylon scene file.
+   */
+  meshId?: string
+
+  /**
+   * Cache this mesh.
+   * Cached files are kept in memory and only removed after calling KJS.clearCache().
+   * Use cached files in case they are being used between more than one scene.
+   * Cached meshes make shorter loading time at the expense of memory usage.
+   */
+  cached?: boolean
 }
 
 /**
- * Mesh decorator can be applied in three different places:
- * - To a class itself, where it will inherit extended MeshInterface lifecycle, methods and variables.
+ * Mesh decorator can be defined in three different contexts:
+ * - A class itself, where it will inherit extended MeshInterface lifecycle, methods and variables.
  * - To an 'Actor' class property, where it will be created as a MeshConstructor using the decorator props.
  * - To a 'Scene' class property, where it will be created as a MeshConstructor using the decorator props.
  * - To a 'ActorState' or 'SceneState' class properties, where it will be created as a MeshConstructor using the decorator props.
