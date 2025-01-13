@@ -30,7 +30,7 @@ import { MeshCore } from './mesh-core'
 import { MeshInterface } from './mesh-interface'
 import { MeshProps } from './mesh-props'
 
-export function Mesh(props: MeshProps/* = {} */): any { // 8a8f desocmentar
+export function Mesh(props: MeshProps = {}): any {
   return function <T extends { new (...args: any[]): MeshInterface }>(constructorOrTarget: (T & MeshInterface) | any, contextOrProperty: ClassDecoratorContext | string, descriptor: PropertyDescriptor) {
     const decorateClass = () => {
       const _classInterface = class extends constructorOrTarget implements MeshInterface {
@@ -174,7 +174,7 @@ export function Mesh(props: MeshProps/* = {} */): any { // 8a8f desocmentar
         meshes: Map<SceneInterface, BABYLON.AbstractMesh> = new Map<SceneInterface, BABYLON.AbstractMesh>()
 
         load(scene: SceneInterface): LoadingProgress {
-          const progress = new LoadingProgress()
+          /* const progress = new LoadingProgress()
           if (this.meshes.get(scene)) {
             return progress.complete()
           } else {
@@ -185,7 +185,7 @@ export function Mesh(props: MeshProps/* = {} */): any { // 8a8f desocmentar
               // 8a8f hay que indicar path y file para que SceneLoader cargue las texturas de la misma carpeta ya que el archivo lo requiere.
               // Por tanto no es suficiente con almacenar únicamente el archivo .babylon como asset, sino que habría que almacenar todos los archivos necesarios para la malla.
               // Cuando no se indica escena, parece que babylon asocia la malla a la última escena creada, lo cual no es lo deseado ya que quiero almacenar la malla (y sus assets) en memoria para utilziarla en cualquier escena.
-              BABYLON.SceneLoader.ImportMeshAsync('', '', asset?.objectURL/*, scene.babylon.scene */)
+              BABYLON.SceneLoader.ImportMeshAsync('', '', asset?.objectURL)
               // BABYLON.SceneLoader.AppendAsync('', asset?.objectURL, scene.babylon.scene) // 8a8f where is the texture?
                 .then(babylonScene => {
                   const mesh = babylonScene.meshes.find(mesh => mesh.id === this.props.meshId)
@@ -204,7 +204,8 @@ export function Mesh(props: MeshProps/* = {} */): any { // 8a8f desocmentar
             } else {
               return progress.complete()
             }
-          }
+          } */
+          return new LoadingProgress().complete()
         }
 
         unload(scene: SceneInterface): void {

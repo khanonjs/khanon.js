@@ -24,7 +24,10 @@ import { SpriteInterface } from '../decorators/sprite/sprite-interface'
 import { AssetDefinition } from '../models/asset-definition'
 import { AssetType } from '../models/asset-type'
 import { Logger } from '../modules/logger'
-import { isPrototypeOf } from '../utils/utils'
+import {
+  isPrototypeOf,
+  objectToString
+} from '../utils/utils'
 import { ActorStatesController } from './actor-states-controller'
 import { ActorActionsController } from './actors-actions-controller'
 import { ActorsController } from './actors-controller'
@@ -36,10 +39,11 @@ import { SpritesController } from './sprites-controller'
 
 export class AssetsController {
   private static contentTypes = { // TODO is this worth?
-    [AssetType.FONT]: ['font/otf', 'font/ttf', 'font/woff', 'font/woff2', ''],
+    [AssetType.AUDIO]: ['audio/aac', 'audio/midi', 'audio/x-midi', 'audio/mpeg', 'audio/ogg', 'audio/opus', 'audio/wav', 'audio/webm'],
+    [AssetType.BABYLON_SCENE]: [''],
     [AssetType.IMAGE]: ['image/bmp', 'image/jpeg', 'image/png', 'image/tiff', 'image/webp'],
-    [AssetType.MESH]: [''],
-    [AssetType.AUDIO]: ['audio/aac', 'audio/midi', 'audio/x-midi', 'audio/mpeg', 'audio/ogg', 'audio/opus', 'audio/wav', 'audio/webm']
+    [AssetType.FONT]: ['font/otf', 'font/ttf', 'font/woff', 'font/woff2', '']
+
   }
 
   private static assets: Map<string, Asset<SceneInterface>> = new Map<string, Asset<SceneInterface>>()
@@ -97,7 +101,7 @@ export class AssetsController {
                 urls[mesh.props.url] = true
                 definitions = [...definitions, {
                   url: mesh.props.url,
-                  type: AssetType.MESH,
+                  type: AssetType.BABYLON_SCENE,
                   cached: mesh.props.cached ?? false
                 }]
               }
@@ -129,7 +133,13 @@ export class AssetsController {
           asset.addSource(scene, assetDef.cached)
           progresses.push(asset.progress)
         } else {
-          progresses.push(AssetsController.loadFileFromUrl(assetDef, scene))
+          switch (assetDef.type) {
+          case AssetType.BABYLON_SCENE:
+            progresses.push(AssetsController.loadBabylonSceneFromUrl(assetDef, scene))
+            break
+          default:
+            progresses.push(AssetsController.loadFileFromUrl(assetDef, scene))
+          }
         }
       })
       progress.fromNodes(progresses)
@@ -166,27 +176,24 @@ export class AssetsController {
    * @param source
    * @returns
    */
-  private static loadFileFromUrl(definition: AssetDefinition, source: SceneInterface): LoadingProgress<ArrayBuffer> {
+  private static loadFileFromUrl(definition: AssetDefinition, source: SceneInterface): LoadingProgress<void> {
     const asset = new Asset(definition, source)
     AssetsController.assets.set(definition.url, asset)
-    let reader: ReadableStreamDefaultReader
     const throwError = (errorMsg: string) => {
       Logger.error(errorMsg)
       asset.progress.error(errorMsg)
-      reader?.cancel()
       asset.progress.onError.notifyObservers(errorMsg)
     }
     BABYLON.LoadFile(definition.url,
       (data) => {
         Logger.debug(`LoadFileFromUrl: Loaded '${definition.url}', cached: ${!!definition.cached}`)
         const buffer = data as ArrayBuffer
-        if (definition.type === AssetType.IMAGE ||
-            definition.type === AssetType.MESH) {
+        if (definition.type === AssetType.IMAGE) {
           asset.setObjectURL(buffer)
         } else {
           asset.setBuffer(buffer)
         }
-        asset.progress.complete(buffer)
+        asset.progress.complete()
       },
       (progress) => {
         asset.progress.setProgress(progress.loaded / progress.total)
@@ -197,6 +204,45 @@ export class AssetsController {
         throwError(`LoadFileFromUrl: Error loading file '${definition.url}': ${exception}`)
       }
     )
+    return asset.progress
+  }
+
+  /**
+   * Loads a mesh and all its assets from an url. This method is called after checking 'definition.url' has no associated asset.
+   * @param definition
+   * @param source
+   * @returns
+   */
+  private static loadBabylonSceneFromUrl(definition: AssetDefinition, source: SceneInterface): LoadingProgress<void> {
+    const asset = new Asset(definition, source)
+    AssetsController.assets.set(definition.url, asset)
+    const throwError = (errorMsg: string) => {
+      Logger.error(errorMsg)
+      asset.progress.error(errorMsg)
+      asset.progress.onError.notifyObservers(errorMsg)
+    }
+    const indexSlash = definition.url.lastIndexOf('/') + 1
+    const path = definition.url.slice(0, indexSlash)
+    const file = definition.url.slice(indexSlash)
+    BABYLON.SceneLoader.ShowLoadingScreen = false
+    BABYLON.SceneLoader.AppendAsync(path, file)
+      .then(babylonScene => {
+        BABYLON.SceneSerializer.SerializeAsync(babylonScene)
+          .then(serial => {
+            Logger.debug(`loadBabylonSceneFromUrl: Loaded '${definition.url}', cached: ${!!definition.cached}`)
+            asset.setSerial(serial)
+            asset.progress.complete()
+          })
+          .catch(error => {
+            throwError(`loadBabylonSceneFromUrl: Error on SerializeAsync '${definition.url}': ${objectToString(error)}`)
+          })
+          .finally(() => {
+            babylonScene.dispose()
+          })
+      })
+      .catch(error => {
+        throwError(`loadBabylonSceneFromUrl: Error on AppendAsync '${definition.url}': ${objectToString(error)}`)
+      })
     return asset.progress
   }
 }
