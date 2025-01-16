@@ -136,6 +136,15 @@ export function Sprite(props: SpriteProps): any {
           (this.babylon.mesh.material as BABYLON.ShaderMaterial).setInt('frame', frame)
         }
 
+        setEnabled(value: boolean): void {
+          if (value) {
+            attachLoopUpdate(this)
+          } else {
+            removeLoopUpdate(this)
+          }
+          this.babylon.mesh.setEnabled(value)
+        }
+
         setFrame(frame: number): void {
           if (frame < this.getFirstFrame() || frame > this.getLastFrame()) { Logger.debugError(`Calling out of bound setFrame(${frame}) - Start: ${this.getFirstFrame()}, End: ${this.getLastFrame()}`) }
           this.stopAnimation()
@@ -343,13 +352,16 @@ export function Sprite(props: SpriteProps): any {
           } else {
             if (this.props.url) {
               const asset = AssetsController.getAsset(this.props.url)
-              if (!asset) { Logger.debugError(`Asset '${this.props.url}' not found on sprite load:`, _classInterface.prototype) }
-              const spriteMesh = new SpriteMesh(scene, this.props)
-              this.spriteMeshes.set(scene, spriteMesh)
-              spriteMesh.setFromAsset(asset as any)
-                .then(() => {
-                  progress.complete()
-                })
+              if (asset) {
+                const spriteMesh = new SpriteMesh(scene, this.props)
+                this.spriteMeshes.set(scene, spriteMesh)
+                spriteMesh.setFromAsset(asset)
+                  .then(() => {
+                    progress.complete()
+                  })
+              } else {
+                Logger.error(`Asset '${this.props.url}' not found on sprite load:`, _classInterface.prototype)
+              }
               return progress
             } else {
               return progress.complete()

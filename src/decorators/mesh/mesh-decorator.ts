@@ -2,6 +2,7 @@ import * as BABYLON from '@babylonjs/core'
 
 import {
   ActionInterface,
+  AssetDataMesh,
   LoadingProgress
 } from '../../base'
 import { Metadata } from '../../base/interfaces/metadata/metadata'
@@ -123,6 +124,15 @@ export function Mesh(props: MeshProps = {}): any {
         //   return null
         // }
 
+        setEnabled(value: boolean): void {
+          if (value) {
+            attachLoopUpdate(this)
+          } else {
+            removeLoopUpdate(this)
+          }
+          this.babylon.mesh.setEnabled(value)
+        }
+
         setFrame(frame: number): void {
         // TODO
         }
@@ -174,42 +184,51 @@ export function Mesh(props: MeshProps = {}): any {
         meshes: Map<SceneInterface, BABYLON.AbstractMesh> = new Map<SceneInterface, BABYLON.AbstractMesh>()
 
         load(scene: SceneInterface): LoadingProgress {
-          /* const progress = new LoadingProgress()
           if (this.meshes.get(scene)) {
-            return progress.complete()
+            return new LoadingProgress().complete()
           } else {
             if (this.props.url) {
               if (!this.props.meshId) { Logger.debugError(`'meshId' must be defined to load a mesh from a babylon scene file. Mesh url: '${this.props.url}'.`); return null as any }
-              const asset = AssetsController.getAsset(this.props.url)
-              if (!asset) { Logger.debugError(`Asset '${this.props.url}' not found on mesh load:`, _classInterface.prototype) }
-              // 8a8f hay que indicar path y file para que SceneLoader cargue las texturas de la misma carpeta ya que el archivo lo requiere.
-              // Por tanto no es suficiente con almacenar únicamente el archivo .babylon como asset, sino que habría que almacenar todos los archivos necesarios para la malla.
-              // Cuando no se indica escena, parece que babylon asocia la malla a la última escena creada, lo cual no es lo deseado ya que quiero almacenar la malla (y sus assets) en memoria para utilziarla en cualquier escena.
-              BABYLON.SceneLoader.ImportMeshAsync('', '', asset?.objectURL)
-              // BABYLON.SceneLoader.AppendAsync('', asset?.objectURL, scene.babylon.scene) // 8a8f where is the texture?
-                .then(babylonScene => {
-                  const mesh = babylonScene.meshes.find(mesh => mesh.id === this.props.meshId)
-                  if (mesh) {
-                    this.meshes.set(scene, mesh)
-                  } else {
-                    Logger.error(`Mesh Id '${this.props.meshId}' not found in babylon scene '${this.props.url}'`, _classInterface.prototype)
-                  }
-                  progress.complete()
+              const asset = AssetsController.getAsset<AssetDataMesh>(this.props.url)
+              if (asset && asset.definition.data) {
+                const progress = new LoadingProgress()
+                scene.loadSceneFromAsset(asset).onComplete.add((babylonScene) => {
+                  const serial = JSON.stringify(BABYLON.SceneSerializer.SerializeMesh(babylonScene.getMeshById(asset.definition.data?.meshId as any)))
+                  BABYLON.SceneLoader.ImportMeshAsync(asset.definition.data?.meshId, asset.definition.data?.path as any, `data:${serial}`, scene.babylon.scene)
+                    .then((result) => {
+                      const mesh = result.meshes.find((mesh) => mesh.id === this.props.meshId)
+                      if (mesh) {
+                        mesh.setEnabled(false)
+                        this.meshes.set(scene, mesh)
+                        progress.complete()
+                      } else {
+                        const errorMsg = `Mesh '${this.props.meshId}' not found on babylon scene file '${this.props.url}'`
+                        Logger.error(errorMsg, _classInterface.prototype)
+                        progress.error(errorMsg)
+                      }
+                    })
+                    .catch(error => {
+                      const errorMsg = `Error importing mesh '${this.props.meshId}' from babylon scene file '${this.props.url}'`
+                      Logger.error(errorMsg, error, _classInterface.prototype)
+                      progress.error(errorMsg)
+                    })
                 })
-                .catch(error => {
-                  Logger.error('Error loading mesh:', objectToString(error), _classInterface.prototype)
-                  progress.error(error)
-                })
-              return progress
+                return progress
+              } else {
+                Logger.error(`Asset '${this.props.url}' not found on mesh loading:`, _classInterface.prototype)
+                return new LoadingProgress().complete()
+              }
             } else {
-              return progress.complete()
+              return new LoadingProgress().complete()
             }
-          } */
-          return new LoadingProgress().complete()
+          }
         }
 
         unload(scene: SceneInterface): void {
-          // TODO
+          this.meshes.forEach((mesh) => {
+            mesh.dispose()
+          })
+          this.meshes.clear()
         }
 
         spawn(scene: SceneInterface): MeshInterface {

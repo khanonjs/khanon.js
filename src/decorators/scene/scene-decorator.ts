@@ -4,7 +4,12 @@ import '@babylonjs/core/Debug/debugLayer'
 
 import * as BABYLON from '@babylonjs/core'
 
-import { LoadingProgress } from '../../base'
+import {
+  Asset,
+  AssetDataMesh,
+  AssetDefinition,
+  LoadingProgress
+} from '../../base'
 import { Core } from '../../base/core/core'
 import { Metadata } from '../../base/interfaces/metadata/metadata'
 import {
@@ -23,16 +28,17 @@ import {
 } from '../../controllers'
 import KJS from '../../kjs/kjs'
 import { AnimationBase } from '../../models/animation-base'
-import { AssetDefinition } from '../../models/asset-definition'
 import { BabylonAccessor } from '../../models/babylon-accessor'
 import { Rect } from '../../models/rect'
 import { Logger } from '../../modules/logger'
 import { FlexId } from '../../types/flex-id'
 import {
+  applyDefaults,
   attachCanvasResize,
   attachLoopUpdate,
   invokeCallback,
   isPrototypeOf,
+  objectToString,
   removeArrayDuplicitiesInObject,
   removeCanvasResize,
   removeLoopUpdate,
@@ -61,6 +67,7 @@ import { SceneRemove } from './scene-remove'
 import { SceneSpawn } from './scene-spawn'
 import { SceneStateConstructor } from './scene-state/scene-state-constructor'
 import { SceneStateInterface } from './scene-state/scene-state-interface'
+import { scenePropsDefault } from './scene.props.default'
 
 export function Scene(props: SceneProps = {}): any {
   return function <T extends { new (...args: any[]): SceneInterface }>(constructor: T & SceneInterface, context: ClassDecoratorContext) {
@@ -73,7 +80,7 @@ export function Scene(props: SceneProps = {}): any {
         this.storeAvailableElements()
       }
 
-      props = removeArrayDuplicitiesInObject(props)
+      props = removeArrayDuplicitiesInObject(applyDefaults(props, scenePropsDefault))
       metadata: Metadata = Reflect.getMetadata('metadata', this) ?? new Metadata()
       actions: Map<SceneActionConstructor, SceneActionInterface> = new Map<SceneActionConstructor, SceneActionInterface>()
       availableElements: SceneAvailableElements
@@ -95,6 +102,7 @@ export function Scene(props: SceneProps = {}): any {
       meshes: Set<MeshInterface> = new Set<MeshInterface>()
       sprites: Set<SpriteInterface> = new Set<SpriteInterface>()
       particles: Set<ParticleInterface> = new Set<ParticleInterface>()
+      babylonSceneElements: Map<Asset, BABYLON.Scene> = new Map<Asset, BABYLON.Scene>()
 
       setEngineParams(): void {} // TODO ?
 
@@ -127,7 +135,7 @@ export function Scene(props: SceneProps = {}): any {
           Logger.warn('Starting a scene that hasn\'t been loaded. Are you sure you want to do this?', _class.prototype)
         }
         if (!this._camera) { Logger.debugError('Please set a camera before starting the scene. Do it in the (Scene / SceneState) \'onSart\' method:', _class.prototype); return null as any }
-        if (Core.isDevelopmentMode()) {
+        if (Core.isDevelopmentMode() && this.props.useDebugInspector) {
           this.useDebugInspector()
         }
         Core.startRenderScene(this)
@@ -140,7 +148,7 @@ export function Scene(props: SceneProps = {}): any {
       stop(): void {
         Logger.debug('Scene stop', _class.prototype)
         if (Core.isDevelopmentMode()) {
-          // this.denyDebugInspector()  // 8a8f descomentar
+          this.denyDebugInspector()
         }
         this.releaseCamera()
         this.state.end()
@@ -194,6 +202,7 @@ export function Scene(props: SceneProps = {}): any {
               GUIController.load(this.props.guis, this)
             ])
             elementsLoading.onComplete.add(() => {
+              Logger.debug('Scene elements load completed', _class.prototype)
               this.babylon.scene.executeWhenReady(() => {
                 this._loaded = true
                 invokeCallback(this.onLoaded, this)
@@ -227,6 +236,10 @@ export function Scene(props: SceneProps = {}): any {
         ParticlesController.unload(this.props.particles, this)
         ParticlesController.unload(this.metadata.getProps().particles, this)
         GUIController.unload(this.props.guis, this)
+        this.babylonSceneElements.forEach(babylonScene => {
+          babylonScene.dispose()
+        })
+        this.babylonSceneElements.clear()
       }
 
       startRenderObservable(): void {
@@ -261,6 +274,29 @@ export function Scene(props: SceneProps = {}): any {
 
       getCamera<C extends CameraInterface = CameraInterface>(): C {
         return this._camera as C
+      }
+
+      useBabylonSceneFromAsset(): LoadingProgress { // TODO
+        return null as any
+      }
+
+      loadSceneFromAsset(asset: Asset<SceneInterface, AssetDataMesh>): LoadingProgress<BABYLON.Scene> {
+        const babylonScene = this.babylonSceneElements.get(asset)
+        if (babylonScene) {
+          return new LoadingProgress().complete(babylonScene)
+        } else {
+          const progress = new LoadingProgress<BABYLON.Scene>()
+          BABYLON.SceneLoader.LoadAsync(asset.definition.data?.path as any, `data:${asset.serial}`)
+            .then(babylonScene => {
+              this.babylonSceneElements.set(asset, babylonScene)
+              progress.complete(babylonScene)
+            })
+            .catch(error => {
+              Logger.error('Error loading babylon scene:', objectToString(error), _class.prototype)
+              progress.error(error)
+            })
+          return progress
+        }
       }
 
       switchState(state: SceneStateConstructor, setup: any): SceneStateInterface {

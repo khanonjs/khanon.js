@@ -1,6 +1,8 @@
 import * as BABYLON from '@babylonjs/core'
 
 import {
+  Asset,
+  AssetDefinition,
   CanvasResizable,
   Loadable,
   LoadingProgress,
@@ -9,7 +11,6 @@ import {
 } from '../../base'
 import { Metadata } from '../../base/interfaces/metadata/metadata'
 import { AnimationBase } from '../../models/animation-base'
-import { AssetDefinition } from '../../models/asset-definition'
 import { BabylonAccessor } from '../../models/babylon-accessor'
 import { Rect } from '../../models/rect'
 import { FlexId } from '../../types/flex-id'
@@ -48,9 +49,10 @@ export abstract class SceneInterface implements Loadable, LoopUpdatable, CanvasR
   abstract canvasResize$: BABYLON.Observer<Rect>
   abstract actions: Map<SceneActionConstructor, SceneActionInterface>
   abstract actors: Set<ActorInterface>
-  abstract particles: Set<ParticleInterface>
   abstract meshes: Set<MeshInterface>
   abstract sprites: Set<SpriteInterface>
+  abstract particles: Set<ParticleInterface>
+  abstract babylonSceneElements: Map<Asset, BABYLON.Scene>
   abstract animationHandler: Map<SpriteInterface, () => void>
   abstract setEngineParams(): void // TODO ?
   abstract playActionFromInstance(instance: SceneActionInterface): void
@@ -59,6 +61,8 @@ export abstract class SceneInterface implements Loadable, LoopUpdatable, CanvasR
   abstract stopAnimationHandler(sprite: SpriteInterface): void
   abstract startRenderObservable(): void
   abstract stopRenderObservable(): void
+  abstract useBabylonSceneFromAsset(): LoadingProgress // TODO use for BabylonSceneMap
+  abstract loadSceneFromAsset(asset: Asset<SceneInterface>): LoadingProgress<BABYLON.Scene>
   abstract useDebugInspector(): void
   abstract denyDebugInspector(): void
 

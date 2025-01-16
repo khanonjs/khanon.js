@@ -1,18 +1,16 @@
-import * as BABYLON from '@babylonjs/core'
-
-import { AssetDefinition } from '../../models/asset-definition'
 import { Logger } from '../../modules/logger'
 import { LoadingProgress } from '../loading-progress/loading-progress'
+import { AssetDefinition } from './asset-definition'
 
-export class Asset<S> {
-  progress: LoadingProgress<void> = new LoadingProgress<void>()
+export class Asset</* Source interface */ S = any, /* Definition data */ D = any> {
+  progress: LoadingProgress = new LoadingProgress()
 
   private sources: Set<S> = new Set<S>()
   private _buffer: ArrayBuffer
   private _objectURL: string
   private _serial: string
 
-  constructor(readonly definition: AssetDefinition, readonly source: S) {}
+  constructor(readonly definition: AssetDefinition<D>, readonly source: S) {}
 
   get buffer(): ArrayBuffer {
     if (!this._buffer) { Logger.debugError(`Asset Error: No Buffer for asset '${this.definition.url}', did you mean other type?`) }

@@ -61,6 +61,7 @@ export abstract class ActorInterface<B extends SpriteInterface | MeshInterface =
   abstract removeNode(name: string): void
   abstract clearNodes(): void
   abstract switchState(state: ActorStateConstructor, setup: any): ActorStateInterface
+  abstract setEnabled(value: boolean): void
   abstract playAnimation(animation: (B extends SpriteInterface ? SpriteAnimation : MeshAnimation) | FlexId, loopOverride?: boolean, completed?: () => void): void // TODO system to animate body and nodes all together somehow
   abstract stopAnimation(): void
   // abstract setAnimation(): void // TODO system to animate body and nodes all together somehow

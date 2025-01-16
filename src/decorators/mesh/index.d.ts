@@ -152,6 +152,14 @@ export interface MeshProps {
    * Cached meshes make shorter loading time at the expense of memory usage.
    */
   cached?: boolean
+
+  /**
+   * By default 'false'.
+   * If 'true', clone this mesh by instances. This means every actor using it will share the same mesh, not allowing to modify or using shaders with it.
+   * Use it in case you want to impove performance and memory usage (E.g. simple actors with no shading effects, the crowd at a basketball game, etc).
+   * If 'false', the mesh will be cloned by reference, creating a new mesh per element, and allowing to modify it and use shaders.
+   */
+  cloneByInstances?: boolean
 }
 
 /**

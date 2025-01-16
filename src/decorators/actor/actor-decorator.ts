@@ -101,6 +101,20 @@ export function Actor(props: ActorProps = {}): any {
         removeCanvasResize(this)
       }
 
+      setEnabled(value: boolean): void {
+        if (value) {
+          attachLoopUpdate(this)
+        } else {
+          removeLoopUpdate(this)
+        }
+        if (this.body) {
+          this.body.setEnabled(value)
+        }
+        this.nodes.forEach(node => {
+          node.element.setEnabled(value)
+        })
+      }
+
       getNodeElement<N extends B>(Element: new () => N): N {
         if (new Element() instanceof SpriteInterface) { // TODO is there a better way to do this avoiding the 'new'?
           if (!this.scene.availableElements.hasSprite(Element as SpriteConstructor)) { Logger.debugError('Trying to use a sprite non available to the actor. Please check the actor props.', this.constructor.prototype, Element.prototype); return null as any }

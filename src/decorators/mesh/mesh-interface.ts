@@ -26,6 +26,7 @@ export abstract class MeshInterface implements DisplayObject {
   abstract loopUpdate: boolean
   abstract get babylon(): Pick<BabylonAccessor, 'mesh'>
   abstract get scene(): SceneInterface
+  abstract setEnabled(value: boolean): void
   abstract setFrame(frame: number): void
   abstract setFrameFirst(): void
   abstract setFrameLast(): void
