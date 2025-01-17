@@ -9,6 +9,7 @@ export abstract class DisplayObject {
   abstract animations: Map<FlexId, SpriteAnimation | MeshAnimation>
 
   abstract release(): void
+  abstract get t(): SpriteTransform | MeshTransform
   abstract get transform(): SpriteTransform | MeshTransform
 
   // User anailable

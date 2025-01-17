@@ -17,7 +17,7 @@ export declare abstract class MeshInterface {
   /**
    * Babylon.js objects.
    */
-  get babylon(): Pick<BabylonAccessor, 'mesh'>
+  get babylon(): Pick<BabylonAccessor, 'mesh' | 'scene'>
 
   /**
    * Scene this Mesh belongs to.
@@ -26,8 +26,9 @@ export declare abstract class MeshInterface {
 
   /**
    * Shortcut to basic transform methods and accessors.
-   * Using this object is the same than accesing it through 'this.babylon.mesh'.
+   * Using this object is the same than accesing these methods through 'this.babylon.mesh'.
    */
+  get t(): MeshTransform
   get transform(): MeshTransform
 
   /**
@@ -111,7 +112,7 @@ export declare abstract class MeshInterface {
   /**
    * Callback invoked after the mesh has been spawned in a scene.
    */
-  onSpawn?(scene: SceneInterface): void
+  onSpawn?(): void
 
   /**
    * Callback invoked on mesh destroy (equivalent to onRelease).

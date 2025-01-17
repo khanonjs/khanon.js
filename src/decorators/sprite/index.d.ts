@@ -6,7 +6,10 @@ import {
   Rect
 } from '../../models'
 import { DrawBlockProperties } from '../../models/draw-block-properties'
-import { FlexId } from '../../types'
+import {
+  FlexId,
+  SpriteTransform
+} from '../../types'
 import { SceneInterface } from '../scene'
 
 export interface SpriteAnimation extends AnimationBase {}
@@ -21,6 +24,14 @@ export declare abstract class SpriteInterface {
    * Scene owner of this Sprite.
    */
   get scene(): SceneInterface
+
+  /**
+   * Shortcut to basic transform methods and accessors.
+   * Using this object is the same than accesing these methods through 'this.babylon.mesh'.
+   * Sopme of the mesh methods have been overriden to adapt them to sprite needs.
+   */
+  get t(): SpriteTransform
+  get transform(): SpriteTransform
 
   /**
    * Turns on/off the 'onLoopUpdate' callback.

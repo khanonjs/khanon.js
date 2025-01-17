@@ -4,10 +4,8 @@ import { DisplayObject } from '../../base'
 import { BabylonAccessor } from '../../models/babylon-accessor'
 import { DrawBlockProperties } from '../../models/draw-block-properties'
 import { Rect } from '../../models/rect'
-import { MeshTransform } from '../../types'
+import { SpriteTransform } from '../../types'
 import { FlexId } from '../../types/flex-id'
-import { NullableExceptProps } from '../../types/nullable-except-props'
-import { SpriteTransform } from '../../types/sprite-transform'
 import { MeshAnimation } from '../mesh/mesh-animation'
 import { SceneInterface } from '../scene/scene-interface'
 import { SpriteAnimation } from './sprite-animation'
@@ -22,7 +20,8 @@ export abstract class SpriteInterface implements DisplayObject {
   abstract exclusiveTexture: boolean // Exclusive texture means this sprite has an exclusive texture that is not stored anywhere, so the sprite itself has to handle its release.
   abstract animation: SpriteAnimation | null
   abstract animations: Map<FlexId, SpriteAnimation>
-  abstract transform: MeshTransform
+  abstract t: SpriteTransform
+  abstract transform: SpriteTransform
   abstract _scale: number
   abstract setSpriteMesh(spriteMesh: SpriteMesh, isExclusive: boolean, isParticle: boolean): void
   abstract setShaderMaterialTextureFrame(frame: number): void

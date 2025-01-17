@@ -1,9 +1,6 @@
 import * as BABYLON from '@babylonjs/core'
 
-import {
-  LoadingProgress,
-  StateInterface
-} from '../../base'
+import { LoadingProgress } from '../../base'
 import { Core } from '../../base/core/core'
 import { Metadata } from '../../base/interfaces/metadata/metadata'
 import {
@@ -15,7 +12,6 @@ import { DrawBlockProperties } from '../../models/draw-block-properties'
 import { Rect } from '../../models/rect'
 import { Timeout } from '../../models/timeout'
 import { Logger } from '../../modules/logger'
-import { MeshTransform } from '../../types'
 import { FlexId } from '../../types/flex-id'
 import { SpriteTransform } from '../../types/sprite-transform'
 import {
@@ -30,9 +26,11 @@ import {
 } from '../../utils/utils'
 import { ActorActionInterface } from '../actor/actor-action/actor-action-interface'
 import { ActorInterface } from '../actor/actor-interface'
+import { ActorStateInterface } from '../actor/actor-state/actor-state-interface'
 import { ParticleInterface } from '../particle/particle-interface'
 import { SceneActionInterface } from '../scene/scene-action/scene-action-interface'
 import { SceneInterface } from '../scene/scene-interface'
+import { SceneStateInterface } from '../scene/scene-state/scene-state-interface'
 import { SpriteAnimation } from './sprite-animation'
 import { SpriteCore } from './sprite-core'
 import { SpriteInterface } from './sprite-interface'
@@ -59,12 +57,12 @@ export function Sprite(props: SpriteProps): any {
               if (!core.spriteMeshes.get(scene)) { Logger.debugError('Sprite texture not found for scene in sprite constructor:', _classInterface.prototype, scene.constructor.name) } // TODO get sprite and scene names
               this.setSpriteMesh(core.spriteMeshes.get(scene) as any, false)
             }
+            attachLoopUpdate(this)
+            attachCanvasResize(this)
+            invokeCallback(this.onSpawn, this)
           }
         }
 
-        // ***************
-        // SpriteInterface
-        // ***************
         props: SpriteProps
         spriteMesh: SpriteMesh
         exclusiveTexture: boolean
@@ -76,7 +74,8 @@ export function Sprite(props: SpriteProps): any {
         keyFramesTimeouts: Timeout[] = []
         endAnimationTimerInterval: Timeout | null
         endAnimationTimerTimeout: Timeout | null
-        transform: MeshTransform
+        t: SpriteTransform
+        transform: SpriteTransform
         _visible: boolean
         _scale: number = 1
 
@@ -125,11 +124,9 @@ export function Sprite(props: SpriteProps): any {
           this.spriteMesh = spriteMesh
           this.exclusiveTexture = isExclusive
           this.babylon.mesh = spriteMesh.spawn()
-          this.transform = this.babylon.mesh
+          this.transform = this.babylon.mesh as any
+          this.t = this.transform
           this.props.animations?.forEach(animation => this.addAnimation(animation))
-          attachLoopUpdate(this)
-          attachCanvasResize(this)
-          invokeCallback(this.onSpawn, this)
         }
 
         setShaderMaterialTextureFrame(frame: number): void {
@@ -399,7 +396,8 @@ export function Sprite(props: SpriteProps): any {
       constructorOrTarget instanceof ActorActionInterface ||
       constructorOrTarget instanceof SceneInterface ||
       constructorOrTarget instanceof SceneActionInterface ||
-      constructorOrTarget instanceof StateInterface ||
+      constructorOrTarget instanceof ActorStateInterface ||
+      constructorOrTarget instanceof SceneStateInterface ||
       constructorOrTarget instanceof ParticleInterface
     ) && !descriptor) { // Undefined descriptor means it is a decorated property, otherwiese it is a decorated method
       @Sprite(props)

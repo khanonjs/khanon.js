@@ -1,7 +1,6 @@
 import * as BABYLON from '@babylonjs/core'
 
 import {
-  ActionInterface,
   AssetDataMesh,
   LoadingProgress
 } from '../../base'
@@ -19,13 +18,17 @@ import {
   attachCanvasResize,
   attachLoopUpdate,
   invokeCallback,
-  objectToString,
   removeCanvasResize,
   removeLoopUpdate,
   switchLoopUpdate
 } from '../../utils/utils'
+import { ActorActionInterface } from '../actor/actor-action/actor-action-interface'
 import { ActorInterface } from '../actor/actor-interface'
+import { ActorStateInterface } from '../actor/actor-state/actor-state-interface'
+import { ParticleInterface } from '../particle/particle-interface'
+import { SceneActionInterface } from '../scene/scene-action/scene-action-interface'
 import { SceneInterface } from '../scene/scene-interface'
+import { SceneStateInterface } from '../scene/scene-state/scene-state-interface'
 import { MeshAnimation } from './mesh-animation'
 import { MeshCore } from './mesh-core'
 import { MeshInterface } from './mesh-interface'
@@ -39,23 +42,25 @@ export function Mesh(props: MeshProps = {}): any {
           super()
           this.props = props
           if (scene) {
-            this.initialize()
+            this.babylon.scene = this.scene.babylon.scene
+            if (this.props.url) {
+              if (!core.meshes.get(scene)) { Logger.debugError('Mesh not found for scene in mesh constructor:', _classInterface.prototype, scene.constructor.name) } // TODO get mesh and scene names
+              this.setMesh(core.meshes.get(scene) as any)
+            }
+            attachLoopUpdate(this)
+            attachCanvasResize(this)
+            invokeCallback(this.onSpawn, this)
           }
         }
 
-        initialize() {
-          invokeCallback(this.onSpawn, this, this.scene)
-        }
-
-        // ***************
-        // MeshInterface
-        // ***************
         props: MeshProps
-        babylon: Pick<BabylonAccessor, 'mesh'> = { mesh: null as any }
+        babylon: Pick<BabylonAccessor, 'mesh' | 'scene'> = { mesh: null as any, scene: null as any }
         animation: MeshAnimation | null = null
         animations: Map<FlexId, MeshAnimation> = new Map<FlexId, MeshAnimation>()
         loopUpdate$: BABYLON.Observer<number>
         canvasResize$: BABYLON.Observer<Rect>
+        t: MeshTransform
+        transform: MeshTransform
 
         set loopUpdate(value: boolean) { switchLoopUpdate(value, this) }
         get loopUpdate(): boolean { return this._loopUpdate }
@@ -95,34 +100,14 @@ export function Mesh(props: MeshProps = {}): any {
 
         setMesh(babylonMesh: BABYLON.Mesh): void {
           if (this.babylon.mesh) {
-            // const transform = this.getTransform() // TODO
             this.release()
-            this.babylon.mesh = babylonMesh
-            // this.setTransform(transform) // TODO
-          } else {
-            this.babylon.mesh = babylonMesh
           }
+          this.babylon.mesh = babylonMesh
           this.transform = this.babylon.mesh
-          attachLoopUpdate(this)
-          attachCanvasResize(this)
+          this.t = this.transform
+          this.props.animations?.forEach(animation => this.addAnimation(animation))
+          this.setEnabled(true)
         }
-
-        // ***************
-        // DisplayObject
-        // ***************
-        transform: MeshTransform
-
-        // setTransform(transform: BABYLON.Matrix): void {  // TODO
-        // this.babylon.mesh.updatePoseMatrix(transform) // TODO: Test this
-        // this.setPosition(transform.getTranslation())
-        // this.setRotation(transform.getRotationMatrix())
-        // this.babylon.mesh.scaling = transform.sca
-        // this.babylon.mesh.rota = transform.getTranslation()
-        // }
-
-        // getTransform(): BABYLON.Matrix {// TODO
-        //   return null
-        // }
 
         setEnabled(value: boolean): void {
           if (value) {
@@ -225,10 +210,8 @@ export function Mesh(props: MeshProps = {}): any {
         }
 
         unload(scene: SceneInterface): void {
-          this.meshes.forEach((mesh) => {
-            mesh.dispose()
-          })
-          this.meshes.clear()
+          this.meshes.get(scene)?.dispose()
+          this.meshes.delete(scene)
         }
 
         spawn(scene: SceneInterface): MeshInterface {
@@ -236,7 +219,8 @@ export function Mesh(props: MeshProps = {}): any {
           return mesh
         }
       }
-      MeshesController.register(new _classCore())
+      const core = new _classCore()
+      MeshesController.register(core)
       return _classInterface
     }
 
@@ -245,11 +229,16 @@ export function Mesh(props: MeshProps = {}): any {
       return decorateClass()
     } else if ((
       constructorOrTarget instanceof ActorInterface ||
+      constructorOrTarget instanceof ActorActionInterface ||
       constructorOrTarget instanceof SceneInterface ||
-      constructorOrTarget instanceof ActionInterface
+      constructorOrTarget instanceof SceneActionInterface ||
+      constructorOrTarget instanceof ActorStateInterface ||
+      constructorOrTarget instanceof SceneStateInterface ||
+      constructorOrTarget instanceof ParticleInterface
     ) && !descriptor) { // Undefined descriptor means it is a decorated property, otherwiese it is a decorated method
       @Mesh(props)
       abstract class _meshInterface extends MeshInterface {}
+      // TODO: Store the 'className' to debug it in logs.
 
       if (!Reflect.hasMetadata('metadata', constructorOrTarget)) {
         Reflect.defineMetadata('metadata', new Metadata(), constructorOrTarget)
