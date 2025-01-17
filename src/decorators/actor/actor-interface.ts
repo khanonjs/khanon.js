@@ -8,6 +8,10 @@ import {
 import { Metadata } from '../../base/interfaces/metadata/metadata'
 import { Rect } from '../../models/rect'
 import { TransformComposition } from '../../models/transform-composition'
+import {
+  MeshTransform,
+  SpriteTransform
+} from '../../types'
 import { FlexId } from '../../types/flex-id'
 import { MeshAnimation } from '../mesh/mesh-animation'
 import { MeshInterface } from '../mesh/mesh-interface'
@@ -47,8 +51,8 @@ export abstract class ActorInterface<B extends SpriteInterface | MeshInterface =
    * User available
    */
   abstract loopUpdate: boolean
-  abstract get transform(): B | null
-  abstract get t(): B | null
+  abstract get transform(): B extends SpriteInterface ? SpriteTransform : MeshTransform | null
+  abstract get t(): B extends SpriteInterface ? SpriteTransform : MeshTransform | null
   abstract get scene(): SceneInterface
   abstract get body(): B | null
   abstract get state(): ActorStateInterface | null
