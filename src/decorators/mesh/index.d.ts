@@ -5,10 +5,7 @@ import {
   BabylonAccessor,
   Rect
 } from '../../models'
-import {
-  FlexId,
-  MeshTransform
-} from '../../types'
+import { FlexId } from '../../types'
 import { SceneInterface } from '../scene'
 
 export interface MeshAnimation extends AnimationBase {}
@@ -25,17 +22,56 @@ export declare abstract class MeshInterface {
   get scene(): SceneInterface
 
   /**
-   * Shortcut to basic transform methods and accessors.
-   * Using this object is the same than accesing these methods through 'this.babylon.mesh'.
-   */
-  get t(): MeshTransform
-  get transform(): MeshTransform
-
-  /**
    * Turns on/off the 'onLoopUpdate' callback.
    */
   set loopUpdate(value: boolean)
   get loopUpdate(): boolean
+
+  /**
+   * Mesh visiiility.
+   */
+  set visibility(value: number)
+  get visibility(): number
+
+  /**
+   * Mesh transform properties.
+   */
+  get absolutePosition(): BABYLON.Vector3
+  get absoluteRotationQuaternion(): BABYLON.Quaternion
+  get absoluteScaling(): BABYLON.Vector3
+  set position(value: BABYLON.Vector3)
+  get position(): BABYLON.Vector3
+  set rotation(value: BABYLON.Vector3)
+  get rotation(): BABYLON.Vector3
+  set rotationQuaternion(value: BABYLON.Quaternion)
+  get rotationQuaternion(): BABYLON.Nullable<BABYLON.Quaternion>
+  set scaling(value: BABYLON.Vector3)
+  get scaling(): BABYLON.Vector3
+  addRotation(x: number, y: number, z: number): BABYLON.TransformNode
+  getAbsolutePivotPoint(): BABYLON.Vector3
+  getAbsolutePivotPointToRef(result: BABYLON.Vector3): BABYLON.TransformNode
+  getAbsolutePosition(): BABYLON.Vector3
+  getDirection(localAxis: BABYLON.Vector3): BABYLON.Vector3
+  getDirectionToRef(localAxis: BABYLON.Vector3, result: BABYLON.Vector3): BABYLON.TransformNode
+  getPivotPoint(): BABYLON.Vector3
+  getPivotPointToRef(result: BABYLON.Vector3): BABYLON.TransformNode
+  locallyTranslate(vector3: BABYLON.Vector3): BABYLON.TransformNode
+  lookAt(targetPoint: BABYLON.Vector3, yawCor?: number, pitchCor?: number, rollCor?: number, space?: BABYLON.Space): BABYLON.TransformNode
+  rotate(axis: BABYLON.Vector3, amount: number, space?: BABYLON.Space): BABYLON.TransformNode
+  rotateAround(point: BABYLON.Vector3, axis: BABYLON.Vector3, amount: number): BABYLON.TransformNode
+  rotatePOV(flipBack: number, twirlClockwise: number, tiltRight: number): BABYLON.AbstractMesh
+  setAbsolutePosition(absolutePosition: BABYLON.Vector3): BABYLON.TransformNode
+  setDirection(localAxis: BABYLON.Vector3, yawCor?: number, pitchCor?: number, rollCor?: number): BABYLON.TransformNode
+  setPivotMatrix(matrix: BABYLON.DeepImmutable<BABYLON.Matrix>, postMultiplyPivotMatrix?: boolean): BABYLON.TransformNode
+  setPivotPoint(point: BABYLON.Vector3, space?: BABYLON.Space): BABYLON.TransformNode
+  setPositionWithLocalVector(vector3: BABYLON.Vector3): BABYLON.TransformNode
+  translate(axis: BABYLON.Vector3, distance: number, space?: BABYLON.Space): BABYLON.TransformNode
+
+  /**
+   * Sets the mesh enable state.
+   * @param value
+   */
+  setEnabled(value: boolean): void
 
   /**
    * Sets a mesh manually.
@@ -43,18 +79,6 @@ export declare abstract class MeshInterface {
    * @param babylonMesh
    */
   setMesh(babylonMesh: BABYLON.Mesh): void
-
-  /**
-   * Sets the transform (translation, rotation and scale).
-   * @param transform
-   */
-  // setTransform(transform: BABYLON.Matrix): void  // TODO
-
-  /**
-   * Gets the transform.
-   * @param transform
-   */
-  // getTransform(): BABYLON.Matrix // TODO
 
   /**
    * Sets current frame (stops current animation).

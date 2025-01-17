@@ -20,8 +20,6 @@ export abstract class SpriteInterface implements DisplayObject {
   abstract exclusiveTexture: boolean // Exclusive texture means this sprite has an exclusive texture that is not stored anywhere, so the sprite itself has to handle its release.
   abstract animation: SpriteAnimation | null
   abstract animations: Map<FlexId, SpriteAnimation>
-  abstract t: SpriteTransform
-  abstract transform: SpriteTransform
   abstract _scale: number
   abstract setSpriteMesh(spriteMesh: SpriteMesh, isExclusive: boolean, isParticle: boolean): void
   abstract setShaderMaterialTextureFrame(frame: number): void
@@ -45,7 +43,9 @@ export abstract class SpriteInterface implements DisplayObject {
   abstract drawText(text: string, properties: DrawBlockProperties): void
   abstract destroy(): void
 
-  // Transform
+  // Tranmsform properties and methods
+  abstract set visibility(value: number)
+  abstract get visibility(): number
   abstract get absolutePosition(): BABYLON.Vector3
   abstract set position(value: BABYLON.Vector3)
   abstract get position(): BABYLON.Vector3
@@ -69,8 +69,6 @@ export abstract class SpriteInterface implements DisplayObject {
   abstract setPivotPoint(point: BABYLON.Vector3, space?: BABYLON.Space): BABYLON.TransformNode
   abstract setPositionWithLocalVector(vector3: BABYLON.Vector3): BABYLON.TransformNode
   abstract translate(axis: BABYLON.Vector3, distance: number, space?: BABYLON.Space): BABYLON.TransformNode
-  abstract set visibility(value: number)
-  abstract get visibility(): number
 
   /**
    * User defined optional

@@ -16,8 +16,6 @@ export abstract class MeshInterface implements DisplayObject {
   abstract canvasResize$: BABYLON.Observer<Rect>
   abstract animation: SpriteAnimation | MeshAnimation | null
   abstract animations: Map<FlexId, SpriteAnimation | MeshAnimation>
-  abstract get t(): MeshTransform
-  abstract get transform(): MeshTransform
   abstract release(): void
 
   /**
@@ -38,6 +36,11 @@ export abstract class MeshInterface implements DisplayObject {
   abstract setMesh(babylonMesh: BABYLON.Mesh): void
   abstract destroy(): void
 
+  /**
+   * Tranmsform properties and methods
+   */
+  abstract set visibility(value: number)
+  abstract get visibility(): number
   abstract get absolutePosition(): BABYLON.Vector3
   abstract get absoluteRotationQuaternion(): BABYLON.Quaternion
   abstract get absoluteScaling(): BABYLON.Vector3
@@ -68,8 +71,6 @@ export abstract class MeshInterface implements DisplayObject {
   abstract setPivotPoint(point: BABYLON.Vector3, space?: BABYLON.Space): BABYLON.TransformNode
   abstract setPositionWithLocalVector(vector3: BABYLON.Vector3): BABYLON.TransformNode
   abstract translate(axis: BABYLON.Vector3, distance: number, space?: BABYLON.Space): BABYLON.TransformNode
-  abstract set visibility(value: number)
-  abstract get visibility(): number
 
   /**
    * User defined optional

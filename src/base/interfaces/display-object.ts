@@ -1,16 +1,12 @@
 import { MeshAnimation } from '../../decorators/mesh/mesh-animation'
 import { SpriteAnimation } from '../../decorators/sprite/sprite-animation'
 import { FlexId } from '../../types/flex-id'
-import { MeshTransform } from '../../types/mesh-transform'
-import { SpriteTransform } from '../../types/sprite-transform'
 
 export abstract class DisplayObject {
   abstract animation: SpriteAnimation | MeshAnimation | null
   abstract animations: Map<FlexId, SpriteAnimation | MeshAnimation>
 
   abstract release(): void
-  abstract get t(): SpriteTransform | MeshTransform
-  abstract get transform(): SpriteTransform | MeshTransform
 
   // User anailable
   abstract setFrame(frame: number): void

@@ -74,29 +74,12 @@ export function Sprite(props: SpriteProps): any {
         keyFramesTimeouts: Timeout[] = []
         endAnimationTimerInterval: Timeout | null
         endAnimationTimerTimeout: Timeout | null
-        t: SpriteTransform
-        transform: SpriteTransform
         _visible: boolean
         _scale: number = 1
 
         set loopUpdate(value: boolean) { switchLoopUpdate(value, this) }
         get loopUpdate(): boolean { return this._loopUpdate }
 
-        get absolutePosition(): BABYLON.Vector3 { return this.babylon.mesh.absolutePosition }
-        set position(value: BABYLON.Vector3) { this.babylon.mesh.position = value }
-        get position(): BABYLON.Vector3 { return this.babylon.mesh.position }
-        getAbsolutePivotPoint(): BABYLON.Vector3 { return this.babylon.mesh.getAbsolutePivotPoint() }
-        getAbsolutePivotPointToRef(result: BABYLON.Vector3): BABYLON.TransformNode { return this.babylon.mesh.getAbsolutePivotPointToRef(result) }
-        getAbsolutePosition(): BABYLON.Vector3 { return this.babylon.mesh.getAbsolutePosition() }
-        getPivotPoint(): BABYLON.Vector3 { return this.babylon.mesh.getPivotPoint() }
-        getPivotPointToRef(result: BABYLON.Vector3): BABYLON.TransformNode { return this.babylon.mesh.getPivotPointToRef(result) }
-        locallyTranslate(vector3: BABYLON.Vector3): BABYLON.TransformNode { return this.babylon.mesh.locallyTranslate(vector3) }
-        rotateAround(point: BABYLON.Vector3, axis: BABYLON.Vector3, amount: number): BABYLON.TransformNode { return this.babylon.mesh.rotateAround(point, axis, amount) }
-        setAbsolutePosition(absolutePosition: BABYLON.Vector3): BABYLON.TransformNode { return this.babylon.mesh.setAbsolutePosition(absolutePosition) }
-        setPivotMatrix(matrix: BABYLON.DeepImmutable<BABYLON.Matrix>, postMultiplyPivotMatrix?: boolean): BABYLON.TransformNode { return this.babylon.mesh.setPivotMatrix(matrix, postMultiplyPivotMatrix) }
-        setPivotPoint(point: BABYLON.Vector3, space?: BABYLON.Space): BABYLON.TransformNode { return this.babylon.mesh.setPivotPoint(point, space) }
-        setPositionWithLocalVector(vector3: BABYLON.Vector3): BABYLON.TransformNode { return this.babylon.mesh.setPositionWithLocalVector(vector3) }
-        translate(axis: BABYLON.Vector3, distance: number, space?: BABYLON.Space): BABYLON.TransformNode { return this.babylon.mesh.translate(axis, distance, space) }
         set visibility(value: number) {
           this.babylon.mesh.visibility = value;
           (this.babylon.mesh.material as BABYLON.ShaderMaterial).setFloat('alpha', this.babylon.mesh.visibility)
@@ -104,6 +87,9 @@ export function Sprite(props: SpriteProps): any {
 
         get visibility(): number { return this.babylon.mesh.visibility }
 
+        get absolutePosition(): BABYLON.Vector3 { return this.babylon.mesh.absolutePosition }
+        set position(value: BABYLON.Vector3) { this.babylon.mesh.position = value }
+        get position(): BABYLON.Vector3 { return this.babylon.mesh.position }
         set rotation(value: number) { this.babylon.mesh.rotation.z = value }
         get rotation(): number { return this.babylon.mesh.rotation.z }
         set scale(value: number) { this.babylon.mesh.scaling.set(value, value, 1.0) }
@@ -116,6 +102,18 @@ export function Sprite(props: SpriteProps): any {
         get scaleX(): number { return this.babylon.mesh.scaling.x }
         set scaleY(value: number) { this.babylon.mesh.scaling.set(this.babylon.mesh.scaling.x, value, 1.0) }
         get scaleY(): number { return this.babylon.mesh.scaling.y }
+        getAbsolutePivotPoint(): BABYLON.Vector3 { return this.babylon.mesh.getAbsolutePivotPoint() }
+        getAbsolutePivotPointToRef(result: BABYLON.Vector3): BABYLON.TransformNode { return this.babylon.mesh.getAbsolutePivotPointToRef(result) }
+        getAbsolutePosition(): BABYLON.Vector3 { return this.babylon.mesh.getAbsolutePosition() }
+        getPivotPoint(): BABYLON.Vector3 { return this.babylon.mesh.getPivotPoint() }
+        getPivotPointToRef(result: BABYLON.Vector3): BABYLON.TransformNode { return this.babylon.mesh.getPivotPointToRef(result) }
+        locallyTranslate(vector3: BABYLON.Vector3): BABYLON.TransformNode { return this.babylon.mesh.locallyTranslate(vector3) }
+        rotateAround(point: BABYLON.Vector3, axis: BABYLON.Vector3, amount: number): BABYLON.TransformNode { return this.babylon.mesh.rotateAround(point, axis, amount) }
+        setAbsolutePosition(absolutePosition: BABYLON.Vector3): BABYLON.TransformNode { return this.babylon.mesh.setAbsolutePosition(absolutePosition) }
+        setPivotMatrix(matrix: BABYLON.DeepImmutable<BABYLON.Matrix>, postMultiplyPivotMatrix?: boolean): BABYLON.TransformNode { return this.babylon.mesh.setPivotMatrix(matrix, postMultiplyPivotMatrix) }
+        setPivotPoint(point: BABYLON.Vector3, space?: BABYLON.Space): BABYLON.TransformNode { return this.babylon.mesh.setPivotPoint(point, space) }
+        setPositionWithLocalVector(vector3: BABYLON.Vector3): BABYLON.TransformNode { return this.babylon.mesh.setPositionWithLocalVector(vector3) }
+        translate(axis: BABYLON.Vector3, distance: number, space?: BABYLON.Space): BABYLON.TransformNode { return this.babylon.mesh.translate(axis, distance, space) }
 
         setSpriteMesh(spriteMesh: SpriteMesh, isExclusive: boolean) {
           if (this.babylon.mesh) {
@@ -124,8 +122,6 @@ export function Sprite(props: SpriteProps): any {
           this.spriteMesh = spriteMesh
           this.exclusiveTexture = isExclusive
           this.babylon.mesh = spriteMesh.spawn()
-          this.transform = this.babylon.mesh as any
-          this.t = this.transform
           this.props.animations?.forEach(animation => this.addAnimation(animation))
         }
 

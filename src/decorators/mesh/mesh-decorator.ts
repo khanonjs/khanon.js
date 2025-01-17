@@ -59,12 +59,12 @@ export function Mesh(props: MeshProps = {}): any {
         animations: Map<FlexId, MeshAnimation> = new Map<FlexId, MeshAnimation>()
         loopUpdate$: BABYLON.Observer<number>
         canvasResize$: BABYLON.Observer<Rect>
-        t: MeshTransform
-        transform: MeshTransform
 
         set loopUpdate(value: boolean) { switchLoopUpdate(value, this) }
         get loopUpdate(): boolean { return this._loopUpdate }
 
+        set visibility(value: number) { this.babylon.mesh.visibility = value }
+        get visibility(): number { return this.babylon.mesh.visibility }
         get absolutePosition(): BABYLON.Vector3 { return this.babylon.mesh.absolutePosition }
         get absoluteRotationQuaternion(): BABYLON.Quaternion { return this.babylon.mesh.absoluteRotationQuaternion }
         get absoluteScaling(): BABYLON.Vector3 { return this.babylon.mesh.absoluteScaling }
@@ -95,16 +95,12 @@ export function Mesh(props: MeshProps = {}): any {
         setPivotPoint(point: BABYLON.Vector3, space?: BABYLON.Space): BABYLON.TransformNode { return this.babylon.mesh.setPivotPoint(point, space) }
         setPositionWithLocalVector(vector3: BABYLON.Vector3): BABYLON.TransformNode { return this.babylon.mesh.setPositionWithLocalVector(vector3) }
         translate(axis: BABYLON.Vector3, distance: number, space?: BABYLON.Space): BABYLON.TransformNode { return this.babylon.mesh.translate(axis, distance, space) }
-        set visibility(value: number) { this.babylon.mesh.visibility = value }
-        get visibility(): number { return this.babylon.mesh.visibility }
 
         setMesh(babylonMesh: BABYLON.Mesh): void {
           if (this.babylon.mesh) {
             this.release()
           }
           this.babylon.mesh = babylonMesh
-          this.transform = this.babylon.mesh
-          this.t = this.transform
           this.props.animations?.forEach(animation => this.addAnimation(animation))
           this.setEnabled(true)
         }
