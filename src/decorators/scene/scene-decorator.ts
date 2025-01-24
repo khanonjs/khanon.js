@@ -102,7 +102,6 @@ export function Scene(props: SceneProps = {}): any {
       meshes: Set<MeshInterface> = new Set<MeshInterface>()
       sprites: Set<SpriteInterface> = new Set<SpriteInterface>()
       particles: Set<ParticleInterface> = new Set<ParticleInterface>()
-      appendedMeshes: Map<Asset, BABYLON.Scene> = new Map<Asset, BABYLON.Scene>()
 
       setEngineParams(): void {} // TODO ?
 
@@ -237,10 +236,6 @@ export function Scene(props: SceneProps = {}): any {
         ParticlesController.unload(this.props.particles, this)
         ParticlesController.unload(this.metadata.getProps().particles, this)
         GUIController.unload(this.props.guis, this)
-        this.appendedMeshes.forEach(babylonScene => {
-          babylonScene.dispose()
-        })
-        this.appendedMeshes.clear()
       }
 
       startRenderObservable(): void {
@@ -281,20 +276,15 @@ export function Scene(props: SceneProps = {}): any {
         return null as any
       }
 
-      appendMeshFromAsset(asset: Asset<SceneInterface, AssetDataMesh>): LoadingProgress/* <BABYLON.Scene> */ {
-        const babylonScene = this.appendedMeshes.get(asset)
-        if (babylonScene) {
-          return new LoadingProgress().complete(babylonScene)
-        } else {
-          const progress = new LoadingProgress<BABYLON.Scene>()
-          BABYLON.SceneLoader.AppendAsync(asset.definition.data?.path as any, `data:${asset.serial}`, this.babylon.scene)
-            .then(() => progress.complete())
-            .catch(error => {
-              Logger.error('Scene decorator appendSceneFromAsset error:', objectToString(error), _class.prototype)
-              progress.error(error)
-            })
-          return progress
-        }
+      appendMeshFromAsset(asset: Asset<SceneInterface, AssetDataMesh>): LoadingProgress {
+        const progress = new LoadingProgress<BABYLON.Scene>()
+        BABYLON.SceneLoader.AppendAsync(asset.definition.data?.path as any, `data:${asset.serial}`, this.babylon.scene)
+          .then(() => progress.complete())
+          .catch(error => {
+            Logger.error('Scene AppendMeshFromAsset error:', objectToString(error), _class.prototype)
+            progress.error(error)
+          })
+        return progress
       }
 
       switchState(state: SceneStateConstructor, setup: any): SceneStateInterface {

@@ -52,7 +52,6 @@ export abstract class SceneInterface implements Loadable, LoopUpdatable, CanvasR
   abstract meshes: Set<MeshInterface>
   abstract sprites: Set<SpriteInterface>
   abstract particles: Set<ParticleInterface>
-  abstract appendedMeshes: Map<Asset, BABYLON.Scene>
   abstract animationHandler: Map<SpriteInterface, () => void>
   abstract setEngineParams(): void // TODO ?
   abstract playActionFromInstance(instance: SceneActionInterface): void

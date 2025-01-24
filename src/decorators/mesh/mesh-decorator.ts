@@ -181,7 +181,7 @@ export function Mesh(props: MeshProps = {}): any {
                   // Search enabled meshes to avoid picking a mesh with same Id that has been already picked up.
                   let mesh = scene.babylon.scene.meshes.find(_mesh => _mesh.id === asset.definition.data?.meshId as any && _mesh.isEnabled()) as BABYLON.Mesh
                   if (mesh) {
-                    mesh.setEnabled(false) // Enabled must go here, __root__ node is the one to disable.
+                    mesh.setEnabled(false) // setEnabled must go here, '__root__' node is the one to disable.
                     if (this.props.cloneByInstances && !mesh.geometry) {
                       let nextGeometryMesh: BABYLON.Mesh | undefined
                       mesh.getChildMeshes().forEach(_mesh => {
