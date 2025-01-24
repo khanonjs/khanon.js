@@ -6,10 +6,7 @@ import {
   Rect
 } from '../../models'
 import { DrawBlockProperties } from '../../models/draw-block-properties'
-import {
-  FlexId,
-  SpriteTransform
-} from '../../types'
+import { FlexId } from '../../types'
 import { SceneInterface } from '../scene'
 
 export interface SpriteAnimation extends AnimationBase {}

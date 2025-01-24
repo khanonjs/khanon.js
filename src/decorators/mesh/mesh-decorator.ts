@@ -13,7 +13,6 @@ import { BabylonAccessor } from '../../models/babylon-accessor'
 import { Rect } from '../../models/rect'
 import { Logger } from '../../modules/logger'
 import { FlexId } from '../../types/flex-id'
-import { MeshTransform } from '../../types/mesh-transform'
 import {
   attachCanvasResize,
   attachLoopUpdate,
@@ -44,8 +43,12 @@ export function Mesh(props: MeshProps = {}): any {
           if (scene) {
             this.babylon.scene = this.scene.babylon.scene
             if (this.props.url) {
-              if (!core.meshes.get(scene)) { Logger.debugError('Mesh not found for scene in mesh constructor:', _classInterface.prototype, scene.constructor.name) } // TODO get mesh and scene names
-              this.setMesh(core.meshes.get(scene) as any)
+              const mesh = core.meshes.get(scene)
+              if (!mesh) { Logger.debugError('Mesh not found for scene in mesh constructor:', _classInterface.prototype, scene.constructor.name) } // TODO get mesh and scene names
+              const newMesh = this.props.cloneByInstances
+                ? mesh?.createInstance('Mesh - ' + mesh.name.slice(AssetsController.meshSourcePrefix.length))
+                : mesh?.clone('Mesh - ' + mesh.name.slice(AssetsController.meshSourcePrefix.length), null)
+              this.setMesh(newMesh as any)
             }
             attachLoopUpdate(this)
             attachCanvasResize(this)
@@ -131,6 +134,7 @@ export function Mesh(props: MeshProps = {}): any {
         }
 
         playAnimation(animation: MeshAnimation | FlexId, loopOverride?: boolean, completed?: () => void): void {
+          // this.babylon.mesh.beginAnimation('')
         // TODO
         }
 
@@ -162,37 +166,44 @@ export function Mesh(props: MeshProps = {}): any {
       const _classCore = class implements MeshCore {
         props = props
         Instance: MeshInterface = new _classInterface(null as any, null as any)
-        meshes: Map<SceneInterface, BABYLON.AbstractMesh> = new Map<SceneInterface, BABYLON.AbstractMesh>()
+        meshes: Map<SceneInterface, BABYLON.Mesh> = new Map<SceneInterface, BABYLON.Mesh>()
 
         load(scene: SceneInterface): LoadingProgress {
           if (this.meshes.get(scene)) {
             return new LoadingProgress().complete()
           } else {
             if (this.props.url) {
-              if (!this.props.meshId) { Logger.debugError(`'meshId' must be defined to load a mesh from a babylon scene file. Mesh url: '${this.props.url}'.`); return null as any }
               const asset = AssetsController.getAsset<AssetDataMesh>(this.props.url)
               if (asset && asset.definition.data) {
                 const progress = new LoadingProgress()
-                scene.loadSceneFromAsset(asset).onComplete.add((babylonScene) => {
-                  const serial = JSON.stringify(BABYLON.SceneSerializer.SerializeMesh(babylonScene.getMeshById(asset.definition.data?.meshId as any)))
-                  BABYLON.SceneLoader.ImportMeshAsync(asset.definition.data?.meshId, asset.definition.data?.path as any, `data:${serial}`, scene.babylon.scene)
-                    .then((result) => {
-                      const mesh = result.meshes.find((mesh) => mesh.id === this.props.meshId)
-                      if (mesh) {
-                        mesh.setEnabled(false)
-                        this.meshes.set(scene, mesh)
-                        progress.complete()
+                scene.appendMeshFromAsset(asset).onComplete.add(() => {
+                  // If several meshes of same 'url' have been created in the same scene, they will be picked as a queue of the enabled ones.
+                  // Search enabled meshes to avoid picking a mesh with same Id that has been already picked up.
+                  let mesh = scene.babylon.scene.meshes.find(_mesh => _mesh.id === asset.definition.data?.meshId as any && _mesh.isEnabled()) as BABYLON.Mesh
+                  if (mesh) {
+                    mesh.setEnabled(false) // Enabled must go here, __root__ node is the one to disable.
+                    if (this.props.cloneByInstances && !mesh.geometry) {
+                      let nextGeometryMesh: BABYLON.Mesh | undefined
+                      mesh.getChildMeshes().forEach(_mesh => {
+                        if ((_mesh as BABYLON.Mesh).geometry && !nextGeometryMesh) {
+                          nextGeometryMesh = _mesh as BABYLON.Mesh
+                        }
+                      })
+                      if (nextGeometryMesh) {
+                        nextGeometryMesh.id = mesh.id + ' (Instance)'
+                        nextGeometryMesh.name = nextGeometryMesh.id
+                        mesh = nextGeometryMesh
                       } else {
-                        const errorMsg = `Mesh '${this.props.meshId}' not found on babylon scene file '${this.props.url}'`
-                        Logger.error(errorMsg, _classInterface.prototype)
-                        progress.error(errorMsg)
+                        Logger.error(`Not geometry mesh found to clone by instance on file '${this.props.url}'`, _classInterface.prototype)
                       }
-                    })
-                    .catch(error => {
-                      const errorMsg = `Error importing mesh '${this.props.meshId}' from babylon scene file '${this.props.url}'`
-                      Logger.error(errorMsg, error, _classInterface.prototype)
-                      progress.error(errorMsg)
-                    })
+                    }
+                    this.meshes.set(scene, mesh)
+                    progress.complete()
+                  } else {
+                    const errorMsg = `Mesh '${asset.definition.data?.meshId}' not found on file '${this.props.url}'`
+                    Logger.error(errorMsg, _classInterface.prototype)
+                    progress.error(errorMsg)
+                  }
                 })
                 return progress
               } else {

@@ -14,5 +14,5 @@ export interface ActorProps {
   particles?: ParticleConstructor[]
   renderingGroupId?: number
   visibility?: number
-  // spawnByReferenceId?: string // TODO on BabylonSceneMap: Spanwns the actor by scene reference (it will spawn the actor in the scene where the babylon scene reference is equivalent to this Id).
+  // spawnByReferenceId?: string // 8a8f on BabylonSceneMap: Spanwns the actor by scene reference (it will spawn the actor in the scene where the babylon scene reference is equivalent to this Id). Do this for meshes and sprites.
 }

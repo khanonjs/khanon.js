@@ -1,6 +1,6 @@
 import * as BABYLON from '@babylonjs/core'
 
-/** // 8a8f mesh transforms
+/**
  * Shortcut to basic babylon transform methods and variables
  */
 /** @interface */

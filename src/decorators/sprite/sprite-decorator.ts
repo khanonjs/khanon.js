@@ -13,7 +13,6 @@ import { Rect } from '../../models/rect'
 import { Timeout } from '../../models/timeout'
 import { Logger } from '../../modules/logger'
 import { FlexId } from '../../types/flex-id'
-import { SpriteTransform } from '../../types/sprite-transform'
 import {
   applyDefaults,
   attachCanvasResize,

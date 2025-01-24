@@ -102,7 +102,7 @@ export function Scene(props: SceneProps = {}): any {
       meshes: Set<MeshInterface> = new Set<MeshInterface>()
       sprites: Set<SpriteInterface> = new Set<SpriteInterface>()
       particles: Set<ParticleInterface> = new Set<ParticleInterface>()
-      babylonSceneElements: Map<Asset, BABYLON.Scene> = new Map<Asset, BABYLON.Scene>()
+      appendedMeshes: Map<Asset, BABYLON.Scene> = new Map<Asset, BABYLON.Scene>()
 
       setEngineParams(): void {} // TODO ?
 
@@ -172,11 +172,6 @@ export function Scene(props: SceneProps = {}): any {
         } else {
           // Create babylon scene and apply configuration
           this.babylon.scene = new BABYLON.Scene(Core.engine, this.props.options)
-          if (this.props.configuration) {
-            for (const [key, value] of Object.entries(this.props.configuration)) {
-              this.babylon.scene[key] = value
-            }
-          }
 
           this._loadingProgress = new LoadingProgress()
           if (!this.assets) {
@@ -203,6 +198,12 @@ export function Scene(props: SceneProps = {}): any {
             ])
             elementsLoading.onComplete.add(() => {
               Logger.debug('Scene elements load completed', _class.prototype)
+              // Load configuration after Elements loading, to avoid AppendAsync method to override these configurations.
+              if (this.props.configuration) {
+                for (const [key, value] of Object.entries(this.props.configuration)) {
+                  this.babylon.scene[key] = value
+                }
+              }
               this.babylon.scene.executeWhenReady(() => {
                 this._loaded = true
                 invokeCallback(this.onLoaded, this)
@@ -236,10 +237,10 @@ export function Scene(props: SceneProps = {}): any {
         ParticlesController.unload(this.props.particles, this)
         ParticlesController.unload(this.metadata.getProps().particles, this)
         GUIController.unload(this.props.guis, this)
-        this.babylonSceneElements.forEach(babylonScene => {
+        this.appendedMeshes.forEach(babylonScene => {
           babylonScene.dispose()
         })
-        this.babylonSceneElements.clear()
+        this.appendedMeshes.clear()
       }
 
       startRenderObservable(): void {
@@ -280,19 +281,16 @@ export function Scene(props: SceneProps = {}): any {
         return null as any
       }
 
-      loadSceneFromAsset(asset: Asset<SceneInterface, AssetDataMesh>): LoadingProgress<BABYLON.Scene> {
-        const babylonScene = this.babylonSceneElements.get(asset)
+      appendMeshFromAsset(asset: Asset<SceneInterface, AssetDataMesh>): LoadingProgress/* <BABYLON.Scene> */ {
+        const babylonScene = this.appendedMeshes.get(asset)
         if (babylonScene) {
           return new LoadingProgress().complete(babylonScene)
         } else {
           const progress = new LoadingProgress<BABYLON.Scene>()
-          BABYLON.SceneLoader.LoadAsync(asset.definition.data?.path as any, `data:${asset.serial}`)
-            .then(babylonScene => {
-              this.babylonSceneElements.set(asset, babylonScene)
-              progress.complete(babylonScene)
-            })
+          BABYLON.SceneLoader.AppendAsync(asset.definition.data?.path as any, `data:${asset.serial}`, this.babylon.scene)
+            .then(() => progress.complete())
             .catch(error => {
-              Logger.error('Error loading babylon scene:', objectToString(error), _class.prototype)
+              Logger.error('Scene decorator appendSceneFromAsset error:', objectToString(error), _class.prototype)
               progress.error(error)
             })
           return progress

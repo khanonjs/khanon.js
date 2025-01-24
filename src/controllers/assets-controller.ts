@@ -39,6 +39,8 @@ import { SceneStatesController } from './scene-states-controller'
 import { SpritesController } from './sprites-controller'
 
 export class AssetsController {
+  static meshSourcePrefix = 'MeshSource - '
+  private static _uniqueId = 0
   private static contentTypes = { // TODO is this worth?
     [AssetType.AUDIO]: ['audio/aac', 'audio/midi', 'audio/x-midi', 'audio/mpeg', 'audio/ogg', 'audio/opus', 'audio/wav', 'audio/webm'],
     [AssetType.MESH]: [''],
@@ -48,6 +50,7 @@ export class AssetsController {
   }
 
   private static assets: Map<string, Asset<SceneInterface>> = new Map<string, Asset<SceneInterface>>()
+  private static get uniqueId(): string { return String(AssetsController._uniqueId++) }
 
   static getAsset</* Definition data */ D>(url: string): Asset<SceneInterface, D> | undefined {
     return this.assets.get(url)
@@ -144,7 +147,7 @@ export class AssetsController {
         } else {
           switch (assetDef.type) {
           case AssetType.MESH:
-            progresses.push(AssetsController.loadSceneFromUrl(assetDef as any, scene))
+            progresses.push(AssetsController.loadMeshFromUrl(assetDef as any, scene))
             break
           default:
             progresses.push(AssetsController.loadFileFromUrl(assetDef, scene))
@@ -216,7 +219,7 @@ export class AssetsController {
     return asset.progress
   }
 
-  private static loadSceneFromUrl(definition: Required<AssetDefinition<AssetDataMesh>>, source: SceneInterface): LoadingProgress {
+  private static loadMeshFromUrl(definition: Required<AssetDefinition<AssetDataMesh>>, source: SceneInterface): LoadingProgress {
     const asset = new Asset(definition, source)
     AssetsController.assets.set(definition.url, asset)
     const throwError = (errorMsg: string) => {
@@ -228,15 +231,25 @@ export class AssetsController {
     BABYLON.SceneLoader.LoadAsync(definition.data.path, definition.data.file)
       .then(babylonScene => {
         Logger.debug(`LoadMeshFromUrl: Loaded '${definition.url}', cached: ${!!definition.cached}`)
-        BABYLON.SceneSerializer.SerializeAsync(babylonScene)
-          .then(serial => {
-            asset.setSerial(JSON.stringify(serial))
-            babylonScene.dispose()
-            asset.progress.complete()
-          })
-          .catch(error => {
-            throwError(`LoadMeshFromUrl: Error on SerializeAsync '${definition.url}': ${objectToString(error)}`)
-          })
+        const rootMesh = definition.data.meshId
+          ? babylonScene.meshes.find(mesh => mesh.id === definition.data.meshId)
+          : babylonScene.meshes[0]
+        if (rootMesh) {
+          rootMesh.id = AssetsController.meshSourcePrefix + (rootMesh.id === '__root__' && rootMesh.getChildren()[0] ? rootMesh.getChildren()[0].id : rootMesh.id) + '-' + AssetsController.uniqueId
+          rootMesh.name = rootMesh.id
+          definition.data.meshId = rootMesh.id
+          BABYLON.SceneSerializer.SerializeAsync(babylonScene)
+            .then(serial => {
+              asset.setSerial(JSON.stringify(serial))
+              setTimeout(() => babylonScene.dispose(), 1) // Lend time to babylon to do its things
+              asset.progress.complete()
+            })
+            .catch(error => {
+              throwError(`LoadMeshFromUrl: Error on SerializeAsync '${definition.url}': ${objectToString(error)}`)
+            })
+        } else {
+          throwError(`LoadMeshFromUrl: Mesh not found in '${definition.url}'.}`)
+        }
       })
       .catch(error => {
         throwError(`LoadMeshFromUrl: Error on LoadAsync '${definition.url}': ${objectToString(error)}`)
