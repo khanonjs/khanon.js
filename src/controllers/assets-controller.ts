@@ -25,10 +25,7 @@ import { SceneStateInterface } from '../decorators/scene/scene-state/scene-state
 import { SpriteCore } from '../decorators/sprite/sprite-core'
 import { SpriteInterface } from '../decorators/sprite/sprite-interface'
 import { Logger } from '../modules/logger'
-import {
-  isPrototypeOf,
-  objectToString
-} from '../utils/utils'
+import { isPrototypeOf } from '../utils/utils'
 import { ActorStatesController } from './actor-states-controller'
 import { ActorActionsController } from './actors-actions-controller'
 import { ActorsController } from './actors-controller'
@@ -39,8 +36,6 @@ import { SceneStatesController } from './scene-states-controller'
 import { SpritesController } from './sprites-controller'
 
 export class AssetsController {
-  static meshSourcePrefix = 'MeshSource - '
-  private static _uniqueId = 0
   private static contentTypes = { // TODO is this worth?
     [AssetType.AUDIO]: ['audio/aac', 'audio/midi', 'audio/x-midi', 'audio/mpeg', 'audio/ogg', 'audio/opus', 'audio/wav', 'audio/webm'],
     [AssetType.MESH]: [''],
@@ -50,7 +45,6 @@ export class AssetsController {
   }
 
   private static assets: Map<string, Asset<SceneInterface>> = new Map<string, Asset<SceneInterface>>()
-  private static get uniqueId(): string { return String(AssetsController._uniqueId++) }
 
   static getAsset</* Definition data */ D>(url: string): Asset<SceneInterface, D> | undefined {
     return this.assets.get(url)
