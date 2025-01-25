@@ -169,6 +169,7 @@ export function Mesh(props: MeshProps = {}): any {
             this.animation.animationGroup.stop()
             this.animation.animationGroup.onAnimationGroupLoopObservable.clear()
             this.animation.animationGroup.onAnimationGroupEndObservable.clear()
+            this.animation = null
           }
         }
 
