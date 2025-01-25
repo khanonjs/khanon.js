@@ -19,6 +19,7 @@ import { CameraConstructor } from '../camera/camera-constructor'
 import { CameraInterface } from '../camera/camera-interface'
 import { MeshInterface } from '../mesh/mesh-interface'
 import { ParticleInterface } from '../particle/particle-interface'
+import { SpriteAnimation } from '../sprite/sprite-animation'
 import { SpriteInterface } from '../sprite/sprite-interface'
 import { SceneActionConstructor } from './scene-action/scene-action-constructor'
 import { SceneActionInterface } from './scene-action/scene-action-interface'
@@ -56,12 +57,11 @@ export abstract class SceneInterface implements Loadable, LoopUpdatable, CanvasR
   abstract setEngineParams(): void // TODO ?
   abstract playActionFromInstance(instance: SceneActionInterface): void
   abstract stopActionFromInstance(instance: SceneActionInterface, forceRemove?: boolean): void
-  abstract setAnimationHandler(sprite: SpriteInterface, animation: AnimationBase): void
+  abstract setAnimationHandler(sprite: SpriteInterface, animation: SpriteAnimation): void
   abstract stopAnimationHandler(sprite: SpriteInterface): void
   abstract startRenderObservable(): void
   abstract stopRenderObservable(): void
   abstract useBabylonSceneFromAsset(): LoadingProgress // TODO use for BabylonSceneMap
-  abstract appendMeshFromAsset(asset: Asset<SceneInterface>): LoadingProgress
   abstract useDebugInspector(): void
   abstract denyDebugInspector(): void
 

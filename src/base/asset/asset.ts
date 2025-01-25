@@ -9,6 +9,7 @@ export class Asset</* Source interface */ S = any, /* Definition data */ D = any
   private _buffer: ArrayBuffer
   private _objectURL: string
   private _serial: string
+  private _file: File
 
   constructor(readonly definition: AssetDefinition<D>, readonly source: S) {}
 
@@ -25,6 +26,11 @@ export class Asset</* Source interface */ S = any, /* Definition data */ D = any
   get serial(): string {
     if (!this._serial) { Logger.debugError(`Asset Error: No serial for asset '${this.definition.url}', did you mean other type?`) }
     return this._serial
+  }
+
+  get file(): File {
+    if (!this._file) { Logger.debugError(`Asset Error: No file for asset '${this.definition.url}', did you mean other type?`) }
+    return this._file
   }
 
   addSource(source: S, cached: boolean) {
@@ -48,5 +54,9 @@ export class Asset</* Source interface */ S = any, /* Definition data */ D = any
 
   setSerial(serial: string) {
     this._serial = serial
+  }
+
+  setFile(buffer: ArrayBuffer, fileName: string) {
+    this._file = new File([buffer], fileName)
   }
 }

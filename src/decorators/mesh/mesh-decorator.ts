@@ -31,9 +31,7 @@ import { SceneStateInterface } from '../scene/scene-state/scene-state-interface'
 import { MeshAnimation } from './mesh-animation'
 import { MeshCore } from './mesh-core'
 import { MeshInterface } from './mesh-interface'
-import { MeshMetadata } from './mesh-metadata'
 import { MeshProps } from './mesh-props'
-import { MeshSource } from './mesh-source'
 
 export function Mesh(props: MeshProps = {}): any {
   return function <T extends { new (...args: any[]): MeshInterface }>(constructorOrTarget: (T & MeshInterface) | any, contextOrProperty: ClassDecoratorContext | string, descriptor: PropertyDescriptor) {
@@ -45,20 +43,30 @@ export function Mesh(props: MeshProps = {}): any {
           if (scene) {
             this.babylon.scene = this.scene.babylon.scene
             if (this.props.url) {
-              const meshLoadedData = core.meshes.get(scene)
-              if (!meshLoadedData) { Logger.debugError(`Mesh '${this.props.url}' not found for scene in mesh constructor:`, _classInterface.prototype, scene.constructor.name) } // TODO get mesh and scene names
-              if (meshLoadedData) {
-                if (meshLoadedData.instantiate && meshLoadedData.geometry) {
-                  const instance = meshLoadedData.geometry.createInstance(meshLoadedData.parent.name + ' (Instance)')
-                  instance.setParent(meshLoadedData.parent)
-                  this.setMesh(instance)
-                  if (!meshLoadedData.parent.isEnabled()) {
-                    meshLoadedData.parent.setEnabled(true)
+              const assetContainer = core.assetContainers.get(scene)
+              if (!assetContainer) { Logger.debugError(`AssetContainer mesh '${this.props.url}' not for spawn:`, _classInterface.prototype, scene.constructor.name) } // TODO get mesh and scene names
+              if (assetContainer) {
+                const entries = assetContainer.instantiateModelsToScene((name) => name, undefined, {
+                  doNotInstantiate: !this.props.cloneByInstances
+                })
+                this.props.animations?.forEach(animation => {
+                  const animationGroup = entries.animationGroups.find(animationGroup => animation.id === animationGroup.name)
+                  if (animationGroup) {
+                    const definedAnim = this.props.animations?.find(_anim => _anim.id === animationGroup.name)
+                    if (definedAnim) {
+                      this.addAnimation({
+                        id: animationGroup.name,
+                        animationGroup,
+                        loop: animation.loop
+                      })
+                    }
+                  } else {
+                    Logger.error(`Animation '${animation.id}' not found in mesh '${this.props.url}':`, _classInterface.prototype)
                   }
-                } else {
-                  const parent = meshLoadedData.parent.clone('Mesh - ' + meshLoadedData.parent.name.slice(AssetsController.meshSourcePrefix.length), null)
-                  this.setMesh(parent)
-                }
+                })
+                const mesh = entries.rootNodes[0] as BABYLON.Mesh
+                mesh.name = 'Mesh - ' + this.props.url
+                this.setMesh(mesh)
               }
             }
             attachLoopUpdate(this)
@@ -115,7 +123,6 @@ export function Mesh(props: MeshProps = {}): any {
             this.release()
           }
           this.babylon.mesh = babylonMesh
-          this.props.animations?.forEach(animation => this.addAnimation(animation))
           this.setEnabled(true)
         }
 
@@ -141,30 +148,47 @@ export function Mesh(props: MeshProps = {}): any {
         }
 
         addAnimation(animation: MeshAnimation): void {
-        // TODO
+          if (this.animations.get(animation.id)) { Logger.debugError(`Trying to add mesh animation '${animation.id}' that has been already added:`, _classInterface.prototype) } // TODO get mesh and scene names
+          this.animations.set(animation.id, animation)
         }
 
-        playAnimation(animation: MeshAnimation | FlexId, loopOverride?: boolean, completed?: () => void): void {
-          // this.babylon.mesh.beginAnimation('')
-        // TODO
+        playAnimation(animationId: FlexId, loopOverride?: boolean, completed?: () => void): void {
+          if (!this.animations.get(animationId)) { Logger.debugError(`Animation '${animationId}' not found in mesh '${this.props.url}':`, _classInterface.prototype) } // TODO get mesh and scene names
+          this.animation = this.animations.get(animationId) as any
+          if (this.animation) {
+            this.animation.animationGroup.start()
+            this.animation.animationGroup.loopAnimation = (loopOverride !== undefined ? loopOverride : this.animation.loop) ?? false
+            if (completed) {
+              if (this.animation.animationGroup.loopAnimation) {
+                this.animation.animationGroup.onAnimationGroupLoopObservable.add(() => completed())
+              } else {
+                this.animation.animationGroup.onAnimationGroupEndObservable.add(() => completed())
+              }
+            }
+          }
         }
 
         stopAnimation(): void {
-        // TODO
+          if (this.animation) {
+            this.animation.animationGroup.stop()
+            this.animation.animationGroup.onAnimationGroupLoopObservable.clear()
+            this.animation.animationGroup.onAnimationGroupEndObservable.clear()
+          }
         }
 
         subscribeToKeyframe(keyframeId: string, callback: () => void): BABYLON.Observer<void>[] {
-        // TODO
+        // 8a8f
           return null as any
         }
 
         clearKeyframeSubscriptions(keyframeId: string): void {
-        // TODO
+        // 8a8f
         }
 
         release(): void {
           invokeCallback(this.onDestroy, this)
           this.stopAnimation()
+          this.animations.forEach(animation => animation.animationGroup.dispose())
           this.babylon.mesh.dispose()
           removeLoopUpdate(this)
           removeCanvasResize(this)
@@ -177,60 +201,19 @@ export function Mesh(props: MeshProps = {}): any {
       const _classCore = class implements MeshCore {
         props = props
         Instance: MeshInterface = new _classInterface(null as any, null as any)
-        meshes: Map<SceneInterface, MeshSource> = new Map<SceneInterface, MeshSource>()
+        assetContainers: Map<SceneInterface, BABYLON.AssetContainer> = new Map<SceneInterface, BABYLON.AssetContainer>()
 
         load(scene: SceneInterface): LoadingProgress {
-          if (this.meshes.get(scene)) {
+          if (this.assetContainers.get(scene)) {
             return new LoadingProgress().complete()
           } else {
             if (this.props.url) {
               const asset = AssetsController.getAsset<AssetDataMesh>(this.props.url)
               if (asset && asset.definition.data) {
                 const progress = new LoadingProgress()
-                scene.appendMeshFromAsset(asset).onComplete.add(() => {
-                  // If several meshes of same 'url' have been created in the same scene, they will be picked as a queue of the enabled ones.
-                  // Search enabled meshes to avoid picking a mesh with same Id that has been already picked up.
-                  const mesh = scene.babylon.scene.meshes.find(_mesh =>
-                    _mesh.id === asset.definition.data?.meshId as any && _mesh.isEnabled() &&
-                    !_mesh.metadata?.stored) as BABYLON.Mesh
-                  if (mesh) {
-                    mesh.metadata = { stored: false } as MeshMetadata
-                    if (this.props.cloneByInstances && !mesh.geometry) {
-                      let childGeometryMesh: BABYLON.Mesh | undefined
-                      mesh.getChildMeshes().forEach(_mesh => {
-                        if ((_mesh as BABYLON.Mesh).geometry && !childGeometryMesh) {
-                          childGeometryMesh = _mesh as BABYLON.Mesh
-                        }
-                      })
-                      if (childGeometryMesh) {
-                        childGeometryMesh.id = mesh.id + ' (Geometry)'
-                        childGeometryMesh.name = childGeometryMesh.id
-                        childGeometryMesh.setParent(null)
-                        childGeometryMesh.setEnabled(false)
-                        mesh.setEnabled(true)
-                        mesh.metadata = { stored: true } as MeshMetadata
-                        this.meshes.set(scene, {
-                          instantiate: true,
-                          parent: mesh,
-                          geometry: childGeometryMesh
-                        })
-                      } else {
-                        Logger.error(`No geometry mesh found on file '${this.props.url}' to clone by instance:`, _classInterface.prototype)
-                      }
-                    } else {
-                      mesh.setEnabled(false)
-                      mesh.metadata = { stored: true } as MeshMetadata
-                      this.meshes.set(scene, {
-                        instantiate: false,
-                        parent: mesh
-                      })
-                    }
-                    progress.complete()
-                  } else {
-                    const errorMsg = `Mesh '${asset.definition.data?.meshId}' not found on file '${this.props.url}'`
-                    Logger.error(errorMsg, _classInterface.prototype)
-                    progress.error(errorMsg)
-                  }
+                BABYLON.SceneLoader.LoadAssetContainer('file:', asset.file, scene.babylon.scene, (assetContainer) => {
+                  this.assetContainers.set(scene, assetContainer)
+                  progress.complete()
                 })
                 return progress
               } else {
@@ -244,12 +227,8 @@ export function Mesh(props: MeshProps = {}): any {
         }
 
         unload(scene: SceneInterface): void {
-          const meshSource = this.meshes.get(scene)
-          if (meshSource) {
-            meshSource.parent.dispose()
-            meshSource.geometry?.dispose()
-          }
-          this.meshes.delete(scene)
+          const assetContainer = this.assetContainers.get(scene)
+          assetContainer?.dispose()
         }
 
         spawn(scene: SceneInterface): MeshInterface {

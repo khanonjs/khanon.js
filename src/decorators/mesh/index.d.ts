@@ -8,7 +8,10 @@ import {
 import { FlexId } from '../../types'
 import { SceneInterface } from '../scene'
 
-export interface MeshAnimation extends AnimationBase {}
+export interface MeshAnimation {
+  id: FlexId
+  loop: boolean
+}
 
 export declare abstract class MeshInterface {
   /**
@@ -81,34 +84,13 @@ export declare abstract class MeshInterface {
   setMesh(babylonMesh: BABYLON.Mesh): void
 
   /**
-   * Sets current frame (stops current animation).
-   * @param frame
-   */
-  setFrame(frame: number): void
-
-  /**
-   * Sets the first frame of the sprite or current animation.
-   */
-  setFrameFirst(): void
-
-  /**
-   * Sets the last frame of the sprite or current animation.
-   */
-  setFrameLast(): void
-
-  /**
-   * Adds an animation. Animations can be added from this method, or from Sprite props.
-   * @param animation
-   */
-  addAnimation(animation: MeshAnimation): void
-
-  /**
    * Plays an animation. Animations are defined in the Sprite decorator 'props' or manually using 'MeshAnimation' interface.
+   * Note that meshes have the animations integrated in the '.glb' file, so you can't add an animation manually.
    * @param animation Animation object or ID of a predefined animation
    * @param loopOverride Overrides the animation loop value in case needed
-   * @param completed Completed animation callback
+   * @param completed Completed animation callback. It is called everytime the animation ends, no matter if it is in loop or not.
    */
-  playAnimation(animation: MeshAnimation | FlexId, loopOverride?: boolean, completed?: () => void): void
+  playAnimation(animation: FlexId, loopOverride?: boolean, completed?: () => void): void
 
   /**
    * Stops current animation.
@@ -166,9 +148,9 @@ export interface MeshProps {
   url?: string
 
   /**
-   * Mesh Id to be loaded. If undefined, the first mesh will be loaded.
+   * Animations.
    */
-  meshId?: string
+  animations?: MeshAnimation[]
 
   /**
    * Cache this mesh.

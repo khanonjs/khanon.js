@@ -13,8 +13,9 @@ export abstract class MeshInterface implements DisplayObject {
   abstract props: MeshProps
   abstract loopUpdate$: BABYLON.Observer<number>
   abstract canvasResize$: BABYLON.Observer<Rect>
-  abstract animation: SpriteAnimation | MeshAnimation | null
-  abstract animations: Map<FlexId, SpriteAnimation | MeshAnimation>
+  abstract animation: MeshAnimation | null
+  abstract animations: Map<FlexId, MeshAnimation>
+  abstract addAnimation(animation: MeshAnimation): void
   abstract release(): void
 
   /**
@@ -24,10 +25,6 @@ export abstract class MeshInterface implements DisplayObject {
   abstract get babylon(): Pick<BabylonAccessor, 'mesh' | 'scene'>
   abstract get scene(): SceneInterface
   abstract setEnabled(value: boolean): void
-  abstract setFrame(frame: number): void
-  abstract setFrameFirst(): void
-  abstract setFrameLast(): void
-  abstract addAnimation(animation: SpriteAnimation | MeshAnimation): void
   abstract playAnimation(animation: SpriteAnimation | MeshAnimation | FlexId, loopOverride?: boolean, completed?: () => void): void
   abstract stopAnimation(): void
   abstract subscribeToKeyframe(keyframeId: string, callback: () => void): void

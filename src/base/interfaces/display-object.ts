@@ -9,14 +9,10 @@ export abstract class DisplayObject {
   abstract release(): void
 
   // User anailable
-  abstract setFrame(frame: number): void // 8a8f is it shared? do we need DisplayObject?
-  abstract setFrameFirst(): void
-  abstract setFrameLast(): void
-
   abstract addAnimation(animation: SpriteAnimation | MeshAnimation): void
   abstract playAnimation(animation: SpriteAnimation | MeshAnimation | FlexId, loopOverride?: boolean, completed?: () => void): void
   abstract stopAnimation(): void
 
-  abstract subscribeToKeyframe(keyframeId: string, callback: () => void): void
-  abstract clearKeyframeSubscriptions(keyframeId: string): void
+  abstract subscribeToKeyframe(keyframeId: string, callback: () => void): void // 8a8f this only for sprites?
+  abstract clearKeyframeSubscriptions(keyframeId: string): void // 8a8f this only for sprites?
 }

@@ -111,8 +111,7 @@ export class AssetsController {
                   type: AssetType.MESH,
                   data: {
                     path,
-                    file,
-                    meshId: mesh.props.meshId
+                    file
                   },
                   cached: mesh.props.cached ?? false
                 }]
@@ -146,9 +145,9 @@ export class AssetsController {
           progresses.push(asset.progress)
         } else {
           switch (assetDef.type) {
-          case AssetType.MESH:
+          /* case AssetType.MESH:
             progresses.push(AssetsController.loadMeshFromUrl(assetDef as any, scene))
-            break
+            break */
           default:
             progresses.push(AssetsController.loadFileFromUrl(assetDef, scene))
           }
@@ -200,9 +199,14 @@ export class AssetsController {
       (data) => {
         Logger.debug(`LoadFileFromUrl: Loaded '${definition.url}', cached: ${!!definition.cached}`)
         const buffer = data as ArrayBuffer
-        if (definition.type === AssetType.IMAGE) {
+        switch (definition.type) {
+        case AssetType.IMAGE:
           asset.setObjectURL(buffer)
-        } else {
+          break
+        case AssetType.MESH:
+          asset.setFile(buffer, (definition.data as AssetDataMesh).file)
+          break
+        default:
           asset.setBuffer(buffer)
         }
         asset.progress.complete()
@@ -216,44 +220,6 @@ export class AssetsController {
         throwError(`LoadFileFromUrl: Error loading file '${definition.url}': ${exception}`)
       }
     )
-    return asset.progress
-  }
-
-  private static loadMeshFromUrl(definition: Required<AssetDefinition<AssetDataMesh>>, source: SceneInterface): LoadingProgress {
-    const asset = new Asset(definition, source)
-    AssetsController.assets.set(definition.url, asset)
-    const throwError = (errorMsg: string) => {
-      Logger.error(errorMsg)
-      asset.progress.error(errorMsg)
-      asset.progress.onError.notifyObservers(errorMsg)
-    }
-    BABYLON.SceneLoader.ShowLoadingScreen = false
-    BABYLON.SceneLoader.LoadAsync(definition.data.path, definition.data.file)
-      .then(babylonScene => {
-        Logger.debug(`LoadMeshFromUrl: Loaded '${definition.url}', cached: ${!!definition.cached}`)
-        const rootMesh = definition.data.meshId
-          ? babylonScene.meshes.find(mesh => mesh.id === definition.data.meshId)
-          : babylonScene.meshes[0]
-        if (rootMesh) {
-          rootMesh.id = AssetsController.meshSourcePrefix + (rootMesh.id === '__root__' && rootMesh.getChildren()[0] ? rootMesh.getChildren()[0].id : rootMesh.id) + '-' + AssetsController.uniqueId
-          rootMesh.name = rootMesh.id
-          definition.data.meshId = rootMesh.id
-          BABYLON.SceneSerializer.SerializeAsync(babylonScene)
-            .then(serial => {
-              asset.setSerial(JSON.stringify(serial))
-              setTimeout(() => babylonScene.dispose(), 1) // Lend time to babylon to do its things before being able to dispose.
-              asset.progress.complete()
-            })
-            .catch(error => {
-              throwError(`LoadMeshFromUrl: Error on SerializeAsync '${definition.url}': ${objectToString(error)}`)
-            })
-        } else {
-          throwError(`LoadMeshFromUrl: Mesh not found in '${definition.url}'.}`)
-        }
-      })
-      .catch(error => {
-        throwError(`LoadMeshFromUrl: Error on LoadAsync '${definition.url}': ${objectToString(error)}`)
-      })
     return asset.progress
   }
 }

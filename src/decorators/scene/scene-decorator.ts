@@ -56,6 +56,7 @@ import { MeshConstructor } from '../mesh/mesh-constructor'
 import { MeshInterface } from '../mesh/mesh-interface'
 import { ParticleConstructor } from '../particle/particle-constructor'
 import { ParticleInterface } from '../particle/particle-interface'
+import { SpriteAnimation } from '../sprite/sprite-animation'
 import { SpriteConstructor } from '../sprite/sprite-constructor'
 import { SpriteInterface } from '../sprite/sprite-interface'
 import { SceneActionConstructor } from './scene-action/scene-action-constructor'
@@ -276,17 +277,6 @@ export function Scene(props: SceneProps = {}): any {
         return null as any
       }
 
-      appendMeshFromAsset(asset: Asset<SceneInterface, AssetDataMesh>): LoadingProgress {
-        const progress = new LoadingProgress<BABYLON.Scene>()
-        BABYLON.SceneLoader.AppendAsync(asset.definition.data?.path as any, `data:${asset.serial}`, this.babylon.scene)
-          .then(() => progress.complete())
-          .catch(error => {
-            Logger.error('Scene AppendMeshFromAsset error:', objectToString(error), _class.prototype)
-            progress.error(error)
-          })
-        return progress
-      }
-
       switchState(state: SceneStateConstructor, setup: any): SceneStateInterface {
         if (!this.availableElements.hasSceneState(state)) { Logger.debugError('Trying to set a state non available to the scene. Please check the scene props.', _class.prototype, state.prototype); return null as any }
         const _state = SceneStatesController.get(state).spawn(this)
@@ -298,7 +288,7 @@ export function Scene(props: SceneProps = {}): any {
         return this._state
       }
 
-      setAnimationHandler(sprite: SpriteInterface, animation: AnimationBase): void {
+      setAnimationHandler(sprite: SpriteInterface, animation: SpriteAnimation): void {
         const startMs = Core.getLoopUpdateLastMs()
         const numSprites = animation.frameEnd - animation.frameStart
         const totalTimeMs = numSprites * animation.delay

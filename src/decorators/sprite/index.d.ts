@@ -2,6 +2,7 @@ import * as BABYLON from '@babylonjs/core'
 
 import {
   AnimationBase,
+  AnimationKeyFrame,
   BabylonAccessor,
   Rect
 } from '../../models'
@@ -9,7 +10,28 @@ import { DrawBlockProperties } from '../../models/draw-block-properties'
 import { FlexId } from '../../types'
 import { SceneInterface } from '../scene'
 
-export interface SpriteAnimation extends AnimationBase {}
+export interface SpriteAnimation extends AnimationBase {
+  /**
+   * Frame start of the animation, '0' by default.
+   */
+  frameStart?: number
+
+  /**
+   * Frame end of the animation. It is equivalent to the last frame by default.
+   */
+  frameEnd?: number
+
+  /**
+   * Delay between frames (in milliseconds), '100' by default.
+   * This property is omitted in particles.
+   */
+  delay?: number
+
+  /**
+   * Each Key frame emit an event when the frame/s are reached.
+   */
+  keyFrames?: AnimationKeyFrame[]
+}
 
 export declare abstract class SpriteInterface {
   /**
@@ -176,7 +198,7 @@ export declare interface SpriteProps {
   numFrames?: number
 
   /**
-   * Animations
+   * Animations.
    */
   animations?: SpriteAnimation[]
 
