@@ -136,12 +136,16 @@ export function Mesh(props: MeshProps = {}): any {
           this.babylon.mesh.setEnabled(value)
         }
 
+        setFrame(frame: number) {
+          this.animation?.animationGroup.goToFrame(frame)
+        }
+
         addAnimation(animation: MeshAnimation): void {
           if (this.animations.get(animation.id)) { Logger.debugError(`Trying to add mesh animation '${animation.id}' that has been already added:`, _classInterface.prototype) } // TODO get mesh and scene names
           this.animations.set(animation.id, animation)
         }
 
-        playAnimation(animationId: FlexId, options?: MeshAnimationOptions, completed?: () => void): void {
+        playAnimation(animationId: FlexId, options?: MeshAnimationOptions, completed?: () => void): BABYLON.AnimationGroup {
           if (!this.animations.get(animationId)) { Logger.debugError(`Animation '${animationId}' not found in mesh '${this.props.url}':`, _classInterface.prototype) } // TODO get mesh and scene names
           this.animation = this.animations.get(animationId) as any
           if (this.animation) {
@@ -154,6 +158,9 @@ export function Mesh(props: MeshProps = {}): any {
                 this.animation.animationGroup.onAnimationGroupEndObservable.add(() => completed())
               }
             }
+            return this.animation.animationGroup
+          } else {
+            return null as any
           }
         }
 

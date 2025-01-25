@@ -89,9 +89,10 @@ export declare abstract class MeshInterface {
    * Note that meshes have the animations integrated in the '.glb' file, so you can't add an animation manually.
    * @param animation Animation object or ID of a predefined animation
    * @param loopOverride Overrides the animation loop value in case needed
-   * @param completed Completed animation callback. It is called everytime the animation ends, no matter if it is in loop or not.
+   * @param completed Completed animation callback. It is called everytime the animation ends, no matter if it is in loop or not
+   * @returns BABYLON.AnimationGroup object: https://doc.babylonjs.com/typedoc/classes/BABYLON.AnimationGroup
    */
-  playAnimation(animation: FlexId, options?: MeshAnimationOptions, completed?: () => void): void
+  playAnimation(animation: FlexId, options?: MeshAnimationOptions, completed?: () => void): BABYLON.AnimationGroup
 
   /**
    * Stops current animation.

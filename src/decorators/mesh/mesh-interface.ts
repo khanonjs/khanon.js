@@ -27,7 +27,8 @@ export abstract class MeshInterface implements DisplayObject {
   abstract get scene(): SceneInterface
   abstract setMesh(babylonMesh: BABYLON.Mesh): void
   abstract setEnabled(value: boolean): void
-  abstract playAnimation(animation: SpriteAnimation | MeshAnimation | FlexId, options?: MeshAnimationOptions, completed?: () => void): void
+  abstract setFrame(frame: number): void
+  abstract playAnimation(animation: SpriteAnimation | MeshAnimation | FlexId, options?: MeshAnimationOptions, completed?: () => void): BABYLON.AnimationGroup
   abstract stopAnimation(): void
   abstract subscribeToKeyframe(keyframeId: string, callback: () => void): void // 8a8f
   abstract clearKeyframeSubscriptions(keyframeId: string): void // 8a8f
