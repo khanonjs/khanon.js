@@ -31,6 +31,7 @@ import { SceneStateInterface } from '../scene/scene-state/scene-state-interface'
 import { MeshAnimation } from './mesh-animation'
 import { MeshCore } from './mesh-core'
 import { MeshInterface } from './mesh-interface'
+import { MeshMetadata } from './mesh-metadata'
 import { MeshProps } from './mesh-props'
 import { MeshSource } from './mesh-source'
 
@@ -189,9 +190,11 @@ export function Mesh(props: MeshProps = {}): any {
                 scene.appendMeshFromAsset(asset).onComplete.add(() => {
                   // If several meshes of same 'url' have been created in the same scene, they will be picked as a queue of the enabled ones.
                   // Search enabled meshes to avoid picking a mesh with same Id that has been already picked up.
-                  const mesh = scene.babylon.scene.meshes.find(_mesh => _mesh.id === asset.definition.data?.meshId as any && _mesh.isEnabled()) as BABYLON.Mesh
+                  const mesh = scene.babylon.scene.meshes.find(_mesh =>
+                    _mesh.id === asset.definition.data?.meshId as any && _mesh.isEnabled() &&
+                    !_mesh.metadata?.stored) as BABYLON.Mesh
                   if (mesh) {
-                    mesh.setEnabled(false)
+                    mesh.metadata = { stored: false } as MeshMetadata
                     if (this.props.cloneByInstances && !mesh.geometry) {
                       let childGeometryMesh: BABYLON.Mesh | undefined
                       mesh.getChildMeshes().forEach(_mesh => {
@@ -204,6 +207,8 @@ export function Mesh(props: MeshProps = {}): any {
                         childGeometryMesh.name = childGeometryMesh.id
                         childGeometryMesh.setParent(null)
                         childGeometryMesh.setEnabled(false)
+                        mesh.setEnabled(true)
+                        mesh.metadata = { stored: true } as MeshMetadata
                         this.meshes.set(scene, {
                           instantiate: true,
                           parent: mesh,
@@ -213,6 +218,8 @@ export function Mesh(props: MeshProps = {}): any {
                         Logger.error(`No geometry mesh found on file '${this.props.url}' to clone by instance:`, _classInterface.prototype)
                       }
                     } else {
+                      mesh.setEnabled(false)
+                      mesh.metadata = { stored: true } as MeshMetadata
                       this.meshes.set(scene, {
                         instantiate: false,
                         parent: mesh
@@ -237,7 +244,11 @@ export function Mesh(props: MeshProps = {}): any {
         }
 
         unload(scene: SceneInterface): void {
-          this.meshes.get(scene)?.parent.dispose()
+          const meshSource = this.meshes.get(scene)
+          if (meshSource) {
+            meshSource.parent.dispose()
+            meshSource.geometry?.dispose()
+          }
           this.meshes.delete(scene)
         }
 
