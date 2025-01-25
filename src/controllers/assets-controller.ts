@@ -241,7 +241,7 @@ export class AssetsController {
           BABYLON.SceneSerializer.SerializeAsync(babylonScene)
             .then(serial => {
               asset.setSerial(JSON.stringify(serial))
-              setTimeout(() => babylonScene.dispose(), 1) // Lend time to babylon to do its things
+              setTimeout(() => babylonScene.dispose(), 1) // Lend time to babylon to do its things before being able to dispose.
               asset.progress.complete()
             })
             .catch(error => {

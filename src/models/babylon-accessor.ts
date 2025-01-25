@@ -2,7 +2,7 @@ import * as BABYLON from '@babylonjs/core'
 
 export interface BabylonAccessor<
     C extends BABYLON.Camera = BABYLON.Camera,
-    M extends BABYLON.Mesh = BABYLON.Mesh,
+    M extends BABYLON.AbstractMesh = BABYLON.AbstractMesh,
     N extends BABYLON.Material = BABYLON.Material
   > {
   camera: C

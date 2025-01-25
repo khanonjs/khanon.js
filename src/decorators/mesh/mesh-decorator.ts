@@ -32,6 +32,7 @@ import { MeshAnimation } from './mesh-animation'
 import { MeshCore } from './mesh-core'
 import { MeshInterface } from './mesh-interface'
 import { MeshProps } from './mesh-props'
+import { MeshSource } from './mesh-source'
 
 export function Mesh(props: MeshProps = {}): any {
   return function <T extends { new (...args: any[]): MeshInterface }>(constructorOrTarget: (T & MeshInterface) | any, contextOrProperty: ClassDecoratorContext | string, descriptor: PropertyDescriptor) {
@@ -43,12 +44,21 @@ export function Mesh(props: MeshProps = {}): any {
           if (scene) {
             this.babylon.scene = this.scene.babylon.scene
             if (this.props.url) {
-              const mesh = core.meshes.get(scene)
-              if (!mesh) { Logger.debugError('Mesh not found for scene in mesh constructor:', _classInterface.prototype, scene.constructor.name) } // TODO get mesh and scene names
-              const newMesh = this.props.cloneByInstances
-                ? mesh?.createInstance('Mesh - ' + mesh.name.slice(AssetsController.meshSourcePrefix.length))
-                : mesh?.clone('Mesh - ' + mesh.name.slice(AssetsController.meshSourcePrefix.length), null)
-              this.setMesh(newMesh as any)
+              const meshLoadedData = core.meshes.get(scene)
+              if (!meshLoadedData) { Logger.debugError(`Mesh '${this.props.url}' not found for scene in mesh constructor:`, _classInterface.prototype, scene.constructor.name) } // TODO get mesh and scene names
+              if (meshLoadedData) {
+                if (meshLoadedData.instantiate && meshLoadedData.geometry) {
+                  const instance = meshLoadedData.geometry.createInstance(meshLoadedData.parent.name + ' (Instance)')
+                  instance.setParent(meshLoadedData.parent)
+                  this.setMesh(instance)
+                  if (!meshLoadedData.parent.isEnabled()) {
+                    meshLoadedData.parent.setEnabled(true)
+                  }
+                } else {
+                  const parent = meshLoadedData.parent.clone('Mesh - ' + meshLoadedData.parent.name.slice(AssetsController.meshSourcePrefix.length), null)
+                  this.setMesh(parent)
+                }
+              }
             }
             attachLoopUpdate(this)
             attachCanvasResize(this)
@@ -99,7 +109,7 @@ export function Mesh(props: MeshProps = {}): any {
         setPositionWithLocalVector(vector3: BABYLON.Vector3): BABYLON.TransformNode { return this.babylon.mesh.setPositionWithLocalVector(vector3) }
         translate(axis: BABYLON.Vector3, distance: number, space?: BABYLON.Space): BABYLON.TransformNode { return this.babylon.mesh.translate(axis, distance, space) }
 
-        setMesh(babylonMesh: BABYLON.Mesh): void {
+        setMesh(babylonMesh: BABYLON.Mesh | BABYLON.InstancedMesh): void {
           if (this.babylon.mesh) {
             this.release()
           }
@@ -166,7 +176,7 @@ export function Mesh(props: MeshProps = {}): any {
       const _classCore = class implements MeshCore {
         props = props
         Instance: MeshInterface = new _classInterface(null as any, null as any)
-        meshes: Map<SceneInterface, BABYLON.Mesh> = new Map<SceneInterface, BABYLON.Mesh>()
+        meshes: Map<SceneInterface, MeshSource> = new Map<SceneInterface, MeshSource>()
 
         load(scene: SceneInterface): LoadingProgress {
           if (this.meshes.get(scene)) {
@@ -179,25 +189,35 @@ export function Mesh(props: MeshProps = {}): any {
                 scene.appendMeshFromAsset(asset).onComplete.add(() => {
                   // If several meshes of same 'url' have been created in the same scene, they will be picked as a queue of the enabled ones.
                   // Search enabled meshes to avoid picking a mesh with same Id that has been already picked up.
-                  let mesh = scene.babylon.scene.meshes.find(_mesh => _mesh.id === asset.definition.data?.meshId as any && _mesh.isEnabled()) as BABYLON.Mesh
+                  const mesh = scene.babylon.scene.meshes.find(_mesh => _mesh.id === asset.definition.data?.meshId as any && _mesh.isEnabled()) as BABYLON.Mesh
                   if (mesh) {
-                    mesh.setEnabled(false) // setEnabled must go here, '__root__' node is the one to disable.
+                    mesh.setEnabled(false)
                     if (this.props.cloneByInstances && !mesh.geometry) {
-                      let nextGeometryMesh: BABYLON.Mesh | undefined
+                      let childGeometryMesh: BABYLON.Mesh | undefined
                       mesh.getChildMeshes().forEach(_mesh => {
-                        if ((_mesh as BABYLON.Mesh).geometry && !nextGeometryMesh) {
-                          nextGeometryMesh = _mesh as BABYLON.Mesh
+                        if ((_mesh as BABYLON.Mesh).geometry && !childGeometryMesh) {
+                          childGeometryMesh = _mesh as BABYLON.Mesh
                         }
                       })
-                      if (nextGeometryMesh) {
-                        nextGeometryMesh.id = mesh.id + ' (Instance)'
-                        nextGeometryMesh.name = nextGeometryMesh.id
-                        mesh = nextGeometryMesh
+                      if (childGeometryMesh) {
+                        childGeometryMesh.id = mesh.id + ' (Geometry)'
+                        childGeometryMesh.name = childGeometryMesh.id
+                        childGeometryMesh.setParent(null)
+                        childGeometryMesh.setEnabled(false)
+                        this.meshes.set(scene, {
+                          instantiate: true,
+                          parent: mesh,
+                          geometry: childGeometryMesh
+                        })
                       } else {
-                        Logger.error(`Not geometry mesh found to clone by instance on file '${this.props.url}'`, _classInterface.prototype)
+                        Logger.error(`No geometry mesh found on file '${this.props.url}' to clone by instance:`, _classInterface.prototype)
                       }
+                    } else {
+                      this.meshes.set(scene, {
+                        instantiate: false,
+                        parent: mesh
+                      })
                     }
-                    this.meshes.set(scene, mesh)
                     progress.complete()
                   } else {
                     const errorMsg = `Mesh '${asset.definition.data?.meshId}' not found on file '${this.props.url}'`
@@ -217,7 +237,7 @@ export function Mesh(props: MeshProps = {}): any {
         }
 
         unload(scene: SceneInterface): void {
-          this.meshes.get(scene)?.dispose()
+          this.meshes.get(scene)?.parent.dispose()
           this.meshes.delete(scene)
         }
 

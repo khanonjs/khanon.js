@@ -9,7 +9,7 @@ export abstract class DisplayObject {
   abstract release(): void
 
   // User anailable
-  abstract setFrame(frame: number): void
+  abstract setFrame(frame: number): void // 8a8f is it shared? do we need DisplayObject?
   abstract setFrameFirst(): void
   abstract setFrameLast(): void
 
