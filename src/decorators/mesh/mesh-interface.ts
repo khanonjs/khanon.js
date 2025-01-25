@@ -24,12 +24,12 @@ export abstract class MeshInterface implements DisplayObject {
   abstract loopUpdate: boolean
   abstract get babylon(): Pick<BabylonAccessor, 'mesh' | 'scene'>
   abstract get scene(): SceneInterface
+  abstract setMesh(babylonMesh: BABYLON.Mesh): void
   abstract setEnabled(value: boolean): void
   abstract playAnimation(animation: SpriteAnimation | MeshAnimation | FlexId, loopOverride?: boolean, completed?: () => void): void
   abstract stopAnimation(): void
-  abstract subscribeToKeyframe(keyframeId: string, callback: () => void): void
-  abstract clearKeyframeSubscriptions(keyframeId: string): void
-  abstract setMesh(babylonMesh: BABYLON.Mesh): void
+  abstract subscribeToKeyframe(keyframeId: string, callback: () => void): void // 8a8f
+  abstract clearKeyframeSubscriptions(keyframeId: string): void // 8a8f
   abstract destroy(): void
 
   /**

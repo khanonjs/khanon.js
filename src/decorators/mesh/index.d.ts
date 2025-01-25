@@ -102,13 +102,13 @@ export declare abstract class MeshInterface {
    * @param keyframeId
    * @param callback
    */
-  subscribeToKeyframe(keyframeId: string, callback: () => void): void
+  subscribeToKeyframe(keyframeId: string, callback: () => void): void // 8a8f
 
   /**
    * Clears all subscriptions to a keyframe.
    * @param keyframeId
    */
-  clearKeyframeSubscriptions(keyframeId: string): void
+  clearKeyframeSubscriptions(keyframeId: string): void // 8a8f
 
   /**
    * Removes the mesh from the scene.

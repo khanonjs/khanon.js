@@ -5,8 +5,6 @@ import '@babylonjs/core/Debug/debugLayer'
 import * as BABYLON from '@babylonjs/core'
 
 import {
-  Asset,
-  AssetDataMesh,
   AssetDefinition,
   LoadingProgress
 } from '../../base'
@@ -27,7 +25,6 @@ import {
   SpritesController
 } from '../../controllers'
 import KJS from '../../kjs/kjs'
-import { AnimationBase } from '../../models/animation-base'
 import { BabylonAccessor } from '../../models/babylon-accessor'
 import { Rect } from '../../models/rect'
 import { Logger } from '../../modules/logger'
@@ -38,7 +35,6 @@ import {
   attachLoopUpdate,
   invokeCallback,
   isPrototypeOf,
-  objectToString,
   removeArrayDuplicitiesInObject,
   removeCanvasResize,
   removeLoopUpdate,

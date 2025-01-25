@@ -1,7 +1,6 @@
 import * as BABYLON from '@babylonjs/core'
 
 import {
-  Asset,
   AssetDefinition,
   CanvasResizable,
   Loadable,
@@ -10,7 +9,6 @@ import {
   Notificable
 } from '../../base'
 import { Metadata } from '../../base/interfaces/metadata/metadata'
-import { AnimationBase } from '../../models/animation-base'
 import { BabylonAccessor } from '../../models/babylon-accessor'
 import { Rect } from '../../models/rect'
 import { FlexId } from '../../types/flex-id'
@@ -61,7 +59,7 @@ export abstract class SceneInterface implements Loadable, LoopUpdatable, CanvasR
   abstract stopAnimationHandler(sprite: SpriteInterface): void
   abstract startRenderObservable(): void
   abstract stopRenderObservable(): void
-  abstract useBabylonSceneFromAsset(): LoadingProgress // TODO use for BabylonSceneMap
+  abstract useBabylonSceneFromAsset(): LoadingProgress // 8a8f use for BabylonSceneMap?
   abstract useDebugInspector(): void
   abstract denyDebugInspector(): void
 

@@ -135,18 +135,6 @@ export function Mesh(props: MeshProps = {}): any {
           this.babylon.mesh.setEnabled(value)
         }
 
-        setFrame(frame: number): void {
-        // TODO
-        }
-
-        setFrameFirst(): void {
-        // TODO
-        }
-
-        setFrameLast(): void {
-        // TODO
-        }
-
         addAnimation(animation: MeshAnimation): void {
           if (this.animations.get(animation.id)) { Logger.debugError(`Trying to add mesh animation '${animation.id}' that has been already added:`, _classInterface.prototype) } // TODO get mesh and scene names
           this.animations.set(animation.id, animation)
