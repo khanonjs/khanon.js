@@ -29,6 +29,7 @@ import { SceneActionInterface } from '../scene/scene-action/scene-action-interfa
 import { SceneInterface } from '../scene/scene-interface'
 import { SceneStateInterface } from '../scene/scene-state/scene-state-interface'
 import { MeshAnimation } from './mesh-animation'
+import { MeshAnimationOptions } from './mesh-animation-options'
 import { MeshCore } from './mesh-core'
 import { MeshInterface } from './mesh-interface'
 import { MeshProps } from './mesh-props'
@@ -140,14 +141,14 @@ export function Mesh(props: MeshProps = {}): any {
           this.animations.set(animation.id, animation)
         }
 
-        playAnimation(animationId: FlexId, loopOverride?: boolean, completed?: () => void): void {
+        playAnimation(animationId: FlexId, options?: MeshAnimationOptions, completed?: () => void): void {
           if (!this.animations.get(animationId)) { Logger.debugError(`Animation '${animationId}' not found in mesh '${this.props.url}':`, _classInterface.prototype) } // TODO get mesh and scene names
           this.animation = this.animations.get(animationId) as any
           if (this.animation) {
-            this.animation.animationGroup.start()
-            this.animation.animationGroup.loopAnimation = (loopOverride !== undefined ? loopOverride : this.animation.loop) ?? false
+            const loop = (options?.loop !== undefined ? options.loop : this.animation.loop) ?? false
+            this.animation.animationGroup.start(loop, options?.speedRatio, options?.from, options?.to, options?.isAdditive)
             if (completed) {
-              if (this.animation.animationGroup.loopAnimation) {
+              if (loop) {
                 this.animation.animationGroup.onAnimationGroupLoopObservable.add(() => completed())
               } else {
                 this.animation.animationGroup.onAnimationGroupEndObservable.add(() => completed())

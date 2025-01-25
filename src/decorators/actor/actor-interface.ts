@@ -14,11 +14,13 @@ import {
 } from '../../types'
 import { FlexId } from '../../types/flex-id'
 import { MeshAnimation } from '../mesh/mesh-animation'
+import { MeshAnimationOptions } from '../mesh/mesh-animation-options'
 import { MeshInterface } from '../mesh/mesh-interface'
 import { ParticleConstructor } from '../particle/particle-constructor'
 import { ParticleInterface } from '../particle/particle-interface'
 import { SceneInterface } from '../scene/scene-interface'
 import { SpriteAnimation } from '../sprite/sprite-animation'
+import { SpriteAnimationOptions } from '../sprite/sprite-animatrion-options'
 import { SpriteInterface } from '../sprite/sprite-interface'
 import { ActorActionConstructor } from './actor-action/actor-action-constructor'
 import { ActorActionInterface } from './actor-action/actor-action-interface'
@@ -66,7 +68,7 @@ export abstract class ActorInterface<B extends SpriteInterface | MeshInterface =
   abstract clearNodes(): void
   abstract switchState(state: ActorStateConstructor, setup: any): ActorStateInterface
   abstract setEnabled(value: boolean): void
-  abstract playAnimation(animation: (B extends SpriteInterface ? SpriteAnimation : MeshAnimation) | FlexId, loopOverride?: boolean, completed?: () => void): void // TODO system to animate body and nodes all together somehow
+  abstract playAnimation(animation: (B extends SpriteInterface ? SpriteAnimation : MeshAnimation) | FlexId, options?: (B extends SpriteInterface ? SpriteAnimationOptions : MeshAnimationOptions), completed?: () => void): void // TODO system to animate body and nodes all together somehow
   abstract stopAnimation(): void
   // abstract setAnimation(): void // TODO system to animate body and nodes all together somehow
   abstract playAction(action: ActorActionConstructor | ((delta: number) => void), setup: any): ActorActionInterface

@@ -28,12 +28,14 @@ import {
   switchLoopUpdate
 } from '../../utils/utils'
 import { MeshAnimation } from '../mesh/mesh-animation'
+import { MeshAnimationOptions } from '../mesh/mesh-animation-options'
 import { MeshConstructor } from '../mesh/mesh-constructor'
 import { MeshInterface } from '../mesh/mesh-interface'
 import { ParticleConstructor } from '../particle/particle-constructor'
 import { ParticleInterface } from '../particle/particle-interface'
 import { SceneInterface } from '../scene/scene-interface'
 import { SpriteAnimation } from '../sprite/sprite-animation'
+import { SpriteAnimationOptions } from '../sprite/sprite-animatrion-options'
 import { SpriteConstructor } from '../sprite/sprite-constructor'
 import { SpriteInterface } from '../sprite/sprite-interface'
 import { ActorActionConstructor } from './actor-action/actor-action-constructor'
@@ -230,8 +232,8 @@ export function Actor(props: ActorProps = {}): any {
         return this._state
       }
 
-      playAnimation(animation: SpriteAnimation | MeshAnimation | FlexId, loopOverride?: boolean, completed?: () => void): void {
-        this.body?.playAnimation(animation, loopOverride, completed)
+      playAnimation(animation: SpriteAnimation | MeshAnimation | FlexId, options?: SpriteAnimationOptions | MeshAnimationOptions, completed?: () => void): void {
+        this.body?.playAnimation(animation, options, completed)
       }
 
       stopAnimation(): void {

@@ -31,6 +31,7 @@ import { SceneActionInterface } from '../scene/scene-action/scene-action-interfa
 import { SceneInterface } from '../scene/scene-interface'
 import { SceneStateInterface } from '../scene/scene-state/scene-state-interface'
 import { SpriteAnimation } from './sprite-animation'
+import { SpriteAnimationOptions } from './sprite-animatrion-options'
 import { SpriteCore } from './sprite-core'
 import { SpriteInterface } from './sprite-interface'
 import { SpriteMesh } from './sprite-mesh'
@@ -180,7 +181,7 @@ export function Sprite(props: SpriteProps): any {
           this.animations.set(animation.id, animation)
         }
 
-        playAnimation(animation: SpriteAnimation | FlexId, loopOverride?: boolean, completed?: () => void): void {
+        playAnimation(animation: SpriteAnimation | FlexId, options?: SpriteAnimationOptions, completed?: () => void): void {
           if (isFlexId(animation)) {
             if (!this.animations.get(animation as FlexId)) { Logger.debugError(`Animation '${animation}' doesn't exist in sprite:`, _classInterface.prototype); return }
             animation = this.animations.get(animation as FlexId) as SpriteAnimation
@@ -189,7 +190,7 @@ export function Sprite(props: SpriteProps): any {
           const frameStart = this.getFirstFrame()
           const frameEnd = this.getLastFrame()
           const delay = this.animation.delay
-          const loop = loopOverride ?? this.animation.loop
+          const loop = options?.loop ?? this.animation.loop
           const keyFrames = this.animation.keyFrames
 
           this.visible = true

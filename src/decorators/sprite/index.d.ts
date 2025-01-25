@@ -9,6 +9,7 @@ import {
 import { DrawBlockProperties } from '../../models/draw-block-properties'
 import { FlexId } from '../../types'
 import { SceneInterface } from '../scene'
+import { SpriteAnimationOptions } from './sprite-animatrion-options'
 
 export interface SpriteAnimation extends AnimationBase {
   /**
@@ -23,7 +24,7 @@ export interface SpriteAnimation extends AnimationBase {
 
   /**
    * Delay between frames (in milliseconds), '100' by default.
-   * This property is omitted in particles.
+   * This property is ignored in particles.
    */
   delay?: number
 
@@ -118,7 +119,7 @@ export declare abstract class SpriteInterface {
    * @param loopOverride Overrides the animation loop value in case needed
    * @param completed Completed animation callback
    */
-  playAnimation(animation: SpriteAnimation | FlexId, loopOverride?: boolean, completed?: () => void): void
+  playAnimation(animation: SpriteAnimation | FlexId, options?: SpriteAnimationOptions, completed?: () => void): void
 
   /**
    * Stops current animation.

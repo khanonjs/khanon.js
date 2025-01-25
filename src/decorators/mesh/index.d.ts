@@ -7,6 +7,7 @@ import {
 } from '../../models'
 import { FlexId } from '../../types'
 import { SceneInterface } from '../scene'
+import { MeshAnimationOptions } from './mesh-animation-options'
 
 export interface MeshAnimation {
   id: FlexId
@@ -90,7 +91,7 @@ export declare abstract class MeshInterface {
    * @param loopOverride Overrides the animation loop value in case needed
    * @param completed Completed animation callback. It is called everytime the animation ends, no matter if it is in loop or not.
    */
-  playAnimation(animation: FlexId, loopOverride?: boolean, completed?: () => void): void
+  playAnimation(animation: FlexId, options?: MeshAnimationOptions, completed?: () => void): void
 
   /**
    * Stops current animation.

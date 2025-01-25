@@ -8,6 +8,7 @@ import { FlexId } from '../../types/flex-id'
 import { MeshAnimation } from '../mesh/mesh-animation'
 import { SceneInterface } from '../scene/scene-interface'
 import { SpriteAnimation } from './sprite-animation'
+import { SpriteAnimationOptions } from './sprite-animatrion-options'
 import { SpriteMesh } from './sprite-mesh'
 import { SpriteProps } from './sprite-props'
 
@@ -35,7 +36,7 @@ export abstract class SpriteInterface implements DisplayObject {
   abstract setFrameFirst(): void
   abstract setFrameLast(): void
   abstract addAnimation(animation: SpriteAnimation | MeshAnimation): void
-  abstract playAnimation(animation: SpriteAnimation | MeshAnimation | FlexId, loopOverride?: boolean, completed?: () => void): void
+  abstract playAnimation(animation: SpriteAnimation | MeshAnimation | FlexId, options?: SpriteAnimationOptions, completed?: () => void): void
   abstract stopAnimation(): void
   abstract subscribeToKeyframe(keyframeId: string, callback: () => void): void
   abstract clearKeyframeSubscriptions(keyframeId: string): void
