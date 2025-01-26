@@ -326,6 +326,7 @@ export interface SceneProps {
 
   /**
    * Maps to use in this scene.
+   * Work in progress, this feature will be implemented further.
    */
   maps?: SceneMapConstructor[]
 

@@ -50,7 +50,7 @@ export function Mesh(props: MeshProps = {}): any {
                 const entries = assetContainer.instantiateModelsToScene((name) => name, undefined, {
                   doNotInstantiate: !this.props.cloneByInstances
                 })
-                this.props.animations?.forEach(animation => { // TODO Could this be done in Core to improve performance?
+                this.props.animations?.forEach(animation => {
                   const animationGroup = entries.animationGroups.find(animationGroup => animation.id === animationGroup.name)
                   if (animationGroup) {
                     const definedAnim = this.props.animations?.find(_anim => _anim.id === animationGroup.name)
@@ -141,47 +141,47 @@ export function Mesh(props: MeshProps = {}): any {
           this.animation?.animationGroup.goToFrame(frame)
         }
 
+        animationCreateEvent(aniGroup: BABYLON.AnimationGroup): BABYLON.Animation {
+          const eventAni = aniGroup.targetedAnimations[0].animation.clone()
+          eventAni.name = `Keyframes - ${aniGroup.name}`
+          const tmpTarget = this.animationCreateTemporalTarget(eventAni)
+          aniGroup.addTargetedAnimation(eventAni, {
+            name: 'events',
+            ...tmpTarget
+          })
+          return eventAni
+        }
+
+        animationCreateTemporalTarget(ani: BABYLON.Animation) {
+          switch (ani.dataType) {
+          case BABYLON.Animation.ANIMATIONTYPE_COLOR3:
+            return { [ani.targetPropertyPath[0]]: BABYLON.Color3.White() }
+          case BABYLON.Animation.ANIMATIONTYPE_COLOR4:
+            return { [ani.targetPropertyPath[0]]: BABYLON.Color4.FromInts(0, 0, 0, 0) }
+          case BABYLON.Animation.ANIMATIONTYPE_FLOAT:
+            return { [ani.targetPropertyPath[0]]: 0 }
+          case BABYLON.Animation.ANIMATIONTYPE_MATRIX:
+            return { [ani.targetPropertyPath[0]]: BABYLON.Matrix.Zero() }
+          case BABYLON.Animation.ANIMATIONTYPE_QUATERNION:
+            return { [ani.targetPropertyPath[0]]: BABYLON.Quaternion.Zero() }
+          case BABYLON.Animation.ANIMATIONTYPE_SIZE:
+            return { [ani.targetPropertyPath[0]]: BABYLON.Vector3.Zero() }
+          case BABYLON.Animation.ANIMATIONTYPE_VECTOR2:
+            return { [ani.targetPropertyPath[0]]: BABYLON.Vector2.Zero() }
+          case BABYLON.Animation.ANIMATIONTYPE_VECTOR3:
+            return { [ani.targetPropertyPath[0]]: BABYLON.Vector3.Zero() }
+          default:
+            return {}
+          }
+        }
+
         addAnimation(animation: MeshAnimation): void {
           if (this.animations.get(animation.id)) { Logger.debugError(`Trying to add mesh animation '${animation.id}' that has been already added:`, _classInterface.prototype) } // TODO get mesh and scene names
           if (animation?.keyFrames && animation.keyFrames.length > 0) {
             animation.keyFrames.forEach(keyFrame => {
               keyFrame.frames.forEach(frame => {
-                const createEventAni = (aniGroup: BABYLON.AnimationGroup): BABYLON.Animation => {
-                  const eventAni = aniGroup.targetedAnimations[0].animation.clone()
-                  eventAni.name = `Keyframes - ${aniGroup.name}`
-                  const tmpTarget = createTmpTarget(eventAni)
-                  aniGroup.addTargetedAnimation(eventAni, {
-                    name: 'events',
-                    ...tmpTarget
-                  })
-                  return eventAni
-                }
-                const createTmpTarget = (ani: BABYLON.Animation) => {
-                  switch (ani.dataType) {
-                  case BABYLON.Animation.ANIMATIONTYPE_COLOR3:
-                    return { [ani.targetPropertyPath[0]]: BABYLON.Color3.White() }
-                  case BABYLON.Animation.ANIMATIONTYPE_COLOR4:
-                    return {
-                      [ani.targetPropertyPath[0]]: BABYLON.Color4.FromInts(0, 0, 0, 0)
-                    }
-                  case BABYLON.Animation.ANIMATIONTYPE_FLOAT:
-                    return { [ani.targetPropertyPath[0]]: 0 }
-                  case BABYLON.Animation.ANIMATIONTYPE_MATRIX:
-                    return { [ani.targetPropertyPath[0]]: BABYLON.Matrix.Zero() }
-                  case BABYLON.Animation.ANIMATIONTYPE_QUATERNION:
-                    return { [ani.targetPropertyPath[0]]: BABYLON.Quaternion.Zero() }
-                  case BABYLON.Animation.ANIMATIONTYPE_SIZE:
-                    return { [ani.targetPropertyPath[0]]: BABYLON.Vector3.Zero() }
-                  case BABYLON.Animation.ANIMATIONTYPE_VECTOR2:
-                    return { [ani.targetPropertyPath[0]]: BABYLON.Vector2.Zero() }
-                  case BABYLON.Animation.ANIMATIONTYPE_VECTOR3:
-                    return { [ani.targetPropertyPath[0]]: BABYLON.Vector3.Zero() }
-                  default:
-                    return {}
-                  }
-                }
                 keyFrame.emitter = new BABYLON.Observable<void>()
-                const eventAni = createEventAni(animation.animationGroup)
+                const eventAni = this.animationCreateEvent(animation.animationGroup)
                 const aniEvent = new BABYLON.AnimationEvent(frame, () => keyFrame.emitter.notifyObservers())
                 eventAni.addEvent(aniEvent)
               })
