@@ -50,7 +50,7 @@ export function Mesh(props: MeshProps = {}): any {
                 const entries = assetContainer.instantiateModelsToScene((name) => name, undefined, {
                   doNotInstantiate: !this.props.cloneByInstances
                 })
-                this.props.animations?.forEach(animation => {
+                this.props.animations?.forEach(animation => { // TODO Could this be done in Core to improve performance?
                   const animationGroup = entries.animationGroups.find(animationGroup => animation.id === animationGroup.name)
                   if (animationGroup) {
                     const definedAnim = this.props.animations?.find(_anim => _anim.id === animationGroup.name)
@@ -58,7 +58,8 @@ export function Mesh(props: MeshProps = {}): any {
                       this.addAnimation({
                         id: animationGroup.name,
                         animationGroup,
-                        loop: animation.loop
+                        loop: animation.loop,
+                        keyFrames: animation.keyFrames
                       })
                     }
                   } else {
@@ -142,6 +143,50 @@ export function Mesh(props: MeshProps = {}): any {
 
         addAnimation(animation: MeshAnimation): void {
           if (this.animations.get(animation.id)) { Logger.debugError(`Trying to add mesh animation '${animation.id}' that has been already added:`, _classInterface.prototype) } // TODO get mesh and scene names
+          if (animation?.keyFrames && animation.keyFrames.length > 0) {
+            animation.keyFrames.forEach(keyFrame => {
+              keyFrame.frames.forEach(frame => {
+                const createEventAni = (aniGroup: BABYLON.AnimationGroup): BABYLON.Animation => {
+                  const eventAni = aniGroup.targetedAnimations[0].animation.clone()
+                  eventAni.name = `Keyframes - ${aniGroup.name}`
+                  const tmpTarget = createTmpTarget(eventAni)
+                  aniGroup.addTargetedAnimation(eventAni, {
+                    name: 'events',
+                    ...tmpTarget
+                  })
+                  return eventAni
+                }
+                const createTmpTarget = (ani: BABYLON.Animation) => {
+                  switch (ani.dataType) {
+                  case BABYLON.Animation.ANIMATIONTYPE_COLOR3:
+                    return { [ani.targetPropertyPath[0]]: BABYLON.Color3.White() }
+                  case BABYLON.Animation.ANIMATIONTYPE_COLOR4:
+                    return {
+                      [ani.targetPropertyPath[0]]: BABYLON.Color4.FromInts(0, 0, 0, 0)
+                    }
+                  case BABYLON.Animation.ANIMATIONTYPE_FLOAT:
+                    return { [ani.targetPropertyPath[0]]: 0 }
+                  case BABYLON.Animation.ANIMATIONTYPE_MATRIX:
+                    return { [ani.targetPropertyPath[0]]: BABYLON.Matrix.Zero() }
+                  case BABYLON.Animation.ANIMATIONTYPE_QUATERNION:
+                    return { [ani.targetPropertyPath[0]]: BABYLON.Quaternion.Zero() }
+                  case BABYLON.Animation.ANIMATIONTYPE_SIZE:
+                    return { [ani.targetPropertyPath[0]]: BABYLON.Vector3.Zero() }
+                  case BABYLON.Animation.ANIMATIONTYPE_VECTOR2:
+                    return { [ani.targetPropertyPath[0]]: BABYLON.Vector2.Zero() }
+                  case BABYLON.Animation.ANIMATIONTYPE_VECTOR3:
+                    return { [ani.targetPropertyPath[0]]: BABYLON.Vector3.Zero() }
+                  default:
+                    return {}
+                  }
+                }
+                keyFrame.emitter = new BABYLON.Observable<void>()
+                const eventAni = createEventAni(animation.animationGroup)
+                const aniEvent = new BABYLON.AnimationEvent(frame, () => keyFrame.emitter.notifyObservers())
+                eventAni.addEvent(aniEvent)
+              })
+            })
+          }
           this.animations.set(animation.id, animation)
         }
 
@@ -158,9 +203,6 @@ export function Mesh(props: MeshProps = {}): any {
                 this.animation.animationGroup.onAnimationGroupEndObservable.add(() => completed())
               }
             }
-            Logger.trace('aki animations A', this.animation.animationGroup.name)
-            Logger.trace('aki animations B', this.animation.animationGroup.from)
-            Logger.trace('aki animations C', this.animation.animationGroup.to)
             return this.animation.animationGroup
           } else {
             return null as any
@@ -176,13 +218,21 @@ export function Mesh(props: MeshProps = {}): any {
           }
         }
 
-        subscribeToKeyframe(keyframeId: string, callback: () => void): BABYLON.Observer<void>[] {
-        // 8a8f
-          return null as any
+        subscribeToKeyframe(keyframeId: FlexId, callback: () => void): BABYLON.Observer<void>[] {
+          const observers: BABYLON.Observer<void>[] = []
+          this.animations.forEach(animation => {
+            animation.keyFrames?.filter(keyframe => keyframe.id === keyframeId)
+              .forEach(keyframe => observers.push(keyframe.emitter.add(callback)))
+          })
+          return observers
         }
 
-        clearKeyframeSubscriptions(keyframeId: string): void {
-        // 8a8f
+        clearKeyframeSubscriptions(keyframeId: FlexId): void {
+          this.animations.forEach(animation => {
+            animation.keyFrames
+              ?.filter(keyframe => keyframe.id === keyframeId)
+              .forEach(keyframe => keyframe.emitter.clear())
+          })
         }
 
         release(): void {

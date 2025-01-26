@@ -4,6 +4,7 @@ import { DisplayObject } from '../../base'
 import { BabylonAccessor } from '../../models/babylon-accessor'
 import { DrawBlockProperties } from '../../models/draw-block-properties'
 import { Rect } from '../../models/rect'
+import { Timeout } from '../../models/timeout'
 import { FlexId } from '../../types/flex-id'
 import { MeshAnimation } from '../mesh/mesh-animation'
 import { SceneInterface } from '../scene/scene-interface'
@@ -27,6 +28,9 @@ export abstract class SpriteInterface implements DisplayObject {
    */
   abstract animation: SpriteAnimation | null
   abstract animations: Map<FlexId, SpriteAnimation>
+  abstract keyFramesTimeouts: Timeout[]
+  abstract removeAnimationKeyFrames(): void
+  abstract removeEndAnimationTimer(): void
   abstract release(): void
 
   /**

@@ -251,6 +251,22 @@ export function Sprite(props: SpriteProps): any {
           })
         }
 
+        removeAnimationKeyFrames(): void {
+          this.keyFramesTimeouts.forEach((timeout) => Core.clearTimeout(timeout))
+          this.keyFramesTimeouts = []
+        }
+
+        removeEndAnimationTimer(): void {
+          if (this.endAnimationTimerInterval) {
+            Core.clearInterval(this.endAnimationTimerInterval)
+            this.endAnimationTimerInterval = null
+          }
+          if (this.endAnimationTimerTimeout) {
+            Core.clearTimeout(this.endAnimationTimerTimeout)
+            this.endAnimationTimerTimeout = null
+          }
+        }
+
         drawText(text: string, properties: DrawBlockProperties): void {
           // TODO This algorithm should be improved in different ways:
           // - Add CSS style or whatever.
@@ -307,22 +323,6 @@ export function Sprite(props: SpriteProps): any {
 
         destroy(): void {
           this.scene.remove.sprite(this)
-        }
-
-        private removeAnimationKeyFrames(): void {
-          this.keyFramesTimeouts.forEach((timeout) => Core.clearTimeout(timeout))
-          this.keyFramesTimeouts = []
-        }
-
-        private removeEndAnimationTimer(): void {
-          if (this.endAnimationTimerInterval) {
-            Core.clearInterval(this.endAnimationTimerInterval)
-            this.endAnimationTimerInterval = null
-          }
-          if (this.endAnimationTimerTimeout) {
-            Core.clearTimeout(this.endAnimationTimerTimeout)
-            this.endAnimationTimerTimeout = null
-          }
         }
       }
       const _classCore = class implements SpriteCore {
