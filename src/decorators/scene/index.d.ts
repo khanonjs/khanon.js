@@ -290,6 +290,11 @@ export type SceneMapConstructor = SpriteMapConstructor | MeshMapConstructor
 
 export interface SceneProps {
   /**
+   * URL of the scene to load from a '.babylon' file.
+   */
+  url?: string
+
+  /**
    * Refers to BABYLON.SceneOptions: https://doc.babylonjs.com/typedoc/interfaces/BABYLON.SceneOptions
    */
   options?: BABYLON.SceneOptions
@@ -321,6 +326,7 @@ export interface SceneProps {
 
   /**
    * Maps to use in this scene.
+   * Work in progress, this feature will be implemented further.
    */
   maps?: SceneMapConstructor[]
 
@@ -345,9 +351,10 @@ export interface SceneProps {
   particles?: ParticleConstructor[]
 
   /**
-   * Assign the Babylon debug inspector to this scene.
+   * By default 'true'.
+   * Use the Babylon debug inspector in this scene.
    */
-  debugInspector?: boolean
+  useDebugInspector?: boolean
 }
 
 export declare function Scene(props?: SceneProps): any

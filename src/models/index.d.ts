@@ -22,22 +22,6 @@ export declare interface AnimationBase {
   id: FlexId
 
   /**
-   * Frame start of the animation, '0' by default.
-   */
-  frameStart?: number
-
-  /**
-   * Frame end of the animation. It is equivalent to the last frame by default.
-   */
-  frameEnd?: number
-
-  /**
-   * Delay between frames (in milliseconds), '100' by default.
-   * This property is omitted in particles.
-   */
-  delay?: number
-
-  /**
    * Indicates if the animation is cyclic, 'false' by default.
    * This property is omitted in particles.
    */

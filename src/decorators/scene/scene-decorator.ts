@@ -4,7 +4,10 @@ import '@babylonjs/core/Debug/debugLayer'
 
 import * as BABYLON from '@babylonjs/core'
 
-import { LoadingProgress } from '../../base'
+import {
+  AssetDefinition,
+  LoadingProgress
+} from '../../base'
 import { Core } from '../../base/core/core'
 import { Metadata } from '../../base/interfaces/metadata/metadata'
 import {
@@ -22,13 +25,12 @@ import {
   SpritesController
 } from '../../controllers'
 import KJS from '../../kjs/kjs'
-import { AnimationBase } from '../../models/animation-base'
-import { AssetDefinition } from '../../models/asset-definition'
 import { BabylonAccessor } from '../../models/babylon-accessor'
 import { Rect } from '../../models/rect'
 import { Logger } from '../../modules/logger'
 import { FlexId } from '../../types/flex-id'
 import {
+  applyDefaults,
   attachCanvasResize,
   attachLoopUpdate,
   invokeCallback,
@@ -50,6 +52,7 @@ import { MeshConstructor } from '../mesh/mesh-constructor'
 import { MeshInterface } from '../mesh/mesh-interface'
 import { ParticleConstructor } from '../particle/particle-constructor'
 import { ParticleInterface } from '../particle/particle-interface'
+import { SpriteAnimation } from '../sprite/sprite-animation'
 import { SpriteConstructor } from '../sprite/sprite-constructor'
 import { SpriteInterface } from '../sprite/sprite-interface'
 import { SceneActionConstructor } from './scene-action/scene-action-constructor'
@@ -61,6 +64,7 @@ import { SceneRemove } from './scene-remove'
 import { SceneSpawn } from './scene-spawn'
 import { SceneStateConstructor } from './scene-state/scene-state-constructor'
 import { SceneStateInterface } from './scene-state/scene-state-interface'
+import { scenePropsDefault } from './scene.props.default'
 
 export function Scene(props: SceneProps = {}): any {
   return function <T extends { new (...args: any[]): SceneInterface }>(constructor: T & SceneInterface, context: ClassDecoratorContext) {
@@ -73,7 +77,7 @@ export function Scene(props: SceneProps = {}): any {
         this.storeAvailableElements()
       }
 
-      props = removeArrayDuplicitiesInObject(props)
+      props = removeArrayDuplicitiesInObject(applyDefaults(props, scenePropsDefault))
       metadata: Metadata = Reflect.getMetadata('metadata', this) ?? new Metadata()
       actions: Map<SceneActionConstructor, SceneActionInterface> = new Map<SceneActionConstructor, SceneActionInterface>()
       availableElements: SceneAvailableElements
@@ -83,11 +87,12 @@ export function Scene(props: SceneProps = {}): any {
       _loadingProgress: LoadingProgress | undefined
       _started: boolean
       _state: SceneStateInterface
-      _camera: CameraInterface
+      _camera: CameraInterface | undefined
+      _cameraConstructor: CameraConstructor
       _spawn: SceneSpawn
       _remove: SceneRemove
       _loopUpdate: boolean
-      _hasDebugInspector: boolean
+      _debugInspector: (event: KeyboardEvent) => void
 
       // Spawned elements
       actors: Set<ActorInterface> = new Set<ActorInterface>()
@@ -105,7 +110,6 @@ export function Scene(props: SceneProps = {}): any {
       get loaded(): boolean { return this._loaded }
       get started(): boolean { return this._started }
       get state(): SceneStateInterface { return this._state }
-      get camera(): CameraInterface { return this._camera }
       get spawn(): SceneSpawn { return this._spawn }
       get remove(): SceneRemove { return this._remove }
 
@@ -117,13 +121,19 @@ export function Scene(props: SceneProps = {}): any {
         if (this._started) {
           this.stop()
         }
+        if (this._cameraConstructor) {
+          this.switchCamera(this._cameraConstructor)
+        }
         this._started = true
         this.switchState(state, stateSetup)
         invokeCallback(this.onStart, this)
         if (!this.loaded) {
           Logger.warn('Starting a scene that hasn\'t been loaded. Are you sure you want to do this?', _class.prototype)
         }
-        if (!this.camera) { Logger.debugError('Please set a camera before starting the scene. Do it in the (Scene / SceneState) \'onSart\' method:', _class.prototype); return null as any }
+        if (!this._camera) { Logger.debugError('Please set a camera before starting the scene. Do it in the (Scene / SceneState) \'onSart\' method:', _class.prototype); return null as any }
+        if (Core.isDevelopmentMode() && this.props.useDebugInspector) {
+          this.useDebugInspector()
+        }
         Core.startRenderScene(this)
         this.startRenderObservable()
         attachLoopUpdate(this)
@@ -133,6 +143,10 @@ export function Scene(props: SceneProps = {}): any {
 
       stop(): void {
         Logger.debug('Scene stop', _class.prototype)
+        if (Core.isDevelopmentMode()) {
+          this.denyDebugInspector()
+        }
+        this.releaseCamera()
         this.state.end()
         this.remove.all()
         this._started = false
@@ -154,16 +168,6 @@ export function Scene(props: SceneProps = {}): any {
         } else {
           // Create babylon scene and apply configuration
           this.babylon.scene = new BABYLON.Scene(Core.engine, this.props.options)
-          if (this.props.configuration) {
-            for (const [key, value] of Object.entries(this.props.configuration)) {
-              this.babylon.scene[key] = value
-            }
-          }
-
-          // Babylon inspector (only DEV mode). Babylon inspector's imports are removed on webpack build.
-          if (Core.isDevelopmentMode()) { // TODO one per scene, allow only one at the same time
-            this.debugInspector()
-          }
 
           this._loadingProgress = new LoadingProgress()
           if (!this.assets) {
@@ -189,6 +193,13 @@ export function Scene(props: SceneProps = {}): any {
               GUIController.load(this.props.guis, this)
             ])
             elementsLoading.onComplete.add(() => {
+              Logger.debug('Scene elements load completed', _class.prototype)
+              // Load configuration after Elements loading, to avoid AppendAsync method to override these configurations.
+              if (this.props.configuration) {
+                for (const [key, value] of Object.entries(this.props.configuration)) {
+                  this.babylon.scene[key] = value
+                }
+              }
               this.babylon.scene.executeWhenReady(() => {
                 this._loaded = true
                 invokeCallback(this.onLoaded, this)
@@ -237,19 +248,29 @@ export function Scene(props: SceneProps = {}): any {
       }
 
       switchCamera(constructor: CameraConstructor): void {
-        const camera = CamerasController.get(constructor).spawn(this)
-        if (this._camera) {
-          this._camera.babylon.camera.onViewMatrixChangedObservable.clear()
-          this._camera.stop() // TODO should I stop and start the camera on scene stop and start?
-        }
-        this._camera = camera
+        this.releaseCamera()
+        this._cameraConstructor = constructor
+        this._camera = CamerasController.get(constructor).spawn(this)
         this._camera.babylon.camera = (this._camera.onInitialize as any)(this.babylon.scene)
         this._camera.babylon.camera.attachControl(Core.canvas, true)
         this._camera.start()
       }
 
+      releaseCamera(): void {
+        if (this._camera) {
+          this._camera.release()
+          this._camera.babylon.camera.detachControl()
+          this._camera = undefined
+          this.babylon.scene.activeCamera = null
+        }
+      }
+
       getCamera<C extends CameraInterface = CameraInterface>(): C {
         return this._camera as C
+      }
+
+      useBabylonSceneFromAsset(): LoadingProgress { // TODO
+        return null as any
       }
 
       switchState(state: SceneStateConstructor, setup: any): SceneStateInterface {
@@ -263,7 +284,7 @@ export function Scene(props: SceneProps = {}): any {
         return this._state
       }
 
-      setAnimationHandler(sprite: SpriteInterface, animation: AnimationBase): void {
+      setAnimationHandler(sprite: SpriteInterface, animation: SpriteAnimation): void {
         const startMs = Core.getLoopUpdateLastMs()
         const numSprites = animation.frameEnd - animation.frameStart
         const totalTimeMs = numSprites * animation.delay
@@ -459,19 +480,28 @@ export function Scene(props: SceneProps = {}): any {
         }
       }
 
-      debugInspector(): void {
-        // TODO handle this for each scene (only one can be active at once)
-        if (!this._hasDebugInspector) {
-          this._hasDebugInspector = true
-          window.addEventListener('keyup', (ev) => {
-            if (ev.shiftKey && ev.ctrlKey && ev.altKey && ev.key === 'I') {
+      useDebugInspector(): void {
+        if (!this._debugInspector) {
+          this._debugInspector = (event: KeyboardEvent) => {
+            if (event.shiftKey && event.ctrlKey && event.altKey && event.key === 'I') {
               if (this.babylon.scene.debugLayer.isVisible()) {
                 this.babylon.scene.debugLayer.hide()
               } else {
                 this.babylon.scene.debugLayer.show()
               }
             }
-          })
+          }
+          window.addEventListener('keyup', this._debugInspector)
+        }
+      }
+
+      denyDebugInspector(): void {
+        if (this._debugInspector) {
+          window.removeEventListener('keyup', this._debugInspector)
+          this._debugInspector = undefined as any
+          if (this.babylon.scene.debugLayer.isVisible()) {
+            this.babylon.scene.debugLayer.hide()
+          }
         }
       }
     }

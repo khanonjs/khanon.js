@@ -4,13 +4,12 @@ import { DisplayObject } from '../../base'
 import { BabylonAccessor } from '../../models/babylon-accessor'
 import { DrawBlockProperties } from '../../models/draw-block-properties'
 import { Rect } from '../../models/rect'
-import { MeshTransform } from '../../types'
+import { Timeout } from '../../models/timeout'
 import { FlexId } from '../../types/flex-id'
-import { NullableExceptProps } from '../../types/nullable-except-props'
-import { SpriteTransform } from '../../types/sprite-transform'
 import { MeshAnimation } from '../mesh/mesh-animation'
 import { SceneInterface } from '../scene/scene-interface'
 import { SpriteAnimation } from './sprite-animation'
+import { SpriteAnimationOptions } from './sprite-animatrion-options'
 import { SpriteMesh } from './sprite-mesh'
 import { SpriteProps } from './sprite-props'
 
@@ -20,32 +19,45 @@ export abstract class SpriteInterface implements DisplayObject {
   abstract loopUpdate$: BABYLON.Observer<number>
   abstract canvasResize$: BABYLON.Observer<Rect>
   abstract exclusiveTexture: boolean // Exclusive texture means this sprite has an exclusive texture that is not stored anywhere, so the sprite itself has to handle its release.
-  abstract animation: SpriteAnimation | null
-  abstract animations: Map<FlexId, SpriteAnimation>
-  abstract transform: MeshTransform
   abstract _scale: number
   abstract setSpriteMesh(spriteMesh: SpriteMesh, isExclusive: boolean, isParticle: boolean): void
   abstract setShaderMaterialTextureFrame(frame: number): void
+
+  /**
+   * Display Object
+   */
+  abstract animation: SpriteAnimation | null
+  abstract animations: Map<FlexId, SpriteAnimation>
+  abstract keyFramesTimeouts: Timeout[]
+  abstract removeAnimationKeyFrames(): void
+  abstract removeEndAnimationTimer(): void
   abstract release(): void
 
   /**
    * User available
    */
+  abstract drawText(text: string, properties: DrawBlockProperties): void
+
+  /**
+   * User available Display Object
+   */
   abstract loopUpdate: boolean
   abstract get babylon(): Pick<BabylonAccessor, 'mesh' | 'scene'>
   abstract get scene(): SceneInterface
+  abstract setEnabled(value: boolean): void
   abstract setFrame(frame: number): void
-  abstract setFrameFirst(): void
-  abstract setFrameLast(): void
   abstract addAnimation(animation: SpriteAnimation | MeshAnimation): void
-  abstract playAnimation(animation: SpriteAnimation | MeshAnimation | FlexId, loopOverride?: boolean, completed?: () => void): void
+  abstract playAnimation(animation: SpriteAnimation | MeshAnimation | FlexId, options?: SpriteAnimationOptions, completed?: () => void): void
   abstract stopAnimation(): void
   abstract subscribeToKeyframe(keyframeId: string, callback: () => void): void
   abstract clearKeyframeSubscriptions(keyframeId: string): void
-  abstract drawText(text: string, properties: DrawBlockProperties): void
   abstract destroy(): void
 
-  // Transform
+  /**
+   * Tranmsform properties and methods
+   */
+  abstract set visibility(value: number)
+  abstract get visibility(): number
   abstract get absolutePosition(): BABYLON.Vector3
   abstract set position(value: BABYLON.Vector3)
   abstract get position(): BABYLON.Vector3
@@ -69,8 +81,6 @@ export abstract class SpriteInterface implements DisplayObject {
   abstract setPivotPoint(point: BABYLON.Vector3, space?: BABYLON.Space): BABYLON.TransformNode
   abstract setPositionWithLocalVector(vector3: BABYLON.Vector3): BABYLON.TransformNode
   abstract translate(axis: BABYLON.Vector3, distance: number, space?: BABYLON.Space): BABYLON.TransformNode
-  abstract set visibility(value: number)
-  abstract get visibility(): number
 
   /**
    * User defined optional

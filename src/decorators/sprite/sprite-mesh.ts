@@ -83,7 +83,7 @@ export class SpriteMesh {
     quadVertexData.uvs = uvs
 
     this.babylon.mesh = new BABYLON.Mesh(`SpriteSource - ${this.name}`, this.babylon.scene)
-    this.babylon.mesh.visibility = 0
+    this.babylon.mesh.setEnabled(false)
     quadVertexData.applyToMesh(this.babylon.mesh, true)
 
     const size = this.babylon.texture.getSize()
@@ -139,7 +139,7 @@ export class SpriteMesh {
 
   spawn(): BABYLON.Mesh {
     const mesh = this.babylon.mesh.clone(`Sprite - ${this.name}`)
-    mesh.visibility = 1
+    mesh.setEnabled(true)
     mesh.billboardMode = 2
     return mesh
   }

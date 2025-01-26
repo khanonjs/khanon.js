@@ -84,7 +84,7 @@ export function Particle(props: ParticleProps): any {
         }
 
         updatePosition(): void {
-          this.babylon.particleSystem.emitter = (this.attachmentInfo.attachment as any).transform.position.add(this.offset)
+          this.babylon.particleSystem.emitter = (this.attachmentInfo.attachment as any).position.add(this.offset)
         }
 
         start(): void {
