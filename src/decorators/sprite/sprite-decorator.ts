@@ -145,14 +145,6 @@ export function Sprite(props: SpriteProps): any {
           this.setShaderMaterialTextureFrame(frame)
         }
 
-        setFrameFirst(): void {
-          this.setFrame(this.getFirstFrame())
-        }
-
-        setFrameLast(): void {
-          this.setFrame(this.getLastFrame())
-        }
-
         private getFirstFrame(): number {
           return this.animation?.frameStart ?? 0
         }

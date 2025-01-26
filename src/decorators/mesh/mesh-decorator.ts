@@ -158,6 +158,9 @@ export function Mesh(props: MeshProps = {}): any {
                 this.animation.animationGroup.onAnimationGroupEndObservable.add(() => completed())
               }
             }
+            Logger.trace('aki animations A', this.animation.animationGroup.name)
+            Logger.trace('aki animations B', this.animation.animationGroup.from)
+            Logger.trace('aki animations C', this.animation.animationGroup.to)
             return this.animation.animationGroup
           } else {
             return null as any

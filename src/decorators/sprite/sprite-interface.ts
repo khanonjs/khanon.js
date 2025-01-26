@@ -18,32 +18,40 @@ export abstract class SpriteInterface implements DisplayObject {
   abstract loopUpdate$: BABYLON.Observer<number>
   abstract canvasResize$: BABYLON.Observer<Rect>
   abstract exclusiveTexture: boolean // Exclusive texture means this sprite has an exclusive texture that is not stored anywhere, so the sprite itself has to handle its release.
-  abstract animation: SpriteAnimation | null
-  abstract animations: Map<FlexId, SpriteAnimation>
   abstract _scale: number
   abstract setSpriteMesh(spriteMesh: SpriteMesh, isExclusive: boolean, isParticle: boolean): void
   abstract setShaderMaterialTextureFrame(frame: number): void
+
+  /**
+   * Display Object
+   */
+  abstract animation: SpriteAnimation | null
+  abstract animations: Map<FlexId, SpriteAnimation>
   abstract release(): void
 
   /**
    * User available
+   */
+  abstract drawText(text: string, properties: DrawBlockProperties): void
+
+  /**
+   * User available Display Object
    */
   abstract loopUpdate: boolean
   abstract get babylon(): Pick<BabylonAccessor, 'mesh' | 'scene'>
   abstract get scene(): SceneInterface
   abstract setEnabled(value: boolean): void
   abstract setFrame(frame: number): void
-  abstract setFrameFirst(): void
-  abstract setFrameLast(): void
   abstract addAnimation(animation: SpriteAnimation | MeshAnimation): void
   abstract playAnimation(animation: SpriteAnimation | MeshAnimation | FlexId, options?: SpriteAnimationOptions, completed?: () => void): void
   abstract stopAnimation(): void
   abstract subscribeToKeyframe(keyframeId: string, callback: () => void): void
   abstract clearKeyframeSubscriptions(keyframeId: string): void
-  abstract drawText(text: string, properties: DrawBlockProperties): void
   abstract destroy(): void
 
-  // Tranmsform properties and methods
+  /**
+   * Tranmsform properties and methods
+   */
   abstract set visibility(value: number)
   abstract get visibility(): number
   abstract get absolutePosition(): BABYLON.Vector3

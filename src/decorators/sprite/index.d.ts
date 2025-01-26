@@ -27,11 +27,6 @@ export interface SpriteAnimation extends AnimationBase {
    * This property is ignored in particles.
    */
   delay?: number
-
-  /**
-   * Each Key frame emit an event when the frame/s are reached.
-   */
-  keyFrames?: AnimationKeyFrame[]
 }
 
 export declare abstract class SpriteInterface {
@@ -50,6 +45,11 @@ export declare abstract class SpriteInterface {
    */
   set loopUpdate(value: boolean)
   get loopUpdate(): boolean
+
+  /**
+   * Gets the current animation.
+   */
+  get animation(): SpriteAnimation
 
   /**
    * Sprite visiiility.
@@ -92,20 +92,10 @@ export declare abstract class SpriteInterface {
   setEnabled(value: boolean): void
 
   /**
-   * Sets current frame (stops current animation).
+   * Sets the frame (stops current animation).
    * @param frame
    */
   setFrame(frame: number): void
-
-  /**
-   * Sets the first frame of the sprite or current animation.
-   */
-  setFrameFirst(): void
-
-  /**
-   * Sets the last frame of the sprite or current animation.
-   */
-  setFrameLast(): void
 
   /**
    * Adds an animation. Animations can be added from this method, or from Sprite props.

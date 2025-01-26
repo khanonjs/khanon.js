@@ -9,9 +9,11 @@ import { FlexId } from '../../types'
 import { SceneInterface } from '../scene'
 import { MeshAnimationOptions } from './mesh-animation-options'
 
-export interface MeshAnimation {
-  id: FlexId
-  loop: boolean
+export interface MeshAnimation extends AnimationBase {
+  /**
+   * Babylon animaation group class:
+   */
+  animationGroup: BABYLON.AnimationGroup
 }
 
 export declare abstract class MeshInterface {
@@ -30,6 +32,11 @@ export declare abstract class MeshInterface {
    */
   set loopUpdate(value: boolean)
   get loopUpdate(): boolean
+
+  /**
+   * Gets the current animation.
+   */
+  get animation(): MeshAnimation
 
   /**
    * Mesh visiiility.
@@ -72,17 +79,29 @@ export declare abstract class MeshInterface {
   translate(axis: BABYLON.Vector3, distance: number, space?: BABYLON.Space): BABYLON.TransformNode
 
   /**
+   * Sets a mesh manually.
+   * Through this method, it is possible to manually create a Babylon Mesh in 'onSpawn' method and apply it.
+   * @param babylonMesh
+   */
+  setMesh(babylonMesh: BABYLON.Mesh): void
+
+  /**
    * Sets the mesh enable state.
    * @param value
    */
   setEnabled(value: boolean): void
 
   /**
-   * Sets a mesh manually.
-   * Through this method, it is possible to manually create a Babylon Mesh in 'onSpawn' method and apply it.
-   * @param babylonMesh
+   * Sets the frame (stops current animation).
+   * @param frame
    */
-  setMesh(babylonMesh: BABYLON.Mesh): void
+  setFrame(frame: number): void
+
+  /**
+   * Adds an animation. Animations can be added from this method, or from Mesh props.
+   * @param animation
+   */
+  addAnimation(animation: MeshAnimation): void
 
   /**
    * Plays an animation. Animations are defined in the Sprite decorator 'props' or manually using 'MeshAnimation' interface.
@@ -152,7 +171,7 @@ export interface MeshProps {
   /**
    * Animations.
    */
-  animations?: MeshAnimation[]
+  animations?: Omit<MeshAnimation, 'animationGroup'>[]
 
   /**
    * Cache this mesh.

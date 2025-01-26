@@ -26,6 +26,11 @@ export declare interface AnimationBase {
    * This property is omitted in particles.
    */
   loop?: boolean
+
+  /**
+   * Each Key frame emit an event when the frame/s are reached.
+   */
+  keyFrames?: AnimationKeyFrame[]
 }
 
 export class BabylonAccessor<C extends BABYLON.Camera = any> {

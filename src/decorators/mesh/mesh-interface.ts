@@ -14,20 +14,28 @@ export abstract class MeshInterface implements DisplayObject {
   abstract props: MeshProps
   abstract loopUpdate$: BABYLON.Observer<number>
   abstract canvasResize$: BABYLON.Observer<Rect>
+
+  /**
+   * Display Object
+   */
   abstract animation: MeshAnimation | null
   abstract animations: Map<FlexId, MeshAnimation>
-  abstract addAnimation(animation: MeshAnimation): void
   abstract release(): void
 
   /**
    * User available
    */
+  abstract setMesh(babylonMesh: BABYLON.Mesh): void
+
+  /**
+   * User available Display Object
+   */
   abstract loopUpdate: boolean
   abstract get babylon(): Pick<BabylonAccessor, 'mesh' | 'scene'>
   abstract get scene(): SceneInterface
-  abstract setMesh(babylonMesh: BABYLON.Mesh): void
   abstract setEnabled(value: boolean): void
   abstract setFrame(frame: number): void
+  abstract addAnimation(animation: MeshAnimation): void
   abstract playAnimation(animation: SpriteAnimation | MeshAnimation | FlexId, options?: MeshAnimationOptions, completed?: () => void): BABYLON.AnimationGroup
   abstract stopAnimation(): void
   abstract subscribeToKeyframe(keyframeId: string, callback: () => void): void // 8a8f
