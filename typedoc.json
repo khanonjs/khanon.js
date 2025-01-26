@@ -17,8 +17,6 @@
     "./src/decorators/scene/scene-action/index.d.ts",
     "./src/decorators/scene/scene-state/index.d.ts",
     "./src/decorators/sprite/index.d.ts",
-    "./src/decorators/sprite-map/index.d.ts",
-    "./src/decorators/mesh-map/index.d.ts",
     "./src/models/index.d.ts",
     "./src/modules/helper/index.d.ts",
     "./src/modules/logger/index.d.ts",
