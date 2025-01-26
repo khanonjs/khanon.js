@@ -38,8 +38,8 @@ export abstract class MeshInterface implements DisplayObject {
   abstract addAnimation(animation: MeshAnimation): void
   abstract playAnimation(animation: SpriteAnimation | MeshAnimation | FlexId, options?: MeshAnimationOptions, completed?: () => void): BABYLON.AnimationGroup
   abstract stopAnimation(): void
-  abstract subscribeToKeyframe(keyframeId: string, callback: () => void): void // 8a8f
-  abstract clearKeyframeSubscriptions(keyframeId: string): void // 8a8f
+  abstract subscribeToKeyframe(keyframeId: string, callback: () => void): void
+  abstract clearKeyframeSubscriptions(keyframeId: string): void
   abstract destroy(): void
 
   /**

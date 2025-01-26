@@ -22,7 +22,7 @@ export abstract class DisplayObject {
   abstract addAnimation(animation: SpriteAnimation | MeshAnimation): void
   abstract playAnimation(animation: SpriteAnimation | MeshAnimation | FlexId, options?: SpriteAnimationOptions | MeshAnimationOptions, completed?: () => void): void
   abstract stopAnimation(): void
-  abstract subscribeToKeyframe(keyframeId: string, callback: () => void): void // 8a8f this only for sprites?
-  abstract clearKeyframeSubscriptions(keyframeId: string): void // 8a8f this only for sprites?
+  abstract subscribeToKeyframe(keyframeId: string, callback: () => void): void
+  abstract clearKeyframeSubscriptions(keyframeId: string): void
   abstract destroy(): void
 }
