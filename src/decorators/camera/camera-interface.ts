@@ -18,6 +18,7 @@ export abstract class CameraInterface<S = any, C extends SceneInterface = SceneI
   abstract canvasResize$: BABYLON.Observer<Rect>
   abstract start(): void
   abstract stop(): void
+  abstract release(): void
 
   /**
    * User available

@@ -15,7 +15,7 @@ import { ScenesController } from './scenes-controller'
 export class NotificationsController {
   static send(message: FlexId, elements?: NotificableType | NotificableType[], ...args: any[]): void {
     if (!elements) {
-      // 8a8f send message to all elements of the game. Improve the performance before implement this
+      // TODO send message to all elements of the game. Improve the performance before implement this
     } else
       if (Array.isArray(elements)) {
         elements.forEach(element => NotificationsController.sendConstructor(message, element, args))

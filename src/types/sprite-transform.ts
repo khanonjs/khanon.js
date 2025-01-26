@@ -1,38 +1,27 @@
 import * as BABYLON from '@babylonjs/core'
 
 /**
- * Shortcut to basic babylon transform methods and variables
+ * Shortcut to mesh babylon transform methods and variables adapted to sprite needs.
  */
 /** @interface */
-// export type SpriteTransform = Pick<BABYLON.Sprite, 'isVisible' | 'position' | 'angle' | 'color' | 'width' | 'height' | 'size'>
 export type SpriteTransform = Pick<BABYLON.Mesh,
     'absolutePosition'
-  // | 'absoluteRotationQuaternion'
-  // | 'absoluteScaling'
   | 'position'
-  // | 'rotation'
-  // | 'rotationQuaternion'
-  // | 'scaling'
-  // | 'addRotation'
   | 'getAbsolutePivotPoint'
   | 'getAbsolutePivotPointToRef'
   | 'getAbsolutePosition'
-  // | 'getDirection'
-  // | 'getDirectionToRef'
   | 'getPivotPoint'
   | 'getPivotPointToRef'
   | 'locallyTranslate'
-  // | 'lookAt'
-  // | 'rotate'
   | 'rotateAround'
-  // | 'rotatePOV'
   | 'setAbsolutePosition'
-  // | 'setDirection'
   | 'setPivotMatrix'
   | 'setPivotPoint'
   | 'setPositionWithLocalVector'
   | 'translate'
   | 'visibility'> & {
     rotation: number
-    scaling: BABYLON.Vector2
+    scale: number
+    scaleX: number
+    scaleY: number
   }

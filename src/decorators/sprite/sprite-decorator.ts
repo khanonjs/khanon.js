@@ -1,9 +1,6 @@
 import * as BABYLON from '@babylonjs/core'
 
-import {
-  LoadingProgress,
-  StateInterface
-} from '../../base'
+import { LoadingProgress } from '../../base'
 import { Core } from '../../base/core/core'
 import { Metadata } from '../../base/interfaces/metadata/metadata'
 import {
@@ -15,9 +12,7 @@ import { DrawBlockProperties } from '../../models/draw-block-properties'
 import { Rect } from '../../models/rect'
 import { Timeout } from '../../models/timeout'
 import { Logger } from '../../modules/logger'
-import { MeshTransform } from '../../types'
 import { FlexId } from '../../types/flex-id'
-import { SpriteTransform } from '../../types/sprite-transform'
 import {
   applyDefaults,
   attachCanvasResize,
@@ -30,10 +25,13 @@ import {
 } from '../../utils/utils'
 import { ActorActionInterface } from '../actor/actor-action/actor-action-interface'
 import { ActorInterface } from '../actor/actor-interface'
+import { ActorStateInterface } from '../actor/actor-state/actor-state-interface'
 import { ParticleInterface } from '../particle/particle-interface'
 import { SceneActionInterface } from '../scene/scene-action/scene-action-interface'
 import { SceneInterface } from '../scene/scene-interface'
+import { SceneStateInterface } from '../scene/scene-state/scene-state-interface'
 import { SpriteAnimation } from './sprite-animation'
+import { SpriteAnimationOptions } from './sprite-animatrion-options'
 import { SpriteCore } from './sprite-core'
 import { SpriteInterface } from './sprite-interface'
 import { SpriteMesh } from './sprite-mesh'
@@ -59,12 +57,12 @@ export function Sprite(props: SpriteProps): any {
               if (!core.spriteMeshes.get(scene)) { Logger.debugError('Sprite texture not found for scene in sprite constructor:', _classInterface.prototype, scene.constructor.name) } // TODO get sprite and scene names
               this.setSpriteMesh(core.spriteMeshes.get(scene) as any, false)
             }
+            attachLoopUpdate(this)
+            attachCanvasResize(this)
+            invokeCallback(this.onSpawn, this)
           }
         }
 
-        // ***************
-        // SpriteInterface
-        // ***************
         props: SpriteProps
         spriteMesh: SpriteMesh
         exclusiveTexture: boolean
@@ -76,28 +74,12 @@ export function Sprite(props: SpriteProps): any {
         keyFramesTimeouts: Timeout[] = []
         endAnimationTimerInterval: Timeout | null
         endAnimationTimerTimeout: Timeout | null
-        transform: MeshTransform
         _visible: boolean
         _scale: number = 1
 
         set loopUpdate(value: boolean) { switchLoopUpdate(value, this) }
         get loopUpdate(): boolean { return this._loopUpdate }
 
-        get absolutePosition(): BABYLON.Vector3 { return this.babylon.mesh.absolutePosition }
-        set position(value: BABYLON.Vector3) { this.babylon.mesh.position = value }
-        get position(): BABYLON.Vector3 { return this.babylon.mesh.position }
-        getAbsolutePivotPoint(): BABYLON.Vector3 { return this.babylon.mesh.getAbsolutePivotPoint() }
-        getAbsolutePivotPointToRef(result: BABYLON.Vector3): BABYLON.TransformNode { return this.babylon.mesh.getAbsolutePivotPointToRef(result) }
-        getAbsolutePosition(): BABYLON.Vector3 { return this.babylon.mesh.getAbsolutePosition() }
-        getPivotPoint(): BABYLON.Vector3 { return this.babylon.mesh.getPivotPoint() }
-        getPivotPointToRef(result: BABYLON.Vector3): BABYLON.TransformNode { return this.babylon.mesh.getPivotPointToRef(result) }
-        locallyTranslate(vector3: BABYLON.Vector3): BABYLON.TransformNode { return this.babylon.mesh.locallyTranslate(vector3) }
-        rotateAround(point: BABYLON.Vector3, axis: BABYLON.Vector3, amount: number): BABYLON.TransformNode { return this.babylon.mesh.rotateAround(point, axis, amount) }
-        setAbsolutePosition(absolutePosition: BABYLON.Vector3): BABYLON.TransformNode { return this.babylon.mesh.setAbsolutePosition(absolutePosition) }
-        setPivotMatrix(matrix: BABYLON.DeepImmutable<BABYLON.Matrix>, postMultiplyPivotMatrix?: boolean): BABYLON.TransformNode { return this.babylon.mesh.setPivotMatrix(matrix, postMultiplyPivotMatrix) }
-        setPivotPoint(point: BABYLON.Vector3, space?: BABYLON.Space): BABYLON.TransformNode { return this.babylon.mesh.setPivotPoint(point, space) }
-        setPositionWithLocalVector(vector3: BABYLON.Vector3): BABYLON.TransformNode { return this.babylon.mesh.setPositionWithLocalVector(vector3) }
-        translate(axis: BABYLON.Vector3, distance: number, space?: BABYLON.Space): BABYLON.TransformNode { return this.babylon.mesh.translate(axis, distance, space) }
         set visibility(value: number) {
           this.babylon.mesh.visibility = value;
           (this.babylon.mesh.material as BABYLON.ShaderMaterial).setFloat('alpha', this.babylon.mesh.visibility)
@@ -105,6 +87,9 @@ export function Sprite(props: SpriteProps): any {
 
         get visibility(): number { return this.babylon.mesh.visibility }
 
+        get absolutePosition(): BABYLON.Vector3 { return this.babylon.mesh.absolutePosition }
+        set position(value: BABYLON.Vector3) { this.babylon.mesh.position = value }
+        get position(): BABYLON.Vector3 { return this.babylon.mesh.position }
         set rotation(value: number) { this.babylon.mesh.rotation.z = value }
         get rotation(): number { return this.babylon.mesh.rotation.z }
         set scale(value: number) { this.babylon.mesh.scaling.set(value, value, 1.0) }
@@ -117,6 +102,18 @@ export function Sprite(props: SpriteProps): any {
         get scaleX(): number { return this.babylon.mesh.scaling.x }
         set scaleY(value: number) { this.babylon.mesh.scaling.set(this.babylon.mesh.scaling.x, value, 1.0) }
         get scaleY(): number { return this.babylon.mesh.scaling.y }
+        getAbsolutePivotPoint(): BABYLON.Vector3 { return this.babylon.mesh.getAbsolutePivotPoint() }
+        getAbsolutePivotPointToRef(result: BABYLON.Vector3): BABYLON.TransformNode { return this.babylon.mesh.getAbsolutePivotPointToRef(result) }
+        getAbsolutePosition(): BABYLON.Vector3 { return this.babylon.mesh.getAbsolutePosition() }
+        getPivotPoint(): BABYLON.Vector3 { return this.babylon.mesh.getPivotPoint() }
+        getPivotPointToRef(result: BABYLON.Vector3): BABYLON.TransformNode { return this.babylon.mesh.getPivotPointToRef(result) }
+        locallyTranslate(vector3: BABYLON.Vector3): BABYLON.TransformNode { return this.babylon.mesh.locallyTranslate(vector3) }
+        rotateAround(point: BABYLON.Vector3, axis: BABYLON.Vector3, amount: number): BABYLON.TransformNode { return this.babylon.mesh.rotateAround(point, axis, amount) }
+        setAbsolutePosition(absolutePosition: BABYLON.Vector3): BABYLON.TransformNode { return this.babylon.mesh.setAbsolutePosition(absolutePosition) }
+        setPivotMatrix(matrix: BABYLON.DeepImmutable<BABYLON.Matrix>, postMultiplyPivotMatrix?: boolean): BABYLON.TransformNode { return this.babylon.mesh.setPivotMatrix(matrix, postMultiplyPivotMatrix) }
+        setPivotPoint(point: BABYLON.Vector3, space?: BABYLON.Space): BABYLON.TransformNode { return this.babylon.mesh.setPivotPoint(point, space) }
+        setPositionWithLocalVector(vector3: BABYLON.Vector3): BABYLON.TransformNode { return this.babylon.mesh.setPositionWithLocalVector(vector3) }
+        translate(axis: BABYLON.Vector3, distance: number, space?: BABYLON.Space): BABYLON.TransformNode { return this.babylon.mesh.translate(axis, distance, space) }
 
         setSpriteMesh(spriteMesh: SpriteMesh, isExclusive: boolean) {
           if (this.babylon.mesh) {
@@ -125,15 +122,20 @@ export function Sprite(props: SpriteProps): any {
           this.spriteMesh = spriteMesh
           this.exclusiveTexture = isExclusive
           this.babylon.mesh = spriteMesh.spawn()
-          this.transform = this.babylon.mesh
           this.props.animations?.forEach(animation => this.addAnimation(animation))
-          attachLoopUpdate(this)
-          attachCanvasResize(this)
-          invokeCallback(this.onSpawn, this)
         }
 
         setShaderMaterialTextureFrame(frame: number): void {
           (this.babylon.mesh.material as BABYLON.ShaderMaterial).setInt('frame', frame)
+        }
+
+        setEnabled(value: boolean): void {
+          if (value) {
+            attachLoopUpdate(this)
+          } else {
+            removeLoopUpdate(this)
+          }
+          this.babylon.mesh.setEnabled(value)
         }
 
         setFrame(frame: number): void {
@@ -141,14 +143,6 @@ export function Sprite(props: SpriteProps): any {
           this.stopAnimation()
           this.visible = true
           this.setShaderMaterialTextureFrame(frame)
-        }
-
-        setFrameFirst(): void {
-          this.setFrame(this.getFirstFrame())
-        }
-
-        setFrameLast(): void {
-          this.setFrame(this.getLastFrame())
         }
 
         private getFirstFrame(): number {
@@ -179,7 +173,7 @@ export function Sprite(props: SpriteProps): any {
           this.animations.set(animation.id, animation)
         }
 
-        playAnimation(animation: SpriteAnimation | FlexId, loopOverride?: boolean, completed?: () => void): void {
+        playAnimation(animation: SpriteAnimation | FlexId, options?: SpriteAnimationOptions, completed?: () => void): void {
           if (isFlexId(animation)) {
             if (!this.animations.get(animation as FlexId)) { Logger.debugError(`Animation '${animation}' doesn't exist in sprite:`, _classInterface.prototype); return }
             animation = this.animations.get(animation as FlexId) as SpriteAnimation
@@ -188,7 +182,7 @@ export function Sprite(props: SpriteProps): any {
           const frameStart = this.getFirstFrame()
           const frameEnd = this.getLastFrame()
           const delay = this.animation.delay
-          const loop = loopOverride ?? this.animation.loop
+          const loop = options?.loop ?? this.animation.loop
           const keyFrames = this.animation.keyFrames
 
           this.visible = true
@@ -257,6 +251,22 @@ export function Sprite(props: SpriteProps): any {
           })
         }
 
+        removeAnimationKeyFrames(): void {
+          this.keyFramesTimeouts.forEach((timeout) => Core.clearTimeout(timeout))
+          this.keyFramesTimeouts = []
+        }
+
+        removeEndAnimationTimer(): void {
+          if (this.endAnimationTimerInterval) {
+            Core.clearInterval(this.endAnimationTimerInterval)
+            this.endAnimationTimerInterval = null
+          }
+          if (this.endAnimationTimerTimeout) {
+            Core.clearTimeout(this.endAnimationTimerTimeout)
+            this.endAnimationTimerTimeout = null
+          }
+        }
+
         drawText(text: string, properties: DrawBlockProperties): void {
           // TODO This algorithm should be improved in different ways:
           // - Add CSS style or whatever.
@@ -314,22 +324,6 @@ export function Sprite(props: SpriteProps): any {
         destroy(): void {
           this.scene.remove.sprite(this)
         }
-
-        private removeAnimationKeyFrames(): void {
-          this.keyFramesTimeouts.forEach((timeout) => Core.clearTimeout(timeout))
-          this.keyFramesTimeouts = []
-        }
-
-        private removeEndAnimationTimer(): void {
-          if (this.endAnimationTimerInterval) {
-            Core.clearInterval(this.endAnimationTimerInterval)
-            this.endAnimationTimerInterval = null
-          }
-          if (this.endAnimationTimerTimeout) {
-            Core.clearTimeout(this.endAnimationTimerTimeout)
-            this.endAnimationTimerTimeout = null
-          }
-        }
       }
       const _classCore = class implements SpriteCore {
         props = applyDefaults(props, spritePropsDefault)
@@ -343,13 +337,16 @@ export function Sprite(props: SpriteProps): any {
           } else {
             if (this.props.url) {
               const asset = AssetsController.getAsset(this.props.url)
-              if (!asset) { Logger.debugError(`Asset '${this.props.url}' not found on sprite load:`, _classInterface.prototype) }
-              const spriteMesh = new SpriteMesh(scene, this.props)
-              this.spriteMeshes.set(scene, spriteMesh)
-              spriteMesh.setFromAsset(asset as any)
-                .then(() => {
-                  progress.complete()
-                })
+              if (asset) {
+                const spriteMesh = new SpriteMesh(scene, this.props)
+                this.spriteMeshes.set(scene, spriteMesh)
+                spriteMesh.setFromAsset(asset)
+                  .then(() => {
+                    progress.complete()
+                  })
+              } else {
+                Logger.error(`Asset '${this.props.url}' not found on sprite load:`, _classInterface.prototype)
+              }
               return progress
             } else {
               return progress.complete()
@@ -387,7 +384,8 @@ export function Sprite(props: SpriteProps): any {
       constructorOrTarget instanceof ActorActionInterface ||
       constructorOrTarget instanceof SceneInterface ||
       constructorOrTarget instanceof SceneActionInterface ||
-      constructorOrTarget instanceof StateInterface ||
+      constructorOrTarget instanceof ActorStateInterface ||
+      constructorOrTarget instanceof SceneStateInterface ||
       constructorOrTarget instanceof ParticleInterface
     ) && !descriptor) { // Undefined descriptor means it is a decorated property, otherwiese it is a decorated method
       @Sprite(props)

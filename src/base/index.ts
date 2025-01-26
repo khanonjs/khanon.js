@@ -1,4 +1,8 @@
 export { Asset } from './asset/asset'
+export { AssetDataMesh } from './asset/asset-data-mesh'
+export { AssetDefinition } from './asset/asset-definition'
+export { AssetType } from './asset/asset-type'
+
 export { LoadingProgress } from './loading-progress/loading-progress'
 
 export { ControllerLoader } from './controller/controller-loadable'

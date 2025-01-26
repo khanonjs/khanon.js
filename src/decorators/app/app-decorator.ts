@@ -23,17 +23,19 @@ export function App(props: AppProps): any {
       get state(): AppStateInterface { return this._state }
 
       switchState(state: AppStateConstructor, setup: any): LoadingProgress {
+        const newStateCore = AppStatesController.get(state)
+        if (this._state) {
+          const prevStateCore = AppStatesController.get(this._state)
+          this._state.end()
+          this._stateCore.unload(prevStateCore)
+          // TODO For scene switch, before unloading the current one, look for assets from the next one. Do not delete assets that are in the next scene.
+        }
         if (this.props.removeTimeoutsOnStateSwitch) {
           Core.clearAllTimeouts()
         }
-        const _newStateCore = AppStatesController.get(state)
-        if (this._state) {
-          this._state.end()
-          this._stateCore.unload(_newStateCore)
-        }
-        const progress = _newStateCore.load()
+        const progress = newStateCore.load()
         progress.onComplete.add(() => {
-          this._stateCore = _newStateCore
+          this._stateCore = newStateCore
           this._state = this._stateCore.spawn()
           this._state.start(setup)
         })

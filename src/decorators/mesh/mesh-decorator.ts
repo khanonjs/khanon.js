@@ -1,16 +1,18 @@
 import * as BABYLON from '@babylonjs/core'
 
 import {
-  ActionInterface,
+  AssetDataMesh,
   LoadingProgress
 } from '../../base'
 import { Metadata } from '../../base/interfaces/metadata/metadata'
-import { MeshesController } from '../../controllers'
+import {
+  AssetsController,
+  MeshesController
+} from '../../controllers'
 import { BabylonAccessor } from '../../models/babylon-accessor'
 import { Rect } from '../../models/rect'
 import { Logger } from '../../modules/logger'
 import { FlexId } from '../../types/flex-id'
-import { MeshTransform } from '../../types/mesh-transform'
 import {
   attachCanvasResize,
   attachLoopUpdate,
@@ -19,14 +21,20 @@ import {
   removeLoopUpdate,
   switchLoopUpdate
 } from '../../utils/utils'
+import { ActorActionInterface } from '../actor/actor-action/actor-action-interface'
 import { ActorInterface } from '../actor/actor-interface'
+import { ActorStateInterface } from '../actor/actor-state/actor-state-interface'
+import { ParticleInterface } from '../particle/particle-interface'
+import { SceneActionInterface } from '../scene/scene-action/scene-action-interface'
 import { SceneInterface } from '../scene/scene-interface'
+import { SceneStateInterface } from '../scene/scene-state/scene-state-interface'
 import { MeshAnimation } from './mesh-animation'
+import { MeshAnimationOptions } from './mesh-animation-options'
 import { MeshCore } from './mesh-core'
 import { MeshInterface } from './mesh-interface'
 import { MeshProps } from './mesh-props'
 
-export function Mesh(props: MeshProps): any {
+export function Mesh(props: MeshProps = {}): any {
   return function <T extends { new (...args: any[]): MeshInterface }>(constructorOrTarget: (T & MeshInterface) | any, contextOrProperty: ClassDecoratorContext | string, descriptor: PropertyDescriptor) {
     const decorateClass = () => {
       const _classInterface = class extends constructorOrTarget implements MeshInterface {
@@ -34,19 +42,43 @@ export function Mesh(props: MeshProps): any {
           super()
           this.props = props
           if (scene) {
-            this.initialize()
+            this.babylon.scene = this.scene.babylon.scene
+            if (this.props.url) {
+              const assetContainer = core.assetContainers.get(scene)
+              if (!assetContainer) { Logger.debugError(`AssetContainer mesh '${this.props.url}' not for spawn:`, _classInterface.prototype, scene.constructor.name) } // TODO get mesh and scene names
+              if (assetContainer) {
+                const entries = assetContainer.instantiateModelsToScene((name) => name, undefined, {
+                  doNotInstantiate: !this.props.cloneByInstances
+                })
+                this.props.animations?.forEach(animation => {
+                  const animationGroup = entries.animationGroups.find(animationGroup => animation.id === animationGroup.name)
+                  if (animationGroup) {
+                    const definedAnim = this.props.animations?.find(_anim => _anim.id === animationGroup.name)
+                    if (definedAnim) {
+                      this.addAnimation({
+                        id: animationGroup.name,
+                        animationGroup,
+                        loop: animation.loop,
+                        keyFrames: animation.keyFrames
+                      })
+                    }
+                  } else {
+                    Logger.error(`Animation '${animation.id}' not found in mesh '${this.props.url}':`, _classInterface.prototype)
+                  }
+                })
+                const mesh = entries.rootNodes[0] as BABYLON.Mesh
+                mesh.name = 'Mesh - ' + this.props.url
+                this.setMesh(mesh)
+              }
+            }
+            attachLoopUpdate(this)
+            attachCanvasResize(this)
+            invokeCallback(this.onSpawn, this)
           }
         }
 
-        initialize() {
-          invokeCallback(this.onSpawn, this, this.scene)
-        }
-
-        // ***************
-        // MeshInterface
-        // ***************
         props: MeshProps
-        babylon: Pick<BabylonAccessor, 'mesh'> = { mesh: null as any }
+        babylon: Pick<BabylonAccessor, 'mesh' | 'scene'> = { mesh: null as any, scene: null as any }
         animation: MeshAnimation | null = null
         animations: Map<FlexId, MeshAnimation> = new Map<FlexId, MeshAnimation>()
         loopUpdate$: BABYLON.Observer<number>
@@ -55,6 +87,8 @@ export function Mesh(props: MeshProps): any {
         set loopUpdate(value: boolean) { switchLoopUpdate(value, this) }
         get loopUpdate(): boolean { return this._loopUpdate }
 
+        set visibility(value: number) { this.babylon.mesh.visibility = value }
+        get visibility(): number { return this.babylon.mesh.visibility }
         get absolutePosition(): BABYLON.Vector3 { return this.babylon.mesh.absolutePosition }
         get absoluteRotationQuaternion(): BABYLON.Quaternion { return this.babylon.mesh.absoluteRotationQuaternion }
         get absoluteScaling(): BABYLON.Vector3 { return this.babylon.mesh.absoluteScaling }
@@ -85,76 +119,126 @@ export function Mesh(props: MeshProps): any {
         setPivotPoint(point: BABYLON.Vector3, space?: BABYLON.Space): BABYLON.TransformNode { return this.babylon.mesh.setPivotPoint(point, space) }
         setPositionWithLocalVector(vector3: BABYLON.Vector3): BABYLON.TransformNode { return this.babylon.mesh.setPositionWithLocalVector(vector3) }
         translate(axis: BABYLON.Vector3, distance: number, space?: BABYLON.Space): BABYLON.TransformNode { return this.babylon.mesh.translate(axis, distance, space) }
-        set visibility(value: number) { this.babylon.mesh.visibility = value }
-        get visibility(): number { return this.babylon.mesh.visibility }
 
-        setMesh(babylonMesh: BABYLON.Mesh): void {
+        setMesh(babylonMesh: BABYLON.Mesh | BABYLON.InstancedMesh): void {
           if (this.babylon.mesh) {
-            // const transform = this.getTransform() // TODO
             this.release()
-            this.babylon.mesh = babylonMesh
-            // this.setTransform(transform) // TODO
-          } else {
-            this.babylon.mesh = babylonMesh
           }
-          this.transform = this.babylon.mesh
-          attachLoopUpdate(this)
-          attachCanvasResize(this)
+          this.babylon.mesh = babylonMesh
+          this.setEnabled(true)
         }
 
-        // ***************
-        // DisplayObject
-        // ***************
-        transform: MeshTransform
-
-        // setTransform(transform: BABYLON.Matrix): void {  // TODO
-        // this.babylon.mesh.updatePoseMatrix(transform) // TODO: Test this
-        // this.setPosition(transform.getTranslation())
-        // this.setRotation(transform.getRotationMatrix())
-        // this.babylon.mesh.scaling = transform.sca
-        // this.babylon.mesh.rota = transform.getTranslation()
-        // }
-
-        // getTransform(): BABYLON.Matrix {// TODO
-        //   return null
-        // }
-
-        setFrame(frame: number): void {
-        // TODO
+        setEnabled(value: boolean): void {
+          if (value) {
+            attachLoopUpdate(this)
+          } else {
+            removeLoopUpdate(this)
+          }
+          this.babylon.mesh.setEnabled(value)
         }
 
-        setFrameFirst(): void {
-        // TODO
+        setFrame(frame: number) {
+          this.animation?.animationGroup.goToFrame(frame)
         }
 
-        setFrameLast(): void {
-        // TODO
+        animationCreateEvent(aniGroup: BABYLON.AnimationGroup): BABYLON.Animation {
+          const eventAni = aniGroup.targetedAnimations[0].animation.clone()
+          eventAni.name = `Keyframes - ${aniGroup.name}`
+          const tmpTarget = this.animationCreateTemporalTarget(eventAni)
+          aniGroup.addTargetedAnimation(eventAni, {
+            name: 'events',
+            ...tmpTarget
+          })
+          return eventAni
+        }
+
+        animationCreateTemporalTarget(ani: BABYLON.Animation) {
+          switch (ani.dataType) {
+          case BABYLON.Animation.ANIMATIONTYPE_COLOR3:
+            return { [ani.targetPropertyPath[0]]: BABYLON.Color3.White() }
+          case BABYLON.Animation.ANIMATIONTYPE_COLOR4:
+            return { [ani.targetPropertyPath[0]]: BABYLON.Color4.FromInts(0, 0, 0, 0) }
+          case BABYLON.Animation.ANIMATIONTYPE_FLOAT:
+            return { [ani.targetPropertyPath[0]]: 0 }
+          case BABYLON.Animation.ANIMATIONTYPE_MATRIX:
+            return { [ani.targetPropertyPath[0]]: BABYLON.Matrix.Zero() }
+          case BABYLON.Animation.ANIMATIONTYPE_QUATERNION:
+            return { [ani.targetPropertyPath[0]]: BABYLON.Quaternion.Zero() }
+          case BABYLON.Animation.ANIMATIONTYPE_SIZE:
+            return { [ani.targetPropertyPath[0]]: BABYLON.Vector3.Zero() }
+          case BABYLON.Animation.ANIMATIONTYPE_VECTOR2:
+            return { [ani.targetPropertyPath[0]]: BABYLON.Vector2.Zero() }
+          case BABYLON.Animation.ANIMATIONTYPE_VECTOR3:
+            return { [ani.targetPropertyPath[0]]: BABYLON.Vector3.Zero() }
+          default:
+            return {}
+          }
         }
 
         addAnimation(animation: MeshAnimation): void {
-        // TODO
+          if (this.animations.get(animation.id)) { Logger.debugError(`Trying to add mesh animation '${animation.id}' that has been already added:`, _classInterface.prototype) } // TODO get mesh and scene names
+          if (animation?.keyFrames && animation.keyFrames.length > 0) {
+            animation.keyFrames.forEach(keyFrame => {
+              keyFrame.frames.forEach(frame => {
+                keyFrame.emitter = new BABYLON.Observable<void>()
+                const eventAni = this.animationCreateEvent(animation.animationGroup)
+                const aniEvent = new BABYLON.AnimationEvent(frame, () => keyFrame.emitter.notifyObservers())
+                eventAni.addEvent(aniEvent)
+              })
+            })
+          }
+          this.animations.set(animation.id, animation)
         }
 
-        playAnimation(animation: MeshAnimation | FlexId, loopOverride?: boolean, completed?: () => void): void {
-        // TODO
+        playAnimation(animationId: FlexId, options?: MeshAnimationOptions, completed?: () => void): BABYLON.AnimationGroup {
+          if (!this.animations.get(animationId)) { Logger.debugError(`Animation '${animationId}' not found in mesh '${this.props.url}':`, _classInterface.prototype) } // TODO get mesh and scene names
+          this.animation = this.animations.get(animationId) as any
+          if (this.animation) {
+            const loop = (options?.loop !== undefined ? options.loop : this.animation.loop) ?? false
+            this.animation.animationGroup.start(loop, options?.speedRatio, options?.from, options?.to, options?.isAdditive)
+            if (completed) {
+              if (loop) {
+                this.animation.animationGroup.onAnimationGroupLoopObservable.add(() => completed())
+              } else {
+                this.animation.animationGroup.onAnimationGroupEndObservable.add(() => completed())
+              }
+            }
+            return this.animation.animationGroup
+          } else {
+            return null as any
+          }
         }
 
         stopAnimation(): void {
-        // TODO
+          if (this.animation) {
+            this.animation.animationGroup.stop()
+            this.animation.animationGroup.onAnimationGroupLoopObservable.clear()
+            this.animation.animationGroup.onAnimationGroupEndObservable.clear()
+            this.animation = null
+          }
         }
 
-        subscribeToKeyframe(keyframeId: string, callback: () => void): BABYLON.Observer<void>[] {
-        // TODO
-          return null as any
+        subscribeToKeyframe(keyframeId: FlexId, callback: () => void): BABYLON.Observer<void>[] {
+          const observers: BABYLON.Observer<void>[] = []
+          this.animations.forEach(animation => {
+            animation.keyFrames?.filter(keyframe => keyframe.id === keyframeId)
+              .forEach(keyframe => observers.push(keyframe.emitter.add(callback)))
+          })
+          return observers
         }
 
-        clearKeyframeSubscriptions(keyframeId: string): void {
-        // TODO
+        clearKeyframeSubscriptions(keyframeId: FlexId): void {
+          this.animations.forEach(animation => {
+            animation.keyFrames
+              ?.filter(keyframe => keyframe.id === keyframeId)
+              .forEach(keyframe => keyframe.emitter.clear())
+          })
         }
 
         release(): void {
           invokeCallback(this.onDestroy, this)
           this.stopAnimation()
+          this.animations.forEach(animation => animation.animationGroup.dispose())
           this.babylon.mesh.dispose()
           removeLoopUpdate(this)
           removeCanvasResize(this)
@@ -167,21 +251,34 @@ export function Mesh(props: MeshProps): any {
       const _classCore = class implements MeshCore {
         props = props
         Instance: MeshInterface = new _classInterface(null as any, null as any)
+        assetContainers: Map<SceneInterface, BABYLON.AssetContainer> = new Map<SceneInterface, BABYLON.AssetContainer>()
 
         load(scene: SceneInterface): LoadingProgress {
-          // 8a8f
-          // this.addLoadStackItem('Scene: ' + url);
-          // const indexSlash = url.lastIndexOf('/') + 1;
-          // const path = url.slice(0, indexSlash);
-          // const file = url.slice(indexSlash);
-          // SceneLoader.ShowLoadingScreen = false;
-          // SceneLoader.AppendAsync(path, file, this.babylonJsScene);
-          // SceneLoader.ImportMeshAsync
-          return new LoadingProgress().complete()
+          if (this.assetContainers.get(scene)) {
+            return new LoadingProgress().complete()
+          } else {
+            if (this.props.url) {
+              const asset = AssetsController.getAsset<AssetDataMesh>(this.props.url)
+              if (asset && asset.definition.data) {
+                const progress = new LoadingProgress()
+                BABYLON.SceneLoader.LoadAssetContainer('file:', asset.file, scene.babylon.scene, (assetContainer) => {
+                  this.assetContainers.set(scene, assetContainer)
+                  progress.complete()
+                })
+                return progress
+              } else {
+                Logger.error(`Asset '${this.props.url}' not found on mesh loading:`, _classInterface.prototype)
+                return new LoadingProgress().complete()
+              }
+            } else {
+              return new LoadingProgress().complete()
+            }
+          }
         }
 
         unload(scene: SceneInterface): void {
-          // TODO
+          const assetContainer = this.assetContainers.get(scene)
+          assetContainer?.dispose()
         }
 
         spawn(scene: SceneInterface): MeshInterface {
@@ -189,7 +286,8 @@ export function Mesh(props: MeshProps): any {
           return mesh
         }
       }
-      MeshesController.register(new _classCore())
+      const core = new _classCore()
+      MeshesController.register(core)
       return _classInterface
     }
 
@@ -198,11 +296,16 @@ export function Mesh(props: MeshProps): any {
       return decorateClass()
     } else if ((
       constructorOrTarget instanceof ActorInterface ||
+      constructorOrTarget instanceof ActorActionInterface ||
       constructorOrTarget instanceof SceneInterface ||
-      constructorOrTarget instanceof ActionInterface
+      constructorOrTarget instanceof SceneActionInterface ||
+      constructorOrTarget instanceof ActorStateInterface ||
+      constructorOrTarget instanceof SceneStateInterface ||
+      constructorOrTarget instanceof ParticleInterface
     ) && !descriptor) { // Undefined descriptor means it is a decorated property, otherwiese it is a decorated method
       @Mesh(props)
       abstract class _meshInterface extends MeshInterface {}
+      // TODO: Store the 'className' to debug it in logs.
 
       if (!Reflect.hasMetadata('metadata', constructorOrTarget)) {
         Reflect.defineMetadata('metadata', new Metadata(), constructorOrTarget)

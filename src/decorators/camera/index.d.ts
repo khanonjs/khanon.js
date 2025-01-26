@@ -71,4 +71,6 @@ export declare abstract class CameraInterface</* Setup object */ S = any, /* Sce
 
 export type CameraConstructor = new () => CameraInterface
 
-export declare function Camera(): any
+export interface CameraProps {}
+
+export declare function Camera(props: CameraProps = {}): any

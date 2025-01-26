@@ -1,6 +1,7 @@
 import * as BABYLON from '@babylonjs/core'
 
 import {
+  AssetDefinition,
   CanvasResizable,
   Loadable,
   LoadingProgress,
@@ -8,8 +9,6 @@ import {
   Notificable
 } from '../../base'
 import { Metadata } from '../../base/interfaces/metadata/metadata'
-import { AnimationBase } from '../../models/animation-base'
-import { AssetDefinition } from '../../models/asset-definition'
 import { BabylonAccessor } from '../../models/babylon-accessor'
 import { Rect } from '../../models/rect'
 import { FlexId } from '../../types/flex-id'
@@ -18,6 +17,7 @@ import { CameraConstructor } from '../camera/camera-constructor'
 import { CameraInterface } from '../camera/camera-interface'
 import { MeshInterface } from '../mesh/mesh-interface'
 import { ParticleInterface } from '../particle/particle-interface'
+import { SpriteAnimation } from '../sprite/sprite-animation'
 import { SpriteInterface } from '../sprite/sprite-interface'
 import { SceneActionConstructor } from './scene-action/scene-action-constructor'
 import { SceneActionInterface } from './scene-action/scene-action-interface'
@@ -37,9 +37,10 @@ export abstract class SceneInterface implements Loadable, LoopUpdatable, CanvasR
   abstract _state: SceneStateInterface
   abstract _spawn: SceneSpawn
   abstract _remove: SceneRemove
-  abstract _camera: CameraInterface
+  abstract _camera: CameraInterface | undefined
+  abstract _cameraConstructor: CameraConstructor
   abstract _loopUpdate: boolean
-  abstract _hasDebugInspector: boolean
+  abstract _debugInspector: (event: KeyboardEvent) => void
   abstract availableElements: SceneAvailableElements
   abstract assets: AssetDefinition[]
   abstract metadata: Metadata
@@ -47,17 +48,20 @@ export abstract class SceneInterface implements Loadable, LoopUpdatable, CanvasR
   abstract canvasResize$: BABYLON.Observer<Rect>
   abstract actions: Map<SceneActionConstructor, SceneActionInterface>
   abstract actors: Set<ActorInterface>
-  abstract particles: Set<ParticleInterface>
   abstract meshes: Set<MeshInterface>
   abstract sprites: Set<SpriteInterface>
+  abstract particles: Set<ParticleInterface>
   abstract animationHandler: Map<SpriteInterface, () => void>
   abstract setEngineParams(): void // TODO ?
   abstract playActionFromInstance(instance: SceneActionInterface): void
   abstract stopActionFromInstance(instance: SceneActionInterface, forceRemove?: boolean): void
-  abstract setAnimationHandler(sprite: SpriteInterface, animation: AnimationBase): void
+  abstract setAnimationHandler(sprite: SpriteInterface, animation: SpriteAnimation): void
   abstract stopAnimationHandler(sprite: SpriteInterface): void
   abstract startRenderObservable(): void
   abstract stopRenderObservable(): void
+  abstract useBabylonSceneFromAsset(): LoadingProgress // 8a8f use for BabylonSceneMap?
+  abstract useDebugInspector(): void
+  abstract denyDebugInspector(): void
 
   /**
    * User available

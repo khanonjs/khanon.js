@@ -35,8 +35,9 @@ export class LoadingProgress<D = any> {
   /**
    * Notify error loading
    */
-  error(error: any) {
+  error(error: any): LoadingProgress<D> {
     this.onError.notifyObservers(error)
+    return this
   }
 
   /**

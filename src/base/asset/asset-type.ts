@@ -1,6 +1,6 @@
 export enum AssetType {
   AUDIO,
-  IMAGE,
   FONT,
+  IMAGE,
   MESH
 }
