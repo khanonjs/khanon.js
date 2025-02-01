@@ -163,8 +163,7 @@ export type MeshConstructor = new () => MeshInterface
 
 export interface MeshProps {
   /**
-   * Url of the .glb mesh file.
-   * The loaded mesh will be the 'meshId' mesh within the babylon file, ignoring all other elements.
+   * Url of the .glb or .gltf mesh file.
    */
   url?: string
 
