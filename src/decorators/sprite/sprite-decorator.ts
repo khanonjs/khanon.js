@@ -382,9 +382,9 @@ export function Sprite(props: SpriteProps): any {
     } else if ((
       constructorOrTarget instanceof ActorInterface ||
       constructorOrTarget instanceof ActorActionInterface ||
+      constructorOrTarget instanceof ActorStateInterface ||
       constructorOrTarget instanceof SceneInterface ||
       constructorOrTarget instanceof SceneActionInterface ||
-      constructorOrTarget instanceof ActorStateInterface ||
       constructorOrTarget instanceof SceneStateInterface ||
       constructorOrTarget instanceof ParticleInterface
     ) && !descriptor) { // Undefined descriptor means it is a decorated property, otherwiese it is a decorated method

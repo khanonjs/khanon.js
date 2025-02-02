@@ -9,6 +9,8 @@ import { FlexId } from '../../types'
 import { SceneInterface } from '../scene'
 import { MeshAnimationOptions } from './mesh-animation-options'
 
+export { MeshAnimationOptions } from './mesh-animation-options'
+
 export interface MeshAnimation extends AnimationBase {
   /**
    * Babylon animaation group class:
