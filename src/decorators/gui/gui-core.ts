@@ -1,12 +1,16 @@
 import {
   Loadable,
-  LoadingProgress
+  LoadingProgress,
+  Spawnable
 } from '../../base'
 import { SceneInterface } from '../scene/scene-interface'
+import { GUIInterface } from './'
 import { GUIProps } from './gui-props'
 
-export abstract class GUICore implements Loadable {
+export abstract class GUICore implements Loadable, Spawnable<GUIInterface> {
   abstract props: GUIProps
+  abstract Instance: GUIInterface // Disambiguate core methods from interface spawnable instances
   abstract load(owner?: SceneInterface): LoadingProgress
   abstract unload(owner?: SceneInterface): void
+  abstract spawn(scene: SceneInterface): GUIInterface
 }

@@ -14,4 +14,5 @@ export interface BabylonAccessor<
   particleSystem: BABYLON.ParticleSystem
   texture: BABYLON.Texture | BABYLON.DynamicTexture
   material: N
+  gui: BABYLON.DynamicTexture
 }

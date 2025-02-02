@@ -14,8 +14,6 @@ import {
 } from '../../controllers'
 import { Rect } from '../../models/rect'
 import { TransformComposition } from '../../models/transform-composition'
-import { Arrays } from '../../modules/helper/arrays'
-import { Helper } from '../../modules/helper/helper'
 import { Logger } from '../../modules/logger'
 import { FlexId } from '../../types/flex-id'
 import {
