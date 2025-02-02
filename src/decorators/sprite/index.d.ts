@@ -222,11 +222,6 @@ export declare interface SpriteProps {
    * Cached sprites make shorter loading time at the expense of memory usage.
    */
   cached?: boolean
-
-  /**
-   * Defines the maximum allowed number of sprites for the spriteManager associated to the texture of this sprite
-   */
-  maxAllowedSprites?: number
 }
 
 /**

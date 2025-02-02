@@ -11,5 +11,4 @@ export interface SpriteProps {
   format?: number
   samplingMode?: number
   cached?: boolean
-  // maxAllowedSprites: number
 }
