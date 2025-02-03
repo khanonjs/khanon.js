@@ -15,7 +15,7 @@ import { FlexId } from '../../types/flex-id'
  */
 export declare abstract class GUIInterface {
   loopUpdate: boolean
-  babylon: Pick<BabylonAccessor<BABYLON.Camera>, 'gui' | 'scene'>
+  babylon: Pick<BabylonAccessor, 'gui'>
   notify(message: FlexId, ...args: any[]): void
 
   /**

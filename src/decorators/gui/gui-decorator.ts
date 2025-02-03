@@ -1,5 +1,5 @@
 import * as BABYLON from '@babylonjs/core'
-import * as BABYLON_GUI from '@babylonjs/gui'
+import * as BABYLONGUI from '@babylonjs/gui'
 
 import {
   LoadingProgress,
@@ -42,11 +42,10 @@ export function GUI(props: GUIProps = {}): any {
 
       props: GUIProps
       metadata: Metadata = Reflect.getMetadata('metadata', this) ?? new Metadata()
-      babylon: Pick<BabylonAccessor<BABYLON.Camera>, 'gui' | 'scene'>
+      babylon: Pick<BabylonAccessor<BABYLON.Camera>, 'gui'> = { gui: null as any }
       _loopUpdate: boolean
       loopUpdate$: BABYLON.Observer<number>
       canvasResize$: BABYLON.Observer<Rect>
-      container: BABYLON_GUI.AdvancedDynamicTexture
       // _state: GUIStateInterface | null = null
       particles: Map<FlexId, ParticleInterface> = new Map<FlexId, ParticleInterface>()
 
@@ -55,15 +54,15 @@ export function GUI(props: GUIProps = {}): any {
       // get state(): GUIStateInterface | null { return this._state }
 
       initialize() {
-        this.container = BABYLON_GUI.AdvancedDynamicTexture.CreateFullscreenUI('')
+        this.babylon.gui = BABYLONGUI.AdvancedDynamicTexture.CreateFullscreenUI('')
         attachLoopUpdate(this)
         attachCanvasResize(this)
-        invokeCallback(this.onInitialize, this, this.container)
+        invokeCallback(this.onInitialize, this, this.babylon.gui)
       }
 
       release() {
         invokeCallback(this.onDestroy, this)
-        this.container?.dispose()
+        this.babylon.gui?.dispose()
         removeLoopUpdate(this)
         removeCanvasResize(this)
       }

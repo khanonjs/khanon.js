@@ -1,5 +1,5 @@
 import * as BABYLON from '@babylonjs/core'
-import * as BABYLON_GUI from '@babylonjs/gui'
+import * as BABYLONGUI from '@babylonjs/gui'
 
 import {
   CanvasResizable,
@@ -19,7 +19,6 @@ export abstract class GUIInterface implements LoopUpdatable, CanvasResizable, No
   abstract metadata: Metadata
   abstract loopUpdate$: BABYLON.Observer<number>
   abstract canvasResize$: BABYLON.Observer<Rect>
-  abstract container: BABYLON_GUI.AdvancedDynamicTexture
   abstract initialize(): void
   abstract release(): void
 
@@ -27,7 +26,7 @@ export abstract class GUIInterface implements LoopUpdatable, CanvasResizable, No
    * User available
    */
   abstract loopUpdate: boolean
-  abstract babylon: Pick<BabylonAccessor<BABYLON.Camera>, 'gui' | 'scene'>
+  abstract babylon: Pick<BabylonAccessor, 'gui'>
   // abstract get state(): GUIStateInterface | null
   // abstract switchState(state: GUIStateConstructor, setup: any): GUIStateInterface
   // abstract show(): void

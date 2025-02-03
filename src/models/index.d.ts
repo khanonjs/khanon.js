@@ -1,4 +1,5 @@
 import * as BABYLON from '@babylonjs/core'
+import * as BABYLONGUI from '@babylonjs/gui'
 
 import { FlexId } from '../types'
 import { Rect } from './rect'
@@ -33,14 +34,21 @@ export declare interface AnimationBase {
   keyFrames?: AnimationKeyFrame[]
 }
 
-export class BabylonAccessor<C extends BABYLON.Camera = any> {
-  get camera(): C
-  get engine(): BABYLON.Engine
-  get scene(): BABYLON.Scene
-  get sprite(): BABYLON.Sprite
-  get mesh(): BABYLON.Mesh
-  get spriteManager(): BABYLON.SpriteManager
-  get particleSystem(): BABYLON.ParticleSystem
+export interface BabylonAccessor<
+    C extends BABYLON.Camera = BABYLON.Camera,
+    M extends BABYLON.AbstractMesh = BABYLON.AbstractMesh,
+    N extends BABYLON.Material = BABYLON.Material
+  > {
+  camera: C
+  engine: BABYLON.Engine
+  scene: BABYLON.Scene
+  sprite: BABYLON.Sprite
+  mesh: M
+  spriteManager: BABYLON.SpriteManager
+  particleSystem: BABYLON.ParticleSystem
+  texture: BABYLON.Texture | BABYLON.DynamicTexture
+  material: N
+  gui: BABYLONGUI.AdvancedDynamicTexture
 }
 
 export interface DrawBlockProperties {
