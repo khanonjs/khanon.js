@@ -279,6 +279,7 @@ export function Mesh(props: MeshProps = {}): any {
         unload(scene: SceneInterface): void {
           const assetContainer = this.assetContainers.get(scene)
           assetContainer?.dispose()
+          this.assetContainers.delete(scene)
         }
 
         spawn(scene: SceneInterface): MeshInterface {

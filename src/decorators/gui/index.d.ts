@@ -1,13 +1,34 @@
-import { BabylonAccessor } from '../../models'
+import * as BABYLON from '@babylonjs/core'
+
+import { BabylonAccessor } from '../../models/babylon-accessor'
+import { Rect } from '../../models/rect'
+import { FlexId } from '../../types/flex-id'
+
+// import { MeshConstructor } from '../mesh/mesh-constructor'
+// import { ParticleConstructor } from '../particle/particle-constructor'
+// import { SpriteConstructor } from '../sprite/sprite-constructor'
+// import { GUIStateConstructor } from './gui-state/gui-state-constructor'
+// import { GUIStateInterface } from './gui-state/gui-state-interface'
 
 /**
  * @param S Camera setup object.
  */
 export declare abstract class GUIInterface {
+  loopUpdate: boolean
+  babylon: Pick<BabylonAccessor<BABYLON.Camera>, 'gui' | 'scene'>
+  notify(message: FlexId, ...args: any[]): void
+
   /**
-   * Babylon.js objects.
+   * User defined mandatory (abstract on .d.ts)
    */
-  get babylon(): Pick<BabylonAccessor, 'scene'>
+  abstract onInitialize?(container: BABYLON.DynamicTexture): void
+
+  /**
+   * User defined optional
+   */
+  onDestroy?(): void
+  onLoopUpdate?(delta: number): void
+  onCanvasResize?(size: Rect): void
 }
 
 export type GUIConstructor = new () => GUIInterface

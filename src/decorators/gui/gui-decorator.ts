@@ -1,4 +1,5 @@
 import * as BABYLON from '@babylonjs/core'
+import * as BABYLON_GUI from '@babylonjs/gui'
 
 import {
   LoadingProgress,
@@ -14,6 +15,8 @@ import { BabylonAccessor } from '../../models/babylon-accessor'
 import { Rect } from '../../models/rect'
 import { FlexId } from '../../types/flex-id'
 import {
+  attachCanvasResize,
+  attachLoopUpdate,
   invokeCallback,
   removeArrayDuplicitiesInObject,
   removeCanvasResize,
@@ -31,68 +34,61 @@ import { GUIStateInterface } from './gui-state/gui-state-interface'
 export function GUI(props: GUIProps = {}): any {
   return function <T extends { new (...args: any[]): GUIInterface }>(constructor: T & GUIInterface, context: ClassDecoratorContext) {
     const _classInterface = class extends constructor implements GUIInterface {
-      constructor(readonly scene: SceneInterface) {
+      constructor(props: GUIProps) {
         super()
+        this.props = props
         this.metadata.applyProps(this)
       }
 
       props: GUIProps
       metadata: Metadata = Reflect.getMetadata('metadata', this) ?? new Metadata()
-      setup: any
       babylon: Pick<BabylonAccessor<BABYLON.Camera>, 'gui' | 'scene'>
       _loopUpdate: boolean
       loopUpdate$: BABYLON.Observer<number>
       canvasResize$: BABYLON.Observer<Rect>
-      _state: GUIStateInterface | null = null
+      container: BABYLON_GUI.AdvancedDynamicTexture
+      // _state: GUIStateInterface | null = null
       particles: Map<FlexId, ParticleInterface> = new Map<FlexId, ParticleInterface>()
 
       set loopUpdate(value: boolean) { switchLoopUpdate(value, this) }
       get loopUpdate(): boolean { return this._loopUpdate }
-      get state(): GUIStateInterface | null { return this._state }
+      // get state(): GUIStateInterface | null { return this._state }
+
+      initialize() {
+        this.container = BABYLON_GUI.AdvancedDynamicTexture.CreateFullscreenUI('')
+        attachLoopUpdate(this)
+        attachCanvasResize(this)
+        invokeCallback(this.onInitialize, this, this.container)
+      }
 
       release() {
-        // invokeCallback(this.onDestroy, this)
+        invokeCallback(this.onDestroy, this)
+        this.container?.dispose()
         removeLoopUpdate(this)
         removeCanvasResize(this)
       }
 
-      start(): void {
+      // show(): void {
+      //   attachLoopUpdate(this)
+      //   attachCanvasResize(this)
+      //   invokeCallback(this.onShow, this)
+      // }
 
-      }
+      // hide(): void {
+      //   invokeCallback(this.onHide, this)
+      //   removeLoopUpdate(this)
+      //   removeCanvasResize(this)
+      // }
 
-      stop(): void {
-
-      }
-
-      show(): void {
-
-      }
-
-      hide(): void {
-
-      }
-
-      switchState(state: GUIStateConstructor, setup: any): GUIStateInterface {
-        /* if (!this.scene.availableElements.hasActorState(state)) { Logger.debugError('Trying to set a state non available to the actor. Please check the actor props.', _classInterface.prototype, state.prototype); return null as any }
-        const _state = ActorStatesController.get(state).spawn(this)
-        if (this._state) {
-          this._state.end()
-        }
-        this._state = _state
-        this._state.start(setup)
-        return this._state */
-        return null as any
-      }
+      // switchState(state: GUIStateConstructor, setup: any): GUIStateInterface {
+      //   return null as any
+      // }
 
       notify(message: FlexId, ...args: any[]): void {
         const definition = this.metadata.notifiers.get(message)
         if (definition) {
           this[definition.methodName](...args)
         }
-      }
-
-      destroy() {
-        // this.scene.remove.actor(this)
       }
     }
     const _classCore = class implements GUICore {
@@ -101,29 +97,29 @@ export function GUI(props: GUIProps = {}): any {
       loaded = false
 
       load(scene: SceneInterface): LoadingProgress {
-        return new LoadingProgress().fromNodes([
-          SpritesController.load(this.props.sprites, scene),
-          SpritesController.load(this.Instance.metadata.getProps().sprites, scene),
-          MeshesController.load(this.props.meshes, scene),
-          MeshesController.load(this.Instance.metadata.getProps().meshes, scene),
-          ParticlesController.load(this.props.particles, scene),
-          ParticlesController.load(this.Instance.metadata.getProps().particles, scene)
-        ])
+        return new LoadingProgress().complete()
+        // return new LoadingProgress().fromNodes([
+        //   SpritesController.load(this.props.sprites, scene),
+        //   SpritesController.load(this.Instance.metadata.getProps().sprites, scene),
+        //   MeshesController.load(this.props.meshes, scene),
+        //   MeshesController.load(this.Instance.metadata.getProps().meshes, scene),
+        //   ParticlesController.load(this.props.particles, scene),
+        //   ParticlesController.load(this.Instance.metadata.getProps().particles, scene)
+        // ])
       }
 
       unload(scene: SceneInterface): void {
-        SpritesController.unload(this.props.sprites, scene)
-        SpritesController.unload(this.Instance.metadata.getProps().sprites, scene)
-        MeshesController.unload(this.props.meshes, scene)
-        MeshesController.unload(this.Instance.metadata.getProps().meshes, scene)
-        ParticlesController.unload(this.props.particles, scene)
-        ParticlesController.unload(this.Instance.metadata.getProps().particles, scene)
+        // SpritesController.unload(this.props.sprites, scene)
+        // SpritesController.unload(this.Instance.metadata.getProps().sprites, scene)
+        // MeshesController.unload(this.props.meshes, scene)
+        // MeshesController.unload(this.Instance.metadata.getProps().meshes, scene)
+        // ParticlesController.unload(this.props.particles, scene)
+        // ParticlesController.unload(this.Instance.metadata.getProps().particles, scene)
       }
 
-      spawn(scene: SceneInterface): GUIInterface {
-        const actor = new _classInterface(scene)
-        // actor.initialize(this.props)
-        return actor
+      spawn(): GUIInterface {
+        const gui = new _classInterface(this.props)
+        return gui
       }
     }
     GUIController.register(new _classCore())

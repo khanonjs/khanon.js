@@ -150,7 +150,7 @@ export declare abstract class SpriteInterface {
   onSpawn?(): void
 
   /**
-   * Callback invoked on sprite destroy (equivalent to onRelease).
+   * Callback invoked on sprite destroy.
    */
   onDestroy?(): void
 

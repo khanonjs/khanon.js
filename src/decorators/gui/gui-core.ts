@@ -4,7 +4,7 @@ import {
   Spawnable
 } from '../../base'
 import { SceneInterface } from '../scene/scene-interface'
-import { GUIInterface } from './'
+import { GUIInterface } from './gui-interface'
 import { GUIProps } from './gui-props'
 
 export abstract class GUICore implements Loadable, Spawnable<GUIInterface> {
@@ -12,5 +12,5 @@ export abstract class GUICore implements Loadable, Spawnable<GUIInterface> {
   abstract Instance: GUIInterface // Disambiguate core methods from interface spawnable instances
   abstract load(owner?: SceneInterface): LoadingProgress
   abstract unload(owner?: SceneInterface): void
-  abstract spawn(scene: SceneInterface): GUIInterface
+  abstract spawn(): GUIInterface
 }

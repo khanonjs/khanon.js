@@ -1,3 +1,4 @@
+import { Logger } from '../../modules/logger'
 import { Loadable } from '../interfaces/loadable'
 import { LoadingProgress } from '../loading-progress/loading-progress'
 import { Controller } from './controller'
@@ -8,7 +9,12 @@ export function ControllerLoader</* Constructor type to load from */ L, /* Insta
       if (constructors) {
         if (Array.isArray(constructors)) {
           const progressNodes: LoadingProgress[] = []
-          ControllerLoadable.get(constructors, useInstance).forEach(item => progressNodes.push(item.load(owner)))
+          const _items: any[] = []
+          ControllerLoadable.get(constructors, useInstance).forEach(item => {
+            _items.push(item)
+            const progress = item.load(owner)
+            progressNodes.push(progress)
+          })
           return new LoadingProgress().fromNodes(progressNodes)
         } else {
           return (ControllerLoadable.get(constructors, useInstance) as T).load(owner) // TODO: TS bug?: Does not correctly infer conditional type

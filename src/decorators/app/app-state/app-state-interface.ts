@@ -4,6 +4,7 @@ import { StateInterface } from '../../../base'
 import { Metadata } from '../../../base/interfaces/metadata/metadata'
 import { Rect } from '../../../models/rect'
 import { FlexId } from '../../../types/flex-id'
+// import { GUIInterface } from '../../gui/gui-interface'
 import { AppStateProps } from './app-state-props'
 
 export abstract class AppStateInterface<S = any> implements StateInterface<S> {
@@ -12,6 +13,9 @@ export abstract class AppStateInterface<S = any> implements StateInterface<S> {
   abstract _loopUpdate: boolean
   abstract loopUpdate$: BABYLON.Observer<number>
   abstract canvasResize$: BABYLON.Observer<Rect>
+  // abstract guis: Set<GUIInterface>
+  // abstract guisStart(): void
+  // abstract guisRelease(): void
   abstract start(setup: any): void
   abstract end(): void
 

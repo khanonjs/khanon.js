@@ -5,6 +5,7 @@ import { ActorStateInterface } from '../actor/actor-state/actor-state-interface'
 import { AppInterface } from '../app/app-interface'
 import { AppStateInterface } from '../app/app-state/app-state-interface'
 import { CameraInterface } from '../camera/camera-interface'
+import { GUIInterface } from '../gui/gui-interface'
 import { ParticleInterface } from '../particle/particle-interface'
 import { SceneInterface } from '../scene/scene-interface'
 import { SceneStateInterface } from '../scene/scene-state/scene-state-interface'
@@ -20,7 +21,8 @@ export function Notification(props: NotificationProps): any {
       target instanceof CameraInterface ||
       target instanceof SceneInterface ||
       target instanceof SceneStateInterface ||
-      target instanceof ParticleInterface
+      target instanceof ParticleInterface ||
+      target instanceof GUIInterface
     ) && descriptor) { // Defined descriptor means it is a decorated method
       if (!Reflect.hasMetadata('metadata', target)) {
         Reflect.defineMetadata('metadata', new Metadata(), target)

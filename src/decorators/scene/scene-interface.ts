@@ -15,6 +15,7 @@ import { FlexId } from '../../types/flex-id'
 import { ActorInterface } from '../actor/actor-interface'
 import { CameraConstructor } from '../camera/camera-constructor'
 import { CameraInterface } from '../camera/camera-interface'
+import { GUIInterface } from '../gui/gui-interface'
 import { MeshInterface } from '../mesh/mesh-interface'
 import { ParticleInterface } from '../particle/particle-interface'
 import { SpriteAnimation } from '../sprite/sprite-animation'
@@ -52,6 +53,9 @@ export abstract class SceneInterface implements Loadable, LoopUpdatable, CanvasR
   abstract sprites: Set<SpriteInterface>
   abstract particles: Set<ParticleInterface>
   abstract animationHandler: Map<SpriteInterface, () => void>
+  abstract guis: Set<GUIInterface>
+  abstract guisStart(): void
+  abstract guisRelease(): void
   abstract setEngineParams(): void // TODO ?
   abstract playActionFromInstance(instance: SceneActionInterface): void
   abstract stopActionFromInstance(instance: SceneActionInterface, forceRemove?: boolean): void

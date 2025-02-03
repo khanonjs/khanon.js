@@ -19,7 +19,7 @@ import {
   removeLoopUpdate,
   switchLoopUpdate
 } from '../../../utils/utils'
-import { SceneConstructor } from '../../scene/scene-constructor'
+import { GUIInterface } from '../../gui/gui-interface'
 import { AppStateCore } from './app-state-core'
 import { AppStateInterface } from './app-state-interface'
 import { AppStateProps } from './app-state-props'
@@ -39,22 +39,38 @@ export function AppState(props: AppStateProps = {}): any {
       loopUpdate$: BABYLON.Observer<number>
       canvasResize$: BABYLON.Observer<Rect>
       setup: any
+      guis: Set<GUIInterface> = new Set<GUIInterface>()
 
       set loopUpdate(value: boolean) { switchLoopUpdate(value, this) }
       get loopUpdate(): boolean { return this._loopUpdate }
 
       start(): void {
         Logger.debug('AppState start', _classInterface.prototype)
+        // this.guisStart()
         invokeCallback(this.onStart, this)
         attachLoopUpdate(this)
         attachCanvasResize(this)
       }
 
       end(): void {
+        // this.guisRelease()
         removeLoopUpdate(this)
         removeCanvasResize(this)
         invokeCallback(this.onEnd, this)
       }
+
+      // guisStart(): void {
+      //   this.props.guis?.forEach(_gui => {
+      //     const gui = GUIController.get(_gui).spawn()
+      //     gui.initialize()
+      //     this.guis.add(gui)
+      //   })
+      // }
+
+      // guisRelease(): void {
+      //   this.guis.forEach(gui => gui.release())
+      //   this.guis.clear()
+      // }
 
       notify(message: FlexId, ...args: any[]): void {
         const definition = this.metadata.notifiers.get(message)
@@ -74,18 +90,18 @@ export function AppState(props: AppStateProps = {}): any {
 
       load(): LoadingProgress {
         const progress = new LoadingProgress().fromNodes([
-          ScenesController.load(this.props.scenes, null),
-          GUIController.load(this.props.guis, null)
+          ScenesController.load(this.props.scenes, null)
+          // GUIController.load(this.props.guis, null)
         ])
         return progress
       }
 
       unload(_newStateCore: AppStateCore): void {
         const unloadScenes = Arrays.removeDuplicatesInBoth(this.props.scenes ?? [], _newStateCore.props.scenes ?? [])
-        const unloadGuis = Arrays.removeDuplicatesInBoth(this.props.guis ?? [], _newStateCore.props.guis ?? [])
         ScenesController.stop(unloadScenes)
         ScenesController.unload(unloadScenes, null)
-        GUIController.unload(unloadGuis, null)
+        // const unloadGuis = Arrays.removeDuplicatesInBoth(this.props.guis ?? [], _newStateCore.props.guis ?? [])
+        // GUIController.unload(unloadGuis, null)
       }
     }
     AppStatesController.register(new _classCore())

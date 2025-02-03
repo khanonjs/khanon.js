@@ -25,6 +25,7 @@ import {
   removeLoopUpdate,
   switchLoopUpdate
 } from '../../utils/utils'
+import { GUIInterface } from '../gui/gui-interface'
 import { MeshAnimation } from '../mesh/mesh-animation'
 import { MeshAnimationOptions } from '../mesh/mesh-animation-options'
 import { MeshConstructor } from '../mesh/mesh-constructor'
@@ -55,12 +56,6 @@ export function Actor(props: ActorProps = {}): any {
         this.metadata.applyProps(this)
       }
 
-      initialize(props: ActorProps) {
-        this.props = props
-        this.visibility = props.visibility ?? 1
-        invokeCallback(this.onSpawn, this)
-      }
-
       props: ActorProps
       metadata: Metadata = Reflect.getMetadata('metadata', this) ?? new Metadata()
       transform: SpriteInterface | MeshInterface | null
@@ -74,6 +69,7 @@ export function Actor(props: ActorProps = {}): any {
       _state: ActorStateInterface | null = null
       actions: Map<ActorActionConstructor, ActorActionInterface> = new Map<ActorActionConstructor, ActorActionInterface>()
       particles: Map<FlexId, ParticleInterface> = new Map<FlexId, ParticleInterface>()
+      // guis: Set<GUIInterface> = new Set<GUIInterface>()
 
       set loopUpdate(value: boolean) { switchLoopUpdate(value, this) }
       get loopUpdate(): boolean { return this._loopUpdate }
@@ -92,8 +88,16 @@ export function Actor(props: ActorProps = {}): any {
         return this._visibility
       }
 
+      initialize(props: ActorProps) {
+        this.props = props
+        this.visibility = props.visibility ?? 1
+        // this.guisStart()
+        invokeCallback(this.onSpawn, this)
+      }
+
       release() {
         invokeCallback(this.onDestroy, this)
+        // this.guisRelease()
         this.stopActionAll()
         this.clearParticles()
         this.removeBody()
@@ -114,6 +118,19 @@ export function Actor(props: ActorProps = {}): any {
           node.element.setEnabled(value)
         })
       }
+
+      // guisStart(): void {
+      //   this.props.guis?.forEach(_gui => {
+      //     const gui = GUIController.get(_gui).spawn()
+      //     gui.initialize()
+      //     this.guis.add(gui)
+      //   })
+      // }
+
+      // guisRelease(): void {
+      //   this.guis.forEach(gui => gui.release())
+      //   this.guis.clear()
+      // }
 
       getNodeElement<N extends B>(Element: new () => N): N {
         if (new Element() instanceof SpriteInterface) { // TODO is there a better way to do this avoiding the 'new'?
@@ -423,8 +440,8 @@ export function Actor(props: ActorProps = {}): any {
           MeshesController.load(this.props.meshes, scene),
           MeshesController.load(this.Instance.metadata.getProps().meshes, scene),
           ParticlesController.load(this.props.particles, scene),
-          ParticlesController.load(this.Instance.metadata.getProps().particles, scene),
-          GUIController.load(this.props.guis, scene)
+          ParticlesController.load(this.Instance.metadata.getProps().particles, scene)
+          // GUIController.load(this.props.guis, scene)
         ])
       }
 
@@ -438,7 +455,7 @@ export function Actor(props: ActorProps = {}): any {
         MeshesController.unload(this.Instance.metadata.getProps().meshes, scene)
         ParticlesController.unload(this.props.particles, scene)
         ParticlesController.unload(this.Instance.metadata.getProps().particles, scene)
-        GUIController.unload(this.props.guis, scene)
+        // GUIController.unload(this.props.guis, scene)
       }
 
       spawn(scene: SceneInterface): ActorInterface {

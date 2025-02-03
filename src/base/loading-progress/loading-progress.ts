@@ -1,5 +1,7 @@
 import * as BABYLON from '@babylonjs/core'
 
+import { Logger } from '../../modules/logger'
+
 // TODO: Make it chainable?
 export class LoadingProgress<D = any> {
   private nodes: {

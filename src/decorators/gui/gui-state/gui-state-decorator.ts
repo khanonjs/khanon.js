@@ -26,7 +26,7 @@ import { GUIStateCore } from './gui-state-core'
 import { GUIStateInterface } from './gui-state-interface'
 import { GUIStateProps } from './gui-state-props'
 
-export function SceneState(props: GUIStateProps = {}): any {
+export function GUIState(props: GUIStateProps = {}): any {
   return function <T extends { new (...args: any[]): GUIStateInterface }>(constructor: T & GUIStateInterface, context: ClassDecoratorContext) {
     const _classInterface = class extends constructor implements GUIStateInterface {
       constructor(readonly gui: GUIInterface, props: GUIStateProps) {
