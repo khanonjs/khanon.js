@@ -13,6 +13,7 @@ import {
   SpriteTransform
 } from '../../types'
 import { FlexId } from '../../types/flex-id'
+import { GUIInterface } from '../gui/gui-interface'
 import { MeshAnimation } from '../mesh/mesh-animation'
 import { MeshAnimationOptions } from '../mesh/mesh-animation-options'
 import { MeshInterface } from '../mesh/mesh-interface'
@@ -42,6 +43,9 @@ export abstract class ActorInterface<B extends SpriteInterface | MeshInterface =
   abstract _state: ActorStateInterface | null
   abstract actions: Map<ActorActionConstructor, ActorActionInterface>
   abstract particles: Map<FlexId, ParticleInterface>
+  // abstract guis: Set<GUIInterface>
+  // abstract guisStart(): void
+  // abstract guisRelease(): void
   abstract initialize(props: ActorProps): void
   abstract release(): void
   abstract getActionOwner(actionConstructor: ActorActionConstructor): ActorInterface | ActorStateInterface | undefined

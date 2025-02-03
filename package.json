@@ -1,6 +1,6 @@
 {
   "name": "@khanonjs/engine",
-  "version": "0.0.110",
+  "version": "0.0.111",
   "description": "A typescript game engine extending Babylon.js",
   "private": false,
   "author": {
@@ -33,13 +33,13 @@
     "lint:fix": "eslint ./src/**/*.* --fix"
   },
   "devDependencies": {
-    "@babylonjs/core": "~7.2.3",
-    "@babylonjs/gui": "~7.2.3",
-    "@babylonjs/gui-editor": "~7.2.3",
-    "@babylonjs/inspector": "~7.2.3",
-    "@babylonjs/loaders": "~7.2.3",
-    "@babylonjs/materials": "~7.2.3",
-    "@babylonjs/serializers": "~7.2.3",
+    "@babylonjs/core": "~7.47.2",
+    "@babylonjs/gui": "~7.47.2",
+    "@babylonjs/gui-editor": "~7.47.2",
+    "@babylonjs/inspector": "~7.47.2",
+    "@babylonjs/loaders": "~7.47.2",
+    "@babylonjs/materials": "~7.47.2",
+    "@babylonjs/serializers": "~7.47.2",
     "@jest/globals": "^29.7.0",
     "@mxssfd/typedoc-theme": "file:mxssfd-typedoc-theme",
     "@types/chai": "^4.3.11",
@@ -80,12 +80,12 @@
     "webpack-dev-server": "^4.15.1"
   },
   "peerDependencies": {
-    "@babylonjs/core": "~7.2.3",
-    "@babylonjs/gui": "~7.2.3",
-    "@babylonjs/inspector": "~7.2.3",
-    "@babylonjs/loaders": "~7.2.3",
-    "@babylonjs/materials": "~7.2.3",
-    "@babylonjs/serializers": "~7.2.3"
+    "@babylonjs/core": "~7.47.2",
+    "@babylonjs/gui": "~7.47.2",
+    "@babylonjs/inspector": "~7.47.2",
+    "@babylonjs/loaders": "~7.47.2",
+    "@babylonjs/materials": "~7.47.2",
+    "@babylonjs/serializers": "~7.47.2"
   },
   "dependencies": {
     "reflect-metadata": "^0.2.2"

@@ -9,7 +9,6 @@ import {
   MeshTransform,
   SpriteTransform
 } from '../../types'
-import { GUIConstructor } from '../gui'
 import {
   MeshConstructor,
   MeshInterface
@@ -261,7 +260,7 @@ export declare abstract class ActorInterface<B extends SpriteInterface | MeshInt
   onSpawn?(): void
 
   /**
-   * Callback invoked on actor destroy (equivalent to onRelease).
+   * Callback invoked on actor destroy.
    */
   onDestroy?(): void
 
@@ -300,11 +299,6 @@ export interface ActorProps {
    * Meshes to use by this actor.
    */
   meshes?: MeshConstructor[]
-
-  /**
-   * GUIs to use in this actor.
-   */
-  guis?: GUIConstructor[]
 
   /**
    * Particles this actor will attach.

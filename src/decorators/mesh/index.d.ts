@@ -144,7 +144,7 @@ export declare abstract class MeshInterface {
   onSpawn?(): void
 
   /**
-   * Callback invoked on mesh destroy (equivalent to onRelease).
+   * Callback invoked on mesh destroy.
    */
   onDestroy?(): void
 

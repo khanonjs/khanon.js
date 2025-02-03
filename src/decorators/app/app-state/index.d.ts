@@ -57,13 +57,6 @@ export interface AppStateProps {
    * These Scenes will be automatically unloaded on state end in case they are not used in the next state.
    */
   scenes?: SceneConstructor[]
-
-  /**
-   * GUIs to load in this state.
-   * The previous state won't end and the app won't switch to this state until it has been fully loaded.
-   * These GUIs will be automatically unloaded on state end in case they are not used in the next state.
-   */
-  guis?: GUIConstructor[]
 }
 
 export declare function AppState(props?: AppStateProps): any

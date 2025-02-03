@@ -27,6 +27,14 @@ export { AppStateInterface } from './decorators/app/app-state/app-state-interfac
 export { Camera } from './decorators/camera/camera-decorator'
 export { CameraInterface } from './decorators/camera/camera-interface'
 
+// GUI decorator
+export { GUI } from './decorators/gui/gui-decorator'
+export { GUIInterface } from './decorators/gui/gui-interface'
+
+// GUI State decorator
+export { GUIState } from './decorators/gui/gui-state/gui-state-decorator'
+export { GUIStateInterface } from './decorators/gui/gui-state/gui-state-interface'
+
 // Mesh decorator
 export { Mesh } from './decorators/mesh/mesh-decorator'
 export { MeshInterface } from './decorators/mesh/mesh-interface'

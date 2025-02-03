@@ -2,7 +2,6 @@ import * as BABYLON from '@babylonjs/core'
 
 import { AppInterface } from '../../decorators/app/app-interface'
 import { AppStateConstructor } from '../../decorators/app/app-state/app-state-constructor'
-import { AppStateInterface } from '../../decorators/app/app-state/app-state-interface'
 import { SceneInterface } from '../../decorators/scene/scene-interface'
 import { BabylonAccessor } from '../../models/babylon-accessor'
 import { Rect } from '../../models/rect'

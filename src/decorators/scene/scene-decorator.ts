@@ -48,6 +48,7 @@ import { ActorStateConstructor } from '../actor/actor-state/actor-state-construc
 import { ActorStateInterface } from '../actor/actor-state/actor-state-interface'
 import { CameraConstructor } from '../camera/camera-constructor'
 import { CameraInterface } from '../camera/camera-interface'
+import { GUIInterface } from '../gui/gui-interface'
 import { MeshConstructor } from '../mesh/mesh-constructor'
 import { MeshInterface } from '../mesh/mesh-interface'
 import { ParticleConstructor } from '../particle/particle-constructor'
@@ -99,6 +100,7 @@ export function Scene(props: SceneProps = {}): any {
       meshes: Set<MeshInterface> = new Set<MeshInterface>()
       sprites: Set<SpriteInterface> = new Set<SpriteInterface>()
       particles: Set<ParticleInterface> = new Set<ParticleInterface>()
+      guis: Set<GUIInterface> = new Set<GUIInterface>()
 
       setEngineParams(): void {} // TODO ?
 
@@ -121,6 +123,7 @@ export function Scene(props: SceneProps = {}): any {
         if (this._started) {
           this.stop()
         }
+        this.guisStart()
         if (this._cameraConstructor) {
           this.switchCamera(this._cameraConstructor)
         }
@@ -146,6 +149,7 @@ export function Scene(props: SceneProps = {}): any {
         if (Core.isDevelopmentMode()) {
           this.denyDebugInspector()
         }
+        this.guisRelease()
         this.releaseCamera()
         this.state.end()
         this.remove.all()
@@ -161,9 +165,7 @@ export function Scene(props: SceneProps = {}): any {
 
         if (this._loaded) {
           return new LoadingProgress().complete()
-        }
-
-        if (this._loadingProgress) {
+        } else if (this._loadingProgress) {
           return this._loadingProgress
         } else {
           // Create babylon scene and apply configuration
@@ -215,7 +217,7 @@ export function Scene(props: SceneProps = {}): any {
           assetsProgress.onProgress.add((progress: number) => {
             this._loadingProgress?.setProgress(progress)
           })
-          return this._loadingProgress
+          return this._loadingProgress ?? new LoadingProgress().complete()
         }
       }
 
@@ -245,6 +247,19 @@ export function Scene(props: SceneProps = {}): any {
 
       stopRenderObservable(): void {
         this.babylon.scene.onBeforeRenderObservable.clear()
+      }
+
+      guisStart(): void {
+        this.props.guis?.forEach(_gui => {
+          const gui = GUIController.get(_gui).spawn()
+          gui.initialize()
+          this.guis.add(gui)
+        })
+      }
+
+      guisRelease(): void {
+        this.guis.forEach(gui => gui.release())
+        this.guis.clear()
       }
 
       switchCamera(constructor: CameraConstructor): void {
