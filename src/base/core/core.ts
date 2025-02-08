@@ -115,6 +115,7 @@ export class Core {
   }
 
   private static initializeBabylon(): void {
+    BABYLON.SceneLoader.ShowLoadingScreen = false
     Core.babylon.engine = new BABYLON.Engine(
       Core.htmlCanvas,
       Core.app.props.engineConfiguration.antialias,

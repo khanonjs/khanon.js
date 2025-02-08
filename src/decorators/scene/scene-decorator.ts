@@ -196,18 +196,35 @@ export function Scene(props: SceneProps = {}): any {
             ])
             elementsLoading.onComplete.add(() => {
               Logger.debug('Scene elements load completed', _class.prototype)
-              // Load configuration after Elements loading, to avoid AppendAsync method to override these configurations.
-              if (this.props.configuration) {
-                for (const [key, value] of Object.entries(this.props.configuration)) {
-                  this.babylon.scene[key] = value
+              const startScene = () => {
+                // Load configuration after Elements loading, to avoid AppendAsync method to override these configurations.
+                if (this.props.configuration) {
+                  for (const [key, value] of Object.entries(this.props.configuration)) {
+                    this.babylon.scene[key] = value
+                  }
                 }
+                this.babylon.scene.executeWhenReady(() => {
+                  this._loaded = true
+                  invokeCallback(this.onLoaded, this)
+                  this._loadingProgress?.complete()
+                  this._loadingProgress = undefined
+                })
               }
-              this.babylon.scene.executeWhenReady(() => {
-                this._loaded = true
-                invokeCallback(this.onLoaded, this)
-                this._loadingProgress?.complete()
-                this._loadingProgress = undefined
-              })
+              if (this.props.url) {
+                const indexSlash = this.props.url.lastIndexOf('/') + 1
+                const path = this.props.url.slice(0, indexSlash)
+                const file = this.props.url.slice(indexSlash)
+                BABYLON.SceneLoader.AppendAsync(path, file, this.babylon.scene)
+                  .then(() => {
+                    Logger.debug(`Scene load  AppendAsync from '${this.props.url}' completed.`, _class.prototype)
+                    startScene()
+                  })
+                  .catch((error: string) => {
+                    Logger.debugError(`Scene load AppendAsync from '${this.props.url}' error`, error, _class.prototype)
+                  })
+              } else {
+                startScene()
+              }
             })
           })
           assetsProgress.onError.add((error: string) => {
