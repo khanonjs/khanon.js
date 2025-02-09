@@ -52,7 +52,6 @@ export function Actor(props: ActorProps = {}): any {
   return function <T extends { new (...args: any[]): ActorInterface }>(constructor: T & ActorInterface, context: ClassDecoratorContext) {
     const _classInterface = class extends constructor implements ActorInterface {
       constructor(readonly scene: SceneInterface) {
-        Logger.trace('aki new actor')
         super()
         this.metadata.applyProps(this)
       }

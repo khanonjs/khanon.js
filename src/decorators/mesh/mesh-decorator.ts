@@ -39,7 +39,6 @@ export function Mesh(props: MeshProps = {}): any {
     const decorateClass = () => {
       const _classInterface = class extends constructorOrTarget implements MeshInterface {
         constructor(readonly scene: SceneInterface, props: MeshProps) {
-          Logger.trace('aki new mesh', props)
           super()
           this.props = props
           if (scene) {
