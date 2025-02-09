@@ -92,6 +92,13 @@ export declare abstract class ActorInterface<B extends SpriteInterface | MeshInt
   get visibility(): number
 
   /**
+   * Sets the enabled status of the actor. If disabled, the actor wont be rendered, and all its actions and states will be paused.
+   * @param value
+   */
+  set enabled(value: boolean)
+  get enabled(): boolean
+
+  /**
    * Sets the Body of the Actor.
    * Setting a new Body removes any previously added Node.
    * @param Node
@@ -130,12 +137,6 @@ export declare abstract class ActorInterface<B extends SpriteInterface | MeshInt
    * Clear all nodes of this actor.
    */
   clearNodes(): void
-
-  /**
-   * Sets the visibility of Body and all Nodes.
-   * @param value
-   */
-  setVisible(value: boolean): void
 
   /**
    * Starts a state.
@@ -306,12 +307,12 @@ export interface ActorProps {
   particles?: ParticleConstructor[]
 
   /**
-   * (Experimental) Spawns the actor by reference Id. Referemce Id is case sensitive. Use this property to spawn 3D actors.
+   * (Experimental) Spawns the actor by reference Id. The reference Id is case sensitive. Use this property to spawn 3D actors.
    * In case the scene is loaded from a '.babylon' file, the actor is spawned replacing every mesh whose Id starts by this reference Id (E.g. 'RefId', 'RefId.001', 'RefId.002', etc).
-   * If 'setBody' is not used in the actor's 'onSpawn' callback, the actor will be spawned using the '.babylon' scene mesh as body.
-   * If 'setBody' is used in the actor's 'onSpawn' callback, the actor will be spawned replacing the mesh in the '.babylon' scene. The scene mesh will be disposed and the actor will use its own defined body in 'onSpawn' callback.
+   * If 'setBody' is not used in the actor's 'onSpawn', the actor will be spawned using the '.babylon' scene mesh as body.
+   * If 'setBody' is used in the actor's 'onSpawn', the actor will be spawned replacing the mesh in the '.babylon' scene. The scene mesh will be disposed and the actor will use its own defined body in 'onSpawn' callback.
    * See https://khanonjs.com/api-docs/interfaces/decorators_scene.SceneProps.html#url to know how to load a scene from a '.banylon' file.
-   * This feature is EXPERIMENTAL. There are some issues with Blender exported mesh positions, and it has not been tested with 3DS Max exporter.
+   * This feature is EXPERIMENTAL. There are some issues with Blender exported mesh positions, and it has not been tested with 3DS Max or Maya exporters.
    */
   spawnByReferenceId?: string
 

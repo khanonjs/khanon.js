@@ -35,7 +35,8 @@ export abstract class MeshInterface implements DisplayObject {
   abstract loopUpdate: boolean
   abstract get babylon(): Pick<BabylonAccessor, 'mesh' | 'scene'>
   abstract get scene(): SceneInterface
-  abstract setEnabled(value: boolean): void
+  abstract get enabled(): boolean
+  abstract set enabled(value: boolean)
   abstract setFrame(frame: number): void
   abstract addAnimation(animation: MeshAnimation): void
   abstract playAnimation(animation: SpriteAnimation | MeshAnimation | FlexId, options?: MeshAnimationOptions, completed?: () => void): BABYLON.AnimationGroup

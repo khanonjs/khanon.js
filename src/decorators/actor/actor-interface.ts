@@ -64,6 +64,8 @@ export abstract class ActorInterface<B extends SpriteInterface | MeshInterface =
   abstract get state(): ActorStateInterface | null
   abstract set visibility(value: number)
   abstract get visibility(): number
+  abstract get enabled(): boolean
+  abstract set enabled(value: boolean)
   abstract setBody(Body: new () => B): B
   abstract addNode(Node: new () => B, name: string, transform?: TransformComposition): ActorNode<B> | undefined
   abstract getNode(name: string): ActorNode<B> | undefined
@@ -71,7 +73,6 @@ export abstract class ActorInterface<B extends SpriteInterface | MeshInterface =
   abstract removeNode(name: string): void
   abstract clearNodes(): void
   abstract switchState(state: ActorStateConstructor, setup: any): ActorStateInterface
-  abstract setEnabled(value: boolean): void
   abstract playAnimation(animation: (B extends SpriteInterface ? SpriteAnimation : MeshAnimation) | FlexId, options?: (B extends SpriteInterface ? SpriteAnimationOptions : MeshAnimationOptions), completed?: () => void): void // TODO system to animate body and nodes all together somehow
   abstract stopAnimation(): void
   // abstract setAnimation(): void // TODO system to animate body and nodes all together somehow

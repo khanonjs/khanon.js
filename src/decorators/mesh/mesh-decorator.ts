@@ -87,6 +87,19 @@ export function Mesh(props: MeshProps = {}): any {
         set loopUpdate(value: boolean) { switchLoopUpdate(value, this) }
         get loopUpdate(): boolean { return this._loopUpdate }
 
+        get enabled(): boolean {
+          return this.babylon.mesh.isEnabled() ?? false
+        }
+
+        set enabled(value: boolean) {
+          if (value) {
+            attachLoopUpdate(this)
+          } else {
+            removeLoopUpdate(this)
+          }
+          this.babylon.mesh.setEnabled(value)
+        }
+
         set visibility(value: number) { this.babylon.mesh.visibility = value }
         get visibility(): number { return this.babylon.mesh.visibility }
         get absolutePosition(): BABYLON.Vector3 { return this.babylon.mesh.absolutePosition }
@@ -125,16 +138,7 @@ export function Mesh(props: MeshProps = {}): any {
             this.release()
           }
           this.babylon.mesh = babylonMesh
-          this.setEnabled(true)
-        }
-
-        setEnabled(value: boolean): void {
-          if (value) {
-            attachLoopUpdate(this)
-          } else {
-            removeLoopUpdate(this)
-          }
-          this.babylon.mesh.setEnabled(value)
+          this.enabled = true
         }
 
         setFrame(frame: number) {

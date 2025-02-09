@@ -88,9 +88,28 @@ export function Actor(props: ActorProps = {}): any {
         return this._visibility
       }
 
+      get enabled(): boolean {
+        return this._body?.babylon.mesh.isEnabled() ?? false
+      }
+
+      set enabled(value: boolean) {
+        // TODO apply this property to pause states and notifications
+        if (value) {
+          attachLoopUpdate(this)
+        } else {
+          removeLoopUpdate(this)
+        }
+        if (this.body) {
+          this.body.enabled = value
+        }
+        this.nodes.forEach(node => {
+          node.element.enabled = value
+        })
+      }
+
       initialize(props: ActorProps) {
         this.props = props
-        this.setEnabled(props.enabled ?? true)
+        this.enabled = props.enabled ?? true
         // this.guisStart()
         invokeCallback(this.onSpawn, this)
       }
@@ -103,20 +122,6 @@ export function Actor(props: ActorProps = {}): any {
         this.removeBody()
         removeLoopUpdate(this)
         removeCanvasResize(this)
-      }
-
-      setEnabled(value: boolean): void {
-        if (value) {
-          attachLoopUpdate(this)
-        } else {
-          removeLoopUpdate(this)
-        }
-        if (this.body) {
-          this.body.setEnabled(value)
-        }
-        this.nodes.forEach(node => {
-          node.element.setEnabled(value)
-        })
       }
 
       // guisStart(): void {

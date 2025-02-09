@@ -47,6 +47,13 @@ export declare abstract class MeshInterface {
   get visibility(): number
 
   /**
+   * Sets or gets the mesh enable state.
+   * @param value
+   */
+  get enabled(): boolean
+  set enabled(value: boolean)
+
+  /**
    * Mesh transform properties.
    */
   get absolutePosition(): BABYLON.Vector3
@@ -86,12 +93,6 @@ export declare abstract class MeshInterface {
    * @param babylonMesh
    */
   setMesh(babylonMesh: BABYLON.Mesh): void
-
-  /**
-   * Sets the mesh enable state.
-   * @param value
-   */
-  setEnabled(value: boolean): void
 
   /**
    * Sets the frame (stops current animation).

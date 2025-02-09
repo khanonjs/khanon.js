@@ -60,6 +60,13 @@ export declare abstract class SpriteInterface {
   get visibility(): number
 
   /**
+   * Sets or gets the mesh enable state.
+   * @param value
+   */
+  get enabled(): boolean
+  set enabled(value: boolean)
+
+  /**
    * Sprite transform properties.
    */
   get absolutePosition(): BABYLON.Vector3
@@ -86,12 +93,6 @@ export declare abstract class SpriteInterface {
   get scaleX(): number
   set scaleY(value: number)
   get scaleY(): number
-
-  /**
-   * Sets the sprite enable state.
-   * @param value
-   */
-  setEnabled(value: boolean): void
 
   /**
    * Sets the frame (stops current animation).

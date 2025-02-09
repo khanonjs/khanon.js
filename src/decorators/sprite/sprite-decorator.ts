@@ -87,6 +87,19 @@ export function Sprite(props: SpriteProps): any {
 
         get visibility(): number { return this.babylon.mesh.visibility }
 
+        get enabled(): boolean {
+          return this.babylon.mesh.isEnabled() ?? false
+        }
+
+        set enabled(value: boolean) {
+          if (value) {
+            attachLoopUpdate(this)
+          } else {
+            removeLoopUpdate(this)
+          }
+          this.babylon.mesh.setEnabled(value)
+        }
+
         get absolutePosition(): BABYLON.Vector3 { return this.babylon.mesh.absolutePosition }
         set position(value: BABYLON.Vector3) { this.babylon.mesh.position = value }
         get position(): BABYLON.Vector3 { return this.babylon.mesh.position }
@@ -127,15 +140,6 @@ export function Sprite(props: SpriteProps): any {
 
         setShaderMaterialTextureFrame(frame: number): void {
           (this.babylon.mesh.material as BABYLON.ShaderMaterial).setInt('frame', frame)
-        }
-
-        setEnabled(value: boolean): void {
-          if (value) {
-            attachLoopUpdate(this)
-          } else {
-            removeLoopUpdate(this)
-          }
-          this.babylon.mesh.setEnabled(value)
         }
 
         setFrame(frame: number): void {
