@@ -48,10 +48,9 @@ export declare abstract class MeshInterface {
 
   /**
    * Sets or gets the mesh enable state.
-   * @param value
    */
-  get enabled(): boolean
   set enabled(value: boolean)
+  get enabled(): boolean
 
   /**
    * Mesh transform properties.

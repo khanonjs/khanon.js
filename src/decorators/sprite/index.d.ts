@@ -61,10 +61,9 @@ export declare abstract class SpriteInterface {
 
   /**
    * Sets or gets the mesh enable state.
-   * @param value
    */
-  get enabled(): boolean
   set enabled(value: boolean)
+  get enabled(): boolean
 
   /**
    * Sprite transform properties.

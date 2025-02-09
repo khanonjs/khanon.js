@@ -92,8 +92,7 @@ export declare abstract class ActorInterface<B extends SpriteInterface | MeshInt
   get visibility(): number
 
   /**
-   * Sets the enabled status of the actor. If disabled, the actor wont be rendered, and all its actions and states will be paused.
-   * @param value
+   * Sets or gets the enabled status of the actor. If disabled, the actor wont be rendered, and all its actions and states will be paused.
    */
   set enabled(value: boolean)
   get enabled(): boolean
