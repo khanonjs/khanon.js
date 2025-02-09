@@ -50,6 +50,7 @@ import { CameraConstructor } from '../camera/camera-constructor'
 import { CameraInterface } from '../camera/camera-interface'
 import { GUIInterface } from '../gui/gui-interface'
 import { MeshConstructor } from '../mesh/mesh-constructor'
+import { Mesh } from '../mesh/mesh-decorator'
 import { MeshInterface } from '../mesh/mesh-interface'
 import { ParticleConstructor } from '../particle/particle-constructor'
 import { ParticleInterface } from '../particle/particle-interface'
@@ -206,6 +207,32 @@ export function Scene(props: SceneProps = {}): any {
                 this.babylon.scene.executeWhenReady(() => {
                   this._loaded = true
                   invokeCallback(this.onLoaded, this)
+                  this.availableElements.actors.forEach(actorConsctructor => {
+                    const actorCore = ActorsController.get(actorConsctructor)
+                    if (actorCore.props.spawnByReferenceId) {
+                      const meshes = [...this.babylon.scene.meshes].reverse()
+                      meshes.forEach(mesh => {
+                        // @ts-ignore
+                        if (mesh.id.indexOf(actorCore.props.spawnByReferenceId) === 0) {
+                          const actor = this.spawn.actor(actorConsctructor)
+                          if (actor.body) {
+                            actor.body.babylon.mesh.position = mesh.getBoundingInfo().boundingBox.centerWorld
+                            mesh.dispose()
+                          } else {
+                            @Mesh()
+                            // @ts-ignore
+                            class NewMesh extends MeshInterface {
+                              onSpawn() {
+                                this.setMesh(mesh as any)
+                              }
+                            }
+                            this.availableElements.meshes.add(NewMesh)
+                            actor.setBody(NewMesh)
+                          }
+                        }
+                      })
+                    }
+                  })
                   this._loadingProgress?.complete()
                   this._loadingProgress = undefined
                 })

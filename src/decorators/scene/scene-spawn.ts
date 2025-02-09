@@ -24,7 +24,7 @@ export class SceneSpawn {
     this.scenePrototype = scenePrototype
   }
 
-  actor<A extends ActorInterface, C extends number>(actor: new () => A, counter?: C, alternativeOnSpawn?: (actor: A, index: number) => void): undefined extends C ? A : A[] {
+  actor<A extends ActorInterface<any>, C extends undefined | number = undefined>(actor: new () => A, counter?: C, alternativeOnSpawn?: (actor: A, index: number) => void): undefined extends C ? A : A[] {
     if (!this.scene?.availableElements.hasActor(actor)) { Logger.debugError('Trying to spawn an actor that doesn\'t belong to the scene. Please check the scene props.', this.scenePrototype, actor.prototype); return null as any }
     Logger.debug(`Actor spawn (${counter ?? 1}):`, actor.prototype)
     if (counter === undefined) {

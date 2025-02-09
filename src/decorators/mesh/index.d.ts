@@ -107,7 +107,7 @@ export declare abstract class MeshInterface {
 
   /**
    * Plays an animation. Animations are defined in the Sprite decorator 'props' or manually using 'MeshAnimation' interface.
-   * Note that meshes have the animations integrated in the '.glb' file, so you can't add an animation manually.
+   * Note that meshes have the animations integrated in the 'glTF' file, so you can't add an animation manually.
    * @param animation Animation object or ID of a predefined animation
    * @param loopOverride Overrides the animation loop value in case needed
    * @param completed Completed animation callback. It is called everytime the animation ends, no matter if it is in loop or not
@@ -165,7 +165,7 @@ export type MeshConstructor = new () => MeshInterface
 
 export interface MeshProps {
   /**
-   * Url of the .glb or .gltf mesh file.
+   * Url of the 'glTF' mesh file.
    */
   url?: string
 

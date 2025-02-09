@@ -306,6 +306,16 @@ export interface ActorProps {
   particles?: ParticleConstructor[]
 
   /**
+   * (Experimental) Spawns the actor by reference Id. Referemce Id is case sensitive. Use this property to spawn 3D actors.
+   * In case the scene is loaded from a '.babylon' file, the actor is spawned replacing every mesh whose Id starts by this reference Id (E.g. 'RefId', 'RefId.001', 'RefId.002', etc).
+   * If 'setBody' is not used in the actor's 'onSpawn' callback, the actor will be spawned using the '.babylon' scene mesh as body.
+   * If 'setBody' is used in the actor's 'onSpawn' callback, the actor will be spawned replacing the mesh in the '.babylon' scene. The scene mesh will be disposed and the actor will use its own defined body in 'onSpawn' callback.
+   * See https://khanonjs.com/api-docs/interfaces/decorators_scene.SceneProps.html#url to know how to load a scene from a '.banylon' file.
+   * This feature is EXPERIMENTAL. There are some issues with Blender exported mesh positions, and it has not been tested with 3DS Max exporter.
+   */
+  spawnByReferenceId?: string
+
+  /**
    * Rendering group Id. This will be applied to all meshes or sprites used by this actor.
    * Use rendering group Id as the rendering layer in ascending order by ID, starting by 0 (default).
    * https://doc.babylonjs.com/features/featuresDeepDive/materials/advanced/transparent_rendering#rendering-groups
@@ -313,9 +323,9 @@ export interface ActorProps {
   renderingGroupId?: number
 
   /**
-   * Initial visibility
+   * 'true' by default, sets the initial enabled state.
    */
-  visibility?: number
+  enabled?: boolean
 }
 
 export declare function Actor(props?: ActorProps): any
