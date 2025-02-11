@@ -1,6 +1,6 @@
 {
   "name": "@khanonjs/engine",
-  "version": "0.0.116",
+  "version": "0.0.117",
   "description": "A typescript game engine extending Babylon.js",
   "private": false,
   "author": {
