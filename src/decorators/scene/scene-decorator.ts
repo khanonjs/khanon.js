@@ -136,7 +136,9 @@ export function Scene(props: SceneProps = {}): any {
         if (!this.loaded) {
           Logger.warn('Starting a scene that hasn\'t been loaded. Are you sure you want to do this?', _class.prototype)
         }
-        if (!this._camera) { Logger.debugError('Please set a camera before starting the scene. Do it in the (Scene / SceneState) \'onSart\' method:', _class.prototype); return null as any }
+        if (!this._camera) {
+          Logger.warn('Set a camera before starting the scene. Do it in the (Scene / SceneState) \'onSart\' method:', _class.prototype); return null as any
+        }
         if (Core.isDevelopmentMode() && this.props.useDebugInspector) {
           this.useDebugInspector()
         }
