@@ -35,7 +35,7 @@ export abstract class SceneInterface implements Loadable, LoopUpdatable, CanvasR
   abstract _loaded: boolean
   abstract _loadingProgress: LoadingProgress | undefined
   abstract _started: boolean
-  abstract _state: SceneStateInterface
+  abstract _state: SceneStateInterface | null
   abstract _spawn: SceneSpawn
   abstract _remove: SceneRemove
   abstract _camera: CameraInterface | undefined
@@ -75,10 +75,10 @@ export abstract class SceneInterface implements Loadable, LoopUpdatable, CanvasR
   abstract set loopUpdate(value: boolean)
   abstract get loaded(): boolean
   abstract get started(): boolean
-  abstract get state(): SceneStateInterface
+  abstract get state(): SceneStateInterface | null
   abstract get spawn(): SceneSpawn
   abstract get remove(): SceneRemove
-  abstract start(state: SceneStateConstructor, stateSetup: any): SceneStateInterface
+  abstract start(state?: SceneStateConstructor, stateSetup?: any): SceneStateInterface | null
   abstract stop(): void
   abstract load(): LoadingProgress
   abstract unload(): void

@@ -88,7 +88,7 @@ export function Scene(props: SceneProps = {}): any {
       _loaded: boolean
       _loadingProgress: LoadingProgress | undefined
       _started: boolean
-      _state: SceneStateInterface
+      _state: SceneStateInterface | null
       _camera: CameraInterface | undefined
       _cameraConstructor: CameraConstructor
       _spawn: SceneSpawn
@@ -112,14 +112,14 @@ export function Scene(props: SceneProps = {}): any {
       get assets(): AssetDefinition[] { return this._assets }
       get loaded(): boolean { return this._loaded }
       get started(): boolean { return this._started }
-      get state(): SceneStateInterface { return this._state }
+      get state(): SceneStateInterface | null { return this._state }
       get spawn(): SceneSpawn { return this._spawn }
       get remove(): SceneRemove { return this._remove }
 
       set loopUpdate(value: boolean) { switchLoopUpdate(value, this) }
       get loopUpdate(): boolean { return this._loopUpdate }
 
-      start(state: SceneStateConstructor, stateSetup: any): SceneStateInterface {
+      start(state?: SceneStateConstructor, stateSetup?: any): SceneStateInterface | null {
         Logger.debug('Scene start', _class.prototype)
         if (this._started) {
           this.stop()
@@ -129,7 +129,9 @@ export function Scene(props: SceneProps = {}): any {
           this.switchCamera(this._cameraConstructor)
         }
         this._started = true
-        this.switchState(state, stateSetup)
+        if (state) {
+          this.switchState(state, stateSetup)
+        }
         invokeCallback(this.onStart, this)
         if (!this.loaded) {
           Logger.warn('Starting a scene that hasn\'t been loaded. Are you sure you want to do this?', _class.prototype)
@@ -152,7 +154,7 @@ export function Scene(props: SceneProps = {}): any {
         }
         this.guisRelease()
         this.releaseCamera()
-        this.state.end()
+        this.state?.end()
         this.remove.all()
         this._started = false
         Core.stopRenderScene(this)
