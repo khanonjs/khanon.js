@@ -216,7 +216,8 @@ export function Scene(props: SceneProps = {}): any {
                         if (mesh.id.indexOf(actorCore.props.spawnByReferenceId) === 0) {
                           const actor = this.spawn.actor(actorConsctructor)
                           if (actor.body) {
-                            actor.body.babylon.mesh.position = mesh.getBoundingInfo().boundingBox.centerWorld
+                            // actor.body.babylon.mesh.position = mesh.getBoundingInfo().boundingBox.centerWorld
+                            actor.body.babylon.mesh.position = mesh.position
                             mesh.dispose()
                           } else {
                             @Mesh()
