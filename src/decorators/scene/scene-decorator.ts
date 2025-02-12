@@ -47,6 +47,7 @@ import { ActorInterface } from '../actor/actor-interface'
 import { ActorStateConstructor } from '../actor/actor-state/actor-state-constructor'
 import { ActorStateInterface } from '../actor/actor-state/actor-state-interface'
 import { CameraConstructor } from '../camera/camera-constructor'
+import { Camera } from '../camera/camera-decorator'
 import { CameraInterface } from '../camera/camera-interface'
 import { GUIInterface } from '../gui/gui-interface'
 import { MeshConstructor } from '../mesh/mesh-constructor'
@@ -136,7 +137,21 @@ export function Scene(props: SceneProps = {}): any {
         if (!this.loaded) {
           Logger.warn('Starting a scene that hasn\'t been loaded. Are you sure you want to do this?', _class.prototype)
         }
-        if (!this._camera) { Logger.debugError('Please set a camera before starting the scene. Do it in the (Scene / SceneState) \'onSart\' method:', _class.prototype); return null as any }
+        if (!this._camera) {
+          Logger.warn('No camera defined; using a generic camera. Set a camera before starting the scene in the Scene or SceneState \'onSart\' method.', _class.prototype)
+          @Camera()
+          // @ts-ignore
+          class GenericCamera extends CameraInterface {
+            onInitialize() {
+              const camera = new BABYLON.UniversalCamera('Generic camera', new BABYLON.Vector3(0, 0, 0), this.babylon.scene)
+              camera.target = new BABYLON.Vector3(1, 0, 0)
+              camera.inputs.clear()
+              camera.minZ = 0.01
+              return camera
+            }
+          }
+          this.switchCamera(GenericCamera)
+        }
         if (Core.isDevelopmentMode() && this.props.useDebugInspector) {
           this.useDebugInspector()
         }
