@@ -47,13 +47,8 @@ export abstract class SceneInterface implements Loadable, LoopUpdatable, CanvasR
   abstract metadata: Metadata
   abstract loopUpdate$: BABYLON.Observer<number>
   abstract canvasResize$: BABYLON.Observer<Rect>
-  abstract actions: Map<SceneActionConstructor, SceneActionInterface>
-  abstract actors: Set<ActorInterface>
-  abstract meshes: Set<MeshInterface>
-  abstract sprites: Set<SpriteInterface>
-  abstract particles: Set<ParticleInterface>
   abstract animationHandler: Map<SpriteInterface, () => void>
-  abstract guis: Set<GUIInterface>
+  abstract actions: Map<SceneActionConstructor, SceneActionInterface>
   abstract guisStart(): void
   abstract guisRelease(): void
   abstract setEngineParams(): void // TODO ?
@@ -77,6 +72,11 @@ export abstract class SceneInterface implements Loadable, LoopUpdatable, CanvasR
   abstract get state(): SceneStateInterface | null
   abstract get spawn(): SceneSpawn
   abstract get remove(): SceneRemove
+  abstract actors: Set<ActorInterface>
+  abstract meshes: Set<MeshInterface>
+  abstract sprites: Set<SpriteInterface>
+  abstract particles: Set<ParticleInterface>
+  abstract guis: Set<GUIInterface>
   abstract getClassName(): string
   abstract start(state?: SceneStateConstructor, stateSetup?: any): SceneStateInterface | null
   abstract stop(): void

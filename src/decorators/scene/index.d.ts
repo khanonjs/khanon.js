@@ -17,7 +17,10 @@ import {
   CameraConstructor,
   CameraInterface
 } from '../camera'
-import { GUIConstructor } from '../gui'
+import {
+  GUIConstructor,
+  GUIInterface
+} from '../gui'
 import {
   MeshConstructor,
   MeshInterface
@@ -154,6 +157,15 @@ export declare abstract class SceneInterface {
    */
   set loopUpdate(value: boolean)
   get loopUpdate(): boolean
+
+  /**
+   * Scene elements.
+   */
+  get actors(): Set<ActorInterface>
+  get meshes(): Set<MeshInterface>
+  get sprites(): Set<SpriteInterface>
+  get particles(): Set<ParticleInterface>
+  get guis(): Set<GUIInterface>
 
   /**
    * Returns the name of the class.
