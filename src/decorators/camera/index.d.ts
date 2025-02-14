@@ -33,6 +33,11 @@ export declare abstract class CameraInterface</* Setup object */ S = any, /* Sce
   get loopUpdate(): boolean
 
   /**
+   * Returns the name of the class.
+   */
+  getClassName(): string
+
+  /**
    * Notifies a message to this camera.
    */
   notify(message: FlexId, ...args: any[]): void

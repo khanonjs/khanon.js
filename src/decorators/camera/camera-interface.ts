@@ -27,6 +27,7 @@ export abstract class CameraInterface<S = any, C extends SceneInterface = SceneI
   abstract setup: S
   abstract loopUpdate: boolean
   abstract babylon: Pick<BabylonAccessor<BABYLON.Camera>, 'camera' | 'scene'>
+  abstract getClassName(): string
   abstract notify(message: FlexId, ...args: any[]): void
   // TODO attach particles to camera to simulate environment effects?
 

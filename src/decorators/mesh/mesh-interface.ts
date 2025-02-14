@@ -1,6 +1,11 @@
 import * as BABYLON from '@babylonjs/core'
 
-import { DisplayObject } from '../../base'
+import {
+  CanvasResizable,
+  DisplayObject,
+  LoopUpdatable
+} from '../../base'
+import {} from '../../base/interfaces/canvas-resizable'
 import { BabylonAccessor } from '../../models/babylon-accessor'
 import { Rect } from '../../models/rect'
 import { FlexId } from '../../types/flex-id'
@@ -10,8 +15,10 @@ import { MeshAnimation } from './mesh-animation'
 import { MeshAnimationOptions } from './mesh-animation-options'
 import { MeshProps } from './mesh-props'
 
-export abstract class MeshInterface implements DisplayObject {
+export abstract class MeshInterface implements DisplayObject, LoopUpdatable, CanvasResizable {
   abstract props: MeshProps
+  abstract className: string
+  abstract _loopUpdate: boolean
   abstract loopUpdate$: BABYLON.Observer<number>
   abstract canvasResize$: BABYLON.Observer<Rect>
   abstract animationCreateEvent(aniGroup: BABYLON.AnimationGroup): BABYLON.Animation
@@ -37,6 +44,7 @@ export abstract class MeshInterface implements DisplayObject {
   abstract get scene(): SceneInterface
   abstract get enabled(): boolean
   abstract set enabled(value: boolean)
+  abstract getClassName(): string
   abstract setFrame(frame: number): void
   abstract addAnimation(animation: MeshAnimation): void
   abstract playAnimation(animation: SpriteAnimation | MeshAnimation | FlexId, options?: MeshAnimationOptions, completed?: () => void): BABYLON.AnimationGroup

@@ -66,6 +66,7 @@ export abstract class ActorInterface<B extends SpriteInterface | MeshInterface =
   abstract get visibility(): number
   abstract get enabled(): boolean
   abstract set enabled(value: boolean)
+  abstract getClassName(): string
   abstract setBody(Body: new () => B): B
   abstract addNode(Node: new () => B, name: string, transform?: TransformComposition): ActorNode<B> | undefined
   abstract getNode(name: string): ActorNode<B> | undefined

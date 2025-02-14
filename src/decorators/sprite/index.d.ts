@@ -94,6 +94,11 @@ export declare abstract class SpriteInterface {
   get scaleY(): number
 
   /**
+   * Returns the name of the class.
+   */
+  getClassName(): string
+
+  /**
    * Sets the frame (stops current animation).
    * @param frame
    */

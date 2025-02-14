@@ -98,6 +98,11 @@ export declare abstract class ActorInterface<B extends SpriteInterface | MeshInt
   get enabled(): boolean
 
   /**
+   * Returns the name of the class.
+   */
+  getClassName(): string
+
+  /**
    * Sets the Body of the Actor.
    * Setting a new Body removes any previously added Node.
    * @param Node

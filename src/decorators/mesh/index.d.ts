@@ -87,6 +87,11 @@ export declare abstract class MeshInterface {
   translate(axis: BABYLON.Vector3, distance: number, space?: BABYLON.Space): BABYLON.TransformNode
 
   /**
+   * Returns the name of the class.
+   */
+  getClassName(): string
+
+  /**
    * Sets a mesh manually.
    * Through this method, it is possible to manually create a Babylon Mesh in 'onSpawn' method and apply it.
    * @param babylonMesh

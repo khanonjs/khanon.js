@@ -37,21 +37,29 @@ export function GUIState(props: GUIStateProps = {}): any {
         }
       }
 
+      getClassName(): string {
+        return constructor.name
+      }
+
       props: GUIStateProps
       setup: any
-      _loopUpdate: boolean
+      _loopUpdate = true
       loopUpdate$: BABYLON.Observer<number>
       canvasResize$: BABYLON.Observer<Rect>
       metadata: Metadata = Reflect.getMetadata('metadata', this) ?? new Metadata()
 
-      set loopUpdate(value: boolean) { switchLoopUpdate(value, this) }
+      set loopUpdate(value: boolean) {
+        this._loopUpdate = value
+        switchLoopUpdate(this._loopUpdate, this)
+      }
+
       get loopUpdate(): boolean { return this._loopUpdate }
 
       start(setup: any): void {
-        Logger.debug('GUIState start', _classInterface.prototype, this.gui.constructor.prototype)
+        Logger.debug('GUIState start', this.getClassName(), this.gui.getClassName())
         this.setup = setup
         invokeCallback(this.onStart, this)
-        attachLoopUpdate(this)
+        switchLoopUpdate(this._loopUpdate, this)
         attachCanvasResize(this)
       }
 

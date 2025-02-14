@@ -63,7 +63,6 @@ export abstract class SceneInterface implements Loadable, LoopUpdatable, CanvasR
   abstract stopAnimationHandler(sprite: SpriteInterface): void
   abstract startRenderObservable(): void
   abstract stopRenderObservable(): void
-  abstract useBabylonSceneFromAsset(): LoadingProgress // 8a8f use for BabylonSceneMap?
   abstract useDebugInspector(): void
   abstract denyDebugInspector(): void
 
@@ -78,6 +77,7 @@ export abstract class SceneInterface implements Loadable, LoopUpdatable, CanvasR
   abstract get state(): SceneStateInterface | null
   abstract get spawn(): SceneSpawn
   abstract get remove(): SceneRemove
+  abstract getClassName(): string
   abstract start(state?: SceneStateConstructor, stateSetup?: any): SceneStateInterface | null
   abstract stop(): void
   abstract load(): LoadingProgress

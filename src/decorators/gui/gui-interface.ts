@@ -28,6 +28,7 @@ export abstract class GUIInterface implements LoopUpdatable, CanvasResizable, No
   abstract loopUpdate: boolean
   abstract babylon: Pick<BabylonAccessor, 'gui'>
   // abstract get state(): GUIStateInterface | null
+  abstract getClassName(): string
   // abstract switchState(state: GUIStateConstructor, setup: any): GUIStateInterface
   // abstract show(): void
   // abstract hide(): void

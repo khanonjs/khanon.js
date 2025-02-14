@@ -35,7 +35,7 @@ import { MeshInterface } from './mesh-interface'
 import { MeshProps } from './mesh-props'
 
 export function Mesh(props: MeshProps = {}): any {
-  return function <T extends { new (...args: any[]): MeshInterface }>(constructorOrTarget: (T & MeshInterface) | any, contextOrProperty: ClassDecoratorContext | string, descriptor: PropertyDescriptor) {
+  return function <T extends { new (...args: any[]): MeshInterface }>(constructorOrTarget: (T & MeshInterface), contextOrProperty: ClassDecoratorContext | string, descriptor: PropertyDescriptor) {
     const decorateClass = () => {
       const _classInterface = class extends constructorOrTarget implements MeshInterface {
         constructor(readonly scene: SceneInterface, props: MeshProps) {
@@ -45,7 +45,7 @@ export function Mesh(props: MeshProps = {}): any {
             this.babylon.scene = this.scene.babylon.scene
             if (this.props.url) {
               const assetContainer = core.assetContainers.get(scene)
-              if (!assetContainer) { Logger.debugError(`AssetContainer mesh '${this.props.url}' not for spawn:`, _classInterface.prototype, scene.constructor.name) } // TODO get mesh and scene names
+              if (!assetContainer) { Logger.debugError(`AssetContainer mesh '${this.props.url}' not for spawn:`, this.getClassName(), scene.getClassName()) }
               if (assetContainer) {
                 const entries = assetContainer.instantiateModelsToScene((name) => name, undefined, {
                   doNotInstantiate: !this.props.cloneByInstances
@@ -63,7 +63,7 @@ export function Mesh(props: MeshProps = {}): any {
                       })
                     }
                   } else {
-                    Logger.error(`Animation '${animation.id}' not found in mesh '${this.props.url}':`, _classInterface.prototype)
+                    Logger.error(`Animation '${animation.id}' not found in mesh '${this.props.url}':`, this.getClassName())
                   }
                 })
                 const mesh = entries.rootNodes[0] as BABYLON.Mesh
@@ -71,20 +71,30 @@ export function Mesh(props: MeshProps = {}): any {
                 this.setMesh(mesh)
               }
             }
-            attachLoopUpdate(this)
+            switchLoopUpdate(this._loopUpdate, this)
             attachCanvasResize(this)
             invokeCallback(this.onSpawn, this)
           }
         }
 
+        getClassName(): string {
+          return this.className ?? constructorOrTarget.name
+        }
+
         props: MeshProps
+        className: string
         babylon: Pick<BabylonAccessor, 'mesh' | 'scene'> = { mesh: null as any, scene: null as any }
         animation: MeshAnimation | null = null
         animations: Map<FlexId, MeshAnimation> = new Map<FlexId, MeshAnimation>()
         loopUpdate$: BABYLON.Observer<number>
         canvasResize$: BABYLON.Observer<Rect>
+        _loopUpdate = false
 
-        set loopUpdate(value: boolean) { switchLoopUpdate(value, this) }
+        set loopUpdate(value: boolean) {
+          this._loopUpdate = value
+          switchLoopUpdate(this._loopUpdate, this)
+        }
+
         get loopUpdate(): boolean { return this._loopUpdate }
 
         get enabled(): boolean {
@@ -93,7 +103,7 @@ export function Mesh(props: MeshProps = {}): any {
 
         set enabled(value: boolean) {
           if (value) {
-            attachLoopUpdate(this)
+            switchLoopUpdate(this._loopUpdate, this)
           } else {
             removeLoopUpdate(this)
           }
@@ -180,7 +190,7 @@ export function Mesh(props: MeshProps = {}): any {
         }
 
         addAnimation(animation: MeshAnimation): void {
-          if (this.animations.get(animation.id)) { Logger.debugError(`Trying to add mesh animation '${animation.id}' that has been already added:`, _classInterface.prototype) } // TODO get mesh and scene names
+          if (this.animations.get(animation.id)) { Logger.debugError(`Trying to add mesh animation '${animation.id}' that has been already added:`, this.getClassName()) }
           if (animation?.keyFrames && animation.keyFrames.length > 0) {
             animation.keyFrames.forEach(keyFrame => {
               keyFrame.frames.forEach(frame => {
@@ -195,7 +205,7 @@ export function Mesh(props: MeshProps = {}): any {
         }
 
         playAnimation(animationId: FlexId, options?: MeshAnimationOptions, completed?: () => void): BABYLON.AnimationGroup {
-          if (!this.animations.get(animationId)) { Logger.debugError(`Animation '${animationId}' not found in mesh '${this.props.url}':`, _classInterface.prototype) } // TODO get mesh and scene names
+          if (!this.animations.get(animationId)) { Logger.debugError(`Animation '${animationId}' not found in mesh '${this.props.url}':`, this.getClassName()) }
           this.animation = this.animations.get(animationId) as any
           if (this.animation) {
             const loop = (options?.loop !== undefined ? options.loop : this.animation.loop) ?? false
@@ -271,7 +281,7 @@ export function Mesh(props: MeshProps = {}): any {
                 })
                 return progress
               } else {
-                Logger.error(`Asset '${this.props.url}' not found on mesh loading:`, _classInterface.prototype)
+                Logger.error(`Asset '${this.props.url}' not found on mesh loading:`, this.Instance.getClassName())
                 return new LoadingProgress().complete()
               }
             } else {
@@ -309,7 +319,9 @@ export function Mesh(props: MeshProps = {}): any {
       constructorOrTarget instanceof ParticleInterface
     ) && !descriptor) { // Undefined descriptor means it is a decorated property, otherwiese it is a decorated method
       @Mesh(props)
-      abstract class _meshInterface extends MeshInterface {}
+      abstract class _meshInterface extends MeshInterface {
+        className = contextOrProperty as any
+      }
       // TODO: Store the 'className' to debug it in logs.
 
       if (!Reflect.hasMetadata('metadata', constructorOrTarget)) {

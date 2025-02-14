@@ -1,6 +1,10 @@
 import * as BABYLON from '@babylonjs/core'
 
-import { DisplayObject } from '../../base'
+import {
+  CanvasResizable,
+  DisplayObject,
+  LoopUpdatable
+} from '../../base'
 import { BabylonAccessor } from '../../models/babylon-accessor'
 import { DrawBlockProperties } from '../../models/draw-block-properties'
 import { Rect } from '../../models/rect'
@@ -13,13 +17,14 @@ import { SpriteAnimationOptions } from './sprite-animatrion-options'
 import { SpriteMesh } from './sprite-mesh'
 import { SpriteProps } from './sprite-props'
 
-export abstract class SpriteInterface implements DisplayObject {
+export abstract class SpriteInterface implements DisplayObject, LoopUpdatable, CanvasResizable {
   abstract props: SpriteProps
+  abstract className: string
   abstract spriteMesh: SpriteMesh
+  abstract _loopUpdate: boolean
   abstract loopUpdate$: BABYLON.Observer<number>
   abstract canvasResize$: BABYLON.Observer<Rect>
   abstract exclusiveTexture: boolean // Exclusive texture means this sprite has an exclusive texture that is not stored anywhere, so the sprite itself has to handle its release.
-  abstract _scale: number
   abstract setSpriteMesh(spriteMesh: SpriteMesh, isExclusive: boolean, isParticle: boolean): void
   abstract setShaderMaterialTextureFrame(frame: number): void
 
@@ -46,6 +51,7 @@ export abstract class SpriteInterface implements DisplayObject {
   abstract get scene(): SceneInterface
   abstract get enabled(): boolean
   abstract set enabled(value: boolean)
+  abstract getClassName(): string
   abstract setFrame(frame: number): void
   abstract addAnimation(animation: SpriteAnimation | MeshAnimation): void
   abstract playAnimation(animation: SpriteAnimation | MeshAnimation | FlexId, options?: SpriteAnimationOptions, completed?: () => void): void

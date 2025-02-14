@@ -15,8 +15,6 @@ import {
   attachCanvasResize,
   attachLoopUpdate,
   invokeCallback,
-  removeCanvasResize,
-  removeLoopUpdate,
   switchLoopUpdate
 } from '../../../utils/utils'
 import { SceneInterface } from '../scene-interface'
@@ -34,14 +32,22 @@ export function SceneAction(props: SceneActionProps = {}): any {
           this.metadata.applyProps(this)
         }
 
+        getClassName(): string {
+          return this._className ?? constructorOrTarget.name
+        }
+
         props = props
         metadata: Metadata = Reflect.getMetadata('metadata', this) ?? new Metadata()
-        _loopUpdate: boolean
+        _loopUpdate = true
         loopUpdate$: BABYLON.Observer<number>
         canvasResize$: BABYLON.Observer<Rect>
         setup: any
 
-        set loopUpdate(value: boolean) { switchLoopUpdate(value, this) }
+        set loopUpdate(value: boolean) {
+          this._loopUpdate = value
+          switchLoopUpdate(this._loopUpdate, this)
+        }
+
         get loopUpdate(): boolean { return this._loopUpdate }
 
         start(setup: any): void {
@@ -57,7 +63,7 @@ export function SceneAction(props: SceneActionProps = {}): any {
               }
             })
           }
-          attachLoopUpdate(this)
+          switchLoopUpdate(this._loopUpdate, this)
           attachCanvasResize(this)
           invokeCallback(this.onPlay, this)
         }

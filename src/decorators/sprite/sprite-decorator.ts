@@ -16,7 +16,6 @@ import { FlexId } from '../../types/flex-id'
 import {
   applyDefaults,
   attachCanvasResize,
-  attachLoopUpdate,
   invokeCallback,
   isFlexId,
   removeCanvasResize,
@@ -40,9 +39,8 @@ import { SpriteProps } from './sprite-props'
 import { spritePropsDefault } from './sprite.props.deafult'
 
 export function Sprite(props: SpriteProps): any {
-  return function <T extends { new (...args: any[]): SpriteInterface }>(constructorOrTarget: (T & SpriteInterface) | any, contextOrProperty: ClassDecoratorContext | string, descriptor: PropertyDescriptor) {
+  return function <T extends { new (...args: any[]): SpriteInterface }>(constructorOrTarget: (T & SpriteInterface), contextOrProperty: ClassDecoratorContext | string, descriptor: PropertyDescriptor) {
     const decorateClass = () => {
-      const _className = constructorOrTarget.name
       const _classInterface = class extends constructorOrTarget implements SpriteInterface {
         constructor(readonly scene: SceneInterface, props: SpriteProps) {
           super()
@@ -51,19 +49,24 @@ export function Sprite(props: SpriteProps): any {
             this.babylon.scene = this.scene.babylon.scene
             if (!this.props.url) {
               const spriteMesh = new SpriteMesh(scene, this.props)
-              spriteMesh.setFromBlank(_className)
+              spriteMesh.setFromBlank(this.getClassName())
               this.setSpriteMesh(spriteMesh, true)
             } else {
-              if (!core.spriteMeshes.get(scene)) { Logger.debugError('Sprite texture not found for scene in sprite constructor:', _classInterface.prototype, scene.constructor.name) } // TODO get sprite and scene names
+              if (!core.spriteMeshes.get(scene)) { Logger.debugError('Sprite texture not found for scene in sprite constructor:', this.getClassName(), scene.getClassName()) }
               this.setSpriteMesh(core.spriteMeshes.get(scene) as any, false)
             }
-            attachLoopUpdate(this)
+            switchLoopUpdate(this._loopUpdate, this)
             attachCanvasResize(this)
             invokeCallback(this.onSpawn, this)
           }
         }
 
+        getClassName(): string {
+          return this.className ?? constructorOrTarget.name
+        }
+
         props: SpriteProps
+        className: string
         spriteMesh: SpriteMesh
         exclusiveTexture: boolean
         animation: SpriteAnimation | null = null
@@ -74,10 +77,13 @@ export function Sprite(props: SpriteProps): any {
         keyFramesTimeouts: Timeout[] = []
         endAnimationTimerInterval: Timeout | null
         endAnimationTimerTimeout: Timeout | null
-        _visible: boolean
-        _scale: number = 1
+        _loopUpdate = false
 
-        set loopUpdate(value: boolean) { switchLoopUpdate(value, this) }
+        set loopUpdate(value: boolean) {
+          this._loopUpdate = value
+          switchLoopUpdate(this._loopUpdate, this)
+        }
+
         get loopUpdate(): boolean { return this._loopUpdate }
 
         set visibility(value: number) {
@@ -93,7 +99,7 @@ export function Sprite(props: SpriteProps): any {
 
         set enabled(value: boolean) {
           if (value) {
-            attachLoopUpdate(this)
+            switchLoopUpdate(this._loopUpdate, this)
           } else {
             removeLoopUpdate(this)
           }
@@ -107,7 +113,7 @@ export function Sprite(props: SpriteProps): any {
         get rotation(): number { return this.babylon.mesh.rotation.z }
         set scale(value: number) { this.babylon.mesh.scaling.set(value, value, 1.0) }
         get scale(): number {
-          if (this.babylon.mesh.scaling.x !== this.babylon.mesh.scaling.y) { Logger.debugError(`ScaleX '${this.babylon.mesh.scaling.x}' is different than ScaleY '${this.babylon.mesh.scaling.y}', it is a mistake to setup different scales for both coordinates treating them as equals through 'get scale' method.`, _classInterface.prototype) }
+          if (this.babylon.mesh.scaling.x !== this.babylon.mesh.scaling.y) { Logger.debugError(`ScaleX '${this.babylon.mesh.scaling.x}' is different than ScaleY '${this.babylon.mesh.scaling.y}', it is a mistake to setup different scales for both coordinates treating them as equals through 'get scale' method.`, this.getClassName()) }
           return this.babylon.mesh.scaling.x
         }
 
@@ -145,7 +151,6 @@ export function Sprite(props: SpriteProps): any {
         setFrame(frame: number): void {
           if (frame < this.getFirstFrame() || frame > this.getLastFrame()) { Logger.debugError(`Calling out of bound setFrame(${frame}) - Start: ${this.getFirstFrame()}, End: ${this.getLastFrame()}`) }
           this.stopAnimation()
-          this.visible = true
           this.setShaderMaterialTextureFrame(frame)
         }
 
@@ -179,7 +184,7 @@ export function Sprite(props: SpriteProps): any {
 
         playAnimation(animation: SpriteAnimation | FlexId, options?: SpriteAnimationOptions, completed?: () => void): void {
           if (isFlexId(animation)) {
-            if (!this.animations.get(animation as FlexId)) { Logger.debugError(`Animation '${animation}' doesn't exist in sprite:`, _classInterface.prototype); return }
+            if (!this.animations.get(animation as FlexId)) { Logger.debugError(`Animation '${animation}' doesn't exist in sprite:`, this.getClassName()); return }
             animation = this.animations.get(animation as FlexId) as SpriteAnimation
           }
           this.animation = animation as SpriteAnimation
@@ -189,7 +194,6 @@ export function Sprite(props: SpriteProps): any {
           const loop = options?.loop ?? this.animation.loop
           const keyFrames = this.animation.keyFrames
 
-          this.visible = true
           this.removeEndAnimationTimer()
           this.removeAnimationKeyFrames()
 
@@ -278,7 +282,7 @@ export function Sprite(props: SpriteProps): any {
           // - Improve performance.
           // - Let the user draw text over an 'url' loaded texture (not only blank textures).
 
-          if (this.props.url) { Logger.debugError('Trying to draw text on an \'url\' texture. Texts can be only drawn on blank textures (url: undefined).', _classInterface.prototype); return }
+          if (this.props.url) { Logger.debugError('Trying to draw text on an \'url\' texture. Texts can be only drawn on blank textures (url: undefined).', this.getClassName()); return }
 
           const font = `${properties.fontStyle} ${properties.fontSize}px ${properties.fontName}`
 
@@ -312,7 +316,7 @@ export function Sprite(props: SpriteProps): any {
         }
 
         release(): void {
-          if (!this.babylon.mesh) { Logger.debugError('Trying to remove a Sprite that has been already removed.', _classInterface.prototype); return }
+          if (!this.babylon.mesh) { Logger.debugError('Trying to remove a Sprite that has been already removed.', this.getClassName()); return }
           invokeCallback(this.onDestroy, this)
           this.stopAnimation()
           if (this.exclusiveTexture) {
@@ -349,7 +353,7 @@ export function Sprite(props: SpriteProps): any {
                     progress.complete()
                   })
               } else {
-                Logger.error(`Asset '${this.props.url}' not found on sprite load:`, _classInterface.prototype)
+                Logger.error(`Asset '${this.props.url}' not found on sprite load:`, this.Instance.getClassName())
               }
               return progress
             } else {
@@ -368,7 +372,7 @@ export function Sprite(props: SpriteProps): any {
         }
 
         getParticleInfo(scene: SceneInterface): SpriteParticleInfo {
-          if (!core.spriteMeshes.get(scene)) { Logger.debugError('Sprite texture not found for scene in getParticleInfo:', _classInterface.prototype, scene.constructor.name) } // TODO get sprite and scene names
+          if (!core.spriteMeshes.get(scene)) { Logger.debugError('Sprite texture not found for scene in getParticleInfo:', this.Instance.getClassName(), scene.constructor.name) } // TODO get sprite and scene names
           return {
             spriteMesh: this.spriteMeshes.get(scene) as any,
             props: this.props
@@ -393,8 +397,9 @@ export function Sprite(props: SpriteProps): any {
       constructorOrTarget instanceof ParticleInterface
     ) && !descriptor) { // Undefined descriptor means it is a decorated property, otherwiese it is a decorated method
       @Sprite(props)
-      abstract class _spriteInterface extends SpriteInterface {}
-      // TODO: Store the 'className' to debug it in logs.
+      abstract class _spriteInterface extends SpriteInterface {
+        className = contextOrProperty as any
+      }
 
       if (!Reflect.hasMetadata('metadata', constructorOrTarget)) {
         Reflect.defineMetadata('metadata', new Metadata(), constructorOrTarget)

@@ -8,11 +8,9 @@ import { SceneInterface } from './scene-interface'
 // TODO add support to inject a user defined SceneRemove class into the scene?
 export class SceneRemove {
   private readonly scene: SceneInterface
-  private readonly scenePrototype: any
 
-  constructor(scene: SceneInterface, scenePrototype: any) {
+  constructor(scene: SceneInterface) {
     this.scene = scene
-    this.scenePrototype = scenePrototype
   }
 
   actor(actor: ActorInterface | ActorInterface[]): void {

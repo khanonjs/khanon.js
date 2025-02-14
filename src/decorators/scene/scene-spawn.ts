@@ -17,18 +17,16 @@ import { SceneInterface } from './scene-interface'
 // TODO Add lights here? That way scene would handle their release.
 export class SceneSpawn {
   private readonly scene: SceneInterface
-  private readonly scenePrototype: any
 
-  constructor(scene: SceneInterface, scenePrototype: any) {
+  constructor(scene: SceneInterface) {
     this.scene = scene
-    this.scenePrototype = scenePrototype
   }
 
   actor<A extends ActorInterface<any>, C extends undefined | number = undefined>(actor: new () => A, counter?: C, alternativeOnSpawn?: (actor: A, index: number) => void): undefined extends C ? A : A[] {
-    if (!this.scene?.availableElements.hasActor(actor)) { Logger.debugError('Trying to spawn an actor that doesn\'t belong to the scene. Please check the scene props.', this.scenePrototype, actor.prototype); return null as any }
-    Logger.debug(`Actor spawn (${counter ?? 1}):`, actor.prototype)
+    if (!this.scene?.availableElements.hasActor(actor)) { Logger.debugError('Trying to spawn an actor that doesn\'t belong to the scene. Please check the scene props.', this.scene.getClassName(), actor.prototype); return null as any }
     if (counter === undefined) {
       const instance = ActorsController.get(actor).spawn(this.scene)
+      Logger.debug(`Actor spawn (${counter ?? 1}):`, instance.getClassName())
       this.scene.actors.add(instance)
       return instance as any
     } else {
@@ -36,6 +34,7 @@ export class SceneSpawn {
       const actorCore = ActorsController.get(actor)
       for (let i = 0; i < counter; i++) {
         const instance = actorCore.spawn(this.scene)
+        if (i === 0) { Logger.debug(`Actor spawn (${counter ?? 1}):`, instance.getClassName()) }
         this.scene.actors.add(instance)
         retInstances.push(instance)
         if (alternativeOnSpawn) {
@@ -54,10 +53,10 @@ export class SceneSpawn {
   }
 
   mesh<M extends MeshInterface>(mesh: new () => M, counter?: number, alternativeOnSpawn?: (mesh: M, index: number) => void): M {
-    if (!this.scene.availableElements.hasMesh(mesh)) { Logger.debugError('Trying to spawn a mesh that doesn\'t belong to the scene. Please check the scene props.', this.scenePrototype, mesh.prototype); return null as any }
-    Logger.debug(`Mesh spawn (${counter ?? 1}):`, mesh.prototype)
+    if (!this.scene.availableElements.hasMesh(mesh)) { Logger.debugError('Trying to spawn a mesh that doesn\'t belong to the scene. Please check the scene props.', this.scene.getClassName(), mesh.prototype); return null as any }
     if (counter === undefined) {
       const instance = MeshesController.get(mesh).spawn(this.scene)
+      Logger.debug(`Mesh spawn (${counter ?? 1}):`, instance.getClassName())
       this.scene.meshes.add(instance)
       return instance as any
     } else {
@@ -65,6 +64,7 @@ export class SceneSpawn {
       const actorCore = MeshesController.get(mesh)
       for (let i = 0; i < counter; i++) {
         const instance = actorCore.spawn(this.scene)
+        if (i === 0) { Logger.debug(`Mesh spawn (${counter ?? 1}):`, instance.getClassName()) }
         this.scene.meshes.add(instance)
         retInstances.push(instance)
         if (alternativeOnSpawn) {
@@ -76,10 +76,10 @@ export class SceneSpawn {
   }
 
   sprite<S extends SpriteInterface>(sprite: new () => S, counter?: number, alternativeOnSpawn?: (sprite: S, index: number) => void): S {
-    if (!this.scene.availableElements.hasSprite(sprite)) { Logger.debugError('Trying to spawn a sprite that doesn\'t belong to the scene. Please check the scene props.', this.scenePrototype, sprite.prototype); return null as any }
-    Logger.debug(`Sprite spawn (${counter ?? 1}):`, sprite.prototype)
+    if (!this.scene.availableElements.hasSprite(sprite)) { Logger.debugError('Trying to spawn a sprite that doesn\'t belong to the scene. Please check the scene props.', this.scene.getClassName(), sprite.prototype); return null as any }
     if (counter === undefined) {
       const instance = SpritesController.get(sprite).spawn(this.scene)
+      Logger.debug(`Sprite spawn (${counter ?? 1}):`, instance.getClassName())
       this.scene.sprites.add(instance)
       return instance as any
     } else {
@@ -87,6 +87,7 @@ export class SceneSpawn {
       const actorCore = SpritesController.get(sprite)
       for (let i = 0; i < counter; i++) {
         const instance = actorCore.spawn(this.scene)
+        if (i === 0) { Logger.debug(`Sprite spawn (${counter ?? 1}):`, instance.getClassName()) }
         this.scene.sprites.add(instance)
         retInstances.push(instance)
         if (alternativeOnSpawn) {

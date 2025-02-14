@@ -27,6 +27,7 @@ export abstract class ActorStateInterface<S = any, A = ActorInterface<SpriteInte
   abstract setup: S
   abstract get loopUpdate(): boolean
   abstract set loopUpdate(value: boolean)
+  abstract getClassName(): string
   abstract notify(message: FlexId, ...args: any[]): void
 
   /**

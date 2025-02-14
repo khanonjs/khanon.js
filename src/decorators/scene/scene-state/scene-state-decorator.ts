@@ -42,16 +42,24 @@ export function SceneState(props: SceneStateProps = {}): any {
         }
       }
 
+      getClassName(): string {
+        return constructor.name
+      }
+
       props: SceneStateProps
       setup: any
-      _loopUpdate: boolean
+      _loopUpdate = true
       loopUpdate$: BABYLON.Observer<number>
       canvasResize$: BABYLON.Observer<Rect>
       _spawn: SceneSpawn
       _remove: SceneRemove
       metadata: Metadata = Reflect.getMetadata('metadata', this) ?? new Metadata()
 
-      set loopUpdate(value: boolean) { switchLoopUpdate(value, this) }
+      set loopUpdate(value: boolean) {
+        this._loopUpdate = value
+        switchLoopUpdate(this._loopUpdate, this)
+      }
+
       get loopUpdate(): boolean { return this._loopUpdate }
 
       get spawn(): SceneSpawn { return this._spawn }
@@ -66,10 +74,10 @@ export function SceneState(props: SceneStateProps = {}): any {
       }
 
       start(setup: any): void {
-        Logger.debug('SceneState start', _classInterface.prototype, this.scene.constructor.prototype)
+        Logger.debug('SceneState start', this.getClassName(), this.scene.getClassName())
         this.setup = setup
         invokeCallback(this.onStart, this)
-        attachLoopUpdate(this)
+        switchLoopUpdate(this._loopUpdate, this)
         attachCanvasResize(this)
       }
 

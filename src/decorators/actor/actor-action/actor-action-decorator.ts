@@ -34,7 +34,12 @@ export function ActorAction(props: ActorActionProps = {}): any {
           this.metadata.applyProps(this)
         }
 
+        getClassName(): string {
+          return this.className ?? constructorOrTarget.name
+        }
+
         props = props
+        className: string
         actor: ActorInterface
         scene: SceneInterface
         metadata: Metadata = Reflect.getMetadata('metadata', this) ?? new Metadata()
@@ -43,10 +48,14 @@ export function ActorAction(props: ActorActionProps = {}): any {
         loopUpdate$: BABYLON.Observer<number>
         canvasResize$: BABYLON.Observer<Rect>
         setup: any
-        _loopUpdate = false
+        _loopUpdate = true
         _isPlaying = false
 
-        set loopUpdate(value: boolean) { switchLoopUpdate(value, this) }
+        set loopUpdate(value: boolean) {
+          this._loopUpdate = value
+          switchLoopUpdate(this._loopUpdate, this)
+        }
+
         get loopUpdate(): boolean { return this._loopUpdate }
 
         get isPlaying(): boolean { return this._isPlaying }
@@ -66,19 +75,16 @@ export function ActorAction(props: ActorActionProps = {}): any {
               }
             })
           }
-          this._loopUpdate = true
-          attachLoopUpdate(this)
+          switchLoopUpdate(this._loopUpdate, this)
           attachCanvasResize(this)
           invokeCallback(this.onPlay, this)
         }
 
         play(): void {
-          if (!this.props.preserve) { Logger.debugError('Cannot play an action which is not preserved in context.', _classInterface.prototype) }
+          if (!this.props.preserve) { Logger.debugError('Cannot play an action which is not preserved in context.', this.getClassName()) }
           if (!this.isPlaying) {
             this._isPlaying = true
-            if (this.loopUpdate) {
-              attachLoopUpdate(this)
-            }
+            switchLoopUpdate(this._loopUpdate, this)
             attachCanvasResize(this)
             invokeCallback(this.onPlay, this)
           }
@@ -135,6 +141,7 @@ export function ActorAction(props: ActorActionProps = {}): any {
     ) && descriptor) { // Defined descriptor means it is a method
       @ActorAction(props)
       abstract class _actionInterface extends ActorActionInterface {
+        className = contextOrMethod as any
         onLoopUpdate = descriptor.value
       }
 

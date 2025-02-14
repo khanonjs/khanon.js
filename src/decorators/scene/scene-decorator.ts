@@ -32,7 +32,6 @@ import { FlexId } from '../../types/flex-id'
 import {
   applyDefaults,
   attachCanvasResize,
-  attachLoopUpdate,
   invokeCallback,
   isPrototypeOf,
   removeArrayDuplicitiesInObject,
@@ -74,10 +73,14 @@ export function Scene(props: SceneProps = {}): any {
     const _class = class extends constructor implements SceneInterface {
       constructor() {
         super()
-        this._spawn = new SceneSpawn(this, _class.prototype)
-        this._remove = new SceneRemove(this, _class.prototype)
+        this._spawn = new SceneSpawn(this)
+        this._remove = new SceneRemove(this)
         this.metadata.applyProps(this)
         this.storeAvailableElements()
+      }
+
+      getClassName(): string {
+        return constructor.name
       }
 
       props = removeArrayDuplicitiesInObject(applyDefaults(props, scenePropsDefault))
@@ -94,7 +97,7 @@ export function Scene(props: SceneProps = {}): any {
       _cameraConstructor: CameraConstructor
       _spawn: SceneSpawn
       _remove: SceneRemove
-      _loopUpdate: boolean
+      _loopUpdate = true
       _debugInspector: (event: KeyboardEvent) => void
 
       // Spawned elements
@@ -117,11 +120,15 @@ export function Scene(props: SceneProps = {}): any {
       get spawn(): SceneSpawn { return this._spawn }
       get remove(): SceneRemove { return this._remove }
 
-      set loopUpdate(value: boolean) { switchLoopUpdate(value, this) }
+      set loopUpdate(value: boolean) {
+        this._loopUpdate = value
+        switchLoopUpdate(this._loopUpdate, this)
+      }
+
       get loopUpdate(): boolean { return this._loopUpdate }
 
       start(state?: SceneStateConstructor, stateSetup?: any): SceneStateInterface | null {
-        Logger.debug('Scene start', _class.prototype)
+        Logger.debug('Scene start', this.getClassName())
         if (this._started) {
           this.stop()
         }
@@ -135,10 +142,10 @@ export function Scene(props: SceneProps = {}): any {
         }
         invokeCallback(this.onStart, this)
         if (!this.loaded) {
-          Logger.warn('Starting a scene that hasn\'t been loaded. Are you sure you want to do this?', _class.prototype)
+          Logger.warn('Starting a scene that hasn\'t been loaded. Are you sure you want to do this?', this.getClassName())
         }
         if (!this._camera) {
-          Logger.warn('No camera defined; using a generic camera. Set a camera before starting the scene in the Scene or SceneState \'onSart\' method.', _class.prototype)
+          Logger.warn('No camera defined; using a generic camera. Set a camera before starting the scene in the Scene\'s or SceneState\'s \'onSart\' method.', this.getClassName())
           @Camera()
           // @ts-ignore
           class GenericCamera extends CameraInterface {
@@ -157,13 +164,13 @@ export function Scene(props: SceneProps = {}): any {
         }
         Core.startRenderScene(this)
         this.startRenderObservable()
-        attachLoopUpdate(this)
+        switchLoopUpdate(this._loopUpdate, this)
         attachCanvasResize(this)
         return this.state
       }
 
       stop(): void {
-        Logger.debug('Scene stop', _class.prototype)
+        Logger.debug('Scene stop', this.getClassName())
         if (Core.isDevelopmentMode()) {
           this.denyDebugInspector()
         }
@@ -179,7 +186,7 @@ export function Scene(props: SceneProps = {}): any {
       }
 
       load(): LoadingProgress {
-        Logger.debug('Scene load', _class.prototype)
+        Logger.debug('Scene load', this.getClassName())
 
         if (this._loaded) {
           return new LoadingProgress().complete()
@@ -198,7 +205,7 @@ export function Scene(props: SceneProps = {}): any {
           }
           const assetsProgress = AssetsController.sceneLoad(this)
           assetsProgress.onComplete.add(() => {
-            Logger.debug('Scene assets load completed', _class.prototype)
+            Logger.debug('Scene assets load completed', this.getClassName())
             const elementsLoading = new LoadingProgress().fromNodes([
               SceneStatesController.load(this.props.states, this),
               SceneActionsController.load(this.props.actions, this),
@@ -213,7 +220,7 @@ export function Scene(props: SceneProps = {}): any {
               GUIController.load(this.props.guis, this)
             ])
             elementsLoading.onComplete.add(() => {
-              Logger.debug('Scene elements load completed', _class.prototype)
+              Logger.debug('Scene elements load completed', this.getClassName())
               const startScene = () => {
                 // Load configuration after Elements loading, to avoid AppendAsync method to override these configurations.
                 if (this.props.configuration) {
@@ -261,11 +268,11 @@ export function Scene(props: SceneProps = {}): any {
                 const file = this.props.url.slice(indexSlash)
                 BABYLON.SceneLoader.AppendAsync(path, file, this.babylon.scene)
                   .then(() => {
-                    Logger.debug(`Scene load  AppendAsync from '${this.props.url}' completed.`, _class.prototype)
+                    Logger.debug(`Scene load  AppendAsync from '${this.props.url}' completed.`, this.getClassName())
                     startScene()
                   })
                   .catch((error: string) => {
-                    Logger.debugError(`Scene load AppendAsync from '${this.props.url}' error`, error, _class.prototype)
+                    Logger.debugError(`Scene load AppendAsync from '${this.props.url}' error`, error, this.getClassName())
                   })
               } else {
                 startScene()
@@ -273,7 +280,7 @@ export function Scene(props: SceneProps = {}): any {
             })
           })
           assetsProgress.onError.add((error: string) => {
-            Logger.debugError('Scene assets load error', error, _class.prototype)
+            Logger.debugError('Scene assets load error', error, this.getClassName())
             KJS.throw(error)
           })
           assetsProgress.onProgress.add((progress: number) => {
@@ -284,7 +291,7 @@ export function Scene(props: SceneProps = {}): any {
       }
 
       unload(): void {
-        Logger.debug('Scene unload', _class.prototype, this)
+        Logger.debug('Scene unload', this.getClassName(), this.getClassName())
         this._loaded = false
         SceneStatesController.unload(this.props.states, this)
         SceneActionsController.unload(this.props.actions, this)
@@ -346,12 +353,8 @@ export function Scene(props: SceneProps = {}): any {
         return this._camera as C
       }
 
-      useBabylonSceneFromAsset(): LoadingProgress { // TODO
-        return null as any
-      }
-
       switchState(state: SceneStateConstructor, setup: any): SceneStateInterface {
-        if (!this.availableElements.hasSceneState(state)) { Logger.debugError('Trying to set a state non available to the scene. Please check the scene props.', _class.prototype, state.prototype); return null as any }
+        if (!this.availableElements.hasSceneState(state)) { Logger.debugError('Trying to set a state non available to the scene. Please check the scene props.', this.getClassName(), state.prototype); return null as any }
         const _state = SceneStatesController.get(state).spawn(this)
         if (this._state) {
           this._state.end()
@@ -393,7 +396,7 @@ export function Scene(props: SceneProps = {}): any {
       }
 
       playAction(actionConstructor: SceneActionConstructor, setup: any): SceneActionInterface {
-        if (!this.availableElements.hasSceneAction(actionConstructor)) { Logger.debugError('Trying to play an action non available to the actor. Please check the actor props.', _class.prototype, actionConstructor.prototype); return null as any }
+        if (!this.availableElements.hasSceneAction(actionConstructor)) { Logger.debugError('Trying to play an action non available to the actor. Please check the actor props.', this.getClassName(), actionConstructor.prototype); return null as any }
         let action = this.actions.get(actionConstructor)
         if (!action) {
           action = SceneActionsController.get(actionConstructor).spawn(this)

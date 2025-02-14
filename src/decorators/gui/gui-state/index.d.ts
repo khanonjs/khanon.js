@@ -42,6 +42,11 @@ export declare abstract class SceneStateInterface<S = any, C = SceneInterface> {
   get loopUpdate(): boolean
 
   /**
+   * Returns the name of the class.
+   */
+  getClassName(): string
+
+  /**
    * Sets a camera.
    */
   switchCamera<C extends CameraConstructor>(camera: C, setup: InstanceType<C>['setup']): void

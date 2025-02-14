@@ -56,11 +56,15 @@ export function Actor(props: ActorProps = {}): any {
         this.metadata.applyProps(this)
       }
 
+      getClassName(): string {
+        return constructor.name
+      }
+
       props: ActorProps
       metadata: Metadata = Reflect.getMetadata('metadata', this) ?? new Metadata()
       transform: SpriteInterface | MeshInterface | null
       t: SpriteInterface | MeshInterface | null
-      _loopUpdate: boolean
+      _loopUpdate = true
       loopUpdate$: BABYLON.Observer<number>
       canvasResize$: BABYLON.Observer<Rect>
       _body: B | null = null
@@ -71,7 +75,11 @@ export function Actor(props: ActorProps = {}): any {
       particles: Map<FlexId, ParticleInterface> = new Map<FlexId, ParticleInterface>()
       // guis: Set<GUIInterface> = new Set<GUIInterface>()
 
-      set loopUpdate(value: boolean) { switchLoopUpdate(value, this) }
+      set loopUpdate(value: boolean) {
+        this._loopUpdate = value
+        switchLoopUpdate(this._loopUpdate, this)
+      }
+
       get loopUpdate(): boolean { return this._loopUpdate }
       get body(): SpriteInterface | MeshInterface | null { return this._body }
       get state(): ActorStateInterface | null { return this._state }
@@ -95,7 +103,7 @@ export function Actor(props: ActorProps = {}): any {
       set enabled(value: boolean) {
         // TODO apply this property to pause states and notifications
         if (value) {
-          attachLoopUpdate(this)
+          switchLoopUpdate(this._loopUpdate, this)
         } else {
           removeLoopUpdate(this)
         }
@@ -109,9 +117,9 @@ export function Actor(props: ActorProps = {}): any {
 
       initialize(props: ActorProps) {
         this.props = props
-        this.enabled = props.enabled ?? true
         // this.guisStart()
         invokeCallback(this.onSpawn, this)
+        this.enabled = props.enabled ?? true
       }
 
       release() {
@@ -139,10 +147,10 @@ export function Actor(props: ActorProps = {}): any {
 
       getNodeElement<N extends B>(Element: new () => N): N {
         if (new Element() instanceof SpriteInterface) { // TODO is there a better way to do this avoiding the 'new'?
-          if (!this.scene.availableElements.hasSprite(Element as SpriteConstructor)) { Logger.debugError('Trying to use a sprite non available to the actor. Please check the actor props.', this.constructor.prototype, Element.prototype); return null as any }
+          if (!this.scene.availableElements.hasSprite(Element as SpriteConstructor)) { Logger.debugError('Trying to use a sprite non available to the actor. Please check the actor props.', this.getClassName(), Element.prototype); return null as any }
           return SpritesController.get(Element).spawn(this.scene) as any
         } else {
-          if (!this.scene.availableElements.hasMesh(Element as MeshConstructor)) { Logger.debugError('Trying to use a mesh non available to the actor. Please check the actor props.', this.constructor.prototype, Element.prototype); return null as any }
+          if (!this.scene.availableElements.hasMesh(Element as MeshConstructor)) { Logger.debugError('Trying to use a mesh non available to the actor. Please check the actor props.', this.getClassName(), Element.prototype); return null as any }
           return MeshesController.get(Element).spawn(this.scene) as any
         }
       }
@@ -158,7 +166,7 @@ export function Actor(props: ActorProps = {}): any {
         }
         this.transform = this._body
         this.t = this.transform
-        attachLoopUpdate(this)
+        switchLoopUpdate(this._loopUpdate, this)
         attachCanvasResize(this)
         return this._body as N
       }
@@ -172,10 +180,10 @@ export function Actor(props: ActorProps = {}): any {
       }
 
       addNode<N extends B>(Node: new () => N, name: string, transform?: TransformComposition, parentName?: string): ActorNode<B> | undefined {
-        if (!this._body) { Logger.debugError(`Cannot add node '${name}' without a body.`, _classInterface.prototype); return undefined }
-        if (this.nodes.has(name)) { Logger.warn(`Trying to add node '${name}' that already exists.`, _classInterface.prototype); return this.nodes.get(name) }
-        if (name === 'boneRoot' || parentName === 'boneRoot') { Logger.debugError('Cannot use \'boneRoot\' as node \'name\' or \'parentName\'.', _classInterface.prototype); return undefined }
-        if (parentName && this.nodes.size === 0) { Logger.debugError('Cannot use \'parentName\' without a previous added node.', _classInterface.prototype); return undefined }
+        if (!this._body) { Logger.debugError(`Cannot add node '${name}' without a body.`, this.getClassName()); return undefined }
+        if (this.nodes.has(name)) { Logger.warn(`Trying to add node '${name}' that already exists.`, this.getClassName()); return this.nodes.get(name) }
+        if (name === 'boneRoot' || parentName === 'boneRoot') { Logger.debugError('Cannot use \'boneRoot\' as node \'name\' or \'parentName\'.', this.getClassName()); return undefined }
+        if (parentName && this.nodes.size === 0) { Logger.debugError('Cannot use \'parentName\' without a previous added node.', this.getClassName()); return undefined }
         const element = this.getNodeElement(Node)
         if (element) {
           if (!this._body.babylon.mesh.skeleton) {
@@ -242,7 +250,7 @@ export function Actor(props: ActorProps = {}): any {
       }
 
       switchState(state: ActorStateConstructor, setup: any): ActorStateInterface {
-        if (!this.scene.availableElements.hasActorState(state)) { Logger.debugError('Trying to set a state non available to the actor. Please check the actor props.', _classInterface.prototype, state.prototype); return null as any }
+        if (!this.scene.availableElements.hasActorState(state)) { Logger.debugError('Trying to set a state non available to the actor. Please check the actor props.', this.getClassName(), state.prototype); return null as any }
         const _state = ActorStatesController.get(state).spawn(this)
         if (this._state) {
           this._state.end()
@@ -269,7 +277,7 @@ export function Actor(props: ActorProps = {}): any {
       }
 
       playAction(actionConstructor: ActorActionConstructor, setup: any): ActorActionInterface {
-        if (!this.scene.availableElements.hasActorAction(actionConstructor)) { Logger.debugError('Trying to play an action non available to the actor. Please check the actor props.', _classInterface.prototype, actionConstructor.prototype); return null as any }
+        if (!this.scene.availableElements.hasActorAction(actionConstructor)) { Logger.debugError('Trying to play an action non available to the actor. Please check the actor props.', this.getClassName(), actionConstructor.prototype); return null as any }
         let action = this.actions.get(actionConstructor)
         if (!action) {
           action = ActorActionsController.get(actionConstructor).spawn(this)
@@ -378,8 +386,8 @@ export function Actor(props: ActorProps = {}): any {
           })
         }
         const attachmentSprite = nodeName ? this.getNode(nodeName)?.element : this.body
-        if (!attachmentSprite) { Logger.debugError('Cannot attach a particle to an empty body.', _classInterface.prototype, particleConstructorOrMethod.prototype); return }
-        if (!this.scene.availableElements.hasParticle(particleConstructorOrMethod as ParticleConstructor)) { Logger.debugError('Trying to attach a particle non available to the actor. Please check the actor props.', _classInterface.prototype, particleConstructorOrMethod.prototype); return }
+        if (!attachmentSprite) { Logger.debugError('Cannot attach a particle to an empty body.', this.getClassName(), particleConstructorOrMethod.prototype); return }
+        if (!this.scene.availableElements.hasParticle(particleConstructorOrMethod as ParticleConstructor)) { Logger.debugError('Trying to attach a particle non available to the actor. Please check the actor props.', this.getClassName(), particleConstructorOrMethod.prototype); return }
         const particle = ParticlesController.get(particleConstructorOrMethod).spawn(this.scene, { attachment: attachmentSprite, offset }, !isMethod)
 
         if (isMethod) {
@@ -396,19 +404,19 @@ export function Actor(props: ActorProps = {}): any {
       }
 
       startParticle(id: FlexId): void {
-        if (!this.particles.get(id)) { Logger.debugError(`Trying to start particle '${id}' that doesn't exist in actor:`, _classInterface.prototype); return }
+        if (!this.particles.get(id)) { Logger.debugError(`Trying to start particle '${id}' that doesn't exist in actor:`, this.getClassName()); return }
         if (this.visibility > 0) {
           this.particles.get(id)?.start()
         }
       }
 
       stopParticle(id: FlexId): void {
-        if (!this.particles.get(id)) { Logger.debugError(`Trying to start particle '${id}' that doesn't exist in actor:`, _classInterface.prototype); return }
+        if (!this.particles.get(id)) { Logger.debugError(`Trying to start particle '${id}' that doesn't exist in actor:`, this.getClassName()); return }
         this.particles.get(id)?.stop()
       }
 
       removeParticle(id: FlexId): void {
-        if (!this.particles.get(id)) { Logger.debugError(`Trying to start particle '${id}' that doesn't exist in actor:`, _classInterface.prototype); return }
+        if (!this.particles.get(id)) { Logger.debugError(`Trying to start particle '${id}' that doesn't exist in actor:`, this.getClassName()); return }
         this.particles.get(id)?.release()
         this.particles.delete(id)
       }

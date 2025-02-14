@@ -18,6 +18,7 @@ import { ParticleProps } from './particle-props'
 
 export abstract class ParticleInterface implements LoopUpdatable, CanvasResizable, Notificable {
   abstract props: ParticleProps
+  abstract className: string
   abstract metadata: Metadata
   abstract _loopUpdate: boolean
   abstract loopUpdate$: BABYLON.Observer<number>
@@ -37,6 +38,7 @@ export abstract class ParticleInterface implements LoopUpdatable, CanvasResizabl
   abstract babylon: Pick<BabylonAccessor, 'scene' | 'particleSystem'>
   abstract scene: SceneInterface
   abstract loopUpdate: boolean
+  abstract getClassName(): string
   abstract start(): void
   abstract stop(): void
   abstract setSprite(sprite: SpriteConstructor): void

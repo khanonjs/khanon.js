@@ -19,6 +19,7 @@ export abstract class SceneStateInterface<S = any, C = SceneInterface> implement
   abstract canvasResize$: BABYLON.Observer<Rect>
   abstract _spawn: SceneSpawn
   abstract _remove: SceneRemove
+  abstract getClassName(): string
   abstract start(setup: any): void
   abstract end(): void
 
@@ -29,8 +30,7 @@ export abstract class SceneStateInterface<S = any, C = SceneInterface> implement
   abstract setup: S
   abstract get spawn(): SceneSpawn
   abstract get remove(): SceneRemove
-  abstract get loopUpdate(): boolean
-  abstract set loopUpdate(value: boolean)
+  abstract loopUpdate: boolean
   abstract switchCamera(camera: CameraConstructor, setup: any): void
   abstract getCamera<C extends CameraInterface = CameraInterface>(): C
   abstract notify(message: FlexId, ...args: any[]): void

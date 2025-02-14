@@ -23,6 +23,7 @@ export abstract class GUIStateInterface<S = any, C = GUIInterface> implements St
   abstract setup: S
   abstract get loopUpdate(): boolean
   abstract set loopUpdate(value: boolean)
+  abstract getClassName(): string
   abstract notify(message: FlexId, ...args: any[]): void
 
   /**

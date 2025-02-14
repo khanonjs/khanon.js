@@ -40,6 +40,11 @@ export declare class ActorActionInterface</* Setup object */ S = any, /* Scene o
   get isPlaying(): boolean
 
   /**
+   * Returns the name of the class.
+   */
+  getClassName(): string
+
+  /**
    * Plays the action in case it has been stopped before and it is preserved (props.preserve = true).
    * This way the action itself controls when it has to stop and play.
    */

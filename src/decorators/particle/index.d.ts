@@ -26,6 +26,11 @@ export abstract class ParticleInterface {
   get loopUpdate(): boolean
 
   /**
+   * Returns the name of the class.
+   */
+  getClassName(): string
+
+  /**
    * Starts the particle.
    */
   start(): void

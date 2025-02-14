@@ -156,6 +156,11 @@ export declare abstract class SceneInterface {
   get loopUpdate(): boolean
 
   /**
+   * Returns the name of the class.
+   */
+  getClassName(): string
+
+  /**
    * Start the scene.
    * @param state Initial state.
    */

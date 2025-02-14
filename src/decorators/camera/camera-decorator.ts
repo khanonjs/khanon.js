@@ -31,14 +31,22 @@ export function Camera(props: CameraProps = {}): any {
         }
       }
 
+      getClassName(): string {
+        return constructor.name
+      }
+
       metadata: Metadata = Reflect.getMetadata('metadata', this) ?? new Metadata()
       babylon: Pick<BabylonAccessor<BABYLON.Camera>, 'camera' | 'scene'> = { camera: null as any, scene: null as any }
       setup: any
-      _loopUpdate: boolean
+      _loopUpdate = true
       loopUpdate$: BABYLON.Observer<number>
       canvasResize$: BABYLON.Observer<Rect>
 
-      set loopUpdate(value: boolean) { switchLoopUpdate(value, this) }
+      set loopUpdate(value: boolean) {
+        this._loopUpdate = value
+        switchLoopUpdate(this._loopUpdate, this)
+      }
+
       get loopUpdate(): boolean { return this._loopUpdate }
 
       notify(message: FlexId, ...args: any[]): void {
@@ -49,7 +57,7 @@ export function Camera(props: CameraProps = {}): any {
       }
 
       start(): void {
-        attachLoopUpdate(this)
+        switchLoopUpdate(this._loopUpdate, this)
         attachCanvasResize(this)
         invokeCallback(this.onStart, this)
       }

@@ -40,22 +40,30 @@ export function GUI(props: GUIProps = {}): any {
         this.metadata.applyProps(this)
       }
 
+      getClassName(): string {
+        return constructor.name
+      }
+
       props: GUIProps
       metadata: Metadata = Reflect.getMetadata('metadata', this) ?? new Metadata()
       babylon: Pick<BabylonAccessor<BABYLON.Camera>, 'gui'> = { gui: null as any }
-      _loopUpdate: boolean
+      _loopUpdate = true
       loopUpdate$: BABYLON.Observer<number>
       canvasResize$: BABYLON.Observer<Rect>
       // _state: GUIStateInterface | null = null
       particles: Map<FlexId, ParticleInterface> = new Map<FlexId, ParticleInterface>()
 
-      set loopUpdate(value: boolean) { switchLoopUpdate(value, this) }
+      set loopUpdate(value: boolean) {
+        this._loopUpdate = value
+        switchLoopUpdate(this._loopUpdate, this)
+      }
+
       get loopUpdate(): boolean { return this._loopUpdate }
       // get state(): GUIStateInterface | null { return this._state }
 
       initialize() {
         this.babylon.gui = BABYLONGUI.AdvancedDynamicTexture.CreateFullscreenUI('')
-        attachLoopUpdate(this)
+        switchLoopUpdate(this._loopUpdate, this)
         attachCanvasResize(this)
         invokeCallback(this.onInitialize, this, this.babylon.gui)
       }
@@ -68,7 +76,7 @@ export function GUI(props: GUIProps = {}): any {
       }
 
       // show(): void {
-      //   attachLoopUpdate(this)
+      //   switchLoopUpdate(this._loopUpdate, this)
       //   attachCanvasResize(this)
       //   invokeCallback(this.onShow, this)
       // }

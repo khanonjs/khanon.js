@@ -36,9 +36,8 @@ import { ParticleProps } from './particle-props'
 import { particlePropsDefault } from './particle.props.deafult'
 
 export function Particle(props: ParticleProps): any {
-  return function <T extends { new (...args: any[]): ParticleInterface }>(constructorOrTarget: (T & ParticleInterface) | any, contextOrProperty: ClassDecoratorContext | string, descriptor: PropertyDescriptor) {
+  return function <T extends { new (...args: any[]): ParticleInterface }>(constructorOrTarget: (T & ParticleInterface), contextOrProperty: ClassDecoratorContext | string, descriptor: PropertyDescriptor) {
     const decorateClass = () => {
-      const className = constructorOrTarget.prototype.constructor.name
       const _classInterface = class extends constructorOrTarget implements ParticleInterface {
         constructor(readonly scene: SceneInterface, props: ParticleProps, readonly attachmentInfo: ParticleAttachmentInfo) {
           super()
@@ -46,10 +45,15 @@ export function Particle(props: ParticleProps): any {
           this.metadata.applyProps(this)
         }
 
+        getClassName(): string {
+          return this.className ?? constructorOrTarget.name
+        }
+
         props: ParticleProps
+        className: string
         metadata: Metadata = Reflect.getMetadata('metadata', this) ?? new Metadata()
         babylon: Pick<BabylonAccessor, 'scene' | 'particleSystem'> = { scene: null as any, particleSystem: null as any }
-        _loopUpdate: boolean
+        _loopUpdate = true
         loopUpdate$: BABYLON.Observer<number>
         canvasResize$: BABYLON.Observer<Rect>
         attachmentUpdate$: BABYLON.Observer<number> | undefined
@@ -57,7 +61,11 @@ export function Particle(props: ParticleProps): any {
         spriteProps: SpriteProps
         offset: BABYLON.Vector3
 
-        set loopUpdate(value: boolean) { switchLoopUpdate(value, this) }
+        set loopUpdate(value: boolean) {
+          this._loopUpdate = value
+          switchLoopUpdate(this._loopUpdate, this)
+        }
+
         get loopUpdate(): boolean { return this._loopUpdate }
 
         create(): void {
@@ -67,8 +75,10 @@ export function Particle(props: ParticleProps): any {
             } else {
               this.offset = this.props.offset.clone()
             }
-            this.babylon.particleSystem = new BABYLON.ParticleSystem(className, this.props.capacity, this.scene.babylon.scene)
-            this.onInitialize(this)
+            this.babylon.particleSystem = new BABYLON.ParticleSystem(this.getClassName(), this.props.capacity, this.scene.babylon.scene)
+            if (this.onInitialize) {
+              this.onInitialize(this)
+            }
             if (this.attachmentInfo.attachment) {
               this.updatePosition()
             } else {
@@ -78,7 +88,7 @@ export function Particle(props: ParticleProps): any {
               switchLoopUpdate(false, this)
               invokeCallback(this.onStop, this)
             })
-            attachLoopUpdate(this)
+            switchLoopUpdate(this._loopUpdate, this)
             attachCanvasResize(this)
           }
         }
@@ -93,7 +103,7 @@ export function Particle(props: ParticleProps): any {
             this.attachmentUpdate$ = Core.loopUpdateAddObserver(() => this.updatePosition())
           }
           this.babylon.particleSystem.start()
-          switchLoopUpdate(true, this)
+          switchLoopUpdate(this._loopUpdate, this)
         }
 
         stop(): void {
@@ -105,7 +115,7 @@ export function Particle(props: ParticleProps): any {
         }
 
         release(): void {
-          if (!this.babylon.particleSystem) { Logger.debugError('Trying to remove a Particle that has been already removed.', _classInterface.prototype); return }
+          if (!this.babylon.particleSystem) { Logger.debugError('Trying to remove a Particle that has been already removed.', this.getClassName()); return }
           this.stop()
           invokeCallback(this.onRemove, this)
           this.babylon.particleSystem.dispose()
@@ -204,6 +214,7 @@ export function Particle(props: ParticleProps): any {
     ) && descriptor) { // Defined descriptor means it is a decorated method
       @Particle(props)
       abstract class _particleInterface extends ParticleInterface {
+        className = contextOrProperty as any
         onInitialize = descriptor.value
       }
 
