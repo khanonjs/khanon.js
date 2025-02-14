@@ -159,12 +159,28 @@ export declare abstract class SceneInterface {
   get loopUpdate(): boolean
 
   /**
-   * Scene elements.
+   * List of spawned actors.
    */
   get actors(): Set<ActorInterface>
+
+  /**
+   * List of spawned meshes.
+   */
   get meshes(): Set<MeshInterface>
+
+  /**
+   * List of spawned sprites.
+   */
   get sprites(): Set<SpriteInterface>
+
+  /**
+   * List of spawned particles.
+   */
   get particles(): Set<ParticleInterface>
+
+  /**
+   * List of spawned guis.
+   */
   get guis(): Set<GUIInterface>
 
   /**
