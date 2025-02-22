@@ -10,6 +10,10 @@ import {
   CameraConstructor,
   CameraInterface
 } from '../../camera'
+import {
+  GUIConstructor,
+  GUIInterface
+} from '../../gui'
 import { MeshConstructor } from '../../mesh'
 import { ParticleConstructor } from '../../particle'
 import { SpriteConstructor } from '../../sprite'
@@ -47,6 +51,24 @@ export declare abstract class SceneStateInterface<S = any, C = SceneInterface> {
   getClassName(): string
 
   /**
+   * Shows a GUI. This GUI must have been declared in the decorator props.
+   * @param gui
+   */
+  showGUI<G extends GUIInterface>(gui: GUIConstructor): G
+
+  /**
+   * Hides a GUI.
+   * @param gui
+   */
+  hideGUI(gui: GUIConstructor): void
+
+  /**
+   * Gets a GUI that's being shown.
+   * @param gui
+   */
+  getGUI<G extends GUIInterface>(gui: GUIConstructor): G | undefined
+
+  /**
    * Sets a camera.
    */
   switchCamera<C extends CameraConstructor>(camera: C, setup: InstanceType<C>['setup']): void
@@ -55,6 +77,12 @@ export declare abstract class SceneStateInterface<S = any, C = SceneInterface> {
    * Gets the camera. Use the generic 'C' to set the returning camera type.
    */
   getCamera<C extends CameraInterface = CameraInterface>(): C
+
+  /**
+   * Set the state.
+   * @param state
+   */
+  switchState<S extends new () => SceneStateInterface>(state: S, setup: InstanceType<S>['setup']): void // TODO is it possible to make 'setup' argument optional whether InstanceType<S>['setup'] type is 'any'?
 
   /**
    * Notifies a message to this sstate.

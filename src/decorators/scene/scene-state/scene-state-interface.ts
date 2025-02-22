@@ -6,9 +6,12 @@ import { Rect } from '../../../models/rect'
 import { FlexId } from '../../../types/flex-id'
 import { CameraConstructor } from '../../camera/camera-constructor'
 import { CameraInterface } from '../../camera/camera-interface'
+import { GUIConstructor } from '../../gui/gui-constructor'
+import { GUIInterface } from '../../gui/gui-interface'
 import { SceneInterface } from '../scene-interface'
 import { SceneRemove } from '../scene-remove'
 import { SceneSpawn } from '../scene-spawn'
+import { SceneStateConstructor } from './scene-state-constructor'
 import { SceneStateProps } from './scene-state-props'
 
 export abstract class SceneStateInterface<S = any, C = SceneInterface> implements StateInterface<S> {
@@ -31,8 +34,12 @@ export abstract class SceneStateInterface<S = any, C = SceneInterface> implement
   abstract get spawn(): SceneSpawn
   abstract get remove(): SceneRemove
   abstract loopUpdate: boolean
+  abstract showGUI<G extends GUIInterface>(gui: GUIConstructor): G
+  abstract hideGUI(gui: GUIConstructor): void
+  abstract getGUI<G extends GUIInterface>(gui: GUIConstructor): G | undefined
   abstract switchCamera(camera: CameraConstructor, setup: any): void
   abstract getCamera<C extends CameraInterface = CameraInterface>(): C
+  abstract switchState(state: SceneStateConstructor, setup: any): void
   abstract notify(message: FlexId, ...args: any[]): void
 
   /**

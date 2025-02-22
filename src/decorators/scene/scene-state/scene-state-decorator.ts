@@ -14,7 +14,6 @@ import { Logger } from '../../../modules/logger'
 import { FlexId } from '../../../types/flex-id'
 import {
   attachCanvasResize,
-  attachLoopUpdate,
   invokeCallback,
   removeCanvasResize,
   removeLoopUpdate,
@@ -22,9 +21,12 @@ import {
 } from '../../../utils/utils'
 import { CameraConstructor } from '../../camera/camera-constructor'
 import { CameraInterface } from '../../camera/camera-interface'
+import { GUIConstructor } from '../../gui/gui-constructor'
+import { GUIInterface } from '../../gui/gui-interface'
 import { SceneInterface } from '../scene-interface'
 import { SceneRemove } from '../scene-remove'
 import { SceneSpawn } from '../scene-spawn'
+import { SceneStateConstructor } from './scene-state-constructor'
 import { SceneStateCore } from './scene-state-core'
 import { SceneStateInterface } from './scene-state-interface'
 import { SceneStateProps } from './scene-state-props'
@@ -66,12 +68,28 @@ export function SceneState(props: SceneStateProps = {}): any {
       get spawn(): SceneSpawn { return this._spawn }
       get remove(): SceneRemove { return this._remove }
 
+      showGUI<G extends GUIInterface>(gui: GUIConstructor): G {
+        return this.scene.showGUI(gui)
+      }
+
+      hideGUI(gui: GUIConstructor): void {
+        this.scene.hideGUI(gui)
+      }
+
+      getGUI<G extends GUIInterface>(gui: GUIConstructor): G | undefined {
+        return this.scene.getGUI(gui)
+      }
+
       switchCamera(camera: CameraConstructor, setup: any): void {
         this.scene.switchCamera(camera, setup)
       }
 
       getCamera<C extends CameraInterface = CameraInterface>(): C {
         return this.scene.getCamera()
+      }
+
+      switchState(state: SceneStateConstructor, setup: any): void {
+        this.scene.switchState(state, setup)
       }
 
       start(setup: any): void {
