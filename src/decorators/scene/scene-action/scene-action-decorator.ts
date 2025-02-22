@@ -25,6 +25,7 @@ import { SceneActionProps } from './scene-action-props'
 
 export function SceneAction(props: SceneActionProps = {}): any {
   return function <T extends { new (...args: any[]): SceneActionInterface }>(constructorOrTarget: (T & SceneActionInterface) | any, contextOrMethod: ClassDecoratorContext | string, descriptor: PropertyDescriptor) {
+    const className = constructorOrTarget.name
     const decorateClass = () => {
       const _classInterface = class extends constructorOrTarget implements SceneActionInterface {
         constructor(readonly scene: SceneInterface) {
@@ -33,7 +34,7 @@ export function SceneAction(props: SceneActionProps = {}): any {
         }
 
         getClassName(): string {
-          return this._className ?? constructorOrTarget.name
+          return this._className ?? className
         }
 
         props = props
@@ -107,6 +108,10 @@ export function SceneAction(props: SceneActionProps = {}): any {
         spawn(scene: SceneInterface): SceneActionInterface {
           const action = new _classInterface(scene)
           return action
+        }
+
+        getClassName(): string {
+          return className
         }
       }
       SceneActionsController.register(new _classCore())

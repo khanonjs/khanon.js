@@ -13,4 +13,5 @@ export abstract class ActorStateCore implements StateCore<ActorInterface, ActorS
   abstract spawn(owner: ActorInterface): ActorStateInterface
   abstract load(owner?: SceneInterface): LoadingProgress
   abstract unload(owner?: SceneInterface): void
+  abstract getClassName(): string
 }

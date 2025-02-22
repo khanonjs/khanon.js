@@ -16,4 +16,5 @@ export abstract class MeshCore implements Loadable<SceneInterface>, Spawnable<Me
   abstract load(scene: SceneInterface): LoadingProgress
   abstract unload(scene: SceneInterface): void
   abstract spawn(scene: SceneInterface): MeshInterface
+  abstract getClassName(): string
 }

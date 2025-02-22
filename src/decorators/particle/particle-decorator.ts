@@ -14,7 +14,6 @@ import { FlexId } from '../../types/flex-id'
 import {
   applyDefaults,
   attachCanvasResize,
-  attachLoopUpdate,
   invokeCallback,
   removeCanvasResize,
   removeLoopUpdate,
@@ -37,6 +36,7 @@ import { particlePropsDefault } from './particle.props.deafult'
 
 export function Particle(props: ParticleProps): any {
   return function <T extends { new (...args: any[]): ParticleInterface }>(constructorOrTarget: (T & ParticleInterface), contextOrProperty: ClassDecoratorContext | string, descriptor: PropertyDescriptor) {
+    const className = constructorOrTarget.name
     const decorateClass = () => {
       const _classInterface = class extends constructorOrTarget implements ParticleInterface {
         constructor(readonly scene: SceneInterface, props: ParticleProps, readonly attachmentInfo: ParticleAttachmentInfo) {
@@ -46,7 +46,7 @@ export function Particle(props: ParticleProps): any {
         }
 
         getClassName(): string {
-          return this.className ?? constructorOrTarget.name
+          return this.className ?? className
         }
 
         props: ParticleProps
@@ -195,6 +195,10 @@ export function Particle(props: ParticleProps): any {
             particle.create()
           }
           return particle
+        }
+
+        getClassName(): string {
+          return className
         }
       }
       ParticlesController.register(new _classCore())

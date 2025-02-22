@@ -36,6 +36,7 @@ import { MeshProps } from './mesh-props'
 
 export function Mesh(props: MeshProps = {}): any {
   return function <T extends { new (...args: any[]): MeshInterface }>(constructorOrTarget: (T & MeshInterface), contextOrProperty: ClassDecoratorContext | string, descriptor: PropertyDescriptor) {
+    const className = constructorOrTarget.name
     const decorateClass = () => {
       const _classInterface = class extends constructorOrTarget implements MeshInterface {
         constructor(readonly scene: SceneInterface, props: MeshProps) {
@@ -78,7 +79,7 @@ export function Mesh(props: MeshProps = {}): any {
         }
 
         getClassName(): string {
-          return this.className ?? constructorOrTarget.name
+          return this.className ?? className
         }
 
         props: MeshProps
@@ -299,6 +300,10 @@ export function Mesh(props: MeshProps = {}): any {
         spawn(scene: SceneInterface): MeshInterface {
           const mesh = new _classInterface(scene, this.props)
           return mesh
+        }
+
+        getClassName(): string {
+          return className
         }
       }
       const core = new _classCore()

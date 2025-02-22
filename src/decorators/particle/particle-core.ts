@@ -15,4 +15,5 @@ export abstract class ParticleCore implements Loadable<SceneInterface>, Spawnabl
   abstract spawn(scene: SceneInterface, attachmentInfo?: ParticleAttachmentInfo, dontCreate?: boolean): ParticleInterface
   abstract load(owner?: SceneInterface): LoadingProgress
   abstract unload(owner?: SceneInterface): void
+  abstract getClassName(): string
 }

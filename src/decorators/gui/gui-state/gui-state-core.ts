@@ -13,4 +13,5 @@ export abstract class GUIStateCore implements StateCore<GUIInterface, GUIStateIn
   abstract spawn(owner: GUIInterface): GUIStateInterface
   abstract load(owner: SceneInterface): LoadingProgress
   abstract unload(owner: SceneInterface): void
+  abstract getClassName(): string
 }

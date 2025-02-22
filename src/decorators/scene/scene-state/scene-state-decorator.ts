@@ -31,6 +31,7 @@ import { SceneStateProps } from './scene-state-props'
 
 export function SceneState(props: SceneStateProps = {}): any {
   return function <T extends { new (...args: any[]): SceneStateInterface }>(constructor: T & SceneStateInterface, context: ClassDecoratorContext) {
+    const className = constructor.name
     const _classInterface = class extends constructor implements SceneStateInterface {
       constructor(readonly scene: SceneInterface, props: SceneStateProps) {
         super()
@@ -43,7 +44,7 @@ export function SceneState(props: SceneStateProps = {}): any {
       }
 
       getClassName(): string {
-        return constructor.name
+        return className
       }
 
       props: SceneStateProps
@@ -123,6 +124,10 @@ export function SceneState(props: SceneStateProps = {}): any {
         MeshesController.unload(this.Instance.metadata?.getProps().meshes, scene)
         ParticlesController.unload(this.props.particles, scene)
         ParticlesController.unload(this.Instance.metadata?.getProps().particles, scene)
+      }
+
+      getClassName(): string {
+        return className
       }
     }
     SceneStatesController.register(new _classCore())

@@ -26,6 +26,7 @@ import { ActorActionProps } from './actor-action-props'
 
 export function ActorAction(props: ActorActionProps = {}): any {
   return function <T extends { new (...args: any[]): ActorActionInterface }>(constructorOrTarget: (T & ActorActionInterface), contextOrMethod: ClassDecoratorContext | string, descriptor: PropertyDescriptor) {
+    const className = constructorOrTarget.name
     const decorateClass = () => {
       const _classInterface = class extends constructorOrTarget implements ActorActionInterface {
         constructor(actor: ActorInterface) {
@@ -35,7 +36,7 @@ export function ActorAction(props: ActorActionProps = {}): any {
         }
 
         getClassName(): string {
-          return this.className ?? constructorOrTarget.name
+          return this.className ?? className
         }
 
         props = props
@@ -126,6 +127,10 @@ export function ActorAction(props: ActorActionProps = {}): any {
         spawn(actor: ActorInterface): ActorActionInterface {
           const action = new _classInterface(actor)
           return action
+        }
+
+        getClassName(): string {
+          return className
         }
       }
       ActorActionsController.register(new _classCore())

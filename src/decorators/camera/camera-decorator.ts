@@ -22,6 +22,7 @@ import { CameraProps } from './camera-props'
 // TODO add CameraAction
 export function Camera(props: CameraProps = {}): any {
   return function <T extends { new (...args: any[]): CameraInterface }>(constructor: T & CameraInterface, context: ClassDecoratorContext) {
+    const className = constructor.name
     const _classInterface = class extends constructor implements CameraInterface {
       constructor(readonly scene: SceneInterface) {
         super()
@@ -32,7 +33,7 @@ export function Camera(props: CameraProps = {}): any {
       }
 
       getClassName(): string {
-        return constructor.name
+        return className
       }
 
       metadata: Metadata = Reflect.getMetadata('metadata', this) ?? new Metadata()
@@ -79,6 +80,10 @@ export function Camera(props: CameraProps = {}): any {
       spawn(scene: SceneInterface): CameraInterface {
         const camera = new _classInterface(scene)
         return camera
+      }
+
+      getClassName(): string {
+        return className
       }
     }
     CamerasController.register(new _classCore())

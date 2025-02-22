@@ -28,6 +28,7 @@ import { GUIStateProps } from './gui-state-props'
 
 export function GUIState(props: GUIStateProps = {}): any {
   return function <T extends { new (...args: any[]): GUIStateInterface }>(constructor: T & GUIStateInterface, context: ClassDecoratorContext) {
+    const className = constructor.name
     const _classInterface = class extends constructor implements GUIStateInterface {
       constructor(readonly gui: GUIInterface, props: GUIStateProps) {
         super()
@@ -38,7 +39,7 @@ export function GUIState(props: GUIStateProps = {}): any {
       }
 
       getClassName(): string {
-        return constructor.name
+        return className
       }
 
       props: GUIStateProps
@@ -103,6 +104,10 @@ export function GUIState(props: GUIStateProps = {}): any {
         MeshesController.unload(this.Instance.metadata?.getProps().meshes, scene)
         ParticlesController.unload(this.props.particles, scene)
         ParticlesController.unload(this.Instance.metadata?.getProps().particles, scene)
+      }
+
+      getClassName(): string {
+        return className
       }
     }
     GUIStatesController.register(new _classCore())

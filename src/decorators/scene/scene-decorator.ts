@@ -48,6 +48,7 @@ import { ActorStateInterface } from '../actor/actor-state/actor-state-interface'
 import { CameraConstructor } from '../camera/camera-constructor'
 import { Camera } from '../camera/camera-decorator'
 import { CameraInterface } from '../camera/camera-interface'
+import { GUIConstructor } from '../gui/gui-constructor'
 import { GUIInterface } from '../gui/gui-interface'
 import { MeshConstructor } from '../mesh/mesh-constructor'
 import { Mesh } from '../mesh/mesh-decorator'
@@ -105,7 +106,7 @@ export function Scene(props: SceneProps = {}): any {
       meshes: Set<MeshInterface> = new Set<MeshInterface>()
       sprites: Set<SpriteInterface> = new Set<SpriteInterface>()
       particles: Set<ParticleInterface> = new Set<ParticleInterface>()
-      guis: Set<GUIInterface> = new Set<GUIInterface>()
+      guis: Map<GUIConstructor, GUIInterface> = new Map<GUIConstructor, GUIInterface>()
 
       setEngineParams(): void {} // TODO ?
 
@@ -132,7 +133,6 @@ export function Scene(props: SceneProps = {}): any {
         if (this._started) {
           this.stop()
         }
-        this.guisStart()
         if (this._cameraConstructor) {
           this.switchCamera(this._cameraConstructor)
         }
@@ -145,7 +145,7 @@ export function Scene(props: SceneProps = {}): any {
           Logger.warn('Starting a scene that hasn\'t been loaded. Are you sure you want to do this?', this.getClassName())
         }
         if (!this._camera) {
-          Logger.warn('No camera defined; using a generic camera. Set a camera before starting the scene in the Scene\'s or SceneState\'s \'onSart\' method.', this.getClassName())
+          Logger.warn('No camera defined; using a generic camera. Use \'switchCamera\' in the Scene\'s or SceneState\'s \'onSart\' callback to set a camera before starting the scene.', this.getClassName())
           @Camera()
           // @ts-ignore
           class GenericCamera extends CameraInterface {
@@ -174,7 +174,7 @@ export function Scene(props: SceneProps = {}): any {
         if (Core.isDevelopmentMode()) {
           this.denyDebugInspector()
         }
-        this.guisRelease()
+        this.releaseGUIs()
         this.releaseCamera()
         this.state?.end()
         this.remove.all()
@@ -306,6 +306,34 @@ export function Scene(props: SceneProps = {}): any {
         GUIController.unload(this.props.guis, this)
       }
 
+      showGUI<G extends GUIInterface>(gui: GUIConstructor): G {
+        Logger.debug('Show GUI', this.getClassName(), GUIController.get(gui).getClassName())
+        let guiInstance = this.guis.get(gui)
+        if (guiInstance) {
+          Logger.warn('Trying to show a GUI that\'s already being displayed.', this.getClassName(), guiInstance?.getClassName())
+        } else {
+          guiInstance = GUIController.get(gui).spawn()
+          guiInstance.initialize()
+          this.guis.set(gui, guiInstance)
+        }
+        return guiInstance as any
+      }
+
+      hideGUI(gui: GUIConstructor): void {
+        Logger.debug('Hide GUI', this.getClassName(), GUIController.get(gui).getClassName())
+        const guiInstance = this.guis.get(gui)
+        if (guiInstance) {
+          guiInstance.release()
+          this.guis.delete(gui)
+        } else {
+          Logger.warn('Trying to hide a GUI that\'s not being displayed.', this.getClassName(), GUIController.get(gui).getClassName())
+        }
+      }
+
+      getGUI<G extends GUIInterface>(gui: GUIConstructor): G | undefined {
+        return this.guis.get(gui) as any
+      }
+
       startRenderObservable(): void {
         this.babylon.scene.onBeforeRenderObservable.add(() => {
           this.animationHandler.forEach(handler => {
@@ -318,15 +346,7 @@ export function Scene(props: SceneProps = {}): any {
         this.babylon.scene.onBeforeRenderObservable.clear()
       }
 
-      guisStart(): void {
-        this.props.guis?.forEach(_gui => {
-          const gui = GUIController.get(_gui).spawn()
-          gui.initialize()
-          this.guis.add(gui)
-        })
-      }
-
-      guisRelease(): void {
+      releaseGUIs(): void {
         this.guis.forEach(gui => gui.release())
         this.guis.clear()
       }

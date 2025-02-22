@@ -159,31 +159,6 @@ export declare abstract class SceneInterface {
   get loopUpdate(): boolean
 
   /**
-   * List of spawned actors.
-   */
-  get actors(): Set<ActorInterface>
-
-  /**
-   * List of spawned meshes.
-   */
-  get meshes(): Set<MeshInterface>
-
-  /**
-   * List of spawned sprites.
-   */
-  get sprites(): Set<SpriteInterface>
-
-  /**
-   * List of spawned particles.
-   */
-  get particles(): Set<ParticleInterface>
-
-  /**
-   * List of spawned guis.
-   */
-  get guis(): Set<GUIInterface>
-
-  /**
    * Returns the name of the class.
    */
   getClassName(): string
@@ -208,6 +183,24 @@ export declare abstract class SceneInterface {
    * Unload assets.
    */
   unload(): void
+
+  /**
+   * Shows a GUI. This GUI must have been declared in the decorator props.
+   * @param gui
+   */
+  showGUI<G extends GUIInterface>(gui: GUIConstructor): G
+
+  /**
+   * Hides a GUI.
+   * @param gui
+   */
+  hideGUI(gui: GUIConstructor): void
+
+  /**
+   * Gets a GUI that's being shown.
+   * @param gui
+   */
+  getGUI<G extends GUIInterface>(gui: GUIConstructor): G | undefined
 
   /**
    * Sets a camera.

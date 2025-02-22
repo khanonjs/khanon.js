@@ -13,4 +13,5 @@ export abstract class GUICore implements Loadable, Spawnable<GUIInterface> {
   abstract load(owner?: SceneInterface): LoadingProgress
   abstract unload(owner?: SceneInterface): void
   abstract spawn(): GUIInterface
+  abstract getClassName(): string
 }

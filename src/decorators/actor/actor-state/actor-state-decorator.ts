@@ -27,6 +27,7 @@ import { ActorStateProps } from './actor-state-props'
 
 export function ActorState(props: ActorStateProps = {}): any {
   return function <T extends { new (...args: any[]): ActorStateInterface }>(constructor: T & ActorStateInterface, context: ClassDecoratorContext) {
+    const className = constructor.name
     const _classInterface = class extends constructor implements ActorStateInterface {
       constructor(actor: ActorInterface, props: ActorStateProps) {
         super()
@@ -39,7 +40,7 @@ export function ActorState(props: ActorStateProps = {}): any {
       }
 
       getClassName(): string {
-        return constructor.name
+        return className
       }
 
       props: ActorStateProps
@@ -105,6 +106,10 @@ export function ActorState(props: ActorStateProps = {}): any {
         MeshesController.unload(this.Instance.metadata.getProps().meshes, scene)
         ParticlesController.unload(this.props.particles, scene)
         ParticlesController.unload(this.Instance.metadata?.getProps().particles, scene)
+      }
+
+      getClassName(): string {
+        return className
       }
     }
     ActorStatesController.register(new _classCore())

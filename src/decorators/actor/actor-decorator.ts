@@ -50,6 +50,7 @@ type B = SpriteInterface | MeshInterface
 
 export function Actor(props: ActorProps = {}): any {
   return function <T extends { new (...args: any[]): ActorInterface }>(constructor: T & ActorInterface, context: ClassDecoratorContext) {
+    const className = constructor.name
     const _classInterface = class extends constructor implements ActorInterface {
       constructor(readonly scene: SceneInterface) {
         super()
@@ -57,7 +58,7 @@ export function Actor(props: ActorProps = {}): any {
       }
 
       getClassName(): string {
-        return constructor.name
+        return className
       }
 
       props: ActorProps
@@ -475,6 +476,10 @@ export function Actor(props: ActorProps = {}): any {
         const actor = new _classInterface(scene)
         actor.initialize(this.props)
         return actor
+      }
+
+      getClassName(): string {
+        return className
       }
     }
     ActorsController.register(new _classCore())

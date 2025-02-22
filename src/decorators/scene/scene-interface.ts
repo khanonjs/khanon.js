@@ -15,6 +15,7 @@ import { FlexId } from '../../types/flex-id'
 import { ActorInterface } from '../actor/actor-interface'
 import { CameraConstructor } from '../camera/camera-constructor'
 import { CameraInterface } from '../camera/camera-interface'
+import { GUIConstructor } from '../gui/gui-constructor'
 import { GUIInterface } from '../gui/gui-interface'
 import { MeshInterface } from '../mesh/mesh-interface'
 import { ParticleInterface } from '../particle/particle-interface'
@@ -49,8 +50,12 @@ export abstract class SceneInterface implements Loadable, LoopUpdatable, CanvasR
   abstract canvasResize$: BABYLON.Observer<Rect>
   abstract animationHandler: Map<SpriteInterface, () => void>
   abstract actions: Map<SceneActionConstructor, SceneActionInterface>
-  abstract guisStart(): void
-  abstract guisRelease(): void
+  abstract actors: Set<ActorInterface>
+  abstract meshes: Set<MeshInterface>
+  abstract sprites: Set<SpriteInterface>
+  abstract particles: Set<ParticleInterface>
+  abstract guis: Map<GUIConstructor, GUIInterface>
+  abstract releaseGUIs(): void
   abstract setEngineParams(): void // TODO ?
   abstract playActionFromInstance(instance: SceneActionInterface): void
   abstract stopActionFromInstance(instance: SceneActionInterface, forceRemove?: boolean): void
@@ -72,16 +77,14 @@ export abstract class SceneInterface implements Loadable, LoopUpdatable, CanvasR
   abstract get state(): SceneStateInterface | null
   abstract get spawn(): SceneSpawn
   abstract get remove(): SceneRemove
-  abstract actors: Set<ActorInterface>
-  abstract meshes: Set<MeshInterface>
-  abstract sprites: Set<SpriteInterface>
-  abstract particles: Set<ParticleInterface>
-  abstract guis: Set<GUIInterface>
   abstract getClassName(): string
   abstract start(state?: SceneStateConstructor, stateSetup?: any): SceneStateInterface | null
   abstract stop(): void
   abstract load(): LoadingProgress
   abstract unload(): void
+  abstract showGUI<G extends GUIInterface>(gui: GUIConstructor): G
+  abstract hideGUI(gui: GUIConstructor): void
+  abstract getGUI<G extends GUIInterface>(gui: GUIConstructor): G | undefined
   abstract switchCamera(camera: CameraConstructor, setup: any): void
   abstract getCamera<C extends CameraInterface = CameraInterface>(): C
   abstract switchState(state: SceneStateConstructor, setup: any): void

@@ -13,4 +13,5 @@ export abstract class ActorCore implements Loadable<SceneInterface>, Spawnable<A
   abstract load(scene: SceneInterface): LoadingProgress
   abstract unload(scene: SceneInterface): void
   abstract spawn(scene: SceneInterface): ActorInterface
+  abstract getClassName(): string
 }

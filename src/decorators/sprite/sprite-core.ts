@@ -18,4 +18,5 @@ export abstract class SpriteCore implements Loadable<SceneInterface>, Spawnable<
   abstract unload(scene: SceneInterface): void
   abstract spawn(scene: SceneInterface): SpriteInterface
   abstract getParticleInfo(scene: SceneInterface): SpriteParticleInfo
+  abstract getClassName(): string
 }

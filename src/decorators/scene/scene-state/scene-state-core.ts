@@ -12,4 +12,5 @@ export abstract class SceneStateCore implements StateCore<SceneInterface, SceneS
   abstract spawn(owner: SceneInterface): SceneStateInterface
   abstract load(owner: SceneInterface): LoadingProgress
   abstract unload(owner: SceneInterface): void
+  abstract getClassName(): string
 }

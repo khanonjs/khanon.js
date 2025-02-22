@@ -33,6 +33,7 @@ import { GUIStateInterface } from './gui-state/gui-state-interface'
 
 export function GUI(props: GUIProps = {}): any {
   return function <T extends { new (...args: any[]): GUIInterface }>(constructor: T & GUIInterface, context: ClassDecoratorContext) {
+    const className = constructor.name
     const _classInterface = class extends constructor implements GUIInterface {
       constructor(props: GUIProps) {
         super()
@@ -41,7 +42,7 @@ export function GUI(props: GUIProps = {}): any {
       }
 
       getClassName(): string {
-        return constructor.name
+        return className
       }
 
       props: GUIProps
@@ -127,6 +128,10 @@ export function GUI(props: GUIProps = {}): any {
       spawn(): GUIInterface {
         const gui = new _classInterface(this.props)
         return gui
+      }
+
+      getClassName(): string {
+        return className
       }
     }
     GUIController.register(new _classCore())
