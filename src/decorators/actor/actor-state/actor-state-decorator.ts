@@ -21,6 +21,7 @@ import {
 } from '../../../utils/utils'
 import { SceneInterface } from '../../scene/scene-interface'
 import { ActorInterface } from '../actor-interface'
+import { ActorStateConstructor } from './actor-state-constructor'
 import { ActorStateCore } from './actor-state-core'
 import { ActorStateInterface } from './actor-state-interface'
 import { ActorStateProps } from './actor-state-props'
@@ -58,6 +59,10 @@ export function ActorState(props: ActorStateProps = {}): any {
       }
 
       get loopUpdate(): boolean { return this._loopUpdate }
+
+      switchState(state: ActorStateConstructor, setup: any): ActorStateInterface {
+        return this.actor.switchState(state, setup)
+      }
 
       start(): void {
         Logger.debug('ActorState start', this.getClassName(), this.actor.getClassName())

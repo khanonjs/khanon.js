@@ -8,6 +8,7 @@ import { MeshInterface } from '../../mesh/mesh-interface'
 import { SceneInterface } from '../../scene/scene-interface'
 import { SpriteInterface } from '../../sprite/sprite-interface'
 import { ActorInterface } from '../actor-interface'
+import { ActorStateConstructor } from './actor-state-constructor'
 import { ActorStateProps } from './actor-state-props'
 
 export abstract class ActorStateInterface<S = any, A = ActorInterface<SpriteInterface | MeshInterface>, C = SceneInterface> implements StateInterface<S> {
@@ -28,6 +29,7 @@ export abstract class ActorStateInterface<S = any, A = ActorInterface<SpriteInte
   abstract get loopUpdate(): boolean
   abstract set loopUpdate(value: boolean)
   abstract getClassName(): string
+  abstract switchState(state: ActorStateConstructor, setup: any): ActorStateInterface
   abstract notify(message: FlexId, ...args: any[]): void
 
   /**

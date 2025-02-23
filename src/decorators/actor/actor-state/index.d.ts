@@ -40,6 +40,12 @@ export declare abstract class ActorStateInterface</* Setup object */ S = any, /*
   get loopUpdate(): boolean
 
   /**
+   * Starts a state.
+   * @param state
+   */
+  switchState<S extends new () => ActorStateInterface>(state: S, setup: InstanceType<S>['setup']): ActorStateInterface // TODO is it possible to make 'setup' argument optional whether InstanceType<S>['setup'] type is 'any'?
+
+  /**
    * Notifies a message to this state.
    */
   notify(message: FlexId, ...args: any[]): void
