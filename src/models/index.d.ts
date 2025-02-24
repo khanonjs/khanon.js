@@ -1,8 +1,4 @@
-import * as BABYLON from '@babylonjs/core'
-import * as BABYLONGUI from '@babylonjs/gui'
-
 import { FlexId } from '../types'
-import { Rect } from './rect'
 
 export declare interface AnimationKeyFrame {
   /**
@@ -34,67 +30,8 @@ export declare interface AnimationBase {
   keyFrames?: AnimationKeyFrame[]
 }
 
-export interface BabylonAccessor<
-    C extends BABYLON.Camera = BABYLON.Camera,
-    M extends BABYLON.AbstractMesh = BABYLON.AbstractMesh,
-    N extends BABYLON.Material = BABYLON.Material
-  > {
-  camera: C
-  engine: BABYLON.Engine
-  scene: BABYLON.Scene
-  sprite: BABYLON.Sprite
-  mesh: M
-  spriteManager: BABYLON.SpriteManager
-  particleSystem: BABYLON.ParticleSystem
-  texture: BABYLON.Texture | BABYLON.DynamicTexture
-  material: N
-  gui: BABYLONGUI.AdvancedDynamicTexture
-}
-
-export interface DrawBlockProperties {
-  /**
-   * Font name (CSS fontface).
-   */
-  fontName: string
-
-  /**
-   * Font size.
-   */
-  fontSize: number
-
-  /**
-   * Text color (HTML format).
-   */
-  textColor: string
-
-  /**
-   * Font style (bold, italic, etc..).
-   */
-  fontStyle?: string
-
-  /**
-   * Background color (Deefault is transparent background).
-   */
-  bgColor?: string
-
-  /**
-   * Center horizontally ('true' by default).
-   */
-  centerH?: boolean
-
-  /**
-   * Center vertically ('true' by default).
-   */
-  centerV?: boolean
-
-  /**
-   * Texture size (Default fits text to whole area).
-   */
-  textureSize?: Rect
-}
-
-export { AssetType } from './asset-type'
+export { BabylonAccessor } from './babylon-accessor'
 export { DrawBlockProperties } from './draw-block-properties'
 export { Rect } from './rect'
-export declare class Timeout {}
+export declare interface Timeout {}
 export { TransformComposition } from './transform-composition'
