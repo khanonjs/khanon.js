@@ -1,12 +1,12 @@
 import * as BABYLON from '@babylonjs/core'
 
 import { LoadingProgress } from '../../base'
-import { Core } from '../../base/core/core'
 import { Metadata } from '../../base/interfaces/metadata/metadata'
 import {
   AssetsController,
   SpritesController
 } from '../../controllers'
+import KJS from '../../kjs/kjs'
 import { BabylonAccessor } from '../../models/babylon-accessor'
 import { DrawBlockProperties } from '../../models/draw-block-properties'
 import { Rect } from '../../models/rect'
@@ -203,7 +203,7 @@ export function Sprite(props: SpriteProps): any {
             keyFrames?.forEach((animationKeyFrame) => {
               if (animationKeyFrame.emitter.hasObservers()) {
                 animationKeyFrame.ms.forEach((ms) => {
-                  this.keyFramesTimeouts.push(Core.setTimeout(() => animationKeyFrame.emitter.notifyObservers(), ms))
+                  this.keyFramesTimeouts.push(KJS.setTimeout(() => animationKeyFrame.emitter.notifyObservers(), ms))
                 })
               }
             })
@@ -220,9 +220,9 @@ export function Sprite(props: SpriteProps): any {
 
           if (completed || (keyFrames && keyFrames.length > 0)) {
             if (loop) {
-              this.endAnimationTimerInterval = Core.setInterval(() => onCompleted(), (frameEnd - frameStart + 1) * delay)
+              this.endAnimationTimerInterval = KJS.setInterval(() => onCompleted(), (frameEnd - frameStart + 1) * delay)
             } else {
-              this.endAnimationTimerTimeout = Core.setTimeout(() => onCompleted(), (frameEnd - frameStart + 1) * delay)
+              this.endAnimationTimerTimeout = KJS.setTimeout(() => onCompleted(), (frameEnd - frameStart + 1) * delay)
             }
             startKeyframes()
           }
@@ -261,17 +261,17 @@ export function Sprite(props: SpriteProps): any {
         }
 
         removeAnimationKeyFrames(): void {
-          this.keyFramesTimeouts.forEach((timeout) => Core.clearTimeout(timeout))
+          this.keyFramesTimeouts.forEach((timeout) => KJS.clearTimeout(timeout))
           this.keyFramesTimeouts = []
         }
 
         removeEndAnimationTimer(): void {
           if (this.endAnimationTimerInterval) {
-            Core.clearInterval(this.endAnimationTimerInterval)
+            KJS.clearInterval(this.endAnimationTimerInterval)
             this.endAnimationTimerInterval = null
           }
           if (this.endAnimationTimerTimeout) {
-            Core.clearTimeout(this.endAnimationTimerTimeout)
+            KJS.clearTimeout(this.endAnimationTimerTimeout)
             this.endAnimationTimerTimeout = null
           }
         }
