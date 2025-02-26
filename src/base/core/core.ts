@@ -232,6 +232,7 @@ export class Core {
     Core.loopUpdateLastMs = performance.now()
     Core.loopUpdateLag = 0
     Core.loopUpdateInterval = setInterval(
+    // Core.engine.onEndFrameObservable.add(
       () => {
         const currentMs = performance.now()
         Core.loopUpdateLag += currentMs - Core.loopUpdateLastMs
