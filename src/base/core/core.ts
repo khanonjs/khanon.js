@@ -231,8 +231,8 @@ export class Core {
     Core.loopUpdateMps = 1000 / Core.app.props.loopUpdate.fps
     Core.loopUpdateLastMs = performance.now()
     Core.loopUpdateLag = 0
+    // Core.engine.onBeginFrameObservable.add(  // TODO should use babylon observable?
     Core.loopUpdateInterval = setInterval(
-    // Core.engine.onEndFrameObservable.add(
       () => {
         const currentMs = performance.now()
         Core.loopUpdateLag += currentMs - Core.loopUpdateLastMs
