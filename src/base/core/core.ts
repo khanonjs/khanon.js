@@ -115,7 +115,7 @@ export class Core {
   }
 
   private static initializeBabylon(): void {
-    BABYLON.SceneLoader.ShowLoadingScreen = false
+    BABYLON.SceneLoader.ShowLoadingScreen = false // TODO remove this deprecated class
     Core.babylon.engine = new BABYLON.Engine(
       Core.htmlCanvas,
       Core.app.props.engineConfiguration.antialias,

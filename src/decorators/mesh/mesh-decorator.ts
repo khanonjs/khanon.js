@@ -276,10 +276,12 @@ export function Mesh(props: MeshProps = {}): any {
               const asset = AssetsController.getAsset<AssetDataMesh>(this.props.url)
               if (asset && asset.definition.data) {
                 const progress = new LoadingProgress()
-                BABYLON.SceneLoader.LoadAssetContainer('file:', asset.file, scene.babylon.scene, (assetContainer) => {
-                  this.assetContainers.set(scene, assetContainer)
-                  progress.complete()
-                })
+                BABYLON.LoadAssetContainerAsync(asset.file, scene.babylon.scene)
+                  .then((assetContainer) => {
+                    this.assetContainers.set(scene, assetContainer)
+                    progress.complete()
+                  })
+                  .catch(error => progress.error(error))
                 return progress
               } else {
                 Logger.error(`Asset '${this.props.url}' not found on mesh loading:`, this.Instance.getClassName())

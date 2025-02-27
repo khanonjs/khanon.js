@@ -1,7 +1,3 @@
-// TODO lines from webpack
-import '@babylonjs/inspector'
-import '@babylonjs/core/Debug/debugLayer'
-
 import * as BABYLON from '@babylonjs/core'
 
 import {
@@ -263,10 +259,7 @@ export function Scene(props: SceneProps = {}): any {
                 })
               }
               if (this.props.url) {
-                const indexSlash = this.props.url.lastIndexOf('/') + 1
-                const path = this.props.url.slice(0, indexSlash)
-                const file = this.props.url.slice(indexSlash)
-                BABYLON.SceneLoader.AppendAsync(path, file, this.babylon.scene)
+                BABYLON.AppendSceneAsync(this.props.url, this.babylon.scene)
                   .then(() => {
                     Logger.debug(`Scene load  AppendAsync from '${this.props.url}' completed.`, this.getClassName())
                     startScene()
