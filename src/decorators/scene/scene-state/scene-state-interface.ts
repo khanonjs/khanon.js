@@ -34,7 +34,7 @@ export abstract class SceneStateInterface<S = any, C = SceneInterface> implement
   abstract get spawn(): SceneSpawn
   abstract get remove(): SceneRemove
   abstract loopUpdate: boolean
-  abstract showGUI<G extends GUIInterface>(gui: GUIConstructor): G
+  abstract showGUI<G extends GUIInterface>(gui: GUIConstructor, setup: any): G
   abstract hideGUI(gui: GUIConstructor): void
   abstract getGUI<G extends GUIInterface>(gui: GUIConstructor): G | undefined
   abstract switchCamera(camera: CameraConstructor, setup: any): void

@@ -68,8 +68,8 @@ export function SceneState(props: SceneStateProps = {}): any {
       get spawn(): SceneSpawn { return this._spawn }
       get remove(): SceneRemove { return this._remove }
 
-      showGUI<G extends GUIInterface>(gui: GUIConstructor): G {
-        return this.scene.showGUI(gui)
+      showGUI<G extends GUIInterface>(gui: GUIConstructor, setup: any): G {
+        return this.scene.showGUI(gui, setup)
       }
 
       hideGUI(gui: GUIConstructor): void {

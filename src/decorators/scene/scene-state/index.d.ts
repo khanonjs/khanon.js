@@ -53,8 +53,9 @@ export declare abstract class SceneStateInterface<S = any, C = SceneInterface> {
   /**
    * Shows a GUI. This GUI must have been declared in the decorator props.
    * @param gui
+   * @param setup
    */
-  showGUI<G extends GUIInterface>(gui: GUIConstructor): G
+  showGUI<G extends GUIInterface>(gui: GUIConstructor, setup: any): G
 
   /**
    * Hides a GUI.

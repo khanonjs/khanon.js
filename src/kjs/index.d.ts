@@ -19,7 +19,7 @@ import {
 // ******************
 export declare namespace KJS {
   /**
-   * Scenes controller.
+   * Scene controller.
    */
   export namespace Scene {
     function load(scene: SceneConstructor): LoadingProgress
@@ -32,7 +32,7 @@ export declare namespace KJS {
   }
 
   /**
-   * Notifications controller.
+   * Notification controller.
    * @param message Message Id.
    * @param receivers Constructor type of the elements that will receive the notification.
    * @param args Method arguments received by the 'Notification' decorated method.

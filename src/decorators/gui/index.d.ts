@@ -11,11 +11,12 @@ import { FlexId } from '../../types/flex-id'
 // import { GUIStateInterface } from './gui-state/gui-state-interface'
 
 /**
- * @param S Camera setup object.
+ * @param S GUI setup object.
  */
-export declare abstract class GUIInterface {
+export declare abstract class GUIInterface</* Setup object */ S = any> {
   loopUpdate: boolean
   babylon: Pick<BabylonAccessor, 'gui'>
+  setup: S
 
   /**
    * Returns the name of the class.

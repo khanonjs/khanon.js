@@ -8,7 +8,6 @@ import { Logger } from '../../modules/logger'
 import { FlexId } from '../../types/flex-id'
 import {
   attachCanvasResize,
-  attachLoopUpdate,
   invokeCallback,
   removeCanvasResize,
   removeLoopUpdate,

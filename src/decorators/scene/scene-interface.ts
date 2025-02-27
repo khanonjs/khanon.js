@@ -41,6 +41,7 @@ export abstract class SceneInterface implements Loadable, LoopUpdatable, CanvasR
   abstract _remove: SceneRemove
   abstract _camera: CameraInterface | undefined
   abstract _cameraConstructor: CameraConstructor
+  abstract _cameraSetup: any
   abstract _loopUpdate: boolean
   abstract _debugInspector: (event: KeyboardEvent) => void
   abstract availableElements: SceneAvailableElements
@@ -82,7 +83,7 @@ export abstract class SceneInterface implements Loadable, LoopUpdatable, CanvasR
   abstract stop(): void
   abstract load(): LoadingProgress
   abstract unload(): void
-  abstract showGUI<G extends GUIInterface>(gui: GUIConstructor): G
+  abstract showGUI<G extends GUIInterface>(gui: GUIConstructor, setup: any): G
   abstract hideGUI(gui: GUIConstructor): void
   abstract getGUI<G extends GUIInterface>(gui: GUIConstructor): G | undefined
   abstract switchCamera(camera: CameraConstructor, setup: any): void

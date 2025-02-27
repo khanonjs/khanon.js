@@ -251,7 +251,7 @@ export function Actor(props: ActorProps = {}): any {
       }
 
       switchState(state: ActorStateConstructor, setup: any): ActorStateInterface {
-        if (!this.scene.availableElements.hasActorState(state)) { Logger.debugError('Trying to set a state non available to the actor. Please check the actor props.', this.getClassName(), state.prototype); return null as any }
+        if (!this.scene.availableElements.hasActorState(state)) { Logger.debugError('Denied to set a state non available to the actor. Please check the actor props.', this.getClassName(), state.prototype); return null as any }
         const _state = ActorStatesController.get(state).spawn(this)
         if (this._state) {
           this._state.end()

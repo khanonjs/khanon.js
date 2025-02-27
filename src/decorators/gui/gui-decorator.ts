@@ -34,7 +34,7 @@ import { GUIStateInterface } from './gui-state/gui-state-interface'
 export function GUI(props: GUIProps = {}): any {
   return function <T extends { new (...args: any[]): GUIInterface }>(constructor: T & GUIInterface, context: ClassDecoratorContext) {
     const className = constructor.name
-    const _classInterface = class extends constructor implements GUIInterface {
+    const _classInterface = class extends constructor implements GUIInterface<any> {
       constructor(props: GUIProps) {
         super()
         this.props = props
@@ -48,6 +48,7 @@ export function GUI(props: GUIProps = {}): any {
       props: GUIProps
       metadata: Metadata = Reflect.getMetadata('metadata', this) ?? new Metadata()
       babylon: Pick<BabylonAccessor<BABYLON.Camera>, 'gui'> = { gui: null as any }
+      setup: any
       _loopUpdate = true
       loopUpdate$: BABYLON.Observer<number>
       canvasResize$: BABYLON.Observer<Rect>
@@ -62,8 +63,9 @@ export function GUI(props: GUIProps = {}): any {
       get loopUpdate(): boolean { return this._loopUpdate }
       // get state(): GUIStateInterface | null { return this._state }
 
-      initialize() {
+      initialize(setup: any) {
         this.babylon.gui = BABYLONGUI.AdvancedDynamicTexture.CreateFullscreenUI('')
+        this.setup = setup
         switchLoopUpdate(this._loopUpdate, this)
         attachCanvasResize(this)
         invokeCallback(this.onInitialize, this, this.babylon.gui)

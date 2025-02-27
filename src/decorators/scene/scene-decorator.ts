@@ -92,6 +92,7 @@ export function Scene(props: SceneProps = {}): any {
       _state: SceneStateInterface | null
       _camera: CameraInterface | undefined
       _cameraConstructor: CameraConstructor
+      _cameraSetup: any
       _spawn: SceneSpawn
       _remove: SceneRemove
       _loopUpdate = true
@@ -130,7 +131,7 @@ export function Scene(props: SceneProps = {}): any {
           this.stop()
         }
         if (this._cameraConstructor) {
-          this.switchCamera(this._cameraConstructor)
+          this.switchCamera(this._cameraConstructor, this._cameraSetup)
         }
         this._started = true
         if (state) {
@@ -141,7 +142,7 @@ export function Scene(props: SceneProps = {}): any {
           Logger.warn('Starting a scene that hasn\'t been loaded. Are you sure you want to do this?', this.getClassName())
         }
         if (!this._camera) {
-          Logger.warn('No camera defined; using a generic camera. Use \'switchCamera\' in the Scene\'s or SceneState\'s \'onSart\' callback to set a camera before starting the scene.', this.getClassName())
+          Logger.warn('No camera defined; using a generic camera. Use \'switchCamera\' in the Scene\'s or SceneState\'s \'onStart\' callback to set a camera before starting the scene.', this.getClassName())
           @Camera()
           // @ts-ignore
           class GenericCamera extends CameraInterface {
@@ -153,7 +154,7 @@ export function Scene(props: SceneProps = {}): any {
               return camera
             }
           }
-          this.switchCamera(GenericCamera)
+          this.switchCamera(GenericCamera, {})
         }
         if (Core.isDevelopmentMode() && this.props.useDebugInspector) {
           this.useDebugInspector()
@@ -299,14 +300,14 @@ export function Scene(props: SceneProps = {}): any {
         GUIController.unload(this.props.guis, this)
       }
 
-      showGUI<G extends GUIInterface>(gui: GUIConstructor): G {
+      showGUI<G extends GUIInterface>(gui: GUIConstructor, setup: any): G {
         Logger.debug('Show GUI', this.getClassName(), GUIController.get(gui).getClassName())
         let guiInstance = this.guis.get(gui)
         if (guiInstance) {
           Logger.warn('Trying to show a GUI that\'s already being displayed.', this.getClassName(), guiInstance?.getClassName())
         } else {
           guiInstance = GUIController.get(gui).spawn()
-          guiInstance.initialize()
+          guiInstance.initialize(setup)
           this.guis.set(gui, guiInstance)
         }
         return guiInstance as any
@@ -344,10 +345,12 @@ export function Scene(props: SceneProps = {}): any {
         this.guis.clear()
       }
 
-      switchCamera(constructor: CameraConstructor): void {
+      switchCamera(constructor: CameraConstructor, setup: any): void {
         this.releaseCamera()
         this._cameraConstructor = constructor
+        this._cameraSetup = setup
         this._camera = CamerasController.get(constructor).spawn(this)
+        this._camera.setup = setup
         this._camera.babylon.camera = (this._camera.onInitialize as any)(this.babylon.scene)
         this._camera.babylon.camera.attachControl(Core.canvas, true)
         this._camera.start()
@@ -367,7 +370,7 @@ export function Scene(props: SceneProps = {}): any {
       }
 
       switchState(state: SceneStateConstructor, setup: any): SceneStateInterface {
-        if (!this.availableElements.hasSceneState(state)) { Logger.debugError('Trying to set a state non available to the scene. Please check the scene props.', this.getClassName(), state.prototype); return null as any }
+        if (!this.availableElements.hasSceneState(state)) { Logger.debugError('Denied to set a state non available to the scene. Please check the scene props.', this.getClassName(), state.prototype); return null as any }
         const _state = SceneStatesController.get(state).spawn(this)
         if (this._state) {
           this._state.end()

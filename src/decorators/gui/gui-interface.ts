@@ -13,13 +13,13 @@ import { FlexId } from '../../types/flex-id'
 import { GUIStateConstructor } from './gui-state/gui-state-constructor'
 import { GUIStateInterface } from './gui-state/gui-state-interface'
 
-export abstract class GUIInterface implements LoopUpdatable, CanvasResizable, Notificable {
+export abstract class GUIInterface<S = any> implements LoopUpdatable, CanvasResizable, Notificable {
   abstract _loopUpdate: boolean
   // abstract _state: GUIStateInterface | null
   abstract metadata: Metadata
   abstract loopUpdate$: BABYLON.Observer<number>
   abstract canvasResize$: BABYLON.Observer<Rect>
-  abstract initialize(): void
+  abstract initialize(setup: S): void
   abstract release(): void
 
   /**
@@ -27,6 +27,7 @@ export abstract class GUIInterface implements LoopUpdatable, CanvasResizable, No
    */
   abstract loopUpdate: boolean
   abstract babylon: Pick<BabylonAccessor, 'gui'>
+  abstract setup: S
   // abstract get state(): GUIStateInterface | null
   abstract getClassName(): string
   // abstract switchState(state: GUIStateConstructor, setup: any): GUIStateInterface
