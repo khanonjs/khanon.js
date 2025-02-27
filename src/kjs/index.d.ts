@@ -32,18 +32,6 @@ export declare namespace KJS {
   }
 
   /**
-   * GUI controller.  // TODO
-   */
-  export namespace GUI {
-    function load(scene: SceneConstructor): LoadingProgress
-    function load(scene: SceneConstructor[]): LoadingProgress
-    function unload(scene: SceneConstructor): void
-    function unload(scene: SceneConstructor[]): void
-    function start<S extends SceneStateConstructor>(scene: SceneConstructor, state: S, stateSetup: InstanceType<S>['setup']): void
-    function stop(scene: SceneConstructor): void
-  }
-
-  /**
    * Notifications controller.
    * @param message Message Id.
    * @param receivers Constructor type of the elements that will receive the notification.

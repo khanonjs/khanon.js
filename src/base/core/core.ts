@@ -18,7 +18,7 @@ export class Core {
   // HTML Layers
   private static htmlContainer: HTMLElement
   private static htmlCanvas: HTMLCanvasElement
-  private static htmlGui: HTMLDivElement // TODO
+  private static htmlGui: HTMLDivElement // TODO?
 
   // Babylon
   private static babylon: Pick<BabylonAccessor, 'engine'> = { engine: null as any }
@@ -27,7 +27,6 @@ export class Core {
   private static onCanvasResize: BABYLON.Observable<Rect> = new BABYLON.Observable<Rect>(undefined, true)
 
   // Loop update
-  private static loopUpdateInterval: ReturnType<typeof setInterval>
   private static loopUpdateLastMs: number
   private static loopUpdateMps: number // Number of logical steps per frame
   private static loopUpdateLag: number
@@ -37,7 +36,7 @@ export class Core {
   // Render scenes
   private static readonly renderScenes: Set<SceneInterface> = new Set<SceneInterface>()
 
-  // Timeouts // TODO thread here?
+  // Timeouts
   private static timeouts: Set<Timeout> = new Set<Timeout>()
   private static intervals: Set<Timeout> = new Set<Timeout>()
 
@@ -115,7 +114,7 @@ export class Core {
   }
 
   private static initializeBabylon(): void {
-    BABYLON.SceneLoader.ShowLoadingScreen = false // TODO remove this deprecated class
+    BABYLON.SceneLoaderFlags.ShowLoadingScreen = false
     Core.babylon.engine = new BABYLON.Engine(
       Core.htmlCanvas,
       Core.app.props.engineConfiguration.antialias,
@@ -143,9 +142,7 @@ export class Core {
   }
 
   static close(): void {
-    if (Core.loopUpdateInterval) {
-      clearInterval(Core.loopUpdateInterval)
-    }
+    Core.engine.onBeginFrameObservable.clear()
     if (Core.babylon.engine) {
       Core.babylon.engine.stopRenderLoop()
     }
@@ -231,8 +228,7 @@ export class Core {
     Core.loopUpdateMps = 1000 / Core.app.props.loopUpdate.fps
     Core.loopUpdateLastMs = performance.now()
     Core.loopUpdateLag = 0
-    // Core.engine.onBeginFrameObservable.add(  // TODO should use babylon observable?
-    Core.loopUpdateInterval = setInterval(
+    Core.engine.onBeginFrameObservable.add(
       () => {
         const currentMs = performance.now()
         Core.loopUpdateLag += currentMs - Core.loopUpdateLastMs
@@ -263,9 +259,7 @@ export class Core {
           })
           Core.loopUpdateLag -= Core.loopUpdateMps
         }
-      },
-      0
-    )
+      })
   }
 
   private static updateCanvasSize(): void {
