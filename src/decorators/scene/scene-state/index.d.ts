@@ -55,7 +55,7 @@ export declare abstract class SceneStateInterface<S = any, C = SceneInterface> {
    * @param gui
    * @param setup
    */
-  showGUI<G extends GUIInterface>(gui: GUIConstructor, setup: any): G
+  showGUI<G extends GUIInterface, H extends GUIConstructor>(gui: H, setup: InstanceType<H>['setup']): G
 
   /**
    * Hides a GUI.
