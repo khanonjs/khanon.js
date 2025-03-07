@@ -57,7 +57,7 @@ export declare abstract class SceneStateInterface<S = any, C = SceneInterface> {
   getCamera<C extends CameraInterface = CameraInterface>(): C
 
   /**
-   * Notifies a message to this sstate.
+   * Notifies a message to this state.
    */
   notify(message: FlexId, ...args: any[]): void
 
