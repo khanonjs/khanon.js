@@ -12,6 +12,6 @@ export abstract class GUICore implements Loadable, Spawnable<GUIInterface> {
   abstract Instance: GUIInterface // Disambiguate core methods from interface spawnable instances
   abstract load(owner?: SceneInterface): LoadingProgress
   abstract unload(owner?: SceneInterface): void
-  abstract spawn(): GUIInterface
+  abstract spawn(scene: SceneInterface): GUIInterface
   abstract getClassName(): string
 }

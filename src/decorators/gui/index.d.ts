@@ -3,6 +3,7 @@ import * as BABYLON from '@babylonjs/core'
 import { BabylonAccessor } from '../../models/babylon-accessor'
 import { Rect } from '../../models/rect'
 import { FlexId } from '../../types/flex-id'
+import { SceneInterface } from '../scene'
 
 // import { MeshConstructor } from '../mesh/mesh-constructor'
 // import { ParticleConstructor } from '../particle/particle-constructor'
@@ -16,7 +17,13 @@ import { FlexId } from '../../types/flex-id'
 export declare abstract class GUIInterface</* Setup object */ S = any> {
   loopUpdate: boolean
   babylon: Pick<BabylonAccessor, 'gui'>
-  setup: S
+
+  /**
+   * Scene this Mesh belongs to.
+   */
+  get scene(): SceneInterface
+
+  get setup(): S
 
   /**
    * Returns the name of the class.

@@ -306,7 +306,7 @@ export function Scene(props: SceneProps = {}): any {
         if (guiInstance) {
           Logger.warn('Trying to show a GUI that\'s already being displayed.', this.getClassName(), guiInstance?.getClassName())
         } else {
-          guiInstance = GUIController.get(gui).spawn()
+          guiInstance = GUIController.get(gui).spawn(this)
           guiInstance.initialize(setup)
           this.guis.set(gui, guiInstance)
         }

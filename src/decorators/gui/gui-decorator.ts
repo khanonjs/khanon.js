@@ -35,7 +35,7 @@ export function GUI(props: GUIProps = {}): any {
   return function <T extends { new (...args: any[]): GUIInterface }>(constructor: T & GUIInterface, context: ClassDecoratorContext) {
     const className = constructor.name
     const _classInterface = class extends constructor implements GUIInterface<any> {
-      constructor(props: GUIProps) {
+      constructor(readonly scene: SceneInterface, props: GUIProps) {
         super()
         this.props = props
         this.metadata.applyProps(this)
@@ -103,7 +103,7 @@ export function GUI(props: GUIProps = {}): any {
     }
     const _classCore = class implements GUICore {
       props = removeArrayDuplicitiesInObject(props)
-      Instance: GUIInterface = new _classInterface(null as any)
+      Instance: GUIInterface = new _classInterface(null as any, null as any)
       loaded = false
 
       load(scene: SceneInterface): LoadingProgress {
@@ -127,8 +127,8 @@ export function GUI(props: GUIProps = {}): any {
         // ParticlesController.unload(this.Instance.metadata.getProps().particles, scene)
       }
 
-      spawn(): GUIInterface {
-        const gui = new _classInterface(this.props)
+      spawn(scene: SceneInterface): GUIInterface {
+        const gui = new _classInterface(scene, this.props)
         return gui
       }
 
