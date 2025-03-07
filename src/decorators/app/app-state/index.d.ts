@@ -21,6 +21,11 @@ export declare abstract class AppStateInterface<S = any> {
   get loopUpdate(): boolean
 
   /**
+   * Returns the name of the class.
+   */
+  getClassName(): string
+
+  /**
    * Notifies a message to this state.
    */
   notify(message: FlexId, ...args: any[]): void

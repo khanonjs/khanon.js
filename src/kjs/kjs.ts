@@ -6,7 +6,9 @@ import {
   NotificationsController,
   ScenesController
 } from '../controllers'
+import { AppInterface } from '../decorators/app/app-interface'
 import { AppStateConstructor } from '../decorators/app/app-state/app-state-constructor'
+import { AppStateInterface } from '../decorators/app/app-state/app-state-interface'
 import { Rect } from '../models/rect'
 import { Timeout } from '../models/timeout'
 
@@ -20,6 +22,10 @@ export class KJS {
 
   static clearCache(): void {
     // TODO
+  }
+
+  static getApp<A extends AppInterface>(): A {
+    return Core.getApp() as any
   }
 
   static switchAppState(state: AppStateConstructor, setup: any): LoadingProgress {

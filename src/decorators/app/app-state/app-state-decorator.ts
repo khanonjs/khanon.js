@@ -26,6 +26,7 @@ import { AppStateProps } from './app-state-props'
 
 export function AppState(props: AppStateProps = {}): any {
   return function <T extends { new (...args: any[]): AppStateInterface }>(constructor: T & AppStateInterface, context: ClassDecoratorContext) {
+    const className = constructor.name
     const _classInterface = class extends constructor implements AppStateInterface {
       constructor(props: AppStateProps) {
         super()
@@ -34,7 +35,7 @@ export function AppState(props: AppStateProps = {}): any {
       }
 
       getClassName(): string {
-        return constructor.name
+        return className
       }
 
       props: AppStateProps

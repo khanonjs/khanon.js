@@ -1,3 +1,5 @@
+// 8a8f eliminar todos los .d de los archivos compilados que no se quieren al hacer build
+
 import * as BABYLON from '@babylonjs/core'
 
 import { AppInterface } from '../../decorators/app/app-interface'

@@ -1,5 +1,4 @@
 /* eslint-disable no-useless-call */
-import { objectToString } from '../../utils/utils'
 import { LoggerLevels } from './logger-levels'
 
 export class Logger {

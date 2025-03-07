@@ -14,13 +14,18 @@ import { appPropsDefault } from './app.props.deafult'
 
 export function App(props: AppProps): any {
   return function <T extends { new (...args: any[]): AppInterface }>(constructor: T & AppInterface, context: ClassDecoratorContext) {
+    const className = constructor.name
     const _class = class extends constructor implements AppInterface {
       props = applyDefaults(props, appPropsDefault)
       metadata: Metadata = Reflect.getMetadata('metadata', this) ?? new Metadata()
       _stateCore: AppStateCore
-      _state: AppStateInterface
+      _state: AppStateInterface | undefined
 
-      get state(): AppStateInterface { return this._state }
+      get state(): AppStateInterface | undefined { return this._state }
+
+      getClassName(): string {
+        return className
+      }
 
       switchState(state: AppStateConstructor, setup: any): LoadingProgress {
         const newStateCore = AppStatesController.get(state)
@@ -32,11 +37,11 @@ export function App(props: AppProps): any {
         if (this.props.removeTimeoutsOnStateSwitch) {
           Core.clearAllTimeouts()
         }
-        const progress = newStateCore.load()
+        this._stateCore = newStateCore
+        this._state = this._stateCore.spawn()
+        const progress = this._stateCore.load()
         progress.onComplete.add(() => {
-          this._stateCore = newStateCore
-          this._state = this._stateCore.spawn()
-          this._state.start(setup)
+          this._state?.start(setup)
         })
         return progress
       }

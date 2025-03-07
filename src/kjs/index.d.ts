@@ -1,6 +1,7 @@
 import * as BABYLON from '@babylonjs/core'
 
 import { LoadingProgress } from '../base'
+import { AppInterface } from '../decorators/app'
 import {
   AppStateConstructor,
   AppStateInterface
@@ -47,6 +48,11 @@ export declare namespace KJS {
    */
   function throw_(error?: any): void;
   export { throw_ as throw } // Hack function name :)
+
+  /**
+   * Returns the app instance.
+   */
+  export function getApp<A extends AppInterface>(): A
 
   /**
    * Sets the app state.

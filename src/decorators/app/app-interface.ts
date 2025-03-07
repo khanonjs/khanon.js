@@ -10,12 +10,13 @@ import { AppPropsDefault } from './app.props.deafult'
 export abstract class AppInterface implements Notificable {
   abstract props: AppProps & AppPropsDefault
   abstract metadata: Metadata
-  abstract _state: AppStateInterface
+  abstract _state: AppStateInterface | undefined
 
   /**
    * User available
    */
-  abstract get state(): AppStateInterface
+  abstract get state(): AppStateInterface | undefined
+  abstract getClassName(): string
   abstract switchState(state: AppStateConstructor, setup: any): LoadingProgress
   abstract notify(message: FlexId, ...args: any[]): void
 
