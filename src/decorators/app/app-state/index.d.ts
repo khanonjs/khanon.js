@@ -26,12 +26,12 @@ export declare abstract class AppStateInterface<S = any> {
   notify(message: FlexId, ...args: any[]): void
 
   /**
-   * Invoked on State start. Use this method to setup the App according to the State start.
+   * Invoked on state start. Use this method to setup the App according to the state start.
    */
   onStart?(): void
 
   /**
-   * Invoked on State end. Use this method to setup the App according to the State end.
+   * Invoked on state end. Use this method to setup the App according to the state end.
    */
   onEnd?(): void
 
@@ -54,7 +54,7 @@ export interface AppStateProps {
   /**
    * Scenes to load on state start.
    * The previous state won't end and the app won't switch to this state until it has been fully loaded.
-   * These Scenes will be automatically unloaded on state end in case they are not used in the next state.
+   * These scenes will be automatically unloaded on state end in case they are not used in the next state.
    */
   scenes?: SceneConstructor[]
 }

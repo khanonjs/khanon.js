@@ -142,7 +142,7 @@ export function Scene(props: SceneProps = {}): any {
           Logger.warn('Starting a scene that hasn\'t been loaded. Are you sure you want to do this?', this.getClassName())
         }
         if (!this._camera) {
-          Logger.warn('No camera defined; using a generic camera. Use \'switchCamera\' in the Scene\'s or SceneState\'s \'onStart\' callback to set a camera before starting the scene.', this.getClassName())
+          Logger.warn('No camera defined: using a generic camera. Use \'switchCamera\' in the Scene\'s or SceneState\'s \'onStart\' callback to set a camera before starting the scene.', this.getClassName())
           @Camera()
           // @ts-ignore
           class GenericCamera extends CameraInterface {

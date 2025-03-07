@@ -91,12 +91,12 @@ export declare abstract class SceneStateInterface<S = any, C = SceneInterface> {
   notify(message: FlexId, ...args: any[]): void
 
   /**
-   * Invoked on State start. Use this method to setup the Scene according to this State start.
+   * Invoked on state start. Use this method to setup the scene according to this state start.
    */
   onStart?(): void
 
   /**
-   * Invoked on State end. Use this method to setup the Scene according to the State end.
+   * Invoked on state end. Use this method to setup the scene according to the state end.
    */
   onEnd?(): void
 
