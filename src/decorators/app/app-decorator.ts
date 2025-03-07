@@ -19,9 +19,9 @@ export function App(props: AppProps): any {
       props = applyDefaults(props, appPropsDefault)
       metadata: Metadata = Reflect.getMetadata('metadata', this) ?? new Metadata()
       _stateCore: AppStateCore
-      _state: AppStateInterface | undefined
+      _state: AppStateInterface | null = null
 
-      get state(): AppStateInterface | undefined { return this._state }
+      get state(): AppStateInterface | null { return this._state }
 
       getClassName(): string {
         return className

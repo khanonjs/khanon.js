@@ -13,7 +13,7 @@ export declare abstract class AppInterface {
   /**
    * Gets the current state.
    */
-  get state(): AppStateInterface | undefined
+  get state(): AppStateInterface | null
 
   /**
    * Returns the name of the class.

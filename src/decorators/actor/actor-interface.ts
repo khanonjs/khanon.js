@@ -13,7 +13,6 @@ import {
   SpriteTransform
 } from '../../types'
 import { FlexId } from '../../types/flex-id'
-import { GUIInterface } from '../gui/gui-interface'
 import { MeshAnimation } from '../mesh/mesh-animation'
 import { MeshAnimationOptions } from '../mesh/mesh-animation-options'
 import { MeshInterface } from '../mesh/mesh-interface'

@@ -83,7 +83,7 @@ export declare abstract class ActorInterface<B extends SpriteInterface | MeshInt
   /**
    * Gets the current state.
    */
-  get state(): ActorStateInterface
+  get state(): ActorStateInterface | null
 
   /**
    * 'visibility' of the meshes and sprites of this actor

@@ -140,7 +140,7 @@ export declare abstract class SceneInterface {
   /**
    * Current state.
    */
-  get state(): SceneStateInterface
+  get state(): SceneStateInterface | null
 
   /**
    * Scene spawn class.

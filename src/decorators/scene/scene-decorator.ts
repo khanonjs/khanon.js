@@ -89,7 +89,7 @@ export function Scene(props: SceneProps = {}): any {
       _loaded: boolean
       _loadingProgress: LoadingProgress | undefined
       _started: boolean
-      _state: SceneStateInterface | null
+      _state: SceneStateInterface | null = null
       _camera: CameraInterface | undefined
       _cameraConstructor: CameraConstructor
       _cameraSetup: any
