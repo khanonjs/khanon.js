@@ -8,7 +8,6 @@ import {
 } from '../controllers'
 import { AppInterface } from '../decorators/app/app-interface'
 import { AppStateConstructor } from '../decorators/app/app-state/app-state-constructor'
-import { AppStateInterface } from '../decorators/app/app-state/app-state-interface'
 import { Rect } from '../models/rect'
 import { Timeout } from '../models/timeout'
 
@@ -32,7 +31,7 @@ export class KJS {
     return Core.switchAppState(state, setup)
   }
 
-  static setTimeout(func: () => void, ms: number, context?: any): Timeout {
+  static setTimeout(func: () => void, ms: number, context?: any): Timeout { // TODO get context (scene, state, etc) to remove timeouts on state change more accurately, getting rid of property 'removeTimeoutsOnStateSwitch'
     return Core.setTimeout(func, ms, context)
   }
 

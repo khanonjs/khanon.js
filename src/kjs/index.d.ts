@@ -2,10 +2,7 @@ import * as BABYLON from '@babylonjs/core'
 
 import { LoadingProgress } from '../base'
 import { AppInterface } from '../decorators/app'
-import {
-  AppStateConstructor,
-  AppStateInterface
-} from '../decorators/app/app-state'
+import { AppStateConstructor } from '../decorators/app/app-state'
 import { SceneConstructor } from '../decorators/scene'
 import { SceneStateConstructor } from '../decorators/scene/scene-state'
 import { Timeout } from '../models'
@@ -19,6 +16,11 @@ import {
 //  KJS App handler
 // ******************
 export declare namespace KJS {
+  /**
+   * Types
+   */
+  export type Timeout = Timeout
+
   /**
    * Scene controller.
    */
@@ -95,6 +97,7 @@ export declare namespace KJS {
    * Sets a timeout.
    * This timeout relies on the app loopUpdate, meaning the application will trigger it at time, no matter if the browser tab is unfocused.
    * Some browsers delay native timeouts when tab is unfocused to unweight cpu load, what could drive to app inconsistencies.
+   * KJS timers are also removed on app state changes if 'removeTimeoutsOnStateSwitch' is true, avoiding inconsistencies.
    * @param func Callback
    * @param ms Milliseconds
    * @param context
@@ -105,6 +108,7 @@ export declare namespace KJS {
    * Sets an interval.
    * This interval relies on the app loopUpdate, meaning the application will trigger it at time, no matter if the browser tab is unfocused.
    * Some browsers delay native timeouts when tab is unfocused to unweight cpu load, what could drive to app inconsistencies.
+   * KJS timers are also removed on app state changes if 'removeTimeoutsOnStateSwitch' is true, avoiding inconsistencies.
    * @param func Callback
    * @param ms Milliseconds
    * @param context

@@ -369,7 +369,7 @@ export function Scene(props: SceneProps = {}): any {
       }
 
       switchState(state: SceneStateConstructor, setup: any): SceneStateInterface {
-        if (!this.availableElements.hasSceneState(state)) { Logger.debugError('Denied to set a state non available to the scene. Please check the scene props.', this.getClassName(), state.prototype); return null as any }
+        if (!this.availableElements.hasSceneState(state)) { Logger.debugError('Denied to set a state not available to the scene. Did you mean to add it to the scene props?', this.getClassName(), state.prototype); return null as any }
         const _state = SceneStatesController.get(state).spawn(this)
         if (this._state) {
           this._state.end()
