@@ -5,7 +5,7 @@ import { AppInterface } from '../decorators/app'
 import { AppStateConstructor } from '../decorators/app/app-state'
 import { SceneConstructor } from '../decorators/scene'
 import { SceneStateConstructor } from '../decorators/scene/scene-state'
-import { Timeout } from '../models'
+import { Timeout as _Timeout } from '../models'
 import { Rect } from '../models/rect'
 import {
   FlexId,
@@ -19,7 +19,7 @@ export declare namespace KJS {
   /**
    * Types
    */
-  export type Timeout = Timeout
+  export type Timeout = _Timeout
 
   /**
    * Scene controller.
