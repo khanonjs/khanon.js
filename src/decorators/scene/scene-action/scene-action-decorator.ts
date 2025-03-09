@@ -51,7 +51,7 @@ export function SceneAction(props: SceneActionProps = {}): any {
 
         get loopUpdate(): boolean { return this._loopUpdate }
 
-        start(setup: any): void {
+        _start(setup: any): void {
           this.setup = setup
           if (this.props.countFrames) {
             this.countFramesUpdate$ = Core.loopUpdateAddObserver((delta: number) => {

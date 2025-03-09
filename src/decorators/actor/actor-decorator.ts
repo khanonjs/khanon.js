@@ -301,7 +301,7 @@ export function Actor(props: ActorProps = {}): any {
               this.stopAction(actionOverride)
             }
           })
-          action.start(setup)
+          action._start(setup)
         } else {
           action.play()
         }

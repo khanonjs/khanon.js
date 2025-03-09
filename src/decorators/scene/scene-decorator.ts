@@ -434,7 +434,7 @@ export function Scene(props: SceneProps = {}): any {
               this.stopAction(actionOverride)
             }
           })
-          action.start(setup)
+          action._start(setup)
         }
         return action
       }

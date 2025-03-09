@@ -13,7 +13,7 @@ export abstract class ActionInterface<S = any> implements LoopUpdatable, CanvasR
   abstract _loopUpdate: boolean
   abstract _loopUpdate$: BABYLON.Observer<number>
   abstract _canvasResize$: BABYLON.Observer<Rect>
-  abstract start(setup: S): void
+  abstract _start(setup: S): void
 
   /**
    * User available
