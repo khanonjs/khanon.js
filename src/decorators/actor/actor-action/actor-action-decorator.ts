@@ -32,7 +32,7 @@ export function ActorAction(props: ActorActionProps = {}): any {
         constructor(actor: ActorInterface) {
           super()
           this.actor = actor
-          this.metadata.applyProps(this)
+          this._metadata.applyProps(this)
         }
 
         getClassName(): string {
@@ -43,7 +43,7 @@ export function ActorAction(props: ActorActionProps = {}): any {
         className: string
         actor: ActorInterface
         scene: SceneInterface
-        metadata: Metadata = Reflect.getMetadata('metadata', this) ?? new Metadata()
+        _metadata: Metadata = Reflect.getMetadata('metadata', this) ?? new Metadata()
         countFramesUpdate$: BABYLON.Observer<number> | null = null
         countFrames = 0
         _loopUpdate$: BABYLON.Observer<number>
@@ -107,21 +107,21 @@ export function ActorAction(props: ActorActionProps = {}): any {
         load(scene: SceneInterface): LoadingProgress {
           return new LoadingProgress().fromNodes([
             SpritesController.load(this.props.sprites, scene),
-            SpritesController.load(this.Instance.metadata.getProps().sprites, scene),
+            SpritesController.load(this.Instance._metadata.getProps().sprites, scene),
             MeshesController.load(this.props.meshes, scene),
-            MeshesController.load(this.Instance.metadata.getProps().meshes, scene),
+            MeshesController.load(this.Instance._metadata.getProps().meshes, scene),
             ParticlesController.load(this.props.particles, scene),
-            ParticlesController.load(this.Instance.metadata.getProps().particles, scene)
+            ParticlesController.load(this.Instance._metadata.getProps().particles, scene)
           ])
         }
 
         unload(scene: SceneInterface): void {
           SpritesController.unload(this.props.sprites, scene)
-          SpritesController.unload(this.Instance.metadata.getProps().sprites, scene)
+          SpritesController.unload(this.Instance._metadata.getProps().sprites, scene)
           MeshesController.unload(this.props.meshes, scene)
-          MeshesController.unload(this.Instance.metadata.getProps().meshes, scene)
+          MeshesController.unload(this.Instance._metadata.getProps().meshes, scene)
           ParticlesController.unload(this.props.particles, scene)
-          ParticlesController.unload(this.Instance.metadata.getProps().particles, scene)
+          ParticlesController.unload(this.Instance._metadata.getProps().particles, scene)
         }
 
         spawn(actor: ActorInterface): ActorActionInterface {

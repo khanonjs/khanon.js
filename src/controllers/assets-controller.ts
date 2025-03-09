@@ -62,27 +62,27 @@ export class AssetsController {
             if (isPrototypeOf(SceneStateInterface, element)) {
               const state = SceneStatesController.get<SceneStateCore>(element)
               definitions = [...definitions, ...AssetsController.findAssetsDefinitions(state.props, urls)]
-              definitions = [...definitions, ...AssetsController.findAssetsDefinitions(state.Instance.metadata.getProps(), urls)]
+              definitions = [...definitions, ...AssetsController.findAssetsDefinitions(state.Instance._metadata.getProps(), urls)]
             } else if (isPrototypeOf(ActorStateInterface, element)) {
               const state = ActorStatesController.get<ActorStateCore>(element)
               definitions = [...definitions, ...AssetsController.findAssetsDefinitions(state.props, urls)]
-              definitions = [...definitions, ...AssetsController.findAssetsDefinitions(state.Instance.metadata.getProps(), urls)]
+              definitions = [...definitions, ...AssetsController.findAssetsDefinitions(state.Instance._metadata.getProps(), urls)]
             } else if (isPrototypeOf(ActorActionInterface, element)) {
               const action = ActorActionsController.get<ActorActionCore>(element)
               definitions = [...definitions, ...AssetsController.findAssetsDefinitions(action.props, urls)]
-              definitions = [...definitions, ...AssetsController.findAssetsDefinitions(action.Instance.metadata.getProps(), urls)]
+              definitions = [...definitions, ...AssetsController.findAssetsDefinitions(action.Instance._metadata.getProps(), urls)]
             } else if (isPrototypeOf(SceneActionInterface, element)) {
               const action = SceneActionsController.get<SceneActionCore>(element)
               definitions = [...definitions, ...AssetsController.findAssetsDefinitions(action.props, urls)]
-              definitions = [...definitions, ...AssetsController.findAssetsDefinitions(action.Instance.metadata.getProps(), urls)]
+              definitions = [...definitions, ...AssetsController.findAssetsDefinitions(action.Instance._metadata.getProps(), urls)]
             } else if (isPrototypeOf(ActorInterface, element)) {
               const actor = ActorsController.get<ActorCore>(element)
               definitions = [...definitions, ...AssetsController.findAssetsDefinitions(actor.props, urls)]
-              definitions = [...definitions, ...AssetsController.findAssetsDefinitions(actor.Instance.metadata.getProps(), urls)]
+              definitions = [...definitions, ...AssetsController.findAssetsDefinitions(actor.Instance._metadata.getProps(), urls)]
             } else if (isPrototypeOf(ParticleInterface, element)) {
               const particle = ParticlesController.get<ParticleCore>(element)
               definitions = [...definitions, ...AssetsController.findAssetsDefinitions(particle.props, urls)]
-              definitions = [...definitions, ...AssetsController.findAssetsDefinitions(particle.Instance.metadata.getProps(), urls)]
+              definitions = [...definitions, ...AssetsController.findAssetsDefinitions(particle.Instance._metadata.getProps(), urls)]
             } else if (isPrototypeOf(SpriteInterface, element)) {
               const sprite = SpritesController.get<SpriteCore>(element)
               if (sprite.props.url && !urls[sprite.props.url]) {

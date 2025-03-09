@@ -72,7 +72,7 @@ export function Scene(props: SceneProps = {}): any {
         super()
         this._spawn = new SceneSpawn(this)
         this._remove = new SceneRemove(this)
-        this.metadata.applyProps(this)
+        this._metadata.applyProps(this)
         this.storeAvailableElements()
       }
 
@@ -81,7 +81,7 @@ export function Scene(props: SceneProps = {}): any {
       }
 
       props = removeArrayDuplicitiesInObject(applyDefaults(props, scenePropsDefault))
-      metadata: Metadata = Reflect.getMetadata('metadata', this) ?? new Metadata()
+      _metadata: Metadata = Reflect.getMetadata('metadata', this) ?? new Metadata()
       actions: Map<SceneActionConstructor, SceneActionInterface> = new Map<SceneActionConstructor, SceneActionInterface>()
       availableElements: SceneAvailableElements
       animationHandler: Map<SpriteInterface, () => void> = new Map<SpriteInterface, () => void>()
@@ -197,7 +197,7 @@ export function Scene(props: SceneProps = {}): any {
           if (!this.assets) {
             this._assets = [
               ...AssetsController.findAssetsDefinitions(this.props),
-              ...AssetsController.findAssetsDefinitions(this.metadata.getProps())
+              ...AssetsController.findAssetsDefinitions(this._metadata.getProps())
             ]
           }
           const assetsProgress = AssetsController.sceneLoad(this)
@@ -206,14 +206,14 @@ export function Scene(props: SceneProps = {}): any {
             const elementsLoading = new LoadingProgress().fromNodes([
               SceneStatesController.load(this.props.states, this),
               SceneActionsController.load(this.props.actions, this),
-              SceneActionsController.load(this.metadata.getProps().actions, this),
+              SceneActionsController.load(this._metadata.getProps().actions, this),
               ActorsController.load(this.props.actors, this),
               SpritesController.load(this.props.sprites, this),
-              SpritesController.load(this.metadata.getProps().sprites, this),
+              SpritesController.load(this._metadata.getProps().sprites, this),
               MeshesController.load(this.props.meshes, this),
-              MeshesController.load(this.metadata.getProps().meshes, this),
+              MeshesController.load(this._metadata.getProps().meshes, this),
               ParticlesController.load(this.props.particles, this),
-              ParticlesController.load(this.metadata.getProps().particles, this),
+              ParticlesController.load(this._metadata.getProps().particles, this),
               GUIController.load(this.props.guis, this)
             ])
             elementsLoading.onComplete.add(() => {
@@ -289,14 +289,14 @@ export function Scene(props: SceneProps = {}): any {
         this._loaded = false
         SceneStatesController.unload(this.props.states, this)
         SceneActionsController.unload(this.props.actions, this)
-        SceneActionsController.unload(this.metadata.getProps().actions, this)
+        SceneActionsController.unload(this._metadata.getProps().actions, this)
         ActorsController.unload(this.props.actors, this)
         SpritesController.unload(this.props.sprites, this)
-        SpritesController.unload(this.metadata.getProps().sprites, this)
+        SpritesController.unload(this._metadata.getProps().sprites, this)
         MeshesController.unload(this.props.meshes, this)
-        MeshesController.unload(this.metadata.getProps().meshes, this)
+        MeshesController.unload(this._metadata.getProps().meshes, this)
         ParticlesController.unload(this.props.particles, this)
-        ParticlesController.unload(this.metadata.getProps().particles, this)
+        ParticlesController.unload(this._metadata.getProps().particles, this)
         GUIController.unload(this.props.guis, this)
       }
 
@@ -403,9 +403,9 @@ export function Scene(props: SceneProps = {}): any {
       }
 
       getActionOwner(actionConstructor: SceneActionConstructor): SceneInterface | SceneStateInterface | undefined {
-        return this.metadata.getProps().actions?.find(_action => _action === actionConstructor)
+        return this._metadata.getProps().actions?.find(_action => _action === actionConstructor)
           ? this
-          : this._state?.metadata?.getProps().actions?.find(_action => _action === actionConstructor)
+          : this._state?._metadata?.getProps().actions?.find(_action => _action === actionConstructor)
             ? this._state
             : undefined
       }
@@ -425,7 +425,7 @@ export function Scene(props: SceneProps = {}): any {
           this.actions.set(actionConstructor, action)
           action.props.overrides?.forEach(actionOverride => {
             if (typeof actionOverride === 'string') {
-              const overrideConstructor = this.getActionOwner(actionConstructor)?.metadata.actions.find(_action => _action.methodName === actionOverride)?.classDefinition
+              const overrideConstructor = this.getActionOwner(actionConstructor)?._metadata.actions.find(_action => _action.methodName === actionOverride)?.classDefinition
               if (!overrideConstructor) { Logger.debugError(`Action class method not found to override: '${actionOverride}'`) }
               if (actionConstructor) {
                 this.stopAction(overrideConstructor)
@@ -509,7 +509,7 @@ export function Scene(props: SceneProps = {}): any {
       }
 
       notify(message: FlexId, ...args: any[]): void {
-        const definition = this.metadata.notifiers.get(message)
+        const definition = this._metadata.notifiers.get(message)
         if (definition) {
           this[definition.methodName](...args)
         }
@@ -522,7 +522,7 @@ export function Scene(props: SceneProps = {}): any {
       private storeAvailableElements() {
         this.availableElements = new SceneAvailableElements()
         this.getAvailableElements(this.props)
-        this.getAvailableElements(this.metadata.getProps())
+        this.getAvailableElements(this._metadata.getProps())
       }
 
       private getAvailableElements(props: object | undefined): void {
@@ -534,7 +534,7 @@ export function Scene(props: SceneProps = {}): any {
                   this.availableElements.actors.add(value)
                   const actor = ActorsController.get(value as ActorConstructor)
                   this.getAvailableElements(actor.props)
-                  this.getAvailableElements(actor.Instance.metadata?.getProps())
+                  this.getAvailableElements(actor.Instance._metadata?.getProps())
                 } else if (isPrototypeOf(SpriteInterface, value)) {
                   this.availableElements.sprites.add(value)
                   const sprite = SpritesController.get(value as SpriteConstructor)
@@ -547,27 +547,27 @@ export function Scene(props: SceneProps = {}): any {
                   this.availableElements.actorActions.add(value)
                   const action = ActorActionsController.get(value as ActorActionConstructor)
                   this.getAvailableElements(action.props)
-                  this.getAvailableElements(action.Instance.metadata?.getProps())
+                  this.getAvailableElements(action.Instance._metadata?.getProps())
                 } else if (isPrototypeOf(ActorStateInterface, value)) {
                   this.availableElements.actorStates.add(value)
                   const state = ActorStatesController.get(value as ActorStateConstructor)
                   this.getAvailableElements(state.props)
-                  this.getAvailableElements(state.Instance.metadata?.getProps())
+                  this.getAvailableElements(state.Instance._metadata?.getProps())
                 } else if (isPrototypeOf(ParticleInterface, value)) {
                   this.availableElements.particles.add(value)
                   const particle = ParticlesController.get(value as ParticleConstructor)
                   this.getAvailableElements(particle.props)
-                  this.getAvailableElements(particle.Instance.metadata?.getProps())
+                  this.getAvailableElements(particle.Instance._metadata?.getProps())
                 } else if (isPrototypeOf(SceneActionInterface, value)) {
                   this.availableElements.sceneActions.add(value)
                   const action = SceneActionsController.get(value as SceneActionConstructor)
                   this.getAvailableElements(action.props)
-                  this.getAvailableElements(action.Instance.metadata?.getProps())
+                  this.getAvailableElements(action.Instance._metadata?.getProps())
                 } else if (isPrototypeOf(SceneStateInterface, value)) {
                   this.availableElements.sceneStates.add(value)
                   const state = SceneStatesController.get(value as SceneStateConstructor)
                   this.getAvailableElements(state.props)
-                  this.getAvailableElements(state.Instance.metadata?.getProps())
+                  this.getAvailableElements(state.Instance._metadata?.getProps())
                 }
               })
             }

@@ -31,7 +31,7 @@ export function AppState(props: AppStateProps = {}): any {
       constructor(props: AppStateProps) {
         super()
         this.props = props
-        this.metadata.applyProps(this)
+        this._metadata.applyProps(this)
       }
 
       getClassName(): string {
@@ -39,7 +39,7 @@ export function AppState(props: AppStateProps = {}): any {
       }
 
       props: AppStateProps
-      metadata: Metadata = Reflect.getMetadata('metadata', this) ?? new Metadata()
+      _metadata: Metadata = Reflect.getMetadata('metadata', this) ?? new Metadata()
       _loopUpdate = true
       _loopUpdate$: BABYLON.Observer<number>
       _canvasResize$: BABYLON.Observer<Rect>
@@ -82,7 +82,7 @@ export function AppState(props: AppStateProps = {}): any {
       // }
 
       notify(message: FlexId, ...args: any[]): void {
-        const definition = this.metadata.notifiers.get(message)
+        const definition = this._metadata.notifiers.get(message)
         if (definition) {
           this[definition.methodName](...args)
         }

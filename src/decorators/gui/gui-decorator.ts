@@ -38,7 +38,7 @@ export function GUI(props: GUIProps = {}): any {
       constructor(readonly scene: SceneInterface, props: GUIProps) {
         super()
         this.props = props
-        this.metadata.applyProps(this)
+        this._metadata.applyProps(this)
       }
 
       getClassName(): string {
@@ -46,7 +46,7 @@ export function GUI(props: GUIProps = {}): any {
       }
 
       props: GUIProps
-      metadata: Metadata = Reflect.getMetadata('metadata', this) ?? new Metadata()
+      _metadata: Metadata = Reflect.getMetadata('metadata', this) ?? new Metadata()
       babylon: Pick<BabylonAccessor<BABYLON.Camera>, 'gui'> = { gui: null as any }
       setup: any
       _loopUpdate = true
@@ -95,7 +95,7 @@ export function GUI(props: GUIProps = {}): any {
       // }
 
       notify(message: FlexId, ...args: any[]): void {
-        const definition = this.metadata.notifiers.get(message)
+        const definition = this._metadata.notifiers.get(message)
         if (definition) {
           this[definition.methodName](...args)
         }

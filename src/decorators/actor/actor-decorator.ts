@@ -54,7 +54,7 @@ export function Actor(props: ActorProps = {}): any {
     const _classInterface = class extends constructor implements ActorInterface {
       constructor(readonly scene: SceneInterface) {
         super()
-        this.metadata.applyProps(this)
+        this._metadata.applyProps(this)
       }
 
       getClassName(): string {
@@ -62,7 +62,7 @@ export function Actor(props: ActorProps = {}): any {
       }
 
       props: ActorProps
-      metadata: Metadata = Reflect.getMetadata('metadata', this) ?? new Metadata()
+      _metadata: Metadata = Reflect.getMetadata('metadata', this) ?? new Metadata()
       transform: SpriteInterface | MeshInterface | null
       t: SpriteInterface | MeshInterface | null
       _loopUpdate = true
@@ -270,9 +270,9 @@ export function Actor(props: ActorProps = {}): any {
       }
 
       getActionOwner(actionConstructor: ActorActionConstructor): ActorInterface | ActorStateInterface | undefined {
-        return this.metadata.getProps().actions?.find(_action => _action === actionConstructor)
+        return this._metadata.getProps().actions?.find(_action => _action === actionConstructor)
           ? this
-          : this._state?.metadata?.getProps().actions?.find(_action => _action === actionConstructor)
+          : this._state?._metadata?.getProps().actions?.find(_action => _action === actionConstructor)
             ? this._state
             : undefined
       }
@@ -292,7 +292,7 @@ export function Actor(props: ActorProps = {}): any {
           this.actions.set(actionConstructor, action)
           action.props.overrides?.forEach(actionOverride => {
             if (typeof actionOverride === 'string') {
-              const overrideConstructor = this.getActionOwner(actionConstructor)?.metadata.actions.find(_action => _action.methodName === actionOverride)?.classDefinition
+              const overrideConstructor = this.getActionOwner(actionConstructor)?._metadata.actions.find(_action => _action.methodName === actionOverride)?.classDefinition
               if (!overrideConstructor) { Logger.debugError(`Action class method not found to override: '${actionOverride}'`) }
               if (actionConstructor) {
                 this.stopAction(overrideConstructor)
@@ -382,7 +382,7 @@ export function Actor(props: ActorProps = {}): any {
         let isMethod = false
         if (!particleConstructorOrMethod.prototype?.constructor) {
           isMethod = true
-          this.metadata.particles.forEach((value: MetadataParticleDefinition) => {
+          this._metadata.particles.forEach((value: MetadataParticleDefinition) => {
             particleConstructorOrMethod = value.classDefinition
           })
         }
@@ -429,7 +429,7 @@ export function Actor(props: ActorProps = {}): any {
       }
 
       notify(message: FlexId, ...args: any[]): void {
-        const definition = this.metadata.notifiers.get(message)
+        const definition = this._metadata.notifiers.get(message)
         if (definition) {
           this[definition.methodName](...args)
         }
@@ -448,13 +448,13 @@ export function Actor(props: ActorProps = {}): any {
         return new LoadingProgress().fromNodes([
           ActorStatesController.load(this.props.states, scene),
           ActorActionsController.load(this.props.actions, scene),
-          ActorActionsController.load(this.Instance.metadata.getProps().actions, scene),
+          ActorActionsController.load(this.Instance._metadata.getProps().actions, scene),
           SpritesController.load(this.props.sprites, scene),
-          SpritesController.load(this.Instance.metadata.getProps().sprites, scene),
+          SpritesController.load(this.Instance._metadata.getProps().sprites, scene),
           MeshesController.load(this.props.meshes, scene),
-          MeshesController.load(this.Instance.metadata.getProps().meshes, scene),
+          MeshesController.load(this.Instance._metadata.getProps().meshes, scene),
           ParticlesController.load(this.props.particles, scene),
-          ParticlesController.load(this.Instance.metadata.getProps().particles, scene)
+          ParticlesController.load(this.Instance._metadata.getProps().particles, scene)
           // GUIController.load(this.props.guis, scene)
         ])
       }
@@ -462,13 +462,13 @@ export function Actor(props: ActorProps = {}): any {
       unload(scene: SceneInterface): void {
         ActorStatesController.unload(this.props.states, scene)
         ActorActionsController.unload(this.props.actions, scene)
-        ActorActionsController.unload(this.Instance.metadata.getProps().actions, scene)
+        ActorActionsController.unload(this.Instance._metadata.getProps().actions, scene)
         SpritesController.unload(this.props.sprites, scene)
-        SpritesController.unload(this.Instance.metadata.getProps().sprites, scene)
+        SpritesController.unload(this.Instance._metadata.getProps().sprites, scene)
         MeshesController.unload(this.props.meshes, scene)
-        MeshesController.unload(this.Instance.metadata.getProps().meshes, scene)
+        MeshesController.unload(this.Instance._metadata.getProps().meshes, scene)
         ParticlesController.unload(this.props.particles, scene)
-        ParticlesController.unload(this.Instance.metadata.getProps().particles, scene)
+        ParticlesController.unload(this.Instance._metadata.getProps().particles, scene)
         // GUIController.unload(this.props.guis, scene)
       }
 

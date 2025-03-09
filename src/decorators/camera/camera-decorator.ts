@@ -27,7 +27,7 @@ export function Camera(props: CameraProps = {}): any {
         super()
         if (scene) {
           this.babylon.scene = scene.babylon.scene
-          this.metadata.applyProps(this)
+          this._metadata.applyProps(this)
         }
       }
 
@@ -35,7 +35,7 @@ export function Camera(props: CameraProps = {}): any {
         return className
       }
 
-      metadata: Metadata = Reflect.getMetadata('metadata', this) ?? new Metadata()
+      _metadata: Metadata = Reflect.getMetadata('metadata', this) ?? new Metadata()
       babylon: Pick<BabylonAccessor<BABYLON.Camera>, 'camera' | 'scene'> = { camera: null as any, scene: null as any }
       setup: any
       _loopUpdate = true
@@ -50,7 +50,7 @@ export function Camera(props: CameraProps = {}): any {
       get loopUpdate(): boolean { return this._loopUpdate }
 
       notify(message: FlexId, ...args: any[]): void {
-        const definition = this.metadata.notifiers.get(message)
+        const definition = this._metadata.notifiers.get(message)
         if (definition) {
           this[definition.methodName](...args)
         }

@@ -19,7 +19,7 @@ import { ParticleProps } from './particle-props'
 export abstract class ParticleInterface implements LoopUpdatable, CanvasResizable, Notificable {
   abstract props: ParticleProps
   abstract className: string
-  abstract metadata: Metadata
+  abstract _metadata: Metadata
   abstract _loopUpdate: boolean
   abstract _loopUpdate$: BABYLON.Observer<number>
   abstract _canvasResize$: BABYLON.Observer<Rect>

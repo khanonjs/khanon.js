@@ -42,7 +42,7 @@ export function Particle(props: ParticleProps): any {
         constructor(readonly scene: SceneInterface, props: ParticleProps, readonly attachmentInfo: ParticleAttachmentInfo) {
           super()
           this.props = props
-          this.metadata.applyProps(this)
+          this._metadata.applyProps(this)
         }
 
         getClassName(): string {
@@ -51,7 +51,7 @@ export function Particle(props: ParticleProps): any {
 
         props: ParticleProps
         className: string
-        metadata: Metadata = Reflect.getMetadata('metadata', this) ?? new Metadata()
+        _metadata: Metadata = Reflect.getMetadata('metadata', this) ?? new Metadata()
         babylon: Pick<BabylonAccessor, 'scene' | 'particleSystem'> = { scene: null as any, particleSystem: null as any }
         _loopUpdate = true
         _loopUpdate$: BABYLON.Observer<number>
@@ -167,7 +167,7 @@ export function Particle(props: ParticleProps): any {
         }
 
         notify(message: FlexId, ...args: any[]): void {
-          const definition = this.metadata.notifiers.get(message)
+          const definition = this._metadata.notifiers.get(message)
           if (definition) {
             this[definition.methodName](...args)
           }
@@ -180,13 +180,13 @@ export function Particle(props: ParticleProps): any {
         load(scene: SceneInterface): LoadingProgress {
           return new LoadingProgress().fromNodes([
             SpritesController.load(this.props.sprites, scene),
-            SpritesController.load(this.Instance.metadata.getProps().sprites, scene)
+            SpritesController.load(this.Instance._metadata.getProps().sprites, scene)
           ])
         }
 
         unload(scene: SceneInterface): void {
           SpritesController.unload(this.props.sprites, scene)
-          SpritesController.unload(this.Instance.metadata.getProps().sprites, scene)
+          SpritesController.unload(this.Instance._metadata.getProps().sprites, scene)
         }
 
         spawn(scene: SceneInterface, attachmentInfo: ParticleAttachmentInfo, create = true): ParticleInterface {

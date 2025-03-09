@@ -36,7 +36,7 @@ export function ActorState(props: ActorStateProps = {}): any {
           this.actor = actor
           this.scene = this.actor.scene
         }
-        this.metadata.applyProps(this)
+        this._metadata.applyProps(this)
       }
 
       getClassName(): string {
@@ -45,7 +45,7 @@ export function ActorState(props: ActorStateProps = {}): any {
 
       props: ActorStateProps
       actor: ActorInterface
-      metadata: Metadata = Reflect.getMetadata('metadata', this) ?? new Metadata()
+      _metadata: Metadata = Reflect.getMetadata('metadata', this) ?? new Metadata()
       _loopUpdate = true
       _loopUpdate$: BABYLON.Observer<number>
       _canvasResize$: BABYLON.Observer<Rect>
@@ -77,7 +77,7 @@ export function ActorState(props: ActorStateProps = {}): any {
       }
 
       notify(message: FlexId, ...args: any[]): void {
-        const definition = this.metadata.notifiers.get(message)
+        const definition = this._metadata.notifiers.get(message)
         if (definition) {
           this[definition.methodName](...args)
         }
@@ -95,21 +95,21 @@ export function ActorState(props: ActorStateProps = {}): any {
       load(scene: SceneInterface): LoadingProgress {
         return new LoadingProgress().fromNodes([
           SpritesController.load(this.props.sprites, scene),
-          SpritesController.load(this.Instance.metadata.getProps().sprites, scene),
+          SpritesController.load(this.Instance._metadata.getProps().sprites, scene),
           MeshesController.load(this.props.meshes, scene),
-          MeshesController.load(this.Instance.metadata.getProps().meshes, scene),
+          MeshesController.load(this.Instance._metadata.getProps().meshes, scene),
           ParticlesController.load(this.props.particles, scene),
-          ParticlesController.load(this.Instance.metadata?.getProps().particles, scene)
+          ParticlesController.load(this.Instance._metadata?.getProps().particles, scene)
         ])
       }
 
       unload(scene: SceneInterface): void {
         SpritesController.unload(this.props.sprites, scene)
-        SpritesController.unload(this.Instance.metadata.getProps().sprites, scene)
+        SpritesController.unload(this.Instance._metadata.getProps().sprites, scene)
         MeshesController.unload(this.props.meshes, scene)
-        MeshesController.unload(this.Instance.metadata.getProps().meshes, scene)
+        MeshesController.unload(this.Instance._metadata.getProps().meshes, scene)
         ParticlesController.unload(this.props.particles, scene)
-        ParticlesController.unload(this.Instance.metadata?.getProps().particles, scene)
+        ParticlesController.unload(this.Instance._metadata?.getProps().particles, scene)
       }
 
       getClassName(): string {

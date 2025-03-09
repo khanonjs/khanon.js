@@ -17,7 +17,7 @@ export function App(props: AppProps): any {
     const className = constructor.name
     const _class = class extends constructor implements AppInterface {
       props = applyDefaults(props, appPropsDefault)
-      metadata: Metadata = Reflect.getMetadata('metadata', this) ?? new Metadata()
+      _metadata: Metadata = Reflect.getMetadata('metadata', this) ?? new Metadata()
       _stateCore: AppStateCore
       _state: AppStateInterface | null = null
 
@@ -47,7 +47,7 @@ export function App(props: AppProps): any {
       }
 
       notify(message: FlexId, ...args: any[]): void {
-        const definition = this.metadata.notifiers.get(message)
+        const definition = this._metadata.notifiers.get(message)
         if (definition) {
           this[definition.methodName](...args)
         }

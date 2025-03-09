@@ -9,7 +9,7 @@ import { AppPropsDefault } from './app.props.deafult'
 
 export abstract class AppInterface implements Notificable {
   abstract props: AppProps & AppPropsDefault
-  abstract metadata: Metadata
+  abstract _metadata: Metadata
   abstract _state: AppStateInterface | null
 
   /**
