@@ -66,7 +66,7 @@ export function Actor(props: ActorProps = {}): any {
       transform: SpriteInterface | MeshInterface | null
       t: SpriteInterface | MeshInterface | null
       _loopUpdate = true
-      loopUpdate$: BABYLON.Observer<number>
+      _loopUpdate$: BABYLON.Observer<number>
       _canvasResize$: BABYLON.Observer<Rect>
       _body: B | null = null
       nodes: Map<string, ActorNode<B>> = new Map<string, ActorNode<B>>()

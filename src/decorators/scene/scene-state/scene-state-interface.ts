@@ -18,7 +18,7 @@ export abstract class SceneStateInterface<S = any, C = SceneInterface> implement
   abstract props: SceneStateProps
   abstract metadata: Metadata
   abstract _loopUpdate: boolean
-  abstract loopUpdate$: BABYLON.Observer<number>
+  abstract _loopUpdate$: BABYLON.Observer<number>
   abstract _canvasResize$: BABYLON.Observer<Rect>
   abstract _spawn: SceneSpawn
   abstract _remove: SceneRemove

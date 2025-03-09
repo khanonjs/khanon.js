@@ -52,7 +52,7 @@ export function SceneState(props: SceneStateProps = {}): any {
       props: SceneStateProps
       setup: any
       _loopUpdate = true
-      loopUpdate$: BABYLON.Observer<number>
+      _loopUpdate$: BABYLON.Observer<number>
       _canvasResize$: BABYLON.Observer<Rect>
       _spawn: SceneSpawn
       _remove: SceneRemove

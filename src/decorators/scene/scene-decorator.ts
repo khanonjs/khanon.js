@@ -109,7 +109,7 @@ export function Scene(props: SceneProps = {}): any {
 
       // User available
       babylon: Pick<BabylonAccessor, 'scene'> = { scene: null as any }
-      loopUpdate$: BABYLON.Observer<number>
+      _loopUpdate$: BABYLON.Observer<number>
       _canvasResize$: BABYLON.Observer<Rect>
       get assets(): AssetDefinition[] { return this._assets }
       get loaded(): boolean { return this._loaded }

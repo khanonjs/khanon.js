@@ -11,7 +11,7 @@ export abstract class GUIStateInterface<S = any, C = GUIInterface> implements St
   abstract props: GUIStateProps
   abstract metadata: Metadata
   abstract _loopUpdate: boolean
-  abstract loopUpdate$: BABYLON.Observer<number>
+  abstract _loopUpdate$: BABYLON.Observer<number>
   abstract _canvasResize$: BABYLON.Observer<Rect>
   abstract start(setup: any): void
   abstract _end(): void

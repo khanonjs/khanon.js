@@ -39,7 +39,7 @@ export function Camera(props: CameraProps = {}): any {
       babylon: Pick<BabylonAccessor<BABYLON.Camera>, 'camera' | 'scene'> = { camera: null as any, scene: null as any }
       setup: any
       _loopUpdate = true
-      loopUpdate$: BABYLON.Observer<number>
+      _loopUpdate$: BABYLON.Observer<number>
       _canvasResize$: BABYLON.Observer<Rect>
 
       set loopUpdate(value: boolean) {

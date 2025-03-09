@@ -45,7 +45,7 @@ export function GUIState(props: GUIStateProps = {}): any {
       props: GUIStateProps
       setup: any
       _loopUpdate = true
-      loopUpdate$: BABYLON.Observer<number>
+      _loopUpdate$: BABYLON.Observer<number>
       _canvasResize$: BABYLON.Observer<Rect>
       metadata: Metadata = Reflect.getMetadata('metadata', this) ?? new Metadata()
 

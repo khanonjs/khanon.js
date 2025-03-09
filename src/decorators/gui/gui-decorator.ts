@@ -50,7 +50,7 @@ export function GUI(props: GUIProps = {}): any {
       babylon: Pick<BabylonAccessor<BABYLON.Camera>, 'gui'> = { gui: null as any }
       setup: any
       _loopUpdate = true
-      loopUpdate$: BABYLON.Observer<number>
+      _loopUpdate$: BABYLON.Observer<number>
       _canvasResize$: BABYLON.Observer<Rect>
       // _state: GUIStateInterface | null = null
       particles: Map<FlexId, ParticleInterface> = new Map<FlexId, ParticleInterface>()

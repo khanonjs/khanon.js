@@ -87,7 +87,7 @@ export function Mesh(props: MeshProps = {}): any {
         babylon: Pick<BabylonAccessor, 'mesh' | 'scene'> = { mesh: null as any, scene: null as any }
         animation: MeshAnimation | null = null
         animations: Map<FlexId, MeshAnimation> = new Map<FlexId, MeshAnimation>()
-        loopUpdate$: BABYLON.Observer<number>
+        _loopUpdate$: BABYLON.Observer<number>
         _canvasResize$: BABYLON.Observer<Rect>
         _loopUpdate = false
 

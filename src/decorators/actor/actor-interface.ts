@@ -34,7 +34,7 @@ export abstract class ActorInterface<B extends SpriteInterface | MeshInterface =
   abstract metadata: Metadata
   abstract props: ActorProps
   abstract _loopUpdate: boolean
-  abstract loopUpdate$: BABYLON.Observer<number>
+  abstract _loopUpdate$: BABYLON.Observer<number>
   abstract _canvasResize$: BABYLON.Observer<Rect>
   abstract _body: B | undefined
   abstract nodes: Map<string, B>

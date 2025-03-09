@@ -21,7 +21,7 @@ export abstract class ParticleInterface implements LoopUpdatable, CanvasResizabl
   abstract className: string
   abstract metadata: Metadata
   abstract _loopUpdate: boolean
-  abstract loopUpdate$: BABYLON.Observer<number>
+  abstract _loopUpdate$: BABYLON.Observer<number>
   abstract _canvasResize$: BABYLON.Observer<Rect>
   abstract attachmentInfo: ParticleAttachmentInfo
   abstract attachmentUpdate$: BABYLON.Observer<number> | undefined

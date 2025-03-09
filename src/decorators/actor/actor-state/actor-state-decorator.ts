@@ -47,7 +47,7 @@ export function ActorState(props: ActorStateProps = {}): any {
       actor: ActorInterface
       metadata: Metadata = Reflect.getMetadata('metadata', this) ?? new Metadata()
       _loopUpdate = true
-      loopUpdate$: BABYLON.Observer<number>
+      _loopUpdate$: BABYLON.Observer<number>
       _canvasResize$: BABYLON.Observer<Rect>
       scene: SceneInterface
       setup: any

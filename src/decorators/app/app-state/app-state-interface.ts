@@ -11,7 +11,7 @@ export abstract class AppStateInterface<S = any> implements StateInterface<S> {
   abstract props: AppStateProps
   abstract metadata: Metadata
   abstract _loopUpdate: boolean
-  abstract loopUpdate$: BABYLON.Observer<number>
+  abstract _loopUpdate$: BABYLON.Observer<number>
   abstract _canvasResize$: BABYLON.Observer<Rect>
   // abstract guis: Set<GUIInterface>
   // abstract guisStart(): void

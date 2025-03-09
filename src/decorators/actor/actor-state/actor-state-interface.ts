@@ -15,7 +15,7 @@ export abstract class ActorStateInterface<S = any, A = ActorInterface<SpriteInte
   abstract props: ActorStateProps
   abstract metadata: Metadata
   abstract _loopUpdate: boolean
-  abstract loopUpdate$: BABYLON.Observer<number>
+  abstract _loopUpdate$: BABYLON.Observer<number>
   abstract _canvasResize$: BABYLON.Observer<Rect>
   abstract start(setup: any): void
   abstract _end(): void
