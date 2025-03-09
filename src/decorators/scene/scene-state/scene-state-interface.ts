@@ -24,7 +24,7 @@ export abstract class SceneStateInterface<S = any, C = SceneInterface> implement
   abstract _remove: SceneRemove
   abstract getClassName(): string
   abstract start(setup: any): void
-  abstract end(): void
+  abstract _end(): void
 
   /**
    * User available

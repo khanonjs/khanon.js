@@ -14,7 +14,7 @@ export abstract class GUIStateInterface<S = any, C = GUIInterface> implements St
   abstract loopUpdate$: BABYLON.Observer<number>
   abstract canvasResize$: BABYLON.Observer<Rect>
   abstract start(setup: any): void
-  abstract end(): void
+  abstract _end(): void
 
   /**
    * User available

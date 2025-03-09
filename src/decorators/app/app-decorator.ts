@@ -30,7 +30,7 @@ export function App(props: AppProps): any {
       switchState(state: AppStateConstructor, setup: any): LoadingProgress {
         const newStateCore = AppStatesController.get(state)
         if (this._state) {
-          this._state.end()
+          this._state._end()
           this._stateCore.unload(newStateCore)
           // TODO For scene switch, before unloading the current one, look for assets from the next one. Do not delete assets that are in the next scene.
         }

@@ -173,7 +173,7 @@ export function Scene(props: SceneProps = {}): any {
         }
         this.releaseGUIs()
         this.releaseCamera()
-        this.state?.end()
+        this.state?._end()
         this.remove.all()
         this._started = false
         Core.stopRenderScene(this)
@@ -372,7 +372,7 @@ export function Scene(props: SceneProps = {}): any {
         if (!this.availableElements.hasSceneState(state)) { Logger.debugError('Denied to set a state not available to the scene. Did you mean to add it to the scene props?', this.getClassName(), state.prototype); return null as any }
         const _state = SceneStatesController.get(state).spawn(this)
         if (this._state) {
-          this._state.end()
+          this._state._end()
         }
         this._state = _state
         this._state.start(setup)

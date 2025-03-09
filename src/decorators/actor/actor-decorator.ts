@@ -254,7 +254,7 @@ export function Actor(props: ActorProps = {}): any {
         if (!this.scene.availableElements.hasActorState(state)) { Logger.debugError('Denied to set a state non available to the actor. Please check the actor props.', this.getClassName(), state.prototype); return null as any }
         const _state = ActorStatesController.get(state).spawn(this)
         if (this._state) {
-          this._state.end()
+          this._state._end()
         }
         this._state = _state
         this._state.start(setup)

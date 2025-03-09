@@ -100,7 +100,7 @@ export function SceneState(props: SceneStateProps = {}): any {
         attachCanvasResize(this)
       }
 
-      end(): void {
+      _end(): void {
         removeLoopUpdate(this)
         removeCanvasResize(this)
         invokeCallback(this.onEnd, this)

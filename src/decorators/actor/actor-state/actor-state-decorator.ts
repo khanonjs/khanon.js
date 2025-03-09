@@ -70,7 +70,7 @@ export function ActorState(props: ActorStateProps = {}): any {
         attachCanvasResize(this)
       }
 
-      end(): void {
+      _end(): void {
         removeLoopUpdate(this)
         removeCanvasResize(this)
         invokeCallback(this.onEnd, this)

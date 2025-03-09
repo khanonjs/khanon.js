@@ -61,7 +61,7 @@ export function AppState(props: AppStateProps = {}): any {
         attachCanvasResize(this)
       }
 
-      end(): void {
+      _end(): void {
         // this.guisRelease()
         removeLoopUpdate(this)
         removeCanvasResize(this)

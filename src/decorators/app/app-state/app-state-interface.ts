@@ -17,7 +17,7 @@ export abstract class AppStateInterface<S = any> implements StateInterface<S> {
   // abstract guisStart(): void
   // abstract guisRelease(): void
   abstract start(setup: any): void
-  abstract end(): void
+  abstract _end(): void
 
   /**
    * User available
