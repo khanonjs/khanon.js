@@ -227,7 +227,7 @@ export function Sprite(props: SpriteProps): any {
             startKeyframes()
           }
 
-          this.scene.setAnimationHandler(this, {
+          this.scene._setAnimationHandler(this, {
             id: this._animation.id,
             frameStart,
             frameEnd,
@@ -239,7 +239,7 @@ export function Sprite(props: SpriteProps): any {
         stopAnimation(): void {
           this._removeEndAnimationTimer()
           this._removeAnimationKeyFrames()
-          this.scene.stopAnimationHandler(this)
+          this.scene._stopAnimationHandler(this)
           this._animation = null
         }
 

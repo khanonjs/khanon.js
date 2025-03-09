@@ -70,15 +70,15 @@ export function SceneAction(props: SceneActionProps = {}): any {
         }
 
         play(): void {
-          this.scene.playActionFromInstance(this)
+          this.scene._playActionFromInstance(this)
         }
 
         stop(): void {
-          this.scene.stopActionFromInstance(this)
+          this.scene._stopActionFromInstance(this)
         }
 
         remove(): void {
-          this.scene.stopActionFromInstance(this, true)
+          this.scene._stopActionFromInstance(this, true)
         }
       }
       const _classCore = class implements SceneActionCore {

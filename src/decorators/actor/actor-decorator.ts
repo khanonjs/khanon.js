@@ -148,10 +148,10 @@ export function Actor(props: ActorProps = {}): any {
 
       _getNodeElement<N extends B>(Element: new () => N): N {
         if (new Element() instanceof SpriteInterface) { // TODO is there a better way to do this avoiding the 'new'?
-          if (!this.scene.availableElements.hasSprite(Element as SpriteConstructor)) { Logger.debugError('Trying to use a sprite non available to the actor. Please check the actor props.', this.getClassName(), Element.prototype); return null as any }
+          if (!this.scene._availableElements.hasSprite(Element as SpriteConstructor)) { Logger.debugError('Trying to use a sprite non available to the actor. Please check the actor props.', this.getClassName(), Element.prototype); return null as any }
           return SpritesController.get(Element).spawn(this.scene) as any
         } else {
-          if (!this.scene.availableElements.hasMesh(Element as MeshConstructor)) { Logger.debugError('Trying to use a mesh non available to the actor. Please check the actor props.', this.getClassName(), Element.prototype); return null as any }
+          if (!this.scene._availableElements.hasMesh(Element as MeshConstructor)) { Logger.debugError('Trying to use a mesh non available to the actor. Please check the actor props.', this.getClassName(), Element.prototype); return null as any }
           return MeshesController.get(Element).spawn(this.scene) as any
         }
       }
@@ -251,7 +251,7 @@ export function Actor(props: ActorProps = {}): any {
       }
 
       switchState(state: ActorStateConstructor, setup: any): ActorStateInterface {
-        if (!this.scene.availableElements.hasActorState(state)) { Logger.debugError('Denied to set a state non available to the actor. Please check the actor props.', this.getClassName(), state.prototype); return null as any }
+        if (!this.scene._availableElements.hasActorState(state)) { Logger.debugError('Denied to set a state non available to the actor. Please check the actor props.', this.getClassName(), state.prototype); return null as any }
         const _state = ActorStatesController.get(state).spawn(this)
         if (this._state) {
           this._state._end()
@@ -278,7 +278,7 @@ export function Actor(props: ActorProps = {}): any {
       }
 
       playAction(actionConstructor: ActorActionConstructor, setup: any): ActorActionInterface {
-        if (!this.scene.availableElements.hasActorAction(actionConstructor)) { Logger.debugError('Trying to play an action non available to the actor. Please check the actor props.', this.getClassName(), actionConstructor.prototype); return null as any }
+        if (!this.scene._availableElements.hasActorAction(actionConstructor)) { Logger.debugError('Trying to play an action non available to the actor. Please check the actor props.', this.getClassName(), actionConstructor.prototype); return null as any }
         let action = this._actions.get(actionConstructor)
         if (!action) {
           action = ActorActionsController.get(actionConstructor).spawn(this)
@@ -388,7 +388,7 @@ export function Actor(props: ActorProps = {}): any {
         }
         const attachmentSprite = nodeName ? this.getNode(nodeName)?.element : this.body
         if (!attachmentSprite) { Logger.debugError('Cannot attach a particle to an empty body.', this.getClassName(), particleConstructorOrMethod.prototype); return }
-        if (!this.scene.availableElements.hasParticle(particleConstructorOrMethod as ParticleConstructor)) { Logger.debugError('Trying to attach a particle non available to the actor. Please check the actor props.', this.getClassName(), particleConstructorOrMethod.prototype); return }
+        if (!this.scene._availableElements.hasParticle(particleConstructorOrMethod as ParticleConstructor)) { Logger.debugError('Trying to attach a particle non available to the actor. Please check the actor props.', this.getClassName(), particleConstructorOrMethod.prototype); return }
         const particle = ParticlesController.get(particleConstructorOrMethod).spawn(this.scene, { attachment: attachmentSprite, offset }, !isMethod)
 
         if (isMethod) {

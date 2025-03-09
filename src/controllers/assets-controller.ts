@@ -128,11 +128,11 @@ export class AssetsController {
    */
   static sceneLoad(scene: SceneInterface): LoadingProgress {
     const progress = new LoadingProgress()
-    if (scene.assets.length === 0) {
+    if (scene._assets.length === 0) {
       progress.complete()
     } else {
       const progresses: LoadingProgress[] = []
-      scene.assets.forEach(assetDef => {
+      scene._assets.forEach(assetDef => {
         const asset: Asset<SceneInterface> | undefined = AssetsController.assets.get(assetDef.url)
         if (asset) {
           asset.addSource(scene, assetDef.cached)

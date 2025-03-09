@@ -20,12 +20,12 @@ export class SceneRemove {
       })
     } else {
       actor._release()
-      this.scene.actors.delete(actor)
+      this.scene._actors.delete(actor)
     }
   }
 
   actorAll(): void {
-    this.scene.actors.forEach(actor => {
+    this.scene._actors.forEach(actor => {
       this.actor(actor)
     })
   }
@@ -37,12 +37,12 @@ export class SceneRemove {
       })
     } else {
       particle._release()
-      this.scene.particles.delete(particle)
+      this.scene._particles.delete(particle)
     }
   }
 
   particleAll(): void {
-    this.scene.particles.forEach(particle => {
+    this.scene._particles.forEach(particle => {
       this.particle(particle)
     })
   }
@@ -54,12 +54,12 @@ export class SceneRemove {
       })
     } else {
       sprite._release()
-      this.scene.sprites.delete(sprite)
+      this.scene._sprites.delete(sprite)
     }
   }
 
   spriteAll(): void {
-    this.scene.sprites.forEach(sprite => {
+    this.scene._sprites.forEach(sprite => {
       this.sprite(sprite)
     })
   }
@@ -71,12 +71,12 @@ export class SceneRemove {
       })
     } else {
       mesh._release()
-      this.scene.meshes.delete(mesh)
+      this.scene._meshes.delete(mesh)
     }
   }
 
   meshAll(): void {
-    this.scene.meshes.forEach(mesh => {
+    this.scene._meshes.forEach(mesh => {
       this.mesh(mesh)
     })
   }
