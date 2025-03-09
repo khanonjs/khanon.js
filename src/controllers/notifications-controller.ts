@@ -53,7 +53,7 @@ export class NotificationsController {
         })
       } else if (isPrototypeOf(ParticleInterface, constructor)) {
         Core.getActiveScenes().forEach(scene => scene.actors.forEach(actor => {
-          actor.particles.forEach(particle => {
+          actor._particles.forEach(particle => {
             if (particle instanceof constructor) {
               particle.notify(message, ...args)
             }

@@ -37,20 +37,20 @@ export abstract class ActorInterface<B extends SpriteInterface | MeshInterface =
   abstract _loopUpdate$: BABYLON.Observer<number>
   abstract _canvasResize$: BABYLON.Observer<Rect>
   abstract _body: B | undefined
-  abstract nodes: Map<string, B>
+  abstract _nodes: Map<string, B>
   abstract _visibility: number
   abstract _state: ActorStateInterface | null
-  abstract actions: Map<ActorActionConstructor, ActorActionInterface>
-  abstract particles: Map<FlexId, ParticleInterface>
-  // abstract guis: Set<GUIInterface>
-  // abstract guisStart(): void
-  // abstract guisRelease(): void
-  abstract initialize(props: ActorProps): void
-  abstract release(): void
-  abstract getActionOwner(actionConstructor: ActorActionConstructor): ActorInterface | ActorStateInterface | undefined
-  abstract getNodeElement<N extends B>(Element: new () => N): N
-  abstract playActionFromInstance(instance: ActorActionInterface): void
-  abstract stopActionFromInstance(instance: ActorActionInterface, forceRemove?: boolean): void
+  abstract _actions: Map<ActorActionConstructor, ActorActionInterface>
+  abstract _particles: Map<FlexId, ParticleInterface>
+  // abstract _guis: Set<GUIInterface>
+  // abstract _guisStart(): void
+  // abstract _guisRelease(): void
+  abstract _initialize(props: ActorProps): void
+  abstract _release(): void
+  abstract _getActionOwner(actionConstructor: ActorActionConstructor): ActorInterface | ActorStateInterface | undefined
+  abstract _getNodeElement<N extends B>(Element: new () => N): N
+  abstract _playActionFromInstance(instance: ActorActionInterface): void
+  abstract _stopActionFromInstance(instance: ActorActionInterface, forceRemove?: boolean): void
 
   /**
    * User available

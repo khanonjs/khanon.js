@@ -92,12 +92,12 @@ export function ActorAction(props: ActorActionProps = {}): any {
         }
 
         stop(): void {
-          this.actor.stopActionFromInstance(this)
+          this.actor._stopActionFromInstance(this)
         }
 
         remove(): void {
           this._isPlaying = false
-          this.actor.stopActionFromInstance(this, true)
+          this.actor._stopActionFromInstance(this, true)
         }
       }
       const _classCore = class implements ActorActionCore {

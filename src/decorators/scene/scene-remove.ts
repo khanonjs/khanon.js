@@ -19,7 +19,7 @@ export class SceneRemove {
         this.actor(_actor)
       })
     } else {
-      actor.release()
+      actor._release()
       this.scene.actors.delete(actor)
     }
   }
