@@ -7,7 +7,7 @@ import { SceneInterface } from '../scene-interface'
 import { SceneActionProps } from './scene-action-props'
 
 export abstract class SceneActionInterface<S = any, C extends SceneInterface = SceneInterface> implements ActionInterface<S> {
-  abstract props: SceneActionProps
+  abstract _props: SceneActionProps
   abstract _metadata: Metadata
   abstract _loopUpdate: boolean
   abstract _loopUpdate$: BABYLON.Observer<number>

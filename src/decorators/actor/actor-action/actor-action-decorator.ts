@@ -39,7 +39,7 @@ export function ActorAction(props: ActorActionProps = {}): any {
           return this._className ?? className
         }
 
-        props = props
+        _props = props
         _className: string
         actor: ActorInterface
         scene: SceneInterface
@@ -65,10 +65,10 @@ export function ActorAction(props: ActorActionProps = {}): any {
           this.scene = this.actor.scene
           this.setup = setup
           this._isPlaying = true
-          if (this.props.countFrames) {
+          if (this._props.countFrames) {
             this._countFramesUpdate$ = Core.loopUpdateAddObserver((delta: number) => {
               this._countFrames += delta
-              if (this._countFrames > (this.props.countFrames as any)) {
+              if (this._countFrames > (this._props.countFrames as any)) {
                 this._countFramesUpdate$?.remove()
                 this._countFramesUpdate$ = null
                 this._countFrames = 0
@@ -82,7 +82,7 @@ export function ActorAction(props: ActorActionProps = {}): any {
         }
 
         play(): void {
-          if (!this.props.preserve) { Logger.debugError('Cannot play an action which is not preserved in context.', this.getClassName()) }
+          if (!this._props.preserve) { Logger.debugError('Cannot play an action which is not preserved in context.', this.getClassName()) }
           if (!this.isPlaying) {
             this._isPlaying = true
             switchLoopUpdate(this._loopUpdate, this)

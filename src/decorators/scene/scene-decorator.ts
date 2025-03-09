@@ -423,7 +423,7 @@ export function Scene(props: SceneProps = {}): any {
             action.onLoopUpdate = action.onLoopUpdate?.bind(actionOwner)
           }
           this.actions.set(actionConstructor, action)
-          action.props.overrides?.forEach(actionOverride => {
+          action._props.overrides?.forEach(actionOverride => {
             if (typeof actionOverride === 'string') {
               const overrideConstructor = this.getActionOwner(actionConstructor)?._metadata.actions.find(_action => _action.methodName === actionOverride)?.classDefinition
               if (!overrideConstructor) { Logger.debugError(`Action class method not found to override: '${actionOverride}'`) }
@@ -463,7 +463,7 @@ export function Scene(props: SceneProps = {}): any {
           removeLoopUpdate(action)
           removeCanvasResize(action)
           invokeCallback(action.onStop, action)
-          if (!action.props.preserve || forceRemove) {
+          if (!action._props.preserve || forceRemove) {
             invokeCallback(action.onRemove, action)
             this.actions.delete(actionConstructor)
           }
@@ -472,7 +472,7 @@ export function Scene(props: SceneProps = {}): any {
 
       playActionGroup(group: FlexId): void {
         this.actions.forEach((action, actionConstructor) => {
-          if (action.props.group !== undefined && action.props.group === group) {
+          if (action._props.group !== undefined && action._props.group === group) {
             this.playAction(actionConstructor, {})
           }
         })
@@ -480,7 +480,7 @@ export function Scene(props: SceneProps = {}): any {
 
       stopActionGroup(group: FlexId, forceRemove?: boolean): void {
         this.actions.forEach((action, actionConstructor) => {
-          if (action.props.group !== undefined && action.props.group === group) {
+          if (action._props.group !== undefined && action._props.group === group) {
             this.stopAction(actionConstructor, forceRemove)
           }
         })

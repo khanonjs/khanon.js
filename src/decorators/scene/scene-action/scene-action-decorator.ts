@@ -37,7 +37,7 @@ export function SceneAction(props: SceneActionProps = {}): any {
           return this._className ?? className
         }
 
-        props = props
+        _props = props
         _metadata: Metadata = Reflect.getMetadata('metadata', this) ?? new Metadata()
         _loopUpdate = true
         _loopUpdate$: BABYLON.Observer<number>
@@ -53,10 +53,10 @@ export function SceneAction(props: SceneActionProps = {}): any {
 
         _start(setup: any): void {
           this.setup = setup
-          if (this.props.countFrames) {
+          if (this._props.countFrames) {
             this.countFramesUpdate$ = Core.loopUpdateAddObserver((delta: number) => {
               this.countFrames += delta
-              if (this.countFrames > (this.props.countFrames as any)) {
+              if (this.countFrames > (this._props.countFrames as any)) {
                 this.countFramesUpdate$.remove()
                 this.countFramesUpdate$ = undefined
                 this.countFrames = 0
