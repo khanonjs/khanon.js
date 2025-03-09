@@ -39,27 +39,27 @@ export function Particle(props: ParticleProps): any {
     const className = constructorOrTarget.name
     const decorateClass = () => {
       const _classInterface = class extends constructorOrTarget implements ParticleInterface {
-        constructor(readonly scene: SceneInterface, props: ParticleProps, readonly attachmentInfo: ParticleAttachmentInfo) {
+        constructor(readonly scene: SceneInterface, props: ParticleProps, readonly _attachmentInfo: ParticleAttachmentInfo) {
           super()
-          this.props = props
-          this.metadata.applyProps(this)
+          this._props = props
+          this._metadata.applyProps(this)
         }
 
         getClassName(): string {
-          return this.className ?? className
+          return this._className ?? className
         }
 
-        props: ParticleProps
-        className: string
-        metadata: Metadata = Reflect.getMetadata('metadata', this) ?? new Metadata()
+        _props: ParticleProps
+        _className: string
+        _metadata: Metadata = Reflect.getMetadata('metadata', this) ?? new Metadata()
         babylon: Pick<BabylonAccessor, 'scene' | 'particleSystem'> = { scene: null as any, particleSystem: null as any }
         _loopUpdate = true
-        loopUpdate$: BABYLON.Observer<number>
-        canvasResize$: BABYLON.Observer<Rect>
-        attachmentUpdate$: BABYLON.Observer<number> | undefined
-        animations: SpriteAnimation[] | null = null
-        spriteProps: SpriteProps
-        offset: BABYLON.Vector3
+        _loopUpdate$: BABYLON.Observer<number>
+        _canvasResize$: BABYLON.Observer<Rect>
+        _attachmentUpdate$: BABYLON.Observer<number> | undefined
+        _animations: SpriteAnimation[] | null = null
+        _spriteProps: SpriteProps
+        _offset: BABYLON.Vector3
 
         set loopUpdate(value: boolean) {
           this._loopUpdate = value
@@ -68,21 +68,21 @@ export function Particle(props: ParticleProps): any {
 
         get loopUpdate(): boolean { return this._loopUpdate }
 
-        create(): void {
+        _create(): void {
           if (this.scene) {
-            if (this.attachmentInfo.offset) {
-              this.offset = this.props.offset.add(this.attachmentInfo.offset)
+            if (this._attachmentInfo.offset) {
+              this._offset = this._props.offset.add(this._attachmentInfo.offset)
             } else {
-              this.offset = this.props.offset.clone()
+              this._offset = this._props.offset.clone()
             }
-            this.babylon.particleSystem = new BABYLON.ParticleSystem(this.getClassName(), this.props.capacity, this.scene.babylon.scene)
+            this.babylon.particleSystem = new BABYLON.ParticleSystem(this.getClassName(), this._props.capacity, this.scene.babylon.scene)
             if (this.onInitialize) {
               this.onInitialize(this)
             }
-            if (this.attachmentInfo.attachment) {
-              this.updatePosition()
+            if (this._attachmentInfo.attachment) {
+              this._updatePosition()
             } else {
-              this.babylon.particleSystem.emitter = (this.babylon.particleSystem.emitter as BABYLON.Vector3).add(this.offset)
+              this.babylon.particleSystem.emitter = (this.babylon.particleSystem.emitter as BABYLON.Vector3).add(this._offset)
             }
             this.babylon.particleSystem.onStoppedObservable.add(() => {
               switchLoopUpdate(false, this)
@@ -93,14 +93,14 @@ export function Particle(props: ParticleProps): any {
           }
         }
 
-        updatePosition(): void {
-          this.babylon.particleSystem.emitter = (this.attachmentInfo.attachment as any).position.add(this.offset)
+        _updatePosition(): void {
+          this.babylon.particleSystem.emitter = (this._attachmentInfo.attachment as any).position.add(this._offset)
         }
 
         start(): void {
           invokeCallback(this.onStart, this)
-          if (this.attachmentInfo.attachment && !this.attachmentUpdate$) {
-            this.attachmentUpdate$ = Core.loopUpdateAddObserver(() => this.updatePosition())
+          if (this._attachmentInfo.attachment && !this._attachmentUpdate$) {
+            this._attachmentUpdate$ = Core.loopUpdateAddObserver(() => this._updatePosition())
           }
           this.babylon.particleSystem.start()
           switchLoopUpdate(this._loopUpdate, this)
@@ -108,13 +108,13 @@ export function Particle(props: ParticleProps): any {
 
         stop(): void {
           this.babylon.particleSystem.stop()
-          if (this.attachmentUpdate$) {
-            this.attachmentUpdate$.remove()
-            this.attachmentUpdate$ = undefined
+          if (this._attachmentUpdate$) {
+            this._attachmentUpdate$.remove()
+            this._attachmentUpdate$ = undefined
           }
         }
 
-        release(): void {
+        _release(): void {
           if (!this.babylon.particleSystem) { Logger.debugError('Trying to remove a Particle that has been already removed.', this.getClassName()); return }
           this.stop()
           invokeCallback(this.onRemove, this)
@@ -127,35 +127,35 @@ export function Particle(props: ParticleProps): any {
         setSprite(sprite: SpriteConstructor): void {
           const spriteParticleInfo = SpritesController.get(sprite).getParticleInfo(this.scene)
           if (!spriteParticleInfo.props.url) { Logger.debugError('Cannot use a particle texture from a blank sprite. The sprite \'url\' must be defined.'); return }
-          this.spriteProps = spriteParticleInfo.props
+          this._spriteProps = spriteParticleInfo.props
           this.babylon.particleSystem.particleTexture = spriteParticleInfo.spriteMesh.babylon.texture
-          if (this.spriteProps.width === this.spriteProps.height) {
+          if (this._spriteProps.width === this._spriteProps.height) {
             this.babylon.particleSystem.minScaleX = 1
             this.babylon.particleSystem.maxScaleX = 1
             this.babylon.particleSystem.minScaleY = 1
             this.babylon.particleSystem.maxScaleY = 1
-          } else if (this.spriteProps.width > this.spriteProps.height) {
-            this.babylon.particleSystem.minScaleX = this.spriteProps.width / this.spriteProps.height
-            this.babylon.particleSystem.maxScaleX = this.spriteProps.width / this.spriteProps.height
+          } else if (this._spriteProps.width > this._spriteProps.height) {
+            this.babylon.particleSystem.minScaleX = this._spriteProps.width / this._spriteProps.height
+            this.babylon.particleSystem.maxScaleX = this._spriteProps.width / this._spriteProps.height
             this.babylon.particleSystem.minScaleY = 1
             this.babylon.particleSystem.maxScaleY = 1
           } else {
             this.babylon.particleSystem.minScaleX = 1
             this.babylon.particleSystem.maxScaleX = 1
-            this.babylon.particleSystem.minScaleY = this.spriteProps.width / this.spriteProps.height
-            this.babylon.particleSystem.maxScaleY = this.spriteProps.width / this.spriteProps.height
+            this.babylon.particleSystem.minScaleY = this._spriteProps.width / this._spriteProps.height
+            this.babylon.particleSystem.maxScaleY = this._spriteProps.width / this._spriteProps.height
           }
-          this.animations = this.spriteProps.animations ?? null
-          if (this.animations) {
+          this._animations = this._spriteProps.animations ?? null
+          if (this._animations) {
             this.babylon.particleSystem.isAnimationSheetEnabled = true
-            this.babylon.particleSystem.spriteCellWidth = this.spriteProps.width
-            this.babylon.particleSystem.spriteCellHeight = this.spriteProps.height
+            this.babylon.particleSystem.spriteCellWidth = this._spriteProps.width
+            this.babylon.particleSystem.spriteCellHeight = this._spriteProps.height
           }
         }
 
         setAnimation(id: FlexId, cellChangeSpeed?: number, randomStartCell?: boolean): void {
-          const animation = this.animations?.find(animation => animation.id === id)
-          if (!animation) { Logger.debugError(`Animation Id '${id}' doesn't exist in particle sprite '${this.spriteProps.url}'.`); return }
+          const animation = this._animations?.find(animation => animation.id === id)
+          if (!animation) { Logger.debugError(`Animation Id '${id}' doesn't exist in particle sprite '${this._spriteProps.url}'.`); return }
           this.babylon.particleSystem.startSpriteCellID = animation.frameStart
           this.babylon.particleSystem.endSpriteCellID = animation.frameEnd
           if (cellChangeSpeed) {
@@ -167,7 +167,7 @@ export function Particle(props: ParticleProps): any {
         }
 
         notify(message: FlexId, ...args: any[]): void {
-          const definition = this.metadata.notifiers.get(message)
+          const definition = this._metadata.notifiers.get(message)
           if (definition) {
             this[definition.methodName](...args)
           }
@@ -180,19 +180,19 @@ export function Particle(props: ParticleProps): any {
         load(scene: SceneInterface): LoadingProgress {
           return new LoadingProgress().fromNodes([
             SpritesController.load(this.props.sprites, scene),
-            SpritesController.load(this.Instance.metadata.getProps().sprites, scene)
+            SpritesController.load(this.Instance._metadata.getProps().sprites, scene)
           ])
         }
 
         unload(scene: SceneInterface): void {
           SpritesController.unload(this.props.sprites, scene)
-          SpritesController.unload(this.Instance.metadata.getProps().sprites, scene)
+          SpritesController.unload(this.Instance._metadata.getProps().sprites, scene)
         }
 
         spawn(scene: SceneInterface, attachmentInfo: ParticleAttachmentInfo, create = true): ParticleInterface {
           const particle = new _classInterface(scene, this.props, attachmentInfo)
           if (create) {
-            particle.create()
+            particle._create()
           }
           return particle
         }
@@ -218,7 +218,7 @@ export function Particle(props: ParticleProps): any {
     ) && descriptor) { // Defined descriptor means it is a decorated method
       @Particle(props)
       abstract class _particleInterface extends ParticleInterface {
-        className = contextOrProperty as any
+        _className = contextOrProperty as any
         onInitialize = descriptor.value
       }
 

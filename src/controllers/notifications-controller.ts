@@ -29,13 +29,13 @@ export class NotificationsController {
       Core.getApp().notify(message, ...args)
     } else {
       if (isPrototypeOf(ActorInterface, constructor)) {
-        Core.getActiveScenes().forEach(scene => scene.actors.forEach(actor => {
+        Core.getActiveScenes().forEach(scene => scene._actors.forEach(actor => {
           if (actor instanceof constructor) {
             actor.notify(message, ...args)
           }
         }))
       } else if (isPrototypeOf(ActorStateInterface, constructor)) {
-        Core.getActiveScenes().forEach(scene => scene.actors.forEach(actor => {
+        Core.getActiveScenes().forEach(scene => scene._actors.forEach(actor => {
           if (actor.state instanceof constructor) {
             actor.state.notify(message, ...args)
           }
@@ -52,8 +52,8 @@ export class NotificationsController {
           }
         })
       } else if (isPrototypeOf(ParticleInterface, constructor)) {
-        Core.getActiveScenes().forEach(scene => scene.actors.forEach(actor => {
-          actor.particles.forEach(particle => {
+        Core.getActiveScenes().forEach(scene => scene._actors.forEach(actor => {
+          actor._particles.forEach(particle => {
             if (particle instanceof constructor) {
               particle.notify(message, ...args)
             }

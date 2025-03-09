@@ -72,7 +72,7 @@ export function Scene(props: SceneProps = {}): any {
         super()
         this._spawn = new SceneSpawn(this)
         this._remove = new SceneRemove(this)
-        this.metadata.applyProps(this)
+        this._metadata.applyProps(this)
         this.storeAvailableElements()
       }
 
@@ -80,11 +80,11 @@ export function Scene(props: SceneProps = {}): any {
         return constructor.name
       }
 
-      props = removeArrayDuplicitiesInObject(applyDefaults(props, scenePropsDefault))
-      metadata: Metadata = Reflect.getMetadata('metadata', this) ?? new Metadata()
-      actions: Map<SceneActionConstructor, SceneActionInterface> = new Map<SceneActionConstructor, SceneActionInterface>()
-      availableElements: SceneAvailableElements
-      animationHandler: Map<SpriteInterface, () => void> = new Map<SpriteInterface, () => void>()
+      _props = removeArrayDuplicitiesInObject(applyDefaults(props, scenePropsDefault))
+      _metadata: Metadata = Reflect.getMetadata('metadata', this) ?? new Metadata()
+      _actions: Map<SceneActionConstructor, SceneActionInterface> = new Map<SceneActionConstructor, SceneActionInterface>()
+      _availableElements: SceneAvailableElements
+      _animationHandler: Map<SpriteInterface, () => void> = new Map<SpriteInterface, () => void>()
       _assets: AssetDefinition[]
       _loaded: boolean
       _loadingProgress: LoadingProgress | undefined
@@ -99,19 +99,18 @@ export function Scene(props: SceneProps = {}): any {
       _debugInspector: (event: KeyboardEvent) => void
 
       // Spawned elements
-      actors: Set<ActorInterface> = new Set<ActorInterface>()
-      meshes: Set<MeshInterface> = new Set<MeshInterface>()
-      sprites: Set<SpriteInterface> = new Set<SpriteInterface>()
-      particles: Set<ParticleInterface> = new Set<ParticleInterface>()
-      guis: Map<GUIConstructor, GUIInterface> = new Map<GUIConstructor, GUIInterface>()
+      _actors: Set<ActorInterface> = new Set<ActorInterface>()
+      _meshes: Set<MeshInterface> = new Set<MeshInterface>()
+      _sprites: Set<SpriteInterface> = new Set<SpriteInterface>()
+      _particles: Set<ParticleInterface> = new Set<ParticleInterface>()
+      _guis: Map<GUIConstructor, GUIInterface> = new Map<GUIConstructor, GUIInterface>()
 
-      setEngineParams(): void {} // TODO ?
+      _setEngineParams(): void {} // TODO ?
 
       // User available
       babylon: Pick<BabylonAccessor, 'scene'> = { scene: null as any }
-      loopUpdate$: BABYLON.Observer<number>
-      canvasResize$: BABYLON.Observer<Rect>
-      get assets(): AssetDefinition[] { return this._assets }
+      _loopUpdate$: BABYLON.Observer<number>
+      _canvasResize$: BABYLON.Observer<Rect>
       get loaded(): boolean { return this._loaded }
       get started(): boolean { return this._started }
       get state(): SceneStateInterface | null { return this._state }
@@ -156,11 +155,11 @@ export function Scene(props: SceneProps = {}): any {
           }
           this.switchCamera(GenericCamera, {})
         }
-        if (Core.isDevelopmentMode() && this.props.useDebugInspector) {
-          this.useDebugInspector()
+        if (Core.isDevelopmentMode() && this._props.useDebugInspector) {
+          this._useDebugInspector()
         }
         Core.startRenderScene(this)
-        this.startRenderObservable()
+        this._startRenderObservable()
         switchLoopUpdate(this._loopUpdate, this)
         attachCanvasResize(this)
         return this.state
@@ -169,15 +168,15 @@ export function Scene(props: SceneProps = {}): any {
       stop(): void {
         Logger.debug('Scene stop', this.getClassName())
         if (Core.isDevelopmentMode()) {
-          this.denyDebugInspector()
+          this._denyDebugInspector()
         }
-        this.releaseGUIs()
+        this._releaseGUIs()
         this.releaseCamera()
-        this.state?.end()
+        this.state?._end()
         this.remove.all()
         this._started = false
         Core.stopRenderScene(this)
-        this.stopRenderObservable()
+        this._stopRenderObservable()
         removeLoopUpdate(this)
         removeCanvasResize(this)
       }
@@ -191,44 +190,44 @@ export function Scene(props: SceneProps = {}): any {
           return this._loadingProgress
         } else {
           // Create babylon scene and apply configuration
-          this.babylon.scene = new BABYLON.Scene(Core.engine, this.props.options)
+          this.babylon.scene = new BABYLON.Scene(Core.engine, this._props.options)
 
           this._loadingProgress = new LoadingProgress()
-          if (!this.assets) {
+          if (!this._assets) {
             this._assets = [
-              ...AssetsController.findAssetsDefinitions(this.props),
-              ...AssetsController.findAssetsDefinitions(this.metadata.getProps())
+              ...AssetsController.findAssetsDefinitions(this._props),
+              ...AssetsController.findAssetsDefinitions(this._metadata.getProps())
             ]
           }
           const assetsProgress = AssetsController.sceneLoad(this)
           assetsProgress.onComplete.add(() => {
             Logger.debug('Scene assets load completed', this.getClassName())
             const elementsLoading = new LoadingProgress().fromNodes([
-              SceneStatesController.load(this.props.states, this),
-              SceneActionsController.load(this.props.actions, this),
-              SceneActionsController.load(this.metadata.getProps().actions, this),
-              ActorsController.load(this.props.actors, this),
-              SpritesController.load(this.props.sprites, this),
-              SpritesController.load(this.metadata.getProps().sprites, this),
-              MeshesController.load(this.props.meshes, this),
-              MeshesController.load(this.metadata.getProps().meshes, this),
-              ParticlesController.load(this.props.particles, this),
-              ParticlesController.load(this.metadata.getProps().particles, this),
-              GUIController.load(this.props.guis, this)
+              SceneStatesController.load(this._props.states, this),
+              SceneActionsController.load(this._props.actions, this),
+              SceneActionsController.load(this._metadata.getProps().actions, this),
+              ActorsController.load(this._props.actors, this),
+              SpritesController.load(this._props.sprites, this),
+              SpritesController.load(this._metadata.getProps().sprites, this),
+              MeshesController.load(this._props.meshes, this),
+              MeshesController.load(this._metadata.getProps().meshes, this),
+              ParticlesController.load(this._props.particles, this),
+              ParticlesController.load(this._metadata.getProps().particles, this),
+              GUIController.load(this._props.guis, this)
             ])
             elementsLoading.onComplete.add(() => {
               Logger.debug('Scene elements load completed', this.getClassName())
               const startScene = () => {
                 // Load configuration after Elements loading, to avoid AppendAsync method to override these configurations.
-                if (this.props.configuration) {
-                  for (const [key, value] of Object.entries(this.props.configuration)) {
+                if (this._props.configuration) {
+                  for (const [key, value] of Object.entries(this._props.configuration)) {
                     this.babylon.scene[key] = value
                   }
                 }
                 this.babylon.scene.executeWhenReady(() => {
                   this._loaded = true
                   invokeCallback(this.onLoaded, this)
-                  this.availableElements.actors.forEach(actorConsctructor => {
+                  this._availableElements.actors.forEach(actorConsctructor => {
                     const actorCore = ActorsController.get(actorConsctructor)
                     if (actorCore.props.spawnByReferenceId) {
                       const meshes = [...this.babylon.scene.meshes].reverse()
@@ -248,7 +247,7 @@ export function Scene(props: SceneProps = {}): any {
                                 this.setMesh(mesh as any)
                               }
                             }
-                            this.availableElements.meshes.add(NewMesh)
+                            this._availableElements.meshes.add(NewMesh)
                             actor.setBody(NewMesh)
                           }
                         }
@@ -259,14 +258,14 @@ export function Scene(props: SceneProps = {}): any {
                   this._loadingProgress = undefined
                 })
               }
-              if (this.props.url) {
-                BABYLON.AppendSceneAsync(this.props.url, this.babylon.scene)
+              if (this._props.url) {
+                BABYLON.AppendSceneAsync(this._props.url, this.babylon.scene)
                   .then(() => {
-                    Logger.debug(`Scene load  AppendAsync from '${this.props.url}' completed.`, this.getClassName())
+                    Logger.debug(`Scene load  AppendAsync from '${this._props.url}' completed.`, this.getClassName())
                     startScene()
                   })
                   .catch((error: string) => {
-                    Logger.debugError(`Scene load AppendAsync from '${this.props.url}' error`, error, this.getClassName())
+                    Logger.debugError(`Scene load AppendAsync from '${this._props.url}' error`, error, this.getClassName())
                   })
               } else {
                 startScene()
@@ -287,61 +286,61 @@ export function Scene(props: SceneProps = {}): any {
       unload(): void {
         Logger.debug('Scene unload', this.getClassName(), this.getClassName())
         this._loaded = false
-        SceneStatesController.unload(this.props.states, this)
-        SceneActionsController.unload(this.props.actions, this)
-        SceneActionsController.unload(this.metadata.getProps().actions, this)
-        ActorsController.unload(this.props.actors, this)
-        SpritesController.unload(this.props.sprites, this)
-        SpritesController.unload(this.metadata.getProps().sprites, this)
-        MeshesController.unload(this.props.meshes, this)
-        MeshesController.unload(this.metadata.getProps().meshes, this)
-        ParticlesController.unload(this.props.particles, this)
-        ParticlesController.unload(this.metadata.getProps().particles, this)
-        GUIController.unload(this.props.guis, this)
+        SceneStatesController.unload(this._props.states, this)
+        SceneActionsController.unload(this._props.actions, this)
+        SceneActionsController.unload(this._metadata.getProps().actions, this)
+        ActorsController.unload(this._props.actors, this)
+        SpritesController.unload(this._props.sprites, this)
+        SpritesController.unload(this._metadata.getProps().sprites, this)
+        MeshesController.unload(this._props.meshes, this)
+        MeshesController.unload(this._metadata.getProps().meshes, this)
+        ParticlesController.unload(this._props.particles, this)
+        ParticlesController.unload(this._metadata.getProps().particles, this)
+        GUIController.unload(this._props.guis, this)
       }
 
       showGUI<G extends GUIInterface>(gui: GUIConstructor, setup: any): G {
         Logger.debug('Show GUI', this.getClassName(), GUIController.get(gui).getClassName())
-        let guiInstance = this.guis.get(gui)
+        let guiInstance = this._guis.get(gui)
         if (guiInstance) {
-          guiInstance.release()
+          guiInstance._release()
         }
         guiInstance = GUIController.get(gui).spawn(this)
-        guiInstance.initialize(setup)
-        this.guis.set(gui, guiInstance)
+        guiInstance._initialize(setup)
+        this._guis.set(gui, guiInstance)
         return guiInstance as any
       }
 
       hideGUI(gui: GUIConstructor): void {
         Logger.debug('Hide GUI', this.getClassName(), GUIController.get(gui).getClassName())
-        const guiInstance = this.guis.get(gui)
+        const guiInstance = this._guis.get(gui)
         if (guiInstance) {
-          guiInstance.release()
-          this.guis.delete(gui)
+          guiInstance._release()
+          this._guis.delete(gui)
         } else {
           Logger.warn('Trying to hide a GUI that\'s not being displayed.', this.getClassName(), GUIController.get(gui).getClassName())
         }
       }
 
       getGUI<G extends GUIInterface>(gui: GUIConstructor): G | undefined {
-        return this.guis.get(gui) as any
+        return this._guis.get(gui) as any
       }
 
-      startRenderObservable(): void {
+      _startRenderObservable(): void {
         this.babylon.scene.onBeforeRenderObservable.add(() => {
-          this.animationHandler.forEach(handler => {
+          this._animationHandler.forEach(handler => {
             handler()
           })
         })
       }
 
-      stopRenderObservable(): void {
+      _stopRenderObservable(): void {
         this.babylon.scene.onBeforeRenderObservable.clear()
       }
 
-      releaseGUIs(): void {
-        this.guis.forEach(gui => gui.release())
-        this.guis.clear()
+      _releaseGUIs(): void {
+        this._guis.forEach(gui => gui._release())
+        this._guis.clear()
       }
 
       switchCamera(constructor: CameraConstructor, setup: any): void {
@@ -352,12 +351,12 @@ export function Scene(props: SceneProps = {}): any {
         this._camera.setup = setup
         this._camera.babylon.camera = (this._camera.onInitialize as any)(this.babylon.scene)
         this._camera.babylon.camera.attachControl(Core.canvas, true)
-        this._camera.start()
+        this._camera._start()
       }
 
       releaseCamera(): void {
         if (this._camera) {
-          this._camera.release()
+          this._camera._release()
           this._camera.babylon.camera.detachControl()
           this._camera = undefined
           this.babylon.scene.activeCamera = null
@@ -369,63 +368,63 @@ export function Scene(props: SceneProps = {}): any {
       }
 
       switchState(state: SceneStateConstructor, setup: any): SceneStateInterface {
-        if (!this.availableElements.hasSceneState(state)) { Logger.debugError('Denied to set a state not available to the scene. Did you mean to add it to the scene props?', this.getClassName(), state.prototype); return null as any }
+        if (!this._availableElements.hasSceneState(state)) { Logger.debugError('Denied to set a state not available to the scene. Did you mean to add it to the scene props?', this.getClassName(), state.prototype); return null as any }
         const _state = SceneStatesController.get(state).spawn(this)
         if (this._state) {
-          this._state.end()
+          this._state._end()
         }
         this._state = _state
-        this._state.start(setup)
+        this._state._start(setup)
         return this._state
       }
 
-      setAnimationHandler(sprite: SpriteInterface, animation: SpriteAnimation): void {
+      _setAnimationHandler(sprite: SpriteInterface, animation: SpriteAnimation): void {
         const startMs = Core.getLoopUpdateLastMs()
         const numSprites = animation.frameEnd - animation.frameStart
         const totalTimeMs = numSprites * animation.delay
         const handleLoop = () => {
-          sprite.setShaderMaterialTextureFrame(animation.frameStart + (Math.trunc(((Core.getLoopUpdateLastMs() - startMs) % totalTimeMs) / animation.delay)))
+          sprite._setShaderMaterialTextureFrame(animation.frameStart + (Math.trunc(((Core.getLoopUpdateLastMs() - startMs) % totalTimeMs) / animation.delay)))
         }
         const handleNoLoop = () => {
           const loopUpdateLastMs = Core.getLoopUpdateLastMs()
           if (loopUpdateLastMs - startMs >= totalTimeMs) {
-            sprite.setShaderMaterialTextureFrame(animation.frameEnd)
-            this.animationHandler.delete(sprite)
+            sprite._setShaderMaterialTextureFrame(animation.frameEnd)
+            this._animationHandler.delete(sprite)
           } else {
-            sprite.setShaderMaterialTextureFrame(animation.frameStart + (Math.trunc(((Core.getLoopUpdateLastMs() - startMs) % totalTimeMs) / animation.delay)))
+            sprite._setShaderMaterialTextureFrame(animation.frameStart + (Math.trunc(((Core.getLoopUpdateLastMs() - startMs) % totalTimeMs) / animation.delay)))
           }
         }
-        this.animationHandler.set(sprite, animation.loop ? handleLoop : handleNoLoop)
+        this._animationHandler.set(sprite, animation.loop ? handleLoop : handleNoLoop)
       }
 
-      stopAnimationHandler(sprite: SpriteInterface): void {
-        this.animationHandler.delete(sprite)
+      _stopAnimationHandler(sprite: SpriteInterface): void {
+        this._animationHandler.delete(sprite)
       }
 
       getActionOwner(actionConstructor: SceneActionConstructor): SceneInterface | SceneStateInterface | undefined {
-        return this.metadata.getProps().actions?.find(_action => _action === actionConstructor)
+        return this._metadata.getProps().actions?.find(_action => _action === actionConstructor)
           ? this
-          : this._state?.metadata?.getProps().actions?.find(_action => _action === actionConstructor)
+          : this._state?._metadata?.getProps().actions?.find(_action => _action === actionConstructor)
             ? this._state
             : undefined
       }
 
       playAction(actionConstructor: SceneActionConstructor, setup: any): SceneActionInterface {
-        if (!this.availableElements.hasSceneAction(actionConstructor)) { Logger.debugError('Trying to play an action non available to the actor. Please check the actor props.', this.getClassName(), actionConstructor.prototype); return null as any }
-        let action = this.actions.get(actionConstructor)
+        if (!this._availableElements.hasSceneAction(actionConstructor)) { Logger.debugError('Trying to play an action non available to the actor. Please check the actor props.', this.getClassName(), actionConstructor.prototype); return null as any }
+        let action = this._actions.get(actionConstructor)
         if (!action) {
           action = SceneActionsController.get(actionConstructor).spawn(this)
           let actionOwner: any
-          if (!this.props.actions?.find(_action => _action === actionConstructor)) {
+          if (!this._props.actions?.find(_action => _action === actionConstructor)) {
             // Applies context 'Scene' or 'SceneState' to 'onLoopUpdate' method to preserve the 'this'
             // in case 'onLoopUpdate' is equivalent to a decorated method of some of those both interfaces.
             actionOwner = this.getActionOwner(actionConstructor)
             action.onLoopUpdate = action.onLoopUpdate?.bind(actionOwner)
           }
-          this.actions.set(actionConstructor, action)
-          action.props.overrides?.forEach(actionOverride => {
+          this._actions.set(actionConstructor, action)
+          action._props.overrides?.forEach(actionOverride => {
             if (typeof actionOverride === 'string') {
-              const overrideConstructor = this.getActionOwner(actionConstructor)?.metadata.actions.find(_action => _action.methodName === actionOverride)?.classDefinition
+              const overrideConstructor = this.getActionOwner(actionConstructor)?._metadata.actions.find(_action => _action.methodName === actionOverride)?.classDefinition
               if (!overrideConstructor) { Logger.debugError(`Action class method not found to override: '${actionOverride}'`) }
               if (actionConstructor) {
                 this.stopAction(overrideConstructor)
@@ -434,13 +433,13 @@ export function Scene(props: SceneProps = {}): any {
               this.stopAction(actionOverride)
             }
           })
-          action.start(setup)
+          action._start(setup)
         }
         return action
       }
 
-      playActionFromInstance(instance: SceneActionInterface): void {
-        for (const [key, value] of this.actions.entries()) {
+      _playActionFromInstance(instance: SceneActionInterface): void {
+        for (const [key, value] of this._actions.entries()) {
           if (value === instance) {
             this.playAction(key, {})
             return
@@ -448,8 +447,8 @@ export function Scene(props: SceneProps = {}): any {
         }
       }
 
-      stopActionFromInstance(instance: SceneActionInterface, forceRemove?: boolean) {
-        for (const [key, value] of this.actions.entries()) {
+      _stopActionFromInstance(instance: SceneActionInterface, forceRemove?: boolean) {
+        for (const [key, value] of this._actions.entries()) {
           if (value === instance) {
             this.stopAction(key, forceRemove)
             return
@@ -458,36 +457,36 @@ export function Scene(props: SceneProps = {}): any {
       }
 
       stopAction(actionConstructor: SceneActionConstructor, forceRemove?: boolean): void {
-        const action = this.actions.get(actionConstructor)
+        const action = this._actions.get(actionConstructor)
         if (action) {
           removeLoopUpdate(action)
           removeCanvasResize(action)
           invokeCallback(action.onStop, action)
-          if (!action.props.preserve || forceRemove) {
+          if (!action._props.preserve || forceRemove) {
             invokeCallback(action.onRemove, action)
-            this.actions.delete(actionConstructor)
+            this._actions.delete(actionConstructor)
           }
         }
       }
 
       playActionGroup(group: FlexId): void {
-        this.actions.forEach((action, actionConstructor) => {
-          if (action.props.group !== undefined && action.props.group === group) {
+        this._actions.forEach((action, actionConstructor) => {
+          if (action._props.group !== undefined && action._props.group === group) {
             this.playAction(actionConstructor, {})
           }
         })
       }
 
       stopActionGroup(group: FlexId, forceRemove?: boolean): void {
-        this.actions.forEach((action, actionConstructor) => {
-          if (action.props.group !== undefined && action.props.group === group) {
+        this._actions.forEach((action, actionConstructor) => {
+          if (action._props.group !== undefined && action._props.group === group) {
             this.stopAction(actionConstructor, forceRemove)
           }
         })
       }
 
       stopActionAll(forceRemove?: boolean): void {
-        this.actions.forEach((action, actionConstructor) => {
+        this._actions.forEach((action, actionConstructor) => {
           this.stopAction(actionConstructor, forceRemove)
         })
       }
@@ -505,11 +504,11 @@ export function Scene(props: SceneProps = {}): any {
       }
 
       getAction(actionConstructor: SceneActionConstructor): SceneActionInterface | undefined {
-        return this.actions.get(actionConstructor)
+        return this._actions.get(actionConstructor)
       }
 
       notify(message: FlexId, ...args: any[]): void {
-        const definition = this.metadata.notifiers.get(message)
+        const definition = this._metadata.notifiers.get(message)
         if (definition) {
           this[definition.methodName](...args)
         }
@@ -520,9 +519,9 @@ export function Scene(props: SceneProps = {}): any {
        * TODO: Why _interface can't have type (ActorInterface | SpriteInterface | MeshInterface | ActorActionInterface | SceneActionInterface) ?
        */
       private storeAvailableElements() {
-        this.availableElements = new SceneAvailableElements()
-        this.getAvailableElements(this.props)
-        this.getAvailableElements(this.metadata.getProps())
+        this._availableElements = new SceneAvailableElements()
+        this.getAvailableElements(this._props)
+        this.getAvailableElements(this._metadata.getProps())
       }
 
       private getAvailableElements(props: object | undefined): void {
@@ -531,43 +530,43 @@ export function Scene(props: SceneProps = {}): any {
             if (Array.isArray(property)) {
               property.forEach(value => {
                 if (isPrototypeOf(ActorInterface, value)) { // TODO insert all these constructors in a list and avoid the 'callback hell'
-                  this.availableElements.actors.add(value)
+                  this._availableElements.actors.add(value)
                   const actor = ActorsController.get(value as ActorConstructor)
                   this.getAvailableElements(actor.props)
-                  this.getAvailableElements(actor.Instance.metadata?.getProps())
+                  this.getAvailableElements(actor.Instance._metadata?.getProps())
                 } else if (isPrototypeOf(SpriteInterface, value)) {
-                  this.availableElements.sprites.add(value)
+                  this._availableElements.sprites.add(value)
                   const sprite = SpritesController.get(value as SpriteConstructor)
                   this.getAvailableElements(sprite.props)
                 } else if (isPrototypeOf(MeshInterface, value)) {
-                  this.availableElements.meshes.add(value)
+                  this._availableElements.meshes.add(value)
                   const mesh = MeshesController.get(value as MeshConstructor)
                   this.getAvailableElements(mesh.props)
                 } else if (isPrototypeOf(ActorActionInterface, value)) {
-                  this.availableElements.actorActions.add(value)
+                  this._availableElements.actorActions.add(value)
                   const action = ActorActionsController.get(value as ActorActionConstructor)
                   this.getAvailableElements(action.props)
-                  this.getAvailableElements(action.Instance.metadata?.getProps())
+                  this.getAvailableElements(action.Instance._metadata?.getProps())
                 } else if (isPrototypeOf(ActorStateInterface, value)) {
-                  this.availableElements.actorStates.add(value)
+                  this._availableElements.actorStates.add(value)
                   const state = ActorStatesController.get(value as ActorStateConstructor)
                   this.getAvailableElements(state.props)
-                  this.getAvailableElements(state.Instance.metadata?.getProps())
+                  this.getAvailableElements(state.Instance._metadata?.getProps())
                 } else if (isPrototypeOf(ParticleInterface, value)) {
-                  this.availableElements.particles.add(value)
+                  this._availableElements.particles.add(value)
                   const particle = ParticlesController.get(value as ParticleConstructor)
                   this.getAvailableElements(particle.props)
-                  this.getAvailableElements(particle.Instance.metadata?.getProps())
+                  this.getAvailableElements(particle.Instance._metadata?.getProps())
                 } else if (isPrototypeOf(SceneActionInterface, value)) {
-                  this.availableElements.sceneActions.add(value)
+                  this._availableElements.sceneActions.add(value)
                   const action = SceneActionsController.get(value as SceneActionConstructor)
                   this.getAvailableElements(action.props)
-                  this.getAvailableElements(action.Instance.metadata?.getProps())
+                  this.getAvailableElements(action.Instance._metadata?.getProps())
                 } else if (isPrototypeOf(SceneStateInterface, value)) {
-                  this.availableElements.sceneStates.add(value)
+                  this._availableElements.sceneStates.add(value)
                   const state = SceneStatesController.get(value as SceneStateConstructor)
                   this.getAvailableElements(state.props)
-                  this.getAvailableElements(state.Instance.metadata?.getProps())
+                  this.getAvailableElements(state.Instance._metadata?.getProps())
                 }
               })
             }
@@ -575,7 +574,7 @@ export function Scene(props: SceneProps = {}): any {
         }
       }
 
-      useDebugInspector(): void {
+      _useDebugInspector(): void {
         if (!this._debugInspector) {
           this._debugInspector = (event: KeyboardEvent) => {
             if (event.shiftKey && event.ctrlKey && event.altKey && event.key === 'I') {
@@ -590,7 +589,7 @@ export function Scene(props: SceneProps = {}): any {
         }
       }
 
-      denyDebugInspector(): void {
+      _denyDebugInspector(): void {
         if (this._debugInspector) {
           window.removeEventListener('keyup', this._debugInspector)
           this._debugInspector = undefined as any

@@ -8,16 +8,16 @@ import { FlexId } from '../../../types/flex-id'
 import { AppStateProps } from './app-state-props'
 
 export abstract class AppStateInterface<S = any> implements StateInterface<S> {
-  abstract props: AppStateProps
-  abstract metadata: Metadata
+  abstract _props: AppStateProps
+  abstract _metadata: Metadata
   abstract _loopUpdate: boolean
-  abstract loopUpdate$: BABYLON.Observer<number>
-  abstract canvasResize$: BABYLON.Observer<Rect>
-  // abstract guis: Set<GUIInterface>
-  // abstract guisStart(): void
-  // abstract guisRelease(): void
-  abstract start(setup: any): void
-  abstract end(): void
+  abstract _loopUpdate$: BABYLON.Observer<number>
+  abstract _canvasResize$: BABYLON.Observer<Rect>
+  // abstract _guis: Set<GUIInterface>
+  // abstract _guisStart(): void
+  // abstract _guisRelease(): void
+  abstract _start(setup: any): void
+  abstract _end(): void
 
   /**
    * User available

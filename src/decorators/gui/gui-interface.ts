@@ -17,11 +17,11 @@ import { GUIStateInterface } from './gui-state/gui-state-interface'
 export abstract class GUIInterface<S = any> implements LoopUpdatable, CanvasResizable, Notificable {
   abstract _loopUpdate: boolean
   // abstract _state: GUIStateInterface | null
-  abstract metadata: Metadata
-  abstract loopUpdate$: BABYLON.Observer<number>
-  abstract canvasResize$: BABYLON.Observer<Rect>
-  abstract initialize(setup: S): void
-  abstract release(): void
+  abstract _metadata: Metadata
+  abstract _loopUpdate$: BABYLON.Observer<number>
+  abstract _canvasResize$: BABYLON.Observer<Rect>
+  abstract _initialize(setup: S): void
+  abstract _release(): void
 
   /**
    * User available

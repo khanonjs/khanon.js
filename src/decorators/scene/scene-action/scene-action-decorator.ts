@@ -30,18 +30,18 @@ export function SceneAction(props: SceneActionProps = {}): any {
       const _classInterface = class extends constructorOrTarget implements SceneActionInterface {
         constructor(readonly scene: SceneInterface) {
           super()
-          this.metadata.applyProps(this)
+          this._metadata.applyProps(this)
         }
 
         getClassName(): string {
           return this._className ?? className
         }
 
-        props = props
-        metadata: Metadata = Reflect.getMetadata('metadata', this) ?? new Metadata()
+        _props = props
+        _metadata: Metadata = Reflect.getMetadata('metadata', this) ?? new Metadata()
         _loopUpdate = true
-        loopUpdate$: BABYLON.Observer<number>
-        canvasResize$: BABYLON.Observer<Rect>
+        _loopUpdate$: BABYLON.Observer<number>
+        _canvasResize$: BABYLON.Observer<Rect>
         setup: any
 
         set loopUpdate(value: boolean) {
@@ -51,12 +51,12 @@ export function SceneAction(props: SceneActionProps = {}): any {
 
         get loopUpdate(): boolean { return this._loopUpdate }
 
-        start(setup: any): void {
+        _start(setup: any): void {
           this.setup = setup
-          if (this.props.countFrames) {
+          if (this._props.countFrames) {
             this.countFramesUpdate$ = Core.loopUpdateAddObserver((delta: number) => {
               this.countFrames += delta
-              if (this.countFrames > (this.props.countFrames as any)) {
+              if (this.countFrames > (this._props.countFrames as any)) {
                 this.countFramesUpdate$.remove()
                 this.countFramesUpdate$ = undefined
                 this.countFrames = 0
@@ -70,15 +70,15 @@ export function SceneAction(props: SceneActionProps = {}): any {
         }
 
         play(): void {
-          this.scene.playActionFromInstance(this)
+          this.scene._playActionFromInstance(this)
         }
 
         stop(): void {
-          this.scene.stopActionFromInstance(this)
+          this.scene._stopActionFromInstance(this)
         }
 
         remove(): void {
-          this.scene.stopActionFromInstance(this, true)
+          this.scene._stopActionFromInstance(this, true)
         }
       }
       const _classCore = class implements SceneActionCore {
@@ -88,21 +88,21 @@ export function SceneAction(props: SceneActionProps = {}): any {
         load(scene: SceneInterface): LoadingProgress {
           return new LoadingProgress().fromNodes([
             SpritesController.load(this.props.sprites, scene),
-            SpritesController.load(this.Instance.metadata.getProps().sprites, scene),
+            SpritesController.load(this.Instance._metadata.getProps().sprites, scene),
             MeshesController.load(this.props.meshes, scene),
-            MeshesController.load(this.Instance.metadata.getProps().meshes, scene),
+            MeshesController.load(this.Instance._metadata.getProps().meshes, scene),
             ParticlesController.load(this.props.particles, scene),
-            ParticlesController.load(this.Instance.metadata.getProps().particles, scene)
+            ParticlesController.load(this.Instance._metadata.getProps().particles, scene)
           ])
         }
 
         unload(scene: SceneInterface): void {
           SpritesController.unload(this.props.sprites, scene)
-          SpritesController.unload(this.Instance.metadata.getProps().sprites, scene)
+          SpritesController.unload(this.Instance._metadata.getProps().sprites, scene)
           MeshesController.unload(this.props.meshes, scene)
-          MeshesController.unload(this.Instance.metadata.getProps().meshes, scene)
+          MeshesController.unload(this.Instance._metadata.getProps().meshes, scene)
           ParticlesController.unload(this.props.particles, scene)
-          ParticlesController.unload(this.Instance.metadata.getProps().particles, scene)
+          ParticlesController.unload(this.Instance._metadata.getProps().particles, scene)
         }
 
         spawn(scene: SceneInterface): SceneActionInterface {

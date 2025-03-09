@@ -41,20 +41,20 @@ export function Mesh(props: MeshProps = {}): any {
       const _classInterface = class extends constructorOrTarget implements MeshInterface {
         constructor(readonly scene: SceneInterface, props: MeshProps) {
           super()
-          this.props = props
+          this._props = props
           if (scene) {
             this.babylon.scene = this.scene.babylon.scene
-            if (this.props.url) {
+            if (this._props.url) {
               const assetContainer = core.assetContainers.get(scene)
-              if (!assetContainer) { Logger.debugError(`AssetContainer mesh '${this.props.url}' not for spawn:`, this.getClassName(), scene.getClassName()) }
+              if (!assetContainer) { Logger.debugError(`AssetContainer mesh '${this._props.url}' not for spawn:`, this.getClassName(), scene.getClassName()) }
               if (assetContainer) {
                 const entries = assetContainer.instantiateModelsToScene((name) => name, undefined, {
-                  doNotInstantiate: !this.props.cloneByInstances
+                  doNotInstantiate: !this._props.cloneByInstances
                 })
-                this.props.animations?.forEach(animation => {
+                this._props.animations?.forEach(animation => {
                   const animationGroup = entries.animationGroups.find(animationGroup => animation.id === animationGroup.name)
                   if (animationGroup) {
-                    const definedAnim = this.props.animations?.find(_anim => _anim.id === animationGroup.name)
+                    const definedAnim = this._props.animations?.find(_anim => _anim.id === animationGroup.name)
                     if (definedAnim) {
                       this.addAnimation({
                         id: animationGroup.name,
@@ -64,11 +64,11 @@ export function Mesh(props: MeshProps = {}): any {
                       })
                     }
                   } else {
-                    Logger.error(`Animation '${animation.id}' not found in mesh '${this.props.url}':`, this.getClassName())
+                    Logger.error(`Animation '${animation.id}' not found in mesh '${this._props.url}':`, this.getClassName())
                   }
                 })
                 const mesh = entries.rootNodes[0] as BABYLON.Mesh
-                mesh.name = 'Mesh - ' + this.props.url
+                mesh.name = 'Mesh - ' + this._props.url
                 this.setMesh(mesh)
               }
             }
@@ -79,16 +79,16 @@ export function Mesh(props: MeshProps = {}): any {
         }
 
         getClassName(): string {
-          return this.className ?? className
+          return this._className ?? className
         }
 
-        props: MeshProps
-        className: string
+        _props: MeshProps
+        _className: string
         babylon: Pick<BabylonAccessor, 'mesh' | 'scene'> = { mesh: null as any, scene: null as any }
-        animation: MeshAnimation | null = null
-        animations: Map<FlexId, MeshAnimation> = new Map<FlexId, MeshAnimation>()
-        loopUpdate$: BABYLON.Observer<number>
-        canvasResize$: BABYLON.Observer<Rect>
+        _animation: MeshAnimation | null = null
+        _animations: Map<FlexId, MeshAnimation> = new Map<FlexId, MeshAnimation>()
+        _loopUpdate$: BABYLON.Observer<number>
+        _canvasResize$: BABYLON.Observer<Rect>
         _loopUpdate = false
 
         set loopUpdate(value: boolean) {
@@ -146,20 +146,20 @@ export function Mesh(props: MeshProps = {}): any {
 
         setMesh(babylonMesh: BABYLON.Mesh | BABYLON.InstancedMesh): void {
           if (this.babylon.mesh) {
-            this.release()
+            this._release()
           }
           this.babylon.mesh = babylonMesh
           this.enabled = true
         }
 
         setFrame(frame: number) {
-          this.animation?.animationGroup.goToFrame(frame)
+          this._animation?.animationGroup.goToFrame(frame)
         }
 
-        animationCreateEvent(aniGroup: BABYLON.AnimationGroup): BABYLON.Animation {
+        _animationCreateEvent(aniGroup: BABYLON.AnimationGroup): BABYLON.Animation {
           const eventAni = aniGroup.targetedAnimations[0].animation.clone()
           eventAni.name = `Keyframes - ${aniGroup.name}`
-          const tmpTarget = this.animationCreateTemporalTarget(eventAni)
+          const tmpTarget = this._animationCreateTemporalTarget(eventAni)
           aniGroup.addTargetedAnimation(eventAni, {
             name: 'events',
             ...tmpTarget
@@ -167,7 +167,7 @@ export function Mesh(props: MeshProps = {}): any {
           return eventAni
         }
 
-        animationCreateTemporalTarget(ani: BABYLON.Animation) {
+        _animationCreateTemporalTarget(ani: BABYLON.Animation) {
           switch (ani.dataType) {
           case BABYLON.Animation.ANIMATIONTYPE_COLOR3:
             return { [ani.targetPropertyPath[0]]: BABYLON.Color3.White() }
@@ -191,51 +191,51 @@ export function Mesh(props: MeshProps = {}): any {
         }
 
         addAnimation(animation: MeshAnimation): void {
-          if (this.animations.get(animation.id)) { Logger.debugError(`Trying to add mesh animation '${animation.id}' that has been already added:`, this.getClassName()) }
+          if (this._animations.get(animation.id)) { Logger.debugError(`Trying to add mesh animation '${animation.id}' that has been already added:`, this.getClassName()) }
           if (animation?.keyFrames && animation.keyFrames.length > 0) {
             animation.keyFrames.forEach(keyFrame => {
               keyFrame.frames.forEach(frame => {
                 keyFrame.emitter = new BABYLON.Observable<void>()
-                const eventAni = this.animationCreateEvent(animation.animationGroup)
+                const eventAni = this._animationCreateEvent(animation.animationGroup)
                 const aniEvent = new BABYLON.AnimationEvent(frame, () => keyFrame.emitter.notifyObservers())
                 eventAni.addEvent(aniEvent)
               })
             })
           }
-          this.animations.set(animation.id, animation)
+          this._animations.set(animation.id, animation)
         }
 
         playAnimation(animationId: FlexId, options?: MeshAnimationOptions, completed?: () => void): BABYLON.AnimationGroup {
-          if (!this.animations.get(animationId)) { Logger.debugError(`Animation '${animationId}' not found in mesh '${this.props.url}':`, this.getClassName()) }
-          this.animation = this.animations.get(animationId) as any
-          if (this.animation) {
-            const loop = (options?.loop !== undefined ? options.loop : this.animation.loop) ?? false
-            this.animation.animationGroup.start(loop, options?.speedRatio, options?.from, options?.to, options?.isAdditive)
+          if (!this._animations.get(animationId)) { Logger.debugError(`Animation '${animationId}' not found in mesh '${this._props.url}':`, this.getClassName()) }
+          this._animation = this._animations.get(animationId) as any
+          if (this._animation) {
+            const loop = (options?.loop !== undefined ? options.loop : this._animation.loop) ?? false
+            this._animation.animationGroup.start(loop, options?.speedRatio, options?.from, options?.to, options?.isAdditive)
             if (completed) {
               if (loop) {
-                this.animation.animationGroup.onAnimationGroupLoopObservable.add(() => completed())
+                this._animation.animationGroup.onAnimationGroupLoopObservable.add(() => completed())
               } else {
-                this.animation.animationGroup.onAnimationGroupEndObservable.add(() => completed())
+                this._animation.animationGroup.onAnimationGroupEndObservable.add(() => completed())
               }
             }
-            return this.animation.animationGroup
+            return this._animation.animationGroup
           } else {
             return null as any
           }
         }
 
         stopAnimation(): void {
-          if (this.animation) {
-            this.animation.animationGroup.stop()
-            this.animation.animationGroup.onAnimationGroupLoopObservable.clear()
-            this.animation.animationGroup.onAnimationGroupEndObservable.clear()
-            this.animation = null
+          if (this._animation) {
+            this._animation.animationGroup.stop()
+            this._animation.animationGroup.onAnimationGroupLoopObservable.clear()
+            this._animation.animationGroup.onAnimationGroupEndObservable.clear()
+            this._animation = null
           }
         }
 
         subscribeToKeyframe(keyframeId: FlexId, callback: () => void): BABYLON.Observer<void>[] {
           const observers: BABYLON.Observer<void>[] = []
-          this.animations.forEach(animation => {
+          this._animations.forEach(animation => {
             animation.keyFrames?.filter(keyframe => keyframe.id === keyframeId)
               .forEach(keyframe => observers.push(keyframe.emitter.add(callback)))
           })
@@ -243,17 +243,17 @@ export function Mesh(props: MeshProps = {}): any {
         }
 
         clearKeyframeSubscriptions(keyframeId: FlexId): void {
-          this.animations.forEach(animation => {
+          this._animations.forEach(animation => {
             animation.keyFrames
               ?.filter(keyframe => keyframe.id === keyframeId)
               .forEach(keyframe => keyframe.emitter.clear())
           })
         }
 
-        release(): void {
+        _release(): void {
           invokeCallback(this.onDestroy, this)
           this.stopAnimation()
-          this.animations.forEach(animation => animation.animationGroup.dispose())
+          this._animations.forEach(animation => animation.animationGroup.dispose())
           this.babylon.mesh.dispose()
           removeLoopUpdate(this)
           removeCanvasResize(this)
@@ -327,7 +327,7 @@ export function Mesh(props: MeshProps = {}): any {
     ) && !descriptor) { // Undefined descriptor means it is a decorated property, otherwiese it is a decorated method
       @Mesh(props)
       abstract class _meshInterface extends MeshInterface {
-        className = contextOrProperty as any
+        _className = contextOrProperty as any
       }
       // TODO: Store the 'className' to debug it in logs.
 

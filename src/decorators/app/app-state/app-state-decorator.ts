@@ -30,19 +30,19 @@ export function AppState(props: AppStateProps = {}): any {
     const _classInterface = class extends constructor implements AppStateInterface {
       constructor(props: AppStateProps) {
         super()
-        this.props = props
-        this.metadata.applyProps(this)
+        this._props = props
+        this._metadata.applyProps(this)
       }
 
       getClassName(): string {
         return className
       }
 
-      props: AppStateProps
-      metadata: Metadata = Reflect.getMetadata('metadata', this) ?? new Metadata()
+      _props: AppStateProps
+      _metadata: Metadata = Reflect.getMetadata('metadata', this) ?? new Metadata()
       _loopUpdate = true
-      loopUpdate$: BABYLON.Observer<number>
-      canvasResize$: BABYLON.Observer<Rect>
+      _loopUpdate$: BABYLON.Observer<number>
+      _canvasResize$: BABYLON.Observer<Rect>
       setup: any
       guis: Set<GUIInterface> = new Set<GUIInterface>()
 
@@ -53,7 +53,7 @@ export function AppState(props: AppStateProps = {}): any {
 
       get loopUpdate(): boolean { return this._loopUpdate }
 
-      start(): void {
+      _start(): void {
         Logger.debug('AppState start', this.getClassName())
         // this.guisStart()
         invokeCallback(this.onStart, this)
@@ -61,7 +61,7 @@ export function AppState(props: AppStateProps = {}): any {
         attachCanvasResize(this)
       }
 
-      end(): void {
+      _end(): void {
         // this.guisRelease()
         removeLoopUpdate(this)
         removeCanvasResize(this)
@@ -82,7 +82,7 @@ export function AppState(props: AppStateProps = {}): any {
       // }
 
       notify(message: FlexId, ...args: any[]): void {
-        const definition = this.metadata.notifiers.get(message)
+        const definition = this._metadata.notifiers.get(message)
         if (definition) {
           this[definition.methodName](...args)
         }

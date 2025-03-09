@@ -32,22 +32,22 @@ export function ActorAction(props: ActorActionProps = {}): any {
         constructor(actor: ActorInterface) {
           super()
           this.actor = actor
-          this.metadata.applyProps(this)
+          this._metadata.applyProps(this)
         }
 
         getClassName(): string {
-          return this.className ?? className
+          return this._className ?? className
         }
 
-        props = props
-        className: string
+        _props = props
+        _className: string
         actor: ActorInterface
         scene: SceneInterface
-        metadata: Metadata = Reflect.getMetadata('metadata', this) ?? new Metadata()
-        countFramesUpdate$: BABYLON.Observer<number> | null = null
-        countFrames = 0
-        loopUpdate$: BABYLON.Observer<number>
-        canvasResize$: BABYLON.Observer<Rect>
+        _metadata: Metadata = Reflect.getMetadata('metadata', this) ?? new Metadata()
+        _countFramesUpdate$: BABYLON.Observer<number> | null = null
+        _countFrames = 0
+        _loopUpdate$: BABYLON.Observer<number>
+        _canvasResize$: BABYLON.Observer<Rect>
         setup: any
         _loopUpdate = true
         _isPlaying = false
@@ -61,17 +61,17 @@ export function ActorAction(props: ActorActionProps = {}): any {
 
         get isPlaying(): boolean { return this._isPlaying }
 
-        start(setup: any): void {
+        _start(setup: any): void {
           this.scene = this.actor.scene
           this.setup = setup
           this._isPlaying = true
-          if (this.props.countFrames) {
-            this.countFramesUpdate$ = Core.loopUpdateAddObserver((delta: number) => {
-              this.countFrames += delta
-              if (this.countFrames > (this.props.countFrames as any)) {
-                this.countFramesUpdate$?.remove()
-                this.countFramesUpdate$ = null
-                this.countFrames = 0
+          if (this._props.countFrames) {
+            this._countFramesUpdate$ = Core.loopUpdateAddObserver((delta: number) => {
+              this._countFrames += delta
+              if (this._countFrames > (this._props.countFrames as any)) {
+                this._countFramesUpdate$?.remove()
+                this._countFramesUpdate$ = null
+                this._countFrames = 0
                 this.stop()
               }
             })
@@ -82,7 +82,7 @@ export function ActorAction(props: ActorActionProps = {}): any {
         }
 
         play(): void {
-          if (!this.props.preserve) { Logger.debugError('Cannot play an action which is not preserved in context.', this.getClassName()) }
+          if (!this._props.preserve) { Logger.debugError('Cannot play an action which is not preserved in context.', this.getClassName()) }
           if (!this.isPlaying) {
             this._isPlaying = true
             switchLoopUpdate(this._loopUpdate, this)
@@ -92,12 +92,12 @@ export function ActorAction(props: ActorActionProps = {}): any {
         }
 
         stop(): void {
-          this.actor.stopActionFromInstance(this)
+          this.actor._stopActionFromInstance(this)
         }
 
         remove(): void {
           this._isPlaying = false
-          this.actor.stopActionFromInstance(this, true)
+          this.actor._stopActionFromInstance(this, true)
         }
       }
       const _classCore = class implements ActorActionCore {
@@ -107,21 +107,21 @@ export function ActorAction(props: ActorActionProps = {}): any {
         load(scene: SceneInterface): LoadingProgress {
           return new LoadingProgress().fromNodes([
             SpritesController.load(this.props.sprites, scene),
-            SpritesController.load(this.Instance.metadata.getProps().sprites, scene),
+            SpritesController.load(this.Instance._metadata.getProps().sprites, scene),
             MeshesController.load(this.props.meshes, scene),
-            MeshesController.load(this.Instance.metadata.getProps().meshes, scene),
+            MeshesController.load(this.Instance._metadata.getProps().meshes, scene),
             ParticlesController.load(this.props.particles, scene),
-            ParticlesController.load(this.Instance.metadata.getProps().particles, scene)
+            ParticlesController.load(this.Instance._metadata.getProps().particles, scene)
           ])
         }
 
         unload(scene: SceneInterface): void {
           SpritesController.unload(this.props.sprites, scene)
-          SpritesController.unload(this.Instance.metadata.getProps().sprites, scene)
+          SpritesController.unload(this.Instance._metadata.getProps().sprites, scene)
           MeshesController.unload(this.props.meshes, scene)
-          MeshesController.unload(this.Instance.metadata.getProps().meshes, scene)
+          MeshesController.unload(this.Instance._metadata.getProps().meshes, scene)
           ParticlesController.unload(this.props.particles, scene)
-          ParticlesController.unload(this.Instance.metadata.getProps().particles, scene)
+          ParticlesController.unload(this.Instance._metadata.getProps().particles, scene)
         }
 
         spawn(actor: ActorInterface): ActorActionInterface {
@@ -146,7 +146,7 @@ export function ActorAction(props: ActorActionProps = {}): any {
     ) && descriptor) { // Defined descriptor means it is a method
       @ActorAction(props)
       abstract class _actionInterface extends ActorActionInterface {
-        className = contextOrMethod as any
+        _className = contextOrMethod as any
         onLoopUpdate = descriptor.value
       }
 

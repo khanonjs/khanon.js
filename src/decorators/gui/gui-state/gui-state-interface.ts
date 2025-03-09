@@ -8,13 +8,13 @@ import { GUIInterface } from '../gui-interface'
 import { GUIStateProps } from './gui-state-props'
 
 export abstract class GUIStateInterface<S = any, C = GUIInterface> implements StateInterface<S> {
-  abstract props: GUIStateProps
-  abstract metadata: Metadata
+  abstract _props: GUIStateProps
+  abstract _metadata: Metadata
   abstract _loopUpdate: boolean
-  abstract loopUpdate$: BABYLON.Observer<number>
-  abstract canvasResize$: BABYLON.Observer<Rect>
-  abstract start(setup: any): void
-  abstract end(): void
+  abstract _loopUpdate$: BABYLON.Observer<number>
+  abstract _canvasResize$: BABYLON.Observer<Rect>
+  abstract _start(setup: any): void
+  abstract _end(): void
 
   /**
    * User available

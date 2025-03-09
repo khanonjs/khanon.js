@@ -31,7 +31,7 @@ import { SceneStateConstructor } from './scene-state/scene-state-constructor'
 import { SceneStateInterface } from './scene-state/scene-state-interface'
 
 export abstract class SceneInterface implements Loadable, LoopUpdatable, CanvasResizable, Notificable {
-  abstract props: SceneProps
+  abstract _props: SceneProps
   abstract _assets: AssetDefinition[]
   abstract _loaded: boolean
   abstract _loadingProgress: LoadingProgress | undefined
@@ -44,28 +44,27 @@ export abstract class SceneInterface implements Loadable, LoopUpdatable, CanvasR
   abstract _cameraSetup: any
   abstract _loopUpdate: boolean
   abstract _debugInspector: (event: KeyboardEvent) => void
-  abstract availableElements: SceneAvailableElements
-  abstract assets: AssetDefinition[]
-  abstract metadata: Metadata
-  abstract loopUpdate$: BABYLON.Observer<number>
-  abstract canvasResize$: BABYLON.Observer<Rect>
-  abstract animationHandler: Map<SpriteInterface, () => void>
-  abstract actions: Map<SceneActionConstructor, SceneActionInterface>
-  abstract actors: Set<ActorInterface>
-  abstract meshes: Set<MeshInterface>
-  abstract sprites: Set<SpriteInterface>
-  abstract particles: Set<ParticleInterface>
-  abstract guis: Map<GUIConstructor, GUIInterface>
-  abstract releaseGUIs(): void
-  abstract setEngineParams(): void // TODO ?
-  abstract playActionFromInstance(instance: SceneActionInterface): void
-  abstract stopActionFromInstance(instance: SceneActionInterface, forceRemove?: boolean): void
-  abstract setAnimationHandler(sprite: SpriteInterface, animation: SpriteAnimation): void
-  abstract stopAnimationHandler(sprite: SpriteInterface): void
-  abstract startRenderObservable(): void
-  abstract stopRenderObservable(): void
-  abstract useDebugInspector(): void
-  abstract denyDebugInspector(): void
+  abstract _availableElements: SceneAvailableElements
+  abstract _metadata: Metadata
+  abstract _loopUpdate$: BABYLON.Observer<number>
+  abstract _canvasResize$: BABYLON.Observer<Rect>
+  abstract _animationHandler: Map<SpriteInterface, () => void>
+  abstract _actions: Map<SceneActionConstructor, SceneActionInterface>
+  abstract _actors: Set<ActorInterface>
+  abstract _meshes: Set<MeshInterface>
+  abstract _sprites: Set<SpriteInterface>
+  abstract _particles: Set<ParticleInterface>
+  abstract _guis: Map<GUIConstructor, GUIInterface>
+  abstract _releaseGUIs(): void
+  abstract _setEngineParams(): void // TODO ?
+  abstract _playActionFromInstance(instance: SceneActionInterface): void
+  abstract _stopActionFromInstance(instance: SceneActionInterface, forceRemove?: boolean): void
+  abstract _setAnimationHandler(sprite: SpriteInterface, animation: SpriteAnimation): void
+  abstract _stopAnimationHandler(sprite: SpriteInterface): void
+  abstract _startRenderObservable(): void
+  abstract _stopRenderObservable(): void
+  abstract _useDebugInspector(): void
+  abstract _denyDebugInspector(): void
 
   /**
    * User available

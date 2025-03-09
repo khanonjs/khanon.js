@@ -13,12 +13,12 @@ import { SceneInterface } from '../scene/scene-interface'
 
 export abstract class CameraInterface<S = any, C extends SceneInterface = SceneInterface> implements LoopUpdatable, CanvasResizable, Notificable {
   abstract _loopUpdate: boolean
-  abstract metadata: Metadata
-  abstract loopUpdate$: BABYLON.Observer<number>
-  abstract canvasResize$: BABYLON.Observer<Rect>
-  abstract start(): void
-  abstract stop(): void
-  abstract release(): void
+  abstract _metadata: Metadata
+  abstract _loopUpdate$: BABYLON.Observer<number>
+  abstract _canvasResize$: BABYLON.Observer<Rect>
+  abstract _start(): void
+  abstract _stop(): void
+  abstract _release(): void
 
   /**
    * User available

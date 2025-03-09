@@ -38,7 +38,7 @@ export function GUI(props: GUIProps = {}): any {
       constructor(readonly scene: SceneInterface, props: GUIProps) {
         super()
         this.props = props
-        this.metadata.applyProps(this)
+        this._metadata.applyProps(this)
       }
 
       getClassName(): string {
@@ -46,12 +46,12 @@ export function GUI(props: GUIProps = {}): any {
       }
 
       props: GUIProps
-      metadata: Metadata = Reflect.getMetadata('metadata', this) ?? new Metadata()
+      _metadata: Metadata = Reflect.getMetadata('metadata', this) ?? new Metadata()
       babylon: Pick<BabylonAccessor<BABYLON.Camera>, 'gui'> = { gui: null as any }
       setup: any
       _loopUpdate = true
-      loopUpdate$: BABYLON.Observer<number>
-      canvasResize$: BABYLON.Observer<Rect>
+      _loopUpdate$: BABYLON.Observer<number>
+      _canvasResize$: BABYLON.Observer<Rect>
       // _state: GUIStateInterface | null = null
       particles: Map<FlexId, ParticleInterface> = new Map<FlexId, ParticleInterface>()
 
@@ -63,7 +63,7 @@ export function GUI(props: GUIProps = {}): any {
       get loopUpdate(): boolean { return this._loopUpdate }
       // get state(): GUIStateInterface | null { return this._state }
 
-      initialize(setup: any) {
+      _initialize(setup: any) {
         this.babylon.gui = BABYLONGUI.AdvancedDynamicTexture.CreateFullscreenUI('')
         this.setup = setup
         switchLoopUpdate(this._loopUpdate, this)
@@ -71,7 +71,7 @@ export function GUI(props: GUIProps = {}): any {
         invokeCallback(this.onInitialize, this, this.babylon.gui)
       }
 
-      release() {
+      _release() {
         invokeCallback(this.onDestroy, this)
         this.babylon.gui?.dispose()
         removeLoopUpdate(this)
@@ -95,7 +95,7 @@ export function GUI(props: GUIProps = {}): any {
       // }
 
       notify(message: FlexId, ...args: any[]): void {
-        const definition = this.metadata.notifiers.get(message)
+        const definition = this._metadata.notifiers.get(message)
         if (definition) {
           this[definition.methodName](...args)
         }

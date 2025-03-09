@@ -9,11 +9,11 @@ import { Metadata } from '../metadata/metadata'
 // TODO: Use mixings for derived classes and use a single implementation!!
 
 export abstract class ActionInterface<S = any> implements LoopUpdatable, CanvasResizable {
-  abstract metadata: Metadata
+  abstract _metadata: Metadata
   abstract _loopUpdate: boolean
-  abstract loopUpdate$: BABYLON.Observer<number>
-  abstract canvasResize$: BABYLON.Observer<Rect>
-  abstract start(setup: S): void
+  abstract _loopUpdate$: BABYLON.Observer<number>
+  abstract _canvasResize$: BABYLON.Observer<Rect>
+  abstract _start(setup: S): void
 
   /**
    * User available

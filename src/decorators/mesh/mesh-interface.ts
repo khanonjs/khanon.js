@@ -16,20 +16,16 @@ import { MeshAnimationOptions } from './mesh-animation-options'
 import { MeshProps } from './mesh-props'
 
 export abstract class MeshInterface implements DisplayObject, LoopUpdatable, CanvasResizable {
-  abstract props: MeshProps
-  abstract className: string
+  abstract _props: MeshProps
+  abstract _className: string
   abstract _loopUpdate: boolean
-  abstract loopUpdate$: BABYLON.Observer<number>
-  abstract canvasResize$: BABYLON.Observer<Rect>
-  abstract animationCreateEvent(aniGroup: BABYLON.AnimationGroup): BABYLON.Animation
-  abstract animationCreateTemporalTarget(ani: BABYLON.Animation): void
-
-  /**
-   * Display Object
-   */
-  abstract animation: MeshAnimation | null
-  abstract animations: Map<FlexId, MeshAnimation>
-  abstract release(): void
+  abstract _loopUpdate$: BABYLON.Observer<number>
+  abstract _canvasResize$: BABYLON.Observer<Rect>
+  abstract _animationCreateEvent(aniGroup: BABYLON.AnimationGroup): BABYLON.Animation
+  abstract _animationCreateTemporalTarget(ani: BABYLON.Animation): void
+  abstract _animation: MeshAnimation | null
+  abstract _animations: Map<FlexId, MeshAnimation>
+  abstract _release(): void
 
   /**
    * User available
