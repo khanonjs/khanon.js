@@ -56,7 +56,7 @@ export function GUIState(props: GUIStateProps = {}): any {
 
       get loopUpdate(): boolean { return this._loopUpdate }
 
-      start(setup: any): void {
+      _start(setup: any): void {
         Logger.debug('GUIState start', this.getClassName(), this.gui.getClassName())
         this.setup = setup
         invokeCallback(this.onStart, this)

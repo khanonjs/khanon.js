@@ -92,7 +92,7 @@ export function SceneState(props: SceneStateProps = {}): any {
         this.scene.switchState(state, setup)
       }
 
-      start(setup: any): void {
+      _start(setup: any): void {
         Logger.debug('SceneState start', this.getClassName(), this.scene.getClassName())
         this.setup = setup
         invokeCallback(this.onStart, this)

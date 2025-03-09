@@ -63,7 +63,7 @@ export function ActorState(props: ActorStateProps = {}): any {
         return this.actor.switchState(state, setup)
       }
 
-      start(): void {
+      _start(): void {
         Logger.debug('ActorState start', this.getClassName(), this.actor.getClassName())
         invokeCallback(this.onStart, this)
         switchLoopUpdate(this._loopUpdate, this)

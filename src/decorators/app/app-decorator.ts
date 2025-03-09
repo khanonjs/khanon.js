@@ -41,7 +41,7 @@ export function App(props: AppProps): any {
         this._state = this._stateCore.spawn()
         const progress = this._stateCore.load()
         progress.onComplete.add(() => {
-          this._state?.start(setup)
+          this._state?._start(setup)
         })
         return progress
       }

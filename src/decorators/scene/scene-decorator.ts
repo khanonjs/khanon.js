@@ -375,7 +375,7 @@ export function Scene(props: SceneProps = {}): any {
           this._state._end()
         }
         this._state = _state
-        this._state.start(setup)
+        this._state._start(setup)
         return this._state
       }
 

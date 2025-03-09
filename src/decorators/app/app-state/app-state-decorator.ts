@@ -53,7 +53,7 @@ export function AppState(props: AppStateProps = {}): any {
 
       get loopUpdate(): boolean { return this._loopUpdate }
 
-      start(): void {
+      _start(): void {
         Logger.debug('AppState start', this.getClassName())
         // this.guisStart()
         invokeCallback(this.onStart, this)

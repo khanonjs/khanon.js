@@ -22,7 +22,7 @@ export abstract class SceneStateInterface<S = any, C = SceneInterface> implement
   abstract _canvasResize$: BABYLON.Observer<Rect>
   abstract _spawn: SceneSpawn
   abstract _remove: SceneRemove
-  abstract start(setup: any): void
+  abstract _start(setup: any): void
   abstract _end(): void
 
   /**

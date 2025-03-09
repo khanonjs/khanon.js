@@ -257,7 +257,7 @@ export function Actor(props: ActorProps = {}): any {
           this._state._end()
         }
         this._state = _state
-        this._state.start(setup)
+        this._state._start(setup)
         return this._state
       }
 
