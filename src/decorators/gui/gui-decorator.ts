@@ -51,7 +51,7 @@ export function GUI(props: GUIProps = {}): any {
       setup: any
       _loopUpdate = true
       loopUpdate$: BABYLON.Observer<number>
-      canvasResize$: BABYLON.Observer<Rect>
+      _canvasResize$: BABYLON.Observer<Rect>
       // _state: GUIStateInterface | null = null
       particles: Map<FlexId, ParticleInterface> = new Map<FlexId, ParticleInterface>()
 

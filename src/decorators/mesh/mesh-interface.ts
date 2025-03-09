@@ -20,7 +20,7 @@ export abstract class MeshInterface implements DisplayObject, LoopUpdatable, Can
   abstract className: string
   abstract _loopUpdate: boolean
   abstract loopUpdate$: BABYLON.Observer<number>
-  abstract canvasResize$: BABYLON.Observer<Rect>
+  abstract _canvasResize$: BABYLON.Observer<Rect>
   abstract animationCreateEvent(aniGroup: BABYLON.AnimationGroup): BABYLON.Animation
   abstract animationCreateTemporalTarget(ani: BABYLON.Animation): void
 

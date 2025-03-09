@@ -48,7 +48,7 @@ export abstract class SceneInterface implements Loadable, LoopUpdatable, CanvasR
   abstract assets: AssetDefinition[]
   abstract metadata: Metadata
   abstract loopUpdate$: BABYLON.Observer<number>
-  abstract canvasResize$: BABYLON.Observer<Rect>
+  abstract _canvasResize$: BABYLON.Observer<Rect>
   abstract animationHandler: Map<SpriteInterface, () => void>
   abstract actions: Map<SceneActionConstructor, SceneActionInterface>
   abstract actors: Set<ActorInterface>

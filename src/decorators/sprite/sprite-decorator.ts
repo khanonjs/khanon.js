@@ -74,7 +74,7 @@ export function Sprite(props: SpriteProps): any {
         animations: Map<FlexId, SpriteAnimation> = new Map<FlexId, SpriteAnimation>()
         babylon: Pick<BabylonAccessor, 'mesh' | 'scene'> = { scene: null as any, mesh: null as any }
         loopUpdate$: BABYLON.Observer<number>
-        canvasResize$: BABYLON.Observer<Rect>
+        _canvasResize$: BABYLON.Observer<Rect>
         keyFramesTimeouts: Timeout[] = []
         endAnimationTimerInterval: Timeout | null
         endAnimationTimerTimeout: Timeout | null

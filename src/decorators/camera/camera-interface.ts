@@ -15,7 +15,7 @@ export abstract class CameraInterface<S = any, C extends SceneInterface = SceneI
   abstract _loopUpdate: boolean
   abstract metadata: Metadata
   abstract loopUpdate$: BABYLON.Observer<number>
-  abstract canvasResize$: BABYLON.Observer<Rect>
+  abstract _canvasResize$: BABYLON.Observer<Rect>
   abstract start(): void
   abstract stop(): void
   abstract release(): void

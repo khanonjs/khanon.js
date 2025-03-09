@@ -53,7 +53,7 @@ export function SceneState(props: SceneStateProps = {}): any {
       setup: any
       _loopUpdate = true
       loopUpdate$: BABYLON.Observer<number>
-      canvasResize$: BABYLON.Observer<Rect>
+      _canvasResize$: BABYLON.Observer<Rect>
       _spawn: SceneSpawn
       _remove: SceneRemove
       metadata: Metadata = Reflect.getMetadata('metadata', this) ?? new Metadata()

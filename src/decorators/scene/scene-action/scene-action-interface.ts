@@ -11,7 +11,7 @@ export abstract class SceneActionInterface<S = any, C extends SceneInterface = S
   abstract metadata: Metadata
   abstract _loopUpdate: boolean
   abstract loopUpdate$: BABYLON.Observer<number>
-  abstract canvasResize$: BABYLON.Observer<Rect>
+  abstract _canvasResize$: BABYLON.Observer<Rect>
   abstract start(setup: S): void
 
   /**

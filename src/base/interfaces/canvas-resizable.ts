@@ -3,7 +3,7 @@ import * as BABYLON from '@babylonjs/core'
 import { Rect } from '../../models/rect'
 
 export abstract class CanvasResizable {
-  abstract canvasResize$: BABYLON.Observer<Rect>
+  abstract _canvasResize$: BABYLON.Observer<Rect>
 
   /**
    * USer defined

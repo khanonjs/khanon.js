@@ -88,7 +88,7 @@ export function Mesh(props: MeshProps = {}): any {
         animation: MeshAnimation | null = null
         animations: Map<FlexId, MeshAnimation> = new Map<FlexId, MeshAnimation>()
         loopUpdate$: BABYLON.Observer<number>
-        canvasResize$: BABYLON.Observer<Rect>
+        _canvasResize$: BABYLON.Observer<Rect>
         _loopUpdate = false
 
         set loopUpdate(value: boolean) {

@@ -16,7 +16,7 @@ export abstract class ActorActionInterface<S = any, A = ActorInterface<SpriteInt
   abstract countFrames: number
   abstract metadata: Metadata
   abstract loopUpdate$: BABYLON.Observer<number>
-  abstract canvasResize$: BABYLON.Observer<Rect>
+  abstract _canvasResize$: BABYLON.Observer<Rect>
   abstract _loopUpdate: boolean
   abstract _isPlaying: boolean
   abstract start(setup: S): void

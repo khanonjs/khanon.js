@@ -47,7 +47,7 @@ export function ActorAction(props: ActorActionProps = {}): any {
         countFramesUpdate$: BABYLON.Observer<number> | null = null
         countFrames = 0
         loopUpdate$: BABYLON.Observer<number>
-        canvasResize$: BABYLON.Observer<Rect>
+        _canvasResize$: BABYLON.Observer<Rect>
         setup: any
         _loopUpdate = true
         _isPlaying = false

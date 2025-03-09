@@ -42,7 +42,7 @@ export function AppState(props: AppStateProps = {}): any {
       metadata: Metadata = Reflect.getMetadata('metadata', this) ?? new Metadata()
       _loopUpdate = true
       loopUpdate$: BABYLON.Observer<number>
-      canvasResize$: BABYLON.Observer<Rect>
+      _canvasResize$: BABYLON.Observer<Rect>
       setup: any
       guis: Set<GUIInterface> = new Set<GUIInterface>()
 

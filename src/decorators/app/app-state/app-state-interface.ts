@@ -12,7 +12,7 @@ export abstract class AppStateInterface<S = any> implements StateInterface<S> {
   abstract metadata: Metadata
   abstract _loopUpdate: boolean
   abstract loopUpdate$: BABYLON.Observer<number>
-  abstract canvasResize$: BABYLON.Observer<Rect>
+  abstract _canvasResize$: BABYLON.Observer<Rect>
   // abstract guis: Set<GUIInterface>
   // abstract guisStart(): void
   // abstract guisRelease(): void

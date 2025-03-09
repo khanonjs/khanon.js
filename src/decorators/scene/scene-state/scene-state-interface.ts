@@ -19,10 +19,9 @@ export abstract class SceneStateInterface<S = any, C = SceneInterface> implement
   abstract metadata: Metadata
   abstract _loopUpdate: boolean
   abstract loopUpdate$: BABYLON.Observer<number>
-  abstract canvasResize$: BABYLON.Observer<Rect>
+  abstract _canvasResize$: BABYLON.Observer<Rect>
   abstract _spawn: SceneSpawn
   abstract _remove: SceneRemove
-  abstract getClassName(): string
   abstract start(setup: any): void
   abstract _end(): void
 
@@ -34,6 +33,7 @@ export abstract class SceneStateInterface<S = any, C = SceneInterface> implement
   abstract get spawn(): SceneSpawn
   abstract get remove(): SceneRemove
   abstract loopUpdate: boolean
+  abstract getClassName(): string
   abstract showGUI<G extends GUIInterface>(gui: GUIConstructor, setup: any): G
   abstract hideGUI(gui: GUIConstructor): void
   abstract getGUI<G extends GUIInterface>(gui: GUIConstructor): G | undefined

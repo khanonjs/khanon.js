@@ -55,7 +55,7 @@ export function Particle(props: ParticleProps): any {
         babylon: Pick<BabylonAccessor, 'scene' | 'particleSystem'> = { scene: null as any, particleSystem: null as any }
         _loopUpdate = true
         loopUpdate$: BABYLON.Observer<number>
-        canvasResize$: BABYLON.Observer<Rect>
+        _canvasResize$: BABYLON.Observer<Rect>
         attachmentUpdate$: BABYLON.Observer<number> | undefined
         animations: SpriteAnimation[] | null = null
         spriteProps: SpriteProps

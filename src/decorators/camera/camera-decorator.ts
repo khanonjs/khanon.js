@@ -40,7 +40,7 @@ export function Camera(props: CameraProps = {}): any {
       setup: any
       _loopUpdate = true
       loopUpdate$: BABYLON.Observer<number>
-      canvasResize$: BABYLON.Observer<Rect>
+      _canvasResize$: BABYLON.Observer<Rect>
 
       set loopUpdate(value: boolean) {
         this._loopUpdate = value
