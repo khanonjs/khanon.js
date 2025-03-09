@@ -41,20 +41,20 @@ export function Mesh(props: MeshProps = {}): any {
       const _classInterface = class extends constructorOrTarget implements MeshInterface {
         constructor(readonly scene: SceneInterface, props: MeshProps) {
           super()
-          this.props = props
+          this._props = props
           if (scene) {
             this.babylon.scene = this.scene.babylon.scene
-            if (this.props.url) {
+            if (this._props.url) {
               const assetContainer = core.assetContainers.get(scene)
-              if (!assetContainer) { Logger.debugError(`AssetContainer mesh '${this.props.url}' not for spawn:`, this.getClassName(), scene.getClassName()) }
+              if (!assetContainer) { Logger.debugError(`AssetContainer mesh '${this._props.url}' not for spawn:`, this.getClassName(), scene.getClassName()) }
               if (assetContainer) {
                 const entries = assetContainer.instantiateModelsToScene((name) => name, undefined, {
-                  doNotInstantiate: !this.props.cloneByInstances
+                  doNotInstantiate: !this._props.cloneByInstances
                 })
-                this.props.animations?.forEach(animation => {
+                this._props.animations?.forEach(animation => {
                   const animationGroup = entries.animationGroups.find(animationGroup => animation.id === animationGroup.name)
                   if (animationGroup) {
-                    const definedAnim = this.props.animations?.find(_anim => _anim.id === animationGroup.name)
+                    const definedAnim = this._props.animations?.find(_anim => _anim.id === animationGroup.name)
                     if (definedAnim) {
                       this.addAnimation({
                         id: animationGroup.name,
@@ -64,11 +64,11 @@ export function Mesh(props: MeshProps = {}): any {
                       })
                     }
                   } else {
-                    Logger.error(`Animation '${animation.id}' not found in mesh '${this.props.url}':`, this.getClassName())
+                    Logger.error(`Animation '${animation.id}' not found in mesh '${this._props.url}':`, this.getClassName())
                   }
                 })
                 const mesh = entries.rootNodes[0] as BABYLON.Mesh
-                mesh.name = 'Mesh - ' + this.props.url
+                mesh.name = 'Mesh - ' + this._props.url
                 this.setMesh(mesh)
               }
             }
@@ -82,7 +82,7 @@ export function Mesh(props: MeshProps = {}): any {
           return this.className ?? className
         }
 
-        props: MeshProps
+        _props: MeshProps
         className: string
         babylon: Pick<BabylonAccessor, 'mesh' | 'scene'> = { mesh: null as any, scene: null as any }
         animation: MeshAnimation | null = null
@@ -206,7 +206,7 @@ export function Mesh(props: MeshProps = {}): any {
         }
 
         playAnimation(animationId: FlexId, options?: MeshAnimationOptions, completed?: () => void): BABYLON.AnimationGroup {
-          if (!this.animations.get(animationId)) { Logger.debugError(`Animation '${animationId}' not found in mesh '${this.props.url}':`, this.getClassName()) }
+          if (!this.animations.get(animationId)) { Logger.debugError(`Animation '${animationId}' not found in mesh '${this._props.url}':`, this.getClassName()) }
           this.animation = this.animations.get(animationId) as any
           if (this.animation) {
             const loop = (options?.loop !== undefined ? options.loop : this.animation.loop) ?? false

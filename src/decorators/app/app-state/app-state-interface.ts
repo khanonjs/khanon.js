@@ -8,7 +8,7 @@ import { FlexId } from '../../../types/flex-id'
 import { AppStateProps } from './app-state-props'
 
 export abstract class AppStateInterface<S = any> implements StateInterface<S> {
-  abstract props: AppStateProps
+  abstract _props: AppStateProps
   abstract _metadata: Metadata
   abstract _loopUpdate: boolean
   abstract _loopUpdate$: BABYLON.Observer<number>

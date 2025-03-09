@@ -31,7 +31,7 @@ import { SceneStateConstructor } from './scene-state/scene-state-constructor'
 import { SceneStateInterface } from './scene-state/scene-state-interface'
 
 export abstract class SceneInterface implements Loadable, LoopUpdatable, CanvasResizable, Notificable {
-  abstract props: SceneProps
+  abstract _props: SceneProps
   abstract _assets: AssetDefinition[]
   abstract _loaded: boolean
   abstract _loadingProgress: LoadingProgress | undefined

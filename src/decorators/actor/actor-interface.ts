@@ -32,7 +32,7 @@ import { ActorStateInterface } from './actor-state/actor-state-interface'
 // TODO add animation system, that animates body and nodes depending on what they are
 export abstract class ActorInterface<B extends SpriteInterface | MeshInterface = any> implements LoopUpdatable, CanvasResizable, Notificable {
   abstract _metadata: Metadata
-  abstract props: ActorProps
+  abstract _props: ActorProps
   abstract _loopUpdate: boolean
   abstract _loopUpdate$: BABYLON.Observer<number>
   abstract _canvasResize$: BABYLON.Observer<Rect>

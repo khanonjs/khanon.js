@@ -16,7 +16,7 @@ export function App(props: AppProps): any {
   return function <T extends { new (...args: any[]): AppInterface }>(constructor: T & AppInterface, context: ClassDecoratorContext) {
     const className = constructor.name
     const _class = class extends constructor implements AppInterface {
-      props = applyDefaults(props, appPropsDefault)
+      _props = applyDefaults(props, appPropsDefault)
       _metadata: Metadata = Reflect.getMetadata('metadata', this) ?? new Metadata()
       _stateCore: AppStateCore
       _state: AppStateInterface | null = null
@@ -34,7 +34,7 @@ export function App(props: AppProps): any {
           this._stateCore.unload(newStateCore)
           // TODO For scene switch, before unloading the current one, look for assets from the next one. Do not delete assets that are in the next scene.
         }
-        if (this.props.removeTimeoutsOnStateSwitch) {
+        if (this._props.removeTimeoutsOnStateSwitch) {
           Core.clearAllTimeouts()
         }
         this._stateCore = newStateCore

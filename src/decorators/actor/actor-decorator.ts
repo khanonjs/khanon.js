@@ -61,7 +61,7 @@ export function Actor(props: ActorProps = {}): any {
         return className
       }
 
-      props: ActorProps
+      _props: ActorProps
       _metadata: Metadata = Reflect.getMetadata('metadata', this) ?? new Metadata()
       transform: SpriteInterface | MeshInterface | null
       t: SpriteInterface | MeshInterface | null
@@ -117,7 +117,7 @@ export function Actor(props: ActorProps = {}): any {
       }
 
       initialize(props: ActorProps) {
-        this.props = props
+        this._props = props
         // this.guisStart()
         invokeCallback(this.onSpawn, this)
         this.enabled = props.enabled ?? true
@@ -162,8 +162,8 @@ export function Actor(props: ActorProps = {}): any {
         }
         this._body = this.getNodeElement(Body)
         this._body.visibility = this.visibility
-        if (this.props.renderingGroupId) {
-          this._body.babylon.mesh.renderingGroupId = this.props.renderingGroupId
+        if (this._props.renderingGroupId) {
+          this._body.babylon.mesh.renderingGroupId = this._props.renderingGroupId
         }
         this.transform = this._body
         this.t = this.transform
@@ -198,8 +198,8 @@ export function Actor(props: ActorProps = {}): any {
 
           const node = { element, bone }
           this.nodes.set(name, node)
-          if (this.props.renderingGroupId) {
-            element.babylon.mesh.renderingGroupId = this.props.renderingGroupId
+          if (this._props.renderingGroupId) {
+            element.babylon.mesh.renderingGroupId = this._props.renderingGroupId
           }
           element.visibility = this._visibility
           if (transform?.position) {
@@ -283,7 +283,7 @@ export function Actor(props: ActorProps = {}): any {
         if (!action) {
           action = ActorActionsController.get(actionConstructor).spawn(this)
           let actionOwner: any
-          if (!this.props.actions?.find(_action => _action === actionConstructor)) {
+          if (!this._props.actions?.find(_action => _action === actionConstructor)) {
             // Applies context 'ActorInterface' or 'ActorStateInterface' to 'onLoopUpdate' method to preserve the 'this'
             // in case 'onLoopUpdate' is equivalent to a decorated method of some of those both interfaces.
             actionOwner = this.getActionOwner(actionConstructor)
@@ -397,8 +397,8 @@ export function Actor(props: ActorProps = {}): any {
           particle.onInitialize = particle.onInitialize?.bind(this)
           particle.create()
         }
-        if (this.props.renderingGroupId) {
-          particle.babylon.particleSystem.renderingGroupId = this.props.renderingGroupId
+        if (this._props.renderingGroupId) {
+          particle.babylon.particleSystem.renderingGroupId = this._props.renderingGroupId
         }
         // TODO visibility should affect to particles, is it possible?
         this.particles.set(id, particle)

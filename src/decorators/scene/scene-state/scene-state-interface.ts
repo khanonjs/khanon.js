@@ -15,7 +15,7 @@ import { SceneStateConstructor } from './scene-state-constructor'
 import { SceneStateProps } from './scene-state-props'
 
 export abstract class SceneStateInterface<S = any, C = SceneInterface> implements StateInterface<S> {
-  abstract props: SceneStateProps
+  abstract _props: SceneStateProps
   abstract _metadata: Metadata
   abstract _loopUpdate: boolean
   abstract _loopUpdate$: BABYLON.Observer<number>

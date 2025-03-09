@@ -17,7 +17,7 @@ import { ParticleAttachmentInfo } from './particle-attachment-info'
 import { ParticleProps } from './particle-props'
 
 export abstract class ParticleInterface implements LoopUpdatable, CanvasResizable, Notificable {
-  abstract props: ParticleProps
+  abstract _props: ParticleProps
   abstract className: string
   abstract _metadata: Metadata
   abstract _loopUpdate: boolean

@@ -18,7 +18,7 @@ import { SpriteMesh } from './sprite-mesh'
 import { SpriteProps } from './sprite-props'
 
 export abstract class SpriteInterface implements DisplayObject, LoopUpdatable, CanvasResizable {
-  abstract props: SpriteProps
+  abstract _props: SpriteProps
   abstract className: string
   abstract spriteMesh: SpriteMesh
   abstract _loopUpdate: boolean

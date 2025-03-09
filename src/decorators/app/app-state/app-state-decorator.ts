@@ -30,7 +30,7 @@ export function AppState(props: AppStateProps = {}): any {
     const _classInterface = class extends constructor implements AppStateInterface {
       constructor(props: AppStateProps) {
         super()
-        this.props = props
+        this._props = props
         this._metadata.applyProps(this)
       }
 
@@ -38,7 +38,7 @@ export function AppState(props: AppStateProps = {}): any {
         return className
       }
 
-      props: AppStateProps
+      _props: AppStateProps
       _metadata: Metadata = Reflect.getMetadata('metadata', this) ?? new Metadata()
       _loopUpdate = true
       _loopUpdate$: BABYLON.Observer<number>

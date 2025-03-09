@@ -37,7 +37,7 @@ export function SceneState(props: SceneStateProps = {}): any {
     const _classInterface = class extends constructor implements SceneStateInterface {
       constructor(readonly scene: SceneInterface, props: SceneStateProps) {
         super()
-        this.props = props
+        this._props = props
         if (this.scene) {
           this._spawn = this.scene.spawn
           this._remove = this.scene.remove
@@ -49,7 +49,7 @@ export function SceneState(props: SceneStateProps = {}): any {
         return className
       }
 
-      props: SceneStateProps
+      _props: SceneStateProps
       setup: any
       _loopUpdate = true
       _loopUpdate$: BABYLON.Observer<number>

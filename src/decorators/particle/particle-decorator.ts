@@ -41,7 +41,7 @@ export function Particle(props: ParticleProps): any {
       const _classInterface = class extends constructorOrTarget implements ParticleInterface {
         constructor(readonly scene: SceneInterface, props: ParticleProps, readonly attachmentInfo: ParticleAttachmentInfo) {
           super()
-          this.props = props
+          this._props = props
           this._metadata.applyProps(this)
         }
 
@@ -49,7 +49,7 @@ export function Particle(props: ParticleProps): any {
           return this.className ?? className
         }
 
-        props: ParticleProps
+        _props: ParticleProps
         className: string
         _metadata: Metadata = Reflect.getMetadata('metadata', this) ?? new Metadata()
         babylon: Pick<BabylonAccessor, 'scene' | 'particleSystem'> = { scene: null as any, particleSystem: null as any }
@@ -71,11 +71,11 @@ export function Particle(props: ParticleProps): any {
         create(): void {
           if (this.scene) {
             if (this.attachmentInfo.offset) {
-              this.offset = this.props.offset.add(this.attachmentInfo.offset)
+              this.offset = this._props.offset.add(this.attachmentInfo.offset)
             } else {
-              this.offset = this.props.offset.clone()
+              this.offset = this._props.offset.clone()
             }
-            this.babylon.particleSystem = new BABYLON.ParticleSystem(this.getClassName(), this.props.capacity, this.scene.babylon.scene)
+            this.babylon.particleSystem = new BABYLON.ParticleSystem(this.getClassName(), this._props.capacity, this.scene.babylon.scene)
             if (this.onInitialize) {
               this.onInitialize(this)
             }

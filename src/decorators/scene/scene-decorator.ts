@@ -80,7 +80,7 @@ export function Scene(props: SceneProps = {}): any {
         return constructor.name
       }
 
-      props = removeArrayDuplicitiesInObject(applyDefaults(props, scenePropsDefault))
+      _props = removeArrayDuplicitiesInObject(applyDefaults(props, scenePropsDefault))
       _metadata: Metadata = Reflect.getMetadata('metadata', this) ?? new Metadata()
       actions: Map<SceneActionConstructor, SceneActionInterface> = new Map<SceneActionConstructor, SceneActionInterface>()
       availableElements: SceneAvailableElements
@@ -156,7 +156,7 @@ export function Scene(props: SceneProps = {}): any {
           }
           this.switchCamera(GenericCamera, {})
         }
-        if (Core.isDevelopmentMode() && this.props.useDebugInspector) {
+        if (Core.isDevelopmentMode() && this._props.useDebugInspector) {
           this.useDebugInspector()
         }
         Core.startRenderScene(this)
@@ -191,12 +191,12 @@ export function Scene(props: SceneProps = {}): any {
           return this._loadingProgress
         } else {
           // Create babylon scene and apply configuration
-          this.babylon.scene = new BABYLON.Scene(Core.engine, this.props.options)
+          this.babylon.scene = new BABYLON.Scene(Core.engine, this._props.options)
 
           this._loadingProgress = new LoadingProgress()
           if (!this.assets) {
             this._assets = [
-              ...AssetsController.findAssetsDefinitions(this.props),
+              ...AssetsController.findAssetsDefinitions(this._props),
               ...AssetsController.findAssetsDefinitions(this._metadata.getProps())
             ]
           }
@@ -204,24 +204,24 @@ export function Scene(props: SceneProps = {}): any {
           assetsProgress.onComplete.add(() => {
             Logger.debug('Scene assets load completed', this.getClassName())
             const elementsLoading = new LoadingProgress().fromNodes([
-              SceneStatesController.load(this.props.states, this),
-              SceneActionsController.load(this.props.actions, this),
+              SceneStatesController.load(this._props.states, this),
+              SceneActionsController.load(this._props.actions, this),
               SceneActionsController.load(this._metadata.getProps().actions, this),
-              ActorsController.load(this.props.actors, this),
-              SpritesController.load(this.props.sprites, this),
+              ActorsController.load(this._props.actors, this),
+              SpritesController.load(this._props.sprites, this),
               SpritesController.load(this._metadata.getProps().sprites, this),
-              MeshesController.load(this.props.meshes, this),
+              MeshesController.load(this._props.meshes, this),
               MeshesController.load(this._metadata.getProps().meshes, this),
-              ParticlesController.load(this.props.particles, this),
+              ParticlesController.load(this._props.particles, this),
               ParticlesController.load(this._metadata.getProps().particles, this),
-              GUIController.load(this.props.guis, this)
+              GUIController.load(this._props.guis, this)
             ])
             elementsLoading.onComplete.add(() => {
               Logger.debug('Scene elements load completed', this.getClassName())
               const startScene = () => {
                 // Load configuration after Elements loading, to avoid AppendAsync method to override these configurations.
-                if (this.props.configuration) {
-                  for (const [key, value] of Object.entries(this.props.configuration)) {
+                if (this._props.configuration) {
+                  for (const [key, value] of Object.entries(this._props.configuration)) {
                     this.babylon.scene[key] = value
                   }
                 }
@@ -259,14 +259,14 @@ export function Scene(props: SceneProps = {}): any {
                   this._loadingProgress = undefined
                 })
               }
-              if (this.props.url) {
-                BABYLON.AppendSceneAsync(this.props.url, this.babylon.scene)
+              if (this._props.url) {
+                BABYLON.AppendSceneAsync(this._props.url, this.babylon.scene)
                   .then(() => {
-                    Logger.debug(`Scene load  AppendAsync from '${this.props.url}' completed.`, this.getClassName())
+                    Logger.debug(`Scene load  AppendAsync from '${this._props.url}' completed.`, this.getClassName())
                     startScene()
                   })
                   .catch((error: string) => {
-                    Logger.debugError(`Scene load AppendAsync from '${this.props.url}' error`, error, this.getClassName())
+                    Logger.debugError(`Scene load AppendAsync from '${this._props.url}' error`, error, this.getClassName())
                   })
               } else {
                 startScene()
@@ -287,17 +287,17 @@ export function Scene(props: SceneProps = {}): any {
       unload(): void {
         Logger.debug('Scene unload', this.getClassName(), this.getClassName())
         this._loaded = false
-        SceneStatesController.unload(this.props.states, this)
-        SceneActionsController.unload(this.props.actions, this)
+        SceneStatesController.unload(this._props.states, this)
+        SceneActionsController.unload(this._props.actions, this)
         SceneActionsController.unload(this._metadata.getProps().actions, this)
-        ActorsController.unload(this.props.actors, this)
-        SpritesController.unload(this.props.sprites, this)
+        ActorsController.unload(this._props.actors, this)
+        SpritesController.unload(this._props.sprites, this)
         SpritesController.unload(this._metadata.getProps().sprites, this)
-        MeshesController.unload(this.props.meshes, this)
+        MeshesController.unload(this._props.meshes, this)
         MeshesController.unload(this._metadata.getProps().meshes, this)
-        ParticlesController.unload(this.props.particles, this)
+        ParticlesController.unload(this._props.particles, this)
         ParticlesController.unload(this._metadata.getProps().particles, this)
-        GUIController.unload(this.props.guis, this)
+        GUIController.unload(this._props.guis, this)
       }
 
       showGUI<G extends GUIInterface>(gui: GUIConstructor, setup: any): G {
@@ -416,7 +416,7 @@ export function Scene(props: SceneProps = {}): any {
         if (!action) {
           action = SceneActionsController.get(actionConstructor).spawn(this)
           let actionOwner: any
-          if (!this.props.actions?.find(_action => _action === actionConstructor)) {
+          if (!this._props.actions?.find(_action => _action === actionConstructor)) {
             // Applies context 'Scene' or 'SceneState' to 'onLoopUpdate' method to preserve the 'this'
             // in case 'onLoopUpdate' is equivalent to a decorated method of some of those both interfaces.
             actionOwner = this.getActionOwner(actionConstructor)
@@ -521,7 +521,7 @@ export function Scene(props: SceneProps = {}): any {
        */
       private storeAvailableElements() {
         this.availableElements = new SceneAvailableElements()
-        this.getAvailableElements(this.props)
+        this.getAvailableElements(this._props)
         this.getAvailableElements(this._metadata.getProps())
       }
 

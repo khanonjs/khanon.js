@@ -16,7 +16,7 @@ import { MeshAnimationOptions } from './mesh-animation-options'
 import { MeshProps } from './mesh-props'
 
 export abstract class MeshInterface implements DisplayObject, LoopUpdatable, CanvasResizable {
-  abstract props: MeshProps
+  abstract _props: MeshProps
   abstract className: string
   abstract _loopUpdate: boolean
   abstract _loopUpdate$: BABYLON.Observer<number>

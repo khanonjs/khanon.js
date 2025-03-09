@@ -68,14 +68,14 @@ export class Core {
    */
   static initialize(app: AppInterface) {
     if (Core.app) {
-      Logger.error(`App decorator '${Core.app.props.name}' applied more than one time. Please use a single App decorator to generate de application.`)
+      Logger.error(`App decorator '${Core.app._props.name}' applied more than one time. Please use a single App decorator to generate de application.`)
       return
     }
 
     Core.app = app
     Logger.info('Environment mode:', process.env.NODE_ENV)
-    Logger.level = (Core.app.props.debugLog || Core.isDevelopmentMode()) ? LoggerLevels.TRACE : LoggerLevels.INFO
-    Logger.debug('App instance created:', Core.app.props)
+    Logger.level = (Core.app._props.debugLog || Core.isDevelopmentMode()) ? LoggerLevels.TRACE : LoggerLevels.INFO
+    Logger.debug('App instance created:', Core.app._props)
 
     // Avoid canvas scale error TODO??
     /* setTimeout(
@@ -101,7 +101,7 @@ export class Core {
   }
 
   private static initializeHTMLLayers(): void {
-    const parentId = Core.app.props.htmlCanvasContainerId
+    const parentId = Core.app._props.htmlCanvasContainerId
     const parentElement = document.getElementById(parentId)
     if (parentElement) {
       Core.htmlContainer = parentElement
@@ -119,9 +119,9 @@ export class Core {
     BABYLON.SceneLoaderFlags.ShowLoadingScreen = false
     Core.babylon.engine = new BABYLON.Engine(
       Core.htmlCanvas,
-      Core.app.props.engineConfiguration.antialias,
-      Core.app.props.engineConfiguration.options,
-      Core.app.props.engineConfiguration.adaptToDeviceRatio
+      Core.app._props.engineConfiguration.antialias,
+      Core.app._props.engineConfiguration.options,
+      Core.app._props.engineConfiguration.adaptToDeviceRatio
     )
     Core.babylon.engine.runRenderLoop(() => {
       Core.renderScenes.forEach((scene) => scene.babylon.scene.render())
@@ -227,7 +227,7 @@ export class Core {
   }
 
   private static loopUpdate(): void {
-    Core.loopUpdateMps = 1000 / Core.app.props.loopUpdate.fps
+    Core.loopUpdateMps = 1000 / Core.app._props.loopUpdate.fps
     Core.loopUpdateLastMs = performance.now()
     Core.loopUpdateLag = 0
     Core.engine.onBeginFrameObservable.add(

@@ -32,7 +32,7 @@ export function ActorState(props: ActorStateProps = {}): any {
       constructor(actor: ActorInterface, props: ActorStateProps) {
         super()
         if (actor) {
-          this.props = props
+          this._props = props
           this.actor = actor
           this.scene = this.actor.scene
         }
@@ -43,7 +43,7 @@ export function ActorState(props: ActorStateProps = {}): any {
         return className
       }
 
-      props: ActorStateProps
+      _props: ActorStateProps
       actor: ActorInterface
       _metadata: Metadata = Reflect.getMetadata('metadata', this) ?? new Metadata()
       _loopUpdate = true

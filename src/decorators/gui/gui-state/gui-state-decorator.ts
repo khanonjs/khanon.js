@@ -32,7 +32,7 @@ export function GUIState(props: GUIStateProps = {}): any {
     const _classInterface = class extends constructor implements GUIStateInterface {
       constructor(readonly gui: GUIInterface, props: GUIStateProps) {
         super()
-        this.props = props
+        this._props = props
         if (this.gui) {
           this._metadata.applyProps(this)
         }
@@ -42,7 +42,7 @@ export function GUIState(props: GUIStateProps = {}): any {
         return className
       }
 
-      props: GUIStateProps
+      _props: GUIStateProps
       setup: any
       _loopUpdate = true
       _loopUpdate$: BABYLON.Observer<number>

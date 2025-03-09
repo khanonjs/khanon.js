@@ -45,11 +45,11 @@ export function Sprite(props: SpriteProps): any {
       const _classInterface = class extends constructorOrTarget implements SpriteInterface {
         constructor(readonly scene: SceneInterface, props: SpriteProps) {
           super()
-          this.props = props
+          this._props = props
           if (scene) {
             this.babylon.scene = this.scene.babylon.scene
-            if (!this.props.url) {
-              const spriteMesh = new SpriteMesh(scene, this.props)
+            if (!this._props.url) {
+              const spriteMesh = new SpriteMesh(scene, this._props)
               spriteMesh.setFromBlank(this.getClassName())
               this.setSpriteMesh(spriteMesh, true)
             } else {
@@ -66,7 +66,7 @@ export function Sprite(props: SpriteProps): any {
           return this.className ?? className
         }
 
-        props: SpriteProps
+        _props: SpriteProps
         className: string
         spriteMesh: SpriteMesh
         exclusiveTexture: boolean
@@ -142,7 +142,7 @@ export function Sprite(props: SpriteProps): any {
           this.spriteMesh = spriteMesh
           this.exclusiveTexture = isExclusive
           this.babylon.mesh = spriteMesh.spawn()
-          this.props.animations?.forEach(animation => this.addAnimation(animation))
+          this._props.animations?.forEach(animation => this.addAnimation(animation))
         }
 
         setShaderMaterialTextureFrame(frame: number): void {
@@ -160,7 +160,7 @@ export function Sprite(props: SpriteProps): any {
         }
 
         private getLastFrame(): number {
-          return this.animation?.frameEnd ?? (this.props.numFrames ? this.props.numFrames - 1 : 0)
+          return this.animation?.frameEnd ?? (this._props.numFrames ? this._props.numFrames - 1 : 0)
         }
 
         addAnimation(animation: SpriteAnimation): void {
@@ -283,7 +283,7 @@ export function Sprite(props: SpriteProps): any {
           // - Improve performance.
           // - Let the user draw text over an 'url' loaded texture (not only blank textures).
 
-          if (this.props.url) { Logger.debugError('Trying to draw text on an \'url\' texture. Texts can be only drawn on blank textures (url: undefined).', this.getClassName()); return }
+          if (this._props.url) { Logger.debugError('Trying to draw text on an \'url\' texture. Texts can be only drawn on blank textures (url: undefined).', this.getClassName()); return }
 
           const font = `${properties.fontStyle} ${properties.fontSize}px ${properties.fontName}`
 
@@ -311,7 +311,7 @@ export function Sprite(props: SpriteProps): any {
           const startY = properties.centerV && properties.textureSize ? textureHeight / 2 : lineHeight
 
           dynamicTexture.drawText(text, properties.centerH ? null : 0, startY, font, properties.textColor, null, false)
-          const spriteMesh = new SpriteMesh(this.scene, this.props)
+          const spriteMesh = new SpriteMesh(this.scene, this._props)
           spriteMesh.setFromTexture(dynamicTexture, text.slice(0, 10) + (text.length > 10 ? '...' : ''))
           this.setSpriteMesh(spriteMesh, true)
         }
