@@ -20,8 +20,8 @@ export abstract class GUIInterface<S = any> implements LoopUpdatable, CanvasResi
   abstract _metadata: Metadata
   abstract _loopUpdate$: BABYLON.Observer<number>
   abstract _canvasResize$: BABYLON.Observer<Rect>
-  abstract initialize(setup: S): void
-  abstract release(): void
+  abstract _initialize(setup: S): void
+  abstract _release(): void
 
   /**
    * User available

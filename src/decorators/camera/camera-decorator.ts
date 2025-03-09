@@ -56,20 +56,20 @@ export function Camera(props: CameraProps = {}): any {
         }
       }
 
-      start(): void {
+      _start(): void {
         switchLoopUpdate(this._loopUpdate, this)
         attachCanvasResize(this)
         invokeCallback(this.onStart, this)
       }
 
-      stop(): void {
+      _stop(): void {
         invokeCallback(this.onStop, this)
         removeLoopUpdate(this)
         removeCanvasResize(this)
       }
 
-      release(): void {
-        this.stop()
+      _release(): void {
+        this._stop()
         this.babylon.camera.dispose()
       }
     }

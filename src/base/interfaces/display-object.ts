@@ -7,9 +7,9 @@ import { BabylonAccessor } from '../../models/babylon-accessor'
 import { FlexId } from '../../types/flex-id'
 
 export abstract class DisplayObject {
-  abstract animation: SpriteAnimation | MeshAnimation | null
-  abstract animations: Map<FlexId, SpriteAnimation | MeshAnimation>
-  abstract release(): void
+  abstract _animation: SpriteAnimation | MeshAnimation | null
+  abstract _animations: Map<FlexId, SpriteAnimation | MeshAnimation>
+  abstract _release(): void
 
   /**
    * User anailable

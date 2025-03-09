@@ -51,10 +51,10 @@ export function Sprite(props: SpriteProps): any {
             if (!this._props.url) {
               const spriteMesh = new SpriteMesh(scene, this._props)
               spriteMesh.setFromBlank(this.getClassName())
-              this.setSpriteMesh(spriteMesh, true)
+              this._setSpriteMesh(spriteMesh, true)
             } else {
               if (!core.spriteMeshes.get(scene)) { Logger.debugError('Sprite texture not found for scene in sprite constructor:', this.getClassName(), scene.getClassName()) }
-              this.setSpriteMesh(core.spriteMeshes.get(scene) as any, false)
+              this._setSpriteMesh(core.spriteMeshes.get(scene) as any, false)
             }
             switchLoopUpdate(this._loopUpdate, this)
             attachCanvasResize(this)
@@ -63,19 +63,19 @@ export function Sprite(props: SpriteProps): any {
         }
 
         getClassName(): string {
-          return this.className ?? className
+          return this._className ?? className
         }
 
         _props: SpriteProps
-        className: string
-        spriteMesh: SpriteMesh
-        exclusiveTexture: boolean
-        animation: SpriteAnimation | null = null
-        animations: Map<FlexId, SpriteAnimation> = new Map<FlexId, SpriteAnimation>()
+        _className: string
+        _spriteMesh: SpriteMesh
+        _exclusiveTexture: boolean
+        _animation: SpriteAnimation | null = null
+        _animations: Map<FlexId, SpriteAnimation> = new Map<FlexId, SpriteAnimation>()
         babylon: Pick<BabylonAccessor, 'mesh' | 'scene'> = { scene: null as any, mesh: null as any }
         _loopUpdate$: BABYLON.Observer<number>
         _canvasResize$: BABYLON.Observer<Rect>
-        keyFramesTimeouts: Timeout[] = []
+        _keyFramesTimeouts: Timeout[] = []
         endAnimationTimerInterval: Timeout | null
         endAnimationTimerTimeout: Timeout | null
         _loopUpdate = false
@@ -135,36 +135,36 @@ export function Sprite(props: SpriteProps): any {
         setPositionWithLocalVector(vector3: BABYLON.Vector3): BABYLON.TransformNode { return this.babylon.mesh.setPositionWithLocalVector(vector3) }
         translate(axis: BABYLON.Vector3, distance: number, space?: BABYLON.Space): BABYLON.TransformNode { return this.babylon.mesh.translate(axis, distance, space) }
 
-        setSpriteMesh(spriteMesh: SpriteMesh, isExclusive: boolean) {
+        _setSpriteMesh(spriteMesh: SpriteMesh, isExclusive: boolean) {
           if (this.babylon.mesh) {
-            this.release()
+            this._release()
           }
-          this.spriteMesh = spriteMesh
-          this.exclusiveTexture = isExclusive
+          this._spriteMesh = spriteMesh
+          this._exclusiveTexture = isExclusive
           this.babylon.mesh = spriteMesh.spawn()
           this._props.animations?.forEach(animation => this.addAnimation(animation))
         }
 
-        setShaderMaterialTextureFrame(frame: number): void {
+        _setShaderMaterialTextureFrame(frame: number): void {
           (this.babylon.mesh.material as BABYLON.ShaderMaterial).setInt('frame', frame)
         }
 
         setFrame(frame: number): void {
           if (frame < this.getFirstFrame() || frame > this.getLastFrame()) { Logger.debugError(`Calling out of bound setFrame(${frame}) - Start: ${this.getFirstFrame()}, End: ${this.getLastFrame()}`) }
           this.stopAnimation()
-          this.setShaderMaterialTextureFrame(frame)
+          this._setShaderMaterialTextureFrame(frame)
         }
 
         private getFirstFrame(): number {
-          return this.animation?.frameStart ?? 0
+          return this._animation?.frameStart ?? 0
         }
 
         private getLastFrame(): number {
-          return this.animation?.frameEnd ?? (this._props.numFrames ? this._props.numFrames - 1 : 0)
+          return this._animation?.frameEnd ?? (this._props.numFrames ? this._props.numFrames - 1 : 0)
         }
 
         addAnimation(animation: SpriteAnimation): void {
-          if (this.animations.get(animation.id)) { Logger.debugError(`Animation name '${animation.id}' already exists.`); return }
+          if (this._animations.get(animation.id)) { Logger.debugError(`Animation name '${animation.id}' already exists.`); return }
           if (!animation.delay) {
             animation.delay = 100
           }
@@ -180,30 +180,30 @@ export function Sprite(props: SpriteProps): any {
               })
             })
           }
-          this.animations.set(animation.id, animation)
+          this._animations.set(animation.id, animation)
         }
 
         playAnimation(animation: SpriteAnimation | FlexId, options?: SpriteAnimationOptions, completed?: () => void): void {
           if (isFlexId(animation)) {
-            if (!this.animations.get(animation as FlexId)) { Logger.debugError(`Animation '${animation}' doesn't exist in sprite:`, this.getClassName()); return }
-            animation = this.animations.get(animation as FlexId) as SpriteAnimation
+            if (!this._animations.get(animation as FlexId)) { Logger.debugError(`Animation '${animation}' doesn't exist in sprite:`, this.getClassName()); return }
+            animation = this._animations.get(animation as FlexId) as SpriteAnimation
           }
-          this.animation = animation as SpriteAnimation
+          this._animation = animation as SpriteAnimation
           const frameStart = this.getFirstFrame()
           const frameEnd = this.getLastFrame()
-          const delay = this.animation.delay
-          const loop = options?.loop ?? this.animation.loop
-          const keyFrames = this.animation.keyFrames
+          const delay = this._animation.delay
+          const loop = options?.loop ?? this._animation.loop
+          const keyFrames = this._animation.keyFrames
 
-          this.removeEndAnimationTimer()
-          this.removeAnimationKeyFrames()
+          this._removeEndAnimationTimer()
+          this._removeAnimationKeyFrames()
 
           const startKeyframes = () => {
-            this.keyFramesTimeouts = []
+            this._keyFramesTimeouts = []
             keyFrames?.forEach((animationKeyFrame) => {
               if (animationKeyFrame.emitter.hasObservers()) {
                 animationKeyFrame.ms.forEach((ms) => {
-                  this.keyFramesTimeouts.push(KJS.setTimeout(() => animationKeyFrame.emitter.notifyObservers(), ms))
+                  this._keyFramesTimeouts.push(KJS.setTimeout(() => animationKeyFrame.emitter.notifyObservers(), ms))
                 })
               }
             })
@@ -228,7 +228,7 @@ export function Sprite(props: SpriteProps): any {
           }
 
           this.scene.setAnimationHandler(this, {
-            id: this.animation.id,
+            id: this._animation.id,
             frameStart,
             frameEnd,
             delay,
@@ -237,15 +237,15 @@ export function Sprite(props: SpriteProps): any {
         }
 
         stopAnimation(): void {
-          this.removeEndAnimationTimer()
-          this.removeAnimationKeyFrames()
+          this._removeEndAnimationTimer()
+          this._removeAnimationKeyFrames()
           this.scene.stopAnimationHandler(this)
-          this.animation = null
+          this._animation = null
         }
 
         subscribeToKeyframe(keyframeId: FlexId, callback: () => void): BABYLON.Observer<void>[] {
           const observers: BABYLON.Observer<void>[] = []
-          this.animations.forEach(animation => {
+          this._animations.forEach(animation => {
             animation.keyFrames?.filter(keyframe => keyframe.id === keyframeId)
               .forEach(keyframe => observers.push(keyframe.emitter.add(callback)))
           })
@@ -253,19 +253,19 @@ export function Sprite(props: SpriteProps): any {
         }
 
         clearKeyframeSubscriptions(keyframeId: FlexId): void {
-          this.animations.forEach(animation => {
+          this._animations.forEach(animation => {
             animation.keyFrames
               ?.filter(keyframe => keyframe.id === keyframeId)
               .forEach(keyframe => keyframe.emitter.clear())
           })
         }
 
-        removeAnimationKeyFrames(): void {
-          this.keyFramesTimeouts.forEach((timeout) => KJS.clearTimeout(timeout))
-          this.keyFramesTimeouts = []
+        _removeAnimationKeyFrames(): void {
+          this._keyFramesTimeouts.forEach((timeout) => KJS.clearTimeout(timeout))
+          this._keyFramesTimeouts = []
         }
 
-        removeEndAnimationTimer(): void {
+        _removeEndAnimationTimer(): void {
           if (this.endAnimationTimerInterval) {
             KJS.clearInterval(this.endAnimationTimerInterval)
             this.endAnimationTimerInterval = null
@@ -313,16 +313,16 @@ export function Sprite(props: SpriteProps): any {
           dynamicTexture.drawText(text, properties.centerH ? null : 0, startY, font, properties.textColor, null, false)
           const spriteMesh = new SpriteMesh(this.scene, this._props)
           spriteMesh.setFromTexture(dynamicTexture, text.slice(0, 10) + (text.length > 10 ? '...' : ''))
-          this.setSpriteMesh(spriteMesh, true)
+          this._setSpriteMesh(spriteMesh, true)
         }
 
-        release(): void {
+        _release(): void {
           if (!this.babylon.mesh) { Logger.debugError('Trying to remove a Sprite that has been already removed.', this.getClassName()); return }
           invokeCallback(this.onDestroy, this)
           this.stopAnimation()
-          if (this.exclusiveTexture) {
-            this.spriteMesh?.release()
-            this.spriteMesh = null as any
+          if (this._exclusiveTexture) {
+            this._spriteMesh?.release()
+            this._spriteMesh = null as any
           }
           this.babylon.mesh?.dispose()
           this.babylon.mesh = null as any
@@ -403,7 +403,7 @@ export function Sprite(props: SpriteProps): any {
     ) && !descriptor) { // Undefined descriptor means it is a decorated property, otherwiese it is a decorated method
       @Sprite(props)
       abstract class _spriteInterface extends SpriteInterface {
-        className = contextOrProperty as any
+        _className = contextOrProperty as any
       }
 
       if (!Reflect.hasMetadata('metadata', constructorOrTarget)) {

@@ -175,7 +175,7 @@ export function Actor(props: ActorProps = {}): any {
       removeBody(): void {
         if (this._body) {
           this.clearNodes()
-          this._body.release()
+          this._body._release()
           this._body = null
         }
       }
@@ -228,7 +228,7 @@ export function Actor(props: ActorProps = {}): any {
           array.forEach(bone => {
             this.removeNode(bone.name)
           })
-          node.element.release()
+          node.element._release()
           node.bone.dispose()
           this._nodes.delete(name)
           if (this._body && this._nodes.size <= 0) {
@@ -240,7 +240,7 @@ export function Actor(props: ActorProps = {}): any {
 
       clearNodes() {
         this._nodes.forEach(node => {
-          node.element.release()
+          node.element._release()
           node.bone.dispose()
         })
         this._nodes.clear()
@@ -395,7 +395,7 @@ export function Actor(props: ActorProps = {}): any {
           // Applies context to 'onInitialize' as caller 'Actor' to preserve the 'this'
           // in case 'initialize' is equivalent to a decorated method of some of those both interfaces.
           particle.onInitialize = particle.onInitialize?.bind(this)
-          particle.create()
+          particle._create()
         }
         if (this._props.renderingGroupId) {
           particle.babylon.particleSystem.renderingGroupId = this._props.renderingGroupId
@@ -418,7 +418,7 @@ export function Actor(props: ActorProps = {}): any {
 
       removeParticle(id: FlexId): void {
         if (!this._particles.get(id)) { Logger.debugError(`Trying to start particle '${id}' that doesn't exist in actor:`, this.getClassName()); return }
-        this._particles.get(id)?.release()
+        this._particles.get(id)?._release()
         this._particles.delete(id)
       }
 

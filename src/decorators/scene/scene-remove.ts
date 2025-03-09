@@ -36,7 +36,7 @@ export class SceneRemove {
         this.particle(_particle)
       })
     } else {
-      particle.release()
+      particle._release()
       this.scene.particles.delete(particle)
     }
   }
@@ -53,7 +53,7 @@ export class SceneRemove {
         this.sprite(_sprite)
       })
     } else {
-      sprite.release()
+      sprite._release()
       this.scene.sprites.delete(sprite)
     }
   }
@@ -70,7 +70,7 @@ export class SceneRemove {
         this.mesh(_mesh)
       })
     } else {
-      mesh.release()
+      mesh._release()
       this.scene.meshes.delete(mesh)
     }
   }

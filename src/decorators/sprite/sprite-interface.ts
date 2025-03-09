@@ -19,24 +19,20 @@ import { SpriteProps } from './sprite-props'
 
 export abstract class SpriteInterface implements DisplayObject, LoopUpdatable, CanvasResizable {
   abstract _props: SpriteProps
-  abstract className: string
-  abstract spriteMesh: SpriteMesh
+  abstract _className: string
+  abstract _spriteMesh: SpriteMesh
   abstract _loopUpdate: boolean
   abstract _loopUpdate$: BABYLON.Observer<number>
   abstract _canvasResize$: BABYLON.Observer<Rect>
-  abstract exclusiveTexture: boolean // Exclusive texture means this sprite has an exclusive texture that is not stored anywhere, so the sprite itself has to handle its release.
-  abstract setSpriteMesh(spriteMesh: SpriteMesh, isExclusive: boolean, isParticle: boolean): void
-  abstract setShaderMaterialTextureFrame(frame: number): void
-
-  /**
-   * Display Object
-   */
-  abstract animation: SpriteAnimation | null
-  abstract animations: Map<FlexId, SpriteAnimation>
-  abstract keyFramesTimeouts: Timeout[]
-  abstract removeAnimationKeyFrames(): void
-  abstract removeEndAnimationTimer(): void
-  abstract release(): void
+  abstract _exclusiveTexture: boolean // Exclusive texture means this sprite has an exclusive texture that is not stored anywhere, so the sprite itself has to handle its release.
+  abstract _setSpriteMesh(spriteMesh: SpriteMesh, isExclusive: boolean, isParticle: boolean): void
+  abstract _setShaderMaterialTextureFrame(frame: number): void
+  abstract _animation: SpriteAnimation | null
+  abstract _animations: Map<FlexId, SpriteAnimation>
+  abstract _keyFramesTimeouts: Timeout[]
+  abstract _removeAnimationKeyFrames(): void
+  abstract _removeEndAnimationTimer(): void
+  abstract _release(): void
 
   /**
    * User available

@@ -304,10 +304,10 @@ export function Scene(props: SceneProps = {}): any {
         Logger.debug('Show GUI', this.getClassName(), GUIController.get(gui).getClassName())
         let guiInstance = this.guis.get(gui)
         if (guiInstance) {
-          guiInstance.release()
+          guiInstance._release()
         }
         guiInstance = GUIController.get(gui).spawn(this)
-        guiInstance.initialize(setup)
+        guiInstance._initialize(setup)
         this.guis.set(gui, guiInstance)
         return guiInstance as any
       }
@@ -316,7 +316,7 @@ export function Scene(props: SceneProps = {}): any {
         Logger.debug('Hide GUI', this.getClassName(), GUIController.get(gui).getClassName())
         const guiInstance = this.guis.get(gui)
         if (guiInstance) {
-          guiInstance.release()
+          guiInstance._release()
           this.guis.delete(gui)
         } else {
           Logger.warn('Trying to hide a GUI that\'s not being displayed.', this.getClassName(), GUIController.get(gui).getClassName())
@@ -340,7 +340,7 @@ export function Scene(props: SceneProps = {}): any {
       }
 
       releaseGUIs(): void {
-        this.guis.forEach(gui => gui.release())
+        this.guis.forEach(gui => gui._release())
         this.guis.clear()
       }
 
@@ -352,12 +352,12 @@ export function Scene(props: SceneProps = {}): any {
         this._camera.setup = setup
         this._camera.babylon.camera = (this._camera.onInitialize as any)(this.babylon.scene)
         this._camera.babylon.camera.attachControl(Core.canvas, true)
-        this._camera.start()
+        this._camera._start()
       }
 
       releaseCamera(): void {
         if (this._camera) {
-          this._camera.release()
+          this._camera._release()
           this._camera.babylon.camera.detachControl()
           this._camera = undefined
           this.babylon.scene.activeCamera = null
@@ -384,15 +384,15 @@ export function Scene(props: SceneProps = {}): any {
         const numSprites = animation.frameEnd - animation.frameStart
         const totalTimeMs = numSprites * animation.delay
         const handleLoop = () => {
-          sprite.setShaderMaterialTextureFrame(animation.frameStart + (Math.trunc(((Core.getLoopUpdateLastMs() - startMs) % totalTimeMs) / animation.delay)))
+          sprite._setShaderMaterialTextureFrame(animation.frameStart + (Math.trunc(((Core.getLoopUpdateLastMs() - startMs) % totalTimeMs) / animation.delay)))
         }
         const handleNoLoop = () => {
           const loopUpdateLastMs = Core.getLoopUpdateLastMs()
           if (loopUpdateLastMs - startMs >= totalTimeMs) {
-            sprite.setShaderMaterialTextureFrame(animation.frameEnd)
+            sprite._setShaderMaterialTextureFrame(animation.frameEnd)
             this.animationHandler.delete(sprite)
           } else {
-            sprite.setShaderMaterialTextureFrame(animation.frameStart + (Math.trunc(((Core.getLoopUpdateLastMs() - startMs) % totalTimeMs) / animation.delay)))
+            sprite._setShaderMaterialTextureFrame(animation.frameStart + (Math.trunc(((Core.getLoopUpdateLastMs() - startMs) % totalTimeMs) / animation.delay)))
           }
         }
         this.animationHandler.set(sprite, animation.loop ? handleLoop : handleNoLoop)

@@ -63,7 +63,7 @@ export function GUI(props: GUIProps = {}): any {
       get loopUpdate(): boolean { return this._loopUpdate }
       // get state(): GUIStateInterface | null { return this._state }
 
-      initialize(setup: any) {
+      _initialize(setup: any) {
         this.babylon.gui = BABYLONGUI.AdvancedDynamicTexture.CreateFullscreenUI('')
         this.setup = setup
         switchLoopUpdate(this._loopUpdate, this)
@@ -71,7 +71,7 @@ export function GUI(props: GUIProps = {}): any {
         invokeCallback(this.onInitialize, this, this.babylon.gui)
       }
 
-      release() {
+      _release() {
         invokeCallback(this.onDestroy, this)
         this.babylon.gui?.dispose()
         removeLoopUpdate(this)
