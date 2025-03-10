@@ -181,14 +181,24 @@ export declare interface SpriteProps {
   url?: string
 
   /**
-   * Width of the sprite. In case it is an animated sprite, it represents each frame cell width.
+   * Width of the sprite for blank sprites.
    */
-  width: number
+  width?: number
 
   /**
-   * Height of the sprite. In case it is an animated sprite, it represents each frame cell height.
+   * Height of the sprite for blank sprites.
    */
-  height: number
+  height?: number
+
+  /**
+   * Animated sprite cell width.
+   */
+  cellWidth?: number
+
+  /**
+   * Animated sprite cell height.
+   */
+  cellHeight?: number
 
   /**
    * Numnber of frames (total cells).
@@ -238,4 +248,4 @@ export declare interface SpriteProps {
  * - To a 'ActorAction' or 'SceneAction' class properties, where it will be created as a SpriteConstructor using the decorator props.
  * @param props
  */
-export declare function Sprite(props: SpriteProps): any
+export declare function Sprite(props?: SpriteProps): any

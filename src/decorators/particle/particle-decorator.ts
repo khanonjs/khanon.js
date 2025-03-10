@@ -134,22 +134,22 @@ export function Particle(props: ParticleProps): any {
             this.babylon.particleSystem.maxScaleX = 1
             this.babylon.particleSystem.minScaleY = 1
             this.babylon.particleSystem.maxScaleY = 1
-          } else if (this._spriteProps.width > this._spriteProps.height) {
-            this.babylon.particleSystem.minScaleX = this._spriteProps.width / this._spriteProps.height
-            this.babylon.particleSystem.maxScaleX = this._spriteProps.width / this._spriteProps.height
+          } else if (spriteParticleInfo.width > spriteParticleInfo.height) {
+            this.babylon.particleSystem.minScaleX = spriteParticleInfo.width / spriteParticleInfo.height
+            this.babylon.particleSystem.maxScaleX = spriteParticleInfo.width / spriteParticleInfo.height
             this.babylon.particleSystem.minScaleY = 1
             this.babylon.particleSystem.maxScaleY = 1
           } else {
             this.babylon.particleSystem.minScaleX = 1
             this.babylon.particleSystem.maxScaleX = 1
-            this.babylon.particleSystem.minScaleY = this._spriteProps.width / this._spriteProps.height
-            this.babylon.particleSystem.maxScaleY = this._spriteProps.width / this._spriteProps.height
+            this.babylon.particleSystem.minScaleY = spriteParticleInfo.width / spriteParticleInfo.height
+            this.babylon.particleSystem.maxScaleY = spriteParticleInfo.width / spriteParticleInfo.height
           }
           this._animations = this._spriteProps.animations ?? null
           if (this._animations) {
             this.babylon.particleSystem.isAnimationSheetEnabled = true
-            this.babylon.particleSystem.spriteCellWidth = this._spriteProps.width
-            this.babylon.particleSystem.spriteCellHeight = this._spriteProps.height
+            this.babylon.particleSystem.spriteCellWidth = spriteParticleInfo.width
+            this.babylon.particleSystem.spriteCellHeight = spriteParticleInfo.height
           }
         }
 

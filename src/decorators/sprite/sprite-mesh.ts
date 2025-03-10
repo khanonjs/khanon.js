@@ -14,49 +14,68 @@ export class SpriteMesh {
   idShader: number
   width: number
   height: number
+  cellWidth: number
+  cellHeight: number
   numCols:number
   numRows:number
   propCol:number
   propRow:number
+  error = false
 
-  constructor(private readonly scene: SceneInterface, private readonly spriteProps: SpriteProps) {
+  constructor(private readonly scene: SceneInterface, private readonly spriteProps: SpriteProps, private readonly className: string) {
     this.babylon.scene = this.scene.babylon.scene
-    this.width = this.spriteProps.width
-    this.height = this.spriteProps.height
+
+    if (this.spriteProps.url && (this.spriteProps.width || this.spriteProps.height)) {
+      Logger.warn('It is not neccesary to set width and height of image sprites. Did you mean it?', this.className)
+    }
   }
 
   setFromAsset(asset: Asset<SceneInterface>): Promise<void> {
+    if (this.spriteProps.url && this.spriteProps.animations && (!this.spriteProps.cellWidth || !this.spriteProps.cellHeight)) {
+      Logger.error('Please set cellWidth and cellHeight for animated sprites.', this.className)
+      return Promise.resolve()
+    }
     return new Promise((resolve) => {
       this.name = asset.definition.url
       this.asset = asset
       this.babylon.texture = new BABYLON.Texture(asset.objectURL, this.babylon.scene, this.spriteProps.noMipmap, !this.spriteProps.invertY, this.spriteProps.samplingMode)
       this.babylon.texture.name = this.name
       this.babylon.texture.onLoadObservable.add(() => {
+        const size = this.babylon.texture.getSize()
+        this.width = size.width
+        this.height = size.height
         this.buildMesh()
         resolve()
       })
     })
   }
 
-  // TODO is this okay being sync? We need it sync because the texture is created on real-time execution (one exclusive texture per sprite spwan).
   setFromBlank(name: string): void {
-    this.name = name
-    this.babylon.texture = new BABYLON.DynamicTexture(this.name, { width: this.spriteProps.width, height: this.spriteProps.height }, this.babylon.scene, this.spriteProps.noMipmap, this.spriteProps.samplingMode, this.spriteProps.format, !this.spriteProps.invertY)
-    this.buildMesh()
+    if (!this.spriteProps.url && this.spriteProps.width && this.spriteProps.height) {
+      this.width = this.spriteProps.width
+      this.height = this.spriteProps.height
+      this.name = name
+      this.babylon.texture = new BABYLON.DynamicTexture(this.name, { width: this.width, height: this.height }, this.babylon.scene, this.spriteProps.noMipmap, this.spriteProps.samplingMode, this.spriteProps.format, !this.spriteProps.invertY)
+      this.buildMesh()
+    } else {
+      Logger.error('Please set width and height for blank sprites.', this.className)
+    }
   }
 
-  setFromTexture(texture: BABYLON.Texture | BABYLON.DynamicTexture, name: string, width?: number, height?: number): void {
-    this.width = width ?? texture.getSize().width
-    this.height = height ?? texture.getSize().height
-    if (this.width === 0 || this.height === 0) { Logger.debugError('Width and Height must be higher than 0:', this.spriteProps) }
+  setFromTexture(texture: BABYLON.Texture | BABYLON.DynamicTexture, name: string, width?: number, height?: number): void { // TODO check this. Is it neccesary?
+    this.width = width ?? this.spriteProps.width ?? texture.getSize().width
+    this.height = height ?? this.spriteProps.height ?? texture.getSize().height
+    if (this.width === 0 || this.height === 0) { Logger.debugError('Width and height must be higher than 0:', this.spriteProps) }
     this.name = name
     this.babylon.texture = texture
     this.buildMesh()
   }
 
   buildMesh(): void {
-    const w = this.width / 2
-    const h = this.height / 2
+    this.cellWidth = this.spriteProps.cellWidth ?? this.width
+    this.cellHeight = this.spriteProps.cellHeight ?? this.height
+    const w = this.cellWidth / 2
+    const h = this.cellHeight / 2
 
     const quadVertexData = new BABYLON.VertexData()
     // The 4 vertices, clockwise starting from bottom left
@@ -86,13 +105,17 @@ export class SpriteMesh {
     this.babylon.mesh.setEnabled(false)
     quadVertexData.applyToMesh(this.babylon.mesh, true)
 
-    const size = this.babylon.texture.getSize()
     this.idShader = SpriteMesh.idShader
     SpriteMesh.idShader++
-    this.numCols = size.width / this.width
-    this.numRows = size.height / this.height
+    this.numCols = this.width / this.cellWidth
+    this.numRows = this.height / this.cellHeight
     this.propCol = 1 / this.numCols
     this.propRow = 1 / this.numRows
+
+    if (this.numCols % 1 !== 0 || this.numRows % 1 !== 0) {
+      Logger.error('Wrong sprite size, did you set it correctly?', this.width, this.height, this.className, this.spriteProps.url ?? '')
+      return
+    }
 
     BABYLON.Effect.ShadersStore[`spriteMesh${this.idShader}VertexShader`] = `
     precision highp float;

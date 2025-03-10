@@ -49,7 +49,7 @@ export function Sprite(props: SpriteProps): any {
           if (scene) {
             this.babylon.scene = this.scene.babylon.scene
             if (!this._props.url) {
-              const spriteMesh = new SpriteMesh(scene, this._props)
+              const spriteMesh = new SpriteMesh(scene, this._props, this.getClassName())
               spriteMesh.setFromBlank(this.getClassName())
               this._setSpriteMesh(spriteMesh, true)
             } else {
@@ -311,7 +311,9 @@ export function Sprite(props: SpriteProps): any {
           const startY = properties.centerV && properties.textureSize ? textureHeight / 2 : lineHeight
 
           dynamicTexture.drawText(text, properties.centerH ? null : 0, startY, font, properties.textColor, null, false)
-          const spriteMesh = new SpriteMesh(this.scene, this._props)
+          this._props.width = textureWidth
+          this._props.height = textureHeight
+          const spriteMesh = new SpriteMesh(this.scene, this._props, this.getClassName())
           spriteMesh.setFromTexture(dynamicTexture, text.slice(0, 10) + (text.length > 10 ? '...' : ''))
           this._setSpriteMesh(spriteMesh, true)
         }
@@ -335,7 +337,7 @@ export function Sprite(props: SpriteProps): any {
         }
       }
       const _classCore = class implements SpriteCore {
-        props = applyDefaults(props, spritePropsDefault)
+        props = applyDefaults(props ?? {}, spritePropsDefault)
         Instance: SpriteInterface = new _classInterface(null as any, null as any)
         spriteMeshes: Map<SceneInterface, SpriteMesh> = new Map<SceneInterface, SpriteMesh>()
 
@@ -347,7 +349,7 @@ export function Sprite(props: SpriteProps): any {
             if (this.props.url) {
               const asset = AssetsController.getAsset(this.props.url)
               if (asset) {
-                const spriteMesh = new SpriteMesh(scene, this.props)
+                const spriteMesh = new SpriteMesh(scene, this.props, this.Instance.getClassName())
                 this.spriteMeshes.set(scene, spriteMesh)
                 spriteMesh.setFromAsset(asset)
                   .then(() => {
@@ -374,14 +376,17 @@ export function Sprite(props: SpriteProps): any {
 
         getParticleInfo(scene: SceneInterface): SpriteParticleInfo {
           if (!core.spriteMeshes.get(scene)) { Logger.debugError('Sprite texture not found for scene in getParticleInfo:', this.Instance.getClassName(), scene.constructor.name) } // TODO get sprite and scene names
+          const spriteMesh = this.spriteMeshes.get(scene) as any
           return {
-            spriteMesh: this.spriteMeshes.get(scene) as any,
-            props: this.props
+            spriteMesh,
+            props: this.props,
+            width: spriteMesh.cellWidth,
+            height: spriteMesh.cellHeight
           }
         }
 
         getClassName(): string {
-          return className
+          return this.Instance.getClassName()
         }
       }
       const core = new _classCore()
