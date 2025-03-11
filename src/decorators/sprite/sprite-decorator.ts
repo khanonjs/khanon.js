@@ -53,7 +53,10 @@ export function Sprite(props: SpriteProps): any {
               spriteMesh.setFromBlank(this.getClassName())
               this._setSpriteMesh(spriteMesh, true)
             } else {
-              if (!core.spriteMeshes.get(scene)) { Logger.debugError('Sprite texture not found for scene in sprite constructor:', this.getClassName(), scene.getClassName()) }
+              const spriteMesh = core.spriteMeshes.get(scene)
+              if (!spriteMesh) {
+                Logger.error('Sprite texture not found in scene (sprite constructor).  Did you add the sprite to the scene?', this.getClassName(), scene.getClassName())
+              }
               this._setSpriteMesh(core.spriteMeshes.get(scene) as any, false)
             }
             switchLoopUpdate(this._loopUpdate, this)
@@ -375,8 +378,10 @@ export function Sprite(props: SpriteProps): any {
         }
 
         getParticleInfo(scene: SceneInterface): SpriteParticleInfo {
-          if (!core.spriteMeshes.get(scene)) { Logger.debugError('Sprite texture not found for scene in getParticleInfo:', this.Instance.getClassName(), scene.constructor.name) } // TODO get sprite and scene names
           const spriteMesh = this.spriteMeshes.get(scene) as any
+          if (!spriteMesh) {
+            Logger.error('Sprite texture not found in scene (getParticleInfo). Did you add the sprite to the scene?', this.Instance.getClassName(), scene.getClassName())
+          }
           return {
             spriteMesh,
             props: this.props,
