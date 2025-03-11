@@ -1,5 +1,6 @@
 import * as BABYLON from '@babylonjs/core'
 
+import { MetadataParticleDefinition } from '../../base/interfaces/metadata/metadata-particle-definition'
 import {
   ActorsController,
   MeshesController,
@@ -9,6 +10,7 @@ import {
 import { Logger } from '../../modules/logger'
 import { ActorInterface } from '../actor/actor-interface'
 import { MeshInterface } from '../mesh/mesh-interface'
+import { ParticleConstructor } from '../particle/particle-constructor'
 import { ParticleInterface } from '../particle/particle-interface'
 import { SpriteInterface } from '../sprite/sprite-interface'
 import { SceneInterface } from './scene-interface'
@@ -45,9 +47,22 @@ export class SceneSpawn {
     }
   }
 
-  particle<P extends ParticleInterface>(particle: new () => P, offset?: BABYLON.Vector3): P {
-    Logger.debug('Particle spawn:', particle.prototype)
-    const instance = ParticlesController.get(particle).spawn(this.scene, { offset })
+  particle<P extends ParticleInterface>(particleConstructorOrMethod: ParticleConstructor | ((particle: P) => void), offset?: BABYLON.Vector3): P {
+    let isMethod = false
+    if (!particleConstructorOrMethod.prototype?.constructor) {
+      isMethod = true
+      this.scene._metadata.particles.forEach((value: MetadataParticleDefinition) => {
+        particleConstructorOrMethod = value.classDefinition
+      })
+    }
+    const instance = ParticlesController.get(particleConstructorOrMethod).spawn(this.scene, { offset }, !isMethod)
+    Logger.debug('Particle spawn:', this.scene.getClassName(), instance.getClassName())
+    if (isMethod) {
+      // Applies context to 'onInitialize' as caller 'Actor' to preserve the 'this'
+      // in case 'initialize' is equivalent to a decorated method of some of those both interfaces.
+      instance.onInitialize = instance.onInitialize?.bind(this.scene)
+      instance._create()
+    }
     this.scene._particles.add(instance)
     return instance as P
   }

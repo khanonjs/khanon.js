@@ -26,8 +26,10 @@ import {
   MeshInterface
 } from '../mesh'
 import { MeshMapConstructor } from '../mesh-map'
-import { ParticleConstructor } from '../particle'
-import { ParticleInterface } from '../particle/particle-interface'
+import {
+  ParticleConstructor,
+  ParticleInterface
+} from '../particle'
 import {
   SpriteConstructor,
   SpriteInterface
@@ -54,7 +56,7 @@ export declare class SceneSpawn {
    * Spawns a particle in the scene.
    * @param particle
    */
-  particle<P extends ParticleInterface>(particle: new () => P, offset?: BABYLON.Vector3): P
+  particle<P extends ParticleInterface>(Particle: ParticleConstructor | ((particle: ParticleInterface) => void), offset?: BABYLON.Vector3): P
 
   /**
    * Spawns a sprite in the scene.
