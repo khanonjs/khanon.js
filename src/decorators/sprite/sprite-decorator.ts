@@ -38,6 +38,8 @@ import { SpriteParticleInfo } from './sprite-particle-data'
 import { SpriteProps } from './sprite-props'
 import { spritePropsDefault } from './sprite.props.deafult'
 
+// 8a8f el sprite no se crea en blank utilizando decorador de metodo para particula y sprite sin URL, además no avisa del fallo de no indicar width + height
+
 export function Sprite(props: SpriteProps): any {
   return function <T extends { new (...args: any[]): SpriteInterface }>(constructorOrTarget: (T & SpriteInterface), contextOrProperty: ClassDecoratorContext | string, descriptor: PropertyDescriptor) {
     const className = constructorOrTarget.name
