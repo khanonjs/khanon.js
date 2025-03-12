@@ -46,7 +46,7 @@ export function ActorState(props: ActorStateProps = {}): any {
       setTimeout(func: () => void, ms: number): Timeout { return Core.setTimeout(func, ms, this) }
       setInterval(func: () => void, ms: number): Timeout { return Core.setInterval(func, ms, this) }
       clearTimeout(timeout: Timeout): void { Core.clearTimeout(timeout) }
-      clearInterval(interval: Timeout): void { Core.clearTimeout(interval) }
+      clearInterval(interval: Timeout): void { Core.clearInterval(interval) }
       clearAllTimeouts(): void { Core.clearAllTimeoutsByContext(this) }
 
       _props: ActorStateProps

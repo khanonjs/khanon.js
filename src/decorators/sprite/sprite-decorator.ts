@@ -39,8 +39,6 @@ import { SpriteParticleInfo } from './sprite-particle-data'
 import { SpriteProps } from './sprite-props'
 import { spritePropsDefault } from './sprite.props.deafult'
 
-// 8a8f el sprite no se crea en blank utilizando decorador de metodo para particula y sprite sin URL, además no avisa del fallo de no indicar width + height
-
 export function Sprite(props: SpriteProps): any {
   return function <T extends { new (...args: any[]): SpriteInterface }>(constructorOrTarget: (T & SpriteInterface), contextOrProperty: ClassDecoratorContext | string, descriptor: PropertyDescriptor) {
     const className = constructorOrTarget.name
@@ -74,7 +72,7 @@ export function Sprite(props: SpriteProps): any {
         setTimeout(func: () => void, ms: number): Timeout { return Core.setTimeout(func, ms, this) }
         setInterval(func: () => void, ms: number): Timeout { return Core.setInterval(func, ms, this) }
         clearTimeout(timeout: Timeout): void { Core.clearTimeout(timeout) }
-        clearInterval(interval: Timeout): void { Core.clearTimeout(interval) }
+        clearInterval(interval: Timeout): void { Core.clearInterval(interval) }
         clearAllTimeouts(): void { Core.clearAllTimeoutsByContext(this) }
 
         _props: SpriteProps
@@ -387,15 +385,17 @@ export function Sprite(props: SpriteProps): any {
         }
 
         getParticleInfo(scene: SceneInterface): SpriteParticleInfo {
-          const spriteMesh = this.spriteMeshes.get(scene) as any
-          if (!spriteMesh) {
-            Logger.error('Sprite texture not found in scene (getParticleInfo). Did you add the sprite to the scene?', this.Instance.getClassName(), scene.getClassName())
-          }
+          // Create instance to apply initialization process
+          const instance = this.spawn(scene)
+          const texture = instance._spriteMesh.babylon.texture.clone()
+          const width = instance._spriteMesh.cellWidth
+          const height = instance._spriteMesh.cellHeight
+          instance._release()
           return {
-            spriteMesh,
+            texture,
             props: this.props,
-            width: spriteMesh.cellWidth,
-            height: spriteMesh.cellHeight
+            width,
+            height
           }
         }
 

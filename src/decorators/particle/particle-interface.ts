@@ -14,6 +14,7 @@ import { FlexId } from '../../types/flex-id'
 import { SceneInterface } from '../scene/scene-interface'
 import { SpriteAnimation } from '../sprite/sprite-animation'
 import { SpriteConstructor } from '../sprite/sprite-constructor'
+import { SpriteParticleInfo } from '../sprite/sprite-particle-data'
 import { SpriteProps } from '../sprite/sprite-props'
 import { ParticleAttachmentInfo } from './particle-attachment-info'
 import { ParticleProps } from './particle-props'
@@ -28,7 +29,9 @@ export abstract class ParticleInterface implements LoopUpdatable, CanvasResizabl
   abstract _attachmentInfo: ParticleAttachmentInfo
   abstract _attachmentUpdate$: BABYLON.Observer<number> | undefined
   abstract _animations: SpriteAnimation[] | null
+  abstract _spriteClassName: string
   abstract _spriteProps: SpriteProps
+  abstract _spriteParticleInfo: SpriteParticleInfo
   abstract _offset: BABYLON.Vector3
   abstract _create(): void
   abstract _updatePosition(): void
