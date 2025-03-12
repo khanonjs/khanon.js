@@ -34,6 +34,7 @@ export abstract class ActorStateInterface<S = any, A = ActorInterface<SpriteInte
   abstract setInterval(func: () => void, ms: number): Timeout
   abstract clearTimeout(timeout: Timeout): void
   abstract clearInterval(timeout: Timeout): void
+  abstract clearAllTimeouts(): void
   abstract switchState(state: ActorStateConstructor, setup: any): ActorStateInterface
   abstract notify(message: FlexId, ...args: any[]): void
 

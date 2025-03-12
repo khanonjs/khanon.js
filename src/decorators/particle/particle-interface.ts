@@ -45,6 +45,7 @@ export abstract class ParticleInterface implements LoopUpdatable, CanvasResizabl
   abstract setInterval(func: () => void, ms: number): Timeout
   abstract clearTimeout(timeout: Timeout): void
   abstract clearInterval(timeout: Timeout): void
+  abstract clearAllTimeouts(): void
   abstract start(): void
   abstract stop(): void
   abstract setSprite(sprite: SpriteConstructor): void

@@ -84,6 +84,7 @@ export abstract class SceneInterface implements Loadable, LoopUpdatable, CanvasR
   abstract setInterval(func: () => void, ms: number): Timeout
   abstract clearTimeout(timeout: Timeout): void
   abstract clearInterval(timeout: Timeout): void
+  abstract clearAllTimeouts(): void
   abstract start(state?: SceneStateConstructor, stateSetup?: any): SceneStateInterface | null
   abstract stop(): void
   abstract load(): LoadingProgress

@@ -43,6 +43,7 @@ export abstract class SpriteInterface implements DisplayObject, LoopUpdatable, C
   abstract setInterval(func: () => void, ms: number): Timeout
   abstract clearTimeout(timeout: Timeout): void
   abstract clearInterval(timeout: Timeout): void
+  abstract clearAllTimeouts(): void
 
   /**
    * User available Display Object

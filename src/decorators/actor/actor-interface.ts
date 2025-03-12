@@ -72,6 +72,7 @@ export abstract class ActorInterface<B extends SpriteInterface | MeshInterface =
   abstract setInterval(func: () => void, ms: number): Timeout
   abstract clearTimeout(timeout: Timeout): void
   abstract clearInterval(timeout: Timeout): void
+  abstract clearAllTimeouts(): void
   abstract setBody(Body: new () => B): B
   abstract addNode(Node: new () => B, name: string, transform?: TransformComposition): ActorNode<B> | undefined
   abstract getNode(name: string): ActorNode<B> | undefined

@@ -35,6 +35,7 @@ export abstract class CameraInterface<S = any, C extends SceneInterface = SceneI
   abstract setInterval(func: () => void, ms: number): Timeout
   abstract clearTimeout(timeout: Timeout): void
   abstract clearInterval(timeout: Timeout): void
+  abstract clearAllTimeouts(): void
   // TODO attach particles to camera to simulate environment effects?
 
   /**

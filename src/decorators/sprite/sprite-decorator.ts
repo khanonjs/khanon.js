@@ -1,6 +1,7 @@
 import * as BABYLON from '@babylonjs/core'
 
 import { LoadingProgress } from '../../base'
+import { Core } from '../../base/core/core'
 import { Metadata } from '../../base/interfaces/metadata/metadata'
 import {
   AssetsController,
@@ -44,13 +45,6 @@ export function Sprite(props: SpriteProps): any {
   return function <T extends { new (...args: any[]): SpriteInterface }>(constructorOrTarget: (T & SpriteInterface), contextOrProperty: ClassDecoratorContext | string, descriptor: PropertyDescriptor) {
     const className = constructorOrTarget.name
 
-    /* constructorOrTarget.setTimeout = (func: () => void, ms: number): Timeout => { // 8a8f
-      return null as any
-    }
-    constructorOrTarget.setInterval = (func: () => void, ms: number): Timeout => {
-      return null as any
-    } */
-
     const decorateClass = () => {
       const _classInterface = class extends constructorOrTarget implements SpriteInterface {
         constructor(readonly scene: SceneInterface, props: SpriteProps) {
@@ -75,9 +69,13 @@ export function Sprite(props: SpriteProps): any {
           }
         }
 
-        getClassName(): string {
-          return this._className ?? className
-        }
+        getClassName(): string { return this._className ?? className }
+
+        setTimeout(func: () => void, ms: number): Timeout { return Core.setTimeout(func, ms, this) }
+        setInterval(func: () => void, ms: number): Timeout { return Core.setInterval(func, ms, this) }
+        clearTimeout(timeout: Timeout): void { Core.clearTimeout(timeout) }
+        clearInterval(interval: Timeout): void { Core.clearTimeout(interval) }
+        clearAllTimeouts(): void { Core.clearAllTimeoutsByContext(this) }
 
         _props: SpriteProps
         _className: string
@@ -334,6 +332,7 @@ export function Sprite(props: SpriteProps): any {
         _release(): void {
           if (!this.babylon.mesh) { Logger.debugError('Trying to remove a Sprite that has been already removed.', this.getClassName()); return }
           invokeCallback(this.onDestroy, this)
+          this.clearAllTimeouts()
           this.stopAnimation()
           if (this._exclusiveTexture) {
             this._spriteMesh?.release()

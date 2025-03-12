@@ -5,6 +5,7 @@ import {
   LoadingProgress,
   Metadata
 } from '../../base'
+import { Core } from '../../base/core/core'
 import {
   GUIController,
   MeshesController,
@@ -13,6 +14,7 @@ import {
 } from '../../controllers'
 import { BabylonAccessor } from '../../models/babylon-accessor'
 import { Rect } from '../../models/rect'
+import { Timeout } from '../../models/timeout'
 import { FlexId } from '../../types/flex-id'
 import {
   attachCanvasResize,
@@ -41,9 +43,13 @@ export function GUI(props: GUIProps = {}): any {
         this._metadata.applyProps(this)
       }
 
-      getClassName(): string {
-        return className
-      }
+      getClassName(): string { return className }
+
+      setTimeout(func: () => void, ms: number): Timeout { return Core.setTimeout(func, ms, this) }
+      setInterval(func: () => void, ms: number): Timeout { return Core.setInterval(func, ms, this) }
+      clearTimeout(timeout: Timeout): void { Core.clearTimeout(timeout) }
+      clearInterval(interval: Timeout): void { Core.clearTimeout(interval) }
+      clearAllTimeouts(): void { Core.clearAllTimeoutsByContext(this) }
 
       props: GUIProps
       _metadata: Metadata = Reflect.getMetadata('metadata', this) ?? new Metadata()
@@ -72,6 +78,7 @@ export function GUI(props: GUIProps = {}): any {
       }
 
       _release() {
+        this.clearAllTimeouts()
         invokeCallback(this.onDestroy, this)
         this.babylon.gui?.dispose()
         removeLoopUpdate(this)

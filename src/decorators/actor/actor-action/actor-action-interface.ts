@@ -36,6 +36,7 @@ export abstract class ActorActionInterface<S = any, A = ActorInterface<SpriteInt
   abstract setInterval(func: () => void, ms: number): Timeout
   abstract clearTimeout(timeout: Timeout): void
   abstract clearInterval(timeout: Timeout): void
+  abstract clearAllTimeouts(): void
   abstract play(): void
   abstract stop(): void // Callable from user Action, it will call to 'owner.stopActionFromInstance', then owner calls 'action.end' after remove it.
   abstract remove(): void

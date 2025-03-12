@@ -1,6 +1,7 @@
 import * as BABYLON from '@babylonjs/core'
 
 import { LoadingProgress } from '../../../base'
+import { Core } from '../../../base/core/core'
 import { Metadata } from '../../../base/interfaces/metadata/metadata'
 import {
   ActorsController,
@@ -10,6 +11,7 @@ import {
   SpritesController
 } from '../../../controllers'
 import { Rect } from '../../../models/rect'
+import { Timeout } from '../../../models/timeout'
 import { Logger } from '../../../modules/logger'
 import { FlexId } from '../../../types/flex-id'
 import {
@@ -45,9 +47,13 @@ export function SceneState(props: SceneStateProps = {}): any {
         }
       }
 
-      getClassName(): string {
-        return className
-      }
+      getClassName(): string { return className }
+
+      setTimeout(func: () => void, ms: number): Timeout { return Core.setTimeout(func, ms, this) }
+      setInterval(func: () => void, ms: number): Timeout { return Core.setInterval(func, ms, this) }
+      clearTimeout(timeout: Timeout): void { Core.clearTimeout(timeout) }
+      clearInterval(interval: Timeout): void { Core.clearTimeout(interval) }
+      clearAllTimeouts(): void { Core.clearAllTimeoutsByContext(this) }
 
       _props: SceneStateProps
       setup: any
@@ -104,6 +110,7 @@ export function SceneState(props: SceneStateProps = {}): any {
         removeLoopUpdate(this)
         removeCanvasResize(this)
         invokeCallback(this.onEnd, this)
+        this.clearAllTimeouts()
       }
 
       notify(message: FlexId, ...args: any[]): void {

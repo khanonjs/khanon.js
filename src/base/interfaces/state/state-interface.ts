@@ -26,6 +26,7 @@ export abstract class StateInterface<S = any> implements LoopUpdatable, CanvasRe
   abstract setInterval(func: () => void, ms: number): Timeout
   abstract clearTimeout(timeout: Timeout): void
   abstract clearInterval(timeout: Timeout): void
+  abstract clearAllTimeouts(): void
 
   /**
    * User defined optional

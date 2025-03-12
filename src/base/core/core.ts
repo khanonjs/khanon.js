@@ -222,11 +222,18 @@ export class Core {
     Core.intervals.clear()
   }
 
-  /* static clearAllTimeoutsByContext(context: any): void { // 8a8f
-    Core.timeouts.
-    Core.timeouts.clear()
-    Core.intervals.clear()
-  } */
+  static clearAllTimeoutsByContext(context: any): void {
+    [...Core.timeouts].forEach(timeout => {
+      if (timeout.context === context) {
+        Core.clearTimeout(timeout)
+      }
+    });
+    [...Core.intervals].forEach(interval => {
+      if (interval.context === context) {
+        Core.clearInterval(interval)
+      }
+    })
+  }
 
   static getLoopUpdateLastMs() {
     return Core.loopUpdateLastMs
@@ -258,7 +265,7 @@ export class Core {
             interval.ms -= Core.loopUpdateMps
             if (interval.ms < 0) {
               if (interval.context) {
-                interval.func.bind(interval.context)
+                interval.func.bind(interval.context)()
               } else {
                 interval.func()
               }

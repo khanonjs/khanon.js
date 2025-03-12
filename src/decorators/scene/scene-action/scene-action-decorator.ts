@@ -10,10 +10,10 @@ import {
   SpritesController
 } from '../../../controllers'
 import { Rect } from '../../../models/rect'
+import { Timeout } from '../../../models/timeout'
 import { Logger } from '../../../modules/logger'
 import {
   attachCanvasResize,
-  attachLoopUpdate,
   invokeCallback,
   switchLoopUpdate
 } from '../../../utils/utils'
@@ -26,6 +26,7 @@ import { SceneActionProps } from './scene-action-props'
 export function SceneAction(props: SceneActionProps = {}): any {
   return function <T extends { new (...args: any[]): SceneActionInterface }>(constructorOrTarget: (T & SceneActionInterface) | any, contextOrMethod: ClassDecoratorContext | string, descriptor: PropertyDescriptor) {
     const className = constructorOrTarget.name
+
     const decorateClass = () => {
       const _classInterface = class extends constructorOrTarget implements SceneActionInterface {
         constructor(readonly scene: SceneInterface) {
@@ -33,9 +34,13 @@ export function SceneAction(props: SceneActionProps = {}): any {
           this._metadata.applyProps(this)
         }
 
-        getClassName(): string {
-          return this._className ?? className
-        }
+        getClassName(): string { return this._className ?? className }
+
+        setTimeout(func: () => void, ms: number): Timeout { return Core.setTimeout(func, ms, this) }
+        setInterval(func: () => void, ms: number): Timeout { return Core.setInterval(func, ms, this) }
+        clearTimeout(timeout: Timeout): void { Core.clearTimeout(timeout) }
+        clearInterval(interval: Timeout): void { Core.clearTimeout(interval) }
+        clearAllTimeouts(): void { Core.clearAllTimeoutsByContext(this) }
 
         _props = props
         _metadata: Metadata = Reflect.getMetadata('metadata', this) ?? new Metadata()

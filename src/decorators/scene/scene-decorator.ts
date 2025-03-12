@@ -23,6 +23,7 @@ import {
 import KJS from '../../kjs/kjs'
 import { BabylonAccessor } from '../../models/babylon-accessor'
 import { Rect } from '../../models/rect'
+import { Timeout } from '../../models/timeout'
 import { Logger } from '../../modules/logger'
 import { FlexId } from '../../types/flex-id'
 import {
@@ -76,9 +77,13 @@ export function Scene(props: SceneProps = {}): any {
         this.storeAvailableElements()
       }
 
-      getClassName(): string {
-        return constructor.name
-      }
+      getClassName(): string { return constructor.name }
+
+      setTimeout(func: () => void, ms: number): Timeout { return Core.setTimeout(func, ms, this) }
+      setInterval(func: () => void, ms: number): Timeout { return Core.setInterval(func, ms, this) }
+      clearTimeout(timeout: Timeout): void { Core.clearTimeout(timeout) }
+      clearInterval(interval: Timeout): void { Core.clearTimeout(interval) }
+      clearAllTimeouts(): void { Core.clearAllTimeoutsByContext(this) }
 
       _props = removeArrayDuplicitiesInObject(applyDefaults(props, scenePropsDefault))
       _metadata: Metadata = Reflect.getMetadata('metadata', this) ?? new Metadata()
@@ -170,6 +175,8 @@ export function Scene(props: SceneProps = {}): any {
         if (Core.isDevelopmentMode()) {
           this._denyDebugInspector()
         }
+        invokeCallback(this.onStop, this)
+        this.clearAllTimeouts()
         this._releaseGUIs()
         this.releaseCamera()
         this.state?._end()
@@ -464,6 +471,7 @@ export function Scene(props: SceneProps = {}): any {
           invokeCallback(action.onStop, action)
           if (!action._props.preserve || forceRemove) {
             invokeCallback(action.onRemove, action)
+            action.clearAllTimeouts()
             this._actions.delete(actionConstructor)
           }
         }

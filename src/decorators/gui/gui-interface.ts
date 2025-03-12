@@ -42,6 +42,7 @@ export abstract class GUIInterface<S = any> implements LoopUpdatable, CanvasResi
   abstract setInterval(func: () => void, ms: number): Timeout
   abstract clearTimeout(timeout: Timeout): void
   abstract clearInterval(timeout: Timeout): void
+  abstract clearAllTimeouts(): void
 
   /**
    * User defined mandatory (abstract on .d.ts)

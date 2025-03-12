@@ -3,6 +3,7 @@ import * as BABYLON from '@babylonjs/core'
 import { StateInterface } from '../../../base'
 import { Metadata } from '../../../base/interfaces/metadata/metadata'
 import { Rect } from '../../../models/rect'
+import { Timeout } from '../../../models/timeout'
 import { FlexId } from '../../../types/flex-id'
 import { GUIInterface } from '../gui-interface'
 import { GUIStateProps } from './gui-state-props'
@@ -24,6 +25,11 @@ export abstract class GUIStateInterface<S = any, C = GUIInterface> implements St
   abstract get loopUpdate(): boolean
   abstract set loopUpdate(value: boolean)
   abstract getClassName(): string
+  abstract setTimeout(func: () => void, ms: number): Timeout
+  abstract setInterval(func: () => void, ms: number): Timeout
+  abstract clearTimeout(timeout: Timeout): void
+  abstract clearInterval(interval: Timeout): void
+  abstract clearAllTimeouts(): void
   abstract notify(message: FlexId, ...args: any[]): void
 
   /**
