@@ -43,6 +43,14 @@ import { spritePropsDefault } from './sprite.props.deafult'
 export function Sprite(props: SpriteProps): any {
   return function <T extends { new (...args: any[]): SpriteInterface }>(constructorOrTarget: (T & SpriteInterface), contextOrProperty: ClassDecoratorContext | string, descriptor: PropertyDescriptor) {
     const className = constructorOrTarget.name
+
+    /* constructorOrTarget.setTimeout = (func: () => void, ms: number): Timeout => { // 8a8f
+      return null as any
+    }
+    constructorOrTarget.setInterval = (func: () => void, ms: number): Timeout => {
+      return null as any
+    } */
+
     const decorateClass = () => {
       const _classInterface = class extends constructorOrTarget implements SpriteInterface {
         constructor(readonly scene: SceneInterface, props: SpriteProps) {
@@ -208,7 +216,7 @@ export function Sprite(props: SpriteProps): any {
             keyFrames?.forEach((animationKeyFrame) => {
               if (animationKeyFrame.emitter.hasObservers()) {
                 animationKeyFrame.ms.forEach((ms) => {
-                  this._keyFramesTimeouts.push(KJS.setTimeout(() => animationKeyFrame.emitter.notifyObservers(), ms))
+                  this._keyFramesTimeouts.push(this.setTimeout(() => animationKeyFrame.emitter.notifyObservers(), ms))
                 })
               }
             })
@@ -225,9 +233,9 @@ export function Sprite(props: SpriteProps): any {
 
           if (completed || (keyFrames && keyFrames.length > 0)) {
             if (loop) {
-              this.endAnimationTimerInterval = KJS.setInterval(() => onCompleted(), (frameEnd - frameStart + 1) * delay)
+              this.endAnimationTimerInterval = this.setInterval(() => onCompleted(), (frameEnd - frameStart + 1) * delay)
             } else {
-              this.endAnimationTimerTimeout = KJS.setTimeout(() => onCompleted(), (frameEnd - frameStart + 1) * delay)
+              this.endAnimationTimerTimeout = this.setTimeout(() => onCompleted(), (frameEnd - frameStart + 1) * delay)
             }
             startKeyframes()
           }
@@ -266,17 +274,17 @@ export function Sprite(props: SpriteProps): any {
         }
 
         _removeAnimationKeyFrames(): void {
-          this._keyFramesTimeouts.forEach((timeout) => KJS.clearTimeout(timeout))
+          this._keyFramesTimeouts.forEach((timeout) => this.clearTimeout(timeout))
           this._keyFramesTimeouts = []
         }
 
         _removeEndAnimationTimer(): void {
           if (this.endAnimationTimerInterval) {
-            KJS.clearInterval(this.endAnimationTimerInterval)
+            this.clearInterval(this.endAnimationTimerInterval)
             this.endAnimationTimerInterval = null
           }
           if (this.endAnimationTimerTimeout) {
-            KJS.clearTimeout(this.endAnimationTimerTimeout)
+            this.clearTimeout(this.endAnimationTimerTimeout)
             this.endAnimationTimerTimeout = null
           }
         }

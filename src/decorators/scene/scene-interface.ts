@@ -9,8 +9,10 @@ import {
   Notificable
 } from '../../base'
 import { Metadata } from '../../base/interfaces/metadata/metadata'
+import { TimersByContext } from '../../base/interfaces/timers-by-context'
 import { BabylonAccessor } from '../../models/babylon-accessor'
 import { Rect } from '../../models/rect'
+import { Timeout } from '../../models/timeout'
 import { FlexId } from '../../types/flex-id'
 import { ActorInterface } from '../actor/actor-interface'
 import { CameraConstructor } from '../camera/camera-constructor'
@@ -30,7 +32,7 @@ import { SceneSpawn } from './scene-spawn'
 import { SceneStateConstructor } from './scene-state/scene-state-constructor'
 import { SceneStateInterface } from './scene-state/scene-state-interface'
 
-export abstract class SceneInterface implements Loadable, LoopUpdatable, CanvasResizable, Notificable {
+export abstract class SceneInterface implements Loadable, LoopUpdatable, CanvasResizable, Notificable, TimersByContext {
   abstract _props: SceneProps
   abstract _assets: AssetDefinition[]
   abstract _loaded: boolean
@@ -78,6 +80,10 @@ export abstract class SceneInterface implements Loadable, LoopUpdatable, CanvasR
   abstract get spawn(): SceneSpawn
   abstract get remove(): SceneRemove
   abstract getClassName(): string
+  abstract setTimeout(func: () => void, ms: number): Timeout
+  abstract setInterval(func: () => void, ms: number): Timeout
+  abstract clearTimeout(timeout: Timeout): void
+  abstract clearInterval(timeout: Timeout): void
   abstract start(state?: SceneStateConstructor, stateSetup?: any): SceneStateInterface | null
   abstract stop(): void
   abstract load(): LoadingProgress

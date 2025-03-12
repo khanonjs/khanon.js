@@ -7,14 +7,16 @@ import {
   Metadata,
   Notificable
 } from '../../base'
+import { TimersByContext } from '../../base/interfaces/timers-by-context'
 import { BabylonAccessor } from '../../models/babylon-accessor'
 import { Rect } from '../../models/rect'
+import { Timeout } from '../../models/timeout'
 import { FlexId } from '../../types/flex-id'
 import { SceneInterface } from '../scene/scene-interface'
 import { GUIStateConstructor } from './gui-state/gui-state-constructor'
 import { GUIStateInterface } from './gui-state/gui-state-interface'
 
-export abstract class GUIInterface<S = any> implements LoopUpdatable, CanvasResizable, Notificable {
+export abstract class GUIInterface<S = any> implements LoopUpdatable, CanvasResizable, Notificable, TimersByContext {
   abstract _loopUpdate: boolean
   // abstract _state: GUIStateInterface | null
   abstract _metadata: Metadata
@@ -36,6 +38,10 @@ export abstract class GUIInterface<S = any> implements LoopUpdatable, CanvasResi
   // abstract show(): void
   // abstract hide(): void
   abstract notify(message: FlexId, ...args: any[]): void
+  abstract setTimeout(func: () => void, ms: number): Timeout
+  abstract setInterval(func: () => void, ms: number): Timeout
+  abstract clearTimeout(timeout: Timeout): void
+  abstract clearInterval(timeout: Timeout): void
 
   /**
    * User defined mandatory (abstract on .d.ts)

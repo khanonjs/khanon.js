@@ -197,13 +197,13 @@ export class Core {
     Core.onCanvasResize.remove(observer)
   }
 
-  static setTimeout(func: () => void, ms: number, context?: any): Timeout {
+  static setTimeout(func: () => void, ms: number, context: any): Timeout {
     const timeout = { func, oms: ms, ms, context }
     Core.timeouts.add(timeout)
     return timeout
   }
 
-  static setInterval(func: () => void, ms: number, context?: any): Timeout {
+  static setInterval(func: () => void, ms: number, context: any): Timeout {
     const timeout = { func, oms: ms, ms, context }
     Core.intervals.add(timeout)
     return timeout
@@ -221,6 +221,12 @@ export class Core {
     Core.timeouts.clear()
     Core.intervals.clear()
   }
+
+  /* static clearAllTimeoutsByContext(context: any): void { // 8a8f
+    Core.timeouts.
+    Core.timeouts.clear()
+    Core.intervals.clear()
+  } */
 
   static getLoopUpdateLastMs() {
     return Core.loopUpdateLastMs

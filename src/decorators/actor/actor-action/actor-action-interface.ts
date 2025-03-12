@@ -3,6 +3,7 @@ import * as BABYLON from '@babylonjs/core'
 import { ActionInterface } from '../../../base'
 import { Metadata } from '../../../base/interfaces/metadata/metadata'
 import { Rect } from '../../../models/rect'
+import { Timeout } from '../../../models/timeout'
 import { MeshInterface } from '../../mesh/mesh-interface'
 import { SceneInterface } from '../../scene/scene-interface'
 import { SpriteInterface } from '../../sprite/sprite-interface'
@@ -31,6 +32,10 @@ export abstract class ActorActionInterface<S = any, A = ActorInterface<SpriteInt
   abstract get scene(): SceneInterface
   abstract get isPlaying(): boolean
   abstract getClassName(): string
+  abstract setTimeout(func: () => void, ms: number): Timeout
+  abstract setInterval(func: () => void, ms: number): Timeout
+  abstract clearTimeout(timeout: Timeout): void
+  abstract clearInterval(timeout: Timeout): void
   abstract play(): void
   abstract stop(): void // Callable from user Action, it will call to 'owner.stopActionFromInstance', then owner calls 'action.end' after remove it.
   abstract remove(): void

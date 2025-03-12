@@ -34,9 +34,6 @@ export function App(props: AppProps): any {
           this._stateCore.unload(newStateCore)
           // TODO For scene switch, before unloading the current one, look for assets from the next one. Do not delete assets that are in the next scene.
         }
-        if (this._props.removeTimeoutsOnStateSwitch) {
-          Core.clearAllTimeouts()
-        }
         this._stateCore = newStateCore
         this._state = this._stateCore.spawn()
         const progress = this._stateCore.load()

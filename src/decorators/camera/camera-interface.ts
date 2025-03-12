@@ -6,12 +6,14 @@ import {
   Metadata,
   Notificable
 } from '../../base'
+import { TimersByContext } from '../../base/interfaces/timers-by-context'
 import { BabylonAccessor } from '../../models/babylon-accessor'
 import { Rect } from '../../models/rect'
+import { Timeout } from '../../models/timeout'
 import { FlexId } from '../../types/flex-id'
 import { SceneInterface } from '../scene/scene-interface'
 
-export abstract class CameraInterface<S = any, C extends SceneInterface = SceneInterface> implements LoopUpdatable, CanvasResizable, Notificable {
+export abstract class CameraInterface<S = any, C extends SceneInterface = SceneInterface> implements LoopUpdatable, CanvasResizable, Notificable, TimersByContext {
   abstract _loopUpdate: boolean
   abstract _metadata: Metadata
   abstract _loopUpdate$: BABYLON.Observer<number>
@@ -29,6 +31,10 @@ export abstract class CameraInterface<S = any, C extends SceneInterface = SceneI
   abstract babylon: Pick<BabylonAccessor<BABYLON.Camera>, 'camera' | 'scene'>
   abstract getClassName(): string
   abstract notify(message: FlexId, ...args: any[]): void
+  abstract setTimeout(func: () => void, ms: number): Timeout
+  abstract setInterval(func: () => void, ms: number): Timeout
+  abstract clearTimeout(timeout: Timeout): void
+  abstract clearInterval(timeout: Timeout): void
   // TODO attach particles to camera to simulate environment effects?
 
   /**
