@@ -3,6 +3,7 @@ import * as BABYLON from '@babylonjs/core'
 import { StateInterface } from '../../../base'
 import { Metadata } from '../../../base/interfaces/metadata/metadata'
 import { Rect } from '../../../models/rect'
+import { Timeout } from '../../../models/timeout'
 import { FlexId } from '../../../types/flex-id'
 import { MeshInterface } from '../../mesh/mesh-interface'
 import { SceneInterface } from '../../scene/scene-interface'
@@ -29,6 +30,11 @@ export abstract class ActorStateInterface<S = any, A = ActorInterface<SpriteInte
   abstract get loopUpdate(): boolean
   abstract set loopUpdate(value: boolean)
   abstract getClassName(): string
+  abstract setTimeout(func: () => void, ms: number): Timeout
+  abstract setInterval(func: () => void, ms: number): Timeout
+  abstract clearTimeout(timeout: Timeout): void
+  abstract clearInterval(timeout: Timeout): void
+  abstract clearAllTimeouts(): void
   abstract switchState(state: ActorStateConstructor, setup: any): ActorStateInterface
   abstract notify(message: FlexId, ...args: any[]): void
 

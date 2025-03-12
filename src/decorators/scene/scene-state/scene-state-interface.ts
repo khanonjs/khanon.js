@@ -3,6 +3,7 @@ import * as BABYLON from '@babylonjs/core'
 import { StateInterface } from '../../../base'
 import { Metadata } from '../../../base/interfaces/metadata/metadata'
 import { Rect } from '../../../models/rect'
+import { Timeout } from '../../../models/timeout'
 import { FlexId } from '../../../types/flex-id'
 import { CameraConstructor } from '../../camera/camera-constructor'
 import { CameraInterface } from '../../camera/camera-interface'
@@ -34,6 +35,11 @@ export abstract class SceneStateInterface<S = any, C = SceneInterface> implement
   abstract get remove(): SceneRemove
   abstract loopUpdate: boolean
   abstract getClassName(): string
+  abstract setTimeout(func: () => void, ms: number): Timeout
+  abstract setInterval(func: () => void, ms: number): Timeout
+  abstract clearTimeout(timeout: Timeout): void
+  abstract clearInterval(timeout: Timeout): void
+  abstract clearAllTimeouts(): void
   abstract showGUI<G extends GUIInterface>(gui: GUIConstructor, setup: any): G
   abstract hideGUI(gui: GUIConstructor): void
   abstract getGUI<G extends GUIInterface>(gui: GUIConstructor): G | undefined

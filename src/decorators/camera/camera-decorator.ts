@@ -1,9 +1,11 @@
 import * as BABYLON from '@babylonjs/core'
 
 import { Metadata } from '../../base'
+import { Core } from '../../base/core/core'
 import { CamerasController } from '../../controllers'
 import { BabylonAccessor } from '../../models/babylon-accessor'
 import { Rect } from '../../models/rect'
+import { Timeout } from '../../models/timeout'
 import { Logger } from '../../modules/logger'
 import { FlexId } from '../../types/flex-id'
 import {
@@ -31,9 +33,13 @@ export function Camera(props: CameraProps = {}): any {
         }
       }
 
-      getClassName(): string {
-        return className
-      }
+      getClassName(): string { return className }
+
+      setTimeout(func: () => void, ms: number): Timeout { return Core.setTimeout(func, ms, this) }
+      setInterval(func: () => void, ms: number): Timeout { return Core.setInterval(func, ms, this) }
+      clearTimeout(timeout: Timeout): void { Core.clearTimeout(timeout) }
+      clearInterval(interval: Timeout): void { Core.clearTimeout(interval) }
+      clearAllTimeouts(): void { Core.clearAllTimeoutsByContext(this) }
 
       _metadata: Metadata = Reflect.getMetadata('metadata', this) ?? new Metadata()
       babylon: Pick<BabylonAccessor<BABYLON.Camera>, 'camera' | 'scene'> = { camera: null as any, scene: null as any }
@@ -69,6 +75,7 @@ export function Camera(props: CameraProps = {}): any {
       }
 
       _release(): void {
+        this.clearAllTimeouts()
         this._stop()
         this.babylon.camera.dispose()
       }

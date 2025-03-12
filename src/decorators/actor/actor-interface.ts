@@ -6,7 +6,9 @@ import {
   Notificable
 } from '../../base'
 import { Metadata } from '../../base/interfaces/metadata/metadata'
+import { TimersByContext } from '../../base/interfaces/timers-by-context'
 import { Rect } from '../../models/rect'
+import { Timeout } from '../../models/timeout'
 import { TransformComposition } from '../../models/transform-composition'
 import {
   MeshTransform,
@@ -30,7 +32,7 @@ import { ActorStateConstructor } from './actor-state/actor-state-constructor'
 import { ActorStateInterface } from './actor-state/actor-state-interface'
 
 // TODO add animation system, that animates body and nodes depending on what they are
-export abstract class ActorInterface<B extends SpriteInterface | MeshInterface = any> implements LoopUpdatable, CanvasResizable, Notificable {
+export abstract class ActorInterface<B extends SpriteInterface | MeshInterface = any> implements LoopUpdatable, CanvasResizable, Notificable, TimersByContext {
   abstract _metadata: Metadata
   abstract _props: ActorProps
   abstract _loopUpdate: boolean
@@ -66,6 +68,11 @@ export abstract class ActorInterface<B extends SpriteInterface | MeshInterface =
   abstract get enabled(): boolean
   abstract set enabled(value: boolean)
   abstract getClassName(): string
+  abstract setTimeout(func: () => void, ms: number): Timeout
+  abstract setInterval(func: () => void, ms: number): Timeout
+  abstract clearTimeout(timeout: Timeout): void
+  abstract clearInterval(timeout: Timeout): void
+  abstract clearAllTimeouts(): void
   abstract setBody(Body: new () => B): B
   abstract addNode(Node: new () => B, name: string, transform?: TransformComposition): ActorNode<B> | undefined
   abstract getNode(name: string): ActorNode<B> | undefined

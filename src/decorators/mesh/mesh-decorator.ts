@@ -4,6 +4,7 @@ import {
   AssetDataMesh,
   LoadingProgress
 } from '../../base'
+import { Core } from '../../base/core/core'
 import { Metadata } from '../../base/interfaces/metadata/metadata'
 import {
   AssetsController,
@@ -11,6 +12,7 @@ import {
 } from '../../controllers'
 import { BabylonAccessor } from '../../models/babylon-accessor'
 import { Rect } from '../../models/rect'
+import { Timeout } from '../../models/timeout'
 import { Logger } from '../../modules/logger'
 import { FlexId } from '../../types/flex-id'
 import {
@@ -78,9 +80,13 @@ export function Mesh(props: MeshProps = {}): any {
           }
         }
 
-        getClassName(): string {
-          return this._className ?? className
-        }
+        getClassName(): string { return this._className ?? className }
+
+        setTimeout(func: () => void, ms: number): Timeout { return Core.setTimeout(func, ms, this) }
+        setInterval(func: () => void, ms: number): Timeout { return Core.setInterval(func, ms, this) }
+        clearTimeout(timeout: Timeout): void { Core.clearTimeout(timeout) }
+        clearInterval(interval: Timeout): void { Core.clearTimeout(interval) }
+        clearAllTimeouts(): void { Core.clearAllTimeoutsByContext(this) }
 
         _props: MeshProps
         _className: string
@@ -252,6 +258,7 @@ export function Mesh(props: MeshProps = {}): any {
 
         _release(): void {
           invokeCallback(this.onDestroy, this)
+          this.clearAllTimeouts()
           this.stopAnimation()
           this._animations.forEach(animation => animation.animationGroup.dispose())
           this.babylon.mesh.dispose()

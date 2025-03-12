@@ -92,43 +92,4 @@ export declare namespace KJS {
    * Returns the canvas rect.
    */
   export function getCanvasRect(): Rect
-
-  /**
-   * Sets a timeout.
-   * This timeout relies on the app loopUpdate, meaning the application will trigger it at time, no matter if the browser tab is unfocused.
-   * Some browsers delay native timeouts when tab is unfocused to unweight cpu load, what could drive to app inconsistencies.
-   * KJS timers are also removed on app state changes if 'removeTimeoutsOnStateSwitch' is true, avoiding inconsistencies.
-   * @param func Callback
-   * @param ms Milliseconds
-   * @param context
-   */
-  export function setTimeout(func: () => void, ms: number, context?: any): Timeout
-
-  /**
-   * Sets an interval.
-   * This interval relies on the app loopUpdate, meaning the application will trigger it at time, no matter if the browser tab is unfocused.
-   * Some browsers delay native timeouts when tab is unfocused to unweight cpu load, what could drive to app inconsistencies.
-   * KJS timers are also removed on app state changes if 'removeTimeoutsOnStateSwitch' is true, avoiding inconsistencies.
-   * @param func Callback
-   * @param ms Milliseconds
-   * @param context
-   */
-  export function setInterval(func: () => void, ms: number, context?: any): Timeout
-
-  /**
-   * Clears a timeout.
-   * @param timeout
-   */
-  export function clearTimeout(timeout: Timeout): void
-
-  /**
-   * Clears an interval.
-   * @param timeout
-   */
-  export function clearInterval(timeout: Timeout): void
-
-  /**
-   * Clear all timeouts and intervals.
-   */
-  export function clearAllTimeouts(): void
 }

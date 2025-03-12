@@ -6,8 +6,10 @@ import {
   LoopUpdatable
 } from '../../base'
 import {} from '../../base/interfaces/canvas-resizable'
+import { TimersByContext } from '../../base/interfaces/timers-by-context'
 import { BabylonAccessor } from '../../models/babylon-accessor'
 import { Rect } from '../../models/rect'
+import { Timeout } from '../../models/timeout'
 import { FlexId } from '../../types/flex-id'
 import { SceneInterface } from '../scene/scene-interface'
 import { SpriteAnimation } from '../sprite/sprite-animation'
@@ -15,7 +17,7 @@ import { MeshAnimation } from './mesh-animation'
 import { MeshAnimationOptions } from './mesh-animation-options'
 import { MeshProps } from './mesh-props'
 
-export abstract class MeshInterface implements DisplayObject, LoopUpdatable, CanvasResizable {
+export abstract class MeshInterface implements DisplayObject, LoopUpdatable, CanvasResizable, TimersByContext {
   abstract _props: MeshProps
   abstract _className: string
   abstract _loopUpdate: boolean
@@ -41,6 +43,11 @@ export abstract class MeshInterface implements DisplayObject, LoopUpdatable, Can
   abstract get enabled(): boolean
   abstract set enabled(value: boolean)
   abstract getClassName(): string
+  abstract setTimeout(func: () => void, ms: number): Timeout
+  abstract setInterval(func: () => void, ms: number): Timeout
+  abstract clearTimeout(timeout: Timeout): void
+  abstract clearInterval(timeout: Timeout): void
+  abstract clearAllTimeouts(): void
   abstract setFrame(frame: number): void
   abstract addAnimation(animation: MeshAnimation): void
   abstract playAnimation(animation: SpriteAnimation | MeshAnimation | FlexId, options?: MeshAnimationOptions, completed?: () => void): BABYLON.AnimationGroup

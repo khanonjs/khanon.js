@@ -10,6 +10,7 @@ import {
   SpritesController
 } from '../../../controllers'
 import { Rect } from '../../../models/rect'
+import { Timeout } from '../../../models/timeout'
 import { Logger } from '../../../modules/logger'
 import {
   attachCanvasResize,
@@ -35,9 +36,13 @@ export function ActorAction(props: ActorActionProps = {}): any {
           this._metadata.applyProps(this)
         }
 
-        getClassName(): string {
-          return this._className ?? className
-        }
+        getClassName(): string { return this._className ?? className }
+
+        setTimeout(func: () => void, ms: number): Timeout { return Core.setTimeout(func, ms, this) }
+        setInterval(func: () => void, ms: number): Timeout { return Core.setInterval(func, ms, this) }
+        clearTimeout(timeout: Timeout): void { Core.clearTimeout(timeout) }
+        clearInterval(interval: Timeout): void { Core.clearTimeout(interval) }
+        clearAllTimeouts(): void { Core.clearAllTimeoutsByContext(this) }
 
         _props = props
         _className: string

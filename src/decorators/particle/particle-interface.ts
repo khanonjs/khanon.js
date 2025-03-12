@@ -6,8 +6,10 @@ import {
   Notificable
 } from '../../base'
 import { Metadata } from '../../base/interfaces/metadata/metadata'
+import { TimersByContext } from '../../base/interfaces/timers-by-context'
 import { BabylonAccessor } from '../../models/babylon-accessor'
 import { Rect } from '../../models/rect'
+import { Timeout } from '../../models/timeout'
 import { FlexId } from '../../types/flex-id'
 import { SceneInterface } from '../scene/scene-interface'
 import { SpriteAnimation } from '../sprite/sprite-animation'
@@ -16,7 +18,7 @@ import { SpriteProps } from '../sprite/sprite-props'
 import { ParticleAttachmentInfo } from './particle-attachment-info'
 import { ParticleProps } from './particle-props'
 
-export abstract class ParticleInterface implements LoopUpdatable, CanvasResizable, Notificable {
+export abstract class ParticleInterface implements LoopUpdatable, CanvasResizable, Notificable, TimersByContext {
   abstract _props: ParticleProps
   abstract _className: string
   abstract _metadata: Metadata
@@ -39,6 +41,11 @@ export abstract class ParticleInterface implements LoopUpdatable, CanvasResizabl
   abstract scene: SceneInterface
   abstract loopUpdate: boolean
   abstract getClassName(): string
+  abstract setTimeout(func: () => void, ms: number): Timeout
+  abstract setInterval(func: () => void, ms: number): Timeout
+  abstract clearTimeout(timeout: Timeout): void
+  abstract clearInterval(timeout: Timeout): void
+  abstract clearAllTimeouts(): void
   abstract start(): void
   abstract stop(): void
   abstract setSprite(sprite: SpriteConstructor): void

@@ -5,6 +5,7 @@ import {
   DisplayObject,
   LoopUpdatable
 } from '../../base'
+import { TimersByContext } from '../../base/interfaces/timers-by-context'
 import { BabylonAccessor } from '../../models/babylon-accessor'
 import { DrawBlockProperties } from '../../models/draw-block-properties'
 import { Rect } from '../../models/rect'
@@ -17,7 +18,7 @@ import { SpriteAnimationOptions } from './sprite-animatrion-options'
 import { SpriteMesh } from './sprite-mesh'
 import { SpriteProps } from './sprite-props'
 
-export abstract class SpriteInterface implements DisplayObject, LoopUpdatable, CanvasResizable {
+export abstract class SpriteInterface implements DisplayObject, LoopUpdatable, CanvasResizable, TimersByContext {
   abstract _props: SpriteProps
   abstract _className: string
   abstract _spriteMesh: SpriteMesh
@@ -38,6 +39,11 @@ export abstract class SpriteInterface implements DisplayObject, LoopUpdatable, C
    * User available
    */
   abstract drawText(text: string, properties: DrawBlockProperties): void
+  abstract setTimeout(func: () => void, ms: number): Timeout
+  abstract setInterval(func: () => void, ms: number): Timeout
+  abstract clearTimeout(timeout: Timeout): void
+  abstract clearInterval(timeout: Timeout): void
+  abstract clearAllTimeouts(): void
 
   /**
    * User available Display Object

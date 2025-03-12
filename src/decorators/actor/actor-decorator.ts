@@ -1,6 +1,7 @@
 import * as BABYLON from '@babylonjs/core'
 
 import { LoadingProgress } from '../../base'
+import { Core } from '../../base/core/core'
 import { Metadata } from '../../base/interfaces/metadata/metadata'
 import { MetadataParticleDefinition } from '../../base/interfaces/metadata/metadata-particle-definition'
 import {
@@ -13,6 +14,7 @@ import {
   SpritesController
 } from '../../controllers'
 import { Rect } from '../../models/rect'
+import { Timeout } from '../../models/timeout'
 import { TransformComposition } from '../../models/transform-composition'
 import { Logger } from '../../modules/logger'
 import { FlexId } from '../../types/flex-id'
@@ -57,9 +59,13 @@ export function Actor(props: ActorProps = {}): any {
         this._metadata.applyProps(this)
       }
 
-      getClassName(): string {
-        return className
-      }
+      getClassName(): string { return className }
+
+      setTimeout(func: () => void, ms: number): Timeout { return Core.setTimeout(func, ms, this) }
+      setInterval(func: () => void, ms: number): Timeout { return Core.setInterval(func, ms, this) }
+      clearTimeout(timeout: Timeout): void { Core.clearTimeout(timeout) }
+      clearInterval(interval: Timeout): void { Core.clearTimeout(interval) }
+      clearAllTimeouts(): void { Core.clearAllTimeoutsByContext(this) }
 
       _props: ActorProps
       _metadata: Metadata = Reflect.getMetadata('metadata', this) ?? new Metadata()
@@ -125,6 +131,7 @@ export function Actor(props: ActorProps = {}): any {
 
       _release() {
         invokeCallback(this.onDestroy, this)
+        this.clearAllTimeouts()
         // this.guisRelease()
         this.stopActionAll()
         this.clearParticles()
@@ -335,6 +342,7 @@ export function Actor(props: ActorProps = {}): any {
           invokeCallback(action.onStop, action)
           if (!action._props.preserve || forceRemove) {
             invokeCallback(action.onRemove, action)
+            action.clearAllTimeouts()
             this._actions.delete(actionConstructor)
           }
         }

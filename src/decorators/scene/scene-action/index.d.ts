@@ -1,5 +1,8 @@
 import { SceneInterface } from '../'
-import { Rect } from '../../../models'
+import {
+  Rect,
+  Timeout
+} from '../../../models'
 import { FlexId } from '../../../types'
 import { MeshConstructor } from '../../mesh'
 import { ParticleConstructor } from '../../particle'
@@ -26,6 +29,41 @@ export declare abstract class SceneActionInterface</* Setup object */ S = any, /
    * Returns the name of the class.
    */
   getClassName(): string
+
+  /**
+   * Sets a timeout.
+   * This interval relies on the app loopUpdate and it will be triggered on correct frame.
+   * It will be removed on context remove.
+   * @param func Callback
+   * @param ms Milliseconds
+   */
+  setTimeout(func: () => void, ms: number, context?: any): Timeout
+
+  /**
+   * Sets an interval.
+   * This interval relies on the app loopUpdate and it will be triggered on correct frame.
+   * It will be removed on context remove.
+   * @param func Callback
+   * @param ms Milliseconds
+   */
+  setInterval(func: () => void, ms: number): Timeout
+
+  /**
+   * Clears a timeout in this context.
+   * @param timeout
+   */
+  clearTimeout(timeout: Timeout): void
+
+  /**
+   * Clears an interval in this context.
+   * @param timeout
+   */
+  clearInterval(timeout: Timeout): void
+
+  /**
+   * Clear all timeouts and intervals in this context.
+   */
+  clearAllTimeouts(): void
 
   /**
    * Plays the action in case it has been stopped before and it is preserved (props.preserve = true).

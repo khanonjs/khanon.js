@@ -197,13 +197,13 @@ export class Core {
     Core.onCanvasResize.remove(observer)
   }
 
-  static setTimeout(func: () => void, ms: number, context?: any): Timeout {
+  static setTimeout(func: () => void, ms: number, context: any): Timeout {
     const timeout = { func, oms: ms, ms, context }
     Core.timeouts.add(timeout)
     return timeout
   }
 
-  static setInterval(func: () => void, ms: number, context?: any): Timeout {
+  static setInterval(func: () => void, ms: number, context: any): Timeout {
     const timeout = { func, oms: ms, ms, context }
     Core.intervals.add(timeout)
     return timeout
@@ -220,6 +220,19 @@ export class Core {
   static clearAllTimeouts(): void {
     Core.timeouts.clear()
     Core.intervals.clear()
+  }
+
+  static clearAllTimeoutsByContext(context: any): void {
+    [...Core.timeouts].forEach(timeout => {
+      if (timeout.context === context) {
+        Core.clearTimeout(timeout)
+      }
+    });
+    [...Core.intervals].forEach(interval => {
+      if (interval.context === context) {
+        Core.clearInterval(interval)
+      }
+    })
   }
 
   static getLoopUpdateLastMs() {
@@ -252,7 +265,7 @@ export class Core {
             interval.ms -= Core.loopUpdateMps
             if (interval.ms < 0) {
               if (interval.context) {
-                interval.func.bind(interval.context)
+                interval.func.bind(interval.context)()
               } else {
                 interval.func()
               }

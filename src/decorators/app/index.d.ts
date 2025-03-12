@@ -82,15 +82,6 @@ export interface AppProps {
   engineConfiguration?: EngineConfiguration
 
   /**
-   * 'false' by default.
-   * If 'true', all intervals and timeouts created trought KJS.setTimeout or KJS.setInterval are removed on app state change.
-   * This helps to keep the consistency of the app, avoiding to perform actions after a scene is removed.
-   * Use it only if you are setting timeouts and intervals within scenes, to avoid triggering timeouts for elements that no longer exist after the state change.
-   * EXPERIMENTAL: This feature needs a better implementation to avoid removing timers that have been created outside a removed context.
-   */
-  removeTimeoutsOnStateSwitch?: boolean
-
-  /**
    * Logs Khanon.js debug information.
    * This feature is only present in development mode (NODE_ENV = 'development').
    */

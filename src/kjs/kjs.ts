@@ -31,26 +31,6 @@ export class KJS {
     return Core.switchAppState(state, setup)
   }
 
-  static setTimeout(func: () => void, ms: number, context?: any): Timeout { // TODO get context (scene, state, etc) to remove timeouts on state change more accurately, getting rid of property 'removeTimeoutsOnStateSwitch'
-    return Core.setTimeout(func, ms, context)
-  }
-
-  static setInterval(func: () => void, ms: number, context?: any): Timeout {
-    return Core.setInterval(func, ms, context)
-  }
-
-  static clearTimeout(timeout: Timeout): void {
-    Core.clearTimeout(timeout)
-  }
-
-  static clearInterval(timeout: Timeout): void {
-    Core.clearInterval(timeout)
-  }
-
-  static clearAllTimeouts(): void {
-    Core.clearAllTimeouts()
-  }
-
   static loopUpdateAddObserver(func: (delta: number) => void): BABYLON.Observer<number> {
     return Core.loopUpdateAddObserver(func)
   }
