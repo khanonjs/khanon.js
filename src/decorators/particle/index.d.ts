@@ -150,7 +150,7 @@ export interface ParticleProps {
    * In a 2D scene built by sprites, you need to set this property to a vale higher of the sprite behind it.
    * 2D sprites use transparent alpha blending, hiding particles behind them if they coexist with the same *renderingGroupId* than the particle.
    * E.g: In a 2D scene that has a sprite background using *renderingGroupId=0*, you will need to set the particle's *renderingGroupId=1* to see it over the background.
-   * You can ignore this property and use *renderOverTheScene* to make the particle visible over all the elements in the scene (it sets *renderingGroupId=Number.MAX_VALUE*).
+   * You can ignore this property and use *renderOverTheScene* to make the particle visible over all the elements in the scene (it sets *renderingGroupId* to the max value).
    * Read more: https://doc.babylonjs.com/features/featuresDeepDive/materials/advanced/transparent_rendering/#rendering-groups
    */
   renderingGroupId?: number

@@ -85,6 +85,7 @@ export function Particle(props: ParticleProps): any {
             }
             this.babylon.particleSystem = new BABYLON.ParticleSystem(this.getClassName(), this._props.capacity, this.scene.babylon.scene)
             if (this._props.renderingGroupId) {
+              if (this._props.renderingGroupId >= BABYLON.RenderingManager.MAX_RENDERINGGROUPS) { Logger.debugError(`Using a renderingGroupId higher than maximum value ${BABYLON.RenderingManager.MAX_RENDERINGGROUPS - 1}`, this.getClassName()) }
               this.babylon.particleSystem.renderingGroupId = this._props.renderingGroupId
             } else if (this._props.renderOverTheScene) {
               this.babylon.particleSystem.renderingGroupId = BABYLON.RenderingManager.MAX_RENDERINGGROUPS - 1

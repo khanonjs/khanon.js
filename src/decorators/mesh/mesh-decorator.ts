@@ -77,6 +77,7 @@ export function Mesh(props: MeshProps = {}): any {
             switchLoopUpdate(this._loopUpdate, this)
             attachCanvasResize(this)
             if (this._props.renderingGroupId) {
+              if (this._props.renderingGroupId >= BABYLON.RenderingManager.MAX_RENDERINGGROUPS) { Logger.debugError(`Using a renderingGroupId higher than maximum value ${BABYLON.RenderingManager.MAX_RENDERINGGROUPS - 1}`, this.getClassName()) }
               this.babylon.mesh.renderingGroupId = this._props.renderingGroupId
             }
             invokeCallback(this.onSpawn, this)
