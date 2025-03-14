@@ -137,7 +137,7 @@ export type ParticleConstructor = new () => ParticleInterface
 
 export interface ParticleProps {
   /**
-   * If 'true' renders the particle over all the elements in the scene (sets *renderingGroupId=Number.MAX_VALUE*).
+   * If 'true' renders the particle over all the elements in the scene (sets *renderingGroupId* to the max value).
    * Set to 'false' in a 3D scene.
    * Set to 'true' in a 2D scene built by sprites if you want to make the particle visible over all the elements in the scene.
    * This property will be ignored in case *renderingGroupId* is defined.
@@ -145,7 +145,7 @@ export interface ParticleProps {
   renderOverTheScene: boolean
 
   /**
-   * Rendering Group Id of the particle (0 to 3).
+   * Rendering group Id of the particle (0 to 3).
    * In a 3D scene you can ignore this property and set *renderOverTheScene=false*.
    * In a 2D scene built by sprites, you need to set this property to a vale higher of the sprite behind it.
    * 2D sprites use transparent alpha blending, hiding particles behind them if they coexist with the same *renderingGroupId* than the particle.

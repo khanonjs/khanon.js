@@ -275,7 +275,7 @@ export declare interface SpriteProps {
   cached?: boolean
 
   /**
-   * Rendering Group Id of the sprite (0 to 3).
+   * Rendering group Id of the sprite (0 to 3).
    * Read more: https://doc.babylonjs.com/features/featuresDeepDive/materials/advanced/transparent_rendering#rendering-groups
    */
   renderingGroupId?: number
