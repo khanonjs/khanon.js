@@ -160,7 +160,7 @@ export class SpriteMesh {
     this.babylon.material = shaderMaterial
   }
 
-  spawn(): BABYLON.Mesh {
+  cloneMesh(): BABYLON.Mesh {
     const mesh = this.babylon.mesh.clone(`Sprite - ${this.name}`)
     mesh.setEnabled(true)
     mesh.billboardMode = 2
