@@ -6,4 +6,6 @@ export interface ParticleProps {
   sprites?: SpriteConstructor[]
   offset: BABYLON.Vector3
   capacity: number
+  renderingGroupId?: number
+  renderOverTheScene: boolean
 }

@@ -5,4 +5,5 @@ export interface MeshProps {
   animations?: MeshAnimation[]
   cached?: boolean
   cloneByInstances?: boolean
+  renderingGroupId?: number
 }

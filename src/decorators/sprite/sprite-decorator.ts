@@ -18,7 +18,6 @@ import {
   attachCanvasResize,
   invokeCallback,
   isFlexId,
-  maxBelowOne,
   removeCanvasResize,
   removeLoopUpdate,
   switchLoopUpdate
@@ -63,6 +62,9 @@ export function Sprite(props: SpriteProps): any {
             }
             switchLoopUpdate(this._loopUpdate, this)
             attachCanvasResize(this)
+            if (this._props.renderingGroupId) {
+              this.babylon.mesh.renderingGroupId = this._props.renderingGroupId
+            }
             invokeCallback(this.onSpawn, this)
           }
         }
@@ -97,9 +99,6 @@ export function Sprite(props: SpriteProps): any {
         get loopUpdate(): boolean { return this._loopUpdate }
 
         set visibility(value: number) {
-          if (value >= 1) {
-            value = maxBelowOne
-          }
           this.babylon.mesh.visibility = value;
           (this.babylon.mesh.material as BABYLON.ShaderMaterial).setFloat('alpha', this.babylon.mesh.visibility)
         }

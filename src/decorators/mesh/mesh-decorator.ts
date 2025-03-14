@@ -76,6 +76,9 @@ export function Mesh(props: MeshProps = {}): any {
             }
             switchLoopUpdate(this._loopUpdate, this)
             attachCanvasResize(this)
+            if (this._props.renderingGroupId) {
+              this.babylon.mesh.renderingGroupId = this._props.renderingGroupId
+            }
             invokeCallback(this.onSpawn, this)
           }
         }

@@ -386,7 +386,7 @@ export function Actor(props: ActorProps = {}): any {
         return this._actions.get(actionConstructor)
       }
 
-      attachParticle(particleConstructorOrMethod: ParticleConstructor | ((particle: ParticleInterface) => void), id: FlexId, offset: BABYLON.Vector3, nodeName?: string): void {
+      attachParticle(id: FlexId, particleConstructorOrMethod: ParticleConstructor | ((particle: ParticleInterface) => void), offset: BABYLON.Vector3, nodeName?: string): void {
         let isMethod = false
         if (!particleConstructorOrMethod.prototype?.constructor) {
           isMethod = true
@@ -405,7 +405,7 @@ export function Actor(props: ActorProps = {}): any {
           particle.onInitialize = particle.onInitialize?.bind(this)
           particle._create()
         }
-        if (this._props.renderingGroupId) {
+        if (this._props.renderingGroupId && !particle._props.renderingGroupId && !particle._props.renderOverTheScene) {
           particle.babylon.particleSystem.renderingGroupId = this._props.renderingGroupId
         }
         // TODO visibility should affect to particles, is it possible?

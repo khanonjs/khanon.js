@@ -231,6 +231,12 @@ export interface MeshProps {
    * Read more here: https://doc.babylonjs.com/features/featuresDeepDive/mesh/copies/instances
    */
   cloneByInstances?: boolean
+
+  /**
+   * Rendering Group Id of the mesh (0 to 3).
+   * Read more: https://doc.babylonjs.com/features/featuresDeepDive/materials/advanced/transparent_rendering#rendering-groups
+   */
+  renderingGroupId?: number
 }
 
 /**

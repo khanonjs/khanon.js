@@ -84,6 +84,11 @@ export function Particle(props: ParticleProps): any {
               this._offset = this._props.offset.clone()
             }
             this.babylon.particleSystem = new BABYLON.ParticleSystem(this.getClassName(), this._props.capacity, this.scene.babylon.scene)
+            if (this._props.renderingGroupId) {
+              this.babylon.particleSystem.renderingGroupId = this._props.renderingGroupId
+            } else if (this._props.renderOverTheScene) {
+              this.babylon.particleSystem.renderingGroupId = BABYLON.RenderingManager.MAX_RENDERINGGROUPS - 1
+            }
             if (this.onInitialize) {
               this.onInitialize(this)
             }

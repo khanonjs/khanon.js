@@ -137,6 +137,25 @@ export type ParticleConstructor = new () => ParticleInterface
 
 export interface ParticleProps {
   /**
+   * If 'true' renders the particle over all the elements in the scene (sets *renderingGroupId=Number.MAX_VALUE*).
+   * Set to 'false' in a 3D scene.
+   * Set to 'true' in a 2D scene built by sprites if you want to make the particle visible over all the elements in the scene.
+   * This property will be ignored in case *renderingGroupId* is defined.
+   */
+  renderOverTheScene: boolean
+
+  /**
+   * Rendering Group Id of the particle (0 to 3).
+   * In a 3D scene you can ignore this property and set *renderOverTheScene=false*.
+   * In a 2D scene built by sprites, you need to set this property to a vale higher of the sprite behind it.
+   * 2D sprites use transparent alpha blending, hiding particles behind them if they coexist with the same *renderingGroupId* than the particle.
+   * E.g: In a 2D scene that has a sprite background using *renderingGroupId=0*, you will need to set the particle's *renderingGroupId=1* to see it over the background.
+   * You can ignore this property and use *renderOverTheScene* to make the particle visible over all the elements in the scene (it sets *renderingGroupId=Number.MAX_VALUE*).
+   * Read more: https://doc.babylonjs.com/features/featuresDeepDive/materials/advanced/transparent_rendering/#rendering-groups
+   */
+  renderingGroupId?: number
+
+  /**
    * Sprites to be used in this particle.
    */
   sprites?: SpriteConstructor[]
@@ -153,4 +172,4 @@ export interface ParticleProps {
   capacity?: number
 }
 
-export function Particle(props?: ParticleProps): any
+export function Particle(props: ParticleProps): any
