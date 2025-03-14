@@ -7,7 +7,6 @@ import {
   AssetsController,
   SpritesController
 } from '../../controllers'
-import KJS from '../../kjs/kjs'
 import { BabylonAccessor } from '../../models/babylon-accessor'
 import { DrawBlockProperties } from '../../models/draw-block-properties'
 import { Rect } from '../../models/rect'
@@ -19,6 +18,7 @@ import {
   attachCanvasResize,
   invokeCallback,
   isFlexId,
+  maxBelowOne,
   removeCanvasResize,
   removeLoopUpdate,
   switchLoopUpdate
@@ -97,6 +97,9 @@ export function Sprite(props: SpriteProps): any {
         get loopUpdate(): boolean { return this._loopUpdate }
 
         set visibility(value: number) {
+          if (value >= 1) {
+            value = maxBelowOne
+          }
           this.babylon.mesh.visibility = value;
           (this.babylon.mesh.material as BABYLON.ShaderMaterial).setFloat('alpha', this.babylon.mesh.visibility)
         }

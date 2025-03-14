@@ -3,6 +3,7 @@ import * as BABYLON from '@babylonjs/core'
 import { Asset } from '../../base'
 import { BabylonAccessor } from '../../models/babylon-accessor'
 import { Logger } from '../../modules/logger'
+import { maxBelowOne } from '../../utils/utils'
 import { SceneInterface } from '../scene/scene-interface'
 import { SpriteProps } from './sprite-props'
 
@@ -102,6 +103,7 @@ export class SpriteMesh {
     quadVertexData.uvs = uvs
 
     this.babylon.mesh = new BABYLON.Mesh(`SpriteSource - ${this.name}`, this.babylon.scene)
+    this.babylon.mesh.visibility = maxBelowOne
     this.babylon.mesh.setEnabled(false)
     quadVertexData.applyToMesh(this.babylon.mesh, true)
 
@@ -149,13 +151,12 @@ export class SpriteMesh {
     const shaderMaterial = new BABYLON.ShaderMaterial(`spriteMaterial-${this.name}`, this.babylon.scene, `spriteMesh${this.idShader}`, {
       attributes: ['position', 'uv'],
       uniforms: ['worldViewProjection'],
-      samplers: ['textureSampler'],
-      needAlphaBlending: true
+      samplers: ['textureSampler']
     })
 
     shaderMaterial.setTexture('textureSampler', this.babylon.texture)
     shaderMaterial.setInt('frame', 0)
-    shaderMaterial.setFloat('alpha', 1)
+    shaderMaterial.setFloat('alpha', maxBelowOne)
     this.babylon.mesh.material = shaderMaterial
     this.babylon.material = shaderMaterial
   }

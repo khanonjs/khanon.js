@@ -2,6 +2,8 @@ import { Core } from '../base/core/core'
 import { Logger } from '../modules/logger'
 import { ExtractOptional } from '../types/extract-optional'
 
+export const maxBelowOne = 1 - Number.EPSILON
+
 /**
  * Attach LoopUpdate in context if exists.
  */
