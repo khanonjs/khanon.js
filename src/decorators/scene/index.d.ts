@@ -57,7 +57,7 @@ export declare class SceneSpawn {
    * Spawns a particle in the scene.
    * @param particle
    */
-  particle<P extends ParticleInterface>(Particle: ParticleConstructor | ((particle: ParticleInterface) => void), offset?: BABYLON.Vector3): P
+  particle<P extends ParticleConstructor>(Particle: P | ((particle: InstanceType<P>) => void), setup: InstanceType<P>['setup'], offset?: BABYLON.Vector3): InstanceType<P>
 
   /**
    * Spawns a sprite in the scene.

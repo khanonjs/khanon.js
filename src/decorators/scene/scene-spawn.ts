@@ -47,19 +47,19 @@ export class SceneSpawn {
     }
   }
 
-  particle<P extends ParticleInterface>(particleConstructorOrMethod: ParticleConstructor | ((particle: P) => void), offset?: BABYLON.Vector3): P {
+  particle<P extends ParticleInterface>(particleConstructorOrMethod: ParticleConstructor | ((particle: P) => void), setup: any, offset?: BABYLON.Vector3): P {
     let isMethod = false
     if (!particleConstructorOrMethod.prototype?.constructor) {
       isMethod = true
       particleConstructorOrMethod = [...this.scene._metadata.particles].find((value: MetadataParticleDefinition) => particleConstructorOrMethod === value.method as any)?.classDefinition as any
     }
-    const instance = ParticlesController.get(particleConstructorOrMethod).spawn(this.scene, { offset }, !isMethod)
+    const instance = ParticlesController.get(particleConstructorOrMethod).spawn(this.scene, { offset }, !isMethod, setup)
     Logger.debug('Particle spawn:', this.scene.getClassName(), instance.getClassName())
     if (isMethod) {
       // Applies context to 'onInitialize' as caller 'Actor' to preserve the 'this'
       // in case 'initialize' is equivalent to a decorated method of some of those both interfaces.
       instance.onInitialize = instance.onInitialize?.bind(this.scene)
-      instance._create()
+      instance._create(setup)
     }
     this.scene._particles.add(instance)
     return instance as P

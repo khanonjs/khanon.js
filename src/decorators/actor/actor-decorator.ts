@@ -386,28 +386,29 @@ export function Actor(props: ActorProps = {}): any {
         return this._actions.get(actionConstructor)
       }
 
-      attachParticle(id: FlexId, particleConstructorOrMethod: ParticleConstructor | ((particle: ParticleInterface) => void), offset: BABYLON.Vector3, nodeName?: string): void {
+      attachParticle(id: FlexId, particleConstructorOrMethod: ParticleConstructor | ((particle: ParticleInterface) => void), setup: any, offset: BABYLON.Vector3, nodeName?: string): ParticleInterface {
         let isMethod = false
         if (!particleConstructorOrMethod.prototype?.constructor) {
           isMethod = true
           particleConstructorOrMethod = [...this._metadata.particles].find((value: MetadataParticleDefinition) => particleConstructorOrMethod === value.method as any)?.classDefinition as any
         }
         const attachmentSprite = nodeName ? this.getNode(nodeName)?.element : this.body
-        if (!attachmentSprite) { Logger.debugError('Cannot attach a particle to an empty body.', this.getClassName(), particleConstructorOrMethod.prototype); return }
-        if (!this.scene._availableElements.hasParticle(particleConstructorOrMethod as ParticleConstructor)) { Logger.debugError('Trying to attach a particle non available to the actor. Please check the actor props.', this.getClassName(), particleConstructorOrMethod.prototype); return }
-        const particle = ParticlesController.get(particleConstructorOrMethod).spawn(this.scene, { attachment: attachmentSprite, offset }, !isMethod)
+        if (!attachmentSprite) { Logger.debugError('Cannot attach a particle to an empty body.', this.getClassName(), particleConstructorOrMethod.prototype); return null as any }
+        if (!this.scene._availableElements.hasParticle(particleConstructorOrMethod as ParticleConstructor)) { Logger.debugError('Trying to attach a particle non available to the actor. Please check the actor props.', this.getClassName(), particleConstructorOrMethod.prototype); return null as any }
+        const particle = ParticlesController.get(particleConstructorOrMethod).spawn(this.scene, { attachment: attachmentSprite, offset }, !isMethod, setup)
 
         if (isMethod) {
           // Applies context to 'onInitialize' as caller 'Actor' to preserve the 'this'
           // in case 'initialize' is equivalent to a decorated method of some of those both interfaces.
           particle.onInitialize = particle.onInitialize?.bind(this)
-          particle._create()
+          particle._create(setup)
         }
         if (this._props.renderingGroupId && !particle._props.renderingGroupId && !particle._props.renderOverTheScene) {
           particle.babylon.particleSystem.renderingGroupId = this._props.renderingGroupId
         }
         // TODO visibility should affect to particles, is it possible?
         this._particles.set(id, particle)
+        return particle
       }
 
       startParticle(id: FlexId): void {

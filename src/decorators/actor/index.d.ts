@@ -260,7 +260,7 @@ export declare abstract class ActorInterface<B extends SpriteInterface | MeshInt
    * @param offset
    * @param nodeName
    */
-  attachParticle(id: FlexId, Particle: ParticleConstructor | ((particle: ParticleInterface) => void), offset: BABYLON.Vector3, nodeName?: string): void
+  attachParticle<P extends ParticleConstructor>(id: FlexId, Particle: P | ((particle: InstanceType<P>, setup?: any) => void), setup: InstanceType<P>['setup'], offset: BABYLON.Vector3, nodeName?: string): InstanceType<P>
 
   /**
    * Starts a particle.

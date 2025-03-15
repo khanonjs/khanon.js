@@ -19,7 +19,7 @@ import { SpriteProps } from '../sprite/sprite-props'
 import { ParticleAttachmentInfo } from './particle-attachment-info'
 import { ParticleProps } from './particle-props'
 
-export abstract class ParticleInterface implements LoopUpdatable, CanvasResizable, Notificable, TimersByContext {
+export abstract class ParticleInterface<S = any> implements LoopUpdatable, CanvasResizable, Notificable, TimersByContext {
   abstract _props: ParticleProps
   abstract _className: string
   abstract _metadata: Metadata
@@ -33,7 +33,7 @@ export abstract class ParticleInterface implements LoopUpdatable, CanvasResizabl
   abstract _spriteProps: SpriteProps
   abstract _spriteParticleInfo: SpriteParticleInfo
   abstract _offset: BABYLON.Vector3
-  abstract _create(): void
+  abstract _create(setup: S): void
   abstract _updatePosition(): void
   abstract _release(): void
 
@@ -42,6 +42,7 @@ export abstract class ParticleInterface implements LoopUpdatable, CanvasResizabl
    */
   abstract babylon: Pick<BabylonAccessor, 'scene' | 'particleSystem'>
   abstract scene: SceneInterface
+  abstract setup: S
   abstract loopUpdate: boolean
   abstract getClassName(): string
   abstract setTimeout(func: () => void, ms: number): Timeout
@@ -58,7 +59,7 @@ export abstract class ParticleInterface implements LoopUpdatable, CanvasResizabl
   /**
    * User defined mandatory (abstract on .d.ts)
    */
-  onInitialize?(particle: ParticleInterface): void
+  onInitialize?(particle: ParticleInterface, setup?: S): void
 
   /**
    * User defined optional

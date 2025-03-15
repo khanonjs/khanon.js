@@ -59,6 +59,7 @@ export function Particle(props: ParticleProps): any {
         _className: string
         _metadata: Metadata = Reflect.getMetadata('metadata', this) ?? new Metadata()
         babylon: Pick<BabylonAccessor, 'scene' | 'particleSystem'> = { scene: null as any, particleSystem: null as any }
+        setup: any
         _loopUpdate = true
         _loopUpdate$: BABYLON.Observer<number>
         _canvasResize$: BABYLON.Observer<Rect>
@@ -76,8 +77,9 @@ export function Particle(props: ParticleProps): any {
 
         get loopUpdate(): boolean { return this._loopUpdate }
 
-        _create(): void {
+        _create(setup: any): void {
           if (this.scene) {
+            this.setup = setup
             if (this._attachmentInfo.offset) {
               this._offset = this._props.offset.add(this._attachmentInfo.offset)
             } else {
@@ -91,7 +93,7 @@ export function Particle(props: ParticleProps): any {
               this.babylon.particleSystem.renderingGroupId = BABYLON.RenderingManager.MAX_RENDERINGGROUPS - 1
             }
             if (this.onInitialize) {
-              this.onInitialize(this)
+              this.onInitialize(this, setup)
             }
             if (this._attachmentInfo.attachment) {
               this._updatePosition()
@@ -208,10 +210,10 @@ export function Particle(props: ParticleProps): any {
           SpritesController.unload(this.Instance._metadata.getProps().sprites, scene)
         }
 
-        spawn(scene: SceneInterface, attachmentInfo: ParticleAttachmentInfo, create = true): ParticleInterface {
+        spawn(scene: SceneInterface, attachmentInfo: ParticleAttachmentInfo, create = true, setup?: any): ParticleInterface {
           const particle = new _classInterface(scene, this.props, attachmentInfo)
           if (create) {
-            particle._create()
+            particle._create(setup)
           }
           return particle
         }

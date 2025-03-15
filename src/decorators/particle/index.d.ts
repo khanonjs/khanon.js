@@ -9,7 +9,7 @@ import { FlexId } from '../../types'
 import { SceneInterface } from '../scene'
 import { SpriteConstructor } from '../sprite'
 
-export abstract class ParticleInterface {
+export abstract class ParticleInterface<S = any> {
   /**
    * Babylon.js objects.
    */
@@ -19,6 +19,11 @@ export abstract class ParticleInterface {
    * Owner scene of the particle.
    */
   get scene(): SceneInterface
+
+  /**
+   * Setup of the particle.
+   */
+  get setup(): S
 
   /**
    * Turns on/off the 'onLoopUpdate' callback.
