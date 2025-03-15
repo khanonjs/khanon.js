@@ -166,8 +166,9 @@ export interface ParticleProps {
   sprites?: SpriteConstructor[]
 
   /**
-   * Offset position respect the attachment in case the particle is attached to an actor (0, 0, 0 by default).
-   * World position in case the particle is created by a scene.
+   * (0, 0, 0) by default.
+   * Offset respect the attachment in case the particle is attached to an actor.
+   * World position in case the particle is spawned by a scene.
    */
   position?: BABYLON.Vector3
 
