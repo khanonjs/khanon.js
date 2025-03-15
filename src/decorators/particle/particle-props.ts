@@ -7,5 +7,5 @@ export interface ParticleProps {
   position: BABYLON.Vector3
   capacity: number
   renderingGroupId?: number
-  renderOverTheScene: boolean
+  renderOverScene: boolean
 }

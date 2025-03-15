@@ -403,7 +403,7 @@ export function Actor(props: ActorProps = {}): any {
           particle.onInitialize = particle.onInitialize?.bind(this)
           particle._create(setup)
         }
-        if (this._props.renderingGroupId && !particle._props.renderingGroupId && !particle._props.renderOverTheScene) {
+        if (this._props.renderingGroupId && !particle._props.renderingGroupId && !particle._props.renderOverScene) {
           particle.babylon.particleSystem.renderingGroupId = this._props.renderingGroupId
         }
         // TODO visibility should affect to particles, is it possible?
