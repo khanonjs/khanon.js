@@ -248,7 +248,7 @@ export function Particle(props: ParticleProps): any {
       metadata.particles.add({
         propertyName: contextOrProperty as string,
         classDefinition: _particleInterface as any,
-        methodName: contextOrProperty as string
+        method: constructorOrTarget[contextOrProperty as string]
       })
     } else {
       Logger.debugError('Cannot apply mesh decorator to non allowed property class:', constructorOrTarget, contextOrProperty)

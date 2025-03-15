@@ -1,5 +1,7 @@
 import * as BABYLON from '@babylonjs/core'
 
+// 8a8f meter esto en KJS
+
 export declare namespace Helper {
   export namespace Arrays {
     function shuffle(arr: any[], startsOn?: number): void

@@ -1,3 +1,5 @@
+// 8a8f meter esto en KJS
+
 export enum LoggerLevels {
   NO_LOGS = -1,
   ERROR = 3,

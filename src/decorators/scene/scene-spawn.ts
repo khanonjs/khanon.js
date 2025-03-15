@@ -51,9 +51,7 @@ export class SceneSpawn {
     let isMethod = false
     if (!particleConstructorOrMethod.prototype?.constructor) {
       isMethod = true
-      this.scene._metadata.particles.forEach((value: MetadataParticleDefinition) => {
-        particleConstructorOrMethod = value.classDefinition
-      })
+      particleConstructorOrMethod = [...this.scene._metadata.particles].find((value: MetadataParticleDefinition) => particleConstructorOrMethod === value.method as any)?.classDefinition as any
     }
     const instance = ParticlesController.get(particleConstructorOrMethod).spawn(this.scene, { offset }, !isMethod)
     Logger.debug('Particle spawn:', this.scene.getClassName(), instance.getClassName())

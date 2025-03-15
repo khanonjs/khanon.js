@@ -390,9 +390,7 @@ export function Actor(props: ActorProps = {}): any {
         let isMethod = false
         if (!particleConstructorOrMethod.prototype?.constructor) {
           isMethod = true
-          this._metadata.particles.forEach((value: MetadataParticleDefinition) => {
-            particleConstructorOrMethod = value.classDefinition
-          })
+          particleConstructorOrMethod = [...this._metadata.particles].find((value: MetadataParticleDefinition) => particleConstructorOrMethod === value.method as any)?.classDefinition as any
         }
         const attachmentSprite = nodeName ? this.getNode(nodeName)?.element : this.body
         if (!attachmentSprite) { Logger.debugError('Cannot attach a particle to an empty body.', this.getClassName(), particleConstructorOrMethod.prototype); return }

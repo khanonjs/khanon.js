@@ -161,13 +161,13 @@ export interface ParticleProps {
   sprites?: SpriteConstructor[]
 
   /**
-   * Offset position respect the attachment in case the particle is attached to an actor.
+   * Offset position respect the attachment in case the particle is attached to an actor (0, 0, 0 by default).
    * World position in case the particle is created by a scene.
    */
   offset?: BABYLON.Vector3
 
   /**
-   * Maximum number of particles to be emitted.
+   * Maximum number of particles to be emitted (2000 by default).
    */
   capacity?: number
 }
