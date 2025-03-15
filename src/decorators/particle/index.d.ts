@@ -9,7 +9,7 @@ import { FlexId } from '../../types'
 import { SceneInterface } from '../scene'
 import { SpriteConstructor } from '../sprite'
 
-export abstract class ParticleInterface<S = any> {
+export abstract class ParticleInterface</* Setup object */ S = any> {
   /**
    * Babylon.js objects.
    */
@@ -21,7 +21,7 @@ export abstract class ParticleInterface<S = any> {
   get scene(): SceneInterface
 
   /**
-   * Setup of the particle.
+   * Gets the setup object.
    */
   get setup(): S
 
@@ -169,7 +169,7 @@ export interface ParticleProps {
    * Offset position respect the attachment in case the particle is attached to an actor (0, 0, 0 by default).
    * World position in case the particle is created by a scene.
    */
-  offset?: BABYLON.Vector3
+  position?: BABYLON.Vector3
 
   /**
    * Maximum number of particles to be emitted (2000 by default).

@@ -23,7 +23,7 @@ export declare abstract class CameraInterface</* Setup object */ S = any, /* Sce
   get scene(): C
 
   /**
-   * Gets teh setup object.
+   * Gets the setup object.
    */
   get setup(): S
 

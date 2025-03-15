@@ -255,8 +255,9 @@ export declare abstract class ActorInterface<B extends SpriteInterface | MeshInt
    * Attachs a particle to this actor.
    *
    * If nodeName is 'undefined', the particle is attached to the actor's body.
-   * @param Particle Particle constructor or an Actor class method.
    * @param id
+   * @param Particle Particle constructor or an Actor class method.
+   * @param setup Setup object of the particle defined in the particle generic S
    * @param offset
    * @param nodeName
    */

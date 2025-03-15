@@ -32,7 +32,7 @@ export abstract class ParticleInterface<S = any> implements LoopUpdatable, Canva
   abstract _spriteClassName: string
   abstract _spriteProps: SpriteProps
   abstract _spriteParticleInfo: SpriteParticleInfo
-  abstract _offset: BABYLON.Vector3
+  abstract _position: BABYLON.Vector3
   abstract _create(setup: S): void
   abstract _updatePosition(): void
   abstract _release(): void
