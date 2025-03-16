@@ -114,4 +114,4 @@ export type CameraConstructor = new () => CameraInterface
 
 export interface CameraProps {}
 
-export declare function Camera(props: CameraProps = {}): any
+export declare function Camera(props?: CameraProps): any

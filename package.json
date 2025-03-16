@@ -1,12 +1,12 @@
 {
   "name": "@khanonjs/engine",
-  "version": "0.1.14",
+  "version": "0.1.15",
   "description": "A typescript game engine extending Babylon.js",
   "private": false,
   "author": {
     "name": "Lorenzo Portillo"
   },
-  "license": "",
+  "license": "MIT",
   "repository": {
     "type": "git",
     "url": "https://github.com/Khanon-js/khanon.js.git"
@@ -14,6 +14,7 @@
   "keywords": [
     "typescript",
     "game",
+    "gamedev",
     "engine",
     "babylonjs",
     "javascript"

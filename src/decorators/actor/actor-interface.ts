@@ -32,6 +32,7 @@ import { ActorStateConstructor } from './actor-state/actor-state-constructor'
 import { ActorStateInterface } from './actor-state/actor-state-interface'
 
 // TODO add animation system, that animates body and nodes depending on what they are
+// Actors can't be configurable because they can be spawned from the .babylon scene itself, disallowing to setup their configuration.
 export abstract class ActorInterface<B extends SpriteInterface | MeshInterface = any> implements LoopUpdatable, CanvasResizable, Notificable, TimersByContext {
   abstract _metadata: Metadata
   abstract _props: ActorProps
