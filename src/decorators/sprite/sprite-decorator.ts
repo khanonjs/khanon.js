@@ -340,8 +340,8 @@ export function Sprite(props: SpriteProps): any {
             this._spriteMesh = null as any
           }
           this.babylon.mesh?.material?.dispose()
-          this.babylon.mesh.material = null as any
           this.babylon.mesh?.dispose()
+          this.babylon.mesh.material = null as any
           this.babylon.mesh = null as any
           removeLoopUpdate(this)
           removeCanvasResize(this)
