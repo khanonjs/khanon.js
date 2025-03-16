@@ -46,7 +46,7 @@ export class SceneSpawn {
     }
   }
 
-  particle<P extends ParticleInterface>(particleConstructorOrMethod: ParticleConstructor | ((particle: P) => void), setup: any, offset?: BABYLON.Vector3): P {
+  particle(particleConstructorOrMethod: ParticleConstructor | ((particle: ParticleInterface, setup: any) => void), setup: any, offset?: BABYLON.Vector3): ParticleInterface {
     let isMethod = false
     if (!particleConstructorOrMethod.prototype?.constructor) {
       isMethod = true
@@ -67,7 +67,7 @@ export class SceneSpawn {
       instance._create(setup)
     }
     this.scene._particles.add(instance)
-    return instance as P
+    return instance
   }
 
   mesh<M extends MeshInterface>(mesh: new () => M, counter?: number, alternativeOnSpawn?: (mesh: M, index: number) => void): M {

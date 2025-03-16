@@ -59,7 +59,7 @@ export declare class SceneSpawn {
    * @param setup Setup object of the particle defined in the particle generic S
    * @param offset Position offset of the emitter
    */
-  particle<P extends ParticleConstructor>(Particle: P | ((particle: InstanceType<P>) => void), setup: InstanceType<P>['setup'], offset?: BABYLON.Vector3): InstanceType<P>
+  particle<P extends ParticleConstructor>(Particle: P | ((particle: InstanceType<P>, setup: any) => void), setup: InstanceType<P>['setup'], offset?: BABYLON.Vector3): InstanceType<P>
 
   /**
    * Spawns a sprite in the scene.

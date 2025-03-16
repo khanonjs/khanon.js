@@ -386,7 +386,7 @@ export function Actor(props: ActorProps = {}): any {
         return this._actions.get(actionConstructor)
       }
 
-      attachParticle(id: FlexId, particleConstructorOrMethod: ParticleConstructor | ((particle: ParticleInterface) => void), setup: any, offset: BABYLON.Vector3, nodeName?: string): ParticleInterface {
+      attachParticle(id: FlexId, particleConstructorOrMethod: ParticleConstructor | ((particle: ParticleInterface, setup: any) => void), setup: any, offset: BABYLON.Vector3, nodeName?: string): ParticleInterface {
         let isMethod = false
         if (!particleConstructorOrMethod.prototype?.constructor) {
           isMethod = true
