@@ -81,7 +81,7 @@ export function Sprite(props: SpriteProps): any {
         _props: SpriteProps
         _className: string
         _spriteMesh: SpriteMesh
-        _exclusiveTexture: boolean
+        _exclusiveSpriteMesh: boolean
         _animation: SpriteAnimation | null = null
         _animations: Map<FlexId, SpriteAnimation> = new Map<FlexId, SpriteAnimation>()
         babylon: Pick<BabylonAccessor, 'mesh' | 'scene'> = { scene: null as any, mesh: null as any }
@@ -152,8 +152,8 @@ export function Sprite(props: SpriteProps): any {
             this._release()
           }
           this._spriteMesh = spriteMesh
-          this._exclusiveTexture = isExclusive
-          this.babylon.mesh = spriteMesh.cloneMesh()
+          this._exclusiveSpriteMesh = isExclusive
+          this.babylon.mesh = spriteMesh.spawnMesh(isExclusive)
           this._props.animations?.forEach(animation => this.addAnimation(animation))
         }
 
@@ -335,10 +335,12 @@ export function Sprite(props: SpriteProps): any {
           invokeCallback(this.onDestroy, this)
           this.clearAllTimeouts()
           this.stopAnimation()
-          if (this._exclusiveTexture) {
+          if (this._exclusiveSpriteMesh) {
             this._spriteMesh?.release()
             this._spriteMesh = null as any
           }
+          this.babylon.mesh?.material?.dispose()
+          this.babylon.mesh.material = null as any
           this.babylon.mesh?.dispose()
           this.babylon.mesh = null as any
           removeLoopUpdate(this)

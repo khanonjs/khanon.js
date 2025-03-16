@@ -25,7 +25,7 @@ export abstract class SpriteInterface implements DisplayObject, LoopUpdatable, C
   abstract _loopUpdate: boolean
   abstract _loopUpdate$: BABYLON.Observer<number>
   abstract _canvasResize$: BABYLON.Observer<Rect>
-  abstract _exclusiveTexture: boolean // Exclusive texture means this sprite has an exclusive texture that is not stored anywhere, so the sprite itself has to handle its release.
+  abstract _exclusiveSpriteMesh: boolean // Exclusive texture means this sprite has an exclusive texture that is not stored anywhere, so the sprite itself has to handle its release.
   abstract _setSpriteMesh(spriteMesh: SpriteMesh, isExclusive: boolean, isParticle: boolean): void
   abstract _setShaderMaterialTextureFrame(frame: number): void
   abstract _animation: SpriteAnimation | null
