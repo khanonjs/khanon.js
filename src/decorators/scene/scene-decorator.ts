@@ -537,7 +537,7 @@ export function Scene(props: SceneProps = {}): any {
           for (const property of Object.values(props)) {
             if (Array.isArray(property)) {
               property.forEach(value => {
-                if (isPrototypeOf(ActorInterface, value)) { // TODO insert all these constructors in a list and avoid the 'callback hell'
+                if (isPrototypeOf(ActorInterface, value)) { // TODO insert all these constructors in a list and make generic method
                   this._availableElements.actors.add(value)
                   const actor = ActorsController.get(value as ActorConstructor)
                   this.getAvailableElements(actor.props)

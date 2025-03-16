@@ -1,11 +1,9 @@
-import { Logger } from '../../modules/logger'
 import { ActorInterface } from '../actor/actor-interface'
 import { MeshInterface } from '../mesh/mesh-interface'
 import { ParticleInterface } from '../particle/particle-interface'
 import { SpriteInterface } from '../sprite/sprite-interface'
 import { SceneInterface } from './scene-interface'
 
-// TODO add support to inject a user defined SceneRemove class into the scene?
 export class SceneRemove {
   private readonly scene: SceneInterface
 

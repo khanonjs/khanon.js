@@ -62,7 +62,7 @@ export class SpriteMesh {
     }
   }
 
-  setFromTexture(texture: BABYLON.Texture | BABYLON.DynamicTexture, name: string, width?: number, height?: number): void { // TODO check this. Is it neccesary?
+  setFromTexture(texture: BABYLON.Texture | BABYLON.DynamicTexture, name: string, width?: number, height?: number): void {
     this.width = width ?? this.spriteProps.width ?? texture.getSize().width
     this.height = height ?? this.spriteProps.height ?? texture.getSize().height
     if (this.width === 0 || this.height === 0) { Logger.debugError('Width and height must be higher than 0:', this.spriteProps) }

@@ -94,7 +94,7 @@ export abstract class SpriteInterface implements DisplayObject, LoopUpdatable, C
   /**
    * User defined optional
    */
-  // TODO add onCustomTexture to allow users to create custom textures.
+  // TODO add onCustomTexture to allow users to create custom textures. Set isExclusive to true.
   onSpawn?(): void
   onDestroy?(): void
   onLoopUpdate?(delta: number): void

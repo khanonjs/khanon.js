@@ -248,7 +248,7 @@ export declare abstract class SceneInterface {
    * @param camera
    * @param setup
    */
-  switchCamera<C extends CameraConstructor>(camera: C, setup: InstanceType<C>['setup']): void // TODO is it possible to make 'setup' argument optional whether InstanceType<S>['setup'] type is 'any'?
+  switchCamera<C extends CameraConstructor>(camera: C, setup: InstanceType<C>['setup']): void
 
   /**
    * Gets the camera. Use the generic 'C' to set the returning camera type.
@@ -259,13 +259,13 @@ export declare abstract class SceneInterface {
    * Set the state.
    * @param state
    */
-  switchState<S extends SceneStateConstructor>(state: S, setup: InstanceType<S>['setup']): void // TODO is it possible to make 'setup' argument optional whether InstanceType<S>['setup'] type is 'any'?
+  switchState<S extends SceneStateConstructor>(state: S, setup: InstanceType<S>['setup']): void
 
   /**
    * Plays an Action. N actions can be played simultaneously.
    * @param action
    */
-  playAction<S extends SceneActionConstructor>(action: S | ((delta: number) => void), setup: InstanceType<S>['setup']): InstanceType<S> // TODO is it possible to make 'setup' argument optional whether InstanceType<S>['setup'] type is 'any'?
+  playAction<S extends SceneActionConstructor>(action: S | ((delta: number) => void), setup: InstanceType<S>['setup']): InstanceType<S>
 
   /**
    * Plays all actions of a group that have been previously stopped.
@@ -420,7 +420,7 @@ export interface SceneProps {
 
   /**
    * By default 'true'.
-   * Use the Babylon debug inspector in this scene.
+   * Use the Babylon debug inspector in this scene. Press `Ctrl + Alt + Shift + I` to open it.
    */
   useDebugInspector?: boolean
 }

@@ -12,7 +12,7 @@ import { SceneMapConstructor } from './scene-map-constructor'
 import { SceneStateConstructor } from './scene-state/scene-state-constructor'
 
 export interface SceneProps {
-    url?: string // TODO load scene from .babylon file
+    url?: string
     options?: BABYLON.SceneOptions
     configuration?: SceneConfiguration
     guis?: GUIConstructor[]
