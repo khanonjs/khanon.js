@@ -153,7 +153,7 @@ export function Sprite(props: SpriteProps): any {
           }
           this._spriteMesh = spriteMesh
           this._exclusiveSpriteMesh = isExclusive
-          this.babylon.mesh = spriteMesh.spawnMesh(isExclusive)
+          this.babylon.mesh = spriteMesh.spawn(isExclusive)
           this._props.animations?.forEach(animation => this.addAnimation(animation))
         }
 

@@ -160,7 +160,7 @@ export class SpriteMesh {
     this.babylon.material = shaderMaterial
   }
 
-  spawnMesh(isExclusive: boolean): BABYLON.Mesh {
+  spawn(isExclusive: boolean): BABYLON.Mesh {
     const mesh = this.babylon.mesh.clone(`Sprite - ${this.name}`)
     if (this.babylon.mesh.material && !isExclusive) {
       // Clone material for individual animations and properties
