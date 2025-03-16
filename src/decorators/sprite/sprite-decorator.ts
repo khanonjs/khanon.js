@@ -388,17 +388,17 @@ export function Sprite(props: SpriteProps): any {
         }
 
         getParticleInfo(scene: SceneInterface): SpriteParticleInfo {
-          // Create instance to apply initialization process
-          const instance = this.spawn(scene)
-          const texture = instance._spriteMesh.babylon.texture.clone()
-          const width = instance._spriteMesh.cellWidth
-          const height = instance._spriteMesh.cellHeight
-          instance._release()
-          return {
-            texture,
-            props: this.props,
-            width,
-            height
+          const spriteMesh = this.spriteMeshes.get(scene)
+          if (spriteMesh) {
+            return {
+              texture: spriteMesh.babylon.texture,
+              props: this.props,
+              width: spriteMesh.cellWidth,
+              height: spriteMesh.cellHeight
+            }
+          } else {
+            Logger.error('Sprite mesh not found in getParticleInfo.', this.getClassName())
+            return null as any
           }
         }
 

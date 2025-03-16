@@ -390,7 +390,13 @@ export function Actor(props: ActorProps = {}): any {
         let isMethod = false
         if (!particleConstructorOrMethod.prototype?.constructor) {
           isMethod = true
-          particleConstructorOrMethod = [...this._metadata.particles].find((value: MetadataParticleDefinition) => particleConstructorOrMethod === value.method as any)?.classDefinition as any
+          const _classDefinition = [...this._metadata.particles].find((value: MetadataParticleDefinition) => particleConstructorOrMethod === value.method as any)?.classDefinition as any
+          if (_classDefinition) {
+            particleConstructorOrMethod = _classDefinition
+          } else {
+            Logger.error(`Particle method '${particleConstructorOrMethod.name}' doesn't belong to the actor. Use a decorated method declared within the actor.`, this.getClassName())
+            return null as any
+          }
         }
         const attachmentSprite = nodeName ? this.getNode(nodeName)?.element : this.body
         if (!attachmentSprite) { Logger.debugError('Cannot attach a particle to an empty body.', this.getClassName(), particleConstructorOrMethod.prototype); return null as any }
