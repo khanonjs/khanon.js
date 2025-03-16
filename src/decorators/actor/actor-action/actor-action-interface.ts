@@ -25,11 +25,11 @@ export abstract class ActorActionInterface<S = any, A = ActorInterface<SpriteInt
   /**
    * User available
    */
+  abstract scene: SceneInterface
   abstract actor: A
   abstract setup: S
   abstract set loopUpdate(value: boolean)
   abstract get loopUpdate(): boolean
-  abstract get scene(): SceneInterface
   abstract get isPlaying(): boolean
   abstract getClassName(): string
   abstract setTimeout(func: () => void, ms: number): Timeout

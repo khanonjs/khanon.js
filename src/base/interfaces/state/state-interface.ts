@@ -4,11 +4,12 @@ import { Rect } from '../../../models/rect'
 import { Timeout } from '../../../models/timeout'
 import { FlexId } from '../../../types/flex-id'
 import { CanvasResizable } from '../canvas-resizable'
+import { Configurable } from '../configurable'
 import { LoopUpdatable } from '../loop-updatable'
 import { Notificable } from '../notificable'
 import { TimersByContext } from '../timers-by-context'
 
-export abstract class StateInterface<S = any> implements LoopUpdatable, CanvasResizable, Notificable, TimersByContext {
+export abstract class StateInterface<S = any> implements LoopUpdatable, CanvasResizable, Notificable, TimersByContext, Configurable<S> {
   abstract _loopUpdate: boolean
   abstract _loopUpdate$: BABYLON.Observer<number>
   abstract _canvasResize$: BABYLON.Observer<Rect>

@@ -18,8 +18,8 @@ export abstract class SceneActionInterface<S = any, C extends SceneInterface = S
   /**
    * User available
    */
-  abstract get scene(): C
-  abstract get setup(): S
+  abstract scene: C
+  abstract setup: S
   abstract set loopUpdate(value: boolean)
   abstract get loopUpdate(): boolean
   abstract getClassName(): string

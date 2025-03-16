@@ -5,6 +5,7 @@ import {
   LoopUpdatable,
   Notificable
 } from '../../base'
+import { Configurable } from '../../base/interfaces/configurable'
 import { Metadata } from '../../base/interfaces/metadata/metadata'
 import { TimersByContext } from '../../base/interfaces/timers-by-context'
 import { BabylonAccessor } from '../../models/babylon-accessor'
@@ -19,7 +20,7 @@ import { SpriteProps } from '../sprite/sprite-props'
 import { ParticleAttachmentInfo } from './particle-attachment-info'
 import { ParticleProps } from './particle-props'
 
-export abstract class ParticleInterface<S = any> implements LoopUpdatable, CanvasResizable, Notificable, TimersByContext {
+export abstract class ParticleInterface<S = any> implements LoopUpdatable, CanvasResizable, Notificable, TimersByContext, Configurable<S> {
   abstract _props: ParticleProps
   abstract _className: string
   abstract _metadata: Metadata
@@ -43,7 +44,8 @@ export abstract class ParticleInterface<S = any> implements LoopUpdatable, Canva
   abstract babylon: Pick<BabylonAccessor, 'scene' | 'particleSystem'>
   abstract scene: SceneInterface
   abstract setup: S
-  abstract loopUpdate: boolean
+  abstract get loopUpdate(): boolean
+  abstract set loopUpdate(value: boolean)
   abstract getClassName(): string
   abstract setTimeout(func: () => void, ms: number): Timeout
   abstract setInterval(func: () => void, ms: number): Timeout

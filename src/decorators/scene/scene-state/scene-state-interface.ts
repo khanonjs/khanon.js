@@ -31,9 +31,10 @@ export abstract class SceneStateInterface<S = any, C = SceneInterface> implement
    */
   abstract scene: C
   abstract setup: S
+  abstract get loopUpdate(): boolean
+  abstract set loopUpdate(value: boolean)
   abstract get spawn(): SceneSpawn
   abstract get remove(): SceneRemove
-  abstract loopUpdate: boolean
   abstract getClassName(): string
   abstract setTimeout(func: () => void, ms: number): Timeout
   abstract setInterval(func: () => void, ms: number): Timeout

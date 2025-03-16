@@ -7,6 +7,7 @@ import {
   Metadata,
   Notificable
 } from '../../base'
+import { Configurable } from '../../base/interfaces/configurable'
 import { TimersByContext } from '../../base/interfaces/timers-by-context'
 import { BabylonAccessor } from '../../models/babylon-accessor'
 import { Rect } from '../../models/rect'
@@ -16,7 +17,7 @@ import { SceneInterface } from '../scene/scene-interface'
 import { GUIStateConstructor } from './gui-state/gui-state-constructor'
 import { GUIStateInterface } from './gui-state/gui-state-interface'
 
-export abstract class GUIInterface<S = any> implements LoopUpdatable, CanvasResizable, Notificable, TimersByContext {
+export abstract class GUIInterface<S = any> implements LoopUpdatable, CanvasResizable, Notificable, TimersByContext, Configurable<S> {
   abstract _loopUpdate: boolean
   // abstract _state: GUIStateInterface | null
   abstract _metadata: Metadata
@@ -28,10 +29,11 @@ export abstract class GUIInterface<S = any> implements LoopUpdatable, CanvasResi
   /**
    * User available
    */
-  abstract loopUpdate: boolean
   abstract babylon: Pick<BabylonAccessor, 'gui'>
   abstract scene: SceneInterface
   abstract setup: S
+  abstract get loopUpdate(): boolean
+  abstract set loopUpdate(value: boolean)
   // abstract get state(): GUIStateInterface | null
   abstract getClassName(): string
   // abstract switchState(state: GUIStateConstructor, setup: any): GUIStateInterface

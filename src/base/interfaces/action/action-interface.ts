@@ -4,13 +4,14 @@ import { SceneInterface } from '../../../decorators/scene/scene-interface'
 import { Rect } from '../../../models/rect'
 import { Timeout } from '../../../models/timeout'
 import { CanvasResizable } from '../canvas-resizable'
+import { Configurable } from '../configurable'
 import { LoopUpdatable } from '../loop-updatable'
 import { Metadata } from '../metadata/metadata'
 import { TimersByContext } from '../timers-by-context'
 
 // TODO: Use mixings for derived classes and use a single implementation!!
 
-export abstract class ActionInterface<S = any> implements LoopUpdatable, CanvasResizable, TimersByContext {
+export abstract class ActionInterface<S = any> implements LoopUpdatable, CanvasResizable, TimersByContext, Configurable<S> {
   abstract _metadata: Metadata
   abstract _loopUpdate: boolean
   abstract _loopUpdate$: BABYLON.Observer<number>
@@ -20,10 +21,10 @@ export abstract class ActionInterface<S = any> implements LoopUpdatable, CanvasR
   /**
    * User available
    */
-  abstract get setup(): S
+  abstract scene: SceneInterface
+  abstract setup: S
   abstract set loopUpdate(value: boolean)
   abstract get loopUpdate(): boolean
-  abstract get scene(): SceneInterface
   abstract play(): void
   abstract stop(): void
   abstract remove(): void

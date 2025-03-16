@@ -6,6 +6,7 @@ import {
   Metadata,
   Notificable
 } from '../../base'
+import { Configurable } from '../../base/interfaces/configurable'
 import { TimersByContext } from '../../base/interfaces/timers-by-context'
 import { BabylonAccessor } from '../../models/babylon-accessor'
 import { Rect } from '../../models/rect'
@@ -13,7 +14,7 @@ import { Timeout } from '../../models/timeout'
 import { FlexId } from '../../types/flex-id'
 import { SceneInterface } from '../scene/scene-interface'
 
-export abstract class CameraInterface<S = any, C extends SceneInterface = SceneInterface> implements LoopUpdatable, CanvasResizable, Notificable, TimersByContext {
+export abstract class CameraInterface<S = any, C extends SceneInterface = SceneInterface> implements LoopUpdatable, CanvasResizable, Notificable, TimersByContext, Configurable<S> {
   abstract _loopUpdate: boolean
   abstract _metadata: Metadata
   abstract _loopUpdate$: BABYLON.Observer<number>
@@ -27,8 +28,9 @@ export abstract class CameraInterface<S = any, C extends SceneInterface = SceneI
    */
   abstract scene: C
   abstract setup: S
-  abstract loopUpdate: boolean
   abstract babylon: Pick<BabylonAccessor<BABYLON.Camera>, 'camera' | 'scene'>
+  abstract get loopUpdate(): boolean
+  abstract set loopUpdate(value: boolean)
   abstract getClassName(): string
   abstract notify(message: FlexId, ...args: any[]): void
   abstract setTimeout(func: () => void, ms: number): Timeout
