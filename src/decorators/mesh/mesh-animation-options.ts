@@ -1,5 +1,5 @@
 /**
- * These options are related to babylon animation options:
+ * These options are related to babylon AnimationGroup start options:
  * https://doc.babylonjs.com/typedoc/classes/BABYLON.AnimationGroup#start
  */
 export interface MeshAnimationOptions {

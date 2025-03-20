@@ -17,7 +17,6 @@ import { Logger } from '../../modules/logger'
 import { FlexId } from '../../types/flex-id'
 import {
   attachCanvasResize,
-  attachLoopUpdate,
   invokeCallback,
   removeCanvasResize,
   removeLoopUpdate,
@@ -216,6 +215,11 @@ export function Mesh(props: MeshProps = {}): any {
         }
 
         playAnimation(animationId: FlexId, options?: MeshAnimationOptions, completed?: () => void): BABYLON.AnimationGroup {
+          if (animationId === this._animation?.id) {
+            Logger.warn('Trying to start same animation that is being played. Try to avoid this situation.')
+            return this._animation.animationGroup
+          }
+          this.stopAnimation()
           if (!this._animations.get(animationId)) { Logger.debugError(`Animation '${animationId}' not found in mesh '${this._props.url}':`, this.getClassName()) }
           this._animation = this._animations.get(animationId) as any
           if (this._animation) {
@@ -225,7 +229,10 @@ export function Mesh(props: MeshProps = {}): any {
               if (loop) {
                 this._animation.animationGroup.onAnimationGroupLoopObservable.add(() => completed())
               } else {
-                this._animation.animationGroup.onAnimationGroupEndObservable.add(() => completed())
+                this._animation.animationGroup.onAnimationGroupEndObservable.add(() => {
+                  this.stopAnimation()
+                  setTimeout(completed, 1)
+                })
               }
             }
             return this._animation.animationGroup
@@ -236,9 +243,9 @@ export function Mesh(props: MeshProps = {}): any {
 
         stopAnimation(): void {
           if (this._animation) {
-            this._animation.animationGroup.stop()
             this._animation.animationGroup.onAnimationGroupLoopObservable.clear()
             this._animation.animationGroup.onAnimationGroupEndObservable.clear()
+            this._animation.animationGroup.stop()
             this._animation = null
           }
         }
