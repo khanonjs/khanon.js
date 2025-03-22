@@ -53,7 +53,7 @@ export function GUI(props: GUIProps = {}): any {
 
       props: GUIProps
       _metadata: Metadata = Reflect.getMetadata('metadata', this) ?? new Metadata()
-      babylon: Pick<BabylonAccessor<BABYLON.Camera>, 'gui'> = { gui: null as any }
+      babylon: Pick<BabylonAccessor<BABYLON.TargetCamera>, 'gui'> = { gui: null as any }
       setup: any
       _loopUpdate = true
       _loopUpdate$: BABYLON.Observer<number>

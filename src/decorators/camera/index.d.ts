@@ -5,13 +5,16 @@ import {
   Rect,
   Timeout
 } from '../../models'
-import { FlexId } from '../../types'
+import {
+  CameraTransform,
+  FlexId
+} from '../../types'
 import { SceneInterface } from '../scene'
 
 /**
  * @param S Camera setup object.
  */
-export declare abstract class CameraInterface</* Setup object */ S = any, /* Scene object */ C = SceneInterface> {
+export declare abstract class CameraInterface</* Setup object */ S = any, /* Scene object */ C = SceneInterface> extends CameraTransform {
   /**
    * Babylon.js objects.
    */
@@ -32,6 +35,26 @@ export declare abstract class CameraInterface</* Setup object */ S = any, /* Sce
    */
   set loopUpdate(value: boolean)
   get loopUpdate(): boolean
+
+  /**
+   * Camera transform properties.
+   */
+  get position(): BABYLON.Vector3
+  set position(value: BABYLON.Vector3)
+  get globalPosition(): BABYLON.Vector3
+  get upVector(): BABYLON.Vector3
+  set upVector(value: BABYLON.Vector3)
+  getDirection(localAxis: BABYLON.Vector3): BABYLON.Vector3
+  getDirectionToRef(localAxis: BABYLON.Vector3, result: BABYLON.Vector3): void
+  getForwardRay(length?: number, transform?: BABYLON.Matrix, origin?: BABYLON.Vector3): BABYLON.Ray
+  getProjectionMatrix(force?: boolean): BABYLON.Matrix
+  getWorldMatrix(): BABYLON.Matrix
+  get rotation(): BABYLON.Vector3
+  set rotation(value: BABYLON.Vector3)
+  get speed(): number
+  set speed(value: number)
+  get target(): BABYLON.Vector3
+  set target(value: BABYLON.Vector3)
 
   /**
    * Returns the name of the class.

@@ -41,7 +41,9 @@ export abstract class CameraInterface<S = any, C extends SceneInterface = SceneI
   abstract clearAllTimeouts(): void
   // TODO attach particles to camera to simulate environment effects?
 
-  // Transform
+  /**
+   * Tranmsform properties and methods
+   */
   abstract position: BABYLON.Vector3
   abstract globalPosition: BABYLON.Vector3
   abstract upVector: BABYLON.Vector3

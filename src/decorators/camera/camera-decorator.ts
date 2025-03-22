@@ -55,6 +55,7 @@ export function Camera(props: CameraProps = {}): any {
 
       get loopUpdate(): boolean { return this._loopUpdate }
 
+      // Transform
       get position(): BABYLON.Vector3 { return this.babylon.camera.position }
       set position(value: BABYLON.Vector3) { this.babylon.camera.position = value }
       get globalPosition(): BABYLON.Vector3 { return this.babylon.camera.globalPosition }
