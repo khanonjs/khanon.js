@@ -215,10 +215,6 @@ export function Mesh(props: MeshProps = {}): any {
         }
 
         playAnimation(animationId: FlexId, options?: MeshAnimationOptions, completed?: () => void): BABYLON.AnimationGroup {
-          if (animationId === this._animation?.id) {
-            Logger.warn('Trying to start same animation that is being played. Try to avoid this situation.')
-            return this._animation.animationGroup
-          }
           this.stopAnimation()
           if (!this._animations.get(animationId)) { Logger.debugError(`Animation '${animationId}' not found in mesh '${this._props.url}':`, this.getClassName()) }
           this._animation = this._animations.get(animationId) as any
