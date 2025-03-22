@@ -2,7 +2,7 @@ import * as BABYLON from '@babylonjs/core'
 import * as BABYLONGUI from '@babylonjs/gui'
 
 export interface BabylonAccessor<
-    C extends BABYLON.Camera = BABYLON.Camera,
+    C extends BABYLON.TargetCamera = BABYLON.TargetCamera,
     M extends BABYLON.AbstractMesh = BABYLON.AbstractMesh,
     N extends BABYLON.Material = BABYLON.Material
   > {

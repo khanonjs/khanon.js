@@ -10,6 +10,7 @@ import { TimersByContext } from '../../base/interfaces/timers-by-context'
 import { BabylonAccessor } from '../../models/babylon-accessor'
 import { Rect } from '../../models/rect'
 import { Timeout } from '../../models/timeout'
+import { MeshTransform } from '../../types'
 import { FlexId } from '../../types/flex-id'
 import { SceneInterface } from '../scene/scene-interface'
 import { SpriteAnimation } from '../sprite/sprite-animation'
@@ -17,7 +18,7 @@ import { MeshAnimation } from './mesh-animation'
 import { MeshAnimationOptions } from './mesh-animation-options'
 import { MeshProps } from './mesh-props'
 
-export abstract class MeshInterface implements DisplayObject, LoopUpdatable, CanvasResizable, TimersByContext {
+export abstract class MeshInterface implements DisplayObject, LoopUpdatable, CanvasResizable, TimersByContext, MeshTransform {
   abstract _props: MeshProps
   abstract _className: string
   abstract _loopUpdate: boolean

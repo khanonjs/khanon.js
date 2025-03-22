@@ -11,10 +11,11 @@ import { TimersByContext } from '../../base/interfaces/timers-by-context'
 import { BabylonAccessor } from '../../models/babylon-accessor'
 import { Rect } from '../../models/rect'
 import { Timeout } from '../../models/timeout'
+import { CameraTransform } from '../../types/camera-transform'
 import { FlexId } from '../../types/flex-id'
 import { SceneInterface } from '../scene/scene-interface'
 
-export abstract class CameraInterface<S = any, C extends SceneInterface = SceneInterface> implements LoopUpdatable, CanvasResizable, Notificable, TimersByContext, Configurable<S> {
+export abstract class CameraInterface<S = any, C extends SceneInterface = SceneInterface> implements LoopUpdatable, CanvasResizable, Notificable, TimersByContext, Configurable<S>, CameraTransform {
   abstract _loopUpdate: boolean
   abstract _metadata: Metadata
   abstract _loopUpdate$: BABYLON.Observer<number>
@@ -28,7 +29,7 @@ export abstract class CameraInterface<S = any, C extends SceneInterface = SceneI
    */
   abstract scene: C
   abstract setup: S
-  abstract babylon: Pick<BabylonAccessor<BABYLON.Camera>, 'camera' | 'scene'>
+  abstract babylon: Pick<BabylonAccessor<BABYLON.TargetCamera>, 'camera' | 'scene'>
   abstract get loopUpdate(): boolean
   abstract set loopUpdate(value: boolean)
   abstract getClassName(): string
@@ -39,6 +40,19 @@ export abstract class CameraInterface<S = any, C extends SceneInterface = SceneI
   abstract clearInterval(timeout: Timeout): void
   abstract clearAllTimeouts(): void
   // TODO attach particles to camera to simulate environment effects?
+
+  // Transform
+  abstract position: BABYLON.Vector3
+  abstract globalPosition: BABYLON.Vector3
+  abstract upVector: BABYLON.Vector3
+  abstract getDirection(localAxis: BABYLON.Vector3): BABYLON.Vector3
+  abstract getDirectionToRef(localAxis: BABYLON.Vector3, result: BABYLON.Vector3): void
+  abstract getForwardRay(length?: number, transform?: BABYLON.Matrix, origin?: BABYLON.Vector3): BABYLON.Ray
+  abstract getProjectionMatrix(force?: boolean): BABYLON.Matrix
+  abstract getWorldMatrix(): BABYLON.Matrix
+  abstract rotation: BABYLON.Vector3
+  abstract speed: number
+  abstract target: BABYLON.Vector3
 
   /**
    * User defined mandatory (abstract on .d.ts)

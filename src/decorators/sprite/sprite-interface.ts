@@ -10,6 +10,7 @@ import { BabylonAccessor } from '../../models/babylon-accessor'
 import { DrawBlockProperties } from '../../models/draw-block-properties'
 import { Rect } from '../../models/rect'
 import { Timeout } from '../../models/timeout'
+import { SpriteTransform } from '../../types'
 import { FlexId } from '../../types/flex-id'
 import { MeshAnimation } from '../mesh/mesh-animation'
 import { SceneInterface } from '../scene/scene-interface'
@@ -18,7 +19,7 @@ import { SpriteAnimationOptions } from './sprite-animatrion-options'
 import { SpriteMesh } from './sprite-mesh'
 import { SpriteProps } from './sprite-props'
 
-export abstract class SpriteInterface implements DisplayObject, LoopUpdatable, CanvasResizable, TimersByContext {
+export abstract class SpriteInterface implements DisplayObject, LoopUpdatable, CanvasResizable, TimersByContext, SpriteTransform {
   abstract _props: SpriteProps
   abstract _className: string
   abstract _spriteMesh: SpriteMesh
