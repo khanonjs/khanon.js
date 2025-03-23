@@ -59,7 +59,7 @@ export abstract class CameraInterface<S = any, C extends SceneInterface = SceneI
   /**
    * User defined mandatory (abstract on .d.ts)
    */
-  onInitialize?(scene: BABYLON.Scene): BABYLON.Camera
+  onInitialize?(scene: BABYLON.Scene): BABYLON.TargetCamera
 
   /**
    * User defined optional

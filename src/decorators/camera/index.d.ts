@@ -106,7 +106,7 @@ export declare abstract class CameraInterface</* Setup object */ S = any, /* Sce
    * This method must return a valid Babylon camera.
    * 'setup' object isn't available at this point.
    */
-  abstract onInitialize(scene: BABYLON.Scene): BABYLON.Camera
+  abstract onInitialize(scene: BABYLON.Scene): BABYLON.TargetCamera
 
   /**
    * Callback invoked on camera start.
