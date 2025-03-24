@@ -222,12 +222,13 @@ export function Mesh(props: MeshProps = {}): any {
             const loop = (options?.loop !== undefined ? options.loop : this._animation.loop) ?? false
             this._animation.animationGroup.start(loop, options?.speedRatio, options?.from, options?.to, options?.isAdditive)
             if (completed) {
+              // setTimeouts prevent crash if user plays the same animation on the completed method.
               if (loop) {
-                this._animation.animationGroup.onAnimationGroupLoopObservable.add(() => completed())
+                this._animation.animationGroup.onAnimationGroupLoopObservable.add(() => setTimeout(completed, 0))
               } else {
                 this._animation.animationGroup.onAnimationGroupEndObservable.add(() => {
                   this.stopAnimation()
-                  setTimeout(completed, 1)
+                  setTimeout(completed, 0)
                 })
               }
             }
