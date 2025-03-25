@@ -357,8 +357,8 @@ export type SceneMapConstructor = SpriteMapConstructor | MeshMapConstructor
 
 export interface SceneProps {
   /**
-   * URL of the scene to load from a '.babylon' file.
-   * If undefined, no assets will be loaded, all the scene assets will be manually created.
+   * URL of the scene to load from a '.babylon' or 'glTF' file.
+   * If undefined, no assets will be loaded, and the scene elements will be manually created.
    */
   url?: string
 

@@ -167,7 +167,7 @@ export class SpriteMesh {
       mesh.material = this.babylon.mesh.material.clone(`Material - ${this.name}`)
     }
     mesh.setEnabled(true)
-    mesh.billboardMode = 2
+    mesh.billboardMode = BABYLON.Mesh.BILLBOARDMODE_ALL
     return mesh
   }
 
