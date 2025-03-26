@@ -302,6 +302,11 @@ export declare abstract class ActorInterface<B extends SpriteInterface | MeshInt
   onSpawn?(): void
 
   /**
+   * Callback invoked after the actor has finished spawning once the actor is enabled by the first time.
+   */
+  onStart?(): void
+
+  /**
    * Callback invoked on actor destroy.
    */
   onDestroy?(): void

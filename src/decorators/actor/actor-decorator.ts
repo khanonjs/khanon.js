@@ -74,6 +74,7 @@ export function Actor(props: ActorProps = {}): any {
       _loopUpdate = true
       _loopUpdate$: BABYLON.Observer<number>
       _canvasResize$: BABYLON.Observer<Rect>
+      _started = false
       _body: B | null = null
       _nodes: Map<string, ActorNode<B>> = new Map<string, ActorNode<B>>()
       _visibility = 1
@@ -110,6 +111,10 @@ export function Actor(props: ActorProps = {}): any {
       set enabled(value: boolean) {
         // TODO apply this property to pause states and notifications
         if (value) {
+          if (!this._started) {
+            this._started = true
+            invokeCallback(this.onStart, this)
+          }
           switchLoopUpdate(this._loopUpdate, this)
         } else {
           removeLoopUpdate(this)

@@ -39,6 +39,7 @@ export abstract class ActorInterface<B extends SpriteInterface | MeshInterface =
   abstract _loopUpdate: boolean
   abstract _loopUpdate$: BABYLON.Observer<number>
   abstract _canvasResize$: BABYLON.Observer<Rect>
+  abstract _started: boolean
   abstract _body: B | undefined
   abstract _nodes: Map<string, B>
   abstract _visibility: number
@@ -105,6 +106,7 @@ export abstract class ActorInterface<B extends SpriteInterface | MeshInterface =
    * User defined optional
    */
   onSpawn?(): void
+  onStart?(): void
   onDestroy?(): void
   onLoopUpdate?(delta: number): void
   onCanvasResize?(size: Rect): void
