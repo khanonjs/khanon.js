@@ -119,6 +119,10 @@ export function Sprite(props: SpriteProps): any {
           this.babylon.mesh.setEnabled(value)
         }
 
+        get animation(): SpriteAnimation | null {
+          return this._animation
+        }
+
         get absolutePosition(): BABYLON.Vector3 { return this.babylon.mesh.absolutePosition }
         set position(value: BABYLON.Vector3) { this.babylon.mesh.position = value }
         get position(): BABYLON.Vector3 { return this.babylon.mesh.position }

@@ -120,6 +120,10 @@ export function Mesh(props: MeshProps = {}): any {
           this.babylon.mesh.setEnabled(value)
         }
 
+        get animation(): MeshAnimation | null {
+          return this._animation
+        }
+
         set visibility(value: number) { this.babylon.mesh.visibility = value }
         get visibility(): number { return this.babylon.mesh.visibility }
         get absolutePosition(): BABYLON.Vector3 { return this.babylon.mesh.absolutePosition }

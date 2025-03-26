@@ -54,6 +54,7 @@ export abstract class SpriteInterface implements DisplayObject, LoopUpdatable, C
   abstract get scene(): SceneInterface
   abstract get enabled(): boolean
   abstract set enabled(value: boolean)
+  abstract get animation(): SpriteAnimation | null
   abstract getClassName(): string
   abstract setFrame(frame: number): void
   abstract addAnimation(animation: SpriteAnimation | MeshAnimation): void

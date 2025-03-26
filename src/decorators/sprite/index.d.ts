@@ -52,7 +52,7 @@ export declare abstract class SpriteInterface {
   /**
    * Gets the current animation.
    */
-  get animation(): SpriteAnimation
+  get animation(): SpriteAnimation | null
 
   /**
    * Sprite visiiility.

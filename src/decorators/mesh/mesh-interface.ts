@@ -43,6 +43,7 @@ export abstract class MeshInterface implements DisplayObject, LoopUpdatable, Can
   abstract get scene(): SceneInterface
   abstract get enabled(): boolean
   abstract set enabled(value: boolean)
+  abstract get animation(): MeshAnimation | null
   abstract getClassName(): string
   abstract setTimeout(func: () => void, ms: number): Timeout
   abstract setInterval(func: () => void, ms: number): Timeout
