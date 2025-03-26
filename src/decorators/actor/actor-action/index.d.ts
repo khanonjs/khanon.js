@@ -146,7 +146,7 @@ export interface ActorActionProps {
    * List of actions to be overriden on action play.
    * In case it is a string, it makes reference to the method name of an action defined as a class method.
    */
-  overrides?: ActorActionConstructor[]
+  overrides?: (ActorActionConstructor | string)[]
 
   /**
    * Count of number of frames this action is executed.

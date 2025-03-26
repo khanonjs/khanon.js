@@ -144,7 +144,7 @@ export function SceneAction(props: SceneActionProps = {}): any {
         classDefinition: _actionInterface
       })
     } else {
-      Logger.debugError('Cannot apply action decorator to non allowed method class:', constructorOrTarget, contextOrMethod)
+      Logger.debugError('Cannot apply action decorator to not allowed method class:', constructorOrTarget, contextOrMethod)
     }
   }
 }
