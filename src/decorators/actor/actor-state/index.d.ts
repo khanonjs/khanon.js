@@ -1,5 +1,8 @@
 import { ActorInterface } from '../'
-import { Timeout } from '../../../models'
+import {
+  BabylonAccessor,
+  Timeout
+} from '../../../models'
 import { Rect } from '../../../models/rect'
 import { FlexId } from '../../../types'
 import {
@@ -19,6 +22,11 @@ import {
  * @param S Setup interface (optional).
  */
 export declare abstract class ActorStateInterface</* Setup object */ S = any, /* Scene type */ C = SceneInterface, /* Actor type */ A = ActorInterface<SpriteInterface | MeshInterface>> {
+  /**
+   * Babylon.js objects.
+   */
+  get babylon(): Pick<BabylonAccessor, 'scene'>
+
   /**
    * Setup of the state.
    */

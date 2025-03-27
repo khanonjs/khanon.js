@@ -2,6 +2,7 @@ import * as BABYLON from '@babylonjs/core'
 
 import { ActionInterface } from '../../../base'
 import { Metadata } from '../../../base/interfaces/metadata/metadata'
+import { BabylonAccessor } from '../../../models/babylon-accessor'
 import { Rect } from '../../../models/rect'
 import { Timeout } from '../../../models/timeout'
 import { MeshInterface } from '../../mesh/mesh-interface'
@@ -25,6 +26,7 @@ export abstract class ActorActionInterface<S = any, A = ActorInterface<SpriteInt
   /**
    * User available
    */
+  abstract get babylon(): Pick<BabylonAccessor, 'scene'>
   abstract scene: SceneInterface
   abstract actor: A
   abstract setup: S

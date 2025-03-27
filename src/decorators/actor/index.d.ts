@@ -1,6 +1,7 @@
 import * as BABYLON from '@babylonjs/core'
 
 import {
+  BabylonAccessor,
   Rect,
   Timeout,
   TransformComposition
@@ -51,6 +52,11 @@ export interface ActorNode<B extends SpriteInterface | MeshInterface> {
  * - To use 3D Meshes set it as 'MeshInterface'.
  */
 export declare abstract class ActorInterface<B extends SpriteInterface | MeshInterface> {
+  /**
+   * Babylon.js objects.
+   */
+  get babylon(): Pick<BabylonAccessor, 'scene'>
+
   /**
    * Owner scene of this actor.
    */

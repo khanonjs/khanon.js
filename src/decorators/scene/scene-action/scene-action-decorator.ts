@@ -9,6 +9,7 @@ import {
   SceneActionsController,
   SpritesController
 } from '../../../controllers'
+import { BabylonAccessor } from '../../../models/babylon-accessor'
 import { Rect } from '../../../models/rect'
 import { Timeout } from '../../../models/timeout'
 import { Logger } from '../../../modules/logger'
@@ -31,7 +32,10 @@ export function SceneAction(props: SceneActionProps = {}): any {
       const _classInterface = class extends constructorOrTarget implements SceneActionInterface {
         constructor(readonly scene: SceneInterface) {
           super()
-          this._metadata.applyProps(this)
+          if (this.scene) {
+            this.babylon.scene = this.scene.babylon.scene
+            this._metadata.applyProps(this)
+          }
         }
 
         getClassName(): string { return this._className ?? className }
@@ -44,6 +48,7 @@ export function SceneAction(props: SceneActionProps = {}): any {
 
         _props = props
         _metadata: Metadata = Reflect.getMetadata('metadata', this) ?? new Metadata()
+        babylon: Pick<BabylonAccessor, 'scene'> = { scene: null as any }
         _loopUpdate = true
         _loopUpdate$: BABYLON.Observer<number>
         _canvasResize$: BABYLON.Observer<Rect>

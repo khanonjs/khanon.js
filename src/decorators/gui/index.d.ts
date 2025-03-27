@@ -17,7 +17,7 @@ import { SceneInterface } from '../scene'
  */
 export declare abstract class GUIInterface</* Setup object */ S = any> {
   loopUpdate: boolean
-  babylon: Pick<BabylonAccessor, 'gui'>
+  babylon: Pick<BabylonAccessor, 'gui' | 'scene'>
 
   /**
    * Scene this Mesh belongs to.

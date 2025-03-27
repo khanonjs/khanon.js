@@ -13,6 +13,7 @@ import {
   ParticlesController,
   SpritesController
 } from '../../controllers'
+import { BabylonAccessor } from '../../models/babylon-accessor'
 import { Rect } from '../../models/rect'
 import { Timeout } from '../../models/timeout'
 import { TransformComposition } from '../../models/transform-composition'
@@ -20,7 +21,6 @@ import { Logger } from '../../modules/logger'
 import { FlexId } from '../../types/flex-id'
 import {
   attachCanvasResize,
-  attachLoopUpdate,
   invokeCallback,
   removeArrayDuplicitiesInObject,
   removeCanvasResize,
@@ -56,7 +56,10 @@ export function Actor(props: ActorProps = {}): any {
     const _classInterface = class extends constructor implements ActorInterface {
       constructor(readonly scene: SceneInterface) {
         super()
-        this._metadata.applyProps(this)
+        if (this.scene) {
+          this.babylon.scene = this.scene.babylon.scene
+          this._metadata.applyProps(this)
+        }
       }
 
       getClassName(): string { return className }
@@ -69,6 +72,7 @@ export function Actor(props: ActorProps = {}): any {
 
       _props: ActorProps
       _metadata: Metadata = Reflect.getMetadata('metadata', this) ?? new Metadata()
+      babylon: Pick<BabylonAccessor, 'scene'> = { scene: null as any }
       transform: SpriteInterface | MeshInterface | null
       t: SpriteInterface | MeshInterface | null
       _loopUpdate = true

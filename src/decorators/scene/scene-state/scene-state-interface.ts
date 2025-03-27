@@ -2,6 +2,7 @@ import * as BABYLON from '@babylonjs/core'
 
 import { StateInterface } from '../../../base'
 import { Metadata } from '../../../base/interfaces/metadata/metadata'
+import { BabylonAccessor } from '../../../models/babylon-accessor'
 import { Rect } from '../../../models/rect'
 import { Timeout } from '../../../models/timeout'
 import { FlexId } from '../../../types/flex-id'
@@ -29,6 +30,7 @@ export abstract class SceneStateInterface<S = any, C = SceneInterface> implement
   /**
    * User available
    */
+  abstract get babylon(): Pick<BabylonAccessor, 'scene'>
   abstract scene: C
   abstract setup: S
   abstract get loopUpdate(): boolean

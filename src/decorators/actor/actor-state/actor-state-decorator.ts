@@ -9,6 +9,7 @@ import {
   ParticlesController,
   SpritesController
 } from '../../../controllers'
+import { BabylonAccessor } from '../../../models/babylon-accessor'
 import { Rect } from '../../../models/rect'
 import { Timeout } from '../../../models/timeout'
 import { Logger } from '../../../modules/logger'
@@ -31,14 +32,15 @@ export function ActorState(props: ActorStateProps = {}): any {
   return function <T extends { new (...args: any[]): ActorStateInterface }>(constructor: T & ActorStateInterface, context: ClassDecoratorContext) {
     const className = constructor.name
     const _classInterface = class extends constructor implements ActorStateInterface {
-      constructor(actor: ActorInterface, props: ActorStateProps) {
+      constructor(readonly actor: ActorInterface, props: ActorStateProps) {
         super()
-        if (actor) {
+        if (this.actor) {
           this._props = props
           this.actor = actor
           this.scene = this.actor.scene
+          this.babylon.scene = this.actor.babylon.scene
+          this._metadata.applyProps(this)
         }
-        this._metadata.applyProps(this)
       }
 
       getClassName(): string { return className }
@@ -50,7 +52,7 @@ export function ActorState(props: ActorStateProps = {}): any {
       clearAllTimeouts(): void { Core.clearAllTimeoutsByContext(this) }
 
       _props: ActorStateProps
-      actor: ActorInterface
+      babylon: Pick<BabylonAccessor, 'scene'> = { scene: null as any }
       _metadata: Metadata = Reflect.getMetadata('metadata', this) ?? new Metadata()
       _loopUpdate = true
       _loopUpdate$: BABYLON.Observer<number>

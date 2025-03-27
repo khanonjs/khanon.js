@@ -1,5 +1,6 @@
 import { ActorInterface } from '../'
 import {
+  BabylonAccessor,
   Rect,
   Timeout
 } from '../../../models'
@@ -16,6 +17,11 @@ import {
 } from '../../sprite'
 
 export declare class ActorActionInterface</* Setup object */ S = any, /* Scene object */ C = SceneInterface, /* Actor object */ A = ActorInterface<SpriteInterface | MeshInterface>> {
+  /**
+   * Babylon.js objects.
+   */
+  get babylon(): Pick<BabylonAccessor, 'scene'>
+
   /**
    * Setup of the action.
    */

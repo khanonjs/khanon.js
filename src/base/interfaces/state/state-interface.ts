@@ -1,5 +1,6 @@
 import * as BABYLON from '@babylonjs/core'
 
+import { BabylonAccessor } from '../../../models/babylon-accessor'
 import { Rect } from '../../../models/rect'
 import { Timeout } from '../../../models/timeout'
 import { FlexId } from '../../../types/flex-id'

@@ -4,6 +4,7 @@ import {
   SceneSpawn
 } from '../'
 import {
+  BabylonAccessor,
   Rect,
   Timeout
 } from '../../../models'
@@ -22,6 +23,11 @@ import { ParticleConstructor } from '../../particle'
 import { SpriteConstructor } from '../../sprite'
 
 export declare abstract class SceneStateInterface<S = any, C = SceneInterface> {
+  /**
+   * Babylon.js objects.
+   */
+  get babylon(): Pick<BabylonAccessor, 'scene'>
+
   /**
    * Initial setup of the state.
    */

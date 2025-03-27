@@ -1,5 +1,6 @@
 import { SceneInterface } from '../'
 import {
+  BabylonAccessor,
   Rect,
   Timeout
 } from '../../../models'
@@ -9,6 +10,11 @@ import { ParticleConstructor } from '../../particle'
 import { SpriteConstructor } from '../../sprite'
 
 export declare abstract class SceneActionInterface</* Setup object */ S = any, /* Scene object */ C = SceneInterface> {
+  /**
+   * Babylon.js objects.
+   */
+  get babylon(): Pick<BabylonAccessor, 'scene'>
+
   /**
    * Setup of the action.
    */

@@ -44,7 +44,10 @@ export function Particle(props: ParticleProps): any {
         constructor(readonly scene: SceneInterface, props: ParticleProps, readonly _attachmentInfo: ParticleAttachmentInfo) {
           super()
           this._props = props
-          this._metadata.applyProps(this)
+          if (this.scene) {
+            this.babylon.scene = this.scene.babylon.scene
+            this._metadata.applyProps(this)
+          }
         }
 
         getClassName(): string { return this._className ?? className }

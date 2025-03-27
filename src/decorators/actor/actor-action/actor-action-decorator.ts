@@ -9,12 +9,12 @@ import {
   ParticlesController,
   SpritesController
 } from '../../../controllers'
+import { BabylonAccessor } from '../../../models/babylon-accessor'
 import { Rect } from '../../../models/rect'
 import { Timeout } from '../../../models/timeout'
 import { Logger } from '../../../modules/logger'
 import {
   attachCanvasResize,
-  attachLoopUpdate,
   invokeCallback,
   switchLoopUpdate
 } from '../../../utils/utils'
@@ -30,10 +30,12 @@ export function ActorAction(props: ActorActionProps = {}): any {
     const className = constructorOrTarget.name
     const decorateClass = () => {
       const _classInterface = class extends constructorOrTarget implements ActorActionInterface {
-        constructor(actor: ActorInterface) {
+        constructor(readonly actor: ActorInterface) {
           super()
-          this.actor = actor
-          this._metadata.applyProps(this)
+          if (this.actor) {
+            this.babylon.scene = this.actor.babylon.scene
+            this._metadata.applyProps(this)
+          }
         }
 
         getClassName(): string { return this._className ?? className }
@@ -46,7 +48,7 @@ export function ActorAction(props: ActorActionProps = {}): any {
 
         _props = props
         _className: string
-        actor: ActorInterface
+        babylon: Pick<BabylonAccessor, 'scene'> = { scene: null as any }
         scene: SceneInterface
         _metadata: Metadata = Reflect.getMetadata('metadata', this) ?? new Metadata()
         _countFramesUpdate$: BABYLON.Observer<number> | null = null

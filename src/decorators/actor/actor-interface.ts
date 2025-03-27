@@ -7,6 +7,7 @@ import {
 } from '../../base'
 import { Metadata } from '../../base/interfaces/metadata/metadata'
 import { TimersByContext } from '../../base/interfaces/timers-by-context'
+import { BabylonAccessor } from '../../models/babylon-accessor'
 import { Rect } from '../../models/rect'
 import { Timeout } from '../../models/timeout'
 import { TransformComposition } from '../../models/transform-composition'
@@ -59,6 +60,7 @@ export abstract class ActorInterface<B extends SpriteInterface | MeshInterface =
   /**
    * User available
    */
+  abstract get babylon(): Pick<BabylonAccessor, 'scene'>
   abstract loopUpdate: boolean
   abstract get transform(): B extends SpriteInterface ? SpriteTransform : MeshTransform | null
   abstract get t(): B extends SpriteInterface ? SpriteTransform : MeshTransform | null

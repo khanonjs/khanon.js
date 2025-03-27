@@ -10,6 +10,7 @@ import {
   SceneStatesController,
   SpritesController
 } from '../../../controllers'
+import { BabylonAccessor } from '../../../models/babylon-accessor'
 import { Rect } from '../../../models/rect'
 import { Timeout } from '../../../models/timeout'
 import { Logger } from '../../../modules/logger'
@@ -43,6 +44,7 @@ export function SceneState(props: SceneStateProps = {}): any {
         if (this.scene) {
           this._spawn = this.scene.spawn
           this._remove = this.scene.remove
+          this.babylon.scene = this.scene.babylon.scene
           this._metadata.applyProps(this)
         }
       }
@@ -56,6 +58,7 @@ export function SceneState(props: SceneStateProps = {}): any {
       clearAllTimeouts(): void { Core.clearAllTimeoutsByContext(this) }
 
       _props: SceneStateProps
+      babylon: Pick<BabylonAccessor, 'scene'> = { scene: null as any }
       setup: any
       _loopUpdate = true
       _loopUpdate$: BABYLON.Observer<number>

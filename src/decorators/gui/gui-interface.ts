@@ -29,7 +29,7 @@ export abstract class GUIInterface<S = any> implements LoopUpdatable, CanvasResi
   /**
    * User available
    */
-  abstract babylon: Pick<BabylonAccessor, 'gui'>
+  abstract babylon: Pick<BabylonAccessor, 'gui' | 'scene'>
   abstract scene: SceneInterface
   abstract setup: S
   abstract get loopUpdate(): boolean
