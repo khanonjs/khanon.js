@@ -421,13 +421,13 @@ export function Scene(props: SceneProps = {}): any {
         let action = this._actions.get(actionConstructor)
         if (!action) {
           action = SceneActionsController.get(actionConstructor).spawn(this)
-          let actionOwner: any
-          if (!this._props.actions?.find(_action => _action === actionConstructor)) {
+          /* let actionOwner: any
+          if (!this._props.actions?.find(_action => _action === actionConstructor)) {  // TODO remove this?
             // Applies context 'Scene' or 'SceneState' to 'onLoopUpdate' method to preserve the 'this'
             // in case 'onLoopUpdate' is equivalent to a decorated method of some of those both interfaces.
             actionOwner = this.getActionOwner(actionConstructor)
             action.onLoopUpdate = action.onLoopUpdate?.bind(actionOwner)
-          }
+          } */
           this._actions.set(actionConstructor, action)
           action._props.overrides?.forEach(actionOverride => {
             if (typeof actionOverride === 'string') {

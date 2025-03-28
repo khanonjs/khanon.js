@@ -147,10 +147,10 @@ export function ActorAction(props: ActorActionProps = {}): any {
     // Mutates decorator to class or property
     if (constructorOrTarget.prototype) {
       return decorateClass()
-    } else if ((
+    } else if (/* ( // TODO remove this?
       constructorOrTarget instanceof ActorStateInterface ||
       constructorOrTarget instanceof ActorInterface
-    ) && descriptor) { // Defined descriptor means it is a method
+    ) && */descriptor) { // Defined descriptor means it is a method
       @ActorAction(props)
       abstract class _actionInterface extends ActorActionInterface {
         _className = contextOrMethod as any
@@ -166,7 +166,7 @@ export function ActorAction(props: ActorActionProps = {}): any {
         classDefinition: _actionInterface
       })
     } else {
-      Logger.debugError('Cannot apply action decorator to not allowed method class:', constructorOrTarget, contextOrMethod)
+      Logger.debugError('Cannot apply action decorator to a method.', constructorOrTarget, contextOrMethod)
     }
   }
 }

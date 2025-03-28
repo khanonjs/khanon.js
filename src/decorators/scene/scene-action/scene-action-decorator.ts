@@ -131,10 +131,10 @@ export function SceneAction(props: SceneActionProps = {}): any {
     // Mutates decorator to class or property
     if (constructorOrTarget.prototype) {
       return decorateClass()
-    } else if ((
+    } else if (/* ( // TODO remove this?
       constructorOrTarget instanceof SceneStateInterface ||
       constructorOrTarget instanceof SceneInterface
-    ) && descriptor) { // Defined descriptor means it is a method
+    ) && */ descriptor) { // Defined descriptor means it is a method
       @SceneAction(props)
       abstract class _actionInterface extends SceneActionInterface {
         onLoopUpdate = descriptor.value
@@ -149,7 +149,7 @@ export function SceneAction(props: SceneActionProps = {}): any {
         classDefinition: _actionInterface
       })
     } else {
-      Logger.debugError('Cannot apply action decorator to not allowed method class:', constructorOrTarget, contextOrMethod)
+      Logger.debugError('Cannot apply action decorator to a method.', constructorOrTarget, contextOrMethod)
     }
   }
 }

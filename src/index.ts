@@ -1,4 +1,4 @@
-import 'reflect-metadata'
+import 'reflect-metadata' // TODO use reflect-metadata/lite?
 // TODO remove lines depending wether it is debug or production bundle (webpack)
 import '@babylonjs/inspector'
 import '@babylonjs/core/Debug/debugLayer'
