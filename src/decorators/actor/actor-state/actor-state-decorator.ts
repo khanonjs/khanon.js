@@ -71,8 +71,9 @@ export function ActorState(props: ActorStateProps = {}): any {
         return this.actor.switchState(state, setup)
       }
 
-      _start(): void {
+      _start(setup: any): void {
         Logger.debug('ActorState start', this.getClassName(), this.actor.getClassName())
+        this.setup = setup
         invokeCallback(this.onStart, this)
         switchLoopUpdate(this._loopUpdate, this)
         attachCanvasResize(this)
