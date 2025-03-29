@@ -107,7 +107,7 @@ export abstract class SceneInterface implements Loadable, LoopUpdatable, CanvasR
   abstract removeActionGroup(group: FlexId, forceRemove?: boolean): void
   abstract removeActionAll(forceRemove?: boolean): void
   abstract getActors<C extends ActorConstructor>(actor: C): InstanceType<C>[]
-  abstract getAction(actionConstructor: SceneActionConstructor): SceneActionInterface | undefined
+  abstract getAction<C extends SceneActionConstructor>(actionConstructor: C): InstanceType<C> | undefined
   abstract notify(message: FlexId, ...args: any[]): void
 
   /**

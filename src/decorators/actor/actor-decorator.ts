@@ -394,8 +394,8 @@ export function Actor(props: ActorProps = {}): any {
         this.stopActionAll(true)
       }
 
-      getAction(actionConstructor: ActorActionConstructor): ActorActionInterface | undefined {
-        return this._actions.get(actionConstructor)
+      getAction<C extends ActorActionConstructor>(actionConstructor: C): InstanceType<C> | undefined {
+        return this._actions.get(actionConstructor) as InstanceType<C>
       }
 
       attachParticle(id: FlexId, particleConstructorOrMethod: ParticleConstructor | ((particle: ParticleInterface, setup: any) => void), setup: any, offset: BABYLON.Vector3, nodeName?: string): ParticleInterface {

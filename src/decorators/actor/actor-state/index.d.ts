@@ -87,7 +87,7 @@ export declare abstract class ActorStateInterface</* Setup object */ S = any, /*
    * Starts a state.
    * @param state
    */
-  switchState<S extends new () => ActorStateInterface>(state: S, setup: InstanceType<S>['setup']): ActorStateInterface // TODO is it possible to make 'setup' argument optional whether InstanceType<S>['setup'] type is 'any'?
+  switchState<C extends new () => ActorStateInterface>(state: C, setup: InstanceType<C>['setup']): ActorStateInterface // TODO is it possible to make 'setup' argument optional whether InstanceType<S>['setup'] type is 'any'?
 
   /**
    * Notifies a message to this state.

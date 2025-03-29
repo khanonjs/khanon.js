@@ -259,13 +259,13 @@ export declare abstract class SceneInterface {
    * Set the state.
    * @param state
    */
-  switchState<S extends SceneStateConstructor>(state: S, setup: InstanceType<S>['setup']): void
+  switchState<C extends SceneStateConstructor>(state: C, setup: InstanceType<C>['setup']): void
 
   /**
    * Plays an Action. N actions can be played simultaneously.
    * @param action
    */
-  playAction<S extends SceneActionConstructor>(action: S | ((delta: number) => void), setup: InstanceType<S>['setup']): InstanceType<S>
+  playAction<C extends SceneActionConstructor>(action: C, setup: InstanceType<C>['setup']): InstanceType<C>
 
   /**
    * Plays all actions of a group that have been previously stopped.

@@ -25,7 +25,7 @@ export declare abstract class AppInterface {
    * @param state
    * @param setup
    */
-  switchState<S extends AppStateConstructor>(state: S, setup: InstanceType<S>['setup']): LoadingProgress // TODO is it possible to make 'setup' argument optional whether InstanceType<S>['setup'] type is 'any'?
+  switchState<C extends AppStateConstructor>(state: C, setup: InstanceType<C>['setup']): LoadingProgress // TODO is it possible to make 'setup' argument optional whether InstanceType<S>['setup'] type is 'any'?
 
   /**
    * Notifies a message to the App.

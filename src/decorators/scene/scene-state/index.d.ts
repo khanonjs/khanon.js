@@ -127,7 +127,7 @@ export declare abstract class SceneStateInterface<S = any, C = SceneInterface> {
    * Set the state.
    * @param state
    */
-  switchState<S extends new () => SceneStateInterface>(state: S, setup: InstanceType<S>['setup']): void // TODO is it possible to make 'setup' argument optional whether InstanceType<S>['setup'] type is 'any'?
+  switchState<C extends new () => SceneStateInterface>(state: C, setup: InstanceType<C>['setup']): void // TODO is it possible to make 'setup' argument optional whether InstanceType<S>['setup'] type is 'any'?
 
   /**
    * Notifies a message to this state.

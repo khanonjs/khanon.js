@@ -188,7 +188,7 @@ export declare abstract class ActorInterface<B extends SpriteInterface | MeshInt
    * Starts a state.
    * @param state
    */
-  switchState<S extends ActorStateConstructor>(state: S, setup: InstanceType<S>['setup']): ActorStateInterface // TODO is it possible to make 'setup' argument optional whether InstanceType<S>['setup'] type is 'any'?
+  switchState<C extends ActorStateConstructor>(state: C, setup: InstanceType<C>['setup']): ActorStateInterface // TODO is it possible to make 'setup' argument optional whether InstanceType<S>['setup'] type is 'any'?
 
   /**
    * Plays the animation of the body. Equivalent to 'actor.body.playAnimation'.
@@ -209,7 +209,7 @@ export declare abstract class ActorInterface<B extends SpriteInterface | MeshInt
    * Plays an Action. N actions can be played simultaneously.
    * @param action
    */
-  playAction<S extends ActorActionConstructor>(action: S | ((delta: number, setup: any) => void), setup: InstanceType<S>['setup']): InstanceType<S> // TODO is it possible to make 'setup' argument optional whether InstanceType<S>['setup'] type is 'any'?
+  playAction<C extends ActorActionConstructor>(action: C, setup: InstanceType<C>['setup']): InstanceType<C> // TODO is it possible to make 'setup' argument optional whether InstanceType<S>['setup'] type is 'any'?
 
   /**
    * Plays all actions of a group that have been previously stopped.

@@ -96,7 +96,7 @@ export abstract class ActorInterface<B extends SpriteInterface | MeshInterface =
   abstract removeAction(actionConstructor: ActorActionConstructor, forceRemove?: boolean): void
   abstract removeActionGroup(group: FlexId, forceRemove?: boolean): void
   abstract removeActionAll(forceRemove?: boolean): void
-  abstract getAction(actionConstructor: ActorActionConstructor): ActorActionInterface | undefined
+  abstract getAction<C extends ActorActionConstructor>(actionConstructor: C): InstanceType<C> | undefined
   abstract attachParticle(id: FlexId, Particle: ParticleConstructor | ((particle: ParticleInterface, setup: any) => void), setup: any, offset: BABYLON.Vector3, nodeName?: string): ParticleInterface
   abstract startParticle(id: FlexId): void
   abstract stopParticle(id: FlexId): void

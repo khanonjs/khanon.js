@@ -515,8 +515,8 @@ export function Scene(props: SceneProps = {}): any {
         this.stopActionAll(true)
       }
 
-      getAction(actionConstructor: SceneActionConstructor): SceneActionInterface | undefined {
-        return this._actions.get(actionConstructor)
+      getAction<C extends SceneActionConstructor>(actionConstructor: SceneActionConstructor): InstanceType<C> | undefined {
+        return this._actions.get(actionConstructor) as InstanceType<C>
       }
 
       getActors<C extends ActorConstructor>(actor: ActorConstructor): InstanceType<C>[] {
