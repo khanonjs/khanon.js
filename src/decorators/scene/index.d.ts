@@ -314,7 +314,7 @@ export declare abstract class SceneInterface {
   getAction(actionConstructor: SceneActionConstructor): SceneActionInterface | undefined
 
   /**
-   * Returns the list of all spawned actors of a kind.
+   * Returns the list of all spawned actors of a constructor type.
    * @param actor
    */
   getActors<C extends ActorConstructor>(actor: C): InstanceType<C>[]

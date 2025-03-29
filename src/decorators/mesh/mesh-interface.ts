@@ -13,7 +13,6 @@ import { Timeout } from '../../models/timeout'
 import { MeshTransform } from '../../types'
 import { FlexId } from '../../types/flex-id'
 import { SceneInterface } from '../scene/scene-interface'
-import { SpriteAnimation } from '../sprite/sprite-animation'
 import { MeshAnimation } from './mesh-animation'
 import { MeshAnimationOptions } from './mesh-animation-options'
 import { MeshProps } from './mesh-props'
@@ -33,7 +32,13 @@ export abstract class MeshInterface implements DisplayObject, LoopUpdatable, Can
   /**
    * User available
    */
+  abstract getClassName(): string
   abstract setMesh(babylonMesh: BABYLON.Mesh): void
+  abstract setTimeout(func: () => void, ms: number): Timeout
+  abstract setInterval(func: () => void, ms: number): Timeout
+  abstract clearTimeout(timeout: Timeout): void
+  abstract clearInterval(timeout: Timeout): void
+  abstract clearAllTimeouts(): void
 
   /**
    * User available Display Object
@@ -44,12 +49,6 @@ export abstract class MeshInterface implements DisplayObject, LoopUpdatable, Can
   abstract get enabled(): boolean
   abstract set enabled(value: boolean)
   abstract get animation(): MeshAnimation | null
-  abstract getClassName(): string
-  abstract setTimeout(func: () => void, ms: number): Timeout
-  abstract setInterval(func: () => void, ms: number): Timeout
-  abstract clearTimeout(timeout: Timeout): void
-  abstract clearInterval(timeout: Timeout): void
-  abstract clearAllTimeouts(): void
   abstract setFrame(frame: number): void
   abstract addAnimation(animation: MeshAnimation): void
   abstract playAnimation(animation: FlexId, options?: MeshAnimationOptions, completed?: () => void): BABYLON.AnimationGroup

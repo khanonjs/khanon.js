@@ -39,6 +39,7 @@ export abstract class SpriteInterface implements DisplayObject, LoopUpdatable, C
   /**
    * User available
    */
+  abstract getClassName(): string
   abstract drawText(text: string, properties: DrawBlockProperties): void
   abstract setTimeout(func: () => void, ms: number): Timeout
   abstract setInterval(func: () => void, ms: number): Timeout
@@ -55,9 +56,8 @@ export abstract class SpriteInterface implements DisplayObject, LoopUpdatable, C
   abstract get enabled(): boolean
   abstract set enabled(value: boolean)
   abstract get animation(): SpriteAnimation | null
-  abstract getClassName(): string
   abstract setFrame(frame: number): void
-  abstract addAnimation(animation: SpriteAnimation | MeshAnimation): void
+  abstract addAnimation(animation: SpriteAnimation): void
   abstract playAnimation(animation: FlexId, options?: SpriteAnimationOptions, completed?: () => void): void
   abstract stopAnimation(): void
   abstract subscribeToKeyframe(keyframeId: string, callback: () => void): void

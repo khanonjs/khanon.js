@@ -255,7 +255,7 @@ export declare abstract class ActorInterface<B extends SpriteInterface | MeshInt
    * Gets an action.
    * @param actionConstructor
    */
-  getAction(actionConstructor: ActorActionConstructor): ActorActionInterface | undefined
+  getAction<C extends ActorActionConstructor>(actionConstructor: C): InstanceType<C> | undefined
 
   /**
    * Attachs a particle to this actor.
