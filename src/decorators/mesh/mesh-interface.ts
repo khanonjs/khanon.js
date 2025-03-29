@@ -52,7 +52,7 @@ export abstract class MeshInterface implements DisplayObject, LoopUpdatable, Can
   abstract clearAllTimeouts(): void
   abstract setFrame(frame: number): void
   abstract addAnimation(animation: MeshAnimation): void
-  abstract playAnimation(animation: SpriteAnimation | MeshAnimation | FlexId, options?: MeshAnimationOptions, completed?: () => void): BABYLON.AnimationGroup
+  abstract playAnimation(animation: FlexId, options?: MeshAnimationOptions, completed?: () => void): BABYLON.AnimationGroup
   abstract stopAnimation(): void
   abstract subscribeToKeyframe(keyframeId: string, callback: () => void): void
   abstract clearKeyframeSubscriptions(keyframeId: string): void

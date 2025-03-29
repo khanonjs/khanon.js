@@ -52,6 +52,7 @@ export abstract class ActorInterface<B extends SpriteInterface | MeshInterface =
   // abstract _guisRelease(): void
   abstract _initialize(props: ActorProps): void
   abstract _release(): void
+  abstract _applyStarted(): void
   abstract _getActionOwner(actionConstructor: ActorActionConstructor): ActorInterface | ActorStateInterface | undefined
   abstract _getNodeElement<N extends B>(Element: new () => N): N
   abstract _playActionFromInstance(instance: ActorActionInterface): void
@@ -84,7 +85,7 @@ export abstract class ActorInterface<B extends SpriteInterface | MeshInterface =
   abstract removeNode(name: string): void
   abstract clearNodes(): void
   abstract switchState(state: ActorStateConstructor, setup: any): ActorStateInterface
-  abstract playAnimation(animation: (B extends SpriteInterface ? SpriteAnimation : MeshAnimation) | FlexId, options?: (B extends SpriteInterface ? SpriteAnimationOptions : MeshAnimationOptions), completed?: () => void): void // TODO system to animate body and nodes all together somehow
+  abstract playAnimation(animation: FlexId, options?: (B extends SpriteInterface ? SpriteAnimationOptions : MeshAnimationOptions), completed?: () => void): void // TODO system to animate body and nodes all together somehow
   abstract stopAnimation(): void
   // abstract setAnimation(): void // TODO system to animate body and nodes all together somehow
   abstract playAction(action: ActorActionConstructor | ((delta: number) => void), setup: any): ActorActionInterface

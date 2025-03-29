@@ -105,6 +105,7 @@ export function Scene(props: SceneProps = {}): any {
 
       // Spawned elements
       _actors: Set<ActorInterface> = new Set<ActorInterface>()
+      _actorsByType: Map<ActorConstructor, ActorInterface[]> = new Map<ActorConstructor, ActorInterface[]>()
       _meshes: Set<MeshInterface> = new Set<MeshInterface>()
       _sprites: Set<SpriteInterface> = new Set<SpriteInterface>()
       _particles: Set<ParticleInterface> = new Set<ParticleInterface>()
@@ -137,7 +138,6 @@ export function Scene(props: SceneProps = {}): any {
         if (this._cameraConstructor) {
           this.switchCamera(this._cameraConstructor, this._cameraSetup)
         }
-        this._started = true
         if (state) {
           this.switchState(state, stateSetup)
         }
@@ -160,11 +160,15 @@ export function Scene(props: SceneProps = {}): any {
           }
           this.switchCamera(GenericCamera, {})
         }
+        Core.startRenderScene(this)
+        this._startRenderObservable()
+        this._started = true
+        this._actors.forEach(actor => {
+          actor._applyStarted()
+        })
         if (Core.isDevelopmentMode() && this._props.useDebugInspector) {
           this._useDebugInspector()
         }
-        Core.startRenderScene(this)
-        this._startRenderObservable()
         switchLoopUpdate(this._loopUpdate, this)
         attachCanvasResize(this)
         return this.state
@@ -408,7 +412,7 @@ export function Scene(props: SceneProps = {}): any {
         this._animationHandler.delete(sprite)
       }
 
-      getActionOwner(actionConstructor: SceneActionConstructor): SceneInterface | SceneStateInterface | undefined {
+      _getActionOwner(actionConstructor: SceneActionConstructor): SceneInterface | SceneStateInterface | undefined {
         return this._metadata.getProps().actions?.find(_action => _action === actionConstructor)
           ? this
           : this._state?._metadata?.getProps().actions?.find(_action => _action === actionConstructor)
@@ -431,7 +435,7 @@ export function Scene(props: SceneProps = {}): any {
           this._actions.set(actionConstructor, action)
           action._props.overrides?.forEach(actionOverride => {
             if (typeof actionOverride === 'string') {
-              const overrideConstructor = this.getActionOwner(actionConstructor)?._metadata.actions.find(_action => _action.methodName === actionOverride)?.classDefinition
+              const overrideConstructor = this._getActionOwner(actionConstructor)?._metadata.actions.find(_action => _action.methodName === actionOverride)?.classDefinition
               if (!overrideConstructor) { Logger.debugError(`Action class method not found to override: '${actionOverride}'`) }
               if (actionConstructor) {
                 this.stopAction(overrideConstructor)
@@ -513,6 +517,10 @@ export function Scene(props: SceneProps = {}): any {
 
       getAction(actionConstructor: SceneActionConstructor): SceneActionInterface | undefined {
         return this._actions.get(actionConstructor)
+      }
+
+      getActors<C extends ActorConstructor>(actor: ActorConstructor): InstanceType<C>[] {
+        return this._actorsByType.get(actor) ?? [] as any
       }
 
       notify(message: FlexId, ...args: any[]): void {

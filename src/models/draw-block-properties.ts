@@ -27,12 +27,12 @@ export interface DrawBlockProperties {
   bgColor?: string
 
   /**
-   * Center horizontally ('true' by default).
+   * Center horizontally (*true* by default).
    */
   centerH?: boolean
 
   /**
-   * Center vertically ('true' by default).
+   * Center vertically (*true* by default).
    */
   centerV?: boolean
 

@@ -274,20 +274,20 @@ export declare abstract class SceneInterface {
   playActionGroup(group: FlexId): void
 
   /**
-   * Stops an action. If the actions prop 'preserve' prop is 'false', it will be removed.
+   * Stops an action. If the actions prop 'preserve' prop is *false*, it will be removed.
    * Actions can be stopped also within the Action itself.
    * @param action
    */
   stopAction(action: SceneActionConstructor | ((delta: number) => void)): void
 
   /**
-   * Stops all actions of a group. All the actions with 'preserve' prop as 'false' will be removed.
+   * Stops all actions of a group. All the actions with 'preserve' prop as *false* will be removed.
    * @param group
    */
   stopActionGroup(group: FlexId): void
 
   /**
-   * Stops all actions. All the actions with 'preserve' prop as 'false' will be removed.
+   * Stops all actions. All the actions with 'preserve' prop as *false* will be removed.
    */
   stopActionAll(): void
 
@@ -312,6 +312,12 @@ export declare abstract class SceneInterface {
    * @param actionConstructor
    */
   getAction(actionConstructor: SceneActionConstructor): SceneActionInterface | undefined
+
+  /**
+   * Returns the list of all spawned actors of a kind.
+   * @param actor
+   */
+  getActors<C extends ActorConstructor>(actor: C): InstanceType<C>[]
 
   /**
    * Notifies a message to this scene.
@@ -419,7 +425,7 @@ export interface SceneProps {
   particles?: ParticleConstructor[]
 
   /**
-   * By default 'true'.
+   * By default *true*.
    * Use the Babylon debug inspector in this scene. Press `Ctrl + Alt + Shift + I` to open it.
    */
   useDebugInspector?: boolean

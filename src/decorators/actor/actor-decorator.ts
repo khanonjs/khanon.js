@@ -28,14 +28,12 @@ import {
   switchLoopUpdate
 } from '../../utils/utils'
 import { GUIInterface } from '../gui/gui-interface'
-import { MeshAnimation } from '../mesh/mesh-animation'
 import { MeshAnimationOptions } from '../mesh/mesh-animation-options'
 import { MeshConstructor } from '../mesh/mesh-constructor'
 import { MeshInterface } from '../mesh/mesh-interface'
 import { ParticleConstructor } from '../particle/particle-constructor'
 import { ParticleInterface } from '../particle/particle-interface'
 import { SceneInterface } from '../scene/scene-interface'
-import { SpriteAnimation } from '../sprite/sprite-animation'
 import { SpriteAnimationOptions } from '../sprite/sprite-animatrion-options'
 import { SpriteConstructor } from '../sprite/sprite-constructor'
 import { SpriteInterface } from '../sprite/sprite-interface'
@@ -114,21 +112,25 @@ export function Actor(props: ActorProps = {}): any {
 
       set enabled(value: boolean) {
         // TODO apply this property to pause states and notifications
-        if (value) {
-          if (!this._started) {
-            this._started = true
-            invokeCallback(this.onStart, this)
-          }
-          switchLoopUpdate(this._loopUpdate, this)
-        } else {
-          removeLoopUpdate(this)
-        }
         if (this.body) {
           this.body.enabled = value
         }
         this._nodes.forEach(node => {
           node.element.enabled = value
         })
+        if (value) {
+          this._applyStarted()
+          switchLoopUpdate(this._loopUpdate, this)
+        } else {
+          removeLoopUpdate(this)
+        }
+      }
+
+      _applyStarted() {
+        if (this.enabled && !this._started && this.scene.started) {
+          this._started = true
+          invokeCallback(this.onStart, this)
+        }
       }
 
       _initialize(props: ActorProps) {
@@ -183,6 +185,7 @@ export function Actor(props: ActorProps = {}): any {
         }
         this.transform = this._body
         this.t = this.transform
+        this._applyStarted()
         switchLoopUpdate(this._loopUpdate, this)
         attachCanvasResize(this)
         return this._body as N
@@ -277,7 +280,7 @@ export function Actor(props: ActorProps = {}): any {
         return this._state
       }
 
-      playAnimation(animation: SpriteAnimation | MeshAnimation | FlexId, options?: SpriteAnimationOptions | MeshAnimationOptions, completed?: () => void): void {
+      playAnimation(animation: FlexId, options?: SpriteAnimationOptions | MeshAnimationOptions, completed?: () => void): void {
         this.body?.playAnimation(animation, options, completed)
       }
 

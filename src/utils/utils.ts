@@ -137,7 +137,7 @@ export function isPrototypeOf(_parent: object, _child: object): boolean {
 }
 
 /**
- * Return 'true' if the variable type meets a FlexId type
+ * Return *true* if the variable type meets a FlexId type
  */
 export function isFlexId(_var: any): boolean {
   return typeof _var === 'string' || typeof _var === 'number'

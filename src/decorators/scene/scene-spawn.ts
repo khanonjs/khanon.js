@@ -25,23 +25,29 @@ export class SceneSpawn {
 
   actor<A extends ActorInterface<any>, C extends undefined | number = undefined>(actor: new () => A, counter?: C, alternativeOnSpawn?: (actor: A, index: number) => void): undefined extends C ? A : A[] {
     if (!this.scene?._availableElements.hasActor(actor)) { Logger.debugError('Trying to spawn an actor that doesn\'t belong to the scene. Add it to the scene props.', this.scene.getClassName(), ActorsController.get(actor).getClassName()); return null as any }
-    if (counter === undefined) {
+    if (counter === undefined || counter <= 1) {
       const instance = ActorsController.get(actor).spawn(this.scene)
       Logger.debug(`Actor spawn (${counter ?? 1}):`, instance.getClassName())
       this.scene._actors.add(instance)
+      const list = this.scene._actorsByType.get(actor) ?? []
+      list.push(instance)
+      this.scene._actorsByType.set(actor, list)
       return instance as any
     } else {
       const retInstances: ActorInterface[] = []
       const actorCore = ActorsController.get(actor)
+      const list = this.scene._actorsByType.get(actor) ?? []
       for (let i = 0; i < counter; i++) {
         const instance = actorCore.spawn(this.scene)
         if (i === 0) { Logger.debug(`Actor spawn (${counter ?? 1}):`, instance.getClassName()) }
         this.scene._actors.add(instance)
+        list.push(instance)
         retInstances.push(instance)
         if (alternativeOnSpawn) {
           alternativeOnSpawn(instance as A, i)
         }
       }
+      this.scene._actorsByType.set(actor, list)
       return retInstances as any
     }
   }

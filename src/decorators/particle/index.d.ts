@@ -142,9 +142,9 @@ export type ParticleConstructor = new () => ParticleInterface
 
 export interface ParticleProps {
   /**
-   * If 'true' renders the particle over all the elements in the scene (sets *renderingGroupId* to the max value).
-   * Set to 'false' in a 3D scene.
-   * Set to 'true' in a 2D scene built by sprites if you want to make the particle visible over all the elements in the scene.
+   * If *true* renders the particle over all the elements in the scene (sets *renderingGroupId* to the max value).
+   * Set to *false* in a 3D scene.
+   * Set to *true* in a 2D scene built by sprites if you want to make the particle visible over all the elements in the scene.
    * This property will be ignored in case *renderingGroupId* is defined.
    */
   renderOverScene: boolean

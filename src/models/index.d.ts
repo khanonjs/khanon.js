@@ -19,7 +19,7 @@ export declare interface AnimationBase {
   id: FlexId
 
   /**
-   * Indicates if the animation is cyclic, 'false' by default.
+   * Indicates if the animation is cyclic, *false* by default.
    * This property is omitted in particles.
    */
   loop?: boolean

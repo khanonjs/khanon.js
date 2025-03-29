@@ -58,7 +58,7 @@ export abstract class SpriteInterface implements DisplayObject, LoopUpdatable, C
   abstract getClassName(): string
   abstract setFrame(frame: number): void
   abstract addAnimation(animation: SpriteAnimation | MeshAnimation): void
-  abstract playAnimation(animation: SpriteAnimation | MeshAnimation | FlexId, options?: SpriteAnimationOptions, completed?: () => void): void
+  abstract playAnimation(animation: FlexId, options?: SpriteAnimationOptions, completed?: () => void): void
   abstract stopAnimation(): void
   abstract subscribeToKeyframe(keyframeId: string, callback: () => void): void
   abstract clearKeyframeSubscriptions(keyframeId: string): void

@@ -44,7 +44,7 @@ export declare class ActorActionInterface</* Setup object */ S = any, /* Scene o
   get loopUpdate(): boolean
 
   /**
-   * Returns 'true' if the action is playing.
+   * Returns *true* if the action is playing.
    */
   get isPlaying(): boolean
 
@@ -110,7 +110,7 @@ export declare class ActorActionInterface</* Setup object */ S = any, /* Scene o
   onPlay?(): void
 
   /**
-   * Invoked on action stop. If 'props.preserved' is 'true', the action instance will remain alive waiting for another 'playAction'.
+   * Invoked on action stop. If 'props.preserved' is *true*, the action instance will remain alive waiting for another 'playAction'.
    */
   onStop?(): void
 
@@ -141,10 +141,10 @@ export interface ActorActionProps {
   group?: FlexId
 
   /**
-   * By default 'false'.
+   * By default *false*.
    *
-   * If preserve is 'false', the action is removed after stop it. The next action play will create a new instance.
-   * If preserve is 'true', the action is preserved after stop it, keeping the instance and being able to be played again with last values.
+   * If preserve is *false*, the action is removed after stop it. The next action play will create a new instance.
+   * If preserve is *true*, the action is preserved after stop it, keeping the instance and being able to be played again with last values.
    */
   preserve?: boolean
 

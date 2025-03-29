@@ -221,8 +221,12 @@ export function Mesh(props: MeshProps = {}): any {
         playAnimation(animationId: FlexId, options?: MeshAnimationOptions, completed?: () => void): BABYLON.AnimationGroup {
           this.stopAnimation()
           if (!this._animations.get(animationId)) { Logger.debugError(`Animation '${animationId}' not found in mesh '${this._props.url}':`, this.getClassName()) }
-          this._animation = this._animations.get(animationId) as any
-          if (this._animation) {
+          const animation = this._animations.get(animationId)
+          if (animation) {
+            if (this._animation && this._animation.id === animation.id && !options?.restart) {
+              return this._animation.animationGroup
+            }
+            this._animation = animation
             const loop = (options?.loop !== undefined ? options.loop : this._animation.loop) ?? false
             this._animation.animationGroup.start(loop, options?.speedRatio, options?.from, options?.to, options?.isAdditive)
             if (completed) {

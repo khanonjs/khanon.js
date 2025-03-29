@@ -14,6 +14,7 @@ import { BabylonAccessor } from '../../models/babylon-accessor'
 import { Rect } from '../../models/rect'
 import { Timeout } from '../../models/timeout'
 import { FlexId } from '../../types/flex-id'
+import { ActorConstructor } from '../actor/actor-constructor'
 import { ActorInterface } from '../actor/actor-interface'
 import { CameraConstructor } from '../camera/camera-constructor'
 import { CameraInterface } from '../camera/camera-interface'
@@ -53,6 +54,7 @@ export abstract class SceneInterface implements Loadable, LoopUpdatable, CanvasR
   abstract _animationHandler: Map<SpriteInterface, () => void>
   abstract _actions: Map<SceneActionConstructor, SceneActionInterface>
   abstract _actors: Set<ActorInterface>
+  abstract _actorsByType: Map<ActorConstructor, ActorInterface[]>
   abstract _meshes: Set<MeshInterface>
   abstract _sprites: Set<SpriteInterface>
   abstract _particles: Set<ParticleInterface>
@@ -63,6 +65,7 @@ export abstract class SceneInterface implements Loadable, LoopUpdatable, CanvasR
   abstract _stopActionFromInstance(instance: SceneActionInterface, forceRemove?: boolean): void
   abstract _setAnimationHandler(sprite: SpriteInterface, animation: SpriteAnimation): void
   abstract _stopAnimationHandler(sprite: SpriteInterface): void
+  abstract _getActionOwner(actionConstructor: SceneActionConstructor): SceneInterface | SceneStateInterface | undefined
   abstract _startRenderObservable(): void
   abstract _stopRenderObservable(): void
   abstract _useDebugInspector(): void
@@ -95,7 +98,6 @@ export abstract class SceneInterface implements Loadable, LoopUpdatable, CanvasR
   abstract switchCamera(camera: CameraConstructor, setup: any): void
   abstract getCamera<C extends CameraInterface = CameraInterface>(): C
   abstract switchState(state: SceneStateConstructor, setup: any): void
-  abstract getActionOwner(actionConstructor: SceneActionConstructor): SceneInterface | SceneStateInterface | undefined
   abstract playAction(action: SceneActionConstructor | ((delta: number) => void), setup: any): void
   abstract stopAction(action: SceneActionConstructor): void
   abstract playActionGroup(group: FlexId): void
@@ -104,6 +106,7 @@ export abstract class SceneInterface implements Loadable, LoopUpdatable, CanvasR
   abstract removeAction(actionConstructor: SceneActionConstructor, forceRemove?: boolean): void
   abstract removeActionGroup(group: FlexId, forceRemove?: boolean): void
   abstract removeActionAll(forceRemove?: boolean): void
+  abstract getActors<C extends ActorConstructor>(actor: C): InstanceType<C>[]
   abstract getAction(actionConstructor: SceneActionConstructor): SceneActionInterface | undefined
   abstract notify(message: FlexId, ...args: any[]): void
 

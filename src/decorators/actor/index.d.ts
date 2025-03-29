@@ -218,20 +218,20 @@ export declare abstract class ActorInterface<B extends SpriteInterface | MeshInt
   playActionGroup(group: FlexId): void
 
   /**
-   * Stops an action. If the actions prop 'preserve' prop is 'false', it will be removed.
+   * Stops an action. If the actions prop 'preserve' prop is *false*, it will be removed.
    * Actions can be stopped also within the Action itself.
    * @param action
    */
   stopAction(action: ActorActionConstructor | ((delta: number) => void), forceRemove?: boolean): void
 
   /**
-   * Stops all actions of a group. All the actions with 'preserve' prop as 'false' will be removed.
+   * Stops all actions of a group. All the actions with 'preserve' prop as *false* will be removed.
    * @param group
    */
   stopActionGroup(group: FlexId, forceRemove?: boolean): void
 
   /**
-   * Stops all actions. All the actions with 'preserve' prop as 'false' will be removed.
+   * Stops all actions. All the actions with 'preserve' prop as *false* will be removed.
    */
   stopActionAll(forceRemove?: boolean): void
 
@@ -308,7 +308,7 @@ export declare abstract class ActorInterface<B extends SpriteInterface | MeshInt
   onSpawn?(): void
 
   /**
-   * Callback invoked after the actor has finished spawning once the actor is enabled by the first time.
+   * Callback invoked after the scene *onStart* and the actor is enabled by the first time.
    */
   onStart?(): void
 
@@ -376,7 +376,7 @@ export interface ActorProps {
   renderingGroupId?: number
 
   /**
-   * 'true' by default, sets the initial enabled state.
+   * *true* by default, sets the initial enabled state.
    */
   enabled?: boolean
 }

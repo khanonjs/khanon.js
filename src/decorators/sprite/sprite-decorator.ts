@@ -199,57 +199,60 @@ export function Sprite(props: SpriteProps): any {
           this._animations.set(animation.id, animation)
         }
 
-        playAnimation(animation: SpriteAnimation | FlexId, options?: SpriteAnimationOptions, completed?: () => void): void {
-          if (isFlexId(animation)) {
-            if (!this._animations.get(animation as FlexId)) { Logger.debugError(`Animation '${animation}' doesn't exist in sprite:`, this.getClassName()); return }
-            animation = this._animations.get(animation as FlexId) as SpriteAnimation
-          }
-          this._animation = animation as SpriteAnimation
-          const frameStart = this.getFirstFrame()
-          const frameEnd = this.getLastFrame()
-          const delay = this._animation.delay
-          const loop = options?.loop ?? this._animation.loop
-          const keyFrames = this._animation.keyFrames
-
-          this._removeEndAnimationTimer()
-          this._removeAnimationKeyFrames()
-
-          const startKeyframes = () => {
-            this._keyFramesTimeouts = []
-            keyFrames?.forEach((animationKeyFrame) => {
-              if (animationKeyFrame.emitter.hasObservers()) {
-                animationKeyFrame.ms.forEach((ms) => {
-                  this._keyFramesTimeouts.push(this.setTimeout(() => animationKeyFrame.emitter.notifyObservers(), ms))
-                })
-              }
-            })
-          }
-
-          const onCompleted = () => {
-            if (completed) {
-              completed()
+        playAnimation(animationId: FlexId, options?: SpriteAnimationOptions, completed?: () => void): void {
+          if (!this._animations.get(animationId as FlexId)) { Logger.debugError(`Animation '${animationId}' doesn't exist in sprite:`, this.getClassName()); return }
+          const animation = this._animations.get(animationId)
+          if (animation) {
+            if (this._animation && this._animation.id === animation.id && !options?.restart) {
+              return
             }
-            if (loop) {
+            this._animation = animation
+            const frameStart = this.getFirstFrame()
+            const frameEnd = this.getLastFrame()
+            const delay = this._animation.delay
+            const loop = options?.loop ?? this._animation.loop
+            const keyFrames = this._animation.keyFrames
+
+            this._removeEndAnimationTimer()
+            this._removeAnimationKeyFrames()
+
+            const startKeyframes = () => {
+              this._keyFramesTimeouts = []
+              keyFrames?.forEach((animationKeyFrame) => {
+                if (animationKeyFrame.emitter.hasObservers()) {
+                  animationKeyFrame.ms.forEach((ms) => {
+                    this._keyFramesTimeouts.push(this.setTimeout(() => animationKeyFrame.emitter.notifyObservers(), ms))
+                  })
+                }
+              })
+            }
+
+            const onCompleted = () => {
+              if (completed) {
+                completed()
+              }
+              if (loop) {
+                startKeyframes()
+              }
+            }
+
+            if (completed || (keyFrames && keyFrames.length > 0)) {
+              if (loop) {
+                this.endAnimationTimerInterval = this.setInterval(() => onCompleted(), (frameEnd - frameStart + 1) * delay)
+              } else {
+                this.endAnimationTimerTimeout = this.setTimeout(() => onCompleted(), (frameEnd - frameStart + 1) * delay)
+              }
               startKeyframes()
             }
-          }
 
-          if (completed || (keyFrames && keyFrames.length > 0)) {
-            if (loop) {
-              this.endAnimationTimerInterval = this.setInterval(() => onCompleted(), (frameEnd - frameStart + 1) * delay)
-            } else {
-              this.endAnimationTimerTimeout = this.setTimeout(() => onCompleted(), (frameEnd - frameStart + 1) * delay)
-            }
-            startKeyframes()
+            this.scene._setAnimationHandler(this, {
+              id: this._animation.id,
+              frameStart,
+              frameEnd,
+              delay,
+              loop
+            })
           }
-
-          this.scene._setAnimationHandler(this, {
-            id: this._animation.id,
-            frameStart,
-            frameEnd,
-            delay,
-            loop
-          })
         }
 
         stopAnimation(): void {

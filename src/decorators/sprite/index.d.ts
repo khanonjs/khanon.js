@@ -2,7 +2,6 @@ import * as BABYLON from '@babylonjs/core'
 
 import {
   AnimationBase,
-  AnimationKeyFrame,
   BabylonAccessor,
   Rect,
   Timeout
@@ -152,7 +151,7 @@ export declare abstract class SpriteInterface {
    * @param loopOverride Overrides the animation loop value in case needed
    * @param completed Completed animation callback
    */
-  playAnimation(animation: SpriteAnimation | FlexId, options?: SpriteAnimationOptions, completed?: () => void): void
+  playAnimation(animation: FlexId, options?: SpriteAnimationOptions, completed?: () => void): void
 
   /**
    * Stops current animation.
