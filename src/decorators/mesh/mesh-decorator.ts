@@ -126,7 +126,11 @@ export function Mesh(props: MeshProps = {}): any {
           return this._animation
         }
 
-        set visibility(value: number) { this.babylon.mesh.visibility = value }
+        set visibility(value: number) {
+          this.babylon.mesh.visibility = value
+          this.babylon.mesh.getChildMeshes().forEach(child => { child.visibility = value })
+        }
+
         get visibility(): number { return this.babylon.mesh.visibility }
         get absolutePosition(): BABYLON.Vector3 { return this.babylon.mesh.absolutePosition }
         get absoluteRotationQuaternion(): BABYLON.Quaternion { return this.babylon.mesh.absoluteRotationQuaternion }
