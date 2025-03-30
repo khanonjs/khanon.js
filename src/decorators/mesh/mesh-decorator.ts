@@ -228,7 +228,8 @@ export function Mesh(props: MeshProps = {}): any {
             }
             this._animation = animation
             const loop = (options?.loop !== undefined ? options.loop : this._animation.loop) ?? false
-            this._animation.animationGroup.start(loop, options?.speedRatio, options?.from, options?.to, options?.isAdditive)
+            const speedRatio = options?.speedRatio ?? this._animation.speedRatio
+            this._animation.animationGroup.start(loop, speedRatio, options?.from, options?.to, options?.isAdditive)
             if (completed) {
               // setTimeouts prevent crash if user plays the same animation on the completed method.
               if (loop) {

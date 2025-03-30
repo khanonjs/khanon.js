@@ -17,6 +17,11 @@ export interface MeshAnimation extends AnimationBase {
    * Babylon animaation group class:
    */
   animationGroup: BABYLON.AnimationGroup
+
+  /**
+   * Animation speed ratio (1 by default).
+   */
+  speedRatio?: number
 }
 
 export declare abstract class MeshInterface {

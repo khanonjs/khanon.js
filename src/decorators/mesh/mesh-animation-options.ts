@@ -9,28 +9,27 @@ export interface MeshAnimationOptions {
   loop?: boolean,
 
   /**
-   * Defines the ratio to apply to animation speed (1 by default).
+   * Animation speed ratio (1 by default).
    */
   speedRatio?: number,
 
   /**
-   * Defines the from key (optional).
+   * From key (optional).
    */
   from?: number,
 
   /**
-   * Defines the to key (optional).
+   * To key (optional).
    */
   to?: number,
 
   /**
-   * Defines the additive state for the resulting animatables (optional).
+   * Additive state for the resulting animatables (optional).
    */
   isAdditive?: boolean
 
   /**
    * By default *false*.
-   *
    * If *false*, the animation won't restart in case the same animation is playing.
    * If *true*, the animation restarts from the beggining in case the same animation is playing.
    */
