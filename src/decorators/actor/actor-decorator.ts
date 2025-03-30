@@ -182,6 +182,7 @@ export function Actor(props: ActorProps = {}): any {
         this._body.visibility = this.visibility
         if (this._props.renderingGroupId) {
           this._body.babylon.mesh.renderingGroupId = this._props.renderingGroupId
+          this._body.babylon.mesh.getChildMeshes().forEach(child => { child.renderingGroupId = this._props.renderingGroupId ?? 0 })
         }
         this.transform = this._body
         this.t = this.transform
@@ -219,6 +220,7 @@ export function Actor(props: ActorProps = {}): any {
           this._nodes.set(name, node)
           if (this._props.renderingGroupId) {
             element.babylon.mesh.renderingGroupId = this._props.renderingGroupId
+            element.babylon.mesh.getChildMeshes().forEach(child => { child.renderingGroupId = this._props.renderingGroupId ?? 0 })
           }
           element.visibility = this._visibility
           if (transform?.position) {

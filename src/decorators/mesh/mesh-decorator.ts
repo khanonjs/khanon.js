@@ -79,6 +79,7 @@ export function Mesh(props: MeshProps = {}): any {
             if (this._props.renderingGroupId) {
               if (this._props.renderingGroupId >= BABYLON.RenderingManager.MAX_RENDERINGGROUPS) { Logger.debugError(`Using a renderingGroupId higher than maximum value ${BABYLON.RenderingManager.MAX_RENDERINGGROUPS - 1}`, this.getClassName()) }
               this.babylon.mesh.renderingGroupId = this._props.renderingGroupId
+              this.babylon.mesh.getChildMeshes().forEach(child => { child.renderingGroupId = this._props.renderingGroupId ?? 0 })
             }
             invokeCallback(this.onSpawn, this)
           }
