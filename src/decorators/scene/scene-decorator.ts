@@ -146,10 +146,10 @@ export function Scene(props: SceneProps = {}): any {
         if (this._cameraConstructor) {
           this.switchCamera(this._cameraConstructor, this._cameraSetup)
         }
+        invokeCallback(this.onStart, this)
         if (state) {
           this.switchState(state, stateSetup)
         }
-        invokeCallback(this.onStart, this)
         if (!this.loaded) {
           Logger.warn('Starting a scene that hasn\'t been loaded. Are you sure you want to do this?', this.getClassName())
         }
