@@ -262,6 +262,12 @@ export declare abstract class SceneInterface {
   switchState<C extends SceneStateConstructor>(state: C, setup: InstanceType<C>['setup']): void
 
   /**
+   * Returns *true* if the scene state coincides with  *state*.
+   * @param state
+   */
+  isState(state: SceneStateConstructor): boolean
+
+  /**
    * Plays an Action. N actions can be played simultaneously.
    * @param action
    */

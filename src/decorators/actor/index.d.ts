@@ -38,7 +38,7 @@ import {
  */
 
 /**
- * Represets a part (node) attached to the body of the actor.
+ * Node attached to the body of the actor.
  */
 export interface ActorNode<B extends SpriteInterface | MeshInterface> {
   element: B
@@ -46,10 +46,8 @@ export interface ActorNode<B extends SpriteInterface | MeshInterface> {
 }
 
 /**
- * Actor Interface to be extended from decorated Actors.
- * @param B alludes to what kind of interface this actor will have as Body and Nodes.
- * - To use 2D Sprites set it as 'SpriteInterface'.
- * - To use 3D Meshes set it as 'MeshInterface'.
+ * ActorInterface extend from decorated Actors.
+ * @param B (Required) Constructor type of Body and Nodes. Set it as *SpriteInterface* to use 2D sprites. Set it as *MeshInterface* To use 3D meshes.
  */
 export declare abstract class ActorInterface<B extends SpriteInterface | MeshInterface> {
   /**
@@ -189,6 +187,12 @@ export declare abstract class ActorInterface<B extends SpriteInterface | MeshInt
    * @param state
    */
   switchState<C extends ActorStateConstructor>(state: C, setup: InstanceType<C>['setup']): ActorStateInterface // TODO is it possible to make 'setup' argument optional whether InstanceType<S>['setup'] type is 'any'?
+
+  /**
+   * Returns *true* if the actor state coincides with  *state*.
+   * @param state
+   */
+  isState(state: ActorStateConstructor): boolean
 
   /**
    * Plays the animation of the body. Equivalent to 'actor.body.playAnimation'.

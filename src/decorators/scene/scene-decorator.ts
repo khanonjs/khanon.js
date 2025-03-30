@@ -113,6 +113,14 @@ export function Scene(props: SceneProps = {}): any {
 
       _setEngineParams(): void {} // TODO ?
 
+      isState(state: SceneStateConstructor): boolean {
+        if (this.state) {
+          return this.state instanceof state
+        } else {
+          return false
+        }
+      }
+
       // User available
       babylon: Pick<BabylonAccessor, 'scene'> = { scene: null as any }
       _loopUpdate$: BABYLON.Observer<number>

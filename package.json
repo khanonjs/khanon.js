@@ -1,6 +1,6 @@
 {
   "name": "@khanonjs/engine",
-  "version": "0.1.32",
+  "version": "0.1.34",
   "description": "A typescript game engine extending Babylon.js",
   "private": false,
   "author": {
@@ -58,6 +58,7 @@
     "archiver": "^6.0.1",
     "axios": "^1.6.2",
     "chai": "^4.3.10",
+    "circular-dependency-plugin": "^5.2.2",
     "cpy-cli": "^5.0.0",
     "cross-env": "^7.0.3",
     "dpdm": "^3.14.0",

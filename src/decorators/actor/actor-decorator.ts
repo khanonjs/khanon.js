@@ -280,6 +280,14 @@ export function Actor(props: ActorProps = {}): any {
         return this._state
       }
 
+      isState(state: ActorStateConstructor): boolean {
+        if (this.state) {
+          return this.state instanceof state
+        } else {
+          return false
+        }
+      }
+
       playAnimation(animation: FlexId, options?: SpriteAnimationOptions | MeshAnimationOptions, completed?: () => void): void {
         this.body?.playAnimation(animation, options, completed)
       }
