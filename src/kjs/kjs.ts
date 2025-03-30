@@ -9,7 +9,6 @@ import {
 import { AppInterface } from '../decorators/app/app-interface'
 import { AppStateConstructor } from '../decorators/app/app-state/app-state-constructor'
 import { Rect } from '../models/rect'
-import { Timeout } from '../models/timeout'
 
 export class KJS {
   static get Scene(): ScenesController { return ScenesController }

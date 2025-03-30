@@ -36,12 +36,12 @@ export declare namespace KJS {
 
   /**
    * Notification controller.
-   * @param message Message Id.
+   * @param id Message Id.
    * @param receivers Constructor type of the elements that will receive the notification.
    * @param args Method arguments received by the 'Notification' decorated method.
    */
   export namespace Notify {
-    function send(message: FlexId, receivers?: NotificableType | NotificableType[], ...args: any[]): void
+    function send(id: FlexId, receivers?: NotificableType | NotificableType[], ...args: any[]): void
   }
 
   /**
