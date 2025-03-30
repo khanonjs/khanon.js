@@ -29,7 +29,7 @@ export interface MeshAnimationOptions {
   isAdditive?: boolean
 
   /**
-   * By default *false*.
+   * By default *true*.
    * If *false*, the animation won't restart in case the same animation is playing.
    * If *true*, the animation restarts from the beggining in case the same animation is playing.
    */

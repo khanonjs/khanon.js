@@ -225,7 +225,7 @@ export function Mesh(props: MeshProps = {}): any {
           if (!this._animations.get(animationId)) { Logger.debugError(`Animation '${animationId}' not found in mesh '${this._props.url}':`, this.getClassName()) }
           const animation = this._animations.get(animationId)
           if (animation) {
-            if (this._animation && this._animation.id === animation.id && !options?.restart) {
+            if (this._animation && this._animation.id === animation.id && !options?.restart === false) {
               return this._animation.animationGroup
             }
             this._animation = animation

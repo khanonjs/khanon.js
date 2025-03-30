@@ -28,8 +28,8 @@ export function Notification(props: NotificationProps): any {
         Reflect.defineMetadata('metadata', new Metadata(), target)
       }
       const metadata = Reflect.getMetadata('metadata', target) as Metadata
-      if (metadata.notifiers.get(props.message)) { Logger.debugError(`Trying to define duplicated Notification message '${props.message}' to element '${target.constructor.name}'.`); return }
-      metadata.notifiers.set(props.message, {
+      if (metadata.notifiers.get(props.id)) { Logger.debugError(`Trying to define duplicated Notification message '${props.id}' to element '${target.constructor.name}'.`); return }
+      metadata.notifiers.set(props.id, {
         props,
         methodName: propertyKey
       })

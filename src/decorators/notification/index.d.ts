@@ -4,7 +4,7 @@ export interface NotificationProps {
   /**
    * Message ID to trigger the decorated method.
    */
-  message: FlexId
+  id: FlexId
 }
 
 export declare function Notification(props: NotificationProps): any

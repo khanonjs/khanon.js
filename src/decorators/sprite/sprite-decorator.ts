@@ -203,7 +203,7 @@ export function Sprite(props: SpriteProps): any {
           if (!this._animations.get(animationId as FlexId)) { Logger.debugError(`Animation '${animationId}' doesn't exist in sprite:`, this.getClassName()); return }
           const animation = this._animations.get(animationId)
           if (animation) {
-            if (this._animation && this._animation.id === animation.id && !options?.restart) {
+            if (this._animation && this._animation.id === animation.id && !options?.restart === false) {
               return
             }
             this._animation = animation
