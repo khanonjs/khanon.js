@@ -16,7 +16,7 @@ export class NotificationsController {
   static send(id: FlexId, elements?: NotificableType | NotificableType[], ...args: any[]): void {
     if (!elements) {
       // TODO send message to all elements of the game. Improve the performance.
-      NotificationsController.send(id, args)
+      NotificationsController.send(id, undefined, args)
     } else
       if (Array.isArray(elements)) {
         elements.forEach(element => NotificationsController.sendConstructor(id, element, args))
