@@ -61,7 +61,8 @@ export function Mesh(props: MeshProps = {}): any {
                         id: animationGroup.name,
                         animationGroup,
                         loop: animation.loop,
-                        keyFrames: animation.keyFrames
+                        keyFrames: animation.keyFrames,
+                        speedRatio: animation.speedRatio
                       })
                     }
                   } else {
