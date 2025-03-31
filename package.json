@@ -29,6 +29,7 @@
     "build:docs": "typedoc --options typedoc.json",
     "publish:docs": "node ./publish/publish-docs.mjs",
     "publish:validate-version": "node ./publish/validate-version.js",
+    "patch:alpha": "npm version prepatch --preid=alpha",
     "start:docs": "http-server ./api-docs -o",
     "test": "jest",
     "link": "cpy package.json ./src && cd ./src && npm link && npm i",
