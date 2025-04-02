@@ -78,8 +78,7 @@ export function Mesh(props: MeshProps = {}): any {
             attachCanvasResize(this)
             if (this._props.renderingGroupId) {
               if (this._props.renderingGroupId >= BABYLON.RenderingManager.MAX_RENDERINGGROUPS) { Logger.debugError(`Using a renderingGroupId higher than maximum value ${BABYLON.RenderingManager.MAX_RENDERINGGROUPS - 1}`, this.getClassName()) }
-              this.babylon.mesh.renderingGroupId = this._props.renderingGroupId
-              this.babylon.mesh.getChildMeshes().forEach(child => { child.renderingGroupId = this._props.renderingGroupId ?? 0 })
+              this._getMeshHierarchy().forEach(mesh => { mesh.renderingGroupId = this._props.renderingGroupId ?? 0 })
             }
             invokeCallback(this.onSpawn, this)
           }
@@ -127,8 +126,7 @@ export function Mesh(props: MeshProps = {}): any {
         }
 
         set visibility(value: number) {
-          this.babylon.mesh.visibility = value
-          this.babylon.mesh.getChildMeshes().forEach(child => { child.visibility = value })
+          this._getMeshHierarchy().forEach(mesh => { mesh.visibility = value })
         }
 
         get visibility(): number { return this.babylon.mesh.visibility }
@@ -169,6 +167,20 @@ export function Mesh(props: MeshProps = {}): any {
           }
           this.babylon.mesh = babylonMesh
           this.enabled = true
+        }
+
+        setMaterialTransparencyMode(value: number, applyToHierarchy = true) {
+          let meshes: BABYLON.AbstractMesh[] = []
+          if (applyToHierarchy) {
+            meshes = this._getMeshHierarchy()
+          } else {
+            meshes = [this.babylon.mesh]
+          }
+          meshes.forEach(mesh => {
+            if (mesh.material) {
+              mesh.material.transparencyMode = value
+            }
+          })
         }
 
         setFrame(frame: number) {
@@ -277,6 +289,14 @@ export function Mesh(props: MeshProps = {}): any {
               ?.filter(keyframe => keyframe.id === keyframeId)
               .forEach(keyframe => keyframe.emitter.clear())
           })
+        }
+
+        _getMeshHierarchy(): BABYLON.AbstractMesh[] {
+          let meshes: BABYLON.AbstractMesh[] = []
+          if (this.babylon.mesh) {
+            meshes = [this.babylon.mesh, ...this.babylon.mesh.getChildMeshes()]
+          }
+          return meshes
         }
 
         _release(): void {

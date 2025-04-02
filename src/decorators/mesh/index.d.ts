@@ -140,6 +140,13 @@ export declare abstract class MeshInterface {
   setMesh(babylonMesh: BABYLON.Mesh): void
 
   /**
+   * Sets the material transparency mode. Apply it to the full hierarchy if *applyToHierarchy* is *true*.
+   * @param value
+   * @param applyToHierarchy
+   */
+  setMaterialTransparencyMode(value: number, applyToHierarchy?: boolean): void
+
+  /**
    * Sets the frame (stops current animation).
    * @param frame
    */

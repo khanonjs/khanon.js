@@ -16,13 +16,11 @@ import {
   SpriteTransform
 } from '../../types'
 import { FlexId } from '../../types/flex-id'
-import { MeshAnimation } from '../mesh/mesh-animation'
 import { MeshAnimationOptions } from '../mesh/mesh-animation-options'
 import { MeshInterface } from '../mesh/mesh-interface'
 import { ParticleConstructor } from '../particle/particle-constructor'
 import { ParticleInterface } from '../particle/particle-interface'
 import { SceneInterface } from '../scene/scene-interface'
-import { SpriteAnimation } from '../sprite/sprite-animation'
 import { SpriteAnimationOptions } from '../sprite/sprite-animatrion-options'
 import { SpriteInterface } from '../sprite/sprite-interface'
 import { ActorActionConstructor } from './actor-action/actor-action-constructor'

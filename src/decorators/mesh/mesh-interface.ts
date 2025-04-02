@@ -25,6 +25,7 @@ export abstract class MeshInterface implements DisplayObject, LoopUpdatable, Can
   abstract _canvasResize$: BABYLON.Observer<Rect>
   abstract _animationCreateEvent(aniGroup: BABYLON.AnimationGroup): BABYLON.Animation
   abstract _animationCreateTemporalTarget(ani: BABYLON.Animation): void
+  abstract _getMeshHierarchy(): BABYLON.AbstractMesh[]
   abstract _animation: MeshAnimation | null
   abstract _animations: Map<FlexId, MeshAnimation>
   abstract _release(): void
@@ -39,6 +40,7 @@ export abstract class MeshInterface implements DisplayObject, LoopUpdatable, Can
   abstract clearTimeout(timeout: Timeout): void
   abstract clearInterval(timeout: Timeout): void
   abstract clearAllTimeouts(): void
+  abstract setMaterialTransparencyMode(value: number, applyToHierarchy?: boolean): void
 
   /**
    * User available Display Object
