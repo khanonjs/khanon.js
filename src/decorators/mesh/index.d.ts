@@ -141,6 +141,8 @@ export declare abstract class MeshInterface {
 
   /**
    * Sets the material transparency mode. Apply it to the full hierarchy if *applyToHierarchy* is *true*.
+   * Set the value to one of the BABYLON.Material.MATERIAL_XXXXXX modes.
+   * Read more: https://doc.babylonjs.com/features/featuresDeepDive/materials/advanced/transparent_rendering
    * @param value
    * @param applyToHierarchy
    */
@@ -240,7 +242,7 @@ export interface MeshProps {
    * If *true*, clone this mesh by instances. This means every actor using it will share the same mesh, not allowing to modify or using shaders with it.
    * Use it in case you want to impove performance and memory usage (E.g. simple actors with no shading effects, the crowd at a basketball game, etc).
    * If *false*, the mesh will be cloned by reference, creating a new mesh per element, and allowing to modify it and use shaders.
-   * Read more here: https://doc.babylonjs.com/features/featuresDeepDive/mesh/copies/instances
+   * Read more: https://doc.babylonjs.com/features/featuresDeepDive/mesh/copies/instances
    */
   cloneByInstances?: boolean
 
