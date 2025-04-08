@@ -215,16 +215,6 @@ export declare abstract class SceneInterface {
   stop(): void
 
   /**
-   * Load the scene's assets.
-   */
-  load(): LoadingProgress
-
-  /**
-   * Unload assets.
-   */
-  unload(): void
-
-  /**
    * Shows a GUI. This GUI must have been declared in the decorator props.
    * @param gui
    * @param setup

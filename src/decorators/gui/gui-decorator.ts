@@ -116,7 +116,7 @@ export function GUI(props: GUIProps = {}): any {
       Instance: GUIInterface = new _classInterface(null as any, null as any)
       loaded = false
 
-      load(scene: SceneInterface): LoadingProgress {
+      _load(scene: SceneInterface): LoadingProgress {
         return new LoadingProgress().complete()
         // return new LoadingProgress().fromNodes([
         //   SpritesController.load(this.props.sprites, scene),
@@ -128,7 +128,7 @@ export function GUI(props: GUIProps = {}): any {
         // ])
       }
 
-      unload(scene: SceneInterface): void {
+      _unload(scene: SceneInterface): void {
         // SpritesController.unload(this.props.sprites, scene)
         // SpritesController.unload(this.Instance.metadata.getProps().sprites, scene)
         // MeshesController.unload(this.props.meshes, scene)

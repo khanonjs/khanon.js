@@ -31,12 +31,12 @@ export function App(props: AppProps): any {
         const newStateCore = AppStatesController.get(state)
         if (this._state) {
           this._state._end()
-          this._stateCore.unload(newStateCore)
+          this._stateCore._unload(newStateCore)
           // TODO For scene switch, before unloading the current one, look for assets from the next one. Do not delete assets that are in the next scene.
         }
         this._stateCore = newStateCore
         this._state = this._stateCore.spawn()
-        const progress = this._stateCore.load()
+        const progress = this._stateCore._load()
         progress.onComplete.add(() => {
           this._state?._start(setup)
         })

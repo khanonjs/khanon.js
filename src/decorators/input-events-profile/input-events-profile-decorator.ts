@@ -9,11 +9,11 @@ export function InputEventsProfile(props: InputEventsProfileProps = {}): any {
       /* constructor() {
 
       } */
-      load(owner?: any): LoadingProgress {
+      _load(owner?: any): LoadingProgress {
         return null as any
       }
 
-      unload(owner?: any): void {
+      _unload(owner?: any): void {
 
       }
     }

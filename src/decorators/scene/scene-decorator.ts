@@ -200,7 +200,7 @@ export function Scene(props: SceneProps = {}): any {
         removeCanvasResize(this)
       }
 
-      load(): LoadingProgress {
+      _load(): LoadingProgress {
         Logger.debug('Scene load', this.getClassName())
 
         if (this._loaded) {
@@ -302,7 +302,7 @@ export function Scene(props: SceneProps = {}): any {
         }
       }
 
-      unload(): void {
+      _unload(): void {
         Logger.debug('Scene unload', this.getClassName(), this.getClassName())
         this._loaded = false
         SceneStatesController.unload(this._props.states, this)

@@ -4,6 +4,6 @@ import {
 } from '../../base'
 
 export abstract class InputEventsProfileInterface implements Loadable/*, LoopUpdatable, CanvasResizable, Notificable, TimersByContext */ {
-  abstract load(owner?: any): LoadingProgress
-  abstract unload(owner?: any): void
+  abstract _load(owner?: any): LoadingProgress
+  abstract _unload(owner?: any): void
 }

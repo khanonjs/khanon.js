@@ -479,7 +479,7 @@ export function Actor(props: ActorProps = {}): any {
       Instance: ActorInterface = new _classInterface(null as any)
       loaded = false
 
-      load(scene: SceneInterface): LoadingProgress {
+      _load(scene: SceneInterface): LoadingProgress {
         return new LoadingProgress().fromNodes([
           ActorStatesController.load(this.props.states, scene),
           ActorActionsController.load(this.props.actions, scene),
@@ -494,7 +494,7 @@ export function Actor(props: ActorProps = {}): any {
         ])
       }
 
-      unload(scene: SceneInterface): void {
+      _unload(scene: SceneInterface): void {
         ActorStatesController.unload(this.props.states, scene)
         ActorActionsController.unload(this.props.actions, scene)
         ActorActionsController.unload(this.Instance._metadata.getProps().actions, scene)

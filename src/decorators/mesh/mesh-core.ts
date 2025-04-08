@@ -13,8 +13,8 @@ export abstract class MeshCore implements Loadable<SceneInterface>, Spawnable<Me
   abstract props: MeshProps
   abstract Instance: MeshInterface
   abstract assetContainers: Map<SceneInterface, BABYLON.AssetContainer>
-  abstract load(scene: SceneInterface): LoadingProgress
-  abstract unload(scene: SceneInterface): void
+  abstract _load(scene: SceneInterface): LoadingProgress
+  abstract _unload(scene: SceneInterface): void
   abstract spawn(scene: SceneInterface): MeshInterface
   abstract getClassName(): string
 }

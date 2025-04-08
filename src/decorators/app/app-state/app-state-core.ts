@@ -9,6 +9,6 @@ export abstract class AppStateCore implements StateCore<any, AppStateInterface, 
   abstract props: AppStateProps
   abstract Instance: AppStateInterface
   abstract spawn(): AppStateInterface
-  abstract load(): LoadingProgress
-  abstract unload(_newStateCore: AppStateCore): void
+  abstract _load(): LoadingProgress
+  abstract _unload(_newStateCore: AppStateCore): void
 }

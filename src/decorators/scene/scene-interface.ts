@@ -59,6 +59,8 @@ export abstract class SceneInterface implements Loadable, LoopUpdatable, CanvasR
   abstract _sprites: Set<SpriteInterface>
   abstract _particles: Set<ParticleInterface>
   abstract _guis: Map<GUIConstructor, GUIInterface>
+  abstract _load(): LoadingProgress
+  abstract _unload(): void
   abstract _releaseGUIs(): void
   abstract _setEngineParams(): void // TODO ?
   abstract _playActionFromInstance(instance: SceneActionInterface): void
@@ -90,8 +92,6 @@ export abstract class SceneInterface implements Loadable, LoopUpdatable, CanvasR
   abstract clearAllTimeouts(): void
   abstract start(state?: SceneStateConstructor, stateSetup?: any): SceneStateInterface | null
   abstract stop(): void
-  abstract load(): LoadingProgress
-  abstract unload(): void
   abstract showGUI<G extends GUIInterface>(gui: GUIConstructor, setup: any): G
   abstract hideGUI(gui: GUIConstructor): void
   abstract getGUI<G extends GUIInterface>(gui: GUIConstructor): G | undefined
