@@ -1,13 +1,13 @@
 import * as BABYLON from '@babylonjs/core'
 
-export declare abstract class InputEventsProfileInterface {
+export declare abstract class InputEventsInterface {
 
 }
 
-export type InputEventsProfileConstructor = new () => InputEventsProfileInterface
+export type InputEventsConstructor = new () => InputEventsInterface
 
-export interface InputEventsProfileProps {
+export interface InputEventsProps {
 
 }
 
-export declare function InputEventsProfile(props?: InputEventsProfileProps): any
+export declare function InputEvents(props?: InputEventsProps): any
