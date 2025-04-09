@@ -1,7 +1,10 @@
 import { ActorActionConstructor } from '../../../decorators/actor/actor-action/actor-action-constructor'
+import { InputEventData } from '../../../decorators/input-events/input-event-data'
+import { InputEventIds } from '../../../decorators/input-events/input-event-ids'
 import { SceneActionConstructor } from '../../../decorators/scene/scene-action/scene-action-constructor'
 import { FlexId } from '../../../types/flex-id'
 import { MetadataActionDefinition } from './metadata-action-definition'
+import { MetadataInputEventDefinition } from './metadata-input-event-definition'
 import { MetadataMeshDefinition } from './metadata-mesh-definition'
 import { MetadataNotifierDefinition } from './metadata-notifier-definition'
 import { MetadataParticleDefinition } from './metadata-particle-definition'
@@ -14,6 +17,7 @@ export class Metadata<A extends ActorActionConstructor | SceneActionConstructor 
   meshes: MetadataMeshDefinition[] = []
   particles: Set<MetadataParticleDefinition> = new Set<MetadataParticleDefinition>()
   notifiers: Map<FlexId, MetadataNotifierDefinition> = new Map<FlexId, MetadataNotifierDefinition>()
+  inputEvents: Map<InputEventIds, Map<InputEventData, MetadataInputEventDefinition>> = new Map<InputEventIds, Map<InputEventData, MetadataInputEventDefinition>>()
 
   applyProps(_class: any): void {
     this.actions.forEach(definition => {
