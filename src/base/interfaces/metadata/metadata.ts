@@ -1,7 +1,8 @@
 import { ActorActionConstructor } from '../../../decorators/actor/actor-action/actor-action-constructor'
-import { InputEventData } from '../../../decorators/input-events/input-event-data'
-import { InputEventIds } from '../../../decorators/input-events/input-event-ids'
+import { InputEventData } from '../../../decorators/input-event/input-event-data'
+import { InputEventIds } from '../../../decorators/input-event/input-event-ids'
 import { SceneActionConstructor } from '../../../decorators/scene/scene-action/scene-action-constructor'
+import { Logger } from '../../../modules/logger'
 import { FlexId } from '../../../types/flex-id'
 import { MetadataActionDefinition } from './metadata-action-definition'
 import { MetadataInputEventDefinition } from './metadata-input-event-definition'
@@ -29,6 +30,14 @@ export class Metadata<A extends ActorActionConstructor | SceneActionConstructor 
     this.meshes.forEach(definition => {
       _class[definition.propertyName] = definition.classDefinition
     })
+  }
+
+  startInputEvents(): void {
+    Logger.trace('aki startInputEvents', [...this.inputEvents].length)
+  }
+
+  stopInputEvents(): void {
+    Logger.trace('aki stopInputEvents', [...this.inputEvents].length)
   }
 
   /**

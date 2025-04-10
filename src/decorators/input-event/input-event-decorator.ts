@@ -30,6 +30,7 @@ export function InputEvent(props: InputEventProps): any {
       } else {
         inputEventById = new Map<InputEventData, MetadataInputEventDefinition>()
       }
+      Logger.trace('aki register InputEvent', propertyKey)
       inputEventById.set(props.data, {
         props,
         methodName: propertyKey

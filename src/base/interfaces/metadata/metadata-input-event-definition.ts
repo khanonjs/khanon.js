@@ -1,4 +1,4 @@
-import { InputEventProps } from '../../../decorators/input-events/input-event-props'
+import { InputEventProps } from '../../../decorators/input-event/input-event-props'
 
 export interface MetadataInputEventDefinition {
   props: InputEventProps

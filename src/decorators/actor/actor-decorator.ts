@@ -77,6 +77,8 @@ export function Actor(props: ActorProps = {}): any {
       _loopUpdate$: BABYLON.Observer<number>
       _canvasResize$: BABYLON.Observer<Rect>
       _started = false
+      _updating = false
+      _enabled = false
       _body: B | null = null
       _nodes: Map<string, ActorNode<B>> = new Map<string, ActorNode<B>>()
       _visibility = 1
@@ -107,22 +109,22 @@ export function Actor(props: ActorProps = {}): any {
       }
 
       get enabled(): boolean {
-        return this._body?.babylon.mesh.isEnabled() ?? false
+        return this._enabled
       }
 
       set enabled(value: boolean) {
+        this._enabled = value
         // TODO apply this property to pause states and notifications
         if (this.body) {
-          this.body.enabled = value
+          this.body.enabled = this._enabled
         }
         this._nodes.forEach(node => {
-          node.element.enabled = value
+          node.element.enabled = this._enabled
         })
-        if (value) {
-          this._applyStarted()
-          switchLoopUpdate(this._loopUpdate, this)
+        if (this._enabled) {
+          this._startUpdates()
         } else {
-          removeLoopUpdate(this)
+          this._stopUpdates()
         }
       }
 
@@ -140,15 +142,32 @@ export function Actor(props: ActorProps = {}): any {
         this.enabled = props.enabled ?? true
       }
 
+      _startUpdates(): void {
+        if (!this._updating) {
+          this._updating = true
+          this._applyStarted()
+          this._metadata.startInputEvents()
+          switchLoopUpdate(this._loopUpdate, this)
+          attachCanvasResize(this)
+        }
+      }
+
+      _stopUpdates(): void {
+        if (this._updating) {
+          this._updating = false
+          this._metadata.stopInputEvents()
+          removeLoopUpdate(this)
+          removeCanvasResize(this)
+        }
+      }
+
       _release() {
         invokeCallback(this.onDestroy, this)
         this.clearAllTimeouts()
         // this.guisRelease()
         this.stopActionAll()
         this.clearParticles()
-        this.removeBody()
-        removeLoopUpdate(this)
-        removeCanvasResize(this)
+        this._removeBody()
       }
 
       // guisStart(): void {
@@ -176,9 +195,10 @@ export function Actor(props: ActorProps = {}): any {
 
       setBody<N extends B>(Body: new () => N): N {
         if (this._body) {
-          this.removeBody()
+          this._removeBody()
         }
         this._body = this._getNodeElement(Body)
+        this._body.enabled = this._enabled
         this._body.visibility = this.visibility
         if (this._props.renderingGroupId) {
           this._body.babylon.mesh.renderingGroupId = this._props.renderingGroupId
@@ -186,13 +206,13 @@ export function Actor(props: ActorProps = {}): any {
         }
         this.transform = this._body
         this.t = this.transform
-        this._applyStarted()
-        switchLoopUpdate(this._loopUpdate, this)
-        attachCanvasResize(this)
+        if (this._enabled) {
+          this._startUpdates()
+        }
         return this._body as N
       }
 
-      removeBody(): void {
+      _removeBody(): void {
         if (this._body) {
           this.clearNodes()
           this._body._release()

@@ -9,7 +9,7 @@ export enum InputEventIds {
   TAP_PRESS,
   TAP_DOWN,
   TAP_UP,
-  TAP_DRAG,
+  DRAG,
   MOUSE_POSITION,
   MOUSE_RIGHT_PRESS,
   MOUSE_RIGHT_DOWN,

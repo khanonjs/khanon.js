@@ -167,11 +167,6 @@ export declare abstract class ActorInterface<B extends SpriteInterface | MeshInt
   getNode(name: string): ActorNode<B> | undefined
 
   /**
-   * Removes the body.
-   */
-  removeBody(): void
-
-  /**
    * Removes a node.
    * @param name
    */

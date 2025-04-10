@@ -39,6 +39,8 @@ export abstract class ActorInterface<B extends SpriteInterface | MeshInterface =
   abstract _loopUpdate$: BABYLON.Observer<number>
   abstract _canvasResize$: BABYLON.Observer<Rect>
   abstract _started: boolean
+  abstract _updating: boolean
+  abstract _enabled: boolean
   abstract _body: B | undefined
   abstract _nodes: Map<string, B>
   abstract _visibility: number
@@ -55,6 +57,9 @@ export abstract class ActorInterface<B extends SpriteInterface | MeshInterface =
   abstract _getNodeElement<N extends B>(Element: new () => N): N
   abstract _playActionFromInstance(instance: ActorActionInterface): void
   abstract _stopActionFromInstance(instance: ActorActionInterface, forceRemove?: boolean): void
+  abstract _startUpdates(): void
+  abstract _stopUpdates(): void
+  abstract _removeBody(): void
 
   /**
    * User available
@@ -79,7 +84,6 @@ export abstract class ActorInterface<B extends SpriteInterface | MeshInterface =
   abstract setBody(Body: new () => B): B
   abstract addNode(Node: new () => B, name: string, transform?: TransformComposition): ActorNode<B> | undefined
   abstract getNode(name: string): ActorNode<B> | undefined
-  abstract removeBody(): void
   abstract removeNode(name: string): void
   abstract clearNodes(): void
   abstract switchState(state: ActorStateConstructor, setup: any): ActorStateInterface
