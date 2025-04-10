@@ -59,6 +59,8 @@ export abstract class SceneInterface implements Loadable, LoopUpdatable, CanvasR
   abstract _sprites: Set<SpriteInterface>
   abstract _particles: Set<ParticleInterface>
   abstract _guis: Map<GUIConstructor, GUIInterface>
+  abstract _$pointerDown: BABYLON.Observable<any>
+  abstract _$pointerUp: BABYLON.Observable<any>
   abstract _load(): LoadingProgress
   abstract _unload(): void
   abstract _releaseGUIs(): void

@@ -33,7 +33,7 @@ export function AppState(props: AppStateProps = {}): any {
       constructor(props: AppStateProps) {
         super()
         this._props = props
-        this._metadata.applyProps(this)
+        this._metadata.applyProps(this, null)
       }
 
       getClassName(): string { return className }

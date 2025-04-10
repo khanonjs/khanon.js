@@ -73,7 +73,7 @@ export function Scene(props: SceneProps = {}): any {
         super()
         this._spawn = new SceneSpawn(this)
         this._remove = new SceneRemove(this)
-        this._metadata.applyProps(this)
+        this._metadata.applyProps(this, this)
         this.storeAvailableElements()
       }
 
@@ -101,6 +101,8 @@ export function Scene(props: SceneProps = {}): any {
       _spawn: SceneSpawn
       _remove: SceneRemove
       _loopUpdate = true
+      _$pointerDown: BABYLON.Observable<any> = new BABYLON.Observable()
+      _$pointerUp: BABYLON.Observable<any> = new BABYLON.Observable()
       _debugInspector: (event: KeyboardEvent) => void
 
       // Spawned elements
@@ -346,6 +348,12 @@ export function Scene(props: SceneProps = {}): any {
       }
 
       _startRenderObservable(): void {
+        this.babylon.scene.onPointerDown = () => {
+          this._$pointerDown.notifyObservers(null)
+        }
+        this.babylon.scene.onPointerUp = () => {
+          this._$pointerUp.notifyObservers(null)
+        }
         this.babylon.scene.onBeforeRenderObservable.add(() => {
           this._animationHandler.forEach(handler => {
             handler()
@@ -354,6 +362,10 @@ export function Scene(props: SceneProps = {}): any {
       }
 
       _stopRenderObservable(): void {
+        this._$pointerDown.clear()
+        this._$pointerUp.clear()
+        this.babylon.scene.onPointerDown = undefined
+        this.babylon.scene.onPointerUp = undefined
         this.babylon.scene.onBeforeRenderObservable.clear()
       }
 

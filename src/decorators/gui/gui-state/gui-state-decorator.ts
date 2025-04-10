@@ -36,7 +36,7 @@ export function GUIState(props: GUIStateProps = {}): any {
         super()
         this._props = props
         if (this.gui) {
-          this._metadata.applyProps(this)
+          this._metadata.applyProps(this, this.gui.scene)
         }
       }
 

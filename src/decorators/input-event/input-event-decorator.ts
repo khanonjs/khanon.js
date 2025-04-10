@@ -7,13 +7,12 @@ import { ActorStateInterface } from '../actor/actor-state/actor-state-interface'
 import { AppStateInterface } from '../app/app-state/app-state-interface'
 import { SceneInterface } from '../scene/scene-interface'
 import { SceneStateInterface } from '../scene/scene-state/scene-state-interface'
-import { InputEventData } from './input-event-data'
+import { InputEventModifier } from './input-event-modifier'
 import { InputEventProps } from './input-event-props'
 
 export function InputEvent(props: InputEventProps): any {
   return function(target: any, propertyKey: string, descriptor: PropertyDescriptor) {
     if (!target.prototype && (
-      target instanceof AppStateInterface ||
       target instanceof ActorInterface ||
       target instanceof ActorStateInterface ||
       target instanceof SceneInterface ||
@@ -23,15 +22,14 @@ export function InputEvent(props: InputEventProps): any {
         Reflect.defineMetadata('metadata', new Metadata(), target)
       }
       const metadata = Reflect.getMetadata('metadata', target) as Metadata
-      let inputEventById: Map<InputEventData, MetadataInputEventDefinition> | undefined
+      let inputEventById: Map<InputEventModifier, MetadataInputEventDefinition> | undefined
       inputEventById = metadata.inputEvents.get(props.id)
       if (inputEventById) {
-        if (inputEventById.get(props.data)) { Logger.debugError(`Trying to define duplicated Input Event, Id: '${props.id}', data: '${objectToString(props.data)}' in element '${target.constructor.name}'.`); return }
+        if (inputEventById.get(props.modifier)) { Logger.debugError(`Trying to define duplicated Input Event, Id: '${props.id}', data: '${objectToString(props.modifier)}' in element '${target.constructor.name}'.`); return }
       } else {
-        inputEventById = new Map<InputEventData, MetadataInputEventDefinition>()
+        inputEventById = new Map<InputEventModifier, MetadataInputEventDefinition>()
       }
-      Logger.trace('aki register InputEvent', propertyKey)
-      inputEventById.set(props.data, {
+      inputEventById.set(props.modifier, {
         props,
         methodName: propertyKey
       })

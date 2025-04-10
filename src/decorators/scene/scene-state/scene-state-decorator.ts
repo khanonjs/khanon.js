@@ -45,7 +45,7 @@ export function SceneState(props: SceneStateProps = {}): any {
           this._spawn = this.scene.spawn
           this._remove = this.scene.remove
           this.babylon.scene = this.scene.babylon.scene
-          this._metadata.applyProps(this)
+          this._metadata.applyProps(this, this.scene)
         }
       }
 

@@ -29,7 +29,7 @@ export function Camera(props: CameraProps = {}): any {
         super()
         if (scene) {
           this.babylon.scene = scene.babylon.scene
-          this._metadata.applyProps(this)
+          this._metadata.applyProps(this, this.scene)
         }
       }
 

@@ -34,7 +34,7 @@ export function ActorAction(props: ActorActionProps = {}): any {
           super()
           if (this.actor) {
             this.babylon.scene = this.actor.babylon.scene
-            this._metadata.applyProps(this)
+            this._metadata.applyProps(this, this.scene)
           }
         }
 

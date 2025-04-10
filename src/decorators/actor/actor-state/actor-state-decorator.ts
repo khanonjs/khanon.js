@@ -39,7 +39,7 @@ export function ActorState(props: ActorStateProps = {}): any {
           this.actor = actor
           this.scene = this.actor.scene
           this.babylon.scene = this.actor.babylon.scene
-          this._metadata.applyProps(this)
+          this._metadata.applyProps(this, this.scene)
         }
       }
 

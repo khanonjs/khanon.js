@@ -46,7 +46,7 @@ export function Particle(props: ParticleProps): any {
           this._props = props
           if (this.scene) {
             this.babylon.scene = this.scene.babylon.scene
-            this._metadata.applyProps(this)
+            this._metadata.applyProps(this, this.scene)
           }
         }
 
