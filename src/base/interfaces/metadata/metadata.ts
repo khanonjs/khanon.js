@@ -1,3 +1,4 @@
+import { InputEventsController } from '../../../controllers'
 import { ActorActionConstructor } from '../../../decorators/actor/actor-action/actor-action-constructor'
 import { InputEventIds } from '../../../decorators/input-event/input-event-ids'
 import { InputEventModifier } from '../../../decorators/input-event/input-event-modifier'
@@ -49,22 +50,10 @@ export class Metadata<A extends ActorActionConstructor | SceneActionConstructor 
     }
   }
 
-  // TODO move Input event logic outside this class
   startInputEvents(): void {
     this.inputEvents.forEach(event => {
       event.forEach(definition => {
-        switch (definition.props.id) {
-        case InputEventIds.TAP_DOWN:
-          definition.observer = this.scene?._$pointerDown.add(() => {
-            this.context[definition.methodName]('hola')
-          })
-          break
-        case InputEventIds.TAP_UP:
-          definition.observer = this.scene?._$pointerUp.add(() => {
-            this.context[definition.methodName]('hola')
-          })
-          break
-        }
+        InputEventsController.startInputEvent(definition, this.context, this.scene)
       })
     })
   }
@@ -72,18 +61,7 @@ export class Metadata<A extends ActorActionConstructor | SceneActionConstructor 
   stopInputEvents(): void {
     this.inputEvents.forEach(event => {
       event.forEach(definition => {
-        switch (definition.props.id) {
-        case InputEventIds.TAP_DOWN:
-          if (definition.observer) {
-            this.scene?._$pointerDown.remove(definition.observer)
-          }
-          break
-        case InputEventIds.TAP_UP:
-          if (definition.observer) {
-            this.scene?._$pointerUp.remove(definition.observer)
-          }
-          break
-        }
+        InputEventsController.stopInputEvent(definition, this.context, this.scene)
       })
     })
   }

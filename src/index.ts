@@ -34,6 +34,7 @@ export { CameraInterface } from './decorators/camera/camera-interface'
 // Camera decorator
 export { InputEvent } from './decorators/input-event/input-event-decorator'
 export { InputEventProps } from './decorators/input-event/input-event-props'
+export { InputEventArgData } from './decorators/input-event/input-event-arg-data'
 export { InputEventIds } from './decorators/input-event/input-event-ids'
 
 // GUI decorator
