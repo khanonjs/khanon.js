@@ -9,6 +9,7 @@ import {
   Notificable
 } from '../../base'
 import { Metadata } from '../../base/interfaces/metadata/metadata'
+import { Stateable } from '../../base/interfaces/stateable'
 import { TimersByContext } from '../../base/interfaces/timers-by-context'
 import { BabylonAccessor } from '../../models/babylon-accessor'
 import { Rect } from '../../models/rect'
@@ -33,7 +34,7 @@ import { SceneSpawn } from './scene-spawn'
 import { SceneStateConstructor } from './scene-state/scene-state-constructor'
 import { SceneStateInterface } from './scene-state/scene-state-interface'
 
-export abstract class SceneInterface implements Loadable, LoopUpdatable, CanvasResizable, Notificable, TimersByContext {
+export abstract class SceneInterface implements Stateable<SceneStateConstructor>, Loadable, LoopUpdatable, CanvasResizable, Notificable, TimersByContext {
   abstract _props: SceneProps
   abstract _assets: AssetDefinition[]
   abstract _loaded: boolean
@@ -97,9 +98,9 @@ export abstract class SceneInterface implements Loadable, LoopUpdatable, CanvasR
   abstract showGUI<G extends GUIInterface>(gui: GUIConstructor, setup: any): G
   abstract hideGUI(gui: GUIConstructor): void
   abstract getGUI<G extends GUIInterface>(gui: GUIConstructor): G | undefined
-  abstract switchCamera(camera: CameraConstructor, setup: any): void
+  abstract switchCamera(camera: CameraConstructor, setup: any): CameraInterface
   abstract getCamera<C extends CameraInterface = CameraInterface>(): C
-  abstract switchState(state: SceneStateConstructor, setup: any): void
+  abstract switchState(state: SceneStateConstructor, setup: any): SceneStateInterface
   abstract isState(state: SceneStateConstructor): boolean
   abstract playAction(action: SceneActionConstructor | ((delta: number) => void), setup: any): void
   abstract stopAction(action: SceneActionConstructor): void

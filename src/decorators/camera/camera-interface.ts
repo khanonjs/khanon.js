@@ -7,6 +7,7 @@ import {
   Notificable
 } from '../../base'
 import { Configurable } from '../../base/interfaces/configurable'
+import { Stateable } from '../../base/interfaces/stateable'
 import { TimersByContext } from '../../base/interfaces/timers-by-context'
 import { BabylonAccessor } from '../../models/babylon-accessor'
 import { Rect } from '../../models/rect'
@@ -14,10 +15,13 @@ import { Timeout } from '../../models/timeout'
 import { CameraTransform } from '../../types/camera-transform'
 import { FlexId } from '../../types/flex-id'
 import { SceneInterface } from '../scene/scene-interface'
+import { CameraStateConstructor } from './camera-state/camera-state-constructor'
+import { CameraStateInterface } from './camera-state/camera-state-interface'
 
-export abstract class CameraInterface<S = any, C extends SceneInterface = SceneInterface> implements LoopUpdatable, CanvasResizable, Notificable, TimersByContext, Configurable<S>, CameraTransform {
+export abstract class CameraInterface<S = any, C extends SceneInterface = SceneInterface> implements Stateable<CameraStateConstructor>, LoopUpdatable, CanvasResizable, Notificable, TimersByContext, Configurable<S>, CameraTransform {
   abstract _loopUpdate: boolean
   abstract _metadata: Metadata
+  abstract _state: CameraStateInterface | null
   abstract _loopUpdate$: BABYLON.Observer<number>
   abstract _canvasResize$: BABYLON.Observer<Rect>
   abstract _start(): void
@@ -32,6 +36,7 @@ export abstract class CameraInterface<S = any, C extends SceneInterface = SceneI
   abstract babylon: Pick<BabylonAccessor<BABYLON.TargetCamera>, 'camera' | 'scene'>
   abstract get loopUpdate(): boolean
   abstract set loopUpdate(value: boolean)
+  abstract get state(): CameraStateInterface | null
   abstract getClassName(): string
   abstract notify(message: FlexId, ...args: any[]): void
   abstract setTimeout(func: () => void, ms: number): Timeout
@@ -39,6 +44,7 @@ export abstract class CameraInterface<S = any, C extends SceneInterface = SceneI
   abstract clearTimeout(timeout: Timeout): void
   abstract clearInterval(timeout: Timeout): void
   abstract clearAllTimeouts(): void
+  abstract switchState(state: CameraStateConstructor, setup: any): CameraStateInterface
   // TODO attach particles to camera to simulate environment effects?
 
   /**

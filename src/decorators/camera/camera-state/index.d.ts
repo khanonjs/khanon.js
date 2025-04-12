@@ -1,27 +1,18 @@
-import { ActorInterface } from '../'
+import { CameraInterface } from '../'
 import {
   BabylonAccessor,
   Rect,
   Timeout
 } from '../../../models'
 import { FlexId } from '../../../types'
-import {
-  MeshConstructor,
-  MeshInterface
-} from '../../mesh'
-import { ParticleConstructor } from '../../particle'
 import { SceneInterface } from '../../scene'
-import {
-  SpriteConstructor,
-  SpriteInterface
-} from '../../sprite'
 
 /**
  * Defines the state of an actor.
- * @param A Actor owner of hte state (optional).
+ * @param A Camera owner of hte state (optional).
  * @param S Setup interface (optional).
  */
-export declare abstract class ActorStateInterface</* Setup object */ S = any, /* Scene type */ C = SceneInterface, /* Actor type */ A = ActorInterface<SpriteInterface | MeshInterface>> {
+export declare abstract class CameraStateInterface</* Setup object */ S = any, /* Scene type */ C = SceneInterface, /* Camera type */ D = CameraInterface> {
   /**
    * Babylon.js objects.
    */
@@ -38,9 +29,9 @@ export declare abstract class ActorStateInterface</* Setup object */ S = any, /*
   get scene(): C
 
   /**
-   * Actor owner of the state.
+   * Camera owner of the state.
    */
-  get actor(): A
+  get camera(): D
 
   /**
    * Turns on/off the 'onLoopUpdate' callback.
@@ -87,7 +78,7 @@ export declare abstract class ActorStateInterface</* Setup object */ S = any, /*
    * Starts a state.
    * @param state
    */
-  switchState<C extends new () => ActorStateInterface>(state: C, setup: InstanceType<C>['setup']): ActorStateInterface // TODO is it possible to make 'setup' argument optional whether InstanceType<S>['setup'] type is 'any'?
+  switchState<C extends new () => CameraStateInterface>(state: C, setup: InstanceType<C>['setup']): CameraStateInterface // TODO is it possible to make 'setup' argument optional whether InstanceType<S>['setup'] type is 'any'?
 
   /**
    * Notifies a message to this state.
@@ -117,23 +108,6 @@ export declare abstract class ActorStateInterface</* Setup object */ S = any, /*
   onCanvasResize?(size: Rect): void
 }
 
-export type ActorStateConstructor = new () => ActorStateInterface
+export type CameraStateConstructor = new () => CameraStateInterface
 
-export interface ActorStateProps {
-  /**
-   * Sprites to use in this state.
-   */
-  sprites?: SpriteConstructor[]
-
-  /**
-   * Meshes to use in this state.
-   */
-  meshes?: MeshConstructor[]
-
-  /**
-   * Particles to use in this state.
-   */
-  particles?: ParticleConstructor[]
-}
-
-export declare function ActorState(props?: ActorStateProps): any
+export declare function CameraState(): any

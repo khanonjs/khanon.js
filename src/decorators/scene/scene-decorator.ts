@@ -374,7 +374,7 @@ export function Scene(props: SceneProps = {}): any {
         this._guis.clear()
       }
 
-      switchCamera(constructor: CameraConstructor, setup: any): void {
+      switchCamera(constructor: CameraConstructor, setup: any): CameraInterface {
         this.releaseCamera()
         this._cameraConstructor = constructor
         this._cameraSetup = setup
@@ -383,6 +383,7 @@ export function Scene(props: SceneProps = {}): any {
         this._camera.babylon.camera = (this._camera.onInitialize as any)(this.babylon.scene)
         this._camera.babylon.camera.attachControl(Core.canvas, true)
         this._camera._start()
+        return this._camera
       }
 
       releaseCamera(): void {

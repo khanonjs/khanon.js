@@ -238,7 +238,7 @@ export declare abstract class SceneInterface {
    * @param camera
    * @param setup
    */
-  switchCamera<C extends CameraConstructor>(camera: C, setup: InstanceType<C>['setup']): void
+  switchCamera<C extends CameraConstructor>(camera: C, setup: InstanceType<C>['setup']): InstanceType<C>
 
   /**
    * Gets the camera. Use the generic 'C' to set the returning camera type.
@@ -249,7 +249,7 @@ export declare abstract class SceneInterface {
    * Set the state.
    * @param state
    */
-  switchState<C extends SceneStateConstructor>(state: C, setup: InstanceType<C>['setup']): void
+  switchState<C extends SceneStateConstructor>(state: C, setup: InstanceType<C>['setup']): InstanceType<C>
 
   /**
    * Returns *true* if the scene state coincides with  *state*.
