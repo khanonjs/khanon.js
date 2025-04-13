@@ -19,6 +19,8 @@ export interface InputEventProps {
 
   /**
    * Argument data that will be passed to the method that is called when the Input Event is triggered.
+   * If *undefined* the argument passed will be a *BABYLON.IPointerEvent* obect.
+   * See more: https://doc.babylonjs.com/typedoc/interfaces/BABYLON.IPointerEvent
    */
   argData?: InputEventArgData
 }

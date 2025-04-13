@@ -10,7 +10,7 @@ export class InputEventsController {
   static startInputEvent(definition: MetadataInputEventDefinition, context: any, scene: SceneInterface | null): void {
     const callMethod = (event: any) => {
       // eslint-disable-next-line no-useless-call, prefer-spread
-      context[definition.methodName].apply(context, definition.argMethod?.apply(this, [context, scene]) ?? event)
+      context[definition.methodName].apply(context, definition.argMethod?.apply(this, [context, scene]) ?? [event])
     }
     const setArgMethod = () => {
       switch (definition.props.argData) {

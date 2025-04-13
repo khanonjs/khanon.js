@@ -352,16 +352,16 @@ export function Scene(props: SceneProps = {}): any {
       }
 
       _startRenderObservable(): void {
-        this.babylon.scene.onPointerDown = (evt: BABYLON.IPointerEvent) => {
-          this._$pointerDown.notifyObservers(evt)
+        this.babylon.scene.onPointerDown = (event: BABYLON.IPointerEvent) => {
+          this._$pointerDown.notifyObservers(event)
         }
-        this.babylon.scene.onPointerUp = (evt: BABYLON.IPointerEvent) => {
-          this._$pointerUp.notifyObservers(evt)
+        this.babylon.scene.onPointerUp = (event: BABYLON.IPointerEvent) => {
+          this._$pointerUp.notifyObservers(event)
         }
-        this.babylon.scene.onPointerMove = (evt: BABYLON.IPointerEvent) => {
-          this._$pointerMove.notifyObservers(evt)
-          if (this.babylon.scene.isPointerCaptured()) {
-            this._$pointerDrag.notifyObservers(evt)
+        this.babylon.scene.onPointerMove = (event: BABYLON.IPointerEvent) => {
+          this._$pointerMove.notifyObservers(event)
+          if (this.babylon.scene.isPointerCaptured(1)) {
+            this._$pointerDrag.notifyObservers(event)
           }
         }
         this.babylon.scene.onBeforeRenderObservable.add(() => {

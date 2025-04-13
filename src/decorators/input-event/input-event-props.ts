@@ -5,5 +5,5 @@ import { InputEventModifier } from './input-event-modifier'
 export interface InputEventProps {
   id: InputEventIds
   modifier?: InputEventModifier
-  argData?: InputEventArgData
+  argData?: InputEventArgData // 8a8f is it needed? am I missing something from BABYLON.IPointerEvent?
 }
