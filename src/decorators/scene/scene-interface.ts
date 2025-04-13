@@ -60,8 +60,10 @@ export abstract class SceneInterface implements Stateable<SceneStateConstructor>
   abstract _sprites: Set<SpriteInterface>
   abstract _particles: Set<ParticleInterface>
   abstract _guis: Map<GUIConstructor, GUIInterface>
-  abstract _$pointerDown: BABYLON.Observable<any>
-  abstract _$pointerUp: BABYLON.Observable<any>
+  abstract _$pointerDown: BABYLON.Observable<BABYLON.IPointerEvent>
+  abstract _$pointerUp: BABYLON.Observable<BABYLON.IPointerEvent>
+  abstract _$pointerMove: BABYLON.Observable<BABYLON.IPointerEvent>
+  abstract _$pointerDrag: BABYLON.Observable<BABYLON.IPointerEvent>
   abstract _load(): LoadingProgress
   abstract _unload(): void
   abstract _releaseGUIs(): void

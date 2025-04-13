@@ -4,7 +4,8 @@ import { Logger } from '../../modules/logger'
 import { objectToString } from '../../utils/utils'
 import { ActorInterface } from '../actor/actor-interface'
 import { ActorStateInterface } from '../actor/actor-state/actor-state-interface'
-import { AppStateInterface } from '../app/app-state/app-state-interface'
+import { CameraInterface } from '../camera/camera-interface'
+import { CameraStateInterface } from '../camera/camera-state/camera-state-interface'
 import { SceneInterface } from '../scene/scene-interface'
 import { SceneStateInterface } from '../scene/scene-state/scene-state-interface'
 import { InputEventModifier } from './input-event-modifier'
@@ -16,7 +17,9 @@ export function InputEvent(props: InputEventProps): any {
       target instanceof ActorInterface ||
       target instanceof ActorStateInterface ||
       target instanceof SceneInterface ||
-      target instanceof SceneStateInterface
+      target instanceof SceneStateInterface ||
+      target instanceof CameraInterface ||
+      target instanceof CameraStateInterface
     ) && descriptor) { // Defined descriptor means it is a decorated method
       if (!Reflect.hasMetadata('metadata', target)) {
         Reflect.defineMetadata('metadata', new Metadata(), target)

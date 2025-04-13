@@ -5,10 +5,10 @@ export enum InputEventIds {
   // MOUSE_LEFT_PRESS,
   MOUSE_LEFT_DOWN,
   MOUSE_LEFT_UP,
-  // MOUSE_LEFT_DRAG,
+  MOUSE_MOVE,
   // TAP_PRESS,
   TAP_DOWN,
   TAP_UP,
-  DRAG, // 8a8f
+  DRAG,
   // MOUSE_POSITION
 }

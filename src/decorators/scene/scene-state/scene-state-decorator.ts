@@ -105,11 +105,13 @@ export function SceneState(props: SceneStateProps = {}): any {
         Logger.debug('SceneState start', this.getClassName(), this.scene.getClassName())
         this.setup = setup
         invokeCallback(this.onStart, this)
+        this._metadata.startInputEvents()
         switchLoopUpdate(this._loopUpdate, this)
         attachCanvasResize(this)
       }
 
       _end(): void {
+        this._metadata.stopInputEvents()
         removeLoopUpdate(this)
         removeCanvasResize(this)
         invokeCallback(this.onEnd, this)

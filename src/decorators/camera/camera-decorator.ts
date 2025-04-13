@@ -99,12 +99,14 @@ export function Camera(props: CameraProps = {}): any {
       }
 
       _start(): void {
+        this._metadata.startInputEvents()
         switchLoopUpdate(this._loopUpdate, this)
         attachCanvasResize(this)
         invokeCallback(this.onStart, this)
       }
 
       _stop(): void {
+        this._metadata.stopInputEvents()
         invokeCallback(this.onStop, this)
         removeLoopUpdate(this)
         removeCanvasResize(this)

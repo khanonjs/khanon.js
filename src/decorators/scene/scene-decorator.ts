@@ -101,8 +101,10 @@ export function Scene(props: SceneProps = {}): any {
       _spawn: SceneSpawn
       _remove: SceneRemove
       _loopUpdate = true
-      _$pointerDown: BABYLON.Observable<any> = new BABYLON.Observable()
-      _$pointerUp: BABYLON.Observable<any> = new BABYLON.Observable()
+      _$pointerDown: BABYLON.Observable<BABYLON.IPointerEvent> = new BABYLON.Observable<BABYLON.IPointerEvent>()
+      _$pointerUp: BABYLON.Observable<BABYLON.IPointerEvent> = new BABYLON.Observable<BABYLON.IPointerEvent>()
+      _$pointerMove: BABYLON.Observable<BABYLON.IPointerEvent> = new BABYLON.Observable<BABYLON.IPointerEvent>()
+      _$pointerDrag: BABYLON.Observable<BABYLON.IPointerEvent> = new BABYLON.Observable<BABYLON.IPointerEvent>()
       _debugInspector: (event: KeyboardEvent) => void
 
       // Spawned elements
@@ -179,6 +181,7 @@ export function Scene(props: SceneProps = {}): any {
         if (Core.isDevelopmentMode() && this._props.useDebugInspector) {
           this._useDebugInspector()
         }
+        this._metadata.startInputEvents()
         switchLoopUpdate(this._loopUpdate, this)
         attachCanvasResize(this)
         return this.state
@@ -198,6 +201,7 @@ export function Scene(props: SceneProps = {}): any {
         this._started = false
         Core.stopRenderScene(this)
         this._stopRenderObservable()
+        this._metadata.stopInputEvents()
         removeLoopUpdate(this)
         removeCanvasResize(this)
       }
@@ -348,11 +352,17 @@ export function Scene(props: SceneProps = {}): any {
       }
 
       _startRenderObservable(): void {
-        this.babylon.scene.onPointerDown = () => {
-          this._$pointerDown.notifyObservers(null)
+        this.babylon.scene.onPointerDown = (evt: BABYLON.IPointerEvent) => {
+          this._$pointerDown.notifyObservers(evt)
         }
-        this.babylon.scene.onPointerUp = () => {
-          this._$pointerUp.notifyObservers(null)
+        this.babylon.scene.onPointerUp = (evt: BABYLON.IPointerEvent) => {
+          this._$pointerUp.notifyObservers(evt)
+        }
+        this.babylon.scene.onPointerMove = (evt: BABYLON.IPointerEvent) => {
+          this._$pointerMove.notifyObservers(evt)
+          if (this.babylon.scene.isPointerCaptured()) {
+            this._$pointerDrag.notifyObservers(evt)
+          }
         }
         this.babylon.scene.onBeforeRenderObservable.add(() => {
           this._animationHandler.forEach(handler => {
