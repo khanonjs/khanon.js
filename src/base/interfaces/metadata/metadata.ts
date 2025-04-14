@@ -1,7 +1,6 @@
 import { InputEventsController } from '../../../controllers'
 import { ActorActionConstructor } from '../../../decorators/actor/actor-action/actor-action-constructor'
 import { InputEventIds } from '../../../decorators/input-event/input-event-ids'
-import { InputEventModifier } from '../../../decorators/input-event/input-event-modifier'
 import { SceneActionConstructor } from '../../../decorators/scene/scene-action/scene-action-constructor'
 import { SceneInterface } from '../../../decorators/scene/scene-interface'
 import { Logger } from '../../../modules/logger'
@@ -22,7 +21,7 @@ export class Metadata<A extends ActorActionConstructor | SceneActionConstructor 
   meshes: MetadataMeshDefinition[] = []
   particles: Set<MetadataParticleDefinition> = new Set<MetadataParticleDefinition>()
   notifiers: Map<FlexId, MetadataNotifierDefinition> = new Map<FlexId, MetadataNotifierDefinition>()
-  inputEvents: Map<InputEventIds, Map<InputEventModifier, MetadataInputEventDefinition>> = new Map<InputEventIds, Map<InputEventModifier, MetadataInputEventDefinition>>()
+  inputEvents: Map<InputEventIds, MetadataInputEventDefinition> = new Map<InputEventIds, MetadataInputEventDefinition>()
 
   applyProps(_context: any, scene: SceneInterface | null): void {
     this.context = _context
@@ -51,18 +50,14 @@ export class Metadata<A extends ActorActionConstructor | SceneActionConstructor 
   }
 
   startInputEvents(): void {
-    this.inputEvents.forEach(event => {
-      event.forEach(definition => {
-        InputEventsController.startInputEvent(definition, this.context, this.scene)
-      })
+    this.inputEvents.forEach(definition => {
+      InputEventsController.startInputEvent(definition, this.context, this.scene)
     })
   }
 
   stopInputEvents(): void {
-    this.inputEvents.forEach(event => {
-      event.forEach(definition => {
-        InputEventsController.stopInputEvent(definition, this.context, this.scene)
-      })
+    this.inputEvents.forEach(definition => {
+      InputEventsController.stopInputEvent(definition, this.context, this.scene)
     })
   }
 }
