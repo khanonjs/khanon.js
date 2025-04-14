@@ -193,6 +193,10 @@ export function Scene(props: SceneProps = {}): any {
           this._denyDebugInspector()
         }
         invokeCallback(this.onStop, this)
+        this._$pointerDown.clear()
+        this._$pointerUp.clear()
+        this._$pointerMove.clear()
+        this._$pointerDrag.clear()
         this.clearAllTimeouts()
         this._releaseGUIs()
         this.releaseCamera()
