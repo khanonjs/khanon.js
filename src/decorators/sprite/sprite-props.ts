@@ -6,7 +6,7 @@ export interface SpriteProps {
   height?: number
   cellWidth?: number
   cellHeight?: number
-  numFrames?: number // 8a8f this property shouldn't be neccesary
+  numFrames?: number
   animations?: SpriteAnimation[]
   noMipmap?: boolean
   invertY: boolean

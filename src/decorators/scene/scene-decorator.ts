@@ -101,10 +101,17 @@ export function Scene(props: SceneProps = {}): any {
       _spawn: SceneSpawn
       _remove: SceneRemove
       _loopUpdate = true
+      _$keyDown: BABYLON.Observable<KeyboardEvent> = new BABYLON.Observable<KeyboardEvent>()
+      _$keyUp: BABYLON.Observable<KeyboardEvent> = new BABYLON.Observable<KeyboardEvent>()
+      _$keyPress: BABYLON.Observable<KeyboardEvent> = new BABYLON.Observable<KeyboardEvent>()
       _$pointerDown: BABYLON.Observable<BABYLON.IPointerEvent> = new BABYLON.Observable<BABYLON.IPointerEvent>()
       _$pointerUp: BABYLON.Observable<BABYLON.IPointerEvent> = new BABYLON.Observable<BABYLON.IPointerEvent>()
+      _$pointerPress: BABYLON.Observable<BABYLON.IPointerEvent> = new BABYLON.Observable<BABYLON.IPointerEvent>()
       _$pointerMove: BABYLON.Observable<BABYLON.IPointerEvent> = new BABYLON.Observable<BABYLON.IPointerEvent>()
       _$pointerDrag: BABYLON.Observable<BABYLON.IPointerEvent> = new BABYLON.Observable<BABYLON.IPointerEvent>()
+      _pointerPressInterval: Timeout
+      _pointerPress = false
+      _pointerPressEvent: BABYLON.IPointerEvent
       _debugInspector: (event: KeyboardEvent) => void
 
       // Spawned elements
@@ -193,10 +200,6 @@ export function Scene(props: SceneProps = {}): any {
           this._denyDebugInspector()
         }
         invokeCallback(this.onStop, this)
-        this._$pointerDown.clear()
-        this._$pointerUp.clear()
-        this._$pointerMove.clear()
-        this._$pointerDrag.clear()
         this.clearAllTimeouts()
         this._releaseGUIs()
         this.releaseCamera()
@@ -355,16 +358,44 @@ export function Scene(props: SceneProps = {}): any {
         return this._guis.get(gui) as any
       }
 
+      _eventKeyPress = (event: KeyboardEvent) => {
+        this._$keyPress.notifyObservers(event)
+      }
+
+      _eventKeyUp = (event: KeyboardEvent) => {
+        this._$keyUp.notifyObservers(event)
+      }
+
+      _eventKeyDown = (event: KeyboardEvent) => {
+        this._$keyDown.notifyObservers(event)
+      }
+
       _startRenderObservable(): void {
+        addEventListener('keypress', this._eventKeyPress)
+        addEventListener('keyup', this._eventKeyUp)
+        addEventListener('keydown', this._eventKeyDown)
         this.babylon.scene.onPointerDown = (event: BABYLON.IPointerEvent) => {
+          this._pointerPress = true
+          this._pointerPressEvent = event
           this._$pointerDown.notifyObservers(event)
+          if (this._pointerPressInterval) {
+            this.clearInterval(this._pointerPressInterval)
+          }
+          this._pointerPressInterval = this.setInterval(() => {
+            this._$pointerPress.notifyObservers(this._pointerPressEvent)
+          }, 0)
         }
         this.babylon.scene.onPointerUp = (event: BABYLON.IPointerEvent) => {
+          this._pointerPress = false
           this._$pointerUp.notifyObservers(event)
+          if (this._pointerPressInterval) {
+            this.clearInterval(this._pointerPressInterval)
+          }
         }
         this.babylon.scene.onPointerMove = (event: BABYLON.IPointerEvent) => {
+          this._pointerPressEvent = event
           this._$pointerMove.notifyObservers(event)
-          if (this.babylon.scene.isPointerCaptured(1)) {
+          if (this._pointerPress) {
             this._$pointerDrag.notifyObservers(event)
           }
         }
@@ -376,10 +407,24 @@ export function Scene(props: SceneProps = {}): any {
       }
 
       _stopRenderObservable(): void {
+        removeEventListener('keypress', this._eventKeyPress)
+        removeEventListener('keyup', this._eventKeyUp)
+        removeEventListener('keydown', this._eventKeyDown)
+        this._pointerPress = false
         this._$pointerDown.clear()
         this._$pointerUp.clear()
+        this._$pointerMove.clear()
+        this._$pointerDrag.clear()
+        this._$pointerPress.clear()
+        this._$keyDown.clear()
+        this._$keyUp.clear()
+        this._$keyPress.clear()
+        if (this._pointerPressInterval) {
+          this.clearInterval(this._pointerPressInterval)
+        }
         this.babylon.scene.onPointerDown = undefined
         this.babylon.scene.onPointerUp = undefined
+        this.babylon.scene.onPointerMove = undefined
         this.babylon.scene.onBeforeRenderObservable.clear()
       }
 

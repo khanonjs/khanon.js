@@ -60,10 +60,17 @@ export abstract class SceneInterface implements Stateable<SceneStateConstructor>
   abstract _sprites: Set<SpriteInterface>
   abstract _particles: Set<ParticleInterface>
   abstract _guis: Map<GUIConstructor, GUIInterface>
+  abstract _$keyDown: BABYLON.Observable<KeyboardEvent>
+  abstract _$keyUp: BABYLON.Observable<KeyboardEvent>
+  abstract _$keyPress: BABYLON.Observable<KeyboardEvent>
   abstract _$pointerDown: BABYLON.Observable<BABYLON.IPointerEvent>
   abstract _$pointerUp: BABYLON.Observable<BABYLON.IPointerEvent>
+  abstract _$pointerPress: BABYLON.Observable<BABYLON.IPointerEvent>
   abstract _$pointerMove: BABYLON.Observable<BABYLON.IPointerEvent>
   abstract _$pointerDrag: BABYLON.Observable<BABYLON.IPointerEvent>
+  abstract _pointerPressInterval: Timeout
+  abstract _pointerPress: boolean
+  abstract _pointerPressEvent: BABYLON.IPointerEvent
   abstract _load(): LoadingProgress
   abstract _unload(): void
   abstract _releaseGUIs(): void
@@ -75,6 +82,9 @@ export abstract class SceneInterface implements Stateable<SceneStateConstructor>
   abstract _getActionOwner(actionConstructor: SceneActionConstructor): SceneInterface | SceneStateInterface | undefined
   abstract _startRenderObservable(): void
   abstract _stopRenderObservable(): void
+  abstract _eventKeyPress: (event: KeyboardEvent) => void
+  abstract _eventKeyUp: (event: KeyboardEvent) => void
+  abstract _eventKeyDown: (event: KeyboardEvent) => void
   abstract _useDebugInspector(): void
   abstract _denyDebugInspector(): void
 
