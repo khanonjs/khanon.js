@@ -73,7 +73,7 @@ export function Scene(props: SceneProps = {}): any {
         super()
         this._spawn = new SceneSpawn(this)
         this._remove = new SceneRemove(this)
-        this._metadata.applyProps(this)
+        this._metadata.applyProps(this, this)
         this.storeAvailableElements()
       }
 
@@ -101,6 +101,17 @@ export function Scene(props: SceneProps = {}): any {
       _spawn: SceneSpawn
       _remove: SceneRemove
       _loopUpdate = true
+      _$keyDown: BABYLON.Observable<KeyboardEvent> = new BABYLON.Observable<KeyboardEvent>()
+      _$keyUp: BABYLON.Observable<KeyboardEvent> = new BABYLON.Observable<KeyboardEvent>()
+      _$keyPress: BABYLON.Observable<KeyboardEvent> = new BABYLON.Observable<KeyboardEvent>()
+      _$pointerDown: BABYLON.Observable<BABYLON.IPointerEvent> = new BABYLON.Observable<BABYLON.IPointerEvent>()
+      _$pointerUp: BABYLON.Observable<BABYLON.IPointerEvent> = new BABYLON.Observable<BABYLON.IPointerEvent>()
+      _$pointerPress: BABYLON.Observable<BABYLON.IPointerEvent> = new BABYLON.Observable<BABYLON.IPointerEvent>()
+      _$pointerMove: BABYLON.Observable<BABYLON.IPointerEvent> = new BABYLON.Observable<BABYLON.IPointerEvent>()
+      _$pointerDrag: BABYLON.Observable<BABYLON.IPointerEvent> = new BABYLON.Observable<BABYLON.IPointerEvent>()
+      _pointerPressInterval: Timeout
+      _pointerPress = false
+      _pointerPressEvent: BABYLON.IPointerEvent
       _debugInspector: (event: KeyboardEvent) => void
 
       // Spawned elements
@@ -177,6 +188,7 @@ export function Scene(props: SceneProps = {}): any {
         if (Core.isDevelopmentMode() && this._props.useDebugInspector) {
           this._useDebugInspector()
         }
+        this._metadata.startInputEvents()
         switchLoopUpdate(this._loopUpdate, this)
         attachCanvasResize(this)
         return this.state
@@ -196,11 +208,12 @@ export function Scene(props: SceneProps = {}): any {
         this._started = false
         Core.stopRenderScene(this)
         this._stopRenderObservable()
+        this._metadata.stopInputEvents()
         removeLoopUpdate(this)
         removeCanvasResize(this)
       }
 
-      load(): LoadingProgress {
+      _load(): LoadingProgress {
         Logger.debug('Scene load', this.getClassName())
 
         if (this._loaded) {
@@ -302,7 +315,7 @@ export function Scene(props: SceneProps = {}): any {
         }
       }
 
-      unload(): void {
+      _unload(): void {
         Logger.debug('Scene unload', this.getClassName(), this.getClassName())
         this._loaded = false
         SceneStatesController.unload(this._props.states, this)
@@ -345,7 +358,47 @@ export function Scene(props: SceneProps = {}): any {
         return this._guis.get(gui) as any
       }
 
+      _eventKeyPress = (event: KeyboardEvent) => {
+        this._$keyPress.notifyObservers(event)
+      }
+
+      _eventKeyUp = (event: KeyboardEvent) => {
+        this._$keyUp.notifyObservers(event)
+      }
+
+      _eventKeyDown = (event: KeyboardEvent) => {
+        this._$keyDown.notifyObservers(event)
+      }
+
       _startRenderObservable(): void {
+        addEventListener('keypress', this._eventKeyPress)
+        addEventListener('keyup', this._eventKeyUp)
+        addEventListener('keydown', this._eventKeyDown)
+        this.babylon.scene.onPointerDown = (event: BABYLON.IPointerEvent) => {
+          this._pointerPress = true
+          this._pointerPressEvent = event
+          this._$pointerDown.notifyObservers(event)
+          if (this._pointerPressInterval) {
+            this.clearInterval(this._pointerPressInterval)
+          }
+          this._pointerPressInterval = this.setInterval(() => {
+            this._$pointerPress.notifyObservers(this._pointerPressEvent)
+          }, 0)
+        }
+        this.babylon.scene.onPointerUp = (event: BABYLON.IPointerEvent) => {
+          this._pointerPress = false
+          this._$pointerUp.notifyObservers(event)
+          if (this._pointerPressInterval) {
+            this.clearInterval(this._pointerPressInterval)
+          }
+        }
+        this.babylon.scene.onPointerMove = (event: BABYLON.IPointerEvent) => {
+          this._pointerPressEvent = event
+          this._$pointerMove.notifyObservers(event)
+          if (this._pointerPress) {
+            this._$pointerDrag.notifyObservers(event)
+          }
+        }
         this.babylon.scene.onBeforeRenderObservable.add(() => {
           this._animationHandler.forEach(handler => {
             handler()
@@ -354,6 +407,24 @@ export function Scene(props: SceneProps = {}): any {
       }
 
       _stopRenderObservable(): void {
+        removeEventListener('keypress', this._eventKeyPress)
+        removeEventListener('keyup', this._eventKeyUp)
+        removeEventListener('keydown', this._eventKeyDown)
+        this._pointerPress = false
+        this._$pointerDown.clear()
+        this._$pointerUp.clear()
+        this._$pointerMove.clear()
+        this._$pointerDrag.clear()
+        this._$pointerPress.clear()
+        this._$keyDown.clear()
+        this._$keyUp.clear()
+        this._$keyPress.clear()
+        if (this._pointerPressInterval) {
+          this.clearInterval(this._pointerPressInterval)
+        }
+        this.babylon.scene.onPointerDown = undefined
+        this.babylon.scene.onPointerUp = undefined
+        this.babylon.scene.onPointerMove = undefined
         this.babylon.scene.onBeforeRenderObservable.clear()
       }
 
@@ -362,7 +433,7 @@ export function Scene(props: SceneProps = {}): any {
         this._guis.clear()
       }
 
-      switchCamera(constructor: CameraConstructor, setup: any): void {
+      switchCamera(constructor: CameraConstructor, setup: any): CameraInterface {
         this.releaseCamera()
         this._cameraConstructor = constructor
         this._cameraSetup = setup
@@ -371,6 +442,7 @@ export function Scene(props: SceneProps = {}): any {
         this._camera.babylon.camera = (this._camera.onInitialize as any)(this.babylon.scene)
         this._camera.babylon.camera.attachControl(Core.canvas, true)
         this._camera._start()
+        return this._camera
       }
 
       releaseCamera(): void {

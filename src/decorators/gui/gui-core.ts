@@ -10,8 +10,8 @@ import { GUIProps } from './gui-props'
 export abstract class GUICore implements Loadable, Spawnable<GUIInterface> {
   abstract props: GUIProps
   abstract Instance: GUIInterface // Disambiguate core methods from interface spawnable instances
-  abstract load(owner?: SceneInterface): LoadingProgress
-  abstract unload(owner?: SceneInterface): void
+  abstract _load(owner?: SceneInterface): LoadingProgress
+  abstract _unload(owner?: SceneInterface): void
   abstract spawn(scene: SceneInterface): GUIInterface
   abstract getClassName(): string
 }

@@ -10,6 +10,7 @@ import {
   FlexId
 } from '../../types'
 import { SceneInterface } from '../scene'
+import { CameraStateConstructor } from './camera-state'
 
 /**
  * @param S Camera setup object.
@@ -95,6 +96,13 @@ export declare abstract class CameraInterface</* Setup object */ S = any, /* Sce
    * Clear all timeouts and intervals in this context.
    */
   clearAllTimeouts(): void
+
+  /**
+   * Set the state.
+   * @param state
+   * @param setup
+   */
+  switchState<C extends CameraStateConstructor>(state: C, setup: InstanceType<C>['setup']): InstanceType<C>
 
   /**
    * Notifies a message to this camera.

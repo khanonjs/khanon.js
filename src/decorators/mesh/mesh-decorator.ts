@@ -318,7 +318,7 @@ export function Mesh(props: MeshProps = {}): any {
         Instance: MeshInterface = new _classInterface(null as any, null as any)
         assetContainers: Map<SceneInterface, BABYLON.AssetContainer> = new Map<SceneInterface, BABYLON.AssetContainer>()
 
-        load(scene: SceneInterface): LoadingProgress {
+        _load(scene: SceneInterface): LoadingProgress {
           if (this.assetContainers.get(scene)) {
             return new LoadingProgress().complete()
           } else {
@@ -343,7 +343,7 @@ export function Mesh(props: MeshProps = {}): any {
           }
         }
 
-        unload(scene: SceneInterface): void {
+        _unload(scene: SceneInterface): void {
           const assetContainer = this.assetContainers.get(scene)
           assetContainer?.dispose()
           this.assetContainers.delete(scene)

@@ -14,8 +14,8 @@ export abstract class SpriteCore implements Loadable<SceneInterface>, Spawnable<
   abstract props: SpriteProps & SpritePropsDefault
   abstract Instance: SpriteInterface
   abstract spriteMeshes: Map<SceneInterface, SpriteMesh>
-  abstract load(scene: SceneInterface): LoadingProgress
-  abstract unload(scene: SceneInterface): void
+  abstract _load(scene: SceneInterface): LoadingProgress
+  abstract _unload(scene: SceneInterface): void
   abstract spawn(scene: SceneInterface): SpriteInterface
   abstract getParticleInfo(scene: SceneInterface): SpriteParticleInfo
   abstract getClassName(): string

@@ -167,11 +167,6 @@ export declare abstract class ActorInterface<B extends SpriteInterface | MeshInt
   getNode(name: string): ActorNode<B> | undefined
 
   /**
-   * Removes the body.
-   */
-  removeBody(): void
-
-  /**
    * Removes a node.
    * @param name
    */
@@ -186,7 +181,7 @@ export declare abstract class ActorInterface<B extends SpriteInterface | MeshInt
    * Starts a state.
    * @param state
    */
-  switchState<C extends ActorStateConstructor>(state: C, setup: InstanceType<C>['setup']): ActorStateInterface // TODO is it possible to make 'setup' argument optional whether InstanceType<S>['setup'] type is 'any'?
+  switchState<C extends ActorStateConstructor>(state: C, setup: InstanceType<C>['setup']): InstanceType<C> // TODO is it possible to make 'setup' argument optional whether InstanceType<S>['setup'] type is 'any'?
 
   /**
    * Returns *true* if the actor state coincides with  *state*.
