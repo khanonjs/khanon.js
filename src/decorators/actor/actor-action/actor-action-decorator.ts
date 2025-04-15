@@ -9,11 +9,12 @@ import {
   ParticlesController,
   SpritesController
 } from '../../../controllers'
+import { BabylonAccessor } from '../../../models/babylon-accessor'
 import { Rect } from '../../../models/rect'
+import { Timeout } from '../../../models/timeout'
 import { Logger } from '../../../modules/logger'
 import {
   attachCanvasResize,
-  attachLoopUpdate,
   invokeCallback,
   switchLoopUpdate
 } from '../../../utils/utils'
@@ -26,71 +27,84 @@ import { ActorActionProps } from './actor-action-props'
 
 export function ActorAction(props: ActorActionProps = {}): any {
   return function <T extends { new (...args: any[]): ActorActionInterface }>(constructorOrTarget: (T & ActorActionInterface), contextOrMethod: ClassDecoratorContext | string, descriptor: PropertyDescriptor) {
+    const className = constructorOrTarget.name
     const decorateClass = () => {
       const _classInterface = class extends constructorOrTarget implements ActorActionInterface {
-        constructor(actor: ActorInterface) {
+        constructor(readonly actor: ActorInterface) {
           super()
-          this.actor = actor
-          this.metadata.applyProps(this)
+          if (this.actor) {
+            this.babylon.scene = this.actor.babylon.scene
+            this._metadata.applyProps(this)
+          }
         }
 
-        props = props
-        actor: ActorInterface
+        getClassName(): string { return this._className ?? className }
+
+        setTimeout(func: () => void, ms: number): Timeout { return Core.setTimeout(func, ms, this) }
+        setInterval(func: () => void, ms: number): Timeout { return Core.setInterval(func, ms, this) }
+        clearTimeout(timeout: Timeout): void { Core.clearTimeout(timeout) }
+        clearInterval(interval: Timeout): void { Core.clearInterval(interval) }
+        clearAllTimeouts(): void { Core.clearAllTimeoutsByContext(this) }
+
+        _props = props
+        _className: string
+        babylon: Pick<BabylonAccessor, 'scene'> = { scene: null as any }
         scene: SceneInterface
-        metadata: Metadata = Reflect.getMetadata('metadata', this) ?? new Metadata()
-        countFramesUpdate$: BABYLON.Observer<number> | null = null
-        countFrames = 0
-        loopUpdate$: BABYLON.Observer<number>
-        canvasResize$: BABYLON.Observer<Rect>
+        _metadata: Metadata = Reflect.getMetadata('metadata', this) ?? new Metadata()
+        _countFramesUpdate$: BABYLON.Observer<number> | null = null
+        _countFrames = 0
+        _loopUpdate$: BABYLON.Observer<number>
+        _canvasResize$: BABYLON.Observer<Rect>
         setup: any
-        _loopUpdate = false
+        _loopUpdate = true
         _isPlaying = false
 
-        set loopUpdate(value: boolean) { switchLoopUpdate(value, this) }
+        set loopUpdate(value: boolean) {
+          this._loopUpdate = value
+          switchLoopUpdate(this._loopUpdate, this)
+        }
+
         get loopUpdate(): boolean { return this._loopUpdate }
 
         get isPlaying(): boolean { return this._isPlaying }
 
-        start(setup: any): void {
+        _start(setup: any): void {
           this.scene = this.actor.scene
           this.setup = setup
           this._isPlaying = true
-          if (this.props.countFrames) {
-            this.countFramesUpdate$ = Core.loopUpdateAddObserver((delta: number) => {
-              this.countFrames += delta
-              if (this.countFrames > (this.props.countFrames as any)) {
-                this.countFramesUpdate$?.remove()
-                this.countFramesUpdate$ = null
-                this.countFrames = 0
+          if (this._props.countFrames) {
+            this._countFramesUpdate$ = Core.loopUpdateAddObserver((delta: number) => {
+              this._countFrames += delta
+              if (this._countFrames > (this._props.countFrames as any)) {
+                this._countFramesUpdate$?.remove()
+                this._countFramesUpdate$ = null
+                this._countFrames = 0
                 this.stop()
               }
             })
           }
-          this._loopUpdate = true
-          attachLoopUpdate(this)
+          switchLoopUpdate(this._loopUpdate, this)
           attachCanvasResize(this)
           invokeCallback(this.onPlay, this)
         }
 
         play(): void {
-          if (!this.props.preserve) { Logger.debugError('Cannot play an action which is not preserved in context.', _classInterface.prototype) }
+          if (!this._props.preserve) { Logger.debugError('Cannot play an action which is not preserved in context.', this.getClassName()) }
           if (!this.isPlaying) {
             this._isPlaying = true
-            if (this.loopUpdate) {
-              attachLoopUpdate(this)
-            }
+            switchLoopUpdate(this._loopUpdate, this)
             attachCanvasResize(this)
             invokeCallback(this.onPlay, this)
           }
         }
 
         stop(): void {
-          this.actor.stopActionFromInstance(this)
+          this.actor._stopActionFromInstance(this)
         }
 
         remove(): void {
           this._isPlaying = false
-          this.actor.stopActionFromInstance(this, true)
+          this.actor._stopActionFromInstance(this, true)
         }
       }
       const _classCore = class implements ActorActionCore {
@@ -100,26 +114,30 @@ export function ActorAction(props: ActorActionProps = {}): any {
         load(scene: SceneInterface): LoadingProgress {
           return new LoadingProgress().fromNodes([
             SpritesController.load(this.props.sprites, scene),
-            SpritesController.load(this.Instance.metadata.getProps().sprites, scene),
+            SpritesController.load(this.Instance._metadata.getProps().sprites, scene),
             MeshesController.load(this.props.meshes, scene),
-            MeshesController.load(this.Instance.metadata.getProps().meshes, scene),
+            MeshesController.load(this.Instance._metadata.getProps().meshes, scene),
             ParticlesController.load(this.props.particles, scene),
-            ParticlesController.load(this.Instance.metadata.getProps().particles, scene)
+            ParticlesController.load(this.Instance._metadata.getProps().particles, scene)
           ])
         }
 
         unload(scene: SceneInterface): void {
           SpritesController.unload(this.props.sprites, scene)
-          SpritesController.unload(this.Instance.metadata.getProps().sprites, scene)
+          SpritesController.unload(this.Instance._metadata.getProps().sprites, scene)
           MeshesController.unload(this.props.meshes, scene)
-          MeshesController.unload(this.Instance.metadata.getProps().meshes, scene)
+          MeshesController.unload(this.Instance._metadata.getProps().meshes, scene)
           ParticlesController.unload(this.props.particles, scene)
-          ParticlesController.unload(this.Instance.metadata.getProps().particles, scene)
+          ParticlesController.unload(this.Instance._metadata.getProps().particles, scene)
         }
 
         spawn(actor: ActorInterface): ActorActionInterface {
           const action = new _classInterface(actor)
           return action
+        }
+
+        getClassName(): string {
+          return className
         }
       }
       ActorActionsController.register(new _classCore())
@@ -129,12 +147,13 @@ export function ActorAction(props: ActorActionProps = {}): any {
     // Mutates decorator to class or property
     if (constructorOrTarget.prototype) {
       return decorateClass()
-    } else if ((
+    } else if (/* ( // TODO remove this?
       constructorOrTarget instanceof ActorStateInterface ||
       constructorOrTarget instanceof ActorInterface
-    ) && descriptor) { // Defined descriptor means it is a method
+    ) && */descriptor) { // Defined descriptor means it is a method
       @ActorAction(props)
       abstract class _actionInterface extends ActorActionInterface {
+        _className = contextOrMethod as any
         onLoopUpdate = descriptor.value
       }
 
@@ -147,7 +166,7 @@ export function ActorAction(props: ActorActionProps = {}): any {
         classDefinition: _actionInterface
       })
     } else {
-      Logger.debugError('Cannot apply action decorator to non allowed method class:', constructorOrTarget, contextOrMethod)
+      Logger.debugError('Cannot apply action decorator to a method.', constructorOrTarget, contextOrMethod)
     }
   }
 }

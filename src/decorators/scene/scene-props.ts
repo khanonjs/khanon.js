@@ -12,6 +12,7 @@ import { SceneMapConstructor } from './scene-map-constructor'
 import { SceneStateConstructor } from './scene-state/scene-state-constructor'
 
 export interface SceneProps {
+    url?: string
     options?: BABYLON.SceneOptions
     configuration?: SceneConfiguration
     guis?: GUIConstructor[]
@@ -23,4 +24,5 @@ export interface SceneProps {
     sprites?: SpriteConstructor[]
     meshes?: MeshConstructor[]
     particles?: ParticleConstructor[]
+    useDebugInspector?: boolean
 }

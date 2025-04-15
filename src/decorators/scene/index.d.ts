@@ -3,7 +3,8 @@ import * as BABYLON from '@babylonjs/core'
 import { LoadingProgress } from '../../base'
 import {
   BabylonAccessor,
-  Rect
+  Rect,
+  Timeout
 } from '../../models'
 import {
   FlexId,
@@ -17,14 +18,19 @@ import {
   CameraConstructor,
   CameraInterface
 } from '../camera'
-import { GUIConstructor } from '../gui'
+import {
+  GUIConstructor,
+  GUIInterface
+} from '../gui'
 import {
   MeshConstructor,
   MeshInterface
 } from '../mesh'
 import { MeshMapConstructor } from '../mesh-map'
-import { ParticleConstructor } from '../particle'
-import { ParticleInterface } from '../particle/particle-interface'
+import {
+  ParticleConstructor,
+  ParticleInterface
+} from '../particle'
 import {
   SpriteConstructor,
   SpriteInterface
@@ -50,8 +56,10 @@ export declare class SceneSpawn {
   /**
    * Spawns a particle in the scene.
    * @param particle
+   * @param setup Setup object of the particle defined in the particle generic S
+   * @param offset Position offset of the emitter
    */
-  particle<P extends ParticleInterface>(particle: new () => P, offset?: BABYLON.Vector3): P
+  particle<P extends ParticleConstructor>(Particle: P | ((particle: InstanceType<P>, setup: any) => void), setup: InstanceType<P>['setup'], offset?: BABYLON.Vector3): InstanceType<P>
 
   /**
    * Spawns a sprite in the scene.
@@ -137,7 +145,7 @@ export declare abstract class SceneInterface {
   /**
    * Current state.
    */
-  get state(): SceneStateInterface
+  get state(): SceneStateInterface | null
 
   /**
    * Scene spawn class.
@@ -154,6 +162,46 @@ export declare abstract class SceneInterface {
    */
   set loopUpdate(value: boolean)
   get loopUpdate(): boolean
+
+  /**
+   * Returns the name of the class.
+   */
+  getClassName(): string
+
+  /**
+   * Sets a timeout.
+   * This interval relies on the app loopUpdate and it will be triggered on correct frame.
+   * It will be removed on context remove.
+   * @param func Callback
+   * @param ms Milliseconds
+   */
+  setTimeout(func: () => void, ms: number, context?: any): Timeout
+
+  /**
+   * Sets an interval.
+   * This interval relies on the app loopUpdate and it will be triggered on correct frame.
+   * It will be removed on context remove.
+   * @param func Callback
+   * @param ms Milliseconds
+   */
+  setInterval(func: () => void, ms: number): Timeout
+
+  /**
+   * Clears a timeout in this context.
+   * @param timeout
+   */
+  clearTimeout(timeout: Timeout): void
+
+  /**
+   * Clears an interval in this context.
+   * @param timeout
+   */
+  clearInterval(timeout: Timeout): void
+
+  /**
+   * Clear all timeouts and intervals in this context.
+   */
+  clearAllTimeouts(): void
 
   /**
    * Start the scene.
@@ -177,11 +225,30 @@ export declare abstract class SceneInterface {
   unload(): void
 
   /**
+   * Shows a GUI. This GUI must have been declared in the decorator props.
+   * @param gui
+   * @param setup
+   */
+  showGUI<G extends GUIInterface, H extends GUIConstructor>(gui: H, setup: InstanceType<H>['setup']): G
+
+  /**
+   * Hides a GUI.
+   * @param gui
+   */
+  hideGUI(gui: GUIConstructor): void
+
+  /**
+   * Gets a GUI that's being shown.
+   * @param gui
+   */
+  getGUI<G extends GUIInterface>(gui: GUIConstructor): G | undefined
+
+  /**
    * Sets a camera.
    * @param camera
    * @param setup
    */
-  switchCamera<C extends CameraConstructor>(camera: C, setup: InstanceType<C>['setup']): void // TODO is it possible to make 'setup' argument optional whether InstanceType<S>['setup'] type is 'any'?
+  switchCamera<C extends CameraConstructor>(camera: C, setup: InstanceType<C>['setup']): void
 
   /**
    * Gets the camera. Use the generic 'C' to set the returning camera type.
@@ -192,13 +259,19 @@ export declare abstract class SceneInterface {
    * Set the state.
    * @param state
    */
-  switchState<S extends SceneStateConstructor>(state: S, setup: InstanceType<S>['setup']): void // TODO is it possible to make 'setup' argument optional whether InstanceType<S>['setup'] type is 'any'?
+  switchState<C extends SceneStateConstructor>(state: C, setup: InstanceType<C>['setup']): void
+
+  /**
+   * Returns *true* if the scene state coincides with  *state*.
+   * @param state
+   */
+  isState(state: SceneStateConstructor): boolean
 
   /**
    * Plays an Action. N actions can be played simultaneously.
    * @param action
    */
-  playAction<S extends SceneActionConstructor>(action: S | ((delta: number) => void), setup: InstanceType<S>['setup']): InstanceType<S> // TODO is it possible to make 'setup' argument optional whether InstanceType<S>['setup'] type is 'any'?
+  playAction<C extends SceneActionConstructor>(action: C, setup: InstanceType<C>['setup']): InstanceType<C>
 
   /**
    * Plays all actions of a group that have been previously stopped.
@@ -207,20 +280,20 @@ export declare abstract class SceneInterface {
   playActionGroup(group: FlexId): void
 
   /**
-   * Stops an action. If the actions prop 'preserve' prop is 'false', it will be removed.
+   * Stops an action. If the actions prop 'preserve' prop is *false*, it will be removed.
    * Actions can be stopped also within the Action itself.
    * @param action
    */
   stopAction(action: SceneActionConstructor | ((delta: number) => void)): void
 
   /**
-   * Stops all actions of a group. All the actions with 'preserve' prop as 'false' will be removed.
+   * Stops all actions of a group. All the actions with 'preserve' prop as *false* will be removed.
    * @param group
    */
   stopActionGroup(group: FlexId): void
 
   /**
-   * Stops all actions. All the actions with 'preserve' prop as 'false' will be removed.
+   * Stops all actions. All the actions with 'preserve' prop as *false* will be removed.
    */
   stopActionAll(): void
 
@@ -245,6 +318,12 @@ export declare abstract class SceneInterface {
    * @param actionConstructor
    */
   getAction(actionConstructor: SceneActionConstructor): SceneActionInterface | undefined
+
+  /**
+   * Returns the list of all spawned actors of a constructor type.
+   * @param actor
+   */
+  getActors<C extends ActorConstructor>(actor: C): InstanceType<C>[]
 
   /**
    * Notifies a message to this scene.
@@ -290,6 +369,12 @@ export type SceneMapConstructor = SpriteMapConstructor | MeshMapConstructor
 
 export interface SceneProps {
   /**
+   * URL of the scene to load from a '.babylon' or 'glTF' file.
+   * If undefined, no assets will be loaded, and the scene elements will be manually created.
+   */
+  url?: string
+
+  /**
    * Refers to BABYLON.SceneOptions: https://doc.babylonjs.com/typedoc/interfaces/BABYLON.SceneOptions
    */
   options?: BABYLON.SceneOptions
@@ -321,6 +406,7 @@ export interface SceneProps {
 
   /**
    * Maps to use in this scene.
+   * Work in progress, this feature will be implemented further.
    */
   maps?: SceneMapConstructor[]
 
@@ -345,9 +431,10 @@ export interface SceneProps {
   particles?: ParticleConstructor[]
 
   /**
-   * Assign the Babylon debug inspector to this scene.
+   * By default *true*.
+   * Use the Babylon debug inspector in this scene. Press `Ctrl + Alt + Shift + I` to open it.
    */
-  debugInspector?: boolean
+  useDebugInspector?: boolean
 }
 
 export declare function Scene(props?: SceneProps): any

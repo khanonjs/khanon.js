@@ -2,6 +2,8 @@ import { Core } from '../base/core/core'
 import { Logger } from '../modules/logger'
 import { ExtractOptional } from '../types/extract-optional'
 
+export const maxBelowOne = 1 - Number.EPSILON
+
 /**
  * Attach LoopUpdate in context if exists.
  */
@@ -135,7 +137,7 @@ export function isPrototypeOf(_parent: object, _child: object): boolean {
 }
 
 /**
- * Return 'true' if the variable type meets a FlexId type
+ * Return *true* if the variable type meets a FlexId type
  */
 export function isFlexId(_var: any): boolean {
   return typeof _var === 'string' || typeof _var === 'number'

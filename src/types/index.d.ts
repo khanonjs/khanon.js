@@ -6,6 +6,7 @@ import { ParticleConstructor } from '../decorators/particle'
 import { SceneConstructor } from '../decorators/scene'
 import { SceneStateConstructor } from '../decorators/scene/scene-state'
 
+export { CameraTransform } from './camera-transform'
 export { DeepPartial } from './deep-partial'
 export { DeepRequired } from './deep-required'
 export { ExtractOptional } from './extract-optional'

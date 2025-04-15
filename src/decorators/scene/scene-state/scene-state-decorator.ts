@@ -1,6 +1,7 @@
 import * as BABYLON from '@babylonjs/core'
 
 import { LoadingProgress } from '../../../base'
+import { Core } from '../../../base/core/core'
 import { Metadata } from '../../../base/interfaces/metadata/metadata'
 import {
   ActorsController,
@@ -9,12 +10,13 @@ import {
   SceneStatesController,
   SpritesController
 } from '../../../controllers'
+import { BabylonAccessor } from '../../../models/babylon-accessor'
 import { Rect } from '../../../models/rect'
+import { Timeout } from '../../../models/timeout'
 import { Logger } from '../../../modules/logger'
 import { FlexId } from '../../../types/flex-id'
 import {
   attachCanvasResize,
-  attachLoopUpdate,
   invokeCallback,
   removeCanvasResize,
   removeLoopUpdate,
@@ -22,40 +24,70 @@ import {
 } from '../../../utils/utils'
 import { CameraConstructor } from '../../camera/camera-constructor'
 import { CameraInterface } from '../../camera/camera-interface'
+import { GUIConstructor } from '../../gui/gui-constructor'
+import { GUIInterface } from '../../gui/gui-interface'
 import { SceneInterface } from '../scene-interface'
 import { SceneRemove } from '../scene-remove'
 import { SceneSpawn } from '../scene-spawn'
+import { SceneStateConstructor } from './scene-state-constructor'
 import { SceneStateCore } from './scene-state-core'
 import { SceneStateInterface } from './scene-state-interface'
 import { SceneStateProps } from './scene-state-props'
 
 export function SceneState(props: SceneStateProps = {}): any {
   return function <T extends { new (...args: any[]): SceneStateInterface }>(constructor: T & SceneStateInterface, context: ClassDecoratorContext) {
+    const className = constructor.name
     const _classInterface = class extends constructor implements SceneStateInterface {
       constructor(readonly scene: SceneInterface, props: SceneStateProps) {
         super()
-        this.props = props
+        this._props = props
         if (this.scene) {
           this._spawn = this.scene.spawn
           this._remove = this.scene.remove
-          this.metadata.applyProps(this)
+          this.babylon.scene = this.scene.babylon.scene
+          this._metadata.applyProps(this)
         }
       }
 
-      props: SceneStateProps
+      getClassName(): string { return className }
+
+      setTimeout(func: () => void, ms: number): Timeout { return Core.setTimeout(func, ms, this) }
+      setInterval(func: () => void, ms: number): Timeout { return Core.setInterval(func, ms, this) }
+      clearTimeout(timeout: Timeout): void { Core.clearTimeout(timeout) }
+      clearInterval(interval: Timeout): void { Core.clearInterval(interval) }
+      clearAllTimeouts(): void { Core.clearAllTimeoutsByContext(this) }
+
+      _props: SceneStateProps
+      babylon: Pick<BabylonAccessor, 'scene'> = { scene: null as any }
       setup: any
-      _loopUpdate: boolean
-      loopUpdate$: BABYLON.Observer<number>
-      canvasResize$: BABYLON.Observer<Rect>
+      _loopUpdate = true
+      _loopUpdate$: BABYLON.Observer<number>
+      _canvasResize$: BABYLON.Observer<Rect>
       _spawn: SceneSpawn
       _remove: SceneRemove
-      metadata: Metadata = Reflect.getMetadata('metadata', this) ?? new Metadata()
+      _metadata: Metadata = Reflect.getMetadata('metadata', this) ?? new Metadata()
 
-      set loopUpdate(value: boolean) { switchLoopUpdate(value, this) }
+      set loopUpdate(value: boolean) {
+        this._loopUpdate = value
+        switchLoopUpdate(this._loopUpdate, this)
+      }
+
       get loopUpdate(): boolean { return this._loopUpdate }
 
       get spawn(): SceneSpawn { return this._spawn }
       get remove(): SceneRemove { return this._remove }
+
+      showGUI<G extends GUIInterface>(gui: GUIConstructor, setup: any): G {
+        return this.scene.showGUI(gui, setup)
+      }
+
+      hideGUI(gui: GUIConstructor): void {
+        this.scene.hideGUI(gui)
+      }
+
+      getGUI<G extends GUIInterface>(gui: GUIConstructor): G | undefined {
+        return this.scene.getGUI(gui)
+      }
 
       switchCamera(camera: CameraConstructor, setup: any): void {
         this.scene.switchCamera(camera, setup)
@@ -65,22 +97,27 @@ export function SceneState(props: SceneStateProps = {}): any {
         return this.scene.getCamera()
       }
 
-      start(setup: any): void {
-        Logger.debug('SceneState start', _classInterface.prototype, this.scene.constructor.prototype)
+      switchState(state: SceneStateConstructor, setup: any): void {
+        this.scene.switchState(state, setup)
+      }
+
+      _start(setup: any): void {
+        Logger.debug('SceneState start', this.getClassName(), this.scene.getClassName())
         this.setup = setup
         invokeCallback(this.onStart, this)
-        attachLoopUpdate(this)
+        switchLoopUpdate(this._loopUpdate, this)
         attachCanvasResize(this)
       }
 
-      end(): void {
+      _end(): void {
         removeLoopUpdate(this)
         removeCanvasResize(this)
         invokeCallback(this.onEnd, this)
+        this.clearAllTimeouts()
       }
 
       notify(message: FlexId, ...args: any[]): void {
-        const definition = this.metadata.notifiers.get(message)
+        const definition = this._metadata.notifiers.get(message)
         if (definition) {
           this[definition.methodName](...args)
         }
@@ -99,22 +136,26 @@ export function SceneState(props: SceneStateProps = {}): any {
         return new LoadingProgress().fromNodes([
           ActorsController.load(this.props.actors, scene),
           SpritesController.load(this.props.sprites, scene),
-          SpritesController.load(this.Instance.metadata?.getProps().sprites, scene),
+          SpritesController.load(this.Instance._metadata?.getProps().sprites, scene),
           MeshesController.load(this.props.meshes, scene),
-          MeshesController.load(this.Instance.metadata?.getProps().meshes, scene),
+          MeshesController.load(this.Instance._metadata?.getProps().meshes, scene),
           ParticlesController.load(this.props.particles, scene),
-          ParticlesController.load(this.Instance.metadata?.getProps().particles, scene)
+          ParticlesController.load(this.Instance._metadata?.getProps().particles, scene)
         ])
       }
 
       unload(scene: SceneInterface): void {
         ActorsController.unload(this.props.actors, scene)
         SpritesController.unload(this.props.sprites, scene)
-        SpritesController.unload(this.Instance.metadata?.getProps().sprites, scene)
+        SpritesController.unload(this.Instance._metadata?.getProps().sprites, scene)
         MeshesController.unload(this.props.meshes, scene)
-        MeshesController.unload(this.Instance.metadata?.getProps().meshes, scene)
+        MeshesController.unload(this.Instance._metadata?.getProps().meshes, scene)
         ParticlesController.unload(this.props.particles, scene)
-        ParticlesController.unload(this.Instance.metadata?.getProps().particles, scene)
+        ParticlesController.unload(this.Instance._metadata?.getProps().particles, scene)
+      }
+
+      getClassName(): string {
+        return className
       }
     }
     SceneStatesController.register(new _classCore())

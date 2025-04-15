@@ -6,33 +6,60 @@ import {
   Metadata,
   Notificable
 } from '../../base'
+import { Configurable } from '../../base/interfaces/configurable'
+import { TimersByContext } from '../../base/interfaces/timers-by-context'
 import { BabylonAccessor } from '../../models/babylon-accessor'
 import { Rect } from '../../models/rect'
+import { Timeout } from '../../models/timeout'
+import { CameraTransform } from '../../types/camera-transform'
 import { FlexId } from '../../types/flex-id'
 import { SceneInterface } from '../scene/scene-interface'
 
-export abstract class CameraInterface<S = any, C extends SceneInterface = SceneInterface> implements LoopUpdatable, CanvasResizable, Notificable {
+export abstract class CameraInterface<S = any, C extends SceneInterface = SceneInterface> implements LoopUpdatable, CanvasResizable, Notificable, TimersByContext, Configurable<S>, CameraTransform {
   abstract _loopUpdate: boolean
-  abstract metadata: Metadata
-  abstract loopUpdate$: BABYLON.Observer<number>
-  abstract canvasResize$: BABYLON.Observer<Rect>
-  abstract start(): void
-  abstract stop(): void
+  abstract _metadata: Metadata
+  abstract _loopUpdate$: BABYLON.Observer<number>
+  abstract _canvasResize$: BABYLON.Observer<Rect>
+  abstract _start(): void
+  abstract _stop(): void
+  abstract _release(): void
 
   /**
    * User available
    */
   abstract scene: C
   abstract setup: S
-  abstract loopUpdate: boolean
-  abstract babylon: Pick<BabylonAccessor<BABYLON.Camera>, 'camera' | 'scene'>
+  abstract babylon: Pick<BabylonAccessor<BABYLON.TargetCamera>, 'camera' | 'scene'>
+  abstract get loopUpdate(): boolean
+  abstract set loopUpdate(value: boolean)
+  abstract getClassName(): string
   abstract notify(message: FlexId, ...args: any[]): void
+  abstract setTimeout(func: () => void, ms: number): Timeout
+  abstract setInterval(func: () => void, ms: number): Timeout
+  abstract clearTimeout(timeout: Timeout): void
+  abstract clearInterval(timeout: Timeout): void
+  abstract clearAllTimeouts(): void
   // TODO attach particles to camera to simulate environment effects?
+
+  /**
+   * Tranmsform properties and methods
+   */
+  abstract position: BABYLON.Vector3
+  abstract globalPosition: BABYLON.Vector3
+  abstract upVector: BABYLON.Vector3
+  abstract getDirection(localAxis: BABYLON.Vector3): BABYLON.Vector3
+  abstract getDirectionToRef(localAxis: BABYLON.Vector3, result: BABYLON.Vector3): void
+  abstract getForwardRay(length?: number, transform?: BABYLON.Matrix, origin?: BABYLON.Vector3): BABYLON.Ray
+  abstract getProjectionMatrix(force?: boolean): BABYLON.Matrix
+  abstract getWorldMatrix(): BABYLON.Matrix
+  abstract rotation: BABYLON.Vector3
+  abstract speed: number
+  abstract target: BABYLON.Vector3
 
   /**
    * User defined mandatory (abstract on .d.ts)
    */
-  onInitialize?(scene: BABYLON.Scene): BABYLON.Camera
+  onInitialize?(scene: BABYLON.Scene): BABYLON.TargetCamera
 
   /**
    * User defined optional

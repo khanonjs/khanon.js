@@ -1,5 +1,9 @@
 import { ActorInterface } from '../'
-import { Rect } from '../../../models'
+import {
+  BabylonAccessor,
+  Rect,
+  Timeout
+} from '../../../models'
 import { FlexId } from '../../../types'
 import {
   MeshConstructor,
@@ -13,6 +17,11 @@ import {
 } from '../../sprite'
 
 export declare class ActorActionInterface</* Setup object */ S = any, /* Scene object */ C = SceneInterface, /* Actor object */ A = ActorInterface<SpriteInterface | MeshInterface>> {
+  /**
+   * Babylon.js objects.
+   */
+  get babylon(): Pick<BabylonAccessor, 'scene'>
+
   /**
    * Setup of the action.
    */
@@ -35,9 +44,49 @@ export declare class ActorActionInterface</* Setup object */ S = any, /* Scene o
   get loopUpdate(): boolean
 
   /**
-   * Returns 'true' if the action is playing.
+   * Returns *true* if the action is playing.
    */
   get isPlaying(): boolean
+
+  /**
+   * Returns the name of the class.
+   */
+  getClassName(): string
+
+  /**
+   * Sets a timeout.
+   * This interval relies on the app loopUpdate and it will be triggered on correct frame.
+   * It will be removed on context remove.
+   * @param func Callback
+   * @param ms Milliseconds
+   */
+  setTimeout(func: () => void, ms: number, context?: any): Timeout
+
+  /**
+   * Sets an interval.
+   * This interval relies on the app loopUpdate and it will be triggered on correct frame.
+   * It will be removed on context remove.
+   * @param func Callback
+   * @param ms Milliseconds
+   */
+  setInterval(func: () => void, ms: number): Timeout
+
+  /**
+   * Clears a timeout in this context.
+   * @param timeout
+   */
+  clearTimeout(timeout: Timeout): void
+
+  /**
+   * Clears an interval in this context.
+   * @param timeout
+   */
+  clearInterval(timeout: Timeout): void
+
+  /**
+   * Clear all timeouts and intervals in this context.
+   */
+  clearAllTimeouts(): void
 
   /**
    * Plays the action in case it has been stopped before and it is preserved (props.preserve = true).
@@ -61,7 +110,7 @@ export declare class ActorActionInterface</* Setup object */ S = any, /* Scene o
   onPlay?(): void
 
   /**
-   * Invoked on action stop. If 'props.preserved' is 'true', the action instance will remain alive waiting for another 'playAction'.
+   * Invoked on action stop. If 'props.preserved' is *true*, the action instance will remain alive waiting for another 'playAction'.
    */
   onStop?(): void
 
@@ -92,10 +141,10 @@ export interface ActorActionProps {
   group?: FlexId
 
   /**
-   * By default 'false'.
+   * By default *false*.
    *
-   * If preserve is 'false', the action is removed after stop it. The next action play will create a new instance.
-   * If preserve is 'true', the action is preserved after stop it, keeping the instance and being able to be played again with last values.
+   * If preserve is *false*, the action is removed after stop it. The next action play will create a new instance.
+   * If preserve is *true*, the action is preserved after stop it, keeping the instance and being able to be played again with last values.
    */
   preserve?: boolean
 
@@ -103,7 +152,7 @@ export interface ActorActionProps {
    * List of actions to be overriden on action play.
    * In case it is a string, it makes reference to the method name of an action defined as a class method.
    */
-  overrides?: ActorActionConstructor[]
+  overrides?: (ActorActionConstructor | string)[]
 
   /**
    * Count of number of frames this action is executed.

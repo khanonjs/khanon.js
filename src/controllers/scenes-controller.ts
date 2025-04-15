@@ -5,7 +5,7 @@ import { SceneStateConstructor } from '../decorators/scene/scene-state/scene-sta
 import { Logger } from '../modules/logger'
 
 export class ScenesController extends ControllerLoader<SceneConstructor, SceneInterface>() {
-  static start(scene: SceneConstructor, state: SceneStateConstructor, stateSetup: any): void {
+  static start(scene: SceneConstructor, state?: SceneStateConstructor, stateSetup?: any): void {
     const sceneInterface = ScenesController.get(scene)
     sceneInterface.start(state, stateSetup)
   }

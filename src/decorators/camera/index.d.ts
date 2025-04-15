@@ -2,15 +2,19 @@ import * as BABYLON from '@babylonjs/core'
 
 import {
   BabylonAccessor,
-  Rect
+  Rect,
+  Timeout
 } from '../../models'
-import { FlexId } from '../../types'
+import {
+  CameraTransform,
+  FlexId
+} from '../../types'
 import { SceneInterface } from '../scene'
 
 /**
  * @param S Camera setup object.
  */
-export declare abstract class CameraInterface</* Setup object */ S = any, /* Scene object */ C = SceneInterface> {
+export declare abstract class CameraInterface</* Setup object */ S = any, /* Scene object */ C = SceneInterface> extends CameraTransform {
   /**
    * Babylon.js objects.
    */
@@ -22,7 +26,7 @@ export declare abstract class CameraInterface</* Setup object */ S = any, /* Sce
   get scene(): C
 
   /**
-   * Gets teh setup object.
+   * Gets the setup object.
    */
   get setup(): S
 
@@ -31,6 +35,66 @@ export declare abstract class CameraInterface</* Setup object */ S = any, /* Sce
    */
   set loopUpdate(value: boolean)
   get loopUpdate(): boolean
+
+  /**
+   * Camera transform properties.
+   */
+  get position(): BABYLON.Vector3
+  set position(value: BABYLON.Vector3)
+  get globalPosition(): BABYLON.Vector3
+  get upVector(): BABYLON.Vector3
+  set upVector(value: BABYLON.Vector3)
+  getDirection(localAxis: BABYLON.Vector3): BABYLON.Vector3
+  getDirectionToRef(localAxis: BABYLON.Vector3, result: BABYLON.Vector3): void
+  getForwardRay(length?: number, transform?: BABYLON.Matrix, origin?: BABYLON.Vector3): BABYLON.Ray
+  getProjectionMatrix(force?: boolean): BABYLON.Matrix
+  getWorldMatrix(): BABYLON.Matrix
+  get rotation(): BABYLON.Vector3
+  set rotation(value: BABYLON.Vector3)
+  get speed(): number
+  set speed(value: number)
+  get target(): BABYLON.Vector3
+  set target(value: BABYLON.Vector3)
+
+  /**
+   * Returns the name of the class.
+   */
+  getClassName(): string
+
+  /**
+   * Sets a timeout.
+   * This interval relies on the app loopUpdate and it will be triggered on correct frame.
+   * It will be removed on context remove.
+   * @param func Callback
+   * @param ms Milliseconds
+   */
+  setTimeout(func: () => void, ms: number, context?: any): Timeout
+
+  /**
+   * Sets an interval.
+   * This interval relies on the app loopUpdate and it will be triggered on correct frame.
+   * It will be removed on context remove.
+   * @param func Callback
+   * @param ms Milliseconds
+   */
+  setInterval(func: () => void, ms: number): Timeout
+
+  /**
+   * Clears a timeout in this context.
+   * @param timeout
+   */
+  clearTimeout(timeout: Timeout): void
+
+  /**
+   * Clears an interval in this context.
+   * @param timeout
+   */
+  clearInterval(timeout: Timeout): void
+
+  /**
+   * Clear all timeouts and intervals in this context.
+   */
+  clearAllTimeouts(): void
 
   /**
    * Notifies a message to this camera.
@@ -42,7 +106,7 @@ export declare abstract class CameraInterface</* Setup object */ S = any, /* Sce
    * This method must return a valid Babylon camera.
    * 'setup' object isn't available at this point.
    */
-  abstract onInitialize(scene: BABYLON.Scene): BABYLON.Camera
+  abstract onInitialize(scene: BABYLON.Scene): BABYLON.TargetCamera
 
   /**
    * Callback invoked on camera start.
@@ -71,4 +135,6 @@ export declare abstract class CameraInterface</* Setup object */ S = any, /* Sce
 
 export type CameraConstructor = new () => CameraInterface
 
-export declare function Camera(): any
+export interface CameraProps {}
+
+export declare function Camera(props?: CameraProps): any

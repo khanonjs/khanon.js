@@ -3,6 +3,7 @@ const fs = require('fs');
 var glob = require('glob');
 const path = require('path');
 const srcDir = path.resolve(fs.realpathSync(process.cwd()), './src');
+const CircularDependencyPlugin = require('circular-dependency-plugin')
 
 console.log('aki srcDir:', srcDir);
 
@@ -37,6 +38,11 @@ module.exports = {
         extensions: ['.tsx', '.ts', '.js'],
     },
     devtool: false,
+    plugins: [
+        new CircularDependencyPlugin({
+          allowAsyncCycles: true
+        })
+      ],
     mode: 'none',
     module: {
         rules: [

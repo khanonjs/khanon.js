@@ -26,7 +26,7 @@ export class Logger {
     }
   }
 
-  // TODO: Add posibility to hide a debug log depending on an Id (so there's an Id list that the user can modify)
+  // TODO: Add posibility to hide a debug log depending on an Id (so there's an Id list that the user can supply)
   static debug(msg: string, ...params: any[]) {
     if (Logger.level >= LoggerLevels.DEBUG) {
       console.log.apply(console, ['%c' + msg, 'background: #d7ffd6; color: #014001;' + Logger.boldStyle, ...params])

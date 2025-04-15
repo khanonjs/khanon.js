@@ -1,7 +1,10 @@
-import { SpriteMesh } from './sprite-mesh'
+import * as BABYLON from '@babylonjs/core'
+
 import { SpriteProps } from './sprite-props'
 
 export interface SpriteParticleInfo {
-  spriteMesh: SpriteMesh
+  texture: BABYLON.Texture | BABYLON.DynamicTexture
   props: SpriteProps
+  width: number
+  height: number
 }

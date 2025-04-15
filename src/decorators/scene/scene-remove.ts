@@ -1,18 +1,14 @@
-import { Logger } from '../../modules/logger'
 import { ActorInterface } from '../actor/actor-interface'
 import { MeshInterface } from '../mesh/mesh-interface'
 import { ParticleInterface } from '../particle/particle-interface'
 import { SpriteInterface } from '../sprite/sprite-interface'
 import { SceneInterface } from './scene-interface'
 
-// TODO add support to inject a user defined SceneRemove class into the scene?
 export class SceneRemove {
   private readonly scene: SceneInterface
-  private readonly scenePrototype: any
 
-  constructor(scene: SceneInterface, scenePrototype: any) {
+  constructor(scene: SceneInterface) {
     this.scene = scene
-    this.scenePrototype = scenePrototype
   }
 
   actor(actor: ActorInterface | ActorInterface[]): void {
@@ -21,13 +17,13 @@ export class SceneRemove {
         this.actor(_actor)
       })
     } else {
-      actor.release()
-      this.scene.actors.delete(actor)
+      actor._release()
+      this.scene._actors.delete(actor)
     }
   }
 
   actorAll(): void {
-    this.scene.actors.forEach(actor => {
+    this.scene._actors.forEach(actor => {
       this.actor(actor)
     })
   }
@@ -38,13 +34,13 @@ export class SceneRemove {
         this.particle(_particle)
       })
     } else {
-      particle.release()
-      this.scene.particles.delete(particle)
+      particle._release()
+      this.scene._particles.delete(particle)
     }
   }
 
   particleAll(): void {
-    this.scene.particles.forEach(particle => {
+    this.scene._particles.forEach(particle => {
       this.particle(particle)
     })
   }
@@ -55,13 +51,13 @@ export class SceneRemove {
         this.sprite(_sprite)
       })
     } else {
-      sprite.release()
-      this.scene.sprites.delete(sprite)
+      sprite._release()
+      this.scene._sprites.delete(sprite)
     }
   }
 
   spriteAll(): void {
-    this.scene.sprites.forEach(sprite => {
+    this.scene._sprites.forEach(sprite => {
       this.sprite(sprite)
     })
   }
@@ -72,13 +68,13 @@ export class SceneRemove {
         this.mesh(_mesh)
       })
     } else {
-      mesh.release()
-      this.scene.meshes.delete(mesh)
+      mesh._release()
+      this.scene._meshes.delete(mesh)
     }
   }
 
   meshAll(): void {
-    this.scene.meshes.forEach(mesh => {
+    this.scene._meshes.forEach(mesh => {
       this.mesh(mesh)
     })
   }

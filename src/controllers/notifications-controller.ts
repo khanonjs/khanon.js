@@ -13,34 +13,24 @@ import { ScenesController } from './scenes-controller'
 
 // TODO This must be optimized storing each actor, particle, etc.. in a Map<ActorConstructor, Observable>
 export class NotificationsController {
-  static send(message: FlexId, elements?: NotificableType | NotificableType[], ...args: any[]): void {
-    if (!elements) {
-      // 8a8f send message to all elements of the game. Improve the performance before implement this
+  static send(id: FlexId, receivers?: NotificableType | NotificableType[], ...args: any[]): void {
+    if (!receivers) {
+      // TODO Improve the performance.
+      NotificationsController.sendConstructor(id, undefined, args)
     } else
-      if (Array.isArray(elements)) {
-        elements.forEach(element => NotificationsController.sendConstructor(message, element, args))
+      if (Array.isArray(receivers)) {
+        receivers.forEach(element => NotificationsController.sendConstructor(id, element, args))
       } else {
-        NotificationsController.sendConstructor(message, elements, args)
+        NotificationsController.sendConstructor(id, receivers, args)
       }
   }
 
-  private static sendConstructor(message: FlexId, constructor: NotificableType, args: any[]) {
-    if (isPrototypeOf(AppInterface, constructor)) {
+  private static sendConstructor(message: FlexId, constructor?: NotificableType, args: any[] = []) {
+    if (!constructor || isPrototypeOf(AppInterface, constructor)) {
       Core.getApp().notify(message, ...args)
-    } else {
-      if (isPrototypeOf(ActorInterface, constructor)) {
-        Core.getActiveScenes().forEach(scene => scene.actors.forEach(actor => {
-          if (actor instanceof constructor) {
-            actor.notify(message, ...args)
-          }
-        }))
-      } else if (isPrototypeOf(ActorStateInterface, constructor)) {
-        Core.getActiveScenes().forEach(scene => scene.actors.forEach(actor => {
-          if (actor.state instanceof constructor) {
-            actor.state.notify(message, ...args)
-          }
-        }))
-      } else if (isPrototypeOf(SceneInterface, constructor)) {
+    }
+    if (constructor) {
+      if (isPrototypeOf(SceneInterface, constructor)) {
         const scene = ScenesController.get(constructor)
         if (scene && scene.started) {
           scene.notify(message, ...args)
@@ -51,15 +41,43 @@ export class NotificationsController {
             scene.state.notify(message, ...args)
           }
         })
+      } else if (isPrototypeOf(ActorInterface, constructor)) {
+        Core.getActiveScenes().forEach(scene => scene._actors.forEach(actor => {
+          if (actor instanceof constructor) {
+            actor.notify(message, ...args)
+          }
+        }))
+      } else if (isPrototypeOf(ActorStateInterface, constructor)) {
+        Core.getActiveScenes().forEach(scene => scene._actors.forEach(actor => {
+          if (actor.state instanceof constructor) {
+            actor.state.notify(message, ...args)
+          }
+        }))
       } else if (isPrototypeOf(ParticleInterface, constructor)) {
-        Core.getActiveScenes().forEach(scene => scene.actors.forEach(actor => {
-          actor.particles.forEach(particle => {
+        Core.getActiveScenes().forEach(scene => scene._actors.forEach(actor => {
+          actor._particles.forEach(particle => {
             if (particle instanceof constructor) {
               particle.notify(message, ...args)
             }
           })
         }))
       }
+    } else {
+      Core.getActiveScenes().forEach(scene => {
+        if (scene.started) {
+          scene.notify(message, ...args)
+        }
+        scene.state?.notify(message, ...args)
+        scene._actors.forEach(actor => {
+          actor.notify(message, ...args)
+          actor.state?.notify(message, ...args)
+        })
+        scene._actors.forEach(actor => {
+          actor._particles.forEach(particle => {
+            particle.notify(message, ...args)
+          })
+        })
+      })
     }
   }
 }

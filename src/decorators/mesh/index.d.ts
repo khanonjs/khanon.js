@@ -3,21 +3,32 @@ import * as BABYLON from '@babylonjs/core'
 import {
   AnimationBase,
   BabylonAccessor,
-  Rect
+  Rect,
+  Timeout
 } from '../../models'
-import {
-  FlexId,
-  MeshTransform
-} from '../../types'
+import { FlexId } from '../../types'
 import { SceneInterface } from '../scene'
+import { MeshAnimationOptions } from './mesh-animation-options'
 
-export interface MeshAnimation extends AnimationBase {}
+export { MeshAnimationOptions } from './mesh-animation-options'
+
+export interface MeshAnimation extends AnimationBase {
+  /**
+   * Babylon animaation group class:
+   */
+  animationGroup: BABYLON.AnimationGroup
+
+  /**
+   * Animation speed ratio (1 by default).
+   */
+  speedRatio?: number
+}
 
 export declare abstract class MeshInterface {
   /**
    * Babylon.js objects.
    */
-  get babylon(): Pick<BabylonAccessor, 'mesh'>
+  get babylon(): Pick<BabylonAccessor, 'mesh' | 'scene'>
 
   /**
    * Scene this Mesh belongs to.
@@ -25,16 +36,101 @@ export declare abstract class MeshInterface {
   get scene(): SceneInterface
 
   /**
-   * Shortcut to basic transform methods and accessors.
-   * Using this object is the same than accesing it through 'this.babylon.mesh'.
-   */
-  get transform(): MeshTransform
-
-  /**
    * Turns on/off the 'onLoopUpdate' callback.
    */
   set loopUpdate(value: boolean)
   get loopUpdate(): boolean
+
+  /**
+   * Gets the current animation.
+   */
+  get animation(): MeshAnimation
+
+  /**
+   * Mesh visiiility.
+   */
+  set visibility(value: number)
+  get visibility(): number
+
+  /**
+   * Sets or gets the mesh enable state.
+   */
+  set enabled(value: boolean)
+  get enabled(): boolean
+
+  /**
+   * Mesh transform properties.
+   */
+  get absolutePosition(): BABYLON.Vector3
+  get absoluteRotationQuaternion(): BABYLON.Quaternion
+  get absoluteScaling(): BABYLON.Vector3
+  set position(value: BABYLON.Vector3)
+  get position(): BABYLON.Vector3
+  set rotation(value: BABYLON.Vector3)
+  get rotation(): BABYLON.Vector3
+  set rotationQuaternion(value: BABYLON.Quaternion)
+  get rotationQuaternion(): BABYLON.Nullable<BABYLON.Quaternion>
+  set scaling(value: BABYLON.Vector3)
+  get scaling(): BABYLON.Vector3
+  addRotation(x: number, y: number, z: number): BABYLON.TransformNode
+  getAbsolutePivotPoint(): BABYLON.Vector3
+  getAbsolutePivotPointToRef(result: BABYLON.Vector3): BABYLON.TransformNode
+  getAbsolutePosition(): BABYLON.Vector3
+  getDirection(localAxis: BABYLON.Vector3): BABYLON.Vector3
+  getDirectionToRef(localAxis: BABYLON.Vector3, result: BABYLON.Vector3): BABYLON.TransformNode
+  getPivotPoint(): BABYLON.Vector3
+  getPivotPointToRef(result: BABYLON.Vector3): BABYLON.TransformNode
+  locallyTranslate(vector3: BABYLON.Vector3): BABYLON.TransformNode
+  lookAt(targetPoint: BABYLON.Vector3, yawCor?: number, pitchCor?: number, rollCor?: number, space?: BABYLON.Space): BABYLON.TransformNode
+  rotate(axis: BABYLON.Vector3, amount: number, space?: BABYLON.Space): BABYLON.TransformNode
+  rotateAround(point: BABYLON.Vector3, axis: BABYLON.Vector3, amount: number): BABYLON.TransformNode
+  rotatePOV(flipBack: number, twirlClockwise: number, tiltRight: number): BABYLON.AbstractMesh
+  setAbsolutePosition(absolutePosition: BABYLON.Vector3): BABYLON.TransformNode
+  setDirection(localAxis: BABYLON.Vector3, yawCor?: number, pitchCor?: number, rollCor?: number): BABYLON.TransformNode
+  setPivotMatrix(matrix: BABYLON.DeepImmutable<BABYLON.Matrix>, postMultiplyPivotMatrix?: boolean): BABYLON.TransformNode
+  setPivotPoint(point: BABYLON.Vector3, space?: BABYLON.Space): BABYLON.TransformNode
+  setPositionWithLocalVector(vector3: BABYLON.Vector3): BABYLON.TransformNode
+  translate(axis: BABYLON.Vector3, distance: number, space?: BABYLON.Space): BABYLON.TransformNode
+
+  /**
+   * Returns the name of the class.
+   */
+  getClassName(): string
+
+  /**
+   * Sets a timeout.
+   * This interval relies on the app loopUpdate and it will be triggered on correct frame.
+   * It will be removed on context remove.
+   * @param func Callback
+   * @param ms Milliseconds
+   */
+  setTimeout(func: () => void, ms: number, context?: any): Timeout
+
+  /**
+   * Sets an interval.
+   * This interval relies on the app loopUpdate and it will be triggered on correct frame.
+   * It will be removed on context remove.
+   * @param func Callback
+   * @param ms Milliseconds
+   */
+  setInterval(func: () => void, ms: number): Timeout
+
+  /**
+   * Clears a timeout in this context.
+   * @param timeout
+   */
+  clearTimeout(timeout: Timeout): void
+
+  /**
+   * Clears an interval in this context.
+   * @param timeout
+   */
+  clearInterval(timeout: Timeout): void
+
+  /**
+   * Clear all timeouts and intervals in this context.
+   */
+  clearAllTimeouts(): void
 
   /**
    * Sets a mesh manually.
@@ -44,46 +140,35 @@ export declare abstract class MeshInterface {
   setMesh(babylonMesh: BABYLON.Mesh): void
 
   /**
-   * Sets the transform (translation, rotation and scale).
-   * @param transform
+   * Sets the material transparency mode. Apply it to the full hierarchy if *applyToHierarchy* is *true*.
+   * Set the value to one of the BABYLON.Material.MATERIAL_XXXXXX modes.
+   * Read more: https://doc.babylonjs.com/features/featuresDeepDive/materials/advanced/transparent_rendering
+   * @param value
+   * @param applyToHierarchy
    */
-  // setTransform(transform: BABYLON.Matrix): void  // TODO
+  setMaterialTransparencyMode(value: number, applyToHierarchy?: boolean): void
 
   /**
-   * Gets the transform.
-   * @param transform
-   */
-  // getTransform(): BABYLON.Matrix // TODO
-
-  /**
-   * Sets current frame (stops current animation).
+   * Sets the frame (stops current animation).
    * @param frame
    */
   setFrame(frame: number): void
 
   /**
-   * Sets the first frame of the sprite or current animation.
-   */
-  setFrameFirst(): void
-
-  /**
-   * Sets the last frame of the sprite or current animation.
-   */
-  setFrameLast(): void
-
-  /**
-   * Adds an animation. Animations can be added from this method, or from Sprite props.
+   * Adds an animation. Animations can be added from this method, or from Mesh props.
    * @param animation
    */
   addAnimation(animation: MeshAnimation): void
 
   /**
    * Plays an animation. Animations are defined in the Sprite decorator 'props' or manually using 'MeshAnimation' interface.
+   * Note that meshes have the animations integrated in the 'glTF' file, so you can't add an animation manually.
    * @param animation Animation object or ID of a predefined animation
    * @param loopOverride Overrides the animation loop value in case needed
-   * @param completed Completed animation callback
+   * @param completed Completed animation callback. It is called everytime the animation ends, no matter if it is in loop or not
+   * @returns BABYLON.AnimationGroup object: https://doc.babylonjs.com/typedoc/classes/BABYLON.AnimationGroup
    */
-  playAnimation(animation: MeshAnimation | FlexId, loopOverride?: boolean, completed?: () => void): void
+  playAnimation(animation: FlexId, options?: MeshAnimationOptions, completed?: () => void): BABYLON.AnimationGroup
 
   /**
    * Stops current animation.
@@ -111,10 +196,10 @@ export declare abstract class MeshInterface {
   /**
    * Callback invoked after the mesh has been spawned in a scene.
    */
-  onSpawn?(scene: SceneInterface): void
+  onSpawn?(): void
 
   /**
-   * Callback invoked on mesh destroy (equivalent to onRelease).
+   * Callback invoked on mesh destroy.
    */
   onDestroy?(): void
 
@@ -134,11 +219,43 @@ export declare abstract class MeshInterface {
 export type MeshConstructor = new () => MeshInterface
 
 export interface MeshProps {
+  /**
+   * Url of the 'glTF' mesh file.
+   */
+  url?: string
+
+  /**
+   * Animations.
+   */
+  animations?: Omit<MeshAnimation, 'animationGroup'>[]
+
+  /**
+   * Cache this mesh.
+   * Cached files are kept in memory and only removed after calling KJS.clearCache().
+   * Use cached files in case they are being used between more than one scene.
+   * Cached meshes make shorter loading time at the expense of memory usage.
+   */
+  cached?: boolean
+
+  /**
+   * By default *false*.
+   * If *true*, clone this mesh by instances. This means every actor using it will share the same mesh, not allowing to modify or using shaders with it.
+   * Use it in case you want to impove performance and memory usage (E.g. simple actors with no shading effects, the crowd at a basketball game, etc).
+   * If *false*, the mesh will be cloned by reference, creating a new mesh per element, and allowing to modify it and use shaders.
+   * Read more: https://doc.babylonjs.com/features/featuresDeepDive/mesh/copies/instances
+   */
+  cloneByInstances?: boolean
+
+  /**
+   * Rendering group Id of the mesh (0 to 3).
+   * Read more: https://doc.babylonjs.com/features/featuresDeepDive/materials/advanced/transparent_rendering#rendering-groups
+   */
+  renderingGroupId?: number
 }
 
 /**
- * Mesh decorator can be applied in three different places:
- * - To a class itself, where it will inherit extended MeshInterface lifecycle, methods and variables.
+ * Mesh decorator can be defined in three different contexts:
+ * - A class itself, where it will inherit extended MeshInterface lifecycle, methods and variables.
  * - To an 'Actor' class property, where it will be created as a MeshConstructor using the decorator props.
  * - To a 'Scene' class property, where it will be created as a MeshConstructor using the decorator props.
  * - To a 'ActorState' or 'SceneState' class properties, where it will be created as a MeshConstructor using the decorator props.

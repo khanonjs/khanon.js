@@ -1,8 +1,9 @@
+// 8a8f eliminar todos los .d de los archivos compilados que no se quieren al hacer build, mover los tipos e interfaces de ./models a KJS namespace
+
 import * as BABYLON from '@babylonjs/core'
 
 import { AppInterface } from '../../decorators/app/app-interface'
 import { AppStateConstructor } from '../../decorators/app/app-state/app-state-constructor'
-import { AppStateInterface } from '../../decorators/app/app-state/app-state-interface'
 import { SceneInterface } from '../../decorators/scene/scene-interface'
 import { BabylonAccessor } from '../../models/babylon-accessor'
 import { Rect } from '../../models/rect'
@@ -19,7 +20,7 @@ export class Core {
   // HTML Layers
   private static htmlContainer: HTMLElement
   private static htmlCanvas: HTMLCanvasElement
-  private static htmlGui: HTMLDivElement // TODO
+  private static htmlGui: HTMLDivElement // TODO?
 
   // Babylon
   private static babylon: Pick<BabylonAccessor, 'engine'> = { engine: null as any }
@@ -28,7 +29,6 @@ export class Core {
   private static onCanvasResize: BABYLON.Observable<Rect> = new BABYLON.Observable<Rect>(undefined, true)
 
   // Loop update
-  private static loopUpdateInterval: ReturnType<typeof setInterval>
   private static loopUpdateLastMs: number
   private static loopUpdateMps: number // Number of logical steps per frame
   private static loopUpdateLag: number
@@ -38,7 +38,7 @@ export class Core {
   // Render scenes
   private static readonly renderScenes: Set<SceneInterface> = new Set<SceneInterface>()
 
-  // Timeouts // TODO thread here?
+  // Timeouts
   private static timeouts: Set<Timeout> = new Set<Timeout>()
   private static intervals: Set<Timeout> = new Set<Timeout>()
 
@@ -68,14 +68,14 @@ export class Core {
    */
   static initialize(app: AppInterface) {
     if (Core.app) {
-      Logger.error(`App decorator '${Core.app.props.name}' applied more than one time. Please use a single App decorator to generate de application.`)
+      Logger.error(`App decorator '${Core.app._props.name}' applied more than one time. Please use a single App decorator to generate de application.`)
       return
     }
 
     Core.app = app
     Logger.info('Environment mode:', process.env.NODE_ENV)
-    Logger.level = (Core.app.props.debugLog || Core.isDevelopmentMode()) ? LoggerLevels.TRACE : LoggerLevels.INFO
-    Logger.debug('App instance created:', Core.app.props)
+    Logger.level = (Core.app._props.debugLog || Core.isDevelopmentMode()) ? LoggerLevels.TRACE : LoggerLevels.INFO
+    Logger.debug('App instance created:', Core.app._props)
 
     // Avoid canvas scale error TODO??
     /* setTimeout(
@@ -101,7 +101,7 @@ export class Core {
   }
 
   private static initializeHTMLLayers(): void {
-    const parentId = Core.app.props.htmlCanvasContainerId
+    const parentId = Core.app._props.htmlCanvasContainerId
     const parentElement = document.getElementById(parentId)
     if (parentElement) {
       Core.htmlContainer = parentElement
@@ -116,11 +116,12 @@ export class Core {
   }
 
   private static initializeBabylon(): void {
+    BABYLON.SceneLoaderFlags.ShowLoadingScreen = false
     Core.babylon.engine = new BABYLON.Engine(
       Core.htmlCanvas,
-      Core.app.props.engineConfiguration.antialias,
-      Core.app.props.engineConfiguration.options,
-      Core.app.props.engineConfiguration.adaptToDeviceRatio
+      Core.app._props.engineConfiguration.antialias,
+      Core.app._props.engineConfiguration.options,
+      Core.app._props.engineConfiguration.adaptToDeviceRatio
     )
     Core.babylon.engine.runRenderLoop(() => {
       Core.renderScenes.forEach((scene) => scene.babylon.scene.render())
@@ -143,9 +144,7 @@ export class Core {
   }
 
   static close(): void {
-    if (Core.loopUpdateInterval) {
-      clearInterval(Core.loopUpdateInterval)
-    }
+    Core.engine.onBeginFrameObservable.clear()
     if (Core.babylon.engine) {
       Core.babylon.engine.stopRenderLoop()
     }
@@ -198,13 +197,13 @@ export class Core {
     Core.onCanvasResize.remove(observer)
   }
 
-  static setTimeout(func: () => void, ms: number, context?: any): Timeout {
+  static setTimeout(func: () => void, ms: number, context: any): Timeout {
     const timeout = { func, oms: ms, ms, context }
     Core.timeouts.add(timeout)
     return timeout
   }
 
-  static setInterval(func: () => void, ms: number, context?: any): Timeout {
+  static setInterval(func: () => void, ms: number, context: any): Timeout {
     const timeout = { func, oms: ms, ms, context }
     Core.intervals.add(timeout)
     return timeout
@@ -223,15 +222,28 @@ export class Core {
     Core.intervals.clear()
   }
 
+  static clearAllTimeoutsByContext(context: any): void {
+    [...Core.timeouts].forEach(timeout => {
+      if (timeout.context === context) {
+        Core.clearTimeout(timeout)
+      }
+    });
+    [...Core.intervals].forEach(interval => {
+      if (interval.context === context) {
+        Core.clearInterval(interval)
+      }
+    })
+  }
+
   static getLoopUpdateLastMs() {
     return Core.loopUpdateLastMs
   }
 
   private static loopUpdate(): void {
-    Core.loopUpdateMps = 1000 / Core.app.props.loopUpdate.fps
+    Core.loopUpdateMps = 1000 / Core.app._props.loopUpdate.fps
     Core.loopUpdateLastMs = performance.now()
     Core.loopUpdateLag = 0
-    Core.loopUpdateInterval = setInterval(
+    Core.engine.onBeginFrameObservable.add(
       () => {
         const currentMs = performance.now()
         Core.loopUpdateLag += currentMs - Core.loopUpdateLastMs
@@ -253,7 +265,7 @@ export class Core {
             interval.ms -= Core.loopUpdateMps
             if (interval.ms < 0) {
               if (interval.context) {
-                interval.func.bind(interval.context)
+                interval.func.bind(interval.context)()
               } else {
                 interval.func()
               }
@@ -262,9 +274,7 @@ export class Core {
           })
           Core.loopUpdateLag -= Core.loopUpdateMps
         }
-      },
-      0
-    )
+      })
   }
 
   private static updateCanvasSize(): void {

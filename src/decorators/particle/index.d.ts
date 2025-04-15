@@ -2,13 +2,14 @@ import * as BABYLON from '@babylonjs/core'
 
 import {
   BabylonAccessor,
-  Rect
+  Rect,
+  Timeout
 } from '../../models'
 import { FlexId } from '../../types'
 import { SceneInterface } from '../scene'
 import { SpriteConstructor } from '../sprite'
 
-export abstract class ParticleInterface {
+export abstract class ParticleInterface</* Setup object */ S = any> {
   /**
    * Babylon.js objects.
    */
@@ -20,10 +21,55 @@ export abstract class ParticleInterface {
   get scene(): SceneInterface
 
   /**
+   * Gets the setup object.
+   */
+  get setup(): S
+
+  /**
    * Turns on/off the 'onLoopUpdate' callback.
    */
   set loopUpdate(value: boolean)
   get loopUpdate(): boolean
+
+  /**
+   * Returns the name of the class.
+   */
+  getClassName(): string
+
+  /**
+   * Sets a timeout.
+   * This interval relies on the app loopUpdate and it will be triggered on correct frame.
+   * It will be removed on context remove.
+   * @param func Callback
+   * @param ms Milliseconds
+   */
+  setTimeout(func: () => void, ms: number, context?: any): Timeout
+
+  /**
+   * Sets an interval.
+   * This interval relies on the app loopUpdate and it will be triggered on correct frame.
+   * It will be removed on context remove.
+   * @param func Callback
+   * @param ms Milliseconds
+   */
+  setInterval(func: () => void, ms: number): Timeout
+
+  /**
+   * Clears a timeout in this context.
+   * @param timeout
+   */
+  clearTimeout(timeout: Timeout): void
+
+  /**
+   * Clears an interval in this context.
+   * @param timeout
+   */
+  clearInterval(timeout: Timeout): void
+
+  /**
+   * Clear all timeouts and intervals in this context.
+   */
+  clearAllTimeouts(): void
 
   /**
    * Starts the particle.
@@ -96,20 +142,40 @@ export type ParticleConstructor = new () => ParticleInterface
 
 export interface ParticleProps {
   /**
+   * If *true* renders the particle over all the elements in the scene (sets *renderingGroupId* to the max value).
+   * Set to *false* in a 3D scene.
+   * Set to *true* in a 2D scene built by sprites if you want to make the particle visible over all the elements in the scene.
+   * This property will be ignored in case *renderingGroupId* is defined.
+   */
+  renderOverScene: boolean
+
+  /**
+   * Rendering group Id of the particle (0 to 3).
+   * In a 3D scene you can ignore this property and set *renderOverScene=false*.
+   * In a 2D scene built by sprites, you need to set this property to a vale higher of the sprite behind it.
+   * 2D sprites use transparent alpha blending, hiding particles behind them if they coexist with the same *renderingGroupId* than the particle.
+   * E.g: In a 2D scene that has a sprite background using *renderingGroupId=0*, you will need to set the particle's *renderingGroupId=1* to see it over the background.
+   * You can ignore this property and use *renderOverScene* to make the particle visible over all the elements in the scene (it sets *renderingGroupId* to the max value).
+   * Read more: https://doc.babylonjs.com/features/featuresDeepDive/materials/advanced/transparent_rendering/#rendering-groups
+   */
+  renderingGroupId?: number
+
+  /**
    * Sprites to be used in this particle.
    */
   sprites?: SpriteConstructor[]
 
   /**
-   * Offset position respect the attachment in case the particle is attached to an actor.
-   * World position in case the particle is created by a scene.
+   * (0, 0, 0) by default.
+   * Offset respect the attachment in case the particle is attached to an actor.
+   * World position in case the particle is spawned by a scene.
    */
-  offset?: BABYLON.Vector3
+  position?: BABYLON.Vector3
 
   /**
-   * Maximum number of particles to be emitted.
+   * Maximum number of particles to be emitted (2000 by default).
    */
   capacity?: number
 }
 
-export function Particle(props?: ParticleProps): any
+export function Particle(props: ParticleProps): any

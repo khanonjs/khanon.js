@@ -1,7 +1,9 @@
 import * as BABYLON from '@babylonjs/core'
 
 import {
+  BabylonAccessor,
   Rect,
+  Timeout,
   TransformComposition
 } from '../../models'
 import {
@@ -9,7 +11,6 @@ import {
   MeshTransform,
   SpriteTransform
 } from '../../types'
-import { GUIConstructor } from '../gui'
 import {
   MeshConstructor,
   MeshInterface
@@ -37,7 +38,7 @@ import {
  */
 
 /**
- * Represets a part (node) attached to the body of the actor.
+ * Node attached to the body of the actor.
  */
 export interface ActorNode<B extends SpriteInterface | MeshInterface> {
   element: B
@@ -45,12 +46,15 @@ export interface ActorNode<B extends SpriteInterface | MeshInterface> {
 }
 
 /**
- * Actor Interface to be extended from decorated Actors.
- * @param B alludes to what kind of interface this actor will have as Body and Nodes.
- * - To use 2D Sprites set it as 'SpriteInterface'.
- * - To use 3D Meshes set it as 'MeshInterface'.
+ * ActorInterface extend from decorated Actors.
+ * @param B (Required) Constructor type of Body and Nodes. Set it as *SpriteInterface* to use 2D sprites. Set it as *MeshInterface* To use 3D meshes.
  */
 export declare abstract class ActorInterface<B extends SpriteInterface | MeshInterface> {
+  /**
+   * Babylon.js objects.
+   */
+  get babylon(): Pick<BabylonAccessor, 'scene'>
+
   /**
    * Owner scene of this actor.
    */
@@ -84,13 +88,59 @@ export declare abstract class ActorInterface<B extends SpriteInterface | MeshInt
   /**
    * Gets the current state.
    */
-  get state(): ActorStateInterface
+  get state(): ActorStateInterface | null
 
   /**
    * 'visibility' of the meshes and sprites of this actor
    */
   set visibility(value: number)
   get visibility(): number
+
+  /**
+   * Sets or gets the enabled status of the actor. If disabled, the actor wont be rendered, and all its actions and states will be paused.
+   */
+  set enabled(value: boolean)
+  get enabled(): boolean
+
+  /**
+   * Returns the name of the class.
+   */
+  getClassName(): string
+
+  /**
+   * Sets a timeout.
+   * This interval relies on the app loopUpdate and it will be triggered on correct frame.
+   * It will be removed on context remove.
+   * @param func Callback
+   * @param ms Milliseconds
+   */
+  setTimeout(func: () => void, ms: number, context?: any): Timeout
+
+  /**
+   * Sets an interval.
+   * This interval relies on the app loopUpdate and it will be triggered on correct frame.
+   * It will be removed on context remove.
+   * @param func Callback
+   * @param ms Milliseconds
+   */
+  setInterval(func: () => void, ms: number): Timeout
+
+  /**
+   * Clears a timeout in this context.
+   * @param timeout
+   */
+  clearTimeout(timeout: Timeout): void
+
+  /**
+   * Clears an interval in this context.
+   * @param timeout
+   */
+  clearInterval(timeout: Timeout): void
+
+  /**
+   * Clear all timeouts and intervals in this context.
+   */
+  clearAllTimeouts(): void
 
   /**
    * Sets the Body of the Actor.
@@ -133,16 +183,16 @@ export declare abstract class ActorInterface<B extends SpriteInterface | MeshInt
   clearNodes(): void
 
   /**
-   * Sets the visibility of Body and all Nodes.
-   * @param value
-   */
-  setVisible(value: boolean): void
-
-  /**
    * Starts a state.
    * @param state
    */
-  switchState<S extends ActorStateConstructor>(state: S, setup: InstanceType<S>['setup']): ActorStateInterface // TODO is it possible to make 'setup' argument optional whether InstanceType<S>['setup'] type is 'any'?
+  switchState<C extends ActorStateConstructor>(state: C, setup: InstanceType<C>['setup']): ActorStateInterface // TODO is it possible to make 'setup' argument optional whether InstanceType<S>['setup'] type is 'any'?
+
+  /**
+   * Returns *true* if the actor state coincides with  *state*.
+   * @param state
+   */
+  isState(state: ActorStateConstructor): boolean
 
   /**
    * Plays the animation of the body. Equivalent to 'actor.body.playAnimation'.
@@ -163,7 +213,7 @@ export declare abstract class ActorInterface<B extends SpriteInterface | MeshInt
    * Plays an Action. N actions can be played simultaneously.
    * @param action
    */
-  playAction<S extends ActorActionConstructor>(action: S | ((delta: number, setup: any) => void), setup: InstanceType<S>['setup']): InstanceType<S> // TODO is it possible to make 'setup' argument optional whether InstanceType<S>['setup'] type is 'any'?
+  playAction<C extends ActorActionConstructor>(action: C, setup: InstanceType<C>['setup']): InstanceType<C> // TODO is it possible to make 'setup' argument optional whether InstanceType<S>['setup'] type is 'any'?
 
   /**
    * Plays all actions of a group that have been previously stopped.
@@ -172,20 +222,20 @@ export declare abstract class ActorInterface<B extends SpriteInterface | MeshInt
   playActionGroup(group: FlexId): void
 
   /**
-   * Stops an action. If the actions prop 'preserve' prop is 'false', it will be removed.
+   * Stops an action. If the actions prop 'preserve' prop is *false*, it will be removed.
    * Actions can be stopped also within the Action itself.
    * @param action
    */
   stopAction(action: ActorActionConstructor | ((delta: number) => void), forceRemove?: boolean): void
 
   /**
-   * Stops all actions of a group. All the actions with 'preserve' prop as 'false' will be removed.
+   * Stops all actions of a group. All the actions with 'preserve' prop as *false* will be removed.
    * @param group
    */
   stopActionGroup(group: FlexId, forceRemove?: boolean): void
 
   /**
-   * Stops all actions. All the actions with 'preserve' prop as 'false' will be removed.
+   * Stops all actions. All the actions with 'preserve' prop as *false* will be removed.
    */
   stopActionAll(forceRemove?: boolean): void
 
@@ -209,18 +259,19 @@ export declare abstract class ActorInterface<B extends SpriteInterface | MeshInt
    * Gets an action.
    * @param actionConstructor
    */
-  getAction(actionConstructor: ActorActionConstructor): ActorActionInterface | undefined
+  getAction<C extends ActorActionConstructor>(actionConstructor: C): InstanceType<C> | undefined
 
   /**
    * Attachs a particle to this actor.
    *
    * If nodeName is 'undefined', the particle is attached to the actor's body.
-   * @param Particle Particle constructor or an Actor class method.
    * @param id
+   * @param Particle Particle constructor or an Actor class method.
+   * @param setup Setup object of the particle defined in the particle generic S
    * @param offset
    * @param nodeName
    */
-  attachParticle(Particle: ParticleConstructor | ((particle: ParticleInterface) => void), id: FlexId, offset: BABYLON.Vector3, nodeName?: string): void
+  attachParticle<P extends ParticleConstructor>(id: FlexId, Particle: P | ((particle: InstanceType<P>, setup?: any) => void), setup: InstanceType<P>['setup'], offset: BABYLON.Vector3, nodeName?: string): InstanceType<P>
 
   /**
    * Starts a particle.
@@ -261,7 +312,12 @@ export declare abstract class ActorInterface<B extends SpriteInterface | MeshInt
   onSpawn?(): void
 
   /**
-   * Callback invoked on actor destroy (equivalent to onRelease).
+   * Callback invoked after the scene *onStart* and the actor is enabled by the first time.
+   */
+  onStart?(): void
+
+  /**
+   * Callback invoked on actor destroy.
    */
   onDestroy?(): void
 
@@ -302,14 +358,19 @@ export interface ActorProps {
   meshes?: MeshConstructor[]
 
   /**
-   * GUIs to use in this actor.
-   */
-  guis?: GUIConstructor[]
-
-  /**
    * Particles this actor will attach.
    */
   particles?: ParticleConstructor[]
+
+  /**
+   * (Experimental) Spawns the actor by reference Id. The reference Id is case sensitive. Use this property to spawn 3D actors.
+   * In case the scene is loaded from a '.babylon' file, the actor is spawned replacing every mesh whose Id starts by this reference Id (E.g. 'RefId', 'RefId.001', 'RefId.002', etc).
+   * If 'setBody' is not used in the actor's 'onSpawn', the actor will be spawned using the '.babylon' scene mesh as body.
+   * If 'setBody' is used in the actor's 'onSpawn', the actor will be spawned replacing the mesh in the '.babylon' scene. The scene mesh will be disposed and the actor will use its own defined body in 'onSpawn' callback.
+   * See https://khanonjs.com/api-docs/interfaces/decorators_scene.SceneProps.html#url to know how to load a scene from a '.banylon' file.
+   * This feature is EXPERIMENTAL. There are some issues with Blender exported mesh positions, and it has not been tested with 3DS Max or Maya exporters.
+   */
+  spawnByReferenceId?: string
 
   /**
    * Rendering group Id. This will be applied to all meshes or sprites used by this actor.
@@ -319,9 +380,9 @@ export interface ActorProps {
   renderingGroupId?: number
 
   /**
-   * Initial visibility
+   * *true* by default, sets the initial enabled state.
    */
-  visibility?: number
+  enabled?: boolean
 }
 
 export declare function Actor(props?: ActorProps): any

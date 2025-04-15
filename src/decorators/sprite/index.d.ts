@@ -3,13 +3,33 @@ import * as BABYLON from '@babylonjs/core'
 import {
   AnimationBase,
   BabylonAccessor,
-  Rect
+  Rect,
+  Timeout
 } from '../../models'
 import { DrawBlockProperties } from '../../models/draw-block-properties'
 import { FlexId } from '../../types'
 import { SceneInterface } from '../scene'
+import { SpriteAnimationOptions } from './sprite-animatrion-options'
 
-export interface SpriteAnimation extends AnimationBase {}
+export { SpriteAnimationOptions } from './sprite-animatrion-options'
+
+export interface SpriteAnimation extends AnimationBase {
+  /**
+   * Frame start of the animation, '0' by default.
+   */
+  frameStart?: number
+
+  /**
+   * Frame end of the animation. It is equivalent to the last frame by default.
+   */
+  frameEnd?: number
+
+  /**
+   * Delay between frames (in milliseconds), '100' by default.
+   * This property is ignored in particles.
+   */
+  delay?: number
+}
 
 export declare abstract class SpriteInterface {
   /**
@@ -28,137 +48,42 @@ export declare abstract class SpriteInterface {
   set loopUpdate(value: boolean)
   get loopUpdate(): boolean
 
-  // /**
-  //  * Sets position
-  //  */
-  // set position(value: BABYLON.Vector3)
+  /**
+   * Gets the current animation.
+   */
+  get animation(): SpriteAnimation | null
 
-  // /**
-  //  * Gets position
-  //  */
-  // get position(): BABYLON.Vector3
+  /**
+   * Sprite visiiility.
+   */
+  set visibility(value: number)
+  get visibility(): number
 
-  // /**
-  //  * Sets angle
-  //  */
-  // set angle(value: number)
+  /**
+   * Sets or gets the mesh enable state.
+   */
+  set enabled(value: boolean)
+  get enabled(): boolean
 
-  // /**
-  //  * Gets angle
-  //  */
-  // get angle(): number
-
-  // /**
-  //  * Sets width
-  //  */
-  // set width(value: number)
-
-  // /**
-  //  * Gets width
-  //  */
-  // get width(): number
-
-  // /**
-  //  * Sets height
-  //  */
-  // set height(value: number)
-
-  // /**
-  //  * Gets height
-  //  */
-  // get height(): number
-
-  // /**
-  //  * Sets size
-  //  */
-  // set size(value: number)
-
-  // /**
-  //  * Gets size
-  //  */
-  // get size(): number
-
-  // /**
-  //  * Sets color
-  //  */
-  // set color(color: BABYLON.Color4)
-
-  // /**
-  //  * Gets color
-  //  */
-  // get color(): BABYLON.Color4
-
-  // /**
-  //  * Sets isVisible
-  //  */
-  // set isVisible(visible: boolean)
-
-  // /**
-  //  * Gets isVisible
-  //  */
-  // get isVisible(): boolean
-
-  // /**
-  //  * Sets position
-  //  */
-  // set scale(scale: number)
-  // get scale(): number
-
-  // /**
-  //  * Sets the scale of the sprite
-  //  */
-  // set scale(scale: number)
-
-  // /**
-  //  * Gets the scale of the sprite
-  //  */
-  // get scale(): number
-
-  // /**
-  //  * Sets the transform (translation, rotation and scale).
-  //  * @param transform
-  //  */
-  // // setTransform(transform: BABYLON.Matrix): void  // TODO
-
-  // /**
-  //  * Gets teh transform.
-  //  * @param transform
-  //  */
-  // // getTransform(): BABYLON.Matrix // TODO
-
+  /**
+   * Sprite transform properties.
+   */
   get absolutePosition(): BABYLON.Vector3
-  // get absoluteRotationQuaternion(): BABYLON.Quaternion
-  // get absoluteScaling(): BABYLON.Vector3
   set position(value: BABYLON.Vector3)
   get position(): BABYLON.Vector3
-  // set rotation(value: BABYLON.Vector3)
-  // get rotation(): BABYLON.Vector3
-  // set rotationQuaternion(value: BABYLON.Quaternion)
-  // get rotationQuaternion(): BABYLON.Nullable<BABYLON.Quaternion>
-  // set scaling(value: BABYLON.Vector3)
-  // get scaling(): BABYLON.Vector3
-  // addRotation(x: number, y: number, z: number): BABYLON.TransformNode
   getAbsolutePivotPoint(): BABYLON.Vector3
   getAbsolutePivotPointToRef(result: BABYLON.Vector3): BABYLON.TransformNode
   getAbsolutePosition(): BABYLON.Vector3
-  // getDirection(localAxis: BABYLON.Vector3): BABYLON.Vector3
-  // getDirectionToRef(localAxis: BABYLON.Vector3, result: BABYLON.Vector3): BABYLON.TransformNode
   getPivotPoint(): BABYLON.Vector3
   getPivotPointToRef(result: BABYLON.Vector3): BABYLON.TransformNode
   locallyTranslate(vector3: BABYLON.Vector3): BABYLON.TransformNode
-  // lookAt(targetPoint: BABYLON.Vector3, yawCor?: number, pitchCor?: number, rollCor?: number, space?: BABYLON.Space): BABYLON.TransformNode
-  // rotate(axis: BABYLON.Vector3, amount: number, space?: BABYLON.Space): BABYLON.TransformNode
   rotateAround(point: BABYLON.Vector3, axis: BABYLON.Vector3, amount: number): BABYLON.TransformNode
-  // rotatePOV(flipBack: number, twirlClockwise: number, tiltRight: number): BABYLON.AbstractMesh
   setAbsolutePosition(absolutePosition: BABYLON.Vector3): BABYLON.TransformNode
   setDirection(localAxis: BABYLON.Vector3, yawCor?: number, pitchCor?: number, rollCor?: number): BABYLON.TransformNode
   setPivotMatrix(matrix: BABYLON.DeepImmutable<BABYLON.Matrix>, postMultiplyPivotMatrix?: boolean): BABYLON.TransformNode
   setPivotPoint(point: BABYLON.Vector3, space?: BABYLON.Space): BABYLON.TransformNode
   setPositionWithLocalVector(vector3: BABYLON.Vector3): BABYLON.TransformNode
   translate(axis: BABYLON.Vector3, distance: number, space?: BABYLON.Space): BABYLON.TransformNode
-  set visibility(value: number)
-  get visibility(): number
-
   set rotation(value: number)
   get rotation(): number
   set scale(value: number)
@@ -169,20 +94,50 @@ export declare abstract class SpriteInterface {
   get scaleY(): number
 
   /**
-   * Sets current frame (stops current animation).
+   * Returns the name of the class.
+   */
+  getClassName(): string
+
+  /**
+   * Sets a timeout.
+   * This interval relies on the app loopUpdate and it will be triggered on correct frame.
+   * It will be removed on context remove.
+   * @param func Callback
+   * @param ms Milliseconds
+   */
+  setTimeout(func: () => void, ms: number, context?: any): Timeout
+
+  /**
+   * Sets an interval.
+   * This interval relies on the app loopUpdate and it will be triggered on correct frame.
+   * It will be removed on context remove.
+   * @param func Callback
+   * @param ms Milliseconds
+   */
+  setInterval(func: () => void, ms: number): Timeout
+
+  /**
+   * Clears a timeout in this context.
+   * @param timeout
+   */
+  clearTimeout(timeout: Timeout): void
+
+  /**
+   * Clears an interval in this context.
+   * @param timeout
+   */
+  clearInterval(timeout: Timeout): void
+
+  /**
+   * Clear all timeouts and intervals in this context.
+   */
+  clearAllTimeouts(): void
+
+  /**
+   * Sets the frame (stops current animation).
    * @param frame
    */
   setFrame(frame: number): void
-
-  /**
-   * Sets the first frame of the sprite or current animation.
-   */
-  setFrameFirst(): void
-
-  /**
-   * Sets the last frame of the sprite or current animation.
-   */
-  setFrameLast(): void
 
   /**
    * Adds an animation. Animations can be added from this method, or from Sprite props.
@@ -196,7 +151,7 @@ export declare abstract class SpriteInterface {
    * @param loopOverride Overrides the animation loop value in case needed
    * @param completed Completed animation callback
    */
-  playAnimation(animation: SpriteAnimation | FlexId, loopOverride?: boolean, completed?: () => void): void
+  playAnimation(animation: FlexId, options?: SpriteAnimationOptions, completed?: () => void): void
 
   /**
    * Stops current animation.
@@ -235,7 +190,7 @@ export declare abstract class SpriteInterface {
   onSpawn?(): void
 
   /**
-   * Callback invoked on sprite destroy (equivalent to onRelease).
+   * Callback invoked on sprite destroy.
    */
   onDestroy?(): void
 
@@ -261,14 +216,24 @@ export declare interface SpriteProps {
   url?: string
 
   /**
-   * Width of the sprite. In case it is an animated sprite, it represents each frame cell width.
+   * Width of the sprite for blank sprites.
    */
-  width: number
+  width?: number
 
   /**
-   * Height of the sprite. In case it is an animated sprite, it represents each frame cell height.
+   * Height of the sprite for blank sprites.
    */
-  height: number
+  height?: number
+
+  /**
+   * Animated sprite cell width.
+   */
+  cellWidth?: number
+
+  /**
+   * Animated sprite cell height.
+   */
+  cellHeight?: number
 
   /**
    * Numnber of frames (total cells).
@@ -276,7 +241,7 @@ export declare interface SpriteProps {
   numFrames?: number
 
   /**
-   * Animations
+   * Animations.
    */
   animations?: SpriteAnimation[]
 
@@ -309,9 +274,10 @@ export declare interface SpriteProps {
   cached?: boolean
 
   /**
-   * Defines the maximum allowed number of sprites for the spriteManager associated to the texture of this sprite
+   * Rendering group Id of the sprite (0 to 3).
+   * Read more: https://doc.babylonjs.com/features/featuresDeepDive/materials/advanced/transparent_rendering#rendering-groups
    */
-  maxAllowedSprites?: number
+  renderingGroupId?: number
 }
 
 /**
@@ -323,4 +289,4 @@ export declare interface SpriteProps {
  * - To a 'ActorAction' or 'SceneAction' class properties, where it will be created as a SpriteConstructor using the decorator props.
  * @param props
  */
-export declare function Sprite(props: SpriteProps): any
+export declare function Sprite(props?: SpriteProps): any

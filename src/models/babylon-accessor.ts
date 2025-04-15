@@ -1,8 +1,9 @@
 import * as BABYLON from '@babylonjs/core'
+import * as BABYLONGUI from '@babylonjs/gui'
 
 export interface BabylonAccessor<
-    C extends BABYLON.Camera = BABYLON.Camera,
-    M extends BABYLON.Mesh = BABYLON.Mesh,
+    C extends BABYLON.TargetCamera = BABYLON.TargetCamera,
+    M extends BABYLON.AbstractMesh = BABYLON.AbstractMesh,
     N extends BABYLON.Material = BABYLON.Material
   > {
   camera: C
@@ -14,4 +15,5 @@ export interface BabylonAccessor<
   particleSystem: BABYLON.ParticleSystem
   texture: BABYLON.Texture | BABYLON.DynamicTexture
   material: N
+  gui: BABYLONGUI.AdvancedDynamicTexture
 }

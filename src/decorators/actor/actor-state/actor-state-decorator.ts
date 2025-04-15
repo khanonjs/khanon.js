@@ -1,6 +1,7 @@
 import * as BABYLON from '@babylonjs/core'
 
 import { LoadingProgress } from '../../../base'
+import { Core } from '../../../base/core/core'
 import { Metadata } from '../../../base/interfaces/metadata/metadata'
 import {
   ActorStatesController,
@@ -8,12 +9,13 @@ import {
   ParticlesController,
   SpritesController
 } from '../../../controllers'
+import { BabylonAccessor } from '../../../models/babylon-accessor'
 import { Rect } from '../../../models/rect'
+import { Timeout } from '../../../models/timeout'
 import { Logger } from '../../../modules/logger'
 import { FlexId } from '../../../types/flex-id'
 import {
   attachCanvasResize,
-  attachLoopUpdate,
   invokeCallback,
   removeCanvasResize,
   removeLoopUpdate,
@@ -21,50 +23,71 @@ import {
 } from '../../../utils/utils'
 import { SceneInterface } from '../../scene/scene-interface'
 import { ActorInterface } from '../actor-interface'
+import { ActorStateConstructor } from './actor-state-constructor'
 import { ActorStateCore } from './actor-state-core'
 import { ActorStateInterface } from './actor-state-interface'
 import { ActorStateProps } from './actor-state-props'
 
 export function ActorState(props: ActorStateProps = {}): any {
   return function <T extends { new (...args: any[]): ActorStateInterface }>(constructor: T & ActorStateInterface, context: ClassDecoratorContext) {
+    const className = constructor.name
     const _classInterface = class extends constructor implements ActorStateInterface {
-      constructor(actor: ActorInterface, props: ActorStateProps) {
+      constructor(readonly actor: ActorInterface, props: ActorStateProps) {
         super()
-        if (actor) {
-          this.props = props
+        if (this.actor) {
+          this._props = props
           this.actor = actor
           this.scene = this.actor.scene
+          this.babylon.scene = this.actor.babylon.scene
+          this._metadata.applyProps(this)
         }
-        this.metadata.applyProps(this)
       }
 
-      props: ActorStateProps
-      actor: ActorInterface
-      metadata: Metadata = Reflect.getMetadata('metadata', this) ?? new Metadata()
-      _loopUpdate: boolean
-      loopUpdate$: BABYLON.Observer<number>
-      canvasResize$: BABYLON.Observer<Rect>
+      getClassName(): string { return className }
+
+      setTimeout(func: () => void, ms: number): Timeout { return Core.setTimeout(func, ms, this) }
+      setInterval(func: () => void, ms: number): Timeout { return Core.setInterval(func, ms, this) }
+      clearTimeout(timeout: Timeout): void { Core.clearTimeout(timeout) }
+      clearInterval(interval: Timeout): void { Core.clearInterval(interval) }
+      clearAllTimeouts(): void { Core.clearAllTimeoutsByContext(this) }
+
+      _props: ActorStateProps
+      babylon: Pick<BabylonAccessor, 'scene'> = { scene: null as any }
+      _metadata: Metadata = Reflect.getMetadata('metadata', this) ?? new Metadata()
+      _loopUpdate = true
+      _loopUpdate$: BABYLON.Observer<number>
+      _canvasResize$: BABYLON.Observer<Rect>
       scene: SceneInterface
       setup: any
 
-      set loopUpdate(value: boolean) { switchLoopUpdate(value, this) }
+      set loopUpdate(value: boolean) {
+        this._loopUpdate = value
+        switchLoopUpdate(this._loopUpdate, this)
+      }
+
       get loopUpdate(): boolean { return this._loopUpdate }
 
-      start(): void {
-        Logger.debug('ActorState start', _classInterface.prototype, this.actor.constructor.prototype)
+      switchState(state: ActorStateConstructor, setup: any): ActorStateInterface {
+        return this.actor.switchState(state, setup)
+      }
+
+      _start(setup: any): void {
+        Logger.debug('ActorState start', this.getClassName(), this.actor.getClassName())
+        this.setup = setup
         invokeCallback(this.onStart, this)
-        attachLoopUpdate(this)
+        switchLoopUpdate(this._loopUpdate, this)
         attachCanvasResize(this)
       }
 
-      end(): void {
+      _end(): void {
+        this.clearAllTimeouts()
         removeLoopUpdate(this)
         removeCanvasResize(this)
         invokeCallback(this.onEnd, this)
       }
 
       notify(message: FlexId, ...args: any[]): void {
-        const definition = this.metadata.notifiers.get(message)
+        const definition = this._metadata.notifiers.get(message)
         if (definition) {
           this[definition.methodName](...args)
         }
@@ -82,21 +105,25 @@ export function ActorState(props: ActorStateProps = {}): any {
       load(scene: SceneInterface): LoadingProgress {
         return new LoadingProgress().fromNodes([
           SpritesController.load(this.props.sprites, scene),
-          SpritesController.load(this.Instance.metadata.getProps().sprites, scene),
+          SpritesController.load(this.Instance._metadata.getProps().sprites, scene),
           MeshesController.load(this.props.meshes, scene),
-          MeshesController.load(this.Instance.metadata.getProps().meshes, scene),
+          MeshesController.load(this.Instance._metadata.getProps().meshes, scene),
           ParticlesController.load(this.props.particles, scene),
-          ParticlesController.load(this.Instance.metadata?.getProps().particles, scene)
+          ParticlesController.load(this.Instance._metadata?.getProps().particles, scene)
         ])
       }
 
       unload(scene: SceneInterface): void {
         SpritesController.unload(this.props.sprites, scene)
-        SpritesController.unload(this.Instance.metadata.getProps().sprites, scene)
+        SpritesController.unload(this.Instance._metadata.getProps().sprites, scene)
         MeshesController.unload(this.props.meshes, scene)
-        MeshesController.unload(this.Instance.metadata.getProps().meshes, scene)
+        MeshesController.unload(this.Instance._metadata.getProps().meshes, scene)
         ParticlesController.unload(this.props.particles, scene)
-        ParticlesController.unload(this.Instance.metadata?.getProps().particles, scene)
+        ParticlesController.unload(this.Instance._metadata?.getProps().particles, scene)
+      }
+
+      getClassName(): string {
+        return className
       }
     }
     ActorStatesController.register(new _classCore())

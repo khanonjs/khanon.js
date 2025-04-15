@@ -3,9 +3,6 @@ import { AnimationKeyFrame } from './animation-keyframe'
 
 export interface AnimationBase {
   id: FlexId
-  frameStart: number
-  frameEnd: number
-  delay: number
   loop?: boolean
   keyFrames?: AnimationKeyFrame[]
 }

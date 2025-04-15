@@ -1,1 +1,0 @@
-Khanon.js blank project

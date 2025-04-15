@@ -1,5 +1,7 @@
 import * as BABYLON from '@babylonjs/core'
 
+import { Logger } from '../../modules/logger'
+
 // TODO: Make it chainable?
 export class LoadingProgress<D = any> {
   private nodes: {
@@ -35,8 +37,9 @@ export class LoadingProgress<D = any> {
   /**
    * Notify error loading
    */
-  error(error: any) {
+  error(error: any): LoadingProgress<D> {
     this.onError.notifyObservers(error)
+    return this
   }
 
   /**
