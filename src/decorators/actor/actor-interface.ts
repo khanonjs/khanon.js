@@ -6,6 +6,7 @@ import {
   Notificable
 } from '../../base'
 import { Metadata } from '../../base/interfaces/metadata/metadata'
+import { Stateable } from '../../base/interfaces/stateable'
 import { TimersByContext } from '../../base/interfaces/timers-by-context'
 import { BabylonAccessor } from '../../models/babylon-accessor'
 import { Rect } from '../../models/rect'
@@ -32,13 +33,15 @@ import { ActorStateInterface } from './actor-state/actor-state-interface'
 
 // TODO add animation system, that animates body and nodes depending on what they are
 // Actors can't be configurable because they can be spawned from the .babylon scene itself, disallowing to setup their configuration.
-export abstract class ActorInterface<B extends SpriteInterface | MeshInterface = any> implements LoopUpdatable, CanvasResizable, Notificable, TimersByContext {
+export abstract class ActorInterface<B extends SpriteInterface | MeshInterface = any> implements Stateable<ActorStateConstructor>, LoopUpdatable, CanvasResizable, Notificable, TimersByContext {
   abstract _metadata: Metadata
   abstract _props: ActorProps
   abstract _loopUpdate: boolean
   abstract _loopUpdate$: BABYLON.Observer<number>
   abstract _canvasResize$: BABYLON.Observer<Rect>
   abstract _started: boolean
+  abstract _updating: boolean
+  abstract _enabled: boolean
   abstract _body: B | undefined
   abstract _nodes: Map<string, B>
   abstract _visibility: number
@@ -55,6 +58,9 @@ export abstract class ActorInterface<B extends SpriteInterface | MeshInterface =
   abstract _getNodeElement<N extends B>(Element: new () => N): N
   abstract _playActionFromInstance(instance: ActorActionInterface): void
   abstract _stopActionFromInstance(instance: ActorActionInterface, forceRemove?: boolean): void
+  abstract _startUpdates(): void
+  abstract _stopUpdates(): void
+  abstract _removeBody(): void
 
   /**
    * User available
@@ -79,7 +85,6 @@ export abstract class ActorInterface<B extends SpriteInterface | MeshInterface =
   abstract setBody(Body: new () => B): B
   abstract addNode(Node: new () => B, name: string, transform?: TransformComposition): ActorNode<B> | undefined
   abstract getNode(name: string): ActorNode<B> | undefined
-  abstract removeBody(): void
   abstract removeNode(name: string): void
   abstract clearNodes(): void
   abstract switchState(state: ActorStateConstructor, setup: any): ActorStateInterface

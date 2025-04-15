@@ -363,7 +363,7 @@ export function Sprite(props: SpriteProps): any {
         Instance: SpriteInterface = new _classInterface(null as any, null as any)
         spriteMeshes: Map<SceneInterface, SpriteMesh> = new Map<SceneInterface, SpriteMesh>()
 
-        load(scene: SceneInterface): LoadingProgress {
+        _load(scene: SceneInterface): LoadingProgress {
           const progress = new LoadingProgress()
           if (this.spriteMeshes.get(scene)) {
             return progress.complete()
@@ -387,7 +387,7 @@ export function Sprite(props: SpriteProps): any {
           }
         }
 
-        unload(scene: SceneInterface): void {
+        _unload(scene: SceneInterface): void {
           this.spriteMeshes.delete(scene)
         }
 

@@ -31,6 +31,15 @@ export { AppStateInterface } from './decorators/app/app-state/app-state-interfac
 export { Camera } from './decorators/camera/camera-decorator'
 export { CameraInterface } from './decorators/camera/camera-interface'
 
+// Camera decorator
+export { CameraState } from './decorators/camera/camera-state/camera-state-decorator'
+export { CameraStateInterface } from './decorators/camera/camera-state/camera-state-interface'
+
+// Camera decorator
+export { InputEvent } from './decorators/input-event/input-event-decorator'
+export { InputEventProps } from './decorators/input-event/input-event-props'
+export { InputEventIds } from './decorators/input-event/input-event-ids'
+
 // GUI decorator
 export { GUI } from './decorators/gui/gui-decorator'
 export { GUIInterface } from './decorators/gui/gui-interface'

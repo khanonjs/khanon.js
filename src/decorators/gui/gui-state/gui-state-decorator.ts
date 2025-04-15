@@ -36,7 +36,7 @@ export function GUIState(props: GUIStateProps = {}): any {
         super()
         this._props = props
         if (this.gui) {
-          this._metadata.applyProps(this)
+          this._metadata.applyProps(this, this.gui.scene)
         }
       }
 
@@ -93,7 +93,7 @@ export function GUIState(props: GUIStateProps = {}): any {
         return state
       }
 
-      load(scene: SceneInterface): LoadingProgress {
+      _load(scene: SceneInterface): LoadingProgress {
         return new LoadingProgress().fromNodes([
           SpritesController.load(this.props.sprites, scene),
           SpritesController.load(this.Instance._metadata?.getProps().sprites, scene),
@@ -104,7 +104,7 @@ export function GUIState(props: GUIStateProps = {}): any {
         ])
       }
 
-      unload(scene: SceneInterface): void {
+      _unload(scene: SceneInterface): void {
         SpritesController.unload(this.props.sprites, scene)
         SpritesController.unload(this.Instance._metadata?.getProps().sprites, scene)
         MeshesController.unload(this.props.meshes, scene)

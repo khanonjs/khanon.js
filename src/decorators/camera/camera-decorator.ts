@@ -2,7 +2,10 @@ import * as BABYLON from '@babylonjs/core'
 
 import { Metadata } from '../../base'
 import { Core } from '../../base/core/core'
-import { CamerasController } from '../../controllers'
+import {
+  CamerasController,
+  CameraStatesController
+} from '../../controllers'
 import { BabylonAccessor } from '../../models/babylon-accessor'
 import { Rect } from '../../models/rect'
 import { Timeout } from '../../models/timeout'
@@ -19,6 +22,8 @@ import { SceneInterface } from '../scene/scene-interface'
 import { CameraCore } from './camera-core'
 import { CameraInterface } from './camera-interface'
 import { CameraProps } from './camera-props'
+import { CameraStateConstructor } from './camera-state/camera-state-constructor'
+import { CameraStateInterface } from './camera-state/camera-state-interface'
 
 // TODO add CameraAction
 export function Camera(props: CameraProps = {}): any {
@@ -29,7 +34,7 @@ export function Camera(props: CameraProps = {}): any {
         super()
         if (scene) {
           this.babylon.scene = scene.babylon.scene
-          this._metadata.applyProps(this)
+          this._metadata.applyProps(this, this.scene)
         }
       }
 
@@ -44,6 +49,7 @@ export function Camera(props: CameraProps = {}): any {
       _metadata: Metadata = Reflect.getMetadata('metadata', this) ?? new Metadata()
       babylon: Pick<BabylonAccessor<BABYLON.TargetCamera>, 'camera' | 'scene'> = { camera: null as any, scene: null as any }
       setup: any
+      _state: CameraStateInterface | null
       _loopUpdate = true
       _loopUpdate$: BABYLON.Observer<number>
       _canvasResize$: BABYLON.Observer<Rect>
@@ -54,6 +60,8 @@ export function Camera(props: CameraProps = {}): any {
       }
 
       get loopUpdate(): boolean { return this._loopUpdate }
+
+      get state(): CameraStateInterface | null { return this._state }
 
       // Transform
       get position(): BABYLON.Vector3 { return this.babylon.camera.position }
@@ -80,13 +88,25 @@ export function Camera(props: CameraProps = {}): any {
         }
       }
 
+      switchState(state: CameraStateConstructor, setup: any): CameraStateInterface {
+        const _state = CameraStatesController.get(state).spawn(this)
+        if (this._state) {
+          this._state._end()
+        }
+        this._state = _state
+        this._state._start(setup)
+        return this._state
+      }
+
       _start(): void {
+        this._metadata.startInputEvents()
         switchLoopUpdate(this._loopUpdate, this)
         attachCanvasResize(this)
         invokeCallback(this.onStart, this)
       }
 
       _stop(): void {
+        this._metadata.stopInputEvents()
         invokeCallback(this.onStop, this)
         removeLoopUpdate(this)
         removeCanvasResize(this)

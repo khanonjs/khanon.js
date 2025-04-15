@@ -12,12 +12,12 @@ export function ControllerLoader</* Constructor type to load from */ L, /* Insta
           const _items: any[] = []
           ControllerLoadable.get(constructors, useInstance).forEach(item => {
             _items.push(item)
-            const progress = item.load(owner)
+            const progress = item._load(owner)
             progressNodes.push(progress)
           })
           return new LoadingProgress().fromNodes(progressNodes)
         } else {
-          return (ControllerLoadable.get(constructors, useInstance) as T).load(owner) // TODO: TS bug?: Does not correctly infer conditional type
+          return (ControllerLoadable.get(constructors, useInstance) as T)._load(owner) // TODO: TS bug?: Does not correctly infer conditional type
         }
       } else {
         return new LoadingProgress().complete()
@@ -27,9 +27,9 @@ export function ControllerLoader</* Constructor type to load from */ L, /* Insta
     static unload(constructors: L | L[] | undefined, owner: D) {
       if (constructors) {
         if (Array.isArray(constructors)) {
-          ControllerLoadable.get(constructors, useInstance).forEach(item => item.unload(owner))
+          ControllerLoadable.get(constructors, useInstance).forEach(item => item._unload(owner))
         } else {
-          (ControllerLoadable.get(constructors, useInstance) as T).unload(owner) // TODO: TS bug?: Does not correctly infer conditional type
+          (ControllerLoadable.get(constructors, useInstance) as T)._unload(owner) // TODO: TS bug?: Does not correctly infer conditional type
         }
       }
     }

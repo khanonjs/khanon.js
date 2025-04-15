@@ -11,7 +11,7 @@ export abstract class GUIStateCore implements StateCore<GUIInterface, GUIStateIn
   abstract props: GUIStateProps
   abstract Instance: GUIStateInterface // Disambiguate core methods from interface spawnable instances
   abstract spawn(owner: GUIInterface): GUIStateInterface
-  abstract load(owner: SceneInterface): LoadingProgress
-  abstract unload(owner: SceneInterface): void
+  abstract _load(owner: SceneInterface): LoadingProgress
+  abstract _unload(owner: SceneInterface): void
   abstract getClassName(): string
 }

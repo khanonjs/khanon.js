@@ -3,12 +3,7 @@ import * as BABYLON from '@babylonjs/core'
 import { LoadingProgress } from '../../../base'
 import { Core } from '../../../base/core/core'
 import { Metadata } from '../../../base/interfaces/metadata/metadata'
-import {
-  ActorStatesController,
-  MeshesController,
-  ParticlesController,
-  SpritesController
-} from '../../../controllers'
+import { CameraStatesController } from '../../../controllers'
 import { BabylonAccessor } from '../../../models/babylon-accessor'
 import { Rect } from '../../../models/rect'
 import { Timeout } from '../../../models/timeout'
@@ -22,23 +17,23 @@ import {
   switchLoopUpdate
 } from '../../../utils/utils'
 import { SceneInterface } from '../../scene/scene-interface'
-import { ActorInterface } from '../actor-interface'
-import { ActorStateConstructor } from './actor-state-constructor'
-import { ActorStateCore } from './actor-state-core'
-import { ActorStateInterface } from './actor-state-interface'
-import { ActorStateProps } from './actor-state-props'
+import { CameraInterface } from '../camera-interface'
+import { CameraStateConstructor } from './camera-state-constructor'
+import { CameraStateCore } from './camera-state-core'
+import { CameraStateInterface } from './camera-state-interface'
+import { CameraStateProps } from './camera-state-props'
 
-export function ActorState(props: ActorStateProps = {}): any {
-  return function <T extends { new (...args: any[]): ActorStateInterface }>(constructor: T & ActorStateInterface, context: ClassDecoratorContext) {
+export function CameraState(props: CameraStateProps = {}): any {
+  return function <T extends { new (...args: any[]): CameraStateInterface }>(constructor: T & CameraStateInterface, context: ClassDecoratorContext) {
     const className = constructor.name
-    const _classInterface = class extends constructor implements ActorStateInterface {
-      constructor(readonly actor: ActorInterface, props: ActorStateProps) {
+    const _classInterface = class extends constructor implements CameraStateInterface {
+      constructor(readonly camera: CameraInterface, props: CameraStateProps) {
         super()
-        if (this.actor) {
+        if (this.camera) {
           this._props = props
-          this.actor = actor
-          this.scene = this.actor.scene
-          this.babylon.scene = this.actor.babylon.scene
+          this.camera = camera
+          this.scene = this.camera.scene
+          this.babylon.scene = this.camera.babylon.scene
           this._metadata.applyProps(this, this.scene)
         }
       }
@@ -51,7 +46,7 @@ export function ActorState(props: ActorStateProps = {}): any {
       clearInterval(interval: Timeout): void { Core.clearInterval(interval) }
       clearAllTimeouts(): void { Core.clearAllTimeoutsByContext(this) }
 
-      _props: ActorStateProps
+      _props: CameraStateProps
       babylon: Pick<BabylonAccessor, 'scene'> = { scene: null as any }
       _metadata: Metadata = Reflect.getMetadata('metadata', this) ?? new Metadata()
       _loopUpdate = true
@@ -67,12 +62,12 @@ export function ActorState(props: ActorStateProps = {}): any {
 
       get loopUpdate(): boolean { return this._loopUpdate }
 
-      switchState(state: ActorStateConstructor, setup: any): ActorStateInterface {
-        return this.actor.switchState(state, setup)
+      switchState(state: CameraStateConstructor, setup: any): CameraStateInterface {
+        return this.camera.switchState(state, setup)
       }
 
       _start(setup: any): void {
-        Logger.debug('ActorState start', this.getClassName(), this.actor.getClassName())
+        Logger.debug('CameraState start', this.getClassName(), this.camera.getClassName())
         this.setup = setup
         invokeCallback(this.onStart, this)
         this._metadata.startInputEvents()
@@ -95,40 +90,27 @@ export function ActorState(props: ActorStateProps = {}): any {
         }
       }
     }
-    const _classCore = class implements ActorStateCore {
+    const _classCore = class implements CameraStateCore {
       props = props
-      Instance: ActorStateInterface = new _classInterface(null as any, null as any)
+      Instance: CameraStateInterface = new _classInterface(null as any, null as any)
 
-      spawn(actor: ActorInterface): ActorStateInterface {
-        const state = new _classInterface(actor, this.props)
+      spawn(camera: CameraInterface): CameraStateInterface {
+        const state = new _classInterface(camera, this.props)
         return state
       }
 
       _load(scene: SceneInterface): LoadingProgress {
-        return new LoadingProgress().fromNodes([
-          SpritesController.load(this.props.sprites, scene),
-          SpritesController.load(this.Instance._metadata.getProps().sprites, scene),
-          MeshesController.load(this.props.meshes, scene),
-          MeshesController.load(this.Instance._metadata.getProps().meshes, scene),
-          ParticlesController.load(this.props.particles, scene),
-          ParticlesController.load(this.Instance._metadata?.getProps().particles, scene)
-        ])
+        return new LoadingProgress().complete()
       }
 
       _unload(scene: SceneInterface): void {
-        SpritesController.unload(this.props.sprites, scene)
-        SpritesController.unload(this.Instance._metadata.getProps().sprites, scene)
-        MeshesController.unload(this.props.meshes, scene)
-        MeshesController.unload(this.Instance._metadata.getProps().meshes, scene)
-        ParticlesController.unload(this.props.particles, scene)
-        ParticlesController.unload(this.Instance._metadata?.getProps().particles, scene)
       }
 
       getClassName(): string {
         return className
       }
     }
-    ActorStatesController.register(new _classCore())
+    CameraStatesController.register(new _classCore())
     return _classInterface
   }
 }

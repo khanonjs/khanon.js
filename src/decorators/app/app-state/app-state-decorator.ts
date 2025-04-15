@@ -33,7 +33,7 @@ export function AppState(props: AppStateProps = {}): any {
       constructor(props: AppStateProps) {
         super()
         this._props = props
-        this._metadata.applyProps(this)
+        this._metadata.applyProps(this, null)
       }
 
       getClassName(): string { return className }
@@ -104,7 +104,7 @@ export function AppState(props: AppStateProps = {}): any {
         return state
       }
 
-      load(): LoadingProgress {
+      _load(): LoadingProgress {
         const progress = new LoadingProgress().fromNodes([
           ScenesController.load(this.props.scenes, null)
           // GUIController.load(this.props.guis, null)
@@ -112,7 +112,7 @@ export function AppState(props: AppStateProps = {}): any {
         return progress
       }
 
-      unload(_newStateCore: AppStateCore): void {
+      _unload(_newStateCore: AppStateCore): void {
         const unloadScenes = Arrays.removeDuplicatesInBoth(this.props.scenes ?? [], _newStateCore.props.scenes ?? [])
         ScenesController.stop(unloadScenes)
         ScenesController.unload(unloadScenes, null)

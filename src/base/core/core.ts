@@ -1,4 +1,4 @@
-// 8a8f eliminar todos los .d de los archivos compilados que no se quieren al hacer build, mover los tipos e interfaces de ./models a KJS namespace
+// TODO eliminar todos los .d de los archivos compilados que no se quieren al hacer build, mover los tipos e interfaces de ./models a KJS namespace
 
 import * as BABYLON from '@babylonjs/core'
 

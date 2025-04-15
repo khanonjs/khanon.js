@@ -11,7 +11,7 @@ export abstract class ActorStateCore implements StateCore<ActorInterface, ActorS
   props: ActorStateProps
   abstract Instance: ActorStateInterface // Disambiguate core methods from interface spawnable instances
   abstract spawn(owner: ActorInterface): ActorStateInterface
-  abstract load(owner?: SceneInterface): LoadingProgress
-  abstract unload(owner?: SceneInterface): void
+  abstract _load(owner?: SceneInterface): LoadingProgress
+  abstract _unload(owner?: SceneInterface): void
   abstract getClassName(): string
 }
