@@ -10,10 +10,12 @@ import { Rect } from '../../models/rect'
 import { Timeout } from '../../models/timeout'
 import { Logger } from '../../modules/logger/logger'
 import { LoggerLevels } from '../../modules/logger/logger-levels'
+import { objectToString } from '../../utils/utils'
 import { LoadingProgress } from '../loading-progress/loading-progress'
 
 export class Core {
   static canvasRect: Rect
+  static needAudioEngine = false
 
   private static app: AppInterface
 
@@ -23,7 +25,7 @@ export class Core {
   private static htmlGui: HTMLDivElement // TODO?
 
   // Babylon
-  private static babylon: Pick<BabylonAccessor, 'engine'> = { engine: null as any }
+  private static babylon: Pick<BabylonAccessor, 'engine' | 'audioEngine'> = { engine: null as any, audioEngine: null as any }
 
   // Canvas
   private static onCanvasResize: BABYLON.Observable<Rect> = new BABYLON.Observable<Rect>(undefined, true)
@@ -61,12 +63,14 @@ export class Core {
 
   static get canvas(): HTMLCanvasElement { return Core.htmlCanvas }
   static get engine(): BABYLON.Engine { return Core.babylon.engine }
+  static get audioEngine(): BABYLON.AudioEngineV2 { return Core.babylon.audioEngine }
 
   /**
    * Called once, on app decorator
    * @param app
    */
-  static initialize(app: AppInterface) {
+  static initialize(app: AppInterface): void {
+    Logger.trace('aki Core.initialize')
     if (Core.app) {
       Logger.error(`App decorator '${Core.app._props.name}' applied more than one time. Please use a single App decorator to generate de application.`)
       return
@@ -85,19 +89,24 @@ export class Core {
 
     Core.initializeHTMLLayers()
     Core.initializeBabylon()
-    Core.loopUpdate()
-    Core.updateCanvasSize()
-    Logger.debug('Initial canvas size:', Core.canvasRect.width, Core.canvasRect.height)
+      .then(() => {
+        Core.loopUpdate()
+        Core.updateCanvasSize()
+        Logger.debug('Initial canvas size:', Core.canvasRect.width, Core.canvasRect.height)
 
-    // Manage canvas resize
-    window.addEventListener('resize', () => {
-      Core.updateCanvasSize()
-      Core.babylon.engine.resize() // TODO: Test this besides 'Core.app.props.engineConfiguration.adaptToDeviceRatio = true'
-    })
+        // Manage canvas resize
+        window.addEventListener('resize', () => {
+          Core.updateCanvasSize()
+          Core.babylon.engine.resize() // TODO: Test this besides 'Core.app.props.engineConfiguration.adaptToDeviceRatio = true'
+        })
 
-    if (Core.app.onStart) {
-      Core.app.onStart()
-    }
+        if (Core.app.onStart) {
+          Core.app.onStart()
+        }
+      })
+      .catch((error) => {
+        Core.throw(`Error initializing Babylon: ${objectToString(error)}`)
+      })
   }
 
   private static initializeHTMLLayers(): void {
@@ -115,22 +124,49 @@ export class Core {
     }
   }
 
-  private static initializeBabylon(): void {
-    BABYLON.SceneLoaderFlags.ShowLoadingScreen = false
-    Core.babylon.engine = new BABYLON.Engine(
-      Core.htmlCanvas,
-      Core.app._props.engineConfiguration.antialias,
-      Core.app._props.engineConfiguration.options,
-      Core.app._props.engineConfiguration.adaptToDeviceRatio
-    )
-    Core.babylon.engine.runRenderLoop(() => {
-      Core.renderScenes.forEach((scene) => scene.babylon.scene.render())
+  private static initializeBabylon(): Promise<void> {
+    return new Promise((resolve, reject) => {
+      BABYLON.SceneLoaderFlags.ShowLoadingScreen = false
+      Core.babylon.engine = new BABYLON.Engine(
+        Core.htmlCanvas,
+        Core.app._props.engineConfiguration.antialias,
+        Core.app._props.engineConfiguration.options,
+        Core.app._props.engineConfiguration.adaptToDeviceRatio
+      )
+      Core.babylon.engine.runRenderLoop(() => {
+        Core.renderScenes.forEach((scene) => scene.babylon.scene.render())
 
-      // TODO: add FPS updater here
+        // TODO: add FPS updater here
       /* if (Core.properties?.fpsContainer) {
         const divFps = document.getElementById(Core.properties.fpsContainer)
         divFps.innerHTML = Core.babylon.getFps().toFixed() + ' fps'
       } */
+      })
+      if (Core.needAudioEngine) {
+        Logger.trace('aki Core.createAudioEngine')
+        Core.needAudioEngine = true
+        Logger.debug('Creating audio engine...')
+        BABYLON.CreateAudioEngineAsync({ resumeOnPause: false })
+          .then((audioEngine) => {
+            this.babylon.audioEngine = audioEngine
+            Logger.debug('Audio engine created.')
+            this.babylon.audioEngine.unlockAsync()
+              .then(() => {
+                Logger.debug('Audio engine unlocked.')
+                resolve()
+              })
+              .catch((error) => {
+                Logger.error('Unlocking audio engine error.')
+                reject(error)
+              })
+          })
+          .catch((error) => {
+            Logger.error('Creating audio engine error.')
+            reject(error)
+          })
+      } else {
+        resolve()
+      }
     })
   }
 
