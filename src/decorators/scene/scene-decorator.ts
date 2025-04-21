@@ -293,7 +293,7 @@ export function Scene(props: SceneProps = {}): any {
               if (this._props.url) {
                 BABYLON.AppendSceneAsync(this._props.url, this.babylon.scene)
                   .then(() => {
-                    Logger.debug(`Scene load  AppendAsync from '${this._props.url}' completed.`, this.getClassName())
+                    Logger.debug(`Scene load AppendAsync from '${this._props.url}' completed.`, this.getClassName())
                     startScene()
                   })
                   .catch((error: string) => {

@@ -21,6 +21,8 @@
 // https://doc.babylonjs.com/features/featuresDeepDive/audio/playingSoundsMusic#browser-autoplay-considerations
 // Testear esto
 
+import * as BABYLON from '@babylonjs/core'
+
 import { Metadata } from '../../base'
 import { Core } from '../../base/core/core'
 import { LoadingProgress } from '../../base/loading-progress/loading-progress'
@@ -35,33 +37,29 @@ import { ActorStateInterface } from '../actor/actor-state/actor-state-interface'
 import { SceneActionInterface } from '../scene/scene-action/scene-action-interface'
 import { SceneInterface } from '../scene/scene-interface'
 import { SceneStateInterface } from '../scene/scene-state/scene-state-interface'
-import { SoundCore } from './sound-core'
 import { SoundInterface } from './sound-interface'
 import { SoundProps } from './sound-props'
 
 export function Sound(props: SoundProps): any {
   return function <T extends { new (...args: any[]): SoundInterface }>(constructorOrTarget: (T & SoundInterface), contextOrProperty: ClassDecoratorContext | string, descriptor: PropertyDescriptor) {
+    Logger.trace('aki Sound decorator')
     const className = constructorOrTarget.name
     const decorateClass = () => {
-      const _classInterface = class extends constructorOrTarget implements SoundInterface {
-        constructor(readonly scene: SceneInterface, props: SoundProps) {
-          super()
-          this._props = props
-          if (scene) {
-          }
-        }
-
-        getClassName(): string { return this._className }
-
-        _props: SoundProps
-        _className: string
-      }
-      const _classCore = class implements SoundCore {
+      const _classCore = class extends constructorOrTarget implements SoundInterface {
         props = props
-        Instance: SoundInterface = new _classInterface(null as any, null as any)
+        sounds: Map<SceneInterface | ActorInterface, BABYLON.StaticSound> = new Map()
 
-        _load(actor: ActorInterface): LoadingProgress {
-          return null as any // 8a8f
+        _load(source: SceneInterface | ActorInterface): LoadingProgress {
+          if (!this.sounds.has(source)) {
+            const progress = new LoadingProgress()
+            const asset = AssetsController.getAsset(this.props.url)
+            // this.sounds.set(source, BABYLON.CreateSoundAsync('', ''))
+            // return progress
+            return new LoadingProgress().complete()
+          } else {
+            return new LoadingProgress().complete()
+          }
+
           /* if (this.props.url) {
             const asset = AssetsController.getAsset(this.props.url)
             if (asset && asset.definition.data) {
@@ -85,8 +83,9 @@ export function Sound(props: SoundProps): any {
         }
 
         spawn(scene: SceneInterface): SoundInterface {
-          const sound = new _classInterface(scene, this.props)
-          return sound
+          // const sound = new _classInterface(scene, this.props)
+          // return sound
+          return null as any
         }
 
         getClassName(): string {
@@ -94,8 +93,8 @@ export function Sound(props: SoundProps): any {
         }
       }
       Core.needAudioEngine = true
-      SoundsController.register(_classInterface, new _classCore())
-      return _classInterface
+      SoundsController.register(_classCore, new _classCore())
+      return _classCore
     }
 
     // Mutates decorator to class or property
@@ -109,19 +108,18 @@ export function Sound(props: SoundProps): any {
       constructorOrTarget instanceof SceneActionInterface ||
       constructorOrTarget instanceof SceneStateInterface
     ) && !descriptor) { // Undefined descriptor means it is a decorated property, otherwiese it is a decorated method
+      Logger.trace('aki add sound property decorator')
       @Sound(props)
-      abstract class _meshInterface extends SoundInterface {
+      abstract class _soundInterface extends SoundInterface {
         _className = contextOrProperty as any
       }
-      // TODO: Store the 'className' to debug it in logs.
-
       if (!Reflect.hasMetadata('metadata', constructorOrTarget)) {
         Reflect.defineMetadata('metadata', new Metadata(), constructorOrTarget)
       }
       const metadata = Reflect.getMetadata('metadata', constructorOrTarget) as Metadata
-      metadata.meshes.push({ // 8a8f
+      metadata.sounds.push({
         propertyName: contextOrProperty as string,
-        classDefinition: _meshInterface as any
+        classDefinition: _soundInterface as any
       })
     } else {
       Logger.debugError('Cannot apply sound decorator to non allowed property class:', constructorOrTarget, contextOrProperty)

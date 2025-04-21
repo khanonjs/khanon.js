@@ -22,6 +22,7 @@ import { SceneActionInterface } from '../decorators/scene/scene-action/scene-act
 import { SceneInterface } from '../decorators/scene/scene-interface'
 import { SceneStateCore } from '../decorators/scene/scene-state/scene-state-core'
 import { SceneStateInterface } from '../decorators/scene/scene-state/scene-state-interface'
+import { SoundInterface } from '../decorators/sound/sound-interface'
 import { SpriteCore } from '../decorators/sprite/sprite-core'
 import { SpriteInterface } from '../decorators/sprite/sprite-interface'
 import { Logger } from '../modules/logger'
@@ -33,6 +34,7 @@ import { MeshesController } from './meshes-controller'
 import { ParticlesController } from './particles-controller'
 import { SceneActionsController } from './scene-actions-controller'
 import { SceneStatesController } from './scene-states-controller'
+import { SoundsController } from './sounds-controller'
 import { SpritesController } from './sprites-controller'
 
 export class AssetsController {
@@ -110,6 +112,14 @@ export class AssetsController {
                   cached: mesh.props.cached ?? false
                 }]
               }
+            } else if (isPrototypeOf(SoundInterface, element)) {
+              const sound = SoundsController.get<SoundInterface>(element)
+              urls[sound.props.url] = true
+              definitions = [...definitions, {
+                url: sound.props.url,
+                type: AssetType.AUDIO,
+                cached: sound.props.cached ?? false
+              }]
             }
           })
         }

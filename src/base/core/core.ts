@@ -146,7 +146,7 @@ export class Core {
         Logger.trace('aki Core.createAudioEngine')
         Core.needAudioEngine = true
         Logger.debug('Creating audio engine...')
-        BABYLON.CreateAudioEngineAsync({ resumeOnPause: false })
+        BABYLON.CreateAudioEngineAsync({ resumeOnInteraction: false })
           .then((audioEngine) => {
             this.babylon.audioEngine = audioEngine
             Logger.debug('Audio engine created.')

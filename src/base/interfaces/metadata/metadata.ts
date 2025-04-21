@@ -11,6 +11,7 @@ import { MetadataMeshDefinition } from './metadata-mesh-definition'
 import { MetadataNotifierDefinition } from './metadata-notifier-definition'
 import { MetadataParticleDefinition } from './metadata-particle-definition'
 import { MetadataProps } from './metadata-props'
+import { MetadataSoundDefinition } from './metadata-sound-definition'
 import { MetadataSpriteDefinition } from './metadata-sprite-definition'
 
 export class Metadata<A extends ActorActionConstructor | SceneActionConstructor = any> {
@@ -22,6 +23,7 @@ export class Metadata<A extends ActorActionConstructor | SceneActionConstructor 
   particles: Set<MetadataParticleDefinition> = new Set<MetadataParticleDefinition>()
   notifiers: Map<FlexId, MetadataNotifierDefinition> = new Map<FlexId, MetadataNotifierDefinition>()
   inputEvents: Map<InputEventIds, MetadataInputEventDefinition> = new Map<InputEventIds, MetadataInputEventDefinition>()
+  sounds: MetadataSoundDefinition[] = []
 
   applyProps(_context: any, scene: SceneInterface | null): void {
     this.context = _context
@@ -35,6 +37,9 @@ export class Metadata<A extends ActorActionConstructor | SceneActionConstructor 
     this.meshes.forEach(definition => {
       _context[definition.propertyName] = definition.classDefinition
     })
+    this.sounds.forEach(definition => {
+      _context[definition.propertyName] = definition.classDefinition
+    })
   }
 
   /**
@@ -45,7 +50,8 @@ export class Metadata<A extends ActorActionConstructor | SceneActionConstructor 
       actions: this.actions.map(definition => definition.classDefinition),
       sprites: this.sprites.map(definition => definition.classDefinition),
       meshes: this.meshes.map(definition => definition.classDefinition),
-      particles: [...this.particles.values()].map(definition => definition.classDefinition)
+      particles: [...this.particles.values()].map(definition => definition.classDefinition),
+      sounds: this.sounds.map(definition => definition.classDefinition)
     }
   }
 
