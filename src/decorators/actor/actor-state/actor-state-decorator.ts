@@ -128,7 +128,7 @@ export function ActorState(props: ActorStateProps = {}): any {
         return className
       }
     }
-    ActorStatesController.register(new _classCore())
+    ActorStatesController.register(_classInterface, new _classCore())
     return _classInterface
   }
 }

@@ -695,7 +695,7 @@ export function Scene(props: SceneProps = {}): any {
         }
       }
     }
-    ScenesController.register(new _class())
+    ScenesController.register(_class, new _class())
     return _class
   }
 }

@@ -140,7 +140,7 @@ export function ActorAction(props: ActorActionProps = {}): any {
           return className
         }
       }
-      ActorActionsController.register(new _classCore())
+      ActorActionsController.register(_classInterface, new _classCore())
       return _classInterface
     }
 

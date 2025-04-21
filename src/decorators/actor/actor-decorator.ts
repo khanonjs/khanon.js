@@ -537,7 +537,7 @@ export function Actor(props: ActorProps = {}): any {
         return className
       }
     }
-    ActorsController.register(new _classCore())
+    ActorsController.register(_classInterface, new _classCore())
     return _classInterface
   }
 }

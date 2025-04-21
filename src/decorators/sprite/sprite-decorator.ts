@@ -416,7 +416,7 @@ export function Sprite(props: SpriteProps): any {
         }
       }
       const core = new _classCore()
-      SpritesController.register(core)
+      SpritesController.register(_classInterface, core)
       return _classInterface
     }
 

@@ -93,9 +93,8 @@ export function Sound(props: SoundProps): any {
           return className
         }
       }
-      const core = new _classCore()
       Core.needAudioEngine = true
-      SoundsController.register(core)
+      SoundsController.register(_classInterface, new _classCore())
       return _classInterface
     }
 

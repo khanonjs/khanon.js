@@ -225,7 +225,7 @@ export function Particle(props: ParticleProps): any {
           return className
         }
       }
-      ParticlesController.register(new _classCore())
+      ParticlesController.register(_classInterface, new _classCore())
       return _classInterface
     }
 

@@ -130,7 +130,7 @@ export function Camera(props: CameraProps = {}): any {
         return className
       }
     }
-    CamerasController.register(new _classCore())
+    CamerasController.register(_classInterface, new _classCore())
     return _classInterface
   }
 }

@@ -124,7 +124,7 @@ export function SceneAction(props: SceneActionProps = {}): any {
           return className
         }
       }
-      SceneActionsController.register(new _classCore())
+      SceneActionsController.register(_classInterface, new _classCore())
       return _classInterface
     }
 

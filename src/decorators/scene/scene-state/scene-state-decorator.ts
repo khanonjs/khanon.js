@@ -160,7 +160,7 @@ export function SceneState(props: SceneStateProps = {}): any {
         return className
       }
     }
-    SceneStatesController.register(new _classCore())
+    SceneStatesController.register(_classInterface, new _classCore())
     return _classInterface
   }
 }

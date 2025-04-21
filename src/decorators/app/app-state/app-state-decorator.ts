@@ -120,7 +120,7 @@ export function AppState(props: AppStateProps = {}): any {
         // GUIController.unload(unloadGuis, null)
       }
     }
-    AppStatesController.register(new _classCore())
+    AppStatesController.register(_classInterface, new _classCore())
     return _classInterface
   }
 }
