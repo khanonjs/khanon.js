@@ -18,6 +18,7 @@ import {
   SceneActionsController,
   ScenesController,
   SceneStatesController,
+  SoundsController,
   SpritesController
 } from '../../controllers'
 import KJS from '../../kjs/kjs'
@@ -245,6 +246,7 @@ export function Scene(props: SceneProps = {}): any {
               MeshesController.load(this._metadata.getProps().meshes, this),
               ParticlesController.load(this._props.particles, this),
               ParticlesController.load(this._metadata.getProps().particles, this),
+              SoundsController.load(this._metadata.getProps().sounds, null),
               GUIController.load(this._props.guis, this)
             ])
             elementsLoading.onComplete.add(() => {
@@ -328,6 +330,7 @@ export function Scene(props: SceneProps = {}): any {
         MeshesController.unload(this._metadata.getProps().meshes, this)
         ParticlesController.unload(this._props.particles, this)
         ParticlesController.unload(this._metadata.getProps().particles, this)
+        SoundsController.unload(this._metadata.getProps().sounds, null)
         GUIController.unload(this._props.guis, this)
       }
 

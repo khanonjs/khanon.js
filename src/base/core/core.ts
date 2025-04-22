@@ -70,7 +70,6 @@ export class Core {
    * @param app
    */
   static initialize(app: AppInterface): void {
-    Logger.trace('aki Core.initialize')
     if (Core.app) {
       Logger.error(`App decorator '${Core.app._props.name}' applied more than one time. Please use a single App decorator to generate de application.`)
       return
@@ -143,10 +142,13 @@ export class Core {
       } */
       })
       if (Core.needAudioEngine) {
-        Logger.trace('aki Core.createAudioEngine')
         Core.needAudioEngine = true
         Logger.debug('Creating audio engine...')
-        BABYLON.CreateAudioEngineAsync({ resumeOnInteraction: false })
+        BABYLON.CreateAudioEngineAsync({
+          disableDefaultUI: Core.app._props.audioEngine.disableDefaultUI,
+          resumeOnInteraction: Core.app._props.audioEngine.resumeOnInteraction,
+          resumeOnPause: Core.app._props.audioEngine.resumeOnPause
+        })
           .then((audioEngine) => {
             this.babylon.audioEngine = audioEngine
             Logger.debug('Audio engine created.')

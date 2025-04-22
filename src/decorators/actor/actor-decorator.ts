@@ -8,9 +8,9 @@ import {
   ActorActionsController,
   ActorsController,
   ActorStatesController,
-  GUIController,
   MeshesController,
   ParticlesController,
+  SoundsController,
   SpritesController
 } from '../../controllers'
 import { BabylonAccessor } from '../../models/babylon-accessor'
@@ -27,7 +27,6 @@ import {
   removeLoopUpdate,
   switchLoopUpdate
 } from '../../utils/utils'
-import { GUIInterface } from '../gui/gui-interface'
 import { MeshAnimationOptions } from '../mesh/mesh-animation-options'
 import { MeshConstructor } from '../mesh/mesh-constructor'
 import { MeshInterface } from '../mesh/mesh-interface'
@@ -509,7 +508,8 @@ export function Actor(props: ActorProps = {}): any {
           MeshesController.load(this.props.meshes, scene),
           MeshesController.load(this.Instance._metadata.getProps().meshes, scene),
           ParticlesController.load(this.props.particles, scene),
-          ParticlesController.load(this.Instance._metadata.getProps().particles, scene)
+          ParticlesController.load(this.Instance._metadata.getProps().particles, scene),
+          SoundsController.load(this.Instance._metadata.getProps().sounds, null)
           // GUIController.load(this.props.guis, scene)
         ])
       }
@@ -524,6 +524,7 @@ export function Actor(props: ActorProps = {}): any {
         MeshesController.unload(this.Instance._metadata.getProps().meshes, scene)
         ParticlesController.unload(this.props.particles, scene)
         ParticlesController.unload(this.Instance._metadata.getProps().particles, scene)
+        SoundsController.unload(this.Instance._metadata.getProps().sounds, null)
         // GUIController.unload(this.props.guis, scene)
       }
 

@@ -41,51 +41,34 @@ import { SoundInterface } from './sound-interface'
 import { SoundProps } from './sound-props'
 
 export function Sound(props: SoundProps): any {
-  return function <T extends { new (...args: any[]): SoundInterface }>(constructorOrTarget: (T & SoundInterface), contextOrProperty: ClassDecoratorContext | string, descriptor: PropertyDescriptor) {
-    Logger.trace('aki Sound decorator')
-    const className = constructorOrTarget.name
+  return function <T extends { new (...args: any[]): SoundInterface }>(target: (T & SoundInterface), contextOrProperty: ClassDecoratorContext | string, descriptor: PropertyDescriptor) {
+    const className = target.name
     const decorateClass = () => {
-      const _classCore = class extends constructorOrTarget implements SoundInterface {
+      const _classCore = class extends target implements SoundInterface {
         props = props
-        sounds: Map<SceneInterface | ActorInterface, BABYLON.StaticSound> = new Map()
+        sound: BABYLON.StaticSound
 
-        _load(source: SceneInterface | ActorInterface): LoadingProgress {
-          if (!this.sounds.has(source)) {
-            const progress = new LoadingProgress()
-            const asset = AssetsController.getAsset(this.props.url)
-            // this.sounds.set(source, BABYLON.CreateSoundAsync('', ''))
-            // return progress
-            return new LoadingProgress().complete()
-          } else {
-            return new LoadingProgress().complete()
+        _load(): LoadingProgress {
+          Logger.trace('aki load sound', this.props.url)
+          const progress = new LoadingProgress()
+          const asset = AssetsController.getAsset(this.props.url)
+          if (asset) {
+            BABYLON.CreateSoundAsync(this.props.url, asset.buffer, { spatialEnabled: !!this.props.spatialEnabled })
+              .then((sound) => {
+                Logger.trace('aki sound loaded!!', this.props.url)
+                this.sound = sound
+                progress.complete()
+              })
+              .catch((error) => {
+                progress.error(error)
+              })
           }
-
-          /* if (this.props.url) {
-            const asset = AssetsController.getAsset(this.props.url)
-            if (asset && asset.definition.data) {
-              const progress = new LoadingProgress()
-              BABYLON.LoadAssetContainerAsync(asset.file, scene.babylon.scene)
-                .then((assetContainer) => {
-                  this.assetContainers.set(scene, assetContainer)
-                  progress.complete()
-                })
-                .catch(error => progress.error(error))
-              return progress
-            } else {
-              Logger.error(`Asset '${this.props.url}' not found on mesh loading:`, this.Instance.getClassName())
-              return new LoadingProgress().complete()
-            }
-          } */
+          return progress
         }
 
         _unload(): void {
-
-        }
-
-        spawn(scene: SceneInterface): SoundInterface {
-          // const sound = new _classInterface(scene, this.props)
-          // return sound
-          return null as any
+          this.sound.dispose()
+          this.sound = null as any
         }
 
         getClassName(): string {
@@ -98,31 +81,31 @@ export function Sound(props: SoundProps): any {
     }
 
     // Mutates decorator to class or property
-    if (constructorOrTarget.prototype) { // Defined prototype means it is a decorated class
+    if (target.prototype) { // Defined prototype means it is a decorated class
       return decorateClass()
     } else if ((
-      constructorOrTarget instanceof ActorInterface ||
-      constructorOrTarget instanceof ActorActionInterface ||
-      constructorOrTarget instanceof ActorStateInterface ||
-      constructorOrTarget instanceof SceneInterface ||
-      constructorOrTarget instanceof SceneActionInterface ||
-      constructorOrTarget instanceof SceneStateInterface
+      target instanceof ActorInterface ||
+      target instanceof ActorActionInterface ||
+      target instanceof ActorStateInterface ||
+      target instanceof SceneInterface ||
+      target instanceof SceneActionInterface ||
+      target instanceof SceneStateInterface
     ) && !descriptor) { // Undefined descriptor means it is a decorated property, otherwiese it is a decorated method
-      Logger.trace('aki add sound property decorator')
       @Sound(props)
       abstract class _soundInterface extends SoundInterface {
         _className = contextOrProperty as any
       }
-      if (!Reflect.hasMetadata('metadata', constructorOrTarget)) {
-        Reflect.defineMetadata('metadata', new Metadata(), constructorOrTarget)
+      if (!Reflect.hasMetadata('metadata', target)) {
+        Reflect.defineMetadata('metadata', new Metadata(), target)
       }
-      const metadata = Reflect.getMetadata('metadata', constructorOrTarget) as Metadata
+      const metadata = Reflect.getMetadata('metadata', target) as Metadata
+      if (metadata.notifiers.get(props.url)) { Logger.debugError(`Trying to define duplicated sound '${props.url}' to element '${target.constructor.name}'.`); return }
       metadata.sounds.push({
         propertyName: contextOrProperty as string,
         classDefinition: _soundInterface as any
       })
     } else {
-      Logger.debugError('Cannot apply sound decorator to non allowed property class:', constructorOrTarget, contextOrProperty)
+      Logger.debugError('Cannot apply sound decorator to non allowed property class:', target, contextOrProperty)
     }
   }
 }

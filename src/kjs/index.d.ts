@@ -5,6 +5,7 @@ import { AppInterface } from '../decorators/app'
 import { AppStateConstructor } from '../decorators/app/app-state'
 import { SceneConstructor } from '../decorators/scene'
 import { SceneStateConstructor } from '../decorators/scene/scene-state'
+import { SoundConstructor } from '../decorators/sound'
 import { Timeout as _Timeout } from '../models'
 import { Rect } from '../models/rect'
 import {
@@ -42,6 +43,13 @@ export declare namespace KJS {
    */
   export namespace Notify {
     function send(id: FlexId, receivers?: NotificableType | NotificableType[], ...args: any[]): void
+  }
+
+  /**
+   * Sounds controller.
+   */
+  export namespace Sound {
+    function play(id: SoundConstructor): void
   }
 
   /**
