@@ -147,11 +147,12 @@ export class Core {
         BABYLON.CreateAudioEngineAsync({
           disableDefaultUI: Core.app._props.audioEngine.disableDefaultUI,
           resumeOnInteraction: Core.app._props.audioEngine.resumeOnInteraction,
-          resumeOnPause: Core.app._props.audioEngine.resumeOnPause
+          resumeOnPause: Core.app._props.audioEngine.resumeOnPause,
+          resumeOnPauseRetryInterval: Core.app._props.audioEngine.resumeOnPauseRetryInterval
         })
           .then((audioEngine) => {
             this.babylon.audioEngine = audioEngine
-            Logger.debug('Audio engine created.')
+            Logger.debug('Audio engine created. Tap the screen to start the scene!')
             this.babylon.audioEngine.unlockAsync()
               .then(() => {
                 Logger.debug('Audio engine unlocked.')

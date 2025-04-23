@@ -1,5 +1,10 @@
+import * as BABYLON from '@babylonjs/core'
+
 export interface SoundProps {
-  url: string// | string[]  // 8a8f
-  spatialEnabled?: boolean // 8a8f attach sounds from actor, actor states and actor actions
+  url: string | string[]
+  stream?: boolean
+  spatialEnabled?: boolean
+  useBoundingBox?: boolean,
+  attachmentType?: BABYLON.SpatialAudioAttachmentType
   cached?: boolean
 }

@@ -50,6 +50,8 @@ export declare namespace KJS {
    */
   export namespace Sound {
     function play(id: SoundConstructor): void
+    function stop(id: SoundConstructor): void
+    function setVolume(value: number): void
   }
 
   /**

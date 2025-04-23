@@ -6,7 +6,7 @@ import { SoundProps } from './sound-props'
 
 export abstract class SoundInterface implements Loadable<void> {
   abstract props: SoundProps
-  abstract sound: BABYLON.StaticSound
+  abstract sound: BABYLON.StaticSound | BABYLON.StreamingSound
   abstract _load(): LoadingProgress
   abstract _unload(): void
   abstract getClassName(): string

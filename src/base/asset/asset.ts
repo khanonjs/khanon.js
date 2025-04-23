@@ -1,3 +1,5 @@
+import * as BABYLON from '@babylonjs/core'
+
 import { Logger } from '../../modules/logger'
 import { LoadingProgress } from '../loading-progress/loading-progress'
 import { AssetDefinition } from './asset-definition'
@@ -7,15 +9,21 @@ export class Asset</* Source interface */ S = any, /* Definition data */ D = any
 
   private sources: Set<S> = new Set<S>()
   private _buffer: ArrayBuffer
+  private _audioBuffer: BABYLON.StaticSoundBuffer
   private _objectURL: string
   private _serial: string
   private _file: File
 
-  constructor(readonly definition: AssetDefinition<D>, readonly source: S) {}
+  constructor(readonly definition: AssetDefinition<D, any>, readonly source: S) {}
 
   get buffer(): ArrayBuffer {
     if (!this._buffer) { Logger.debugError(`Asset Error: No Buffer for asset '${this.definition.url}', did you mean other type?`) }
     return this._buffer
+  }
+
+  get audioBuffer(): BABYLON.StaticSoundBuffer {
+    if (!this._audioBuffer) { Logger.debugError(`Asset Error: No Audio Buffer for asset '${this.definition.url}', did you mean other type?`) }
+    return this._audioBuffer
   }
 
   get objectURL(): string {
@@ -46,6 +54,10 @@ export class Asset</* Source interface */ S = any, /* Definition data */ D = any
 
   setBuffer(buffer: ArrayBuffer) {
     this._buffer = buffer
+  }
+
+  setAudioBuffer(audioBuffer: BABYLON.StaticSoundBuffer) {
+    this._audioBuffer = audioBuffer
   }
 
   setObjectURL(buffer: ArrayBuffer) {

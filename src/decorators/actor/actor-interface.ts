@@ -22,6 +22,7 @@ import { MeshInterface } from '../mesh/mesh-interface'
 import { ParticleConstructor } from '../particle/particle-constructor'
 import { ParticleInterface } from '../particle/particle-interface'
 import { SceneInterface } from '../scene/scene-interface'
+import { SoundInterface } from '../sound/sound-interface'
 import { SpriteAnimationOptions } from '../sprite/sprite-animatrion-options'
 import { SpriteInterface } from '../sprite/sprite-interface'
 import { ActorActionConstructor } from './actor-action/actor-action-constructor'
@@ -61,6 +62,7 @@ export abstract class ActorInterface<B extends SpriteInterface | MeshInterface =
   abstract _startUpdates(): void
   abstract _stopUpdates(): void
   abstract _removeBody(): void
+  abstract _getSpatialSounds(): SoundInterface[]
 
   /**
    * User available

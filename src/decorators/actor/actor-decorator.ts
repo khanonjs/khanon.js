@@ -33,6 +33,7 @@ import { MeshInterface } from '../mesh/mesh-interface'
 import { ParticleConstructor } from '../particle/particle-constructor'
 import { ParticleInterface } from '../particle/particle-interface'
 import { SceneInterface } from '../scene/scene-interface'
+import { SoundInterface } from '../sound/sound-interface'
 import { SpriteAnimationOptions } from '../sprite/sprite-animatrion-options'
 import { SpriteConstructor } from '../sprite/sprite-constructor'
 import { SpriteInterface } from '../sprite/sprite-interface'
@@ -182,6 +183,35 @@ export function Actor(props: ActorProps = {}): any {
       //   this.guis.clear()
       // }
 
+      _getSpatialSounds(): SoundInterface[] {
+        const sounds: SoundInterface[] = []
+        this._metadata.getProps().sounds?.forEach(soundC => {
+          const sound = SoundsController.get(soundC)
+          if (sound.props.spatialEnabled) {
+            sounds.push(sound)
+          }
+        })
+        const actions = ActorActionsController.get([...this._metadata.getProps().actions, ...this._props.actions ?? []])
+        actions.forEach(action => {
+          action.Instance._metadata.getProps().sounds?.forEach(soundC => {
+            const sound = SoundsController.get(soundC)
+            if (sound.props.spatialEnabled) {
+              sounds.push(sound)
+            }
+          })
+        })
+        const states = ActorStatesController.get(this._props.states ?? [])
+        states.forEach(state => {
+          state.Instance._metadata.getProps().sounds?.forEach(soundC => {
+            const sound = SoundsController.get(soundC)
+            if (sound.props.spatialEnabled) {
+              sounds.push(sound)
+            }
+          })
+        })
+        return sounds
+      }
+
       _getNodeElement<N extends B>(Element: new () => N): N {
         if (new Element() instanceof SpriteInterface) { // TODO is there a better way to do this avoiding the 'new'?
           if (!this.scene._availableElements.hasSprite(Element as SpriteConstructor)) { Logger.debugError('Trying to use a sprite non available to the actor. Please check the actor props.', this.getClassName(), Element.prototype); return null as any }
@@ -208,11 +238,17 @@ export function Actor(props: ActorProps = {}): any {
         if (this._enabled) {
           this._startUpdates()
         }
+        this._getSpatialSounds().forEach(sound => {
+          sound.sound.spatial.attach(this._body?.babylon.mesh ?? null, sound.props.useBoundingBox, sound.props.attachmentType)
+        })
         return this._body as N
       }
 
       _removeBody(): void {
         if (this._body) {
+          this._getSpatialSounds().forEach(sound => {
+            sound.sound.spatial.detach()
+          })
           this.clearNodes()
           this._body._release()
           this._body = null

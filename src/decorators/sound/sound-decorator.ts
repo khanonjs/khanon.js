@@ -1,26 +1,3 @@
-// 8a8f
-// https://doc.babylonjs.com/features/featuresDeepDive/audio/playingSoundsMusic
-// https://doc.babylonjs.com/typedoc/interfaces/BABYLON.IWebAudioEngineOptions#audiocontext
-// https://doc.babylonjs.com/typedoc/interfaces/BABYLON.IAbstractSoundOptions#maxinstances
-
-// Los sonidos están explicitamente asociados a un contexto (escena o actor).
-// No se permite crear más de un sonido con la misma URL por contexto.
-// Por defecto se crea un solo sonido para todas las instancias de actor.
-
-// https://doc.babylonjs.com/features/featuresDeepDive/audio/playingSoundsMusic#spatial-audio
-// Para audios creados dentro de contextos como Actor, indicar spatialEnabled significa que se creará un CreateSoundAsync por cada instancia de actor y se asociará al body del actor.
-// por tanto este afecta al setBody. Si spatialEnabled es false, se crea un único sonido para todas las instancias del actor.
-// Spatial actor no puede ir junto a audio stream
-
-// https://doc.babylonjs.com/features/featuresDeepDive/audio/playingSoundsMusic#sound-buffers
-// AssetsController crea un sonido y provee el buffer cuando sea necesario crear la instancia del sonido.
-
-// https://doc.babylonjs.com/features/featuresDeepDive/audio/playingSoundsMusic#using-browser-specific-audio-codecs
-// La URL del sonido permite string o array de strings. Si es un array, se intentará cargar cada uno de los sonidos hasta que uno funcione.
-
-// https://doc.babylonjs.com/features/featuresDeepDive/audio/playingSoundsMusic#browser-autoplay-considerations
-// Testear esto
-
 import * as BABYLON from '@babylonjs/core'
 
 import { Metadata } from '../../base'
@@ -46,22 +23,31 @@ export function Sound(props: SoundProps): any {
     const decorateClass = () => {
       const _classCore = class extends target implements SoundInterface {
         props = props
-        sound: BABYLON.StaticSound
+        sound: BABYLON.StaticSound | BABYLON.StreamingSound
 
         _load(): LoadingProgress {
-          Logger.trace('aki load sound', this.props.url)
           const progress = new LoadingProgress()
-          const asset = AssetsController.getAsset(this.props.url)
-          if (asset) {
-            BABYLON.CreateSoundAsync(this.props.url, asset.buffer, { spatialEnabled: !!this.props.spatialEnabled })
+          if (this.props.stream) {
+            BABYLON.CreateStreamingSoundAsync(this.getClassName(), this.props.url, { spatialEnabled: !!this.props.spatialEnabled })
               .then((sound) => {
-                Logger.trace('aki sound loaded!!', this.props.url)
                 this.sound = sound
                 progress.complete()
               })
               .catch((error) => {
                 progress.error(error)
               })
+          } else {
+            const asset = AssetsController.getAsset(this.props.url)
+            if (asset) {
+              BABYLON.CreateSoundAsync(this.getClassName(), asset.audioBuffer, { spatialEnabled: !!this.props.spatialEnabled })
+                .then((sound) => {
+                  this.sound = sound
+                  progress.complete()
+                })
+                .catch((error) => {
+                  progress.error(error)
+                })
+            }
           }
           return progress
         }
@@ -99,7 +85,11 @@ export function Sound(props: SoundProps): any {
         Reflect.defineMetadata('metadata', new Metadata(), target)
       }
       const metadata = Reflect.getMetadata('metadata', target) as Metadata
-      if (metadata.notifiers.get(props.url)) { Logger.debugError(`Trying to define duplicated sound '${props.url}' to element '${target.constructor.name}'.`); return }
+      if ((target instanceof SceneInterface ||
+        target instanceof SceneActionInterface ||
+        target instanceof SceneStateInterface) && props.spatialEnabled) {
+        Logger.warn(`Defining spatial sound '${props.url}' to scene element '${target.constructor.name}' is not allowed.`)
+      }
       metadata.sounds.push({
         propertyName: contextOrProperty as string,
         classDefinition: _soundInterface as any
