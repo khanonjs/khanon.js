@@ -8,6 +8,7 @@ export interface BabylonAccessor<
   > {
   camera: C
   engine: BABYLON.Engine
+  audioEngine: BABYLON.AudioEngineV2
   scene: BABYLON.Scene
   sprite: BABYLON.Sprite
   mesh: M

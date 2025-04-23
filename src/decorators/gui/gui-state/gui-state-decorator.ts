@@ -117,7 +117,7 @@ export function GUIState(props: GUIStateProps = {}): any {
         return className
       }
     }
-    GUIStatesController.register(new _classCore())
+    GUIStatesController.register(_classInterface, new _classCore())
     return _classInterface
   }
 }

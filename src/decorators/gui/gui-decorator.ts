@@ -146,7 +146,7 @@ export function GUI(props: GUIProps = {}): any {
         return className
       }
     }
-    GUIController.register(new _classCore())
+    GUIController.register(_classInterface, new _classCore())
     return _classInterface
   }
 }

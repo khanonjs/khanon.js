@@ -4,7 +4,8 @@ import { Core } from '../base/core/core'
 import { LoadingProgress } from '../base/loading-progress/loading-progress'
 import {
   NotificationsController,
-  ScenesController
+  ScenesController,
+  SoundsController
 } from '../controllers'
 import { AppInterface } from '../decorators/app/app-interface'
 import { AppStateConstructor } from '../decorators/app/app-state/app-state-constructor'
@@ -13,6 +14,7 @@ import { Rect } from '../models/rect'
 export class KJS {
   static get Scene(): ScenesController { return ScenesController }
   static get Notify(): NotificationsController { return NotificationsController }
+  static get Sound(): SoundsController { return SoundsController }
 
   static throw(error?: any): void {
     Core.throw(error)

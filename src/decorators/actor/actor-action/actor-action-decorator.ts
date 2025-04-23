@@ -7,6 +7,7 @@ import {
   ActorActionsController,
   MeshesController,
   ParticlesController,
+  SoundsController,
   SpritesController
 } from '../../../controllers'
 import { BabylonAccessor } from '../../../models/babylon-accessor'
@@ -20,7 +21,6 @@ import {
 } from '../../../utils/utils'
 import { SceneInterface } from '../../scene/scene-interface'
 import { ActorInterface } from '../actor-interface'
-import { ActorStateInterface } from '../actor-state/actor-state-interface'
 import { ActorActionCore } from './actor-action-core'
 import { ActorActionInterface } from './actor-action-interface'
 import { ActorActionProps } from './actor-action-props'
@@ -118,7 +118,8 @@ export function ActorAction(props: ActorActionProps = {}): any {
             MeshesController.load(this.props.meshes, scene),
             MeshesController.load(this.Instance._metadata.getProps().meshes, scene),
             ParticlesController.load(this.props.particles, scene),
-            ParticlesController.load(this.Instance._metadata.getProps().particles, scene)
+            ParticlesController.load(this.Instance._metadata.getProps().particles, scene),
+            SoundsController.load(this.Instance._metadata.getProps().sounds, null)
           ])
         }
 
@@ -129,6 +130,7 @@ export function ActorAction(props: ActorActionProps = {}): any {
           MeshesController.unload(this.Instance._metadata.getProps().meshes, scene)
           ParticlesController.unload(this.props.particles, scene)
           ParticlesController.unload(this.Instance._metadata.getProps().particles, scene)
+          SoundsController.unload(this.Instance._metadata.getProps().sounds, null)
         }
 
         spawn(actor: ActorInterface): ActorActionInterface {
@@ -140,7 +142,7 @@ export function ActorAction(props: ActorActionProps = {}): any {
           return className
         }
       }
-      ActorActionsController.register(new _classCore())
+      ActorActionsController.register(_classInterface, new _classCore())
       return _classInterface
     }
 

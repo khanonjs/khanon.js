@@ -359,7 +359,7 @@ export function Mesh(props: MeshProps = {}): any {
         }
       }
       const core = new _classCore()
-      MeshesController.register(core)
+      MeshesController.register(_classInterface, core)
       return _classInterface
     }
 

@@ -9,6 +9,9 @@ export interface AppPropsDefault extends ExtractOptional<AppProps> {
   engineConfiguration: {
     antialias: true,
     adaptToDeviceRatio: boolean
+  },
+  audioEngine: {
+    disableDefaultUI: boolean
   }
 }
 
@@ -20,5 +23,8 @@ export const appPropsDefault: AppPropsDefault = {
   engineConfiguration: {
     antialias: true,
     adaptToDeviceRatio: false
+  },
+  audioEngine: {
+    disableDefaultUI: true
   }
 }

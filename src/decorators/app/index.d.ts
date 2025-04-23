@@ -3,7 +3,8 @@ import {
   EngineConfiguration,
   FlexId
 } from '../../types'
-import { AppPropLoopUpdate } from './app-props-loop-update'
+import { AppPropsAudioEngine } from './app-props-audio-engine'
+import { AppPropsLoopUpdate } from './app-props-loop-update'
 import {
   AppStateConstructor,
   AppStateInterface
@@ -55,7 +56,7 @@ export declare abstract class AppInterface {
 
 export type AppConstructor = new () => AppInterface
 
-export { AppPropLoopUpdate } from './app-props-loop-update'
+export { AppPropsLoopUpdate as AppPropLoopUpdate } from './app-props-loop-update'
 
 export interface AppProps {
   /**
@@ -74,7 +75,14 @@ export interface AppProps {
    * Loop update is the main loop application.
    * Any scene, actor, particle, or whatever logical methods are invoked from this Subject a number of frames per second.
    */
-  loopUpdate?: AppPropLoopUpdate
+  loopUpdate?: AppPropsLoopUpdate
+
+  /**
+   * Loop update properties.
+   * Loop update is the main loop application.
+   * Any scene, actor, particle, or whatever logical methods are invoked from this Subject a number of frames per second.
+   */
+  audioEngine?: AppPropsAudioEngine
 
   /**
    * Babylon.js engine configuration

@@ -8,6 +8,7 @@ import {
   MeshesController,
   ParticlesController,
   SceneStatesController,
+  SoundsController,
   SpritesController
 } from '../../../controllers'
 import { BabylonAccessor } from '../../../models/babylon-accessor'
@@ -142,7 +143,8 @@ export function SceneState(props: SceneStateProps = {}): any {
           MeshesController.load(this.props.meshes, scene),
           MeshesController.load(this.Instance._metadata?.getProps().meshes, scene),
           ParticlesController.load(this.props.particles, scene),
-          ParticlesController.load(this.Instance._metadata?.getProps().particles, scene)
+          ParticlesController.load(this.Instance._metadata?.getProps().particles, scene),
+          SoundsController.load(this.Instance._metadata.getProps().sounds, null)
         ])
       }
 
@@ -154,13 +156,14 @@ export function SceneState(props: SceneStateProps = {}): any {
         MeshesController.unload(this.Instance._metadata?.getProps().meshes, scene)
         ParticlesController.unload(this.props.particles, scene)
         ParticlesController.unload(this.Instance._metadata?.getProps().particles, scene)
+        SoundsController.unload(this.Instance._metadata.getProps().sounds, null)
       }
 
       getClassName(): string {
         return className
       }
     }
-    SceneStatesController.register(new _classCore())
+    SceneStatesController.register(_classInterface, new _classCore())
     return _classInterface
   }
 }

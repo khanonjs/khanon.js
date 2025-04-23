@@ -3,4 +3,4 @@ import { ActorActionConstructor } from '../decorators/actor/actor-action/actor-a
 import { ActorActionCore } from '../decorators/actor/actor-action/actor-action-core'
 import { SceneInterface } from '../decorators/scene/scene-interface'
 
-export class ActorActionsController extends ControllerLoader<ActorActionConstructor, ActorActionCore, SceneInterface>(true) {}
+export class ActorActionsController extends ControllerLoader<ActorActionConstructor, ActorActionCore, SceneInterface>() {}

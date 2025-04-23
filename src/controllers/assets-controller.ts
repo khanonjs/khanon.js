@@ -22,6 +22,7 @@ import { SceneActionInterface } from '../decorators/scene/scene-action/scene-act
 import { SceneInterface } from '../decorators/scene/scene-interface'
 import { SceneStateCore } from '../decorators/scene/scene-state/scene-state-core'
 import { SceneStateInterface } from '../decorators/scene/scene-state/scene-state-interface'
+import { SoundInterface } from '../decorators/sound/sound-interface'
 import { SpriteCore } from '../decorators/sprite/sprite-core'
 import { SpriteInterface } from '../decorators/sprite/sprite-interface'
 import { Logger } from '../modules/logger'
@@ -33,6 +34,7 @@ import { MeshesController } from './meshes-controller'
 import { ParticlesController } from './particles-controller'
 import { SceneActionsController } from './scene-actions-controller'
 import { SceneStatesController } from './scene-states-controller'
+import { SoundsController } from './sounds-controller'
 import { SpritesController } from './sprites-controller'
 
 export class AssetsController {
@@ -46,15 +48,15 @@ export class AssetsController {
 
   private static assets: Map<string, Asset<SceneInterface>> = new Map<string, Asset<SceneInterface>>()
 
-  static getAsset</* Definition data */ D>(url: string): Asset<SceneInterface, D> | undefined {
-    return this.assets.get(url)
+  static getAsset</* Definition data */ D>(url: string | string[]): Asset<SceneInterface, D> | undefined {
+    return this.assets.get(AssetsController.getAssetName(url))
   }
 
   /**
    * Get all assets definitions within a source class decorator *props* (Scene, State, Actor, Sprite, Mesh, GUI, Particle, etc..)
    */
   static findAssetsDefinitions(source: any, urls: object = {}): AssetDefinition[] {
-    let definitions: AssetDefinition[] = []
+    let definitions: AssetDefinition<any, any>[] = []
     if (typeof source === 'object') {
       for (const property of Object.values(source)) {
         if (Array.isArray(property)) {
@@ -110,6 +112,16 @@ export class AssetsController {
                   cached: mesh.props.cached ?? false
                 }]
               }
+            } else if (isPrototypeOf(SoundInterface, element)) {
+              const sound = SoundsController.get<SoundInterface>(element)
+              if (!sound.props.stream) {
+                urls[AssetsController.getAssetName(sound.props.url)] = true
+                definitions = [...definitions, {
+                  url: sound.props.url,
+                  type: AssetType.AUDIO,
+                  cached: sound.props.cached ?? false
+                }]
+              }
             }
           })
         }
@@ -139,9 +151,9 @@ export class AssetsController {
           progresses.push(asset.progress)
         } else {
           switch (assetDef.type) {
-          /* case AssetType.MESH:
-            progresses.push(AssetsController.loadMeshFromUrl(assetDef as any, scene))
-            break */
+          case AssetType.AUDIO:
+            progresses.push(AssetsController.loadAudioFromUrl(assetDef, scene))
+            break
           default:
             progresses.push(AssetsController.loadFileFromUrl(assetDef, scene))
           }
@@ -173,6 +185,14 @@ export class AssetsController {
    */
   private purgeAssets() {
     // TODO
+  }
+
+  private static getAssetName(url: string | string[]): string {
+    if (Array.isArray(url)) {
+      return url.join(':')
+    } else {
+      return url
+    }
   }
 
   /**
@@ -214,6 +234,27 @@ export class AssetsController {
         throwError(`LoadFileFromUrl: Error loading file '${definition.url}': ${exception}`)
       }
     )
+    return asset.progress
+  }
+
+  private static loadAudioFromUrl(definition: AssetDefinition<any, string | string[]>, source: SceneInterface): LoadingProgress {
+    const asset = new Asset(definition, source)
+    AssetsController.assets.set(AssetsController.getAssetName(definition.url), asset)
+    const throwError = (errorMsg: string) => {
+      Logger.error(errorMsg)
+      asset.progress.error(errorMsg)
+      asset.progress.onError.notifyObservers(errorMsg)
+    }
+    BABYLON.CreateSoundBufferAsync(definition.url)
+      .then((audioBuffer) => {
+        Logger.debug(`LoadAudioFromUrl: Loaded '${definition.url}', cached: ${!!definition.cached}`)
+        asset.setAudioBuffer(audioBuffer)
+        asset.progress.complete()
+      })
+      .catch((error) => {
+        throwError(`LoadAudioFromUrl: Error loading file '${definition.url}': ${error}`)
+      }
+      )
     return asset.progress
   }
 }
