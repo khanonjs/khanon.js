@@ -88,7 +88,7 @@ export function Sound(props: SoundProps): any {
       if ((target instanceof SceneInterface ||
         target instanceof SceneActionInterface ||
         target instanceof SceneStateInterface) && props.spatialEnabled) {
-        Logger.warn(`Defining spatial sound '${props.url}' to scene element '${target.constructor.name}' is not allowed.`)
+        Logger.warn('Defining spatial sound to a scene element is not allowed.', target.constructor.name)
       }
       metadata.sounds.push({
         propertyName: contextOrProperty as string,
