@@ -86,4 +86,3 @@ export { LoadingProgress } from './base'
 // Modules
 export { Logger } from './modules/logger/logger'
 export { LoggerLevels } from './modules/logger/logger-levels'
-export { Helper } from './modules/helper/helper'

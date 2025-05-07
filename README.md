@@ -1,6 +1,6 @@
 Khanon.js
 ---
-A typescript game engine extending Babylon.js.
+A typescript games framework extending Babylon.js.
 
 Currently in ALPHA stage, BETA will be here soon!
 
