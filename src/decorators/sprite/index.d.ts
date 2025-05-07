@@ -13,7 +13,7 @@ import { SpriteAnimationOptions } from './sprite-animatrion-options'
 
 export { SpriteAnimationOptions } from './sprite-animatrion-options'
 
-export interface SpriteAnimation extends AnimationBase {
+export declare interface SpriteAnimation extends AnimationBase {
   /**
    * Frame start of the animation, '0' by default.
    */

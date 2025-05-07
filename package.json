@@ -1,7 +1,7 @@
 {
   "name": "@khanonjs/engine",
-  "version": "0.1.50-alpha.0",
-  "description": "A typescript game engine extending Babylon.js",
+  "version": "0.1.51-alpha.0",
+  "description": "A typescript games framework extending Babylon.js",
   "private": false,
   "author": {
     "name": "Lorenzo Portillo"
@@ -14,8 +14,10 @@
   "keywords": [
     "typescript",
     "game",
+    "games",
     "gamedev",
     "engine",
+    "framework",
     "babylonjs",
     "javascript"
   ],

@@ -10,11 +10,17 @@ import {
 import { AppInterface } from '../decorators/app/app-interface'
 import { AppStateConstructor } from '../decorators/app/app-state/app-state-constructor'
 import { Rect } from '../models/rect'
+import { Arrays } from '../modules/helper/arrays'
+import { Maths } from '../modules/helper/maths'
+import { Vectors } from '../modules/helper/vectors'
 
 export class KJS {
   static get Scene(): ScenesController { return ScenesController }
   static get Notify(): NotificationsController { return NotificationsController }
   static get Sound(): SoundsController { return SoundsController }
+  static get Array(): Maths { return Arrays }
+  static get Math(): Maths { return Maths }
+  static get Vector(): Maths { return Vectors }
 
   static throw(error?: any): void {
     Core.throw(error)
