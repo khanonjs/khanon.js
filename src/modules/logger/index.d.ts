@@ -1,5 +1,3 @@
-// TODO meter esto en KJS
-
 export enum LoggerLevels {
   NO_LOGS = -1,
   ERROR = 3,
@@ -8,6 +6,7 @@ export enum LoggerLevels {
   DEBUG = 7,
   TRACE = 8
 }
+
 export declare class Logger {
   static get level(): LoggerLevels
   static set level(value: LoggerLevels)
