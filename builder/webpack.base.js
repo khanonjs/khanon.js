@@ -30,7 +30,6 @@ module.exports = {
                 test: /\.tsx?$/,
                 loader: 'ts-loader',
                 options: {
-                    // configFile: settings.computed.tsConfigPath,
                     transpileOnly: true,
                     compilerOptions: {
                         declaration: true,
@@ -41,66 +40,3 @@ module.exports = {
         ],
     },
 };
-
-/* 8a8f eliminar
-{
-    "context": "C:\\Proyectos\\Babylon.js\\src",
-    "entry": {
-        "babylonjs": "C:\\Proyectos\\Babylon.js\\src\\Legacy\\legacy.ts"
-    },
-    "output": {
-        "path": "C:\\Proyectos\\Babylon.js\\dist\\preview release",
-        "filename": "babylon.js",
-        "libraryTarget": "umd",
-        "library": {
-            "root": [
-                "BABYLON"
-            ],
-            "amd": "babylonjs",
-            "commonjs": "babylonjs"
-        },
-        "umdNamedDefine": true,
-        "globalObject": "(typeof self !== \"undefined\" ? self : typeof global !== \"undefined\" ? global : this)"
-    },
-    "resolve": {
-        "extensions": [
-            ".ts"
-        ]
-    },
-    "externals": [
-        null
-    ],
-    "devtool": "none",
-    "module": {
-        "rules": [
-            {
-                "test": {},
-                "loader": "ts-loader",
-                "options": {
-                    "configFile": "C:\\Proyectos\\Babylon.js\\src\\tsconfig.json",
-                    "compilerOptions": {
-                        "declaration": false,
-                        "exclude": [
-                            "node_modules"
-                        ]
-                    }
-                }
-            }
-        ]
-    },
-    "mode": "production",
-    "performance": {
-        "hints": false
-    },
-    "plugins": [
-        {
-            "paths": [
-                {},
-                {},
-                {},
-                {}
-            ]
-        }
-    ]
-}
-*/

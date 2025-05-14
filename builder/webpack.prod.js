@@ -32,7 +32,23 @@ module.exports = merge(base, {
                     replace: '',
                     flags: 'gm'
                 },
-            }
+            },
+            {
+                test: /\.(ts|js)x?$/,
+                loader: 'string-replace-loader',
+                options: {
+                    search: `import '@babylonjs/core/Debug/debugLayer';`,
+                    replace: '',
+                },
+            },
+            {
+                test: /\.(ts|js)x?$/,
+                loader: 'string-replace-loader',
+                options: {
+                    search: `import '@babylonjs/inspector';`,
+                    replace: '',
+                }
+            },
         ],
     },
 });
