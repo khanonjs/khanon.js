@@ -18,9 +18,9 @@ export class KJS {
   static get Scene(): ScenesController { return ScenesController }
   static get Notify(): NotificationsController { return NotificationsController }
   static get Sound(): SoundsController { return SoundsController }
-  static get Array(): Maths { return Arrays }
-  static get Math(): Maths { return Maths }
-  static get Vector(): Maths { return Vectors }
+  static get Arrays(): Arrays { return Arrays }
+  static get Maths(): Maths { return Maths }
+  static get Vectors(): Vectors { return Vectors }
 
   static throw(error?: any): void {
     Core.throw(error)

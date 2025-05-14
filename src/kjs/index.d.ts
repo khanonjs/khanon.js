@@ -54,12 +54,12 @@ export declare namespace KJS {
     function setVolume(value: number): void
   }
 
-  export namespace Array {
+  export namespace Arrays {
     function shuffle(arr: any[], startsOn?: number): void
     function clear(arr: any[]): void
   }
 
-  export namespace Math {
+  export namespace Maths {
     const MIN_VALUE: number
     function dragValue(ratio: number, origin: number, target: number, ratioClampMin?: number, ratioClampMax?: number): number
     function clamp(value: number, min: number, max: number): number
@@ -70,7 +70,7 @@ export declare namespace KJS {
     function increaseVectorWithInertia(from: number[], to: number[], speed: number, acceleration?: number, completed?: () => void): number[]
   }
 
-  export namespace Vector {
+  export namespace Vectors {
     function dragPoint(ratio: number, origin: BABYLON.Vector3, target: BABYLON.Vector3, ratioClampMin?: number, ratioClampMax?: number): BABYLON.Vector3
     function vectorialProjectionToLine(vector: BABYLON.Vector3, line: BABYLON.Vector3): BABYLON.Vector3
     function scalarProjectionToLine(vector: BABYLON.Vector3, line: BABYLON.Vector3): number
