@@ -8,12 +8,17 @@
     },
     "editor.tabSize": 2,
     "eslint.enable": true,
-    "eslint.validate": ["javascript", "typescript"],
+    "eslint.validate": [
+        "javascript",
+        "typescript"
+    ],
     "editor.codeActionsOnSave": {
         "source.fixAll": "explicit",
         "source.fixAll.eslint": "explicit"
     },
     "typescript.tsdk": "node_modules\\typescript\\lib",
     "typescript.preferences.importModuleSpecifier": "relative",
-    "files.associations": { "*.json": "jsonc" }
+    "files.associations": {
+        "*.json": "jsonc"
+    }
 }
