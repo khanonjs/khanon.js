@@ -3,7 +3,7 @@ const fs = require('fs');
 var glob = require('glob');
 const path = require('path');
 const srcDir = path.resolve(fs.realpathSync(process.cwd()), './src');
-const CircularDependencyPlugin = require('circular-dependency-plugin')
+// const CircularDependencyPlugin = require('circular-dependency-plugin')
 
 module.exports = {
     entry: './src/index.ts',
@@ -18,11 +18,11 @@ module.exports = {
         extensions: ['.tsx', '.ts', '.js'],
     },
     devtool: false,
-    plugins: [
-        new CircularDependencyPlugin({
-          allowAsyncCycles: true
-        })
-      ],
+    // plugins: [
+    //     new CircularDependencyPlugin({
+    //       allowAsyncCycles: true
+    //     })
+    //   ],
     mode: 'none',
     module: {
         rules: [

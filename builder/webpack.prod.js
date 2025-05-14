@@ -37,7 +37,7 @@ module.exports = merge(base, {
                 test: /\.(ts|js)x?$/,
                 loader: 'string-replace-loader',
                 options: {
-                    search: `import '@babylonjs/core/Debug/debugLayer';`,
+                    search: `import '@babylonjs/core/Debug/debugLayer'`,
                     replace: '',
                 },
             },
@@ -45,7 +45,7 @@ module.exports = merge(base, {
                 test: /\.(ts|js)x?$/,
                 loader: 'string-replace-loader',
                 options: {
-                    search: `import '@babylonjs/inspector';`,
+                    search: `import '@babylonjs/inspector'`,
                     replace: '',
                 }
             },
