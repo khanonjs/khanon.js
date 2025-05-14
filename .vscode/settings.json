@@ -1,6 +1,7 @@
 {
     "files.exclude": {
-        "**/.git": true
+        "**/.git": true,
+        "**/dist": false,
     },
     "search.exclude": {
         "**/node_modules": true,

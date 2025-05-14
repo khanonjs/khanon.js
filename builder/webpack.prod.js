@@ -1,8 +1,8 @@
 const { merge } = require('webpack-merge');
-const common = require('./webpack.config.js');
+const base = require('./webpack.base.js');
 const TerserPlugin = require('terser-webpack-plugin');
 
-module.exports = merge(common, {
+module.exports = merge(base, {
     mode: 'production',
     performance: {
         hints: false,
@@ -20,6 +20,19 @@ module.exports = merge(common, {
                 extractComments: false,
                 parallel: true,
             }),
+        ],
+    },
+    module: {
+        rules: [
+            {
+                test: /\.ts$/,
+                loader: 'string-replace-loader',
+                options: {
+                    search: '^.*Logger.debug.*\\n?',
+                    replace: '',
+                    flags: 'gm'
+                },
+            }
         ],
     },
 });

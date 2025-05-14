@@ -37,7 +37,7 @@ export { CameraStateInterface } from './decorators/camera/camera-state/camera-st
 
 // Camera decorator
 export { InputEvent } from './decorators/input-event/input-event-decorator'
-export { InputEventProps } from './decorators/input-event/input-event-props'
+export type { InputEventProps } from './decorators/input-event/input-event-props'
 export { InputEventIds } from './decorators/input-event/input-event-ids'
 
 // GUI decorator
@@ -54,7 +54,7 @@ export { MeshInterface } from './decorators/mesh/mesh-interface'
 
 // Notification decorator
 export { Notification } from './decorators/notification/notification-decorator'
-export { NotificationProps } from './decorators/notification/notification-props'
+export type { NotificationProps } from './decorators/notification/notification-props'
 
 // Particle decorator
 export { Particle } from './decorators/particle/particle-decorator'
