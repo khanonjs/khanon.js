@@ -1,42 +1,31 @@
 const fs = require('fs');
+const HtmlWebpackPlugin = require('html-webpack-plugin');
 
-var glob = require('glob');
 const path = require('path');
-const srcDir = path.resolve(fs.realpathSync(process.cwd()), './src');
-// const CircularDependencyPlugin = require('circular-dependency-plugin')
+const appDirectory = fs.realpathSync(process.cwd());
 
 module.exports = {
-    entry: './src/index.ts',
+    entry: path.resolve(appDirectory, 'src/app.ts'), //path to the main .ts file
     output: {
-        path: path.resolve(__dirname, '../dist/bundle'),
-        filename: 'index.js',
-        library: {
-          type: 'commonjs2',
-        },
+        filename: 'js/app.js', //name for the js file that is created/compiled in memory
     },
     resolve: {
-        extensions: ['.tsx', '.ts', '.js'],
+        extensions: ['.ts', '.js'],
     },
-    devtool: false,
-    // plugins: [
-    //     new CircularDependencyPlugin({
-    //       allowAsyncCycles: true
-    //     })
-    //   ],
-    mode: 'none',
     module: {
         rules: [
             {
                 test: /\.tsx?$/,
-                loader: 'ts-loader',
-                options: {
-                    transpileOnly: true,
-                    compilerOptions: {
-                        declaration: true,
-                        exclude: ['node_modules'],
-                    },
-                },
+                use: 'ts-loader',
+                exclude: /node_modules/,
             },
         ],
     },
+    plugins: [
+        new HtmlWebpackPlugin({
+            inject: true,
+            template: path.resolve(appDirectory, 'public/index.html'),
+        }),
+    ],
+    mode: 'none',
 };

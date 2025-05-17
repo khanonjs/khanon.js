@@ -1,6 +1,6 @@
 {
   "name": "@khanonjs/engine",
-  "version": "0.1.56-alpha.0",
+  "version": "0.1.57-alpha.0",
   "description": "A typescript games framework extending Babylon.js",
   "private": false,
   "author": {
@@ -78,20 +78,13 @@
     "jest": "^29.7.0",
     "npm-check-updates": "^16.14.11",
     "recursive-copy": "^2.0.14",
-    "rimraf": "^5.0.5",
     "run-script-os": "^1.1.6",
     "semver": "^7.5.4",
     "sinon": "^17.0.1",
-    "string-replace-loader": "^3.1.0",
     "ts-jest": "^29.1.1",
-    "ts-loader": "^9.5.1",
     "ts-node": "^10.9.1",
     "typedoc": "^0.26.7",
-    "typescript": "^5.3.3",
-    "webpack": "^5.89.0",
-    "webpack-bundle-analyzer": "^4.10.1",
-    "webpack-cli": "^5.1.4",
-    "webpack-dev-server": "^4.15.1"
+    "typescript": "^5.3.3"
   },
   "peerDependencies": {
     "@babylonjs/core": "8.8.3",
@@ -102,6 +95,13 @@
     "@babylonjs/serializers": "^8.8.3"
   },
   "dependencies": {
-    "reflect-metadata": "^0.2.2"
+    "string-replace-loader": "^3.1.0",
+    "reflect-metadata": "^0.2.2",
+    "rimraf": "^5.0.5",
+    "ts-loader": "^9.5.1",
+    "webpack": "^5.89.0",
+    "webpack-bundle-analyzer": "^4.10.1",
+    "webpack-cli": "^5.1.4",
+    "webpack-dev-server": "^4.15.1"
   }
 }
