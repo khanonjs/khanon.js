@@ -1,6 +1,6 @@
 {
   "name": "@khanonjs/engine",
-  "version": "0.1.58-alpha.0",
+  "version": "0.1.59-alpha.0",
   "description": "A typescript games framework extending Babylon.js",
   "private": false,
   "author": {
@@ -74,8 +74,6 @@
     "eslint-plugin-promise": "^6.1.1",
     "form-data": "^4.0.0",
     "html-webpack-plugin": "^5.5.3",
-    "http-server": "^14.1.1",
-    "jest": "^29.7.0",
     "npm-check-updates": "^16.14.11",
     "rimraf": "^5.0.5",
     "run-script-os": "^1.1.6",
@@ -101,6 +99,7 @@
     "@babylonjs/serializers": "^8.8.3"
   },
   "dependencies": {
+    "html-webpack-plugin": "^5.5.3",
     "string-replace-loader": "^3.1.0",
     "reflect-metadata": "^0.2.2",
     "rimraf": "^5.0.5",
