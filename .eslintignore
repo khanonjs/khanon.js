@@ -6,3 +6,4 @@
 builder
 wasm
 mxssfd-typedoc-theme
+webpack*.*

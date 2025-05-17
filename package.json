@@ -26,7 +26,7 @@
   "scripts": {
     "build": "npm run build:dev && npm run build:prod",
     "build:dev": "npm run clean && tsc && cpy package.json ./dist && npm run cpy-declarations && cpy ./README.md ./dist",
-    "build:prod": "webpack --config ./builder/webpack.prod.js",
+    "build:prod": "webpack --config ./webpack.prod.js",
     "clean": "rimraf dist",
     "cpy-declarations": "run-script-os",
     "cpy-declarations:win32": "cpy ./src/**/*.d.ts ./dist",
