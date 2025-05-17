@@ -1,6 +1,6 @@
 {
   "name": "@khanonjs/engine",
-  "version": "0.1.55-alpha.0",
+  "version": "0.1.56-alpha.0",
   "description": "A typescript games framework extending Babylon.js",
   "private": false,
   "author": {
@@ -94,12 +94,12 @@
     "webpack-dev-server": "^4.15.1"
   },
   "peerDependencies": {
-    "@babylonjs/core": "~8.0.1",
-    "@babylonjs/gui": "~8.0.1",
-    "@babylonjs/inspector": "~8.0.1",
-    "@babylonjs/loaders": "~8.0.1",
-    "@babylonjs/materials": "~8.0.1",
-    "@babylonjs/serializers": "~8.0.1"
+    "@babylonjs/core": "8.8.3",
+    "@babylonjs/gui": "^8.8.3",
+    "@babylonjs/inspector": "^8.8.3",
+    "@babylonjs/loaders": "^8.8.3",
+    "@babylonjs/materials": "^8.8.3",
+    "@babylonjs/serializers": "^8.8.3"
   },
   "dependencies": {
     "reflect-metadata": "^0.2.2"
