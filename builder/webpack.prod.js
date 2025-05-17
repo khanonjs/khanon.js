@@ -34,7 +34,7 @@ module.exports = merge(base, {
     devtool: false,
     resolve: {
       alias: {
-        '@khanonjs/engine': path.resolve(__dirname, 'node_modules/@khanonjs/engine/bundle')
+        '@khanonjs/engine': path.resolve(__dirname, '../bundle')
       },
       extensions: ['.ts', '.js']
     },
