@@ -24,10 +24,10 @@ export class SceneSpawn {
   }
 
   actor<A extends ActorInterface<any>, C extends undefined | number = undefined>(actor: new () => A, counter?: C, alternativeOnSpawn?: (actor: A, index: number) => void): undefined extends C ? A : A[] {
-    if (!this.scene?._availableElements.hasActor(actor)) { Logger.debugError('Trying to spawn an actor that doesn\'t belong to the scene. Add it to the scene props.', this.scene.getClassName(), ActorsController.get(actor).getClassName()); return null as any }
+    if (process.env.NODE_ENV !== 'production' && !this.scene?._availableElements.hasActor(actor)) { Logger.debugError('Trying to spawn an actor that doesn\'t belong to the scene. Add it to the scene props.', this.scene.getClassName(), ActorsController.get(actor).getClassName()); return null as any }
     if (counter === undefined || counter <= 1) {
       const instance = ActorsController.get(actor).spawn(this.scene)
-      Logger.debug(`Actor spawn (${counter ?? 1}):`, instance.getClassName())
+      if (process.env.NODE_ENV !== 'production') { Logger.debug(`Actor spawn (${counter ?? 1}):`, instance.getClassName()) }
       this.scene._actors.add(instance)
       const list = this.scene._actorsByType.get(actor) ?? []
       list.push(instance)
@@ -39,7 +39,9 @@ export class SceneSpawn {
       const list = this.scene._actorsByType.get(actor) ?? []
       for (let i = 0; i < counter; i++) {
         const instance = actorCore.spawn(this.scene)
-        if (i === 0) { Logger.debug(`Actor spawn (${counter ?? 1}):`, instance.getClassName()) }
+        if (process.env.NODE_ENV !== 'production' && i === 0) {
+          Logger.debug(`Actor spawn (${counter ?? 1}):`, instance.getClassName())
+        }
         this.scene._actors.add(instance)
         list.push(instance)
         retInstances.push(instance)
@@ -65,7 +67,7 @@ export class SceneSpawn {
       }
     }
     const instance = ParticlesController.get(particleConstructorOrMethod).spawn(this.scene, { offset }, !isMethod, setup)
-    Logger.debug('Particle spawn:', this.scene.getClassName(), instance.getClassName())
+    if (process.env.NODE_ENV !== 'production') { Logger.debug('Particle spawn:', this.scene.getClassName(), instance.getClassName()) }
     if (isMethod) {
       // Applies context to 'onInitialize' as caller 'Actor' to preserve the 'this'
       // in case 'initialize' is equivalent to a decorated method of some of those both interfaces.
@@ -77,10 +79,10 @@ export class SceneSpawn {
   }
 
   mesh<M extends MeshInterface>(mesh: new () => M, counter?: number, alternativeOnSpawn?: (mesh: M, index: number) => void): M {
-    if (!this.scene._availableElements.hasMesh(mesh)) { Logger.debugError('Trying to spawn a mesh that doesn\'t belong to the scene. Add it to the scene props.', this.scene.getClassName(), MeshesController.get(mesh).getClassName()); return null as any }
+    if (process.env.NODE_ENV !== 'production' && !this.scene._availableElements.hasMesh(mesh)) { Logger.debugError('Trying to spawn a mesh that doesn\'t belong to the scene. Add it to the scene props.', this.scene.getClassName(), MeshesController.get(mesh).getClassName()); return null as any }
     if (counter === undefined) {
       const instance = MeshesController.get(mesh).spawn(this.scene)
-      Logger.debug(`Mesh spawn (${counter ?? 1}):`, instance.getClassName())
+      if (process.env.NODE_ENV !== 'production') { Logger.debug(`Mesh spawn (${counter ?? 1}):`, instance.getClassName()) }
       this.scene._meshes.add(instance)
       return instance as any
     } else {
@@ -88,7 +90,9 @@ export class SceneSpawn {
       const actorCore = MeshesController.get(mesh)
       for (let i = 0; i < counter; i++) {
         const instance = actorCore.spawn(this.scene)
-        if (i === 0) { Logger.debug(`Mesh spawn (${counter ?? 1}):`, instance.getClassName()) }
+        if (process.env.NODE_ENV !== 'production' && i === 0) {
+          Logger.debug(`Mesh spawn (${counter ?? 1}):`, instance.getClassName())
+        }
         this.scene._meshes.add(instance)
         retInstances.push(instance)
         if (alternativeOnSpawn) {
@@ -100,10 +104,10 @@ export class SceneSpawn {
   }
 
   sprite<S extends SpriteInterface>(sprite: new () => S, counter?: number, alternativeOnSpawn?: (sprite: S, index: number) => void): S {
-    if (!this.scene._availableElements.hasSprite(sprite)) { Logger.debugError('Trying to spawn a sprite that doesn\'t belong to the scene. Add it to the scene props.', this.scene.getClassName(), SpritesController.get(sprite).getClassName()); return null as any }
+    if (process.env.NODE_ENV !== 'production' && !this.scene._availableElements.hasSprite(sprite)) { Logger.debugError('Trying to spawn a sprite that doesn\'t belong to the scene. Add it to the scene props.', this.scene.getClassName(), SpritesController.get(sprite).getClassName()); return null as any }
     if (counter === undefined) {
       const instance = SpritesController.get(sprite).spawn(this.scene)
-      Logger.debug(`Sprite spawn (${counter ?? 1}):`, instance.getClassName())
+      if (process.env.NODE_ENV !== 'production') { Logger.debug(`Sprite spawn (${counter ?? 1}):`, instance.getClassName()) }
       this.scene._sprites.add(instance)
       return instance as any
     } else {
@@ -111,7 +115,9 @@ export class SceneSpawn {
       const actorCore = SpritesController.get(sprite)
       for (let i = 0; i < counter; i++) {
         const instance = actorCore.spawn(this.scene)
-        if (i === 0) { Logger.debug(`Sprite spawn (${counter ?? 1}):`, instance.getClassName()) }
+        if (process.env.NODE_ENV !== 'production' && i === 0) {
+          Logger.debug(`Sprite spawn (${counter ?? 1}):`, instance.getClassName())
+        }
         this.scene._sprites.add(instance)
         retInstances.push(instance)
         if (alternativeOnSpawn) {

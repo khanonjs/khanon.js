@@ -299,7 +299,7 @@ export function Scene(props: SceneProps = {}): any {
                     startScene()
                   })
                   .catch((error: string) => {
-                    Logger.debugError(`Scene load AppendAsync from '${this._props.url}' error`, error, this.getClassName())
+                    Logger.error(`Scene load AppendAsync from '${this._props.url}' error`, error, this.getClassName())
                   })
               } else {
                 startScene()
@@ -307,7 +307,7 @@ export function Scene(props: SceneProps = {}): any {
             })
           })
           assetsProgress.onError.add((error: string) => {
-            Logger.debugError('Scene assets load error', error, this.getClassName())
+            Logger.error('Scene assets load error', error, this.getClassName())
             KJS.throw(error)
           })
           assetsProgress.onProgress.add((progress: number) => {
@@ -462,7 +462,10 @@ export function Scene(props: SceneProps = {}): any {
       }
 
       switchState(state: SceneStateConstructor, setup: any): SceneStateInterface {
-        if (!this._availableElements.hasSceneState(state)) { Logger.debugError('Denied to set a state not available to the scene. Did you mean to add it to the scene props?', this.getClassName(), state.prototype); return null as any }
+        if (!this._availableElements.hasSceneState(state)) {
+          Logger.error('Denied to set a state not available to the scene. Did you mean to add it to the scene props?', this.getClassName(), state.prototype)
+          return null as any
+        }
         const _state = SceneStatesController.get(state).spawn(this)
         if (this._state) {
           this._state._end()
@@ -504,7 +507,10 @@ export function Scene(props: SceneProps = {}): any {
       }
 
       playAction(actionConstructor: SceneActionConstructor, setup: any): SceneActionInterface {
-        if (!this._availableElements.hasSceneAction(actionConstructor)) { Logger.debugError('Trying to play an action non available to the actor. Please check the actor props.', this.getClassName(), actionConstructor.prototype); return null as any }
+        if (!this._availableElements.hasSceneAction(actionConstructor)) {
+          Logger.error('Trying to play an action non available to the actor. Please check the actor props.', this.getClassName(), actionConstructor.prototype)
+          return null as any
+        }
         let action = this._actions.get(actionConstructor)
         if (!action) {
           action = SceneActionsController.get(actionConstructor).spawn(this)
@@ -519,7 +525,9 @@ export function Scene(props: SceneProps = {}): any {
           action._props.overrides?.forEach(actionOverride => {
             if (typeof actionOverride === 'string') {
               const overrideConstructor = this._getActionOwner(actionConstructor)?._metadata.actions.find(_action => _action.methodName === actionOverride)?.classDefinition
-              if (!overrideConstructor) { Logger.debugError(`Action class method not found to override: '${actionOverride}'`) }
+              if (!overrideConstructor) {
+                Logger.warn(`Action class method not found to override: '${actionOverride}'`)
+              }
               if (actionConstructor) {
                 this.stopAction(overrideConstructor)
               }

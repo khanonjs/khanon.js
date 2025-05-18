@@ -214,10 +214,10 @@ export function Actor(props: ActorProps = {}): any {
 
       _getNodeElement<N extends B>(Element: new () => N): N {
         if (new Element() instanceof SpriteInterface) { // TODO is there a better way to do this avoiding the 'new'?
-          if (!this.scene._availableElements.hasSprite(Element as SpriteConstructor)) { Logger.debugError('Trying to use a sprite non available to the actor. Please check the actor props.', this.getClassName(), Element.prototype); return null as any }
+          if (process.env.NODE_ENV !== 'production' && !this.scene._availableElements.hasSprite(Element as SpriteConstructor)) { Logger.debugError('Trying to use a sprite non available to the actor. Please check the actor props.', this.getClassName(), Element.prototype); return null as any }
           return SpritesController.get(Element).spawn(this.scene) as any
         } else {
-          if (!this.scene._availableElements.hasMesh(Element as MeshConstructor)) { Logger.debugError('Trying to use a mesh non available to the actor. Please check the actor props.', this.getClassName(), Element.prototype); return null as any }
+          if (process.env.NODE_ENV !== 'production' && !this.scene._availableElements.hasMesh(Element as MeshConstructor)) { Logger.debugError('Trying to use a mesh non available to the actor. Please check the actor props.', this.getClassName(), Element.prototype); return null as any }
           return MeshesController.get(Element).spawn(this.scene) as any
         }
       }
@@ -256,10 +256,19 @@ export function Actor(props: ActorProps = {}): any {
       }
 
       addNode<N extends B>(Node: new () => N, name: string, transform?: TransformComposition, parentName?: string): ActorNode<B> | undefined {
-        if (!this._body) { Logger.debugError(`Cannot add node '${name}' without a body.`, this.getClassName()); return undefined }
+        if (!this._body) {
+          Logger.error(`Cannot add node '${name}' without a body.`, this.getClassName())
+          return undefined
+        }
         if (this._nodes.has(name)) { Logger.warn(`Trying to add node '${name}' that already exists.`, this.getClassName()); return this._nodes.get(name) }
-        if (name === 'boneRoot' || parentName === 'boneRoot') { Logger.debugError('Cannot use \'boneRoot\' as node \'name\' or \'parentName\'.', this.getClassName()); return undefined }
-        if (parentName && this._nodes.size === 0) { Logger.debugError('Cannot use \'parentName\' without a previous added node.', this.getClassName()); return undefined }
+        if (name === 'boneRoot' || parentName === 'boneRoot') {
+          Logger.error('Cannot use \'boneRoot\' as node \'name\' or \'parentName\'.', this.getClassName())
+          return undefined
+        }
+        if (parentName && this._nodes.size === 0) {
+          Logger.error('Cannot use \'parentName\' without a previous added node.', this.getClassName())
+          return undefined
+        }
         const element = this._getNodeElement(Node)
         if (element) {
           if (!this._body.babylon.mesh.skeleton) {
@@ -327,7 +336,7 @@ export function Actor(props: ActorProps = {}): any {
       }
 
       switchState(state: ActorStateConstructor, setup: any): ActorStateInterface {
-        if (!this.scene._availableElements.hasActorState(state)) { Logger.debugError('Denied to set a state non available to the actor. Please check the actor props.', this.getClassName(), state.prototype); return null as any }
+        if (process.env.NODE_ENV !== 'production' && !this.scene._availableElements.hasActorState(state)) { Logger.debugError('Denied to set a state non available to the actor. Please check the actor props.', this.getClassName(), state.prototype); return null as any }
         const _state = ActorStatesController.get(state).spawn(this)
         if (this._state) {
           this._state._end()
@@ -362,7 +371,7 @@ export function Actor(props: ActorProps = {}): any {
       }
 
       playAction(actionConstructor: ActorActionConstructor, setup: any): ActorActionInterface {
-        if (!this.scene._availableElements.hasActorAction(actionConstructor)) { Logger.debugError('Trying to play an action non available to the actor. Please check the actor props.', this.getClassName(), actionConstructor.prototype); return null as any }
+        if (process.env.NODE_ENV !== 'production' && !this.scene._availableElements.hasActorAction(actionConstructor)) { Logger.debugError('Trying to play an action non available to the actor. Please check the actor props.', this.getClassName(), actionConstructor.prototype); return null as any }
         let action = this._actions.get(actionConstructor)
         if (!action) {
           action = ActorActionsController.get(actionConstructor).spawn(this)
@@ -377,7 +386,9 @@ export function Actor(props: ActorProps = {}): any {
           action._props.overrides?.forEach(actionOverride => {
             if (typeof actionOverride === 'string') {
               const overrideConstructor = this._getActionOwner(actionConstructor)?._metadata.actions.find(_action => _action.methodName === actionOverride)?.classDefinition
-              if (!overrideConstructor) { Logger.debugError(`Action class method not found to override: '${actionOverride}'`) }
+              if (!overrideConstructor) {
+                Logger.error(`Action class method not found to override: '${actionOverride}'`)
+              }
               if (actionConstructor) {
                 this.stopAction(overrideConstructor)
               }
@@ -476,8 +487,11 @@ export function Actor(props: ActorProps = {}): any {
           }
         }
         const attachmentSprite = nodeName ? this.getNode(nodeName)?.element : this.body
-        if (!attachmentSprite) { Logger.debugError('Cannot attach a particle to an empty body.', this.getClassName(), particleConstructorOrMethod.prototype); return null as any }
-        if (!this.scene._availableElements.hasParticle(particleConstructorOrMethod as ParticleConstructor)) { Logger.debugError('Trying to attach a particle non available to the actor. Please check the actor props.', this.getClassName(), particleConstructorOrMethod.prototype); return null as any }
+        if (!attachmentSprite) {
+          Logger.error('Cannot attach a particle to an empty body.', this.getClassName(), particleConstructorOrMethod.prototype)
+          return null as any
+        }
+        if (process.env.NODE_ENV !== 'production' && !this.scene._availableElements.hasParticle(particleConstructorOrMethod as ParticleConstructor)) { Logger.debugError('Trying to attach a particle non available to the actor. Please check the actor props.', this.getClassName(), particleConstructorOrMethod.prototype); return null as any }
         const particle = ParticlesController.get(particleConstructorOrMethod).spawn(this.scene, { attachment: attachmentSprite, offset }, !isMethod, setup)
 
         if (isMethod) {
@@ -495,20 +509,32 @@ export function Actor(props: ActorProps = {}): any {
       }
 
       startParticle(id: FlexId): void {
-        if (!this._particles.get(id)) { Logger.debugError(`Trying to start particle '${id}' that doesn't exist in actor:`, this.getClassName()); return }
+        const particle = this._particles.get(id)
+        if (!particle) {
+          Logger.error(`Trying to start particle '${id}' that doesn't exist in actor:`, this.getClassName())
+          return
+        }
         if (this.visibility > 0) {
-          this._particles.get(id)?.start()
+          particle.start()
         }
       }
 
       stopParticle(id: FlexId): void {
-        if (!this._particles.get(id)) { Logger.debugError(`Trying to start particle '${id}' that doesn't exist in actor:`, this.getClassName()); return }
-        this._particles.get(id)?.stop()
+        const particle = this._particles.get(id)
+        if (!particle) {
+          Logger.error(`Trying to stop particle '${id}' that doesn't exist in actor:`, this.getClassName())
+          return
+        }
+        particle.stop()
       }
 
       removeParticle(id: FlexId): void {
-        if (!this._particles.get(id)) { Logger.debugError(`Trying to start particle '${id}' that doesn't exist in actor:`, this.getClassName()); return }
-        this._particles.get(id)?._release()
+        const particle = this._particles.get(id)
+        if (!particle) {
+          Logger.error(`Trying to remove particle '${id}' that doesn't exist in actor:`, this.getClassName())
+          return
+        }
+        particle._release()
         this._particles.delete(id)
       }
 

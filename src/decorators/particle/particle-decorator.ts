@@ -90,7 +90,9 @@ export function Particle(props: ParticleProps): any {
             }
             this.babylon.particleSystem = new BABYLON.ParticleSystem(this.getClassName(), this._props.capacity, this.scene.babylon.scene)
             if (this._props.renderingGroupId) {
-              if (this._props.renderingGroupId >= BABYLON.RenderingManager.MAX_RENDERINGGROUPS) { Logger.debugError(`Using a renderingGroupId higher than maximum value ${BABYLON.RenderingManager.MAX_RENDERINGGROUPS - 1}`, this.getClassName()) }
+              if (this._props.renderingGroupId >= BABYLON.RenderingManager.MAX_RENDERINGGROUPS) {
+                Logger.warn(`Using a renderingGroupId higher than maximum value ${BABYLON.RenderingManager.MAX_RENDERINGGROUPS - 1}`, this.getClassName())
+              }
               this.babylon.particleSystem.renderingGroupId = this._props.renderingGroupId
             } else if (this._props.renderOverScene) {
               this.babylon.particleSystem.renderingGroupId = BABYLON.RenderingManager.MAX_RENDERINGGROUPS - 1
@@ -134,7 +136,10 @@ export function Particle(props: ParticleProps): any {
         }
 
         _release(): void {
-          if (!this.babylon.particleSystem) { Logger.debugError('Trying to remove a Particle that has been already removed.', this.getClassName()); return }
+          if (!this.babylon.particleSystem) {
+            Logger.error('Trying to remove a Particle that has been already removed.', this.getClassName())
+            return
+          }
           this.stop()
           invokeCallback(this.onRemove, this)
           this.clearAllTimeouts()
@@ -147,7 +152,7 @@ export function Particle(props: ParticleProps): any {
 
         setSprite(sprite: SpriteConstructor): void {
           const spriteCore = SpritesController.get(sprite)
-          if (!this.scene._availableElements.hasSprite(sprite)) { Logger.debugError('Trying to spawn a sprite that doesn\'t belong to the scene. Please check the scene props.', this.scene.getClassName(), spriteCore.getClassName()); return null as any }
+          if (process.env.NODE_ENV !== 'production' && !this.scene._availableElements.hasSprite(sprite)) { Logger.debugError('Trying to spawn a sprite that doesn\'t belong to the scene. Please check the scene props.', this.scene.getClassName(), spriteCore.getClassName()); return null as any }
           this._spriteParticleInfo?.texture.dispose()
           this._spriteClassName = spriteCore.getClassName()
           this._spriteParticleInfo = spriteCore.getParticleInfo(this.scene)
@@ -179,7 +184,10 @@ export function Particle(props: ParticleProps): any {
 
         setAnimation(id: FlexId, cellChangeSpeed?: number, randomStartCell?: boolean): void {
           const animation = this._animations?.find(animation => animation.id === id)
-          if (!animation) { Logger.debugError(`Animation Id '${id}' doesn't exist in particle sprite '${this._spriteClassName}'.`); return }
+          if (!animation) {
+            Logger.error(`Animation Id '${id}' doesn't exist in particle sprite '${this._spriteClassName}'.`)
+            return
+          }
           this.babylon.particleSystem.startSpriteCellID = animation.frameStart
           this.babylon.particleSystem.endSpriteCellID = animation.frameEnd
           if (cellChangeSpeed) {
@@ -256,7 +264,7 @@ export function Particle(props: ParticleProps): any {
         method: constructorOrTarget[contextOrProperty as string]
       })
     } else {
-      Logger.debugError('Cannot apply mesh decorator to non allowed property class:', constructorOrTarget, contextOrProperty)
+      Logger.error('Cannot apply mesh decorator to non allowed property class:', constructorOrTarget, contextOrProperty)
     }
   }
 }

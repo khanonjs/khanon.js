@@ -28,13 +28,16 @@ export function Notification(props: NotificationProps): any {
         Reflect.defineMetadata('metadata', new Metadata(), target)
       }
       const metadata = Reflect.getMetadata('metadata', target) as Metadata
-      if (metadata.notifiers.get(props.id)) { Logger.debugError(`Trying to define duplicated Notification message '${props.id}' to element '${target.constructor.name}'.`); return }
+      if (metadata.notifiers.get(props.id)) {
+        Logger.error(`Trying to define duplicated Notification message '${props.id}' to element '${target.constructor.name}'.`)
+        return
+      }
       metadata.notifiers.set(props.id, {
         props,
         methodName: propertyKey
       })
     } else {
-      Logger.debugError(`Cannot apply Notification decorator to non allowed method '${propertyKey}' in class '${target.constructor.name}'.`)
+      Logger.error(`Cannot apply Notification decorator to non allowed method '${propertyKey}' in class '${target.constructor.name}'.`)
     }
   }
 }

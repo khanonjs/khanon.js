@@ -95,7 +95,7 @@ export function Sound(props: SoundProps): any {
         classDefinition: _soundInterface as any
       })
     } else {
-      Logger.debugError('Cannot apply sound decorator to non allowed property class:', target, contextOrProperty)
+      Logger.error('Cannot apply sound decorator to non allowed property class:', target, contextOrProperty)
     }
   }
 }

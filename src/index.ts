@@ -1,8 +1,12 @@
 import 'reflect-metadata' // TODO use reflect-metadata/lite?
 // TODO remove lines depending wether it is debug or production bundle (webpack)
-import '@babylonjs/inspector'
-import '@babylonjs/core/Debug/debugLayer'
 import '@babylonjs/loaders'
+
+if (process.env.NODE_ENV !== 'production') {
+  // Use require for conditional imports to avoid top-level import errors
+  require('@babylonjs/inspector')
+  require('@babylonjs/core/Debug/debugLayer')
+}
 
 // Khanon.js
 export { KJS } from './kjs/kjs'

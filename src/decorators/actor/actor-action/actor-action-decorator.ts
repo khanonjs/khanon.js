@@ -89,7 +89,9 @@ export function ActorAction(props: ActorActionProps = {}): any {
         }
 
         play(): void {
-          if (!this._props.preserve) { Logger.debugError('Cannot play an action which is not preserved in context.', this.getClassName()) }
+          if (!this._props.preserve) {
+            Logger.warn('Shouildn\'t be able play an action which is not preserved in context.', this.getClassName())
+          }
           if (!this.isPlaying) {
             this._isPlaying = true
             switchLoopUpdate(this._loopUpdate, this)
@@ -168,7 +170,7 @@ export function ActorAction(props: ActorActionProps = {}): any {
         classDefinition: _actionInterface
       })
     } else {
-      Logger.debugError('Cannot apply action decorator to a method.', constructorOrTarget, contextOrMethod)
+      Logger.error('Cannot apply action decorator to a method.', constructorOrTarget, contextOrMethod)
     }
   }
 }

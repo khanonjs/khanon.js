@@ -63,7 +63,9 @@ export function Sprite(props: SpriteProps): any {
             switchLoopUpdate(this._loopUpdate, this)
             attachCanvasResize(this)
             if (this._props.renderingGroupId) {
-              if (this._props.renderingGroupId >= BABYLON.RenderingManager.MAX_RENDERINGGROUPS) { Logger.debugError(`Using a renderingGroupId higher than maximum value ${BABYLON.RenderingManager.MAX_RENDERINGGROUPS - 1}`, this.getClassName()) }
+              if (this._props.renderingGroupId >= BABYLON.RenderingManager.MAX_RENDERINGGROUPS) {
+                Logger.warn(`Using a renderingGroupId higher than maximum value ${BABYLON.RenderingManager.MAX_RENDERINGGROUPS - 1}`, this.getClassName())
+              }
               this.babylon.mesh.renderingGroupId = this._props.renderingGroupId
             }
             invokeCallback(this.onSpawn, this)
@@ -130,7 +132,7 @@ export function Sprite(props: SpriteProps): any {
         get rotation(): number { return this.babylon.mesh.rotation.z }
         set scale(value: number) { this.babylon.mesh.scaling.set(value, value, 1.0) }
         get scale(): number {
-          if (this.babylon.mesh.scaling.x !== this.babylon.mesh.scaling.y) { Logger.debugError(`ScaleX '${this.babylon.mesh.scaling.x}' is different than ScaleY '${this.babylon.mesh.scaling.y}', it is a mistake to setup different scales for both coordinates treating them as equals through 'get scale' method.`, this.getClassName()) }
+          if (process.env.NODE_ENV !== 'production' && this.babylon.mesh.scaling.x !== this.babylon.mesh.scaling.y) { Logger.debugError(`ScaleX '${this.babylon.mesh.scaling.x}' is different than ScaleY '${this.babylon.mesh.scaling.y}', it is a mistake to setup different scales for both coordinates treating them as equals through 'get scale' method.`, this.getClassName()) }
           return this.babylon.mesh.scaling.x
         }
 
@@ -166,7 +168,10 @@ export function Sprite(props: SpriteProps): any {
         }
 
         setFrame(frame: number): void {
-          if (frame < this.getFirstFrame() || frame > this.getLastFrame()) { Logger.debugError(`Calling out of bound setFrame(${frame}) - Start: ${this.getFirstFrame()}, End: ${this.getLastFrame()}`) }
+          if (frame < this.getFirstFrame() || frame > this.getLastFrame()) {
+            Logger.error(`Calling out of bound setFrame(${frame}) - Start: ${this.getFirstFrame()}, End: ${this.getLastFrame()}`)
+            return
+          }
           this.stopAnimation()
           this._setShaderMaterialTextureFrame(frame)
         }
@@ -180,7 +185,10 @@ export function Sprite(props: SpriteProps): any {
         }
 
         addAnimation(animation: SpriteAnimation): void {
-          if (this._animations.get(animation.id)) { Logger.debugError(`Animation name '${animation.id}' already exists.`); return }
+          if (this._animations.get(animation.id)) {
+            Logger.error(`Animation name '${animation.id}' already exists.`)
+            return
+          }
           if (!animation.delay) {
             animation.delay = 100
           }
@@ -200,7 +208,10 @@ export function Sprite(props: SpriteProps): any {
         }
 
         playAnimation(animationId: FlexId, options?: SpriteAnimationOptions, completed?: () => void): void {
-          if (!this._animations.get(animationId as FlexId)) { Logger.debugError(`Animation '${animationId}' doesn't exist in sprite:`, this.getClassName()); return }
+          if (!this._animations.get(animationId as FlexId)) {
+            Logger.error(`Animation '${animationId}' doesn't exist in sprite:`, this.getClassName())
+            return
+          }
           const animation = this._animations.get(animationId)
           if (animation) {
             if (this._animation && this._animation.id === animation.id && !options?.restart === false) {
@@ -302,7 +313,10 @@ export function Sprite(props: SpriteProps): any {
           // - Improve performance.
           // - Let the user draw text over an 'url' loaded texture (not only blank textures).
 
-          if (this._props.url) { Logger.debugError('Trying to draw text on an \'url\' texture. Texts can be only drawn on blank textures (url: undefined).', this.getClassName()); return }
+          if (this._props.url) {
+            Logger.error('Trying to draw text on an \'url\' texture. Texts can be only drawn on blank textures (url: undefined).', this.getClassName())
+            return
+          }
 
           const font = `${properties.fontStyle} ${properties.fontSize}px ${properties.fontName}`
 
@@ -338,7 +352,10 @@ export function Sprite(props: SpriteProps): any {
         }
 
         _release(): void {
-          if (!this.babylon.mesh) { Logger.debugError('Trying to remove a Sprite that has been already removed.', this.getClassName()); return }
+          if (!this.babylon.mesh) {
+            Logger.error('Trying to remove a Sprite that has been already removed.', this.getClassName())
+            return
+          }
           invokeCallback(this.onDestroy, this)
           this.clearAllTimeouts()
           this.stopAnimation()
@@ -446,7 +463,7 @@ export function Sprite(props: SpriteProps): any {
         classDefinition: _spriteInterface as any
       })
     } else {
-      Logger.debugError('Cannot apply sprite decorator to non allowed property class:', constructorOrTarget, contextOrProperty)
+      Logger.error('Cannot apply sprite decorator to non allowed property class:', constructorOrTarget, contextOrProperty)
     }
   }
 }

@@ -17,27 +17,27 @@ export class Asset</* Source interface */ S = any, /* Definition data */ D = any
   constructor(readonly definition: AssetDefinition<D, any>, readonly source: S) {}
 
   get buffer(): ArrayBuffer {
-    if (!this._buffer) { Logger.debugError(`Asset Error: No Buffer for asset '${this.definition.url}', did you mean other type?`) }
+    if (!this._buffer) { Logger.error(`Asset Error: No Buffer for asset '${this.definition.url}', did you mean other type?`) }
     return this._buffer
   }
 
   get audioBuffer(): BABYLON.StaticSoundBuffer {
-    if (!this._audioBuffer) { Logger.debugError(`Asset Error: No Audio Buffer for asset '${this.definition.url}', did you mean other type?`) }
+    if (!this._audioBuffer) { Logger.error(`Asset Error: No Audio Buffer for asset '${this.definition.url}', did you mean other type?`) }
     return this._audioBuffer
   }
 
   get objectURL(): string {
-    if (!this._objectURL) { Logger.debugError(`Asset Error: No objectURL for asset '${this.definition.url}', did you mean other type?`) }
+    if (!this._objectURL) { Logger.error(`Asset Error: No objectURL for asset '${this.definition.url}', did you mean other type?`) }
     return this._objectURL
   }
 
   get serial(): string {
-    if (!this._serial) { Logger.debugError(`Asset Error: No serial for asset '${this.definition.url}', did you mean other type?`) }
+    if (!this._serial) { Logger.error(`Asset Error: No serial for asset '${this.definition.url}', did you mean other type?`) }
     return this._serial
   }
 
   get file(): File {
-    if (!this._file) { Logger.debugError(`Asset Error: No file for asset '${this.definition.url}', did you mean other type?`) }
+    if (!this._file) { Logger.error(`Asset Error: No file for asset '${this.definition.url}', did you mean other type?`) }
     return this._file
   }
 

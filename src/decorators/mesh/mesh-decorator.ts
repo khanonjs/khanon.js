@@ -47,7 +47,6 @@ export function Mesh(props: MeshProps = {}): any {
             this.babylon.scene = this.scene.babylon.scene
             if (this._props.url) {
               const assetContainer = core.assetContainers.get(scene)
-              if (!assetContainer) { Logger.debugError(`AssetContainer mesh '${this._props.url}' not for spawn:`, this.getClassName(), scene.getClassName()) }
               if (assetContainer) {
                 const entries = assetContainer.instantiateModelsToScene((name) => name, undefined, {
                   doNotInstantiate: !this._props.cloneByInstances
@@ -72,12 +71,16 @@ export function Mesh(props: MeshProps = {}): any {
                 const mesh = entries.rootNodes[0] as BABYLON.Mesh
                 mesh.name = 'Mesh - ' + this._props.url
                 this.setMesh(mesh)
+              } else {
+                Logger.error(`AssetContainer mesh '${this._props.url}' not for spawn:`, this.getClassName(), scene.getClassName())
               }
             }
             switchLoopUpdate(this._loopUpdate, this)
             attachCanvasResize(this)
             if (this._props.renderingGroupId) {
-              if (this._props.renderingGroupId >= BABYLON.RenderingManager.MAX_RENDERINGGROUPS) { Logger.debugError(`Using a renderingGroupId higher than maximum value ${BABYLON.RenderingManager.MAX_RENDERINGGROUPS - 1}`, this.getClassName()) }
+              if (this._props.renderingGroupId >= BABYLON.RenderingManager.MAX_RENDERINGGROUPS) {
+                Logger.warn(`Using a renderingGroupId higher than maximum value ${BABYLON.RenderingManager.MAX_RENDERINGGROUPS - 1}`, this.getClassName())
+              }
               this._getMeshHierarchy().forEach(mesh => { mesh.renderingGroupId = this._props.renderingGroupId ?? 0 })
             }
             invokeCallback(this.onSpawn, this)
@@ -222,7 +225,9 @@ export function Mesh(props: MeshProps = {}): any {
         }
 
         addAnimation(animation: MeshAnimation): void {
-          if (this._animations.get(animation.id)) { Logger.debugError(`Trying to add mesh animation '${animation.id}' that has been already added:`, this.getClassName()) }
+          if (this._animations.get(animation.id)) {
+            Logger.warn(`Trying to add mesh animation '${animation.id}' that has been already added:`, this.getClassName())
+          }
           if (animation?.keyFrames && animation.keyFrames.length > 0) {
             animation.keyFrames.forEach(keyFrame => {
               keyFrame.frames.forEach(frame => {
@@ -238,7 +243,10 @@ export function Mesh(props: MeshProps = {}): any {
 
         playAnimation(animationId: FlexId, options?: MeshAnimationOptions, completed?: () => void): BABYLON.AnimationGroup {
           this.stopAnimation()
-          if (!this._animations.get(animationId)) { Logger.debugError(`Animation '${animationId}' not found in mesh '${this._props.url}':`, this.getClassName()) }
+          if (!this._animations.get(animationId)) {
+            Logger.error(`Animation '${animationId}' not found in mesh '${this._props.url}':`, this.getClassName())
+            return null as any
+          }
           const animation = this._animations.get(animationId)
           if (animation) {
             if (this._animation && this._animation.id === animation.id && !options?.restart === false) {
@@ -390,7 +398,7 @@ export function Mesh(props: MeshProps = {}): any {
         classDefinition: _meshInterface as any
       })
     } else {
-      Logger.debugError('Cannot apply mesh decorator to non allowed property class:', constructorOrTarget, contextOrProperty)
+      Logger.error('Cannot apply mesh decorator to non allowed property class:', constructorOrTarget, contextOrProperty)
     }
   }
 }

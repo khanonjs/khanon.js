@@ -95,32 +95,5 @@ export function AppState(props: AppStateProps = {}): any {
         }
       }
     }
-    const _classCore = class implements AppStateCore {
-      props = props
-      Instance: AppStateInterface = new _classInterface(null as any)
-
-      spawn(): AppStateInterface {
-        const state = new _classInterface(this.props)
-        return state
-      }
-
-      _load(): LoadingProgress {
-        const progress = new LoadingProgress().fromNodes([
-          ScenesController.load(this.props.scenes, null)
-          // GUIController.load(this.props.guis, null)
-        ])
-        return progress
-      }
-
-      _unload(_newStateCore: AppStateCore): void {
-        const unloadScenes = Arrays.removeDuplicatesInBoth(this.props.scenes ?? [], _newStateCore.props.scenes ?? [])
-        ScenesController.stop(unloadScenes)
-        ScenesController.unload(unloadScenes, null)
-        // const unloadGuis = Arrays.removeDuplicatesInBoth(this.props.guis ?? [], _newStateCore.props.guis ?? [])
-        // GUIController.unload(unloadGuis, null)
-      }
-    }
-    AppStatesController.register(_classInterface, new _classCore())
-    return _classInterface
   }
 }

@@ -6,8 +6,12 @@ import { Logger } from '../modules/logger'
 
 export class SoundsController extends ControllerLoader<SoundConstructor, SoundInterface>() {
   static play(sound: SoundConstructor, volume?: number): void {
-    if (!SoundsController.get(sound)) { Logger.debugError(`Sound not found to be played: '${sound.name}'`); return }
     const soundCore = SoundsController.get(sound)
+    if (!soundCore) {
+      Logger.error(`Sound not found to be played: '${sound.name}'`)
+      return
+    }
+
     if (volume) {
       soundCore.sound.volume = volume
     }
@@ -15,8 +19,12 @@ export class SoundsController extends ControllerLoader<SoundConstructor, SoundIn
   }
 
   static stop(sound: SoundConstructor): void {
-    if (!SoundsController.get(sound)) { Logger.debugError(`Sound not found to be stopped: '${sound.name}'`); return }
-    SoundsController.get(sound).sound.stop()
+    const soundCore = SoundsController.get(sound)
+    if (!soundCore) {
+      Logger.error(`Sound not found to be stopped: '${sound.name}'`)
+      return
+    }
+    soundCore.sound.stop()
   }
 
   static setVolume(value: number): void {

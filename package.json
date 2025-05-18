@@ -1,6 +1,6 @@
 {
   "name": "@khanonjs/engine",
-  "version": "0.1.61-alpha.0",
+  "version": "0.1.62-alpha.0",
   "description": "A typescript games framework extending Babylon.js",
   "private": false,
   "author": {
@@ -24,9 +24,7 @@
   "main": "index.js",
   "types": "index.d.ts",
   "scripts": {
-    "build": "npm run build:dev && npm run build:prod && cpy ./builder/**/* ./dist/builder",
-    "build:dev": "npm run clean && tsc && cpy package.json ./dist && npm run cpy-declarations && cpy ./README.md ./dist",
-    "build:prod": "webpack --config ./webpack.prod.js",
+    "build": "npm run clean && tsc && cpy package.json ./dist && npm run cpy-declarations && cpy ./README.md ./dist && cpy ./builder/**/* ./dist/builder",
     "clean": "rimraf dist",
     "cpy-declarations": "run-script-os",
     "cpy-declarations:win32": "cpy ./src/**/*.d.ts ./dist",
@@ -73,26 +71,19 @@
     "eslint-plugin-node": "^11.1.0",
     "eslint-plugin-promise": "^6.1.1",
     "form-data": "^4.0.0",
-    "html-webpack-plugin": "^5.5.3",
     "npm-check-updates": "^16.14.11",
-    "recursive-copy": "^2.0.13",
     "rimraf": "^5.0.5",
     "run-script-os": "^1.1.6",
     "semver": "^7.5.4",
     "sinon": "^17.0.1",
-    "string-replace-loader": "^3.1.0",
     "ts-jest": "^29.1.1",
-    "ts-loader": "^9.5.1",
     "ts-node": "^10.9.1",
     "typedoc": "^0.26.7",
     "typescript": "^5.3.3",
-    "webpack": "^5.89.0",
-    "webpack-bundle-analyzer": "^4.10.1",
-    "webpack-cli": "^5.1.4",
     "webpack-dev-server": "^4.15.1"
   },
   "peerDependencies": {
-    "@babylonjs/core": "8.8.3",
+    "@babylonjs/core": "^8.8.3",
     "@babylonjs/gui": "^8.8.3",
     "@babylonjs/inspector": "^8.8.3",
     "@babylonjs/loaders": "^8.8.3",
@@ -100,15 +91,9 @@
     "@babylonjs/serializers": "^8.8.3"
   },
   "dependencies": {
-    "html-webpack-plugin": "^5.5.3",
-    "recursive-copy": "^2.0.13",
+    "esbuild": "^0.25.4",
+    "esbuild-plugin-copy": "^2.1.1",
     "reflect-metadata": "^0.2.2",
-    "rimraf": "^5.0.5",
-    "string-replace-loader": "^3.1.0",
-    "ts-loader": "^9.5.1",
-    "webpack": "^5.89.0",
-    "webpack-bundle-analyzer": "^4.10.1",
-    "webpack-cli": "^5.1.4",
-    "webpack-dev-server": "^4.15.1"
+    "rimraf": "^5.0.5"
   }
 }

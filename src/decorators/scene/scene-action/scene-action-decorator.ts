@@ -152,7 +152,7 @@ export function SceneAction(props: SceneActionProps = {}): any {
         classDefinition: _actionInterface
       })
     } else {
-      Logger.debugError('Cannot apply action decorator to a method.', constructorOrTarget, contextOrMethod)
+      Logger.error('Cannot apply action decorator to a method.', constructorOrTarget, contextOrMethod)
     }
   }
 }
