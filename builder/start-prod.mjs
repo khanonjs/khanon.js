@@ -20,7 +20,7 @@ import chalk from 'chalk'
        'process.env.NODE_ENV': '"production"',
     },
   }).then((ctx) => {
-    console.log(chalk.cyan('Initial build complete'));
+    console.log(chalk.cyan('Initial build complete.'));
     ctx.serve({
       servedir: dest ?? 'dist',
       port: port ?? 3000,
