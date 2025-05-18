@@ -4,7 +4,7 @@ const base = require('./build');
 (async () => {
   const res = await esbuild.build({
     ...base,
-    logLevel: 'trace',
+    logLevel: 'debug',
     define: {
        'process.env.NODE_ENV': '"development"',
     },

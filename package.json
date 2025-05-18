@@ -1,6 +1,6 @@
 {
   "name": "@khanonjs/engine",
-  "version": "0.1.62-alpha.0",
+  "version": "0.1.63-alpha.0",
   "description": "A typescript games framework extending Babylon.js",
   "private": false,
   "author": {
@@ -94,6 +94,7 @@
     "esbuild": "^0.25.4",
     "esbuild-plugin-copy": "^2.1.1",
     "reflect-metadata": "^0.2.2",
-    "rimraf": "^5.0.5"
+    "rimraf": "^5.0.5",
+    "tslib": "^2.8.1"
   }
 }
