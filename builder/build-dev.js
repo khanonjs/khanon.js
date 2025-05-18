@@ -1,5 +1,5 @@
 const esbuild = require('esbuild');
-const base = require('./build');
+const base = require('./options');
 
 (async () => {
   const res = await esbuild.build({
