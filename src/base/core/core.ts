@@ -80,11 +80,11 @@ export class Core {
     Logger.level = (Core.app._props.debugLog || Core.isDevelopmentMode()) ? LoggerLevels.TRACE : LoggerLevels.INFO
     Logger.debug('App instance created:', Core.app._props)
 
-    // Avoid canvas scale error TODO??
-    /* setTimeout(
-      () => {
-      }, 0
-    ) */
+    // esBuild hot realoading in dev mode
+    if (process.env.NODE_ENV === 'development') {
+      const eventSource = new EventSource('/esbuild')
+      eventSource.addEventListener('change', () => location.reload())
+    }
 
     Core.initializeHTMLLayers()
     Core.initializeBabylon()
