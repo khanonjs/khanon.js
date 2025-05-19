@@ -491,6 +491,7 @@ export function Actor(props: ActorProps = {}): any {
           Logger.error('Cannot attach a particle to an empty body.', this.getClassName(), particleConstructorOrMethod.prototype)
           return null as any
         }
+
         if (process.env.NODE_ENV !== 'production' && !this.scene._availableElements.hasParticle(particleConstructorOrMethod as ParticleConstructor)) { Logger.debugError('Trying to attach a particle non available to the actor. Please check the actor props.', this.getClassName(), particleConstructorOrMethod.prototype); return null as any }
         const particle = ParticlesController.get(particleConstructorOrMethod).spawn(this.scene, { attachment: attachmentSprite, offset }, !isMethod, setup)
 

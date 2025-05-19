@@ -3,7 +3,7 @@
 *.json
 *.md
 *.yml
-builder
+**/builder
 wasm
 mxssfd-typedoc-theme
 webpack*.*
