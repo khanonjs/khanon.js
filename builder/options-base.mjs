@@ -18,7 +18,7 @@ export const optionsBase = (distFolder) => {
           resolveFrom: 'cwd',
           assets: [
             {
-              from: ['./public/*'],
+              from: ['./public/**/*'],
               to: [`./${distFolder}`]
             }
           ]
