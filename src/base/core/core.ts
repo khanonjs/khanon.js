@@ -256,12 +256,12 @@ export class Core {
   }
 
   static clearAllTimeoutsByContext(context: any): void {
-    [...Core.timeouts].forEach(timeout => {
+    Core.timeouts.forEach(timeout => {
       if (timeout.context === context) {
         Core.clearTimeout(timeout)
       }
-    });
-    [...Core.intervals].forEach(interval => {
+    })
+    Core.intervals.forEach(interval => {
       if (interval.context === context) {
         Core.clearInterval(interval)
       }

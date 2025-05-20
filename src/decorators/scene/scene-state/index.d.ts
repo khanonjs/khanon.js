@@ -66,7 +66,7 @@ export declare abstract class SceneStateInterface<S = any, C = SceneInterface> {
    * @param func Callback
    * @param ms Milliseconds
    */
-  setTimeout(func: () => void, ms: number, context?: any): Timeout
+  setTimeout(func: () => void, ms: number): Timeout
 
   /**
    * Sets an interval.

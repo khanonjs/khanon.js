@@ -19,6 +19,7 @@ import { ParticleCore } from '../decorators/particle/particle-core'
 import { ParticleInterface } from '../decorators/particle/particle-interface'
 import { SceneActionCore } from '../decorators/scene/scene-action/scene-action-core'
 import { SceneActionInterface } from '../decorators/scene/scene-action/scene-action-interface'
+import { SceneConstructor } from '../decorators/scene/scene-constructor'
 import { SceneInterface } from '../decorators/scene/scene-interface'
 import { SceneStateCore } from '../decorators/scene/scene-state/scene-state-core'
 import { SceneStateInterface } from '../decorators/scene/scene-state/scene-state-interface'
@@ -34,6 +35,7 @@ import { MeshesController } from './meshes-controller'
 import { ParticlesController } from './particles-controller'
 import { SceneActionsController } from './scene-actions-controller'
 import { SceneStatesController } from './scene-states-controller'
+import { ScenesController } from './scenes-controller'
 import { SoundsController } from './sounds-controller'
 import { SpritesController } from './sprites-controller'
 
@@ -149,26 +151,26 @@ export class AssetsController {
   }
 
   /**
-   * Purge loaded assets from a Scene.
-   * Unnecessary assets will be removed.
-   */
-  static scenePurge(scene: SceneInterface) {
-    // scene.assets.
-    // TODO
-  }
-
-  /**
-   * Unload all existing assets of a Scene.
-   */
-  static sceneUnload(scene: SceneInterface) {
-    // TODO
-  }
-
-  /**
    * Remove assets without sources.
+   * @param nextScenes Keep the assets of the next scene to load.
    */
-  private purgeAssets() {
-    // TODO
+  static purgeAssets(nextScenes?: SceneConstructor[]) {
+    const assetsToDelete: string[] = []
+    let nextAssetsDefinition: string[] = []
+    nextScenes?.forEach(scene => {
+      const sceneAssets = AssetsController.findAssetsDefinitions(ScenesController.get(scene)._props)
+      nextAssetsDefinition = [...nextAssetsDefinition, ...sceneAssets.map(asset => asset.url)]
+    })
+    AssetsController.assets.forEach((asset, key) => {
+      if (!asset.hasSources() && !nextAssetsDefinition.includes(key)) {
+        assetsToDelete.push(key)
+      }
+    })
+    assetsToDelete.forEach(key => {
+      AssetsController.assets.get(key)?.remove()
+      AssetsController.assets.delete(key)
+      Logger.debug(`Asset removed: '${key}'`)
+    })
   }
 
   private static getAssetName(url: string | string[]): string {

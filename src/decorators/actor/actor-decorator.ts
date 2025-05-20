@@ -161,10 +161,12 @@ export function Actor(props: ActorProps = {}): any {
       }
 
       _release() {
-        invokeCallback(this.onDestroy, this)
         this.clearAllTimeouts()
-        // this.guisRelease()
+        invokeCallback(this.onDestroy, this)
+        this._stopUpdates()
         this.stopActionAll()
+        // this.guisRelease()
+        this.state?._end()
         this.clearParticles()
         this._removeBody()
       }

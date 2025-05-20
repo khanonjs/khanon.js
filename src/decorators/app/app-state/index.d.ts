@@ -33,7 +33,7 @@ export declare abstract class AppStateInterface<S = any> {
    * @param func Callback
    * @param ms Milliseconds
    */
-  setTimeout(func: () => void, ms: number, context?: any): Timeout
+  setTimeout(func: () => void, ms: number): Timeout
 
   /**
    * Sets an interval.

@@ -200,6 +200,7 @@ export function Scene(props: SceneProps = {}): any {
         }
         invokeCallback(this.onStop, this)
         this.clearAllTimeouts()
+        this.stopActionAll()
         this._releaseGUIs()
         this.releaseCamera()
         this.state?._end()

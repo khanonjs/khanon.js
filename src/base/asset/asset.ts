@@ -8,37 +8,76 @@ export class Asset</* Source interface */ S = any, /* Definition data */ D = any
   progress: LoadingProgress = new LoadingProgress()
 
   private sources: Set<S> = new Set<S>()
-  private _buffer: ArrayBuffer
-  private _audioBuffer: BABYLON.StaticSoundBuffer
-  private _objectURL: string
-  private _serial: string
-  private _file: File
+  private _buffer: ArrayBuffer | undefined
+  private _audioBuffer: BABYLON.StaticSoundBuffer | undefined
+  private _objectURL: string | undefined
+  private _serial: string | undefined
+  private _file: File | undefined
 
   constructor(readonly definition: AssetDefinition<D, any>, readonly source: S) {}
 
   get buffer(): ArrayBuffer {
-    if (!this._buffer) { Logger.error(`Asset Error: No Buffer for asset '${this.definition.url}', did you mean other type?`) }
-    return this._buffer
+    if (!this._buffer) {
+      Logger.error(`Asset Error: No Buffer for asset '${this.definition.url}', did you mean other type?`)
+      return null as any
+    } else {
+      return this._buffer
+    }
   }
 
   get audioBuffer(): BABYLON.StaticSoundBuffer {
-    if (!this._audioBuffer) { Logger.error(`Asset Error: No Audio Buffer for asset '${this.definition.url}', did you mean other type?`) }
-    return this._audioBuffer
+    if (!this._audioBuffer) {
+      Logger.error(`Asset Error: No Audio Buffer for asset '${this.definition.url}', did you mean other type?`)
+      return null as any
+    } else {
+      return this._audioBuffer
+    }
   }
 
   get objectURL(): string {
-    if (!this._objectURL) { Logger.error(`Asset Error: No objectURL for asset '${this.definition.url}', did you mean other type?`) }
-    return this._objectURL
+    if (!this._objectURL) {
+      Logger.error(`Asset Error: No objectURL for asset '${this.definition.url}', did you mean other type?`)
+      return null as any
+    } else {
+      return this._objectURL
+    }
   }
 
   get serial(): string {
-    if (!this._serial) { Logger.error(`Asset Error: No serial for asset '${this.definition.url}', did you mean other type?`) }
-    return this._serial
+    if (!this._serial) {
+      Logger.error(`Asset Error: No serial for asset '${this.definition.url}', did you mean other type?`)
+      return null as any
+    } else {
+      return this._serial
+    }
   }
 
   get file(): File {
-    if (!this._file) { Logger.error(`Asset Error: No file for asset '${this.definition.url}', did you mean other type?`) }
-    return this._file
+    if (!this._file) {
+      Logger.error(`Asset Error: No file for asset '${this.definition.url}', did you mean other type?`)
+      return null as any
+    } else {
+      return this._file
+    }
+  }
+
+  remove() {
+    if (this._buffer) {
+      this._buffer = undefined
+    }
+    if (this._audioBuffer) {
+      this._audioBuffer = undefined
+    }
+    if (this._objectURL) {
+      URL.revokeObjectURL(this._objectURL)
+      this._objectURL = undefined
+    }
+    if (this._serial) {
+      this._serial = undefined
+    }
+    if (this._file) {
+      this._file = undefined
+    }
   }
 
   addSource(source: S) {
@@ -47,6 +86,10 @@ export class Asset</* Source interface */ S = any, /* Definition data */ D = any
 
   removeSource(source: S) {
     this.sources.delete(source)
+  }
+
+  hasSources(): boolean {
+    return this.sources.size > 0
   }
 
   setBuffer(buffer: ArrayBuffer) {
