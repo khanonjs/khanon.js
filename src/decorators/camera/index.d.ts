@@ -69,7 +69,7 @@ export declare abstract class CameraInterface</* Setup object */ S = any, /* Sce
    * @param func Callback
    * @param ms Milliseconds
    */
-  setTimeout(func: () => void, ms: number, context?: any): Timeout
+  setTimeout(func: () => void, ms: number): Timeout
 
   /**
    * Sets an interval.

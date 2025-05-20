@@ -17,7 +17,6 @@ import { MetadataSpriteDefinition } from './metadata-sprite-definition'
 export class Metadata<A extends ActorActionConstructor | SceneActionConstructor = any> {
   context: any
   scene: SceneInterface | null
-  actions: MetadataActionDefinition<A>[] = []
   sprites: MetadataSpriteDefinition[] = []
   meshes: MetadataMeshDefinition[] = []
   particles: Set<MetadataParticleDefinition> = new Set<MetadataParticleDefinition>()
@@ -28,9 +27,6 @@ export class Metadata<A extends ActorActionConstructor | SceneActionConstructor 
   applyProps(_context: any, scene: SceneInterface | null): void {
     this.context = _context
     this.scene = scene
-    this.actions.forEach(definition => {
-      _context[definition.methodName] = definition.classDefinition
-    })
     this.sprites.forEach(definition => {
       _context[definition.propertyName] = definition.classDefinition
     })
@@ -47,7 +43,6 @@ export class Metadata<A extends ActorActionConstructor | SceneActionConstructor 
    */
   getProps(): MetadataProps<A> {
     return {
-      actions: this.actions.map(definition => definition.classDefinition),
       sprites: this.sprites.map(definition => definition.classDefinition),
       meshes: this.meshes.map(definition => definition.classDefinition),
       particles: [...this.particles.values()].map(definition => definition.classDefinition),

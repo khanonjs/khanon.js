@@ -15,7 +15,6 @@ import { Logger } from '../../../modules/logger'
 import { FlexId } from '../../../types/flex-id'
 import {
   attachCanvasResize,
-  attachLoopUpdate,
   invokeCallback,
   removeCanvasResize,
   removeLoopUpdate,
@@ -99,6 +98,8 @@ export function AppState(props: AppStateProps = {}): any {
       props = props
       Instance: AppStateInterface = new _classInterface(null as any)
 
+      getClassName(): string { return className }
+
       spawn(): AppStateInterface {
         const state = new _classInterface(this.props)
         return state
@@ -113,10 +114,10 @@ export function AppState(props: AppStateProps = {}): any {
       }
 
       _unload(_newStateCore: AppStateCore): void {
-        const unloadScenes = Arrays.removeDuplicatesInBoth(this.props.scenes ?? [], _newStateCore.props.scenes ?? [])
+        const unloadScenes = Arrays.removeDuplicities(this.props.scenes ?? [], _newStateCore.props.scenes ?? [])
         ScenesController.stop(unloadScenes)
         ScenesController.unload(unloadScenes, null)
-        // const unloadGuis = Arrays.removeDuplicatesInBoth(this.props.guis ?? [], _newStateCore.props.guis ?? [])
+        // const unloadGuis = Arrays.x(this.props.guis ?? [], _newStateCore.props.guis ?? [])
         // GUIController.unload(unloadGuis, null)
       }
     }

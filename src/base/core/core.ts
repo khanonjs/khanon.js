@@ -1,4 +1,4 @@
-// TODO eliminar todos los .d de los archivos compilados que no se quieren al hacer build, mover los tipos e interfaces de ./models a KJS namespace
+// KJS-39 on bundle optiomization. eliminar todos los .d de los archivos compilados que no se quieren al hacer build, mover los tipos e interfaces de ./models a KJS namespace
 
 import * as BABYLON from '@babylonjs/core'
 
@@ -22,7 +22,6 @@ export class Core {
   // HTML Layers
   private static htmlContainer: HTMLElement
   private static htmlCanvas: HTMLCanvasElement
-  private static htmlGui: HTMLDivElement // TODO?
 
   // Babylon
   private static babylon: Pick<BabylonAccessor, 'engine' | 'audioEngine'> = { engine: null as any, audioEngine: null as any }
@@ -96,7 +95,7 @@ export class Core {
         // Manage canvas resize
         window.addEventListener('resize', () => {
           Core.updateCanvasSize()
-          Core.babylon.engine.resize() // TODO: Test this besides 'Core.app.props.engineConfiguration.adaptToDeviceRatio = true'
+          Core.babylon.engine.resize()
         })
 
         if (Core.app.onStart) {
@@ -134,12 +133,6 @@ export class Core {
       )
       Core.babylon.engine.runRenderLoop(() => {
         Core.renderScenes.forEach((scene) => scene.babylon.scene.render())
-
-        // TODO: add FPS updater here
-      /* if (Core.properties?.fpsContainer) {
-        const divFps = document.getElementById(Core.properties.fpsContainer)
-        divFps.innerHTML = Core.babylon.getFps().toFixed() + ' fps'
-      } */
       })
       if (Core.needAudioEngine) {
         Core.needAudioEngine = true
@@ -183,6 +176,10 @@ export class Core {
   }
 
   static close(): void {
+    this.clearAllTimeouts()
+    this.renderScenes.forEach((scene) => {
+      scene.stop()
+    })
     Core.engine.onBeginFrameObservable.clear()
     if (Core.babylon.engine) {
       Core.babylon.engine.stopRenderLoop()
@@ -191,9 +188,6 @@ export class Core {
       Core.app.onClose()
     }
     Logger.error('App closed.')
-    // TODO:
-    //  - Stop all listeners (Loop Update, etc)
-    //  - Show error page
   }
 
   static isDevelopmentMode(): boolean {
@@ -262,12 +256,12 @@ export class Core {
   }
 
   static clearAllTimeoutsByContext(context: any): void {
-    [...Core.timeouts].forEach(timeout => {
+    Core.timeouts.forEach(timeout => {
       if (timeout.context === context) {
         Core.clearTimeout(timeout)
       }
-    });
-    [...Core.intervals].forEach(interval => {
+    })
+    Core.intervals.forEach(interval => {
       if (interval.context === context) {
         Core.clearInterval(interval)
       }

@@ -387,7 +387,6 @@ export function Mesh(props: MeshProps = {}): any {
       abstract class _meshInterface extends MeshInterface {
         _className = contextOrProperty as any
       }
-      // TODO: Store the 'className' to debug it in logs.
 
       if (!Reflect.hasMetadata('metadata', constructorOrTarget)) {
         Reflect.defineMetadata('metadata', new Metadata(), constructorOrTarget)

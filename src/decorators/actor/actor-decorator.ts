@@ -114,7 +114,6 @@ export function Actor(props: ActorProps = {}): any {
 
       set enabled(value: boolean) {
         this._enabled = value
-        // TODO apply this property to pause states and notifications
         if (this.body) {
           this.body.enabled = this._enabled
         }
@@ -162,10 +161,12 @@ export function Actor(props: ActorProps = {}): any {
       }
 
       _release() {
-        invokeCallback(this.onDestroy, this)
         this.clearAllTimeouts()
-        // this.guisRelease()
+        invokeCallback(this.onDestroy, this)
+        this._stopUpdates()
         this.stopActionAll()
+        // this.guisRelease()
+        this.state?._end()
         this.clearParticles()
         this._removeBody()
       }
@@ -191,7 +192,7 @@ export function Actor(props: ActorProps = {}): any {
             sounds.push(sound)
           }
         })
-        const actions = ActorActionsController.get([...this._metadata.getProps().actions, ...this._props.actions ?? []])
+        const actions = ActorActionsController.get(this._props.actions ?? [])
         actions.forEach(action => {
           action.Instance._metadata.getProps().sounds?.forEach(soundC => {
             const sound = SoundsController.get(soundC)
@@ -213,7 +214,7 @@ export function Actor(props: ActorProps = {}): any {
       }
 
       _getNodeElement<N extends B>(Element: new () => N): N {
-        if (new Element() instanceof SpriteInterface) { // TODO is there a better way to do this avoiding the 'new'?
+        if (new Element() instanceof SpriteInterface) { // IMPROVE there a better way to do this avoiding the 'new'?
           if (process.env.NODE_ENV !== 'production' && !this.scene._availableElements.hasSprite(Element as SpriteConstructor)) { Logger.debugError('Trying to use a sprite non available to the actor. Please check the actor props.', this.getClassName(), Element.prototype); return null as any }
           return SpritesController.get(Element).spawn(this.scene) as any
         } else {
@@ -362,39 +363,14 @@ export function Actor(props: ActorProps = {}): any {
         this.body?.stopAnimation()
       }
 
-      _getActionOwner(actionConstructor: ActorActionConstructor): ActorInterface | ActorStateInterface | undefined {
-        return this._metadata.getProps().actions?.find(_action => _action === actionConstructor)
-          ? this
-          : this._state?._metadata?.getProps().actions?.find(_action => _action === actionConstructor)
-            ? this._state
-            : undefined
-      }
-
       playAction(actionConstructor: ActorActionConstructor, setup: any): ActorActionInterface {
         if (process.env.NODE_ENV !== 'production' && !this.scene._availableElements.hasActorAction(actionConstructor)) { Logger.debugError('Trying to play an action non available to the actor. Please check the actor props.', this.getClassName(), actionConstructor.prototype); return null as any }
         let action = this._actions.get(actionConstructor)
         if (!action) {
           action = ActorActionsController.get(actionConstructor).spawn(this)
-          /* let actionOwner: any
-          if (!this._props.actions?.find(_action => _action === actionConstructor)) {  // TODO remove this?
-            // Applies context 'ActorInterface' or 'ActorStateInterface' to 'onLoopUpdate' method to preserve the 'this'
-            // in case 'onLoopUpdate' is equivalent to a decorated method of some of those both interfaces.
-            actionOwner = this._getActionOwner(actionConstructor)
-            action.onLoopUpdate = action.onLoopUpdate?.bind(actionOwner)
-          } */
           this._actions.set(actionConstructor, action)
           action._props.overrides?.forEach(actionOverride => {
-            if (typeof actionOverride === 'string') {
-              const overrideConstructor = this._getActionOwner(actionConstructor)?._metadata.actions.find(_action => _action.methodName === actionOverride)?.classDefinition
-              if (!overrideConstructor) {
-                Logger.error(`Action class method not found to override: '${actionOverride}'`)
-              }
-              if (actionConstructor) {
-                this.stopAction(overrideConstructor)
-              }
-            } else {
-              this.stopAction(actionOverride)
-            }
+            this.stopAction(actionOverride)
           })
           action._start(setup)
         } else {
@@ -504,7 +480,6 @@ export function Actor(props: ActorProps = {}): any {
         if (this._props.renderingGroupId && !particle._props.renderingGroupId && !particle._props.renderOverScene) {
           particle.babylon.particleSystem.renderingGroupId = this._props.renderingGroupId
         }
-        // TODO visibility should affect to particles, is it possible?
         this._particles.set(id, particle)
         return particle
       }
@@ -565,7 +540,6 @@ export function Actor(props: ActorProps = {}): any {
         return new LoadingProgress().fromNodes([
           ActorStatesController.load(this.props.states, scene),
           ActorActionsController.load(this.props.actions, scene),
-          ActorActionsController.load(this.Instance._metadata.getProps().actions, scene),
           SpritesController.load(this.props.sprites, scene),
           SpritesController.load(this.Instance._metadata.getProps().sprites, scene),
           MeshesController.load(this.props.meshes, scene),
@@ -580,7 +554,6 @@ export function Actor(props: ActorProps = {}): any {
       _unload(scene: SceneInterface): void {
         ActorStatesController.unload(this.props.states, scene)
         ActorActionsController.unload(this.props.actions, scene)
-        ActorActionsController.unload(this.Instance._metadata.getProps().actions, scene)
         SpritesController.unload(this.props.sprites, scene)
         SpritesController.unload(this.Instance._metadata.getProps().sprites, scene)
         MeshesController.unload(this.props.meshes, scene)

@@ -49,7 +49,7 @@ export abstract class GUIInterface<S = any> implements LoopUpdatable, CanvasResi
   /**
    * User defined mandatory (abstract on .d.ts)
    */
-  onInitialize?(container: BABYLON.DynamicTexture): void
+  onInitialize?(container: BABYLONGUI.AdvancedDynamicTexture): void
 
   /**
    * User defined optional

@@ -12,7 +12,6 @@ export interface SoundProps {
   stream?: boolean
   useBoundingBox?: boolean,
   attachmentType?: BABYLON.SpatialAudioAttachmentType
-  cached?: boolean
 }
 
 export declare function Sound(props: SoundProps): any

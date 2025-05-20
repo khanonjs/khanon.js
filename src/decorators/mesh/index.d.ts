@@ -104,7 +104,7 @@ export declare abstract class MeshInterface {
    * @param func Callback
    * @param ms Milliseconds
    */
-  setTimeout(func: () => void, ms: number, context?: any): Timeout
+  setTimeout(func: () => void, ms: number): Timeout
 
   /**
    * Sets an interval.
@@ -228,14 +228,6 @@ export interface MeshProps {
    * Animations.
    */
   animations?: Omit<MeshAnimation, 'animationGroup'>[]
-
-  /**
-   * Cache this mesh.
-   * Cached files are kept in memory and only removed after calling KJS.clearCache().
-   * Use cached files in case they are being used between more than one scene.
-   * Cached meshes make shorter loading time at the expense of memory usage.
-   */
-  cached?: boolean
 
   /**
    * By default *false*.

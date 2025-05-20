@@ -12,6 +12,5 @@ export interface SpriteProps {
   invertY: boolean
   format?: number
   samplingMode?: number
-  cached?: boolean
   renderingGroupId?: number
 }

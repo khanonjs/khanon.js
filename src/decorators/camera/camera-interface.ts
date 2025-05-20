@@ -45,7 +45,7 @@ export abstract class CameraInterface<S = any, C extends SceneInterface = SceneI
   abstract clearInterval(timeout: Timeout): void
   abstract clearAllTimeouts(): void
   abstract switchState(state: CameraStateConstructor, setup: any): CameraStateInterface
-  // TODO attach particles to camera to simulate environment effects?
+  // FEAT attach particles to camera to simulate environment effects?
 
   /**
    * Tranmsform properties and methods

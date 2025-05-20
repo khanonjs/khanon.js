@@ -123,8 +123,6 @@ export function Scene(props: SceneProps = {}): any {
       _particles: Set<ParticleInterface> = new Set<ParticleInterface>()
       _guis: Map<GUIConstructor, GUIInterface> = new Map<GUIConstructor, GUIInterface>()
 
-      _setEngineParams(): void {} // TODO ?
-
       isState(state: SceneStateConstructor): boolean {
         if (this.state) {
           return this.state instanceof state
@@ -202,6 +200,7 @@ export function Scene(props: SceneProps = {}): any {
         }
         invokeCallback(this.onStop, this)
         this.clearAllTimeouts()
+        this.stopActionAll()
         this._releaseGUIs()
         this.releaseCamera()
         this.state?._end()
@@ -238,7 +237,6 @@ export function Scene(props: SceneProps = {}): any {
             const elementsLoading = new LoadingProgress().fromNodes([
               SceneStatesController.load(this._props.states, this),
               SceneActionsController.load(this._props.actions, this),
-              SceneActionsController.load(this._metadata.getProps().actions, this),
               ActorsController.load(this._props.actors, this),
               SpritesController.load(this._props.sprites, this),
               SpritesController.load(this._metadata.getProps().sprites, this),
@@ -322,7 +320,6 @@ export function Scene(props: SceneProps = {}): any {
         this._loaded = false
         SceneStatesController.unload(this._props.states, this)
         SceneActionsController.unload(this._props.actions, this)
-        SceneActionsController.unload(this._metadata.getProps().actions, this)
         ActorsController.unload(this._props.actors, this)
         SpritesController.unload(this._props.sprites, this)
         SpritesController.unload(this._metadata.getProps().sprites, this)
@@ -498,14 +495,6 @@ export function Scene(props: SceneProps = {}): any {
         this._animationHandler.delete(sprite)
       }
 
-      _getActionOwner(actionConstructor: SceneActionConstructor): SceneInterface | SceneStateInterface | undefined {
-        return this._metadata.getProps().actions?.find(_action => _action === actionConstructor)
-          ? this
-          : this._state?._metadata?.getProps().actions?.find(_action => _action === actionConstructor)
-            ? this._state
-            : undefined
-      }
-
       playAction(actionConstructor: SceneActionConstructor, setup: any): SceneActionInterface {
         if (!this._availableElements.hasSceneAction(actionConstructor)) {
           Logger.error('Trying to play an action non available to the actor. Please check the actor props.', this.getClassName(), actionConstructor.prototype)
@@ -514,26 +503,9 @@ export function Scene(props: SceneProps = {}): any {
         let action = this._actions.get(actionConstructor)
         if (!action) {
           action = SceneActionsController.get(actionConstructor).spawn(this)
-          /* let actionOwner: any
-          if (!this._props.actions?.find(_action => _action === actionConstructor)) {  // TODO remove this?
-            // Applies context 'Scene' or 'SceneState' to 'onLoopUpdate' method to preserve the 'this'
-            // in case 'onLoopUpdate' is equivalent to a decorated method of some of those both interfaces.
-            actionOwner = this.getActionOwner(actionConstructor)
-            action.onLoopUpdate = action.onLoopUpdate?.bind(actionOwner)
-          } */
           this._actions.set(actionConstructor, action)
           action._props.overrides?.forEach(actionOverride => {
-            if (typeof actionOverride === 'string') {
-              const overrideConstructor = this._getActionOwner(actionConstructor)?._metadata.actions.find(_action => _action.methodName === actionOverride)?.classDefinition
-              if (!overrideConstructor) {
-                Logger.warn(`Action class method not found to override: '${actionOverride}'`)
-              }
-              if (actionConstructor) {
-                this.stopAction(overrideConstructor)
-              }
-            } else {
-              this.stopAction(actionOverride)
-            }
+            this.stopAction(actionOverride)
           })
           action._start(setup)
         }
@@ -623,7 +595,6 @@ export function Scene(props: SceneProps = {}): any {
 
       /**
        * Returns all available constructors in a props tree
-       * TODO: Why _interface can't have type (ActorInterface | SpriteInterface | MeshInterface | ActorActionInterface | SceneActionInterface) ?
        */
       private storeAvailableElements() {
         this._availableElements = new SceneAvailableElements()
@@ -636,7 +607,7 @@ export function Scene(props: SceneProps = {}): any {
           for (const property of Object.values(props)) {
             if (Array.isArray(property)) {
               property.forEach(value => {
-                if (isPrototypeOf(ActorInterface, value)) { // TODO insert all these constructors in a list and make generic method
+                if (isPrototypeOf(ActorInterface, value)) { // IMPROVE insert all these constructors in a list and make generic method
                   this._availableElements.actors.add(value)
                   const actor = ActorsController.get(value as ActorConstructor)
                   this.getAvailableElements(actor.props)

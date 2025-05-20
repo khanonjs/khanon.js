@@ -32,7 +32,6 @@ import { ActorProps } from './actor-props'
 import { ActorStateConstructor } from './actor-state/actor-state-constructor'
 import { ActorStateInterface } from './actor-state/actor-state-interface'
 
-// TODO add animation system, that animates body and nodes depending on what they are
 // Actors can't be configurable because they can be spawned from the .babylon scene itself, disallowing to setup their configuration.
 export abstract class ActorInterface<B extends SpriteInterface | MeshInterface = any> implements Stateable<ActorStateConstructor>, LoopUpdatable, CanvasResizable, Notificable, TimersByContext {
   abstract _metadata: Metadata
@@ -55,7 +54,6 @@ export abstract class ActorInterface<B extends SpriteInterface | MeshInterface =
   abstract _initialize(props: ActorProps): void
   abstract _release(): void
   abstract _applyStarted(): void
-  abstract _getActionOwner(actionConstructor: ActorActionConstructor): ActorInterface | ActorStateInterface | undefined
   abstract _getNodeElement<N extends B>(Element: new () => N): N
   abstract _playActionFromInstance(instance: ActorActionInterface): void
   abstract _stopActionFromInstance(instance: ActorActionInterface, forceRemove?: boolean): void
@@ -91,9 +89,9 @@ export abstract class ActorInterface<B extends SpriteInterface | MeshInterface =
   abstract clearNodes(): void
   abstract switchState(state: ActorStateConstructor, setup: any): ActorStateInterface
   abstract isState(state: ActorStateConstructor): boolean
-  abstract playAnimation(animation: FlexId, options?: (B extends SpriteInterface ? SpriteAnimationOptions : MeshAnimationOptions), completed?: () => void): void // TODO system to animate body and nodes all together somehow
+  abstract playAnimation(animation: FlexId, options?: (B extends SpriteInterface ? SpriteAnimationOptions : MeshAnimationOptions), completed?: () => void): void // KJS-25 system to animate body and nodes all together
   abstract stopAnimation(): void
-  // abstract setAnimation(): void // TODO system to animate body and nodes all together somehow
+  // abstract setAnimation(): void // KJS-25 system to animate body and nodes all together
   abstract playAction(action: ActorActionConstructor | ((delta: number) => void), setup: any): ActorActionInterface
   abstract stopAction(action: ActorActionConstructor): void
   abstract playActionGroup(group: FlexId): void

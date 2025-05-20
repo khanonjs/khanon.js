@@ -105,7 +105,7 @@ export declare abstract class SpriteInterface {
    * @param func Callback
    * @param ms Milliseconds
    */
-  setTimeout(func: () => void, ms: number, context?: any): Timeout
+  setTimeout(func: () => void, ms: number): Timeout
 
   /**
    * Sets an interval.
@@ -264,14 +264,6 @@ export declare interface SpriteProps {
    * Used only in Blank textures (url: undefined). Set it as 'BABYLON.Engine.TEXTUREFORMAT_???'. Default is 'BABYLON.Engine.TEXTUREFORMAT_RGBA'.
    */
   format?: number
-
-  /**
-   * Cache this sprite.
-   * Cached files are kept in memory and only removed after calling KJS.clearCache().
-   * Use cached files in case they are being used between more than one scene.
-   * Cached sprites make shorter loading time at the expense of memory usage.
-   */
-  cached?: boolean
 
   /**
    * Rendering group Id of the sprite (0 to 3).

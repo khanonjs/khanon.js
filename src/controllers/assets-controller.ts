@@ -19,6 +19,7 @@ import { ParticleCore } from '../decorators/particle/particle-core'
 import { ParticleInterface } from '../decorators/particle/particle-interface'
 import { SceneActionCore } from '../decorators/scene/scene-action/scene-action-core'
 import { SceneActionInterface } from '../decorators/scene/scene-action/scene-action-interface'
+import { SceneConstructor } from '../decorators/scene/scene-constructor'
 import { SceneInterface } from '../decorators/scene/scene-interface'
 import { SceneStateCore } from '../decorators/scene/scene-state/scene-state-core'
 import { SceneStateInterface } from '../decorators/scene/scene-state/scene-state-interface'
@@ -34,18 +35,11 @@ import { MeshesController } from './meshes-controller'
 import { ParticlesController } from './particles-controller'
 import { SceneActionsController } from './scene-actions-controller'
 import { SceneStatesController } from './scene-states-controller'
+import { ScenesController } from './scenes-controller'
 import { SoundsController } from './sounds-controller'
 import { SpritesController } from './sprites-controller'
 
 export class AssetsController {
-  private static contentTypes = { // TODO is this worth?
-    [AssetType.AUDIO]: ['audio/aac', 'audio/midi', 'audio/x-midi', 'audio/mpeg', 'audio/ogg', 'audio/opus', 'audio/wav', 'audio/webm'],
-    [AssetType.MESH]: [''],
-    [AssetType.IMAGE]: ['image/bmp', 'image/jpeg', 'image/png', 'image/tiff', 'image/webp'],
-    [AssetType.FONT]: ['font/otf', 'font/ttf', 'font/woff', 'font/woff2', '']
-
-  }
-
   private static assets: Map<string, Asset<SceneInterface>> = new Map<string, Asset<SceneInterface>>()
 
   static getAsset</* Definition data */ D>(url: string | string[]): Asset<SceneInterface, D> | undefined {
@@ -91,8 +85,7 @@ export class AssetsController {
                 urls[sprite.props.url] = true
                 definitions = [...definitions, {
                   url: sprite.props.url,
-                  type: AssetType.IMAGE,
-                  cached: sprite.props.cached ?? false
+                  type: AssetType.IMAGE
                 }]
               }
             } else if (isPrototypeOf(MeshInterface, element)) {
@@ -108,8 +101,7 @@ export class AssetsController {
                   data: {
                     path,
                     file
-                  },
-                  cached: mesh.props.cached ?? false
+                  }
                 }]
               }
             } else if (isPrototypeOf(SoundInterface, element)) {
@@ -118,8 +110,7 @@ export class AssetsController {
                 urls[AssetsController.getAssetName(sound.props.url)] = true
                 definitions = [...definitions, {
                   url: sound.props.url,
-                  type: AssetType.AUDIO,
-                  cached: sound.props.cached ?? false
+                  type: AssetType.AUDIO
                 }]
               }
             }
@@ -128,11 +119,6 @@ export class AssetsController {
       }
     }
     return definitions
-  }
-
-  static clearCache() {
-    // TODO
-    AssetsController.assets.clear()
   }
 
   /**
@@ -147,7 +133,7 @@ export class AssetsController {
       scene._assets.forEach(assetDef => {
         const asset: Asset<SceneInterface> | undefined = AssetsController.assets.get(assetDef.url)
         if (asset) {
-          asset.addSource(scene, assetDef.cached)
+          asset.addSource(scene)
           progresses.push(asset.progress)
         } else {
           switch (assetDef.type) {
@@ -165,26 +151,26 @@ export class AssetsController {
   }
 
   /**
-   * Purge loaded assets from a Scene.
-   * Non cached and unnecessary assets will be removed.
+   * Remove assets without sources.
+   * @param nextScenes Keep the assets of the next scene to load.
    */
-  static scenePurge(scene: SceneInterface) {
-    // scene.assets.
-    // TODO
-  }
-
-  /**
-   * Unload all existing and non-cached assets of a Scene.
-   */
-  static sceneUnload(scene: SceneInterface) {
-    // TODO
-  }
-
-  /**
-   * Remove non-cached assets without sources.
-   */
-  private purgeAssets() {
-    // TODO
+  static purgeAssets(nextScenes?: SceneConstructor[]) {
+    const assetsToDelete: string[] = []
+    let nextAssetsDefinition: string[] = []
+    nextScenes?.forEach(scene => {
+      const sceneAssets = AssetsController.findAssetsDefinitions(ScenesController.get(scene)._props)
+      nextAssetsDefinition = [...nextAssetsDefinition, ...sceneAssets.map(asset => asset.url)]
+    })
+    AssetsController.assets.forEach((asset, key) => {
+      if (!asset.hasSources() && !nextAssetsDefinition.includes(key)) {
+        assetsToDelete.push(key)
+      }
+    })
+    assetsToDelete.forEach(key => {
+      AssetsController.assets.get(key)?.remove()
+      AssetsController.assets.delete(key)
+      Logger.debug(`Asset removed: '${key}'`)
+    })
   }
 
   private static getAssetName(url: string | string[]): string {
@@ -211,7 +197,7 @@ export class AssetsController {
     }
     BABYLON.LoadFile(definition.url,
       (data) => {
-        Logger.debug(`LoadFileFromUrl: Loaded '${definition.url}', cached: ${!!definition.cached}`)
+        Logger.debug(`LoadFileFromUrl: Loaded '${definition.url}'`)
         const buffer = data as ArrayBuffer
         switch (definition.type) {
         case AssetType.IMAGE:
@@ -247,7 +233,7 @@ export class AssetsController {
     }
     BABYLON.CreateSoundBufferAsync(definition.url)
       .then((audioBuffer) => {
-        Logger.debug(`LoadAudioFromUrl: Loaded '${definition.url}', cached: ${!!definition.cached}`)
+        Logger.debug(`LoadAudioFromUrl: Loaded '${definition.url}'`)
         asset.setAudioBuffer(audioBuffer)
         asset.progress.complete()
       })

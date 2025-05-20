@@ -6,7 +6,6 @@ import { SoundConstructor } from '../../../decorators/sound/sound-constructor'
 import { SpriteConstructor } from '../../../decorators/sprite/sprite-constructor'
 
 export interface MetadataProps<A extends ActorActionConstructor | SceneActionConstructor = any> {
-  actions: A[]
   sprites: SpriteConstructor[]
   meshes: MeshConstructor[]
   particles: ParticleConstructor[]

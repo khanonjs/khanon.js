@@ -63,7 +63,7 @@ export declare abstract class ActorInterface<B extends SpriteInterface | MeshInt
   /**
    * Transform of the body.
    */
-  // TODO is there a way to return SpriteTransform or MeshTransform from the actor 'this' conditionally based on B generic type?
+  // IMPROVE is there a way to return SpriteTransform or MeshTransform from the actor 'this' conditionally based on B generic type?
   // This way we avoid transform accessor and user can access sprite or mesh transform properties directly.
   get transform(): B extends SpriteInterface ? SpriteTransform : MeshTransform
 
@@ -114,7 +114,7 @@ export declare abstract class ActorInterface<B extends SpriteInterface | MeshInt
    * @param func Callback
    * @param ms Milliseconds
    */
-  setTimeout(func: () => void, ms: number, context?: any): Timeout
+  setTimeout(func: () => void, ms: number): Timeout
 
   /**
    * Sets an interval.
@@ -181,7 +181,7 @@ export declare abstract class ActorInterface<B extends SpriteInterface | MeshInt
    * Starts a state.
    * @param state
    */
-  switchState<C extends ActorStateConstructor>(state: C, setup: InstanceType<C>['setup']): InstanceType<C> // TODO is it possible to make 'setup' argument optional whether InstanceType<S>['setup'] type is 'any'?
+  switchState<C extends ActorStateConstructor>(state: C, setup: InstanceType<C>['setup']): InstanceType<C> // IMPROVE is it possible to make 'setup' argument optional whether InstanceType<S>['setup'] type is 'any'?
 
   /**
    * Returns *true* if the actor state coincides with  *state*.
@@ -196,7 +196,7 @@ export declare abstract class ActorInterface<B extends SpriteInterface | MeshInt
    * @param loopOverride Overrides the animation loop value in case needed
    * @param completed Completed animation callback
    */
-  // TODO system to animate body and nodes all together somehow
+  // KJS-25 system to animate body and nodes all together somehow
   // playAnimation(animation: (B extends SpriteInterface ? SpriteAnimation : MeshAnimation) | FlexId, loopOverride?: boolean, completed?: () => void): void
 
   /**
@@ -208,7 +208,7 @@ export declare abstract class ActorInterface<B extends SpriteInterface | MeshInt
    * Plays an Action. N actions can be played simultaneously.
    * @param action
    */
-  playAction<C extends ActorActionConstructor>(action: C, setup: InstanceType<C>['setup']): InstanceType<C> // TODO is it possible to make 'setup' argument optional whether InstanceType<S>['setup'] type is 'any'?
+  playAction<C extends ActorActionConstructor>(action: C, setup: InstanceType<C>['setup']): InstanceType<C> // IMPROVE is it possible to make 'setup' argument optional whether InstanceType<S>['setup'] type is 'any'?
 
   /**
    * Plays all actions of a group that have been previously stopped.

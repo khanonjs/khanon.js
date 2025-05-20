@@ -10,8 +10,6 @@ import { LoopUpdatable } from '../loop-updatable'
 import { Metadata } from '../metadata/metadata'
 import { TimersByContext } from '../timers-by-context'
 
-// TODO: Use mixings for derived classes and use a single implementation!!
-
 export abstract class ActionInterface<S = any> implements LoopUpdatable, CanvasResizable, TimersByContext, Configurable<S> {
   abstract _metadata: Metadata
   abstract _loopUpdate: boolean

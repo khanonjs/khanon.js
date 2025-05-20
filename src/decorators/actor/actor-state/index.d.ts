@@ -55,7 +55,7 @@ export declare abstract class ActorStateInterface</* Setup object */ S = any, /*
    * @param func Callback
    * @param ms Milliseconds
    */
-  setTimeout(func: () => void, ms: number, context?: any): Timeout
+  setTimeout(func: () => void, ms: number): Timeout
 
   /**
    * Sets an interval.
@@ -87,7 +87,7 @@ export declare abstract class ActorStateInterface</* Setup object */ S = any, /*
    * Starts a state.
    * @param state
    */
-  switchState<C extends new () => ActorStateInterface>(state: C, setup: InstanceType<C>['setup']): ActorStateInterface // TODO is it possible to make 'setup' argument optional whether InstanceType<S>['setup'] type is 'any'?
+  switchState<C extends new () => ActorStateInterface>(state: C, setup: InstanceType<C>['setup']): ActorStateInterface // IMPROVE is it possible to make 'setup' argument optional whether InstanceType<S>['setup'] type is 'any'?
 
   /**
    * Notifies a message to this state.

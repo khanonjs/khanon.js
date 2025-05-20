@@ -1,4 +1,5 @@
 import * as BABYLON from '@babylonjs/core'
+import * as BABYLONGUI from '@babylonjs/gui'
 
 import { Timeout } from '../../models'
 import { BabylonAccessor } from '../../models/babylon-accessor'
@@ -38,7 +39,7 @@ export declare abstract class GUIInterface</* Setup object */ S = any> {
    * @param func Callback
    * @param ms Milliseconds
    */
-  setTimeout(func: () => void, ms: number, context?: any): Timeout
+  setTimeout(func: () => void, ms: number): Timeout
 
   /**
    * Sets an interval.
@@ -71,7 +72,7 @@ export declare abstract class GUIInterface</* Setup object */ S = any> {
   /**
    * User defined mandatory (abstract on .d.ts)
    */
-  abstract onInitialize?(container: BABYLON.DynamicTexture): void
+  abstract onInitialize?(container: BABYLONGUI.AdvancedDynamicTexture): void
 
   /**
    * User defined optional

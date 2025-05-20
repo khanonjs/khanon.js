@@ -11,11 +11,10 @@ import { NotificableType } from '../types/notificable-type'
 import { isPrototypeOf } from '../utils/utils'
 import { ScenesController } from './scenes-controller'
 
-// TODO This must be optimized storing each actor, particle, etc.. in a Map<ActorConstructor, Observable>
+// IMPROVE This must be optimized storing each actor, particle, etc.. in a Map<ActorConstructor, Observable>
 export class NotificationsController {
   static send(id: FlexId, receivers?: NotificableType | NotificableType[], ...args: any[]): void {
     if (!receivers) {
-      // TODO Improve the performance.
       NotificationsController.sendConstructor(id, undefined, args)
     } else
       if (Array.isArray(receivers)) {
@@ -26,6 +25,7 @@ export class NotificationsController {
   }
 
   private static sendConstructor(message: FlexId, constructor?: NotificableType, args: any[] = []) {
+    // IMPROVE Improve the performance adding all entities to Maps by constructors.
     if (!constructor || isPrototypeOf(AppInterface, constructor)) {
       Core.getApp().notify(message, ...args)
     }
