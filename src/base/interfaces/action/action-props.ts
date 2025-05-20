@@ -6,7 +6,7 @@ import { FlexId } from '../../../types/flex-id'
 export interface ActionProps<O> {
   group?: FlexId
   preserve?: boolean
-  overrides?: (O | string)[]
+  overrides?: O[]
   countFrames?: number
   sprites?: SpriteConstructor[]
   meshes?: MeshConstructor[]

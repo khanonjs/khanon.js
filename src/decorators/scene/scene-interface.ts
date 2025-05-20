@@ -74,12 +74,10 @@ export abstract class SceneInterface implements Stateable<SceneStateConstructor>
   abstract _load(): LoadingProgress
   abstract _unload(): void
   abstract _releaseGUIs(): void
-  abstract _setEngineParams(): void // TODO ?
   abstract _playActionFromInstance(instance: SceneActionInterface): void
   abstract _stopActionFromInstance(instance: SceneActionInterface, forceRemove?: boolean): void
   abstract _setAnimationHandler(sprite: SpriteInterface, animation: SpriteAnimation): void
   abstract _stopAnimationHandler(sprite: SpriteInterface): void
-  abstract _getActionOwner(actionConstructor: SceneActionConstructor): SceneInterface | SceneStateInterface | undefined
   abstract _startRenderObservable(): void
   abstract _stopRenderObservable(): void
   abstract _eventKeyPress: (event: KeyboardEvent) => void

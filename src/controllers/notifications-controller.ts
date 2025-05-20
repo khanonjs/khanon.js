@@ -11,11 +11,11 @@ import { NotificableType } from '../types/notificable-type'
 import { isPrototypeOf } from '../utils/utils'
 import { ScenesController } from './scenes-controller'
 
-// TODO This must be optimized storing each actor, particle, etc.. in a Map<ActorConstructor, Observable>
+// IMPROVE This must be optimized storing each actor, particle, etc.. in a Map<ActorConstructor, Observable>
 export class NotificationsController {
   static send(id: FlexId, receivers?: NotificableType | NotificableType[], ...args: any[]): void {
     if (!receivers) {
-      // TODO Improve the performance.
+      // IMPROVE Improve the performance.
       NotificationsController.sendConstructor(id, undefined, args)
     } else
       if (Array.isArray(receivers)) {

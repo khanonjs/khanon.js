@@ -15,7 +15,7 @@ import { ParticleInterface } from '../particle/particle-interface'
 import { SpriteInterface } from '../sprite/sprite-interface'
 import { SceneInterface } from './scene-interface'
 
-// TODO Add lights here? That way scene would handle their release.
+// FEAT Add lights here? That way scene would handle their release.
 export class SceneSpawn {
   private readonly scene: SceneInterface
 

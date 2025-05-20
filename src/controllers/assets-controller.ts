@@ -38,14 +38,6 @@ import { SoundsController } from './sounds-controller'
 import { SpritesController } from './sprites-controller'
 
 export class AssetsController {
-  private static contentTypes = { // TODO is this worth?
-    [AssetType.AUDIO]: ['audio/aac', 'audio/midi', 'audio/x-midi', 'audio/mpeg', 'audio/ogg', 'audio/opus', 'audio/wav', 'audio/webm'],
-    [AssetType.MESH]: [''],
-    [AssetType.IMAGE]: ['image/bmp', 'image/jpeg', 'image/png', 'image/tiff', 'image/webp'],
-    [AssetType.FONT]: ['font/otf', 'font/ttf', 'font/woff', 'font/woff2', '']
-
-  }
-
   private static assets: Map<string, Asset<SceneInterface>> = new Map<string, Asset<SceneInterface>>()
 
   static getAsset</* Definition data */ D>(url: string | string[]): Asset<SceneInterface, D> | undefined {
@@ -131,7 +123,7 @@ export class AssetsController {
   }
 
   static clearCache() {
-    // TODO
+    // TODO REMOVE CACHE SYSTEM
     AssetsController.assets.clear()
   }
 

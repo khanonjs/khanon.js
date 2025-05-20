@@ -27,7 +27,7 @@ export class KJS {
   }
 
   static clearCache(): void {
-    // TODO
+    // TODO REMOVE CACHE SYSTEM
   }
 
   static getApp<A extends AppInterface>(): A {

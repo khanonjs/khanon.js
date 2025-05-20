@@ -25,7 +25,7 @@ import { CameraProps } from './camera-props'
 import { CameraStateConstructor } from './camera-state/camera-state-constructor'
 import { CameraStateInterface } from './camera-state/camera-state-interface'
 
-// TODO add CameraAction
+// FEAT add CameraAction
 export function Camera(props: CameraProps = {}): any {
   return function <T extends { new (...args: any[]): CameraInterface }>(constructor: T & CameraInterface, context: ClassDecoratorContext) {
     const className = constructor.name

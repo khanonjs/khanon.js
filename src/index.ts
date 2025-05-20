@@ -1,6 +1,5 @@
 import 'reflect-metadata'
-// TODO remove lines depending wether it is debug or production bundle (webpack)
-import '@babylonjs/loaders'
+import '@babylonjs/loaders' // KJS-39 on bundle optimization
 
 if (process.env.NODE_ENV !== 'production') {
   // Use require for conditional imports to avoid top-level import errors

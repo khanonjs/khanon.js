@@ -307,7 +307,7 @@ export function Sprite(props: SpriteProps): any {
         }
 
         drawText(text: string, properties: DrawBlockProperties): void {
-          // TODO This algorithm should be improved in different ways:
+          // IMPROVE This algorithm should be improved in different ways:
           // - Add CSS style or whatever.
           // - Avoid creating a secondary texture for boundaries.
           // - Improve performance.

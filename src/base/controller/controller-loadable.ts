@@ -17,7 +17,7 @@ export function ControllerLoader</* Constructor type to load from */ L, /* Insta
           })
           return new LoadingProgress().fromNodes(progressNodes)
         } else {
-          return (ControllerLoadable.get(constructors) as T)._load(owner) // TODO: TS bug?: Does not correctly infer conditional type
+          return (ControllerLoadable.get(constructors) as T)._load(owner) // TS bug?: Does not correctly infer conditional type
         }
       } else {
         return new LoadingProgress().complete()
@@ -29,7 +29,7 @@ export function ControllerLoader</* Constructor type to load from */ L, /* Insta
         if (Array.isArray(constructors)) {
           ControllerLoadable.get(constructors).forEach(item => item._unload(owner))
         } else {
-          (ControllerLoadable.get(constructors) as T)._unload(owner) // TODO: TS bug?: Does not correctly infer conditional type
+          (ControllerLoadable.get(constructors) as T)._unload(owner) // TS bug?: Does not correctly infer conditional type
         }
       }
     }
