@@ -15,7 +15,6 @@ import { ScenesController } from './scenes-controller'
 export class NotificationsController {
   static send(id: FlexId, receivers?: NotificableType | NotificableType[], ...args: any[]): void {
     if (!receivers) {
-      // IMPROVE Improve the performance.
       NotificationsController.sendConstructor(id, undefined, args)
     } else
       if (Array.isArray(receivers)) {
@@ -26,6 +25,7 @@ export class NotificationsController {
   }
 
   private static sendConstructor(message: FlexId, constructor?: NotificableType, args: any[] = []) {
+    // IMPROVE Improve the performance adding all entities to Maps by constructors.
     if (!constructor || isPrototypeOf(AppInterface, constructor)) {
       Core.getApp().notify(message, ...args)
     }
