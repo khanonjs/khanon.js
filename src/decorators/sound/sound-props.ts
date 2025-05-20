@@ -6,5 +6,4 @@ export interface SoundProps {
   spatialEnabled?: boolean
   useBoundingBox?: boolean,
   attachmentType?: BABYLON.SpatialAudioAttachmentType
-  cached?: boolean
 }

@@ -41,11 +41,8 @@ export class Asset</* Source interface */ S = any, /* Definition data */ D = any
     return this._file
   }
 
-  addSource(source: S, cached: boolean) {
+  addSource(source: S) {
     this.sources.add(source)
-    if (cached) {
-      this.definition.cached = true
-    }
   }
 
   removeSource(source: S) {

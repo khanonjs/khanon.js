@@ -26,10 +26,6 @@ export class KJS {
     Core.throw(error)
   }
 
-  static clearCache(): void {
-    // TODO REMOVE CACHE SYSTEM
-  }
-
   static getApp<A extends AppInterface>(): A {
     return Core.getApp() as any
   }

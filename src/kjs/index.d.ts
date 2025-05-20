@@ -100,11 +100,6 @@ export declare namespace KJS {
   export function switchAppState<S extends AppStateConstructor>(state: S, setup: InstanceType<S>['setup']): LoadingProgress // TODO is it possible to make 'setup' argument optional whether InstanceType<S>['setup'] type is 'any'?
 
   /**
-   * Clears cache.
-   */
-  export function clearCache(): void
-
-  /**
    * Subsscribes to loopUpdate observable.
    * @param func
    */
