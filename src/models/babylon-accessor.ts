@@ -17,4 +17,5 @@ export interface BabylonAccessor<
   texture: BABYLON.Texture | BABYLON.DynamicTexture
   material: N
   gui: BABYLONGUI.AdvancedDynamicTexture
+  sound: BABYLON.StaticSound | BABYLON.StreamingSound
 }

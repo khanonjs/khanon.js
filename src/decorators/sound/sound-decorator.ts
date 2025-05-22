@@ -21,14 +21,14 @@ export function Sound(props: SoundProps): any {
   return function <T extends { new (...args: any[]): SoundInterface }>(target: (T & SoundInterface), contextOrProperty: ClassDecoratorContext | string, descriptor: PropertyDescriptor) {
     const className = target.name
     const decorateClass = () => {
-      const _classCore = class extends target implements SoundInterface {
-        props = props
+      const _classInterface = class extends target implements SoundInterface {
+        _props = props
         sound: BABYLON.StaticSound | BABYLON.StreamingSound
 
         _load(): LoadingProgress {
           const progress = new LoadingProgress()
-          if (this.props.stream) {
-            BABYLON.CreateStreamingSoundAsync(this.getClassName(), this.props.url, { spatialEnabled: !!this.props.spatialEnabled })
+          if (this._props.stream) {
+            BABYLON.CreateStreamingSoundAsync(this.getClassName(), this._props.url, { spatialEnabled: !!this._props.spatialEnabled })
               .then((sound) => {
                 this.sound = sound
                 progress.complete()
@@ -37,9 +37,9 @@ export function Sound(props: SoundProps): any {
                 progress.error(error)
               })
           } else {
-            const asset = AssetsController.getAsset(this.props.url)
+            const asset = AssetsController.getAsset(this._props.url)
             if (asset) {
-              BABYLON.CreateSoundAsync(this.getClassName(), asset.audioBuffer, { spatialEnabled: !!this.props.spatialEnabled })
+              BABYLON.CreateSoundAsync(this.getClassName(), asset.audioBuffer, { spatialEnabled: !!this._props.spatialEnabled })
                 .then((sound) => {
                   this.sound = sound
                   progress.complete()
@@ -62,8 +62,8 @@ export function Sound(props: SoundProps): any {
         }
       }
       Core.needAudioEngine = true
-      SoundsController.register(_classCore, new _classCore())
-      return _classCore
+      SoundsController.register(_classInterface, new _classInterface())
+      return _classInterface
     }
 
     // Mutates decorator to class or property
@@ -88,7 +88,7 @@ export function Sound(props: SoundProps): any {
       if ((target instanceof SceneInterface ||
         target instanceof SceneActionInterface ||
         target instanceof SceneStateInterface) && props.spatialEnabled) {
-        Logger.warn('Defining spatial sound to a scene element is not allowed.', target.constructor.name)
+        Logger.warn('Defining spatial sound to a scene is not allowed. Spatial sounds can only be defined on actors.', target.constructor.name)
       }
       metadata.sounds.push({
         propertyName: contextOrProperty as string,

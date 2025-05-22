@@ -81,7 +81,7 @@ export { SpriteInterface } from './decorators/sprite/sprite-interface'
 
 // Sound decorator
 export { Sound } from './decorators/sound/sound-decorator'
-export { SoundInterface } from './decorators/sound/sound-interface'
+export { SoundInterface as SoundInterface } from './decorators/sound/sound-interface'
 
 // Classes
 export { LoadingProgress } from './base'

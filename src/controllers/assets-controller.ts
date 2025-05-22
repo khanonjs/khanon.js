@@ -106,10 +106,10 @@ export class AssetsController {
               }
             } else if (isPrototypeOf(SoundInterface, element)) {
               const sound = SoundsController.get<SoundInterface>(element)
-              if (!sound.props.stream) {
-                urls[AssetsController.getAssetName(sound.props.url)] = true
+              if (!sound._props.stream) {
+                urls[AssetsController.getAssetName(sound._props.url)] = true
                 definitions = [...definitions, {
-                  url: sound.props.url,
+                  url: sound._props.url,
                   type: AssetType.AUDIO
                 }]
               }

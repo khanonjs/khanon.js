@@ -1,7 +1,5 @@
 import { InputEventIds } from './input-event-ids'
 
-export type InputEventModifier = any
-
 export { InputEventIds } from './input-event-ids'
 
 export interface InputEventProps {

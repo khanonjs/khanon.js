@@ -188,7 +188,7 @@ export function Actor(props: ActorProps = {}): any {
         const sounds: SoundInterface[] = []
         this._metadata.getProps().sounds?.forEach(soundC => {
           const sound = SoundsController.get(soundC)
-          if (sound.props.spatialEnabled) {
+          if (sound._props.spatialEnabled) {
             sounds.push(sound)
           }
         })
@@ -196,7 +196,7 @@ export function Actor(props: ActorProps = {}): any {
         actions.forEach(action => {
           action.Instance._metadata.getProps().sounds?.forEach(soundC => {
             const sound = SoundsController.get(soundC)
-            if (sound.props.spatialEnabled) {
+            if (sound._props.spatialEnabled) {
               sounds.push(sound)
             }
           })
@@ -205,7 +205,7 @@ export function Actor(props: ActorProps = {}): any {
         states.forEach(state => {
           state.Instance._metadata.getProps().sounds?.forEach(soundC => {
             const sound = SoundsController.get(soundC)
-            if (sound.props.spatialEnabled) {
+            if (sound._props.spatialEnabled) {
               sounds.push(sound)
             }
           })
@@ -240,7 +240,7 @@ export function Actor(props: ActorProps = {}): any {
           this._startUpdates()
         }
         this._getSpatialSounds().forEach(sound => {
-          sound.sound.spatial.attach(this._body?.babylon.mesh ?? null, sound.props.useBoundingBox, sound.props.attachmentType)
+          sound.sound.spatial.attach(this._body?.babylon.mesh ?? null, sound._props.useBoundingBox, sound._props.attachmentType)
         })
         return this._body as N
       }

@@ -5,7 +5,7 @@ import { LoadingProgress } from '../../base/loading-progress/loading-progress'
 import { SoundProps } from './sound-props'
 
 export abstract class SoundInterface implements Loadable<void> {
-  abstract props: SoundProps
+  abstract _props: SoundProps
   abstract sound: BABYLON.StaticSound | BABYLON.StreamingSound
   abstract _load(): LoadingProgress
   abstract _unload(): void
