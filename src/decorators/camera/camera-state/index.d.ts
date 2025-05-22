@@ -12,7 +12,7 @@ import { SceneInterface } from '../../scene'
  * @param A Camera owner of hte state (optional).
  * @param S Setup interface (optional).
  */
-export declare abstract class CameraStateInterface</* Setup object */ S = any, /* Scene type */ C = SceneInterface, /* Camera type */ D = CameraInterface> {
+export declare abstract class CameraStateInterface</* Setup object */ S = any, /* Camera type */ D = CameraInterface, /* Scene type */ C = SceneInterface> {
   /**
    * Babylon.js objects.
    */

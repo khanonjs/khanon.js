@@ -21,7 +21,7 @@ import {
  * @param A Actor owner of hte state (optional).
  * @param S Setup interface (optional).
  */
-export declare abstract class ActorStateInterface</* Setup object */ S = any, /* Scene type */ C = SceneInterface, /* Actor type */ A = ActorInterface<SpriteInterface | MeshInterface>> {
+export declare abstract class ActorStateInterface</* Setup object */ S = any, /* Actor type */ A = ActorInterface<SpriteInterface | MeshInterface>, /* Scene type */ C = SceneInterface> {
   /**
    * Babylon.js objects.
    */

@@ -61,6 +61,11 @@ export declare abstract class ActorInterface<B extends SpriteInterface | MeshInt
   get scene(): SceneInterface
 
   /**
+   * Gets the current state.
+   */
+  get state(): ActorStateInterface | null
+
+  /**
    * Transform of the body.
    */
   // IMPROVE is there a way to return SpriteTransform or MeshTransform from the actor 'this' conditionally based on B generic type?
@@ -84,11 +89,6 @@ export declare abstract class ActorInterface<B extends SpriteInterface | MeshInt
    * 'actor.transform' references to 'actor.body.transform'.
    */
   get body(): B
-
-  /**
-   * Gets the current state.
-   */
-  get state(): ActorStateInterface | null
 
   /**
    * 'visibility' of the meshes and sprites of this actor

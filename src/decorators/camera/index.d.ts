@@ -10,7 +10,10 @@ import {
   FlexId
 } from '../../types'
 import { SceneInterface } from '../scene'
-import { CameraStateConstructor } from './camera-state'
+import {
+  CameraStateConstructor,
+  CameraStateInterface
+} from './camera-state'
 
 /**
  * @param S Camera setup object.
@@ -30,6 +33,11 @@ export declare abstract class CameraInterface</* Setup object */ S = any, /* Sce
    * Gets the setup object.
    */
   get setup(): S
+
+  /**
+   * Gets the current state.
+   */
+  get state(): CameraStateInterface | null
 
   /**
    * Turns on/off the 'onLoopUpdate' callback.
