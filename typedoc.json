@@ -9,6 +9,7 @@
     "./src/decorators/actor/actor-action/index.d.ts",
     "./src/decorators/actor/actor-state/index.d.ts",
     "./src/decorators/camera/index.d.ts",
+    "./src/decorators/camera/camera-state/index.d.ts",
     "./src/decorators/gui/index.d.ts",
     // "./src/decorators/gui/gui-state/index.d.ts",
     "./src/decorators/mesh/index.d.ts",
