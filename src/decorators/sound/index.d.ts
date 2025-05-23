@@ -15,12 +15,14 @@ export interface SoundProps {
   /**
    * Enables the sound to be played in 3D space.
    * If set to true, the sound will be played in 3D space in case it is played by an actor.
+   * Read more here: https://doc.babylonjs.com/features/featuresDeepDive/audio/playingSoundsMusic#spatial-audio
    */
   spatialEnabled?: boolean
 
   /**
    * Streams the sound instead of loading it.
    * This is useful for large files that would take too long to load, commonly used to play music or environmental backgrounds.
+   * Read more here: https://doc.babylonjs.com/features/featuresDeepDive/audio/playingSoundsMusic#streaming-a-sound
    */
   stream?: boolean
 

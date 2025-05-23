@@ -78,16 +78,15 @@ export interface AppProps {
   loopUpdate?: AppPropsLoopUpdate
 
   /**
-   * Loop update properties.
-   * Loop update is the main loop application.
-   * Any scene, actor, particle, or whatever logical methods are invoked from this Subject a number of frames per second.
-   */
-  audioEngine?: AppPropsAudioEngine
-
-  /**
    * Babylon.js engine configuration
    */
   engineConfiguration?: EngineConfiguration
+
+  /**
+   * Audio engine properties.
+   * Read more here: https://doc.babylonjs.com/features/featuresDeepDive/audio/playingSoundsMusic/#browser-autoplay-considerations
+   */
+  audioEngine?: AppPropsAudioEngine
 
   /**
    * Logs Khanon.js debug information.

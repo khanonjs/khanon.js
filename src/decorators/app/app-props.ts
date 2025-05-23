@@ -6,7 +6,7 @@ export interface AppProps {
   name: string
   htmlCanvasContainerId?: string
   loopUpdate?: AppPropsLoopUpdate
-  audioEngine?: AppPropsAudioEngine
   engineConfiguration?: EngineConfiguration
+  audioEngine?: AppPropsAudioEngine
   debugLog?: boolean
 }

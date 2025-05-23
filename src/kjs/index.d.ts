@@ -36,12 +36,15 @@ export declare namespace KJS {
   }
 
   /**
-   * Notification controller.
-   * @param id Message Id.
-   * @param receivers Constructor type of the elements that will receive the notification.
-   * @param args Method arguments received by the 'Notification' decorated method.
+   * Notification handler.
    */
   export namespace Notify {
+    /**
+     * Sends a notification.
+     * @param id Notification Id.
+     * @param receivers Constructor type of the elements that will receive the notification.
+     * @param args Method arguments received by the 'Notification' decorated method.
+     */
     function send(id: FlexId, receivers?: NotificableType | NotificableType[], ...args: any[]): void
   }
 
@@ -49,14 +52,52 @@ export declare namespace KJS {
    * Sounds controller.
    */
   export namespace Sound {
-    function play(id: SoundConstructor): void
-    function stop(id: SoundConstructor): void
+    /**
+     * Plays a sound.
+     * @param sound Sound constructor.
+     */
+    function play(sound: SoundConstructor): void
+
+    /**
+     * Stop a sound.
+     * @param sound Sound constructor.
+     */
+    function stop(sound: SoundConstructor): void
+
+    /**
+     * Sets the global volume.
+     * @param value Volume value.
+     */
     function setVolume(value: number): void
   }
 
   export namespace Arrays {
+    /**
+     * Shuffles an array
+     * @param arr
+     * @param startsOn
+     */
     function shuffle(arr: any[], startsOn?: number): void
+
+    /**
+     * Clears an array
+     * @param arr
+     */
     function clear(arr: any[]): void
+
+    /**
+     * Removes a value from an array
+     * @param arr
+     * @param value
+     */
+    function removeValue(arr: any[] | undefined, value: any): void
+
+    /**
+     * Removes duplicities from two arrays
+     * @param arr1
+     * @param arr2
+     */
+    function removeDuplicities(arr1: any[], arr2: any[]): any[]
   }
 
   export namespace Maths {
