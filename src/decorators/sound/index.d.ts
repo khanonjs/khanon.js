@@ -7,8 +7,10 @@ export type SoundConstructor = new () => SoundInterface
 export interface SoundProps {
   /**
    * Url of the sound file.
+   * It can be a single url or an array of urls.
+   * For array of urls, read: https://doc.babylonjs.com/features/featuresDeepDive/audio/playingSoundsMusic#using-browser-specific-audio-codecs
    */
-  url: string
+  url: string | string[]
 
   /**
    * Enables the sound to be played in 3D space.
