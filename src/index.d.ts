@@ -4,7 +4,6 @@ export * from './models'
 
 export * from './base/loading-progress'
 
-export * from './modules/helper'
 export * from './modules/logger'
 
 export * from './decorators/app'
