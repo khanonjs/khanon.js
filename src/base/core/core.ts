@@ -190,6 +190,8 @@ export class Core {
     Logger.error('App closed.')
   }
 
+  // TODO check if this method and the code calling it is removed after esbuild tree-shacking
+  // Document the use of process.env.NODE_ENV === 'development' and tree-shaking in website
   static isDevelopmentMode(): boolean {
     return process.env.NODE_ENV === 'development'
   }
