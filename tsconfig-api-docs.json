@@ -8,7 +8,7 @@
       "es6"
     ],
     "rootDir": "dist",
-    "outDir": "dist",
+    "outDir": "dist2",
     "importHelpers": true,
     "declaration": false,
     "noResolve": false,
