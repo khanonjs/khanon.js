@@ -15,19 +15,13 @@ import {
   MeshConstructor,
   MeshInterface
 } from '../mesh'
-import {
-  ParticleConstructor,
-  ParticleInterface
-} from '../particle'
+import { ParticleConstructor } from '../particle'
 import { SceneInterface } from '../scene'
 import {
   SpriteConstructor,
   SpriteInterface
 } from '../sprite'
-import {
-  ActorActionConstructor,
-  ActorActionInterface
-} from './actor-action'
+import { ActorActionConstructor } from './actor-action'
 import {
   ActorStateConstructor,
   ActorStateInterface

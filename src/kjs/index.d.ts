@@ -6,8 +6,10 @@ import { AppStateConstructor } from '../decorators/app/app-state'
 import { SceneConstructor } from '../decorators/scene'
 import { SceneStateConstructor } from '../decorators/scene/scene-state'
 import { SoundConstructor } from '../decorators/sound'
-import { Timeout as _Timeout } from '../models'
-import { Rect } from '../models/rect'
+import {
+  Rect,
+  Timeout as _Timeout
+} from '../models'
 import {
   FlexId,
   NotificableType
