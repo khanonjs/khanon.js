@@ -1,0 +1,37 @@
+{
+  "compilerOptions": {
+    "moduleResolution": "node",
+    "module": "ES2020",
+    "target": "es2021",
+    "lib": [
+      "dom",
+      "es6"
+    ],
+    "rootDir": "dist",
+    "outDir": "dist",
+    "importHelpers": true,
+    "declaration": false,
+    "noResolve": false,
+    "noImplicitThis": true,
+    "noImplicitAny": false,
+    "noImplicitReturns": false,
+    "strictFunctionTypes": true,
+    "skipLibCheck": true,
+    "strict": true,
+    "strictPropertyInitialization": false,
+    "strictNullChecks": true,
+    "experimentalDecorators": true,
+    "emitDecoratorMetadata": true,
+    "sourceMap": true,
+    "preserveConstEnums": true,
+    "esModuleInterop": true,
+    "noUnusedLocals": false
+  },
+  "files": [
+    "./dist/kjs/index.d.ts",
+    "./dist/modules/logger/index.d.ts"
+  ],
+  "types": [
+    "babylonjs"
+  ],
+}
