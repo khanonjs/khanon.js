@@ -1,4 +1,4 @@
-import * as BABYLON from '@babylonjs/core'
+
 
 // VERSION: Review on each babylon update
 /** @interface */

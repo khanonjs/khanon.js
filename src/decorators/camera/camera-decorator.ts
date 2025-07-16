@@ -1,4 +1,4 @@
-import * as BABYLON from '@babylonjs/core'
+
 
 import { Metadata } from '../../base'
 import { Core } from '../../base/core/core'

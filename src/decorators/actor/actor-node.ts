@@ -1,4 +1,4 @@
-import * as BABYLON from '@babylonjs/core'
+
 
 import { MeshInterface } from '../mesh/mesh-interface'
 import { SpriteInterface } from '../sprite/sprite-interface'

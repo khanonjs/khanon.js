@@ -1,4 +1,4 @@
-import * as BABYLON from '@babylonjs/core'
+
 
 import { MetadataParticleDefinition } from '../../base/interfaces/metadata/metadata-particle-definition'
 import {

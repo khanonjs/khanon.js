@@ -1,4 +1,4 @@
-import * as BABYLON from '@babylonjs/core'
+
 
 export class LoadingProgress<D = any> {
   private nodes: {

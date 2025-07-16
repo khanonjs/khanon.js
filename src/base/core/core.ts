@@ -1,6 +1,6 @@
 // KJS-39 on bundle optiomization. eliminar todos los .d de los archivos compilados que no se quieren al hacer build, mover los tipos e interfaces de ./models a KJS namespace
 
-import * as BABYLON from '@babylonjs/core'
+
 
 import { AppInterface } from '../../decorators/app/app-interface'
 import { AppStateConstructor } from '../../decorators/app/app-state/app-state-constructor'

@@ -1,4 +1,4 @@
-import * as BABYLON from '@babylonjs/core'
+
 
 import { ActionInterface } from '../../../base'
 import { Metadata } from '../../../base/interfaces/metadata/metadata'

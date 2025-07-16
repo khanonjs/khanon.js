@@ -1,4 +1,4 @@
-import * as BABYLON from '@babylonjs/core'
+
 
 import { MetadataInputEventDefinition } from '../base/interfaces/metadata/metadata-input-event-definition'
 import { InputEventIds } from '../decorators/input-event/input-event-ids'

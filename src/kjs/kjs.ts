@@ -1,4 +1,4 @@
-import * as BABYLON from '@babylonjs/core'
+
 
 import { Core } from '../base/core/core'
 import { LoadingProgress } from '../base/loading-progress/loading-progress'

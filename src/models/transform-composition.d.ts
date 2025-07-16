@@ -1,4 +1,4 @@
-import * as BABYLON from '@babylonjs/core'
+
 
 export interface TransformComposition {
   position?: BABYLON.Vector3

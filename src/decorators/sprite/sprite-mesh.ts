@@ -1,4 +1,4 @@
-import * as BABYLON from '@babylonjs/core'
+
 
 import { Asset } from '../../base'
 import { BabylonAccessor } from '../../models/babylon-accessor'

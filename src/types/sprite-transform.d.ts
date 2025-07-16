@@ -1,4 +1,4 @@
-import * as BABYLON from '@babylonjs/core'
+
 
 /**
  * Shortcut to mesh babylon transform methods and variables adapted to sprite needs.

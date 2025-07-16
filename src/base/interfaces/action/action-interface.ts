@@ -1,5 +1,3 @@
-import * as BABYLON from '@babylonjs/core'
-
 import { SceneInterface } from '../../../decorators/scene/scene-interface'
 import { BabylonAccessor } from '../../../models/babylon-accessor'
 import { Rect } from '../../../models/rect'

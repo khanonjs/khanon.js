@@ -1,4 +1,4 @@
-import * as BABYLON from '@babylonjs/core'
+
 
 export abstract class LoopUpdatable {
   abstract _loopUpdate: boolean
