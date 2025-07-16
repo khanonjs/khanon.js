@@ -10,7 +10,7 @@
     "rootDir": "src",
     "outDir": "dist",
     "importHelpers": true,
-    "declaration": true,
+    "declaration": false,
     "noResolve": false,
     "noImplicitThis": true,
     "noImplicitAny": false,
@@ -23,7 +23,7 @@
     "experimentalDecorators": true,
     "emitDecoratorMetadata": true,
     "sourceMap": true,
-    "preserveConstEnums":true,
+    "preserveConstEnums": true,
     "esModuleInterop": true,
     "noUnusedLocals": false
   },
@@ -31,10 +31,10 @@
     "src/**/*"
   ],
   "exclude": [
-      "src/**/*.spec.ts"
+    "src/**/*.spec.ts"
   ],
   "types": [
-        "babylonjs"
+    "babylonjs"
   ],
   "files": [
     "src/index.d.ts",
