@@ -7,8 +7,8 @@
       "dom",
       "es6"
     ],
-    "rootDir": "src",
-    "outDir": "dist",
+    "rootDir": "dist",
+    "outDir": "dist2",
     "importHelpers": true,
     "declaration": false,
     "noResolve": false,
@@ -27,17 +27,11 @@
     "esModuleInterop": true,
     "noUnusedLocals": false
   },
-  "include": [
-    "src/**/*"
-  ],
-  "exclude": [
-    "src/**/*.spec.ts"
+  "files": [
+    "./dist/kjs/index.d.ts",
+    "./dist/modules/logger/index.d.ts"
   ],
   "types": [
     "babylonjs"
   ],
-  "files": [
-    "src/index.d.ts",
-    "src/modules/logger/index.d.ts"
-  ]
 }
