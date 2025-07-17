@@ -1,4 +1,19 @@
-
+import { AnimationGroup } from '@babylonjs/core/Animations/animationGroup'
+import { Space } from '@babylonjs/core/Maths/math.axis'
+import {
+  Matrix,
+  Quaternion,
+  Vector3
+} from '@babylonjs/core/Maths/math.vector'
+import {
+  AbstractMesh,
+  Mesh as BabylonMesh
+} from '@babylonjs/core/Meshes/mesh'
+import { TransformNode } from '@babylonjs/core/Meshes/transformNode'
+import {
+  DeepImmutable,
+  Nullable
+} from '@babylonjs/core/types'
 
 import {
   AnimationBase,
@@ -16,7 +31,7 @@ export interface MeshAnimation extends AnimationBase {
   /**
    * Babylon animaation group class:
    */
-  animationGroup: BABYLON.AnimationGroup
+  animationGroup: AnimationGroup
 
   /**
    * Animation speed ratio (1 by default).
@@ -61,36 +76,36 @@ export declare abstract class MeshInterface {
   /**
    * Mesh transform properties.
    */
-  get absolutePosition(): BABYLON.Vector3
-  get absoluteRotationQuaternion(): BABYLON.Quaternion
-  get absoluteScaling(): BABYLON.Vector3
-  set position(value: BABYLON.Vector3)
-  get position(): BABYLON.Vector3
-  set rotation(value: BABYLON.Vector3)
-  get rotation(): BABYLON.Vector3
-  set rotationQuaternion(value: BABYLON.Quaternion)
-  get rotationQuaternion(): BABYLON.Nullable<BABYLON.Quaternion>
-  set scaling(value: BABYLON.Vector3)
-  get scaling(): BABYLON.Vector3
-  addRotation(x: number, y: number, z: number): BABYLON.TransformNode
-  getAbsolutePivotPoint(): BABYLON.Vector3
-  getAbsolutePivotPointToRef(result: BABYLON.Vector3): BABYLON.TransformNode
-  getAbsolutePosition(): BABYLON.Vector3
-  getDirection(localAxis: BABYLON.Vector3): BABYLON.Vector3
-  getDirectionToRef(localAxis: BABYLON.Vector3, result: BABYLON.Vector3): BABYLON.TransformNode
-  getPivotPoint(): BABYLON.Vector3
-  getPivotPointToRef(result: BABYLON.Vector3): BABYLON.TransformNode
-  locallyTranslate(vector3: BABYLON.Vector3): BABYLON.TransformNode
-  lookAt(targetPoint: BABYLON.Vector3, yawCor?: number, pitchCor?: number, rollCor?: number, space?: BABYLON.Space): BABYLON.TransformNode
-  rotate(axis: BABYLON.Vector3, amount: number, space?: BABYLON.Space): BABYLON.TransformNode
-  rotateAround(point: BABYLON.Vector3, axis: BABYLON.Vector3, amount: number): BABYLON.TransformNode
-  rotatePOV(flipBack: number, twirlClockwise: number, tiltRight: number): BABYLON.AbstractMesh
-  setAbsolutePosition(absolutePosition: BABYLON.Vector3): BABYLON.TransformNode
-  setDirection(localAxis: BABYLON.Vector3, yawCor?: number, pitchCor?: number, rollCor?: number): BABYLON.TransformNode
-  setPivotMatrix(matrix: BABYLON.DeepImmutable<BABYLON.Matrix>, postMultiplyPivotMatrix?: boolean): BABYLON.TransformNode
-  setPivotPoint(point: BABYLON.Vector3, space?: BABYLON.Space): BABYLON.TransformNode
-  setPositionWithLocalVector(vector3: BABYLON.Vector3): BABYLON.TransformNode
-  translate(axis: BABYLON.Vector3, distance: number, space?: BABYLON.Space): BABYLON.TransformNode
+  get absolutePosition(): Vector3
+  get absoluteRotationQuaternion(): Quaternion
+  get absoluteScaling(): Vector3
+  set position(value: Vector3)
+  get position(): Vector3
+  set rotation(value: Vector3)
+  get rotation(): Vector3
+  set rotationQuaternion(value: Quaternion)
+  get rotationQuaternion(): Nullable<Quaternion>
+  set scaling(value: Vector3)
+  get scaling(): Vector3
+  addRotation(x: number, y: number, z: number): TransformNode
+  getAbsolutePivotPoint(): Vector3
+  getAbsolutePivotPointToRef(result: Vector3): TransformNode
+  getAbsolutePosition(): Vector3
+  getDirection(localAxis: Vector3): Vector3
+  getDirectionToRef(localAxis: Vector3, result: Vector3): TransformNode
+  getPivotPoint(): Vector3
+  getPivotPointToRef(result: Vector3): TransformNode
+  locallyTranslate(vector3: Vector3): TransformNode
+  lookAt(targetPoint: Vector3, yawCor?: number, pitchCor?: number, rollCor?: number, space?: Space): TransformNode
+  rotate(axis: Vector3, amount: number, space?: Space): TransformNode
+  rotateAround(point: Vector3, axis: Vector3, amount: number): TransformNode
+  rotatePOV(flipBack: number, twirlClockwise: number, tiltRight: number): AbstractMesh
+  setAbsolutePosition(absolutePosition: Vector3): TransformNode
+  setDirection(localAxis: Vector3, yawCor?: number, pitchCor?: number, rollCor?: number): TransformNode
+  setPivotMatrix(matrix: DeepImmutable<Matrix>, postMultiplyPivotMatrix?: boolean): TransformNode
+  setPivotPoint(point: Vector3, space?: Space): TransformNode
+  setPositionWithLocalVector(vector3: Vector3): TransformNode
+  translate(axis: Vector3, distance: number, space?: Space): TransformNode
 
   /**
    * Returns the name of the class.
@@ -137,7 +152,7 @@ export declare abstract class MeshInterface {
    * Through this method, it is possible to manually create a Babylon Mesh in 'onSpawn' method and apply it.
    * @param babylonMesh
    */
-  setMesh(babylonMesh: BABYLON.Mesh): void
+  setMesh(babylonMesh: BabylonMesh): void
 
   /**
    * Sets the material transparency mode. Apply it to the full hierarchy if *applyToHierarchy* is *true*.
@@ -168,7 +183,7 @@ export declare abstract class MeshInterface {
    * @param completed Completed animation callback. It is called everytime the animation ends, no matter if it is in loop or not
    * @returns BABYLON.AnimationGroup object: https://doc.babylonjs.com/typedoc/classes/BABYLON.AnimationGroup
    */
-  playAnimation(animation: FlexId, options?: MeshAnimationOptions, completed?: () => void): BABYLON.AnimationGroup
+  playAnimation(animation: FlexId, options?: MeshAnimationOptions, completed?: () => void): AnimationGroup
 
   /**
    * Stops current animation.

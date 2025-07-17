@@ -1,4 +1,5 @@
-
+import { Bone } from '@babylonjs/core/Bones/bone'
+import { Vector3 } from '@babylonjs/core/Maths/math.vector'
 
 import {
   BabylonAccessor,
@@ -36,7 +37,7 @@ import {
  */
 export interface ActorNode<B extends SpriteInterface | MeshInterface> {
   element: B
-  bone: BABYLON.Bone
+  bone: Bone
 }
 
 /**
@@ -260,7 +261,7 @@ export declare abstract class ActorInterface<B extends SpriteInterface | MeshInt
    * @param offset
    * @param nodeName
    */
-  attachParticle<P extends ParticleConstructor>(id: FlexId, Particle: P | ((particle: InstanceType<P>, setup?: any) => void), setup: InstanceType<P>['setup'], offset: BABYLON.Vector3, nodeName?: string): InstanceType<P>
+  attachParticle<P extends ParticleConstructor>(id: FlexId, Particle: P | ((particle: InstanceType<P>, setup?: any) => void), setup: InstanceType<P>['setup'], offset: Vector3, nodeName?: string): InstanceType<P>
 
   /**
    * Starts a particle.

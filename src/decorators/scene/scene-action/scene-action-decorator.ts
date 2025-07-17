@@ -1,4 +1,4 @@
-
+import { Observer } from '@babylonjs/core/Misc/observable'
 
 import { LoadingProgress } from '../../../base'
 import { Core } from '../../../base/core/core'
@@ -13,14 +13,12 @@ import {
 import { BabylonAccessor } from '../../../models/babylon-accessor'
 import { Rect } from '../../../models/rect'
 import { Timeout } from '../../../models/timeout'
-import { Logger } from '../../../modules/logger'
 import {
   attachCanvasResize,
   invokeCallback,
   switchLoopUpdate
 } from '../../../utils/utils'
 import { SceneInterface } from '../scene-interface'
-import { SceneStateInterface } from '../scene-state/scene-state-interface'
 import { SceneActionCore } from './scene-action-core'
 import { SceneActionInterface } from './scene-action-interface'
 import { SceneActionProps } from './scene-action-props'
@@ -50,8 +48,8 @@ export function SceneAction(props: SceneActionProps = {}): any {
       _metadata: Metadata = Reflect.getMetadata('metadata', this) ?? new Metadata()
       babylon: Pick<BabylonAccessor, 'scene'> = { scene: null as any }
       _loopUpdate = true
-      _loopUpdate$: BABYLON.Observer<number>
-      _canvasResize$: BABYLON.Observer<Rect>
+      _loopUpdate$: Observer<number>
+      _canvasResize$: Observer<Rect>
       setup: any
 
       set loopUpdate(value: boolean) {

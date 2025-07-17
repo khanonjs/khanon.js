@@ -1,24 +1,19 @@
-
-import * as BABYLONGUI from '@babylonjs/gui'
+import { TargetCamera } from '@babylonjs/core/Cameras/targetCamera'
+import { Observer } from '@babylonjs/core/Misc/observable'
+import { AdvancedDynamicTexture } from '@babylonjs/gui/2D/advancedDynamicTexture'
 
 import {
   LoadingProgress,
   Metadata
 } from '../../base'
 import { Core } from '../../base/core/core'
-import {
-  GUIController,
-  MeshesController,
-  ParticlesController,
-  SpritesController
-} from '../../controllers'
+import { GUIController } from '../../controllers'
 import { BabylonAccessor } from '../../models/babylon-accessor'
 import { Rect } from '../../models/rect'
 import { Timeout } from '../../models/timeout'
 import { FlexId } from '../../types/flex-id'
 import {
   attachCanvasResize,
-  attachLoopUpdate,
   invokeCallback,
   removeArrayDuplicitiesInObject,
   removeCanvasResize,
@@ -30,8 +25,6 @@ import { SceneInterface } from '../scene/scene-interface'
 import { GUICore } from './gui-core'
 import { GUIInterface } from './gui-interface'
 import { GUIProps } from './gui-props'
-import { GUIStateConstructor } from './gui-state/gui-state-constructor'
-import { GUIStateInterface } from './gui-state/gui-state-interface'
 
 export function GUI(props: GUIProps = {}): any {
   return function <T extends { new (...args: any[]): GUIInterface }>(constructor: T & GUIInterface, context: ClassDecoratorContext) {
@@ -56,11 +49,11 @@ export function GUI(props: GUIProps = {}): any {
 
       props: GUIProps
       _metadata: Metadata = Reflect.getMetadata('metadata', this) ?? new Metadata()
-      babylon: Pick<BabylonAccessor<BABYLON.TargetCamera>, 'gui' | 'scene'> = { gui: null as any, scene: null as any }
+      babylon: Pick<BabylonAccessor<TargetCamera>, 'gui' | 'scene'> = { gui: null as any, scene: null as any }
       setup: any
       _loopUpdate = true
-      _loopUpdate$: BABYLON.Observer<number>
-      _canvasResize$: BABYLON.Observer<Rect>
+      _loopUpdate$: Observer<number>
+      _canvasResize$: Observer<Rect>
       // _state: GUIStateInterface | null = null
       particles: Map<FlexId, ParticleInterface> = new Map<FlexId, ParticleInterface>()
 
@@ -73,7 +66,7 @@ export function GUI(props: GUIProps = {}): any {
       // get state(): GUIStateInterface | null { return this._state }
 
       _initialize(setup: any) {
-        this.babylon.gui = BABYLONGUI.AdvancedDynamicTexture.CreateFullscreenUI('')
+        this.babylon.gui = AdvancedDynamicTexture.CreateFullscreenUI('')
         this.setup = setup
         switchLoopUpdate(this._loopUpdate, this)
         attachCanvasResize(this)

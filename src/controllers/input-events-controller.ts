@@ -1,9 +1,8 @@
-
+import { IPointerEvent } from '@babylonjs/core/Events/deviceInputEvents'
 
 import { MetadataInputEventDefinition } from '../base/interfaces/metadata/metadata-input-event-definition'
 import { InputEventIds } from '../decorators/input-event/input-event-ids'
 import { SceneInterface } from '../decorators/scene/scene-interface'
-import { Logger } from '../modules/logger'
 
 export class InputEventsController {
   static startInputEvent(definition: MetadataInputEventDefinition, context: any, scene: SceneInterface | null): void {
@@ -19,21 +18,21 @@ export class InputEventsController {
       break
     case InputEventIds.TAP_DOWN:
     case InputEventIds.MOUSE_LEFT_DOWN:
-      definition.observer = scene?._$pointerDown.add((event: BABYLON.IPointerEvent) => context[definition.methodName](event))
+      definition.observer = scene?._$pointerDown.add((event: IPointerEvent) => context[definition.methodName](event))
       break
     case InputEventIds.TAP_UP:
     case InputEventIds.MOUSE_LEFT_UP:
-      definition.observer = scene?._$pointerUp.add((event: BABYLON.IPointerEvent) => context[definition.methodName](event))
+      definition.observer = scene?._$pointerUp.add((event: IPointerEvent) => context[definition.methodName](event))
       break
     case InputEventIds.MOUSE_MOVE:
-      definition.observer = scene?._$pointerMove.add((event: BABYLON.IPointerEvent) => context[definition.methodName](event))
+      definition.observer = scene?._$pointerMove.add((event: IPointerEvent) => context[definition.methodName](event))
       break
     case InputEventIds.DRAG:
-      definition.observer = scene?._$pointerDrag.add((event: BABYLON.IPointerEvent) => context[definition.methodName](event))
+      definition.observer = scene?._$pointerDrag.add((event: IPointerEvent) => context[definition.methodName](event))
       break
     case InputEventIds.MOUSE_LEFT_PRESS:
     case InputEventIds.TAP_PRESS:
-      definition.observer = scene?._$pointerPress.add((event: BABYLON.IPointerEvent) => context[definition.methodName](event))
+      definition.observer = scene?._$pointerPress.add((event: IPointerEvent) => context[definition.methodName](event))
       break
     }
   }

@@ -1,4 +1,5 @@
-
+import { Vector3 } from '@babylonjs/core/Maths/math.vector'
+import { Observer } from '@babylonjs/core/Misc/observable'
 
 import { LoadingProgress } from '../base'
 import { AppInterface } from '../decorators/app'
@@ -114,15 +115,15 @@ export declare namespace KJS {
   }
 
   export namespace Vectors {
-    function dragPoint(ratio: number, origin: BABYLON.Vector3, target: BABYLON.Vector3, ratioClampMin?: number, ratioClampMax?: number): BABYLON.Vector3
-    function vectorialProjectionToLine(vector: BABYLON.Vector3, line: BABYLON.Vector3): BABYLON.Vector3
-    function scalarProjectionToLine(vector: BABYLON.Vector3, line: BABYLON.Vector3): number
-    function vectorialProjectionToPlane(vector: BABYLON.Vector3, planeNormal: BABYLON.Vector3): BABYLON.Vector3
-    function scalarProjectionToPlane(vector: BABYLON.Vector3, line: BABYLON.Vector3): number
-    function angleBetweenLines(lineA: BABYLON.Vector3, lineB: BABYLON.Vector3): number
-    function angleXBetweenLines(lineA: BABYLON.Vector3, lineB: BABYLON.Vector3): number
-    function angleYBetweenLines(lineA: BABYLON.Vector3, lineB: BABYLON.Vector3): number
-    function angleZBetweenLines(lineA: BABYLON.Vector3, lineB: BABYLON.Vector3): number
+    function dragPoint(ratio: number, origin: Vector3, target: Vector3, ratioClampMin?: number, ratioClampMax?: number): Vector3
+    function vectorialProjectionToLine(vector: Vector3, line: Vector3): Vector3
+    function scalarProjectionToLine(vector: Vector3, line: Vector3): number
+    function vectorialProjectionToPlane(vector: Vector3, planeNormal: Vector3): Vector3
+    function scalarProjectionToPlane(vector: Vector3, line: Vector3): number
+    function angleBetweenLines(lineA: Vector3, lineB: Vector3): number
+    function angleXBetweenLines(lineA: Vector3, lineB: Vector3): number
+    function angleYBetweenLines(lineA: Vector3, lineB: Vector3): number
+    function angleZBetweenLines(lineA: Vector3, lineB: Vector3): number
   }
 
   /**
@@ -146,23 +147,23 @@ export declare namespace KJS {
    * Subsscribes to loopUpdate observable.
    * @param func
    */
-  export function loopUpdateAddObserver(func: (delta: number) => void): BABYLON.Observer<number>
+  export function loopUpdateAddObserver(func: (delta: number) => void): Observer<number>
 
   /**
    * Removes a subscription from loopUpdate observable.
    */
-  export function loopUpdateRemoveObserver(observer: BABYLON.Observer<number>): void
+  export function loopUpdateRemoveObserver(observer: Observer<number>): void
 
   /**
    * Subsscribes to canvasResize observable.
    * @param func
    */
-  export function canvasResizeAddObserver(func: (size: Rect) => void): BABYLON.Observer<Rect>
+  export function canvasResizeAddObserver(func: (size: Rect) => void): Observer<Rect>
 
   /**
    * Removes a subscription from canvasResize observable.
    */
-  export function canvasResizeRemoveObserver(observer: BABYLON.Observer<Rect>): void
+  export function canvasResizeRemoveObserver(observer: Observer<Rect>): void
 
   /**
    * Returns the canvas rect.

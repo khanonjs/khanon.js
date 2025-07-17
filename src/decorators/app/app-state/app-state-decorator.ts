@@ -1,11 +1,10 @@
-
+import { Observer } from '@babylonjs/core/Misc/observable'
 
 import { LoadingProgress } from '../../../base'
 import { Core } from '../../../base/core/core'
 import { Metadata } from '../../../base/interfaces/metadata/metadata'
 import {
   AppStatesController,
-  GUIController,
   ScenesController
 } from '../../../controllers'
 import { Rect } from '../../../models/rect'
@@ -46,8 +45,8 @@ export function AppState(props: AppStateProps = {}): any {
       _props: AppStateProps
       _metadata: Metadata = Reflect.getMetadata('metadata', this) ?? new Metadata()
       _loopUpdate = true
-      _loopUpdate$: BABYLON.Observer<number>
-      _canvasResize$: BABYLON.Observer<Rect>
+      _loopUpdate$: Observer<number>
+      _canvasResize$: Observer<Rect>
       setup: any
       guis: Set<GUIInterface> = new Set<GUIInterface>()
 

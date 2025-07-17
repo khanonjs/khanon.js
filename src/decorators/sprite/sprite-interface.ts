@@ -1,4 +1,10 @@
-
+import { Space } from '@babylonjs/core/Maths/math.axis'
+import {
+  Matrix,
+  Vector3
+} from '@babylonjs/core/Maths/math.vector'
+import { TransformNode } from '@babylonjs/core/Meshes/transformNode'
+import { Observer } from '@babylonjs/core/Misc/observable'
 
 import {
   CanvasResizable,
@@ -12,7 +18,6 @@ import { Rect } from '../../models/rect'
 import { Timeout } from '../../models/timeout'
 import { SpriteTransform } from '../../types'
 import { FlexId } from '../../types/flex-id'
-import { MeshAnimation } from '../mesh/mesh-animation'
 import { SceneInterface } from '../scene/scene-interface'
 import { SpriteAnimation } from './sprite-animation'
 import { SpriteAnimationOptions } from './sprite-animatrion-options'
@@ -24,8 +29,8 @@ export abstract class SpriteInterface implements DisplayObject, LoopUpdatable, C
   abstract _className: string
   abstract _spriteMesh: SpriteMesh
   abstract _loopUpdate: boolean
-  abstract _loopUpdate$: BABYLON.Observer<number>
-  abstract _canvasResize$: BABYLON.Observer<Rect>
+  abstract _loopUpdate$: Observer<number>
+  abstract _canvasResize$: Observer<Rect>
   abstract _exclusiveSpriteMesh: boolean // Exclusive texture means this sprite has an exclusive texture that is not stored anywhere, so the sprite itself has to handle its release.
   abstract _setSpriteMesh(spriteMesh: SpriteMesh, isExclusive: boolean, isParticle: boolean): void
   abstract _setShaderMaterialTextureFrame(frame: number): void
@@ -69,9 +74,9 @@ export abstract class SpriteInterface implements DisplayObject, LoopUpdatable, C
    */
   abstract set visibility(value: number)
   abstract get visibility(): number
-  abstract get absolutePosition(): BABYLON.Vector3
-  abstract set position(value: BABYLON.Vector3)
-  abstract get position(): BABYLON.Vector3
+  abstract get absolutePosition(): Vector3
+  abstract set position(value: Vector3)
+  abstract get position(): Vector3
   abstract set rotation(value: number)
   abstract get rotation(): number
   abstract set scale(value: number)
@@ -80,18 +85,18 @@ export abstract class SpriteInterface implements DisplayObject, LoopUpdatable, C
   abstract get scale(): number
   abstract set scaleY(value: number)
   abstract get scaleY(): number
-  abstract getAbsolutePivotPoint(): BABYLON.Vector3
-  abstract getAbsolutePivotPointToRef(result: BABYLON.Vector3): BABYLON.TransformNode
-  abstract getAbsolutePosition(): BABYLON.Vector3
-  abstract getPivotPoint(): BABYLON.Vector3
-  abstract getPivotPointToRef(result: BABYLON.Vector3): BABYLON.TransformNode
-  abstract locallyTranslate(vector3: BABYLON.Vector3): BABYLON.TransformNode
-  abstract rotateAround(point: BABYLON.Vector3, axis: BABYLON.Vector3, amount: number): BABYLON.TransformNode
-  abstract setAbsolutePosition(absolutePosition: BABYLON.Vector3): BABYLON.TransformNode
-  abstract setPivotMatrix(matrix: BABYLON.DeepImmutable<BABYLON.Matrix>, postMultiplyPivotMatrix?: boolean): BABYLON.TransformNode
-  abstract setPivotPoint(point: BABYLON.Vector3, space?: BABYLON.Space): BABYLON.TransformNode
-  abstract setPositionWithLocalVector(vector3: BABYLON.Vector3): BABYLON.TransformNode
-  abstract translate(axis: BABYLON.Vector3, distance: number, space?: BABYLON.Space): BABYLON.TransformNode
+  abstract getAbsolutePivotPoint(): Vector3
+  abstract getAbsolutePivotPointToRef(result: Vector3): TransformNode
+  abstract getAbsolutePosition(): Vector3
+  abstract getPivotPoint(): Vector3
+  abstract getPivotPointToRef(result: Vector3): TransformNode
+  abstract locallyTranslate(vector3: Vector3): TransformNode
+  abstract rotateAround(point: Vector3, axis: Vector3, amount: number): TransformNode
+  abstract setAbsolutePosition(absolutePosition: Vector3): TransformNode
+  abstract setPivotMatrix(matrix: Matrix, postMultiplyPivotMatrix?: boolean): TransformNode
+  abstract setPivotPoint(point: Vector3, space?: Space): TransformNode
+  abstract setPositionWithLocalVector(vector3: Vector3): TransformNode
+  abstract translate(axis: Vector3, distance: number, space?: Space): TransformNode
 
   /**
    * User defined optional

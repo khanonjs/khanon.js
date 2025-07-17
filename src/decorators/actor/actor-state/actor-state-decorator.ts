@@ -1,4 +1,4 @@
-
+import { Observer } from '@babylonjs/core/Misc/observable'
 
 import { LoadingProgress } from '../../../base'
 import { Core } from '../../../base/core/core'
@@ -56,8 +56,8 @@ export function ActorState(props: ActorStateProps = {}): any {
       babylon: Pick<BabylonAccessor, 'scene'> = { scene: null as any }
       _metadata: Metadata = Reflect.getMetadata('metadata', this) ?? new Metadata()
       _loopUpdate = true
-      _loopUpdate$: BABYLON.Observer<number>
-      _canvasResize$: BABYLON.Observer<Rect>
+      _loopUpdate$: Observer<number>
+      _canvasResize$: Observer<Rect>
       scene: SceneInterface
       setup: any
 

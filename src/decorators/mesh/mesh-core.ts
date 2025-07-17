@@ -1,4 +1,4 @@
-
+import { AssetContainer } from '@babylonjs/core/assetContainer'
 
 import {
   Loadable,
@@ -12,7 +12,7 @@ import { MeshProps } from './mesh-props'
 export abstract class MeshCore implements Loadable<SceneInterface>, Spawnable<MeshInterface> {
   abstract props: MeshProps
   abstract Instance: MeshInterface
-  abstract assetContainers: Map<SceneInterface, BABYLON.AssetContainer>
+  abstract assetContainers: Map<SceneInterface, AssetContainer>
   abstract _load(scene: SceneInterface): LoadingProgress
   abstract _unload(scene: SceneInterface): void
   abstract spawn(scene: SceneInterface): MeshInterface

@@ -1,4 +1,4 @@
-
+import { Observer } from '@babylonjs/core/Misc/observable'
 
 import { StateInterface } from '../../../base'
 import { Metadata } from '../../../base/interfaces/metadata/metadata'
@@ -17,8 +17,8 @@ export abstract class ActorStateInterface<S = any, A = ActorInterface<SpriteInte
   abstract _props: ActorStateProps
   abstract _metadata: Metadata
   abstract _loopUpdate: boolean
-  abstract _loopUpdate$: BABYLON.Observer<number>
-  abstract _canvasResize$: BABYLON.Observer<Rect>
+  abstract _loopUpdate$: Observer<number>
+  abstract _canvasResize$: Observer<Rect>
   abstract _start(setup: any): void
   abstract _end(): void
 

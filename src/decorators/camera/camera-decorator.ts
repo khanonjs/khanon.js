@@ -1,4 +1,10 @@
-
+import { TargetCamera } from '@babylonjs/core/Cameras/targetCamera'
+import { Ray } from '@babylonjs/core/Culling/ray'
+import {
+  Matrix,
+  Vector3
+} from '@babylonjs/core/Maths/math.vector'
+import { Observer } from '@babylonjs/core/Misc/observable'
 
 import { Metadata } from '../../base'
 import { Core } from '../../base/core/core'
@@ -9,7 +15,6 @@ import {
 import { BabylonAccessor } from '../../models/babylon-accessor'
 import { Rect } from '../../models/rect'
 import { Timeout } from '../../models/timeout'
-import { Logger } from '../../modules/logger'
 import { FlexId } from '../../types/flex-id'
 import {
   attachCanvasResize,
@@ -47,12 +52,12 @@ export function Camera(props: CameraProps = {}): any {
       clearAllTimeouts(): void { Core.clearAllTimeoutsByContext(this) }
 
       _metadata: Metadata = Reflect.getMetadata('metadata', this) ?? new Metadata()
-      babylon: Pick<BabylonAccessor<BABYLON.TargetCamera>, 'camera' | 'scene'> = { camera: null as any, scene: null as any }
+      babylon: Pick<BabylonAccessor<TargetCamera>, 'camera' | 'scene'> = { camera: null as any, scene: null as any }
       setup: any
       _state: CameraStateInterface | null
       _loopUpdate = true
-      _loopUpdate$: BABYLON.Observer<number>
-      _canvasResize$: BABYLON.Observer<Rect>
+      _loopUpdate$: Observer<number>
+      _canvasResize$: Observer<Rect>
 
       set loopUpdate(value: boolean) {
         this._loopUpdate = value
@@ -64,22 +69,22 @@ export function Camera(props: CameraProps = {}): any {
       get state(): CameraStateInterface | null { return this._state }
 
       // Transform
-      get position(): BABYLON.Vector3 { return this.babylon.camera.position }
-      set position(value: BABYLON.Vector3) { this.babylon.camera.position = value }
-      get globalPosition(): BABYLON.Vector3 { return this.babylon.camera.globalPosition }
-      get upVector(): BABYLON.Vector3 { return this.babylon.camera.upVector }
-      set upVector(value: BABYLON.Vector3) { this.babylon.camera.upVector = value }
-      getDirection(localAxis: BABYLON.Vector3): BABYLON.Vector3 { return this.babylon.camera.getDirection(localAxis) }
-      getDirectionToRef(localAxis: BABYLON.Vector3, result: BABYLON.Vector3): void { return this.babylon.camera.getDirectionToRef(localAxis, result) }
-      getForwardRay(length?: number, transform?: BABYLON.Matrix, origin?: BABYLON.Vector3): BABYLON.Ray { return this.babylon.camera.getForwardRay(length, transform, origin) }
-      getProjectionMatrix(force?: boolean): BABYLON.Matrix { return this.babylon.camera.getProjectionMatrix(force) }
-      getWorldMatrix(): BABYLON.Matrix { return this.babylon.camera.getWorldMatrix() }
-      get rotation(): BABYLON.Vector3 { return this.babylon.camera.rotation }
-      set rotation(value: BABYLON.Vector3) { this.babylon.camera.rotation = value }
+      get position(): Vector3 { return this.babylon.camera.position }
+      set position(value: Vector3) { this.babylon.camera.position = value }
+      get globalPosition(): Vector3 { return this.babylon.camera.globalPosition }
+      get upVector(): Vector3 { return this.babylon.camera.upVector }
+      set upVector(value: Vector3) { this.babylon.camera.upVector = value }
+      getDirection(localAxis: Vector3): Vector3 { return this.babylon.camera.getDirection(localAxis) }
+      getDirectionToRef(localAxis: Vector3, result: Vector3): void { return this.babylon.camera.getDirectionToRef(localAxis, result) }
+      getForwardRay(length?: number, transform?: Matrix, origin?: Vector3): Ray { return this.babylon.camera.getForwardRay(length, transform, origin) }
+      getProjectionMatrix(force?: boolean): Matrix { return this.babylon.camera.getProjectionMatrix(force) }
+      getWorldMatrix(): Matrix { return this.babylon.camera.getWorldMatrix() }
+      get rotation(): Vector3 { return this.babylon.camera.rotation }
+      set rotation(value: Vector3) { this.babylon.camera.rotation = value }
       get speed(): number { return this.babylon.camera.speed }
       set speed(value: number) { this.babylon.camera.speed = value }
-      get target(): BABYLON.Vector3 { return this.babylon.camera.target }
-      set target(value: BABYLON.Vector3) { this.babylon.camera.target = value }
+      get target(): Vector3 { return this.babylon.camera.target }
+      set target(value: Vector3) { this.babylon.camera.target = value }
 
       notify(message: FlexId, ...args: any[]): void {
         const definition = this._metadata.notifiers.get(message)

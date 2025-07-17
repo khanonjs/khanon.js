@@ -1,6 +1,5 @@
+import { Observer } from '@babylonjs/core/Misc/observable'
 
-
-import { BabylonAccessor } from '../../../models/babylon-accessor'
 import { Rect } from '../../../models/rect'
 import { Timeout } from '../../../models/timeout'
 import { FlexId } from '../../../types/flex-id'
@@ -12,8 +11,8 @@ import { TimersByContext } from '../timers-by-context'
 
 export abstract class StateInterface<S = any> implements LoopUpdatable, CanvasResizable, Notificable, TimersByContext, Configurable<S> {
   abstract _loopUpdate: boolean
-  abstract _loopUpdate$: BABYLON.Observer<number>
-  abstract _canvasResize$: BABYLON.Observer<Rect>
+  abstract _loopUpdate$: Observer<number>
+  abstract _canvasResize$: Observer<Rect>
   abstract _start(setup: any): void
   abstract _end(): void
 

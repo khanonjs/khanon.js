@@ -1,4 +1,4 @@
-
+import { Observer } from '@babylonjs/core/Misc/observable'
 
 import { ActionInterface } from '../../../base'
 import { Metadata } from '../../../base/interfaces/metadata/metadata'
@@ -12,8 +12,8 @@ export abstract class SceneActionInterface<S = any, C extends SceneInterface = S
   abstract _props: SceneActionProps
   abstract _metadata: Metadata
   abstract _loopUpdate: boolean
-  abstract _loopUpdate$: BABYLON.Observer<number>
-  abstract _canvasResize$: BABYLON.Observer<Rect>
+  abstract _loopUpdate$: Observer<number>
+  abstract _canvasResize$: Observer<Rect>
   abstract _start(setup: S): void
 
   /**

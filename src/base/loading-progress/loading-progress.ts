@@ -1,4 +1,4 @@
-
+import { Observable } from '@babylonjs/core/Misc/observable'
 
 export class LoadingProgress<D = any> {
   private nodes: {
@@ -19,17 +19,17 @@ export class LoadingProgress<D = any> {
   /**
    * Observable triggered on loading completed
    */
-  onComplete: BABYLON.Observable<D> = new BABYLON.Observable<D>(undefined, true)
+  onComplete: Observable<D> = new Observable<D>(undefined, true)
 
   /**
    * Observable triggered on loading error
    */
-  onError: BABYLON.Observable<string> = new BABYLON.Observable<string>(undefined, true)
+  onError: Observable<string> = new Observable<string>(undefined, true)
 
   /**
    * Observable triggered on loading progress (from 0 to 1)
    */
-  onProgress: BABYLON.Observable<number> = new BABYLON.Observable<number>(undefined, true)
+  onProgress: Observable<number> = new Observable<number>(undefined, true)
 
   /**
    * Notify error loading

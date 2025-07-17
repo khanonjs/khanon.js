@@ -1,4 +1,4 @@
-
+import { Observer } from '@babylonjs/core/Misc/observable'
 
 import { ActionInterface } from '../../../base'
 import { Metadata } from '../../../base/interfaces/metadata/metadata'
@@ -14,11 +14,11 @@ import { ActorActionProps } from './actor-action-props'
 export abstract class ActorActionInterface<S = any, A = ActorInterface<SpriteInterface | MeshInterface>> implements ActionInterface<S> {
   abstract _props: ActorActionProps
   abstract _className: string
-  abstract _countFramesUpdate$: BABYLON.Observer<number> | null
+  abstract _countFramesUpdate$: Observer<number> | null
   abstract _countFrames: number
   abstract _metadata: Metadata
-  abstract _loopUpdate$: BABYLON.Observer<number>
-  abstract _canvasResize$: BABYLON.Observer<Rect>
+  abstract _loopUpdate$: Observer<number>
+  abstract _canvasResize$: Observer<Rect>
   abstract _loopUpdate: boolean
   abstract _isPlaying: boolean
   abstract _start(setup: S): void

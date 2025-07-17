@@ -1,4 +1,4 @@
-
+import { Observer } from '@babylonjs/core/Misc/observable'
 
 import { LoadingProgress } from '../../../base'
 import { Core } from '../../../base/core/core'
@@ -50,10 +50,10 @@ export function ActorAction(props: ActorActionProps = {}): any {
       babylon: Pick<BabylonAccessor, 'scene'> = { scene: null as any }
       scene: SceneInterface
       _metadata: Metadata = Reflect.getMetadata('metadata', this) ?? new Metadata()
-      _countFramesUpdate$: BABYLON.Observer<number> | null = null
+      _countFramesUpdate$: Observer<number> | null = null
       _countFrames = 0
-      _loopUpdate$: BABYLON.Observer<number>
-      _canvasResize$: BABYLON.Observer<Rect>
+      _loopUpdate$: Observer<number>
+      _canvasResize$: Observer<Rect>
       setup: any
       _loopUpdate = true
       _isPlaying = false

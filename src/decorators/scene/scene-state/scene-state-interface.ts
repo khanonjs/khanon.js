@@ -1,4 +1,4 @@
-
+import { Observer } from '@babylonjs/core/Misc/observable'
 
 import { StateInterface } from '../../../base'
 import { Metadata } from '../../../base/interfaces/metadata/metadata'
@@ -20,8 +20,8 @@ export abstract class SceneStateInterface<S = any, C = SceneInterface> implement
   abstract _props: SceneStateProps
   abstract _metadata: Metadata
   abstract _loopUpdate: boolean
-  abstract _loopUpdate$: BABYLON.Observer<number>
-  abstract _canvasResize$: BABYLON.Observer<Rect>
+  abstract _loopUpdate$: Observer<number>
+  abstract _canvasResize$: Observer<Rect>
   abstract _spawn: SceneSpawn
   abstract _remove: SceneRemove
   abstract _start(setup: any): void

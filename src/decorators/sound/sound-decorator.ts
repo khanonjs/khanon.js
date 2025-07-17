@@ -1,4 +1,9 @@
-
+import {
+  CreateSoundAsync,
+  CreateStreamingSoundAsync
+} from '@babylonjs/core/AudioV2/abstractAudio/audioEngineV2'
+import { StaticSound } from '@babylonjs/core/AudioV2/abstractAudio/staticSound'
+import { StreamingSound } from '@babylonjs/core/AudioV2/abstractAudio/streamingSound'
 
 import { Metadata } from '../../base'
 import { Core } from '../../base/core/core'
@@ -23,12 +28,12 @@ export function Sound(props: SoundProps): any {
     const decorateClass = () => {
       const _classInterface = class extends target implements SoundInterface {
         _props = props
-        sound: BABYLON.StaticSound | BABYLON.StreamingSound
+        sound: StaticSound | StreamingSound
 
         _load(): LoadingProgress {
           const progress = new LoadingProgress()
           if (this._props.stream) {
-            BABYLON.CreateStreamingSoundAsync(this.getClassName(), this._props.url, { spatialEnabled: !!this._props.spatialEnabled })
+            CreateStreamingSoundAsync(this.getClassName(), this._props.url, { spatialEnabled: !!this._props.spatialEnabled })
               .then((sound) => {
                 this.sound = sound
                 progress.complete()
@@ -39,7 +44,7 @@ export function Sound(props: SoundProps): any {
           } else {
             const asset = AssetsController.getAsset(this._props.url)
             if (asset) {
-              BABYLON.CreateSoundAsync(this.getClassName(), asset.audioBuffer, { spatialEnabled: !!this._props.spatialEnabled })
+              CreateSoundAsync(this.getClassName(), asset.audioBuffer, { spatialEnabled: !!this._props.spatialEnabled })
                 .then((sound) => {
                   this.sound = sound
                   progress.complete()

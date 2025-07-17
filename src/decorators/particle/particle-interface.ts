@@ -1,4 +1,5 @@
-
+import { Vector3 } from '@babylonjs/core/Maths/math.vector'
+import { Observer } from '@babylonjs/core/Misc/observable'
 
 import {
   CanvasResizable,
@@ -25,15 +26,15 @@ export abstract class ParticleInterface<S = any> implements LoopUpdatable, Canva
   abstract _className: string
   abstract _metadata: Metadata
   abstract _loopUpdate: boolean
-  abstract _loopUpdate$: BABYLON.Observer<number>
-  abstract _canvasResize$: BABYLON.Observer<Rect>
+  abstract _loopUpdate$: Observer<number>
+  abstract _canvasResize$: Observer<Rect>
   abstract _attachmentInfo: ParticleAttachmentInfo
-  abstract _attachmentUpdate$: BABYLON.Observer<number> | undefined
+  abstract _attachmentUpdate$: Observer<number> | undefined
   abstract _animations: SpriteAnimation[] | null
   abstract _spriteClassName: string
   abstract _spriteProps: SpriteProps
   abstract _spriteParticleInfo: SpriteParticleInfo
-  abstract _position: BABYLON.Vector3
+  abstract _position: Vector3
   abstract _create(setup: S): void
   abstract _updatePosition(): void
   abstract _release(): void

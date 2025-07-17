@@ -1,7 +1,6 @@
 import { Timeout } from '../../../models'
 import { Rect } from '../../../models/rect'
 import { FlexId } from '../../../types'
-import { GUIConstructor } from '../../gui'
 import { SceneConstructor } from '../../scene'
 
 /**

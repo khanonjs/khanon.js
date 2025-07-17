@@ -1,4 +1,10 @@
-
+import { TargetCamera } from '@babylonjs/core/Cameras/targetCamera'
+import { Ray } from '@babylonjs/core/Culling/ray'
+import {
+  Matrix,
+  Vector3
+} from '@babylonjs/core/Maths/math.vector'
+import { Scene } from '@babylonjs/core/scene'
 
 import {
   BabylonAccessor,
@@ -48,22 +54,22 @@ export declare abstract class CameraInterface</* Setup object */ S = any, /* Sce
   /**
    * Camera transform properties.
    */
-  get position(): BABYLON.Vector3
-  set position(value: BABYLON.Vector3)
-  get globalPosition(): BABYLON.Vector3
-  get upVector(): BABYLON.Vector3
-  set upVector(value: BABYLON.Vector3)
-  getDirection(localAxis: BABYLON.Vector3): BABYLON.Vector3
-  getDirectionToRef(localAxis: BABYLON.Vector3, result: BABYLON.Vector3): void
-  getForwardRay(length?: number, transform?: BABYLON.Matrix, origin?: BABYLON.Vector3): BABYLON.Ray
-  getProjectionMatrix(force?: boolean): BABYLON.Matrix
-  getWorldMatrix(): BABYLON.Matrix
-  get rotation(): BABYLON.Vector3
-  set rotation(value: BABYLON.Vector3)
+  get position(): Vector3
+  set position(value: Vector3)
+  get globalPosition(): Vector3
+  get upVector(): Vector3
+  set upVector(value: Vector3)
+  getDirection(localAxis: Vector3): Vector3
+  getDirectionToRef(localAxis: Vector3, result: Vector3): void
+  getForwardRay(length?: number, transform?: Matrix, origin?: Vector3): Ray
+  getProjectionMatrix(force?: boolean): Matrix
+  getWorldMatrix(): Matrix
+  get rotation(): Vector3
+  set rotation(value: Vector3)
   get speed(): number
   set speed(value: number)
-  get target(): BABYLON.Vector3
-  set target(value: BABYLON.Vector3)
+  get target(): Vector3
+  set target(value: Vector3)
 
   /**
    * Returns the name of the class.
@@ -122,7 +128,7 @@ export declare abstract class CameraInterface</* Setup object */ S = any, /* Sce
    * This method must return a valid Babylon camera.
    * 'setup' object isn't available at this point.
    */
-  abstract onInitialize(scene: BABYLON.Scene): BABYLON.TargetCamera
+  abstract onInitialize(scene: Scene): TargetCamera
 
   /**
    * Callback invoked on camera start.

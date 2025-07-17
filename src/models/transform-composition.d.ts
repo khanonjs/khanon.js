@@ -1,7 +1,7 @@
-
+import { Vector3 } from '@babylonjs/core/Maths/math.vector'
 
 export interface TransformComposition {
-  position?: BABYLON.Vector3
-  rotation?: BABYLON.Vector3
-  scale?: BABYLON.Vector3
+  position?: Vector3
+  rotation?: Vector3
+  scale?: Vector3
 }

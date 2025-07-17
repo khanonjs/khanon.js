@@ -1,4 +1,4 @@
-
+import { Observer } from '@babylonjs/core/Misc/observable'
 
 import { StateInterface } from '../../../base'
 import { Metadata } from '../../../base/interfaces/metadata/metadata'
@@ -12,8 +12,8 @@ export abstract class AppStateInterface<S = any> implements StateInterface<S> {
   abstract _props: AppStateProps
   abstract _metadata: Metadata
   abstract _loopUpdate: boolean
-  abstract _loopUpdate$: BABYLON.Observer<number>
-  abstract _canvasResize$: BABYLON.Observer<Rect>
+  abstract _loopUpdate$: Observer<number>
+  abstract _canvasResize$: Observer<Rect>
   // abstract _guis: Set<GUIInterface>
   // abstract _guisStart(): void
   // abstract _guisRelease(): void

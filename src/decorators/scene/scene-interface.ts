@@ -1,4 +1,8 @@
-
+import { IPointerEvent } from '@babylonjs/core/Events/deviceInputEvents'
+import {
+  Observable,
+  Observer
+} from '@babylonjs/core/Misc/observable'
 
 import {
   AssetDefinition,
@@ -50,8 +54,8 @@ export abstract class SceneInterface implements Stateable<SceneStateConstructor>
   abstract _debugInspector: (event: KeyboardEvent) => void
   abstract _availableElements: SceneAvailableElements
   abstract _metadata: Metadata
-  abstract _loopUpdate$: BABYLON.Observer<number>
-  abstract _canvasResize$: BABYLON.Observer<Rect>
+  abstract _loopUpdate$: Observer<number>
+  abstract _canvasResize$: Observer<Rect>
   abstract _animationHandler: Map<SpriteInterface, () => void>
   abstract _actions: Map<SceneActionConstructor, SceneActionInterface>
   abstract _actors: Set<ActorInterface>
@@ -60,17 +64,17 @@ export abstract class SceneInterface implements Stateable<SceneStateConstructor>
   abstract _sprites: Set<SpriteInterface>
   abstract _particles: Set<ParticleInterface>
   abstract _guis: Map<GUIConstructor, GUIInterface>
-  abstract _$keyDown: BABYLON.Observable<KeyboardEvent>
-  abstract _$keyUp: BABYLON.Observable<KeyboardEvent>
-  abstract _$keyPress: BABYLON.Observable<KeyboardEvent>
-  abstract _$pointerDown: BABYLON.Observable<BABYLON.IPointerEvent>
-  abstract _$pointerUp: BABYLON.Observable<BABYLON.IPointerEvent>
-  abstract _$pointerPress: BABYLON.Observable<BABYLON.IPointerEvent>
-  abstract _$pointerMove: BABYLON.Observable<BABYLON.IPointerEvent>
-  abstract _$pointerDrag: BABYLON.Observable<BABYLON.IPointerEvent>
+  abstract _$keyDown: Observable<KeyboardEvent>
+  abstract _$keyUp: Observable<KeyboardEvent>
+  abstract _$keyPress: Observable<KeyboardEvent>
+  abstract _$pointerDown: Observable<IPointerEvent>
+  abstract _$pointerUp: Observable<IPointerEvent>
+  abstract _$pointerPress: Observable<IPointerEvent>
+  abstract _$pointerMove: Observable<IPointerEvent>
+  abstract _$pointerDrag: Observable<IPointerEvent>
   abstract _pointerPressInterval: Timeout
   abstract _pointerPress: boolean
-  abstract _pointerPressEvent: BABYLON.IPointerEvent
+  abstract _pointerPressEvent: IPointerEvent
   abstract _load(): LoadingProgress
   abstract _unload(): void
   abstract _releaseGUIs(): void

@@ -1,4 +1,10 @@
-
+import { Bone } from '@babylonjs/core/Bones/bone'
+import { Skeleton } from '@babylonjs/core/Bones/skeleton'
+import {
+  Matrix,
+  Vector3
+} from '@babylonjs/core/Maths/math.vector'
+import { Observer } from '@babylonjs/core/Misc/observable'
 
 import { LoadingProgress } from '../../base'
 import { Core } from '../../base/core/core'
@@ -74,8 +80,8 @@ export function Actor(props: ActorProps = {}): any {
       transform: SpriteInterface | MeshInterface | null
       t: SpriteInterface | MeshInterface | null
       _loopUpdate = true
-      _loopUpdate$: BABYLON.Observer<number>
-      _canvasResize$: BABYLON.Observer<Rect>
+      _loopUpdate$: Observer<number>
+      _canvasResize$: Observer<Rect>
       _started = false
       _updating = false
       _enabled = false
@@ -273,11 +279,11 @@ export function Actor(props: ActorProps = {}): any {
         const element = this._getNodeElement(Node)
         if (element) {
           if (!this._body.babylon.mesh.skeleton) {
-            this._body.babylon.mesh.skeleton = new BABYLON.Skeleton('skeleton', '', this.scene.babylon.scene)
-            const boneRoot = new BABYLON.Bone('boneRoot', this._body.babylon.mesh.skeleton, null, BABYLON.Matrix.Identity())
+            this._body.babylon.mesh.skeleton = new Skeleton('skeleton', '', this.scene.babylon.scene)
+            const boneRoot = new Bone('boneRoot', this._body.babylon.mesh.skeleton, null, Matrix.Identity())
           }
           const boneParentIndex = this._body.babylon.mesh.skeleton.getBoneIndexByName(parentName ?? 'boneRoot')
-          const bone = new BABYLON.Bone(name, this._body.babylon.mesh.skeleton, this._body.babylon.mesh.skeleton.bones[boneParentIndex], BABYLON.Matrix.Identity())
+          const bone = new Bone(name, this._body.babylon.mesh.skeleton, this._body.babylon.mesh.skeleton.bones[boneParentIndex], Matrix.Identity())
           element.babylon.mesh.billboardMode = 0
           element.babylon.mesh.attachToBone(bone, this._body.babylon.mesh)
 
@@ -450,7 +456,7 @@ export function Actor(props: ActorProps = {}): any {
         return this._actions.get(actionConstructor) as InstanceType<C>
       }
 
-      attachParticle(id: FlexId, particleConstructorOrMethod: ParticleConstructor | ((particle: ParticleInterface, setup: any) => void), setup: any, offset: BABYLON.Vector3, nodeName?: string): ParticleInterface {
+      attachParticle(id: FlexId, particleConstructorOrMethod: ParticleConstructor | ((particle: ParticleInterface, setup: any) => void), setup: any, offset: Vector3, nodeName?: string): ParticleInterface {
         let isMethod = false
         if (!particleConstructorOrMethod.prototype?.constructor) {
           isMethod = true

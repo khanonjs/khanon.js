@@ -1,4 +1,4 @@
-
+import { EngineOptions } from '@babylonjs/core/Engines/thinEngine'
 
 export type EngineConfiguration = {
   /**
@@ -9,7 +9,7 @@ export type EngineConfiguration = {
   /**
    * Refers to Babylon engine options: https://doc.babylonjs.com/typedoc/interfaces/BABYLON.EngineOptions
    */
-  options?: BABYLON.EngineOptions
+  options?: EngineOptions
 
   /**
    * Default = true

@@ -1,4 +1,4 @@
-
+import { Vector3 } from '@babylonjs/core/Maths/math.vector'
 
 import { MetadataParticleDefinition } from '../../base/interfaces/metadata/metadata-particle-definition'
 import {
@@ -54,7 +54,7 @@ export class SceneSpawn {
     }
   }
 
-  particle(particleConstructorOrMethod: ParticleConstructor | ((particle: ParticleInterface, setup: any) => void), setup: any, offset?: BABYLON.Vector3): ParticleInterface {
+  particle(particleConstructorOrMethod: ParticleConstructor | ((particle: ParticleInterface, setup: any) => void), setup: any, offset?: Vector3): ParticleInterface {
     let isMethod = false
     if (!particleConstructorOrMethod.prototype?.constructor) {
       isMethod = true
