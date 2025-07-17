@@ -1,4 +1,4 @@
-import * as BABYLON from '@babylonjs/core'
+import { StaticSoundBuffer } from '@babylonjs/core/AudioV2/abstractAudio/staticSoundBuffer'
 
 import { Logger } from '../../modules/logger'
 import { LoadingProgress } from '../loading-progress/loading-progress'
@@ -9,7 +9,7 @@ export class Asset</* Source interface */ S = any, /* Definition data */ D = any
 
   private sources: Set<S> = new Set<S>()
   private _buffer: ArrayBuffer | undefined
-  private _audioBuffer: BABYLON.StaticSoundBuffer | undefined
+  private _audioBuffer: StaticSoundBuffer | undefined
   private _objectURL: string | undefined
   private _serial: string | undefined
   private _file: File | undefined
@@ -25,7 +25,7 @@ export class Asset</* Source interface */ S = any, /* Definition data */ D = any
     }
   }
 
-  get audioBuffer(): BABYLON.StaticSoundBuffer {
+  get audioBuffer(): StaticSoundBuffer {
     if (!this._audioBuffer) {
       Logger.error(`Asset Error: No Audio Buffer for asset '${this.definition.url}', did you mean other type?`)
       return null as any
@@ -96,7 +96,7 @@ export class Asset</* Source interface */ S = any, /* Definition data */ D = any
     this._buffer = buffer
   }
 
-  setAudioBuffer(audioBuffer: BABYLON.StaticSoundBuffer) {
+  setAudioBuffer(audioBuffer: StaticSoundBuffer) {
     this._audioBuffer = audioBuffer
   }
 

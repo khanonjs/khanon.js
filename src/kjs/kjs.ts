@@ -1,4 +1,4 @@
-import * as BABYLON from '@babylonjs/core'
+import { Observer } from '@babylonjs/core/Misc/observable'
 
 import { Core } from '../base/core/core'
 import { LoadingProgress } from '../base/loading-progress/loading-progress'
@@ -34,19 +34,19 @@ export class KJS {
     return Core.switchAppState(state, setup)
   }
 
-  static loopUpdateAddObserver(func: (delta: number) => void): BABYLON.Observer<number> {
+  static loopUpdateAddObserver(func: (delta: number) => void): Observer<number> {
     return Core.loopUpdateAddObserver(func)
   }
 
-  static loopUpdateRemoveObserver(observer: BABYLON.Observer<number>): void {
+  static loopUpdateRemoveObserver(observer: Observer<number>): void {
     Core.loopUpdateRemoveObserver(observer)
   }
 
-  static canvasResizeAddObserver(func: (size: Rect) => void): BABYLON.Observer<Rect> {
+  static canvasResizeAddObserver(func: (size: Rect) => void): Observer<Rect> {
     return Core.canvasResizeAddObserver(func)
   }
 
-  static canvasResizeRemoveObserver(observer: BABYLON.Observer<Rect>): void {
+  static canvasResizeRemoveObserver(observer: Observer<Rect>): void {
     Core.canvasResizeRemoveObserver(observer)
   }
 

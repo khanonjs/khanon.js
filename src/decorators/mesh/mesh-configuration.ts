@@ -1,5 +1,5 @@
-import * as BABYLON from '@babylonjs/core'
+import { Mesh } from '@babylonjs/core/Meshes/mesh'
 
 export abstract class MeshConfiguration {
-  abstract apply(babylonMesh: BABYLON.Mesh): void
+  abstract apply(babylonMesh: Mesh): void
 }

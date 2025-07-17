@@ -1,4 +1,5 @@
-import * as BABYLON from '@babylonjs/core'
+import { Vector3 } from '@babylonjs/core/Maths/math.vector'
+import { SceneOptions } from '@babylonjs/core/scene'
 
 import { LoadingProgress } from '../../base'
 import {
@@ -59,7 +60,7 @@ export declare class SceneSpawn {
    * @param setup Setup object of the particle defined in the particle generic S
    * @param offset Position offset of the emitter
    */
-  particle<P extends ParticleConstructor>(Particle: P | ((particle: InstanceType<P>, setup: any) => void), setup: InstanceType<P>['setup'], offset?: BABYLON.Vector3): InstanceType<P>
+  particle<P extends ParticleConstructor>(Particle: P | ((particle: InstanceType<P>, setup: any) => void), setup: InstanceType<P>['setup'], offset?: Vector3): InstanceType<P>
 
   /**
    * Spawns a sprite in the scene.
@@ -367,7 +368,7 @@ export interface SceneProps {
   /**
    * Refers to BABYLON.SceneOptions: https://doc.babylonjs.com/typedoc/interfaces/BABYLON.SceneOptions
    */
-  options?: BABYLON.SceneOptions
+  options?: SceneOptions
 
   /**
    * Babylon Scene accessors to configure the scene.

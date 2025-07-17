@@ -1,4 +1,7 @@
-import * as BABYLON from '@babylonjs/core'
+import { Vector3 } from '@babylonjs/core/Maths/math.vector'
+import { Observer } from '@babylonjs/core/Misc/observable'
+import { ParticleSystem } from '@babylonjs/core/Particles/particleSystem'
+import { RenderingManager } from '@babylonjs/core/Rendering/renderingManager'
 
 import { LoadingProgress } from '../../base'
 import { Core } from '../../base/core/core'
@@ -64,14 +67,14 @@ export function Particle(props: ParticleProps): any {
         babylon: Pick<BabylonAccessor, 'scene' | 'particleSystem'> = { scene: null as any, particleSystem: null as any }
         setup: any
         _loopUpdate = true
-        _loopUpdate$: BABYLON.Observer<number>
-        _canvasResize$: BABYLON.Observer<Rect>
-        _attachmentUpdate$: BABYLON.Observer<number> | undefined
+        _loopUpdate$: Observer<number>
+        _canvasResize$: Observer<Rect>
+        _attachmentUpdate$: Observer<number> | undefined
         _animations: SpriteAnimation[] | null = null
         _spriteClassName: string
         _spriteProps: SpriteProps
         _spriteParticleInfo: SpriteParticleInfo
-        _position: BABYLON.Vector3
+        _position: Vector3
 
         set loopUpdate(value: boolean) {
           this._loopUpdate = value
@@ -88,14 +91,14 @@ export function Particle(props: ParticleProps): any {
             } else {
               this._position = this._props.position.clone()
             }
-            this.babylon.particleSystem = new BABYLON.ParticleSystem(this.getClassName(), this._props.capacity, this.scene.babylon.scene)
+            this.babylon.particleSystem = new ParticleSystem(this.getClassName(), this._props.capacity, this.scene.babylon.scene)
             if (this._props.renderingGroupId) {
-              if (this._props.renderingGroupId >= BABYLON.RenderingManager.MAX_RENDERINGGROUPS) {
-                Logger.warn(`Using a renderingGroupId higher than maximum value ${BABYLON.RenderingManager.MAX_RENDERINGGROUPS - 1}`, this.getClassName())
+              if (this._props.renderingGroupId >= RenderingManager.MAX_RENDERINGGROUPS) {
+                Logger.warn(`Using a renderingGroupId higher than maximum value ${RenderingManager.MAX_RENDERINGGROUPS - 1}`, this.getClassName())
               }
               this.babylon.particleSystem.renderingGroupId = this._props.renderingGroupId
             } else if (this._props.renderOverScene) {
-              this.babylon.particleSystem.renderingGroupId = BABYLON.RenderingManager.MAX_RENDERINGGROUPS - 1
+              this.babylon.particleSystem.renderingGroupId = RenderingManager.MAX_RENDERINGGROUPS - 1
             }
             if (this.onInitialize) {
               this.onInitialize(this, setup)
@@ -103,7 +106,7 @@ export function Particle(props: ParticleProps): any {
             if (this._attachmentInfo.attachment) {
               this._updatePosition()
             } else {
-              this.babylon.particleSystem.emitter = (this.babylon.particleSystem.emitter as BABYLON.Vector3).add(this._position)
+              this.babylon.particleSystem.emitter = (this.babylon.particleSystem.emitter as Vector3).add(this._position)
             }
             this.babylon.particleSystem.onStoppedObservable.add(() => {
               switchLoopUpdate(false, this)

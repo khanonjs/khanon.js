@@ -1,4 +1,9 @@
-import * as BABYLON from '@babylonjs/core'
+import { Effect } from '@babylonjs/core/Materials/effect'
+import { ShaderMaterial } from '@babylonjs/core/Materials/shaderMaterial'
+import { DynamicTexture } from '@babylonjs/core/Materials/Textures/dynamicTexture'
+import { Texture } from '@babylonjs/core/Materials/Textures/texture'
+import { Mesh as BabylonMesh } from '@babylonjs/core/Meshes/mesh'
+import { VertexData } from '@babylonjs/core/Meshes/mesh.vertexData'
 
 import { Asset } from '../../base'
 import { BabylonAccessor } from '../../models/babylon-accessor'
@@ -8,7 +13,7 @@ import { SpriteProps } from './sprite-props'
 
 export class SpriteMesh {
   static idShader = 0
-  babylon: Pick<BabylonAccessor<any, BABYLON.Mesh, BABYLON.ShaderMaterial>, 'texture' | 'mesh' | 'material' | 'scene'> = { texture: null as any, mesh: null as any, material: null as any, scene: null as any }
+  babylon: Pick<BabylonAccessor<any, BabylonMesh, ShaderMaterial>, 'texture' | 'mesh' | 'material' | 'scene'> = { texture: null as any, mesh: null as any, material: null as any, scene: null as any }
   name: string
   asset: Asset<SceneInterface>
   idShader: number
@@ -38,7 +43,7 @@ export class SpriteMesh {
     return new Promise((resolve) => {
       this.name = asset.definition.url
       this.asset = asset
-      this.babylon.texture = new BABYLON.Texture(asset.objectURL, this.babylon.scene, this.spriteProps.noMipmap, !this.spriteProps.invertY, this.spriteProps.samplingMode)
+      this.babylon.texture = new Texture(asset.objectURL, this.babylon.scene, this.spriteProps.noMipmap, !this.spriteProps.invertY, this.spriteProps.samplingMode)
       this.babylon.texture.name = this.name
       this.babylon.texture.onLoadObservable.add(() => {
         const size = this.babylon.texture.getSize()
@@ -55,14 +60,14 @@ export class SpriteMesh {
       this.width = this.spriteProps.width
       this.height = this.spriteProps.height
       this.name = name
-      this.babylon.texture = new BABYLON.DynamicTexture(this.name, { width: this.width, height: this.height }, this.babylon.scene, this.spriteProps.noMipmap, this.spriteProps.samplingMode, this.spriteProps.format, !this.spriteProps.invertY)
+      this.babylon.texture = new DynamicTexture(this.name, { width: this.width, height: this.height }, this.babylon.scene, this.spriteProps.noMipmap, this.spriteProps.samplingMode, this.spriteProps.format, !this.spriteProps.invertY)
       this.buildMesh()
     } else {
       Logger.error('Please set width and height for blank sprites.', this.className)
     }
   }
 
-  setFromTexture(texture: BABYLON.Texture | BABYLON.DynamicTexture, name: string, width?: number, height?: number): void {
+  setFromTexture(texture: Texture | DynamicTexture, name: string, width?: number, height?: number): void {
     this.width = width ?? this.spriteProps.width ?? texture.getSize().width
     this.height = height ?? this.spriteProps.height ?? texture.getSize().height
     if (this.width === 0 || this.height === 0) {
@@ -80,7 +85,7 @@ export class SpriteMesh {
     const w = this.cellWidth / 2
     const h = this.cellHeight / 2
 
-    const quadVertexData = new BABYLON.VertexData()
+    const quadVertexData = new VertexData()
     // The 4 vertices, clockwise starting from bottom left
     const positions = [
       -w, -h, 0,
@@ -104,7 +109,7 @@ export class SpriteMesh {
     quadVertexData.indices = indices
     quadVertexData.uvs = uvs
 
-    this.babylon.mesh = new BABYLON.Mesh(`SpriteSource - ${this.name}`, this.babylon.scene)
+    this.babylon.mesh = new BabylonMesh(`SpriteSource - ${this.name}`, this.babylon.scene)
     this.babylon.mesh.setEnabled(false)
     quadVertexData.applyToMesh(this.babylon.mesh, true)
 
@@ -120,7 +125,7 @@ export class SpriteMesh {
       return
     }
 
-    BABYLON.Effect.ShadersStore[`spriteMesh${this.idShader}VertexShader`] = `
+    Effect.ShadersStore[`spriteMesh${this.idShader}VertexShader`] = `
     precision highp float;
     attribute vec3 position;
     attribute vec2 uv;
@@ -133,7 +138,7 @@ export class SpriteMesh {
         vUv = uv;
     }
 `
-    BABYLON.Effect.ShadersStore[`spriteMesh${this.idShader}FragmentShader`] = `
+    Effect.ShadersStore[`spriteMesh${this.idShader}FragmentShader`] = `
     precision highp float;
     varying vec2 vUv;
     uniform sampler2D textureSampler;
@@ -149,7 +154,7 @@ export class SpriteMesh {
     }
 `
 
-    const shaderMaterial = new BABYLON.ShaderMaterial(`spriteMaterial-${this.name}`, this.babylon.scene, `spriteMesh${this.idShader}`, {
+    const shaderMaterial = new ShaderMaterial(`spriteMaterial-${this.name}`, this.babylon.scene, `spriteMesh${this.idShader}`, {
       attributes: ['position', 'uv'],
       uniforms: ['worldViewProjection'],
       samplers: ['textureSampler'],
@@ -163,14 +168,14 @@ export class SpriteMesh {
     this.babylon.material = shaderMaterial
   }
 
-  spawn(isExclusive: boolean): BABYLON.Mesh {
+  spawn(isExclusive: boolean): BabylonMesh {
     const mesh = this.babylon.mesh.clone(`Sprite - ${this.name}`)
     if (this.babylon.mesh.material && !isExclusive) {
       // Clone material for individual animations and properties
       mesh.material = this.babylon.mesh.material.clone(`Material - ${this.name}`)
     }
     mesh.setEnabled(true)
-    mesh.billboardMode = BABYLON.Mesh.BILLBOARDMODE_ALL
+    mesh.billboardMode = BabylonMesh.BILLBOARDMODE_ALL
     return mesh
   }
 

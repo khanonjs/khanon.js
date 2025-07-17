@@ -1,4 +1,4 @@
-import * as BABYLON from '@babylonjs/core'
+import { Vector3 } from '@babylonjs/core/Maths/math.vector'
 
 import {
   BabylonAccessor,
@@ -170,7 +170,7 @@ export interface ParticleProps {
    * Offset respect the attachment in case the particle is attached to an actor.
    * World position in case the particle is spawned by a scene.
    */
-  position?: BABYLON.Vector3
+  position?: Vector3
 
   /**
    * Maximum number of particles to be emitted (2000 by default).

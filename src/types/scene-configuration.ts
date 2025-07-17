@@ -1,8 +1,8 @@
-import * as BABYLON from '@babylonjs/core'
+import { Scene } from '@babylonjs/core/scene'
 
 // VERSION: Review on each babylon update
 /** @interface */
-export type SceneConfiguration = Partial<Pick<BABYLON.Scene,
+export type SceneConfiguration = Partial<Pick<Scene,
   'ambientColor' |
   'animationTimeScale' |
   'animationsEnabled' |

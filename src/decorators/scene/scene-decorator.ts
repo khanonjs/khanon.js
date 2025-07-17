@@ -1,4 +1,12 @@
-import * as BABYLON from '@babylonjs/core'
+import { UniversalCamera } from '@babylonjs/core/Cameras/universalCamera'
+import { IPointerEvent } from '@babylonjs/core/Events/deviceInputEvents'
+import { AppendSceneAsync } from '@babylonjs/core/Loading/sceneLoader'
+import { Vector3 } from '@babylonjs/core/Maths/math.vector'
+import {
+  Observable,
+  Observer
+} from '@babylonjs/core/Misc/observable'
+import { Scene as BabylonScene } from '@babylonjs/core/scene'
 
 import {
   AssetDefinition,
@@ -102,17 +110,17 @@ export function Scene(props: SceneProps = {}): any {
       _spawn: SceneSpawn
       _remove: SceneRemove
       _loopUpdate = true
-      _$keyDown: BABYLON.Observable<KeyboardEvent> = new BABYLON.Observable<KeyboardEvent>()
-      _$keyUp: BABYLON.Observable<KeyboardEvent> = new BABYLON.Observable<KeyboardEvent>()
-      _$keyPress: BABYLON.Observable<KeyboardEvent> = new BABYLON.Observable<KeyboardEvent>()
-      _$pointerDown: BABYLON.Observable<BABYLON.IPointerEvent> = new BABYLON.Observable<BABYLON.IPointerEvent>()
-      _$pointerUp: BABYLON.Observable<BABYLON.IPointerEvent> = new BABYLON.Observable<BABYLON.IPointerEvent>()
-      _$pointerPress: BABYLON.Observable<BABYLON.IPointerEvent> = new BABYLON.Observable<BABYLON.IPointerEvent>()
-      _$pointerMove: BABYLON.Observable<BABYLON.IPointerEvent> = new BABYLON.Observable<BABYLON.IPointerEvent>()
-      _$pointerDrag: BABYLON.Observable<BABYLON.IPointerEvent> = new BABYLON.Observable<BABYLON.IPointerEvent>()
+      _$keyDown: Observable<KeyboardEvent> = new Observable<KeyboardEvent>()
+      _$keyUp: Observable<KeyboardEvent> = new Observable<KeyboardEvent>()
+      _$keyPress: Observable<KeyboardEvent> = new Observable<KeyboardEvent>()
+      _$pointerDown: Observable<IPointerEvent> = new Observable<IPointerEvent>()
+      _$pointerUp: Observable<IPointerEvent> = new Observable<IPointerEvent>()
+      _$pointerPress: Observable<IPointerEvent> = new Observable<IPointerEvent>()
+      _$pointerMove: Observable<IPointerEvent> = new Observable<IPointerEvent>()
+      _$pointerDrag: Observable<IPointerEvent> = new Observable<IPointerEvent>()
       _pointerPressInterval: Timeout
       _pointerPress = false
-      _pointerPressEvent: BABYLON.IPointerEvent
+      _pointerPressEvent: IPointerEvent
       _debugInspector: (event: KeyboardEvent) => void
 
       // Spawned elements
@@ -133,8 +141,8 @@ export function Scene(props: SceneProps = {}): any {
 
       // User available
       babylon: Pick<BabylonAccessor, 'scene'> = { scene: null as any }
-      _loopUpdate$: BABYLON.Observer<number>
-      _canvasResize$: BABYLON.Observer<Rect>
+      _loopUpdate$: Observer<number>
+      _canvasResize$: Observer<Rect>
       get loaded(): boolean { return this._loaded }
       get started(): boolean { return this._started }
       get state(): SceneStateInterface | null { return this._state }
@@ -169,8 +177,8 @@ export function Scene(props: SceneProps = {}): any {
           // @ts-ignore
           class GenericCamera extends CameraInterface {
             onInitialize() {
-              const camera = new BABYLON.UniversalCamera('Generic camera', new BABYLON.Vector3(0, 0, 0), this.babylon.scene)
-              camera.target = new BABYLON.Vector3(1, 0, 0)
+              const camera = new UniversalCamera('Generic camera', new Vector3(0, 0, 0), this.babylon.scene)
+              camera.target = new Vector3(1, 0, 0)
               camera.inputs.clear()
               camera.minZ = 0.01
               return camera
@@ -222,7 +230,7 @@ export function Scene(props: SceneProps = {}): any {
           return this._loadingProgress
         } else {
           // Create babylon scene and apply configuration
-          this.babylon.scene = new BABYLON.Scene(Core.engine, this._props.options)
+          this.babylon.scene = new BabylonScene(Core.engine, this._props.options)
 
           this._loadingProgress = new LoadingProgress()
           if (!this._assets) {
@@ -291,7 +299,7 @@ export function Scene(props: SceneProps = {}): any {
                 })
               }
               if (this._props.url) {
-                BABYLON.AppendSceneAsync(this._props.url, this.babylon.scene)
+                AppendSceneAsync(this._props.url, this.babylon.scene)
                   .then(() => {
                     Logger.debug(`Scene load AppendAsync from '${this._props.url}' completed.`, this.getClassName())
                     startScene()
@@ -374,7 +382,7 @@ export function Scene(props: SceneProps = {}): any {
         addEventListener('keypress', this._eventKeyPress)
         addEventListener('keyup', this._eventKeyUp)
         addEventListener('keydown', this._eventKeyDown)
-        this.babylon.scene.onPointerDown = (event: BABYLON.IPointerEvent) => {
+        this.babylon.scene.onPointerDown = (event: IPointerEvent) => {
           this._pointerPress = true
           this._pointerPressEvent = event
           this._$pointerDown.notifyObservers(event)
@@ -385,14 +393,14 @@ export function Scene(props: SceneProps = {}): any {
             this._$pointerPress.notifyObservers(this._pointerPressEvent)
           }, 0)
         }
-        this.babylon.scene.onPointerUp = (event: BABYLON.IPointerEvent) => {
+        this.babylon.scene.onPointerUp = (event: IPointerEvent) => {
           this._pointerPress = false
           this._$pointerUp.notifyObservers(event)
           if (this._pointerPressInterval) {
             this.clearInterval(this._pointerPressInterval)
           }
         }
-        this.babylon.scene.onPointerMove = (event: BABYLON.IPointerEvent) => {
+        this.babylon.scene.onPointerMove = (event: IPointerEvent) => {
           this._pointerPressEvent = event
           this._$pointerMove.notifyObservers(event)
           if (this._pointerPress) {

@@ -1,5 +1,4 @@
-import * as BABYLON from '@babylonjs/core'
-import * as BABYLONGUI from '@babylonjs/gui'
+import { AdvancedDynamicTexture } from '@babylonjs/gui/2D/advancedDynamicTexture'
 
 import { Timeout } from '../../models'
 import { BabylonAccessor } from '../../models/babylon-accessor'
@@ -72,7 +71,7 @@ export declare abstract class GUIInterface</* Setup object */ S = any> {
   /**
    * User defined mandatory (abstract on .d.ts)
    */
-  abstract onInitialize?(container: BABYLONGUI.AdvancedDynamicTexture): void
+  abstract onInitialize?(container: AdvancedDynamicTexture): void
 
   /**
    * User defined optional

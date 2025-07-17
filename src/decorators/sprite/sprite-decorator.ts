@@ -1,4 +1,17 @@
-import * as BABYLON from '@babylonjs/core'
+import { ShaderMaterial } from '@babylonjs/core/Materials/shaderMaterial'
+import { DynamicTexture } from '@babylonjs/core/Materials/Textures/dynamicTexture'
+import { Space } from '@babylonjs/core/Maths/math.axis'
+import {
+  Matrix,
+  Vector3
+} from '@babylonjs/core/Maths/math.vector'
+import { TransformNode } from '@babylonjs/core/Meshes/transformNode'
+import {
+  Observable,
+  Observer
+} from '@babylonjs/core/Misc/observable'
+import { RenderingManager } from '@babylonjs/core/Rendering/renderingManager'
+import { DeepImmutable } from '@babylonjs/core/types'
 
 import { LoadingProgress } from '../../base'
 import { Core } from '../../base/core/core'
@@ -17,7 +30,6 @@ import {
   applyDefaults,
   attachCanvasResize,
   invokeCallback,
-  isFlexId,
   removeCanvasResize,
   removeLoopUpdate,
   switchLoopUpdate
@@ -63,8 +75,8 @@ export function Sprite(props: SpriteProps): any {
             switchLoopUpdate(this._loopUpdate, this)
             attachCanvasResize(this)
             if (this._props.renderingGroupId) {
-              if (this._props.renderingGroupId >= BABYLON.RenderingManager.MAX_RENDERINGGROUPS) {
-                Logger.warn(`Using a renderingGroupId higher than maximum value ${BABYLON.RenderingManager.MAX_RENDERINGGROUPS - 1}`, this.getClassName())
+              if (this._props.renderingGroupId >= RenderingManager.MAX_RENDERINGGROUPS) {
+                Logger.warn(`Using a renderingGroupId higher than maximum value ${RenderingManager.MAX_RENDERINGGROUPS - 1}`, this.getClassName())
               }
               this.babylon.mesh.renderingGroupId = this._props.renderingGroupId
             }
@@ -87,8 +99,8 @@ export function Sprite(props: SpriteProps): any {
         _animation: SpriteAnimation | null = null
         _animations: Map<FlexId, SpriteAnimation> = new Map<FlexId, SpriteAnimation>()
         babylon: Pick<BabylonAccessor, 'mesh' | 'scene'> = { scene: null as any, mesh: null as any }
-        _loopUpdate$: BABYLON.Observer<number>
-        _canvasResize$: BABYLON.Observer<Rect>
+        _loopUpdate$: Observer<number>
+        _canvasResize$: Observer<Rect>
         _keyFramesTimeouts: Timeout[] = []
         endAnimationTimerInterval: Timeout | null
         endAnimationTimerTimeout: Timeout | null
@@ -103,7 +115,7 @@ export function Sprite(props: SpriteProps): any {
 
         set visibility(value: number) {
           this.babylon.mesh.visibility = value;
-          (this.babylon.mesh.material as BABYLON.ShaderMaterial).setFloat('alpha', this.babylon.mesh.visibility)
+          (this.babylon.mesh.material as ShaderMaterial).setFloat('alpha', this.babylon.mesh.visibility)
         }
 
         get visibility(): number { return this.babylon.mesh.visibility }
@@ -125,9 +137,9 @@ export function Sprite(props: SpriteProps): any {
           return this._animation
         }
 
-        get absolutePosition(): BABYLON.Vector3 { return this.babylon.mesh.absolutePosition }
-        set position(value: BABYLON.Vector3) { this.babylon.mesh.position = value }
-        get position(): BABYLON.Vector3 { return this.babylon.mesh.position }
+        get absolutePosition(): Vector3 { return this.babylon.mesh.absolutePosition }
+        set position(value: Vector3) { this.babylon.mesh.position = value }
+        get position(): Vector3 { return this.babylon.mesh.position }
         set rotation(value: number) { this.babylon.mesh.rotation.z = value }
         get rotation(): number { return this.babylon.mesh.rotation.z }
         set scale(value: number) { this.babylon.mesh.scaling.set(value, value, 1.0) }
@@ -140,18 +152,18 @@ export function Sprite(props: SpriteProps): any {
         get scaleX(): number { return this.babylon.mesh.scaling.x }
         set scaleY(value: number) { this.babylon.mesh.scaling.set(this.babylon.mesh.scaling.x, value, 1.0) }
         get scaleY(): number { return this.babylon.mesh.scaling.y }
-        getAbsolutePivotPoint(): BABYLON.Vector3 { return this.babylon.mesh.getAbsolutePivotPoint() }
-        getAbsolutePivotPointToRef(result: BABYLON.Vector3): BABYLON.TransformNode { return this.babylon.mesh.getAbsolutePivotPointToRef(result) }
-        getAbsolutePosition(): BABYLON.Vector3 { return this.babylon.mesh.getAbsolutePosition() }
-        getPivotPoint(): BABYLON.Vector3 { return this.babylon.mesh.getPivotPoint() }
-        getPivotPointToRef(result: BABYLON.Vector3): BABYLON.TransformNode { return this.babylon.mesh.getPivotPointToRef(result) }
-        locallyTranslate(vector3: BABYLON.Vector3): BABYLON.TransformNode { return this.babylon.mesh.locallyTranslate(vector3) }
-        rotateAround(point: BABYLON.Vector3, axis: BABYLON.Vector3, amount: number): BABYLON.TransformNode { return this.babylon.mesh.rotateAround(point, axis, amount) }
-        setAbsolutePosition(absolutePosition: BABYLON.Vector3): BABYLON.TransformNode { return this.babylon.mesh.setAbsolutePosition(absolutePosition) }
-        setPivotMatrix(matrix: BABYLON.DeepImmutable<BABYLON.Matrix>, postMultiplyPivotMatrix?: boolean): BABYLON.TransformNode { return this.babylon.mesh.setPivotMatrix(matrix, postMultiplyPivotMatrix) }
-        setPivotPoint(point: BABYLON.Vector3, space?: BABYLON.Space): BABYLON.TransformNode { return this.babylon.mesh.setPivotPoint(point, space) }
-        setPositionWithLocalVector(vector3: BABYLON.Vector3): BABYLON.TransformNode { return this.babylon.mesh.setPositionWithLocalVector(vector3) }
-        translate(axis: BABYLON.Vector3, distance: number, space?: BABYLON.Space): BABYLON.TransformNode { return this.babylon.mesh.translate(axis, distance, space) }
+        getAbsolutePivotPoint(): Vector3 { return this.babylon.mesh.getAbsolutePivotPoint() }
+        getAbsolutePivotPointToRef(result: Vector3): TransformNode { return this.babylon.mesh.getAbsolutePivotPointToRef(result) }
+        getAbsolutePosition(): Vector3 { return this.babylon.mesh.getAbsolutePosition() }
+        getPivotPoint(): Vector3 { return this.babylon.mesh.getPivotPoint() }
+        getPivotPointToRef(result: Vector3): TransformNode { return this.babylon.mesh.getPivotPointToRef(result) }
+        locallyTranslate(vector3: Vector3): TransformNode { return this.babylon.mesh.locallyTranslate(vector3) }
+        rotateAround(point: Vector3, axis: Vector3, amount: number): TransformNode { return this.babylon.mesh.rotateAround(point, axis, amount) }
+        setAbsolutePosition(absolutePosition: Vector3): TransformNode { return this.babylon.mesh.setAbsolutePosition(absolutePosition) }
+        setPivotMatrix(matrix: DeepImmutable<Matrix>, postMultiplyPivotMatrix?: boolean): TransformNode { return this.babylon.mesh.setPivotMatrix(matrix, postMultiplyPivotMatrix) }
+        setPivotPoint(point: Vector3, space?: Space): TransformNode { return this.babylon.mesh.setPivotPoint(point, space) }
+        setPositionWithLocalVector(vector3: Vector3): TransformNode { return this.babylon.mesh.setPositionWithLocalVector(vector3) }
+        translate(axis: Vector3, distance: number, space?: Space): TransformNode { return this.babylon.mesh.translate(axis, distance, space) }
 
         _setSpriteMesh(spriteMesh: SpriteMesh, isExclusive: boolean) {
           if (this.babylon.mesh) {
@@ -164,7 +176,7 @@ export function Sprite(props: SpriteProps): any {
         }
 
         _setShaderMaterialTextureFrame(frame: number): void {
-          (this.babylon.mesh.material as BABYLON.ShaderMaterial).setInt('frame', frame)
+          (this.babylon.mesh.material as ShaderMaterial).setInt('frame', frame)
         }
 
         setFrame(frame: number): void {
@@ -197,7 +209,7 @@ export function Sprite(props: SpriteProps): any {
           }
           if (animation.keyFrames) {
             animation.keyFrames.forEach((keyFrame) => {
-              keyFrame.emitter = new BABYLON.Observable<void>()
+              keyFrame.emitter = new Observable<void>()
               keyFrame.ms = []
               keyFrame.frames.forEach((frame) => {
                 keyFrame.ms.push((frame - animation.frameStart) * animation.delay)
@@ -273,8 +285,8 @@ export function Sprite(props: SpriteProps): any {
           this._animation = null
         }
 
-        subscribeToKeyframe(keyframeId: FlexId, callback: () => void): BABYLON.Observer<void>[] {
-          const observers: BABYLON.Observer<void>[] = []
+        subscribeToKeyframe(keyframeId: FlexId, callback: () => void): Observer<void>[] {
+          const observers: Observer<void>[] = []
           this._animations.forEach(animation => {
             animation.keyFrames?.filter(keyframe => keyframe.id === keyframeId)
               .forEach(keyframe => observers.push(keyframe.emitter.add(callback)))
@@ -320,7 +332,7 @@ export function Sprite(props: SpriteProps): any {
 
           const font = `${properties.fontStyle} ${properties.fontSize}px ${properties.fontName}`
 
-          const checkSizeTx = new BABYLON.DynamicTexture('DynamicTexture', 64, this.babylon.scene, false)
+          const checkSizeTx = new DynamicTexture('DynamicTexture', 64, this.babylon.scene, false)
           const ctx = checkSizeTx.getContext()
           ctx.font = font
           const metricsFirst = ctx.measureText(text)
@@ -332,7 +344,7 @@ export function Sprite(props: SpriteProps): any {
           const textureWidth = properties.textureSize?.width ?? textWidth
           const textureHeight = properties.textureSize?.height ?? textHeiht + properties.fontSize / 2
 
-          const dynamicTexture = new BABYLON.DynamicTexture('draw-text-texture', { width: textureWidth, height: textureHeight }, this.babylon.scene, false)
+          const dynamicTexture = new DynamicTexture('draw-text-texture', { width: textureWidth, height: textureHeight }, this.babylon.scene, false)
           const ctxTx = dynamicTexture.getContext()
           if (properties.bgColor) {
             ctxTx.beginPath()

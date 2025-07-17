@@ -1,4 +1,32 @@
-import * as BABYLON from '@babylonjs/core'
+import { Animation } from '@babylonjs/core/Animations/animation'
+import { AnimationEvent } from '@babylonjs/core/Animations/animationEvent'
+import { AnimationGroup } from '@babylonjs/core/Animations/animationGroup'
+import { AssetContainer } from '@babylonjs/core/assetContainer'
+import { LoadAssetContainerAsync } from '@babylonjs/core/Loading/sceneLoader.js'
+import {
+  Color3,
+  Color4,
+  Space,
+  Vector2
+} from '@babylonjs/core/Maths/math'
+import {
+  Matrix,
+  Quaternion,
+  Vector3
+} from '@babylonjs/core/Maths/math.vector'
+import { AbstractMesh } from '@babylonjs/core/Meshes/abstractMesh'
+import { InstancedMesh } from '@babylonjs/core/Meshes/instancedMesh'
+import { Mesh as BabylonMesh } from '@babylonjs/core/Meshes/mesh'
+import { TransformNode } from '@babylonjs/core/Meshes/transformNode'
+import {
+  Observable,
+  Observer
+} from '@babylonjs/core/Misc/observable'
+import { RenderingManager } from '@babylonjs/core/Rendering/renderingManager'
+import {
+  DeepImmutable,
+  Nullable
+} from '@babylonjs/core/types'
 
 import {
   AssetDataMesh,
@@ -68,7 +96,7 @@ export function Mesh(props: MeshProps = {}): any {
                     Logger.error(`Animation '${animation.id}' not found in mesh '${this._props.url}':`, this.getClassName())
                   }
                 })
-                const mesh = entries.rootNodes[0] as BABYLON.Mesh
+                const mesh = entries.rootNodes[0] as BabylonMesh
                 mesh.name = 'Mesh - ' + this._props.url
                 this.setMesh(mesh)
               } else {
@@ -78,8 +106,8 @@ export function Mesh(props: MeshProps = {}): any {
             switchLoopUpdate(this._loopUpdate, this)
             attachCanvasResize(this)
             if (this._props.renderingGroupId) {
-              if (this._props.renderingGroupId >= BABYLON.RenderingManager.MAX_RENDERINGGROUPS) {
-                Logger.warn(`Using a renderingGroupId higher than maximum value ${BABYLON.RenderingManager.MAX_RENDERINGGROUPS - 1}`, this.getClassName())
+              if (this._props.renderingGroupId >= RenderingManager.MAX_RENDERINGGROUPS) {
+                Logger.warn(`Using a renderingGroupId higher than maximum value ${RenderingManager.MAX_RENDERINGGROUPS - 1}`, this.getClassName())
               }
               this._getMeshHierarchy().forEach(mesh => { mesh.renderingGroupId = this._props.renderingGroupId ?? 0 })
             }
@@ -100,8 +128,8 @@ export function Mesh(props: MeshProps = {}): any {
         babylon: Pick<BabylonAccessor, 'mesh' | 'scene'> = { mesh: null as any, scene: null as any }
         _animation: MeshAnimation | null = null
         _animations: Map<FlexId, MeshAnimation> = new Map<FlexId, MeshAnimation>()
-        _loopUpdate$: BABYLON.Observer<number>
-        _canvasResize$: BABYLON.Observer<Rect>
+        _loopUpdate$: Observer<number>
+        _canvasResize$: Observer<Rect>
         _loopUpdate = false
 
         set loopUpdate(value: boolean) {
@@ -133,38 +161,38 @@ export function Mesh(props: MeshProps = {}): any {
         }
 
         get visibility(): number { return this.babylon.mesh.visibility }
-        get absolutePosition(): BABYLON.Vector3 { return this.babylon.mesh.absolutePosition }
-        get absoluteRotationQuaternion(): BABYLON.Quaternion { return this.babylon.mesh.absoluteRotationQuaternion }
-        get absoluteScaling(): BABYLON.Vector3 { return this.babylon.mesh.absoluteScaling }
-        set position(value: BABYLON.Vector3) { this.babylon.mesh.position = value }
-        get position(): BABYLON.Vector3 { return this.babylon.mesh.position }
-        set rotation(value: BABYLON.Vector3) { this.babylon.mesh.rotation = value }
-        get rotation(): BABYLON.Vector3 { return this.babylon.mesh.rotation }
-        set rotationQuaternion(value: BABYLON.Quaternion) { this.babylon.mesh.rotationQuaternion = value }
-        get rotationQuaternion(): BABYLON.Nullable<BABYLON.Quaternion> { return this.babylon.mesh.rotationQuaternion }
-        set scaling(value: BABYLON.Vector3) { this.babylon.mesh.scaling = value }
-        get scaling(): BABYLON.Vector3 { return this.babylon.mesh.scaling }
-        addRotation(x: number, y: number, z: number): BABYLON.TransformNode { return this.babylon.mesh.addRotation(x, y, z) }
-        getAbsolutePivotPoint(): BABYLON.Vector3 { return this.babylon.mesh.getAbsolutePivotPoint() }
-        getAbsolutePivotPointToRef(result: BABYLON.Vector3): BABYLON.TransformNode { return this.babylon.mesh.getAbsolutePivotPointToRef(result) }
-        getAbsolutePosition(): BABYLON.Vector3 { return this.babylon.mesh.getAbsolutePosition() }
-        getDirection(localAxis: BABYLON.Vector3): BABYLON.Vector3 { return this.babylon.mesh.getDirection(localAxis) }
-        getDirectionToRef(localAxis: BABYLON.Vector3, result: BABYLON.Vector3): BABYLON.TransformNode { return this.babylon.mesh.getDirectionToRef(localAxis, result) }
-        getPivotPoint(): BABYLON.Vector3 { return this.babylon.mesh.getPivotPoint() }
-        getPivotPointToRef(result: BABYLON.Vector3): BABYLON.TransformNode { return this.babylon.mesh.getPivotPointToRef(result) }
-        locallyTranslate(vector3: BABYLON.Vector3): BABYLON.TransformNode { return this.babylon.mesh.locallyTranslate(vector3) }
-        lookAt(targetPoint: BABYLON.Vector3, yawCor?: number, pitchCor?: number, rollCor?: number, space?: BABYLON.Space): BABYLON.TransformNode { return this.babylon.mesh.lookAt(targetPoint, yawCor, pitchCor, rollCor, space) }
-        rotate(axis: BABYLON.Vector3, amount: number, space?: BABYLON.Space): BABYLON.TransformNode { return this.babylon.mesh.rotate(axis, amount, space) }
-        rotateAround(point: BABYLON.Vector3, axis: BABYLON.Vector3, amount: number): BABYLON.TransformNode { return this.babylon.mesh.rotateAround(point, axis, amount) }
-        rotatePOV(flipBack: number, twirlClockwise: number, tiltRight: number): BABYLON.AbstractMesh { return this.babylon.mesh.rotatePOV(flipBack, twirlClockwise, tiltRight) }
-        setAbsolutePosition(absolutePosition: BABYLON.Vector3): BABYLON.TransformNode { return this.babylon.mesh.setAbsolutePosition(absolutePosition) }
-        setDirection(localAxis: BABYLON.Vector3, yawCor?: number, pitchCor?: number, rollCor?: number): BABYLON.TransformNode { return this.babylon.mesh.setDirection(localAxis, yawCor, pitchCor, rollCor) }
-        setPivotMatrix(matrix: BABYLON.DeepImmutable<BABYLON.Matrix>, postMultiplyPivotMatrix?: boolean): BABYLON.TransformNode { return this.babylon.mesh.setPivotMatrix(matrix, postMultiplyPivotMatrix) }
-        setPivotPoint(point: BABYLON.Vector3, space?: BABYLON.Space): BABYLON.TransformNode { return this.babylon.mesh.setPivotPoint(point, space) }
-        setPositionWithLocalVector(vector3: BABYLON.Vector3): BABYLON.TransformNode { return this.babylon.mesh.setPositionWithLocalVector(vector3) }
-        translate(axis: BABYLON.Vector3, distance: number, space?: BABYLON.Space): BABYLON.TransformNode { return this.babylon.mesh.translate(axis, distance, space) }
+        get absolutePosition(): Vector3 { return this.babylon.mesh.absolutePosition }
+        get absoluteRotationQuaternion(): Quaternion { return this.babylon.mesh.absoluteRotationQuaternion }
+        get absoluteScaling(): Vector3 { return this.babylon.mesh.absoluteScaling }
+        set position(value: Vector3) { this.babylon.mesh.position = value }
+        get position(): Vector3 { return this.babylon.mesh.position }
+        set rotation(value: Vector3) { this.babylon.mesh.rotation = value }
+        get rotation(): Vector3 { return this.babylon.mesh.rotation }
+        set rotationQuaternion(value: Quaternion) { this.babylon.mesh.rotationQuaternion = value }
+        get rotationQuaternion(): Nullable<Quaternion> { return this.babylon.mesh.rotationQuaternion }
+        set scaling(value: Vector3) { this.babylon.mesh.scaling = value }
+        get scaling(): Vector3 { return this.babylon.mesh.scaling }
+        addRotation(x: number, y: number, z: number): TransformNode { return this.babylon.mesh.addRotation(x, y, z) }
+        getAbsolutePivotPoint(): Vector3 { return this.babylon.mesh.getAbsolutePivotPoint() }
+        getAbsolutePivotPointToRef(result: Vector3): TransformNode { return this.babylon.mesh.getAbsolutePivotPointToRef(result) }
+        getAbsolutePosition(): Vector3 { return this.babylon.mesh.getAbsolutePosition() }
+        getDirection(localAxis: Vector3): Vector3 { return this.babylon.mesh.getDirection(localAxis) }
+        getDirectionToRef(localAxis: Vector3, result: Vector3): TransformNode { return this.babylon.mesh.getDirectionToRef(localAxis, result) }
+        getPivotPoint(): Vector3 { return this.babylon.mesh.getPivotPoint() }
+        getPivotPointToRef(result: Vector3): TransformNode { return this.babylon.mesh.getPivotPointToRef(result) }
+        locallyTranslate(vector3: Vector3): TransformNode { return this.babylon.mesh.locallyTranslate(vector3) }
+        lookAt(targetPoint: Vector3, yawCor?: number, pitchCor?: number, rollCor?: number, space?: Space): TransformNode { return this.babylon.mesh.lookAt(targetPoint, yawCor, pitchCor, rollCor, space) }
+        rotate(axis: Vector3, amount: number, space?: Space): TransformNode { return this.babylon.mesh.rotate(axis, amount, space) }
+        rotateAround(point: Vector3, axis: Vector3, amount: number): TransformNode { return this.babylon.mesh.rotateAround(point, axis, amount) }
+        rotatePOV(flipBack: number, twirlClockwise: number, tiltRight: number): AbstractMesh { return this.babylon.mesh.rotatePOV(flipBack, twirlClockwise, tiltRight) }
+        setAbsolutePosition(absolutePosition: Vector3): TransformNode { return this.babylon.mesh.setAbsolutePosition(absolutePosition) }
+        setDirection(localAxis: Vector3, yawCor?: number, pitchCor?: number, rollCor?: number): TransformNode { return this.babylon.mesh.setDirection(localAxis, yawCor, pitchCor, rollCor) }
+        setPivotMatrix(matrix: DeepImmutable<Matrix>, postMultiplyPivotMatrix?: boolean): TransformNode { return this.babylon.mesh.setPivotMatrix(matrix, postMultiplyPivotMatrix) }
+        setPivotPoint(point: Vector3, space?: Space): TransformNode { return this.babylon.mesh.setPivotPoint(point, space) }
+        setPositionWithLocalVector(vector3: Vector3): TransformNode { return this.babylon.mesh.setPositionWithLocalVector(vector3) }
+        translate(axis: Vector3, distance: number, space?: Space): TransformNode { return this.babylon.mesh.translate(axis, distance, space) }
 
-        setMesh(babylonMesh: BABYLON.Mesh | BABYLON.InstancedMesh): void {
+        setMesh(babylonMesh: BabylonMesh | InstancedMesh): void {
           if (this.babylon.mesh) {
             this._release()
           }
@@ -173,7 +201,7 @@ export function Mesh(props: MeshProps = {}): any {
         }
 
         setMaterialTransparencyMode(value: number, applyToHierarchy = true) {
-          let meshes: BABYLON.AbstractMesh[] = []
+          let meshes: AbstractMesh[] = []
           if (applyToHierarchy) {
             meshes = this._getMeshHierarchy()
           } else {
@@ -190,7 +218,7 @@ export function Mesh(props: MeshProps = {}): any {
           this._animation?.animationGroup.goToFrame(frame)
         }
 
-        _animationCreateEvent(aniGroup: BABYLON.AnimationGroup): BABYLON.Animation {
+        _animationCreateEvent(aniGroup: AnimationGroup): Animation {
           const eventAni = aniGroup.targetedAnimations[0].animation.clone()
           eventAni.name = `Keyframes - ${aniGroup.name}`
           const tmpTarget = this._animationCreateTemporalTarget(eventAni)
@@ -201,24 +229,24 @@ export function Mesh(props: MeshProps = {}): any {
           return eventAni
         }
 
-        _animationCreateTemporalTarget(ani: BABYLON.Animation) {
+        _animationCreateTemporalTarget(ani: Animation) {
           switch (ani.dataType) {
-          case BABYLON.Animation.ANIMATIONTYPE_COLOR3:
-            return { [ani.targetPropertyPath[0]]: BABYLON.Color3.White() }
-          case BABYLON.Animation.ANIMATIONTYPE_COLOR4:
-            return { [ani.targetPropertyPath[0]]: BABYLON.Color4.FromInts(0, 0, 0, 0) }
-          case BABYLON.Animation.ANIMATIONTYPE_FLOAT:
+          case Animation.ANIMATIONTYPE_COLOR3:
+            return { [ani.targetPropertyPath[0]]: Color3.White() }
+          case Animation.ANIMATIONTYPE_COLOR4:
+            return { [ani.targetPropertyPath[0]]: Color4.FromInts(0, 0, 0, 0) }
+          case Animation.ANIMATIONTYPE_FLOAT:
             return { [ani.targetPropertyPath[0]]: 0 }
-          case BABYLON.Animation.ANIMATIONTYPE_MATRIX:
-            return { [ani.targetPropertyPath[0]]: BABYLON.Matrix.Zero() }
-          case BABYLON.Animation.ANIMATIONTYPE_QUATERNION:
-            return { [ani.targetPropertyPath[0]]: BABYLON.Quaternion.Zero() }
-          case BABYLON.Animation.ANIMATIONTYPE_SIZE:
-            return { [ani.targetPropertyPath[0]]: BABYLON.Vector3.Zero() }
-          case BABYLON.Animation.ANIMATIONTYPE_VECTOR2:
-            return { [ani.targetPropertyPath[0]]: BABYLON.Vector2.Zero() }
-          case BABYLON.Animation.ANIMATIONTYPE_VECTOR3:
-            return { [ani.targetPropertyPath[0]]: BABYLON.Vector3.Zero() }
+          case Animation.ANIMATIONTYPE_MATRIX:
+            return { [ani.targetPropertyPath[0]]: Matrix.Zero() }
+          case Animation.ANIMATIONTYPE_QUATERNION:
+            return { [ani.targetPropertyPath[0]]: Quaternion.Zero() }
+          case Animation.ANIMATIONTYPE_SIZE:
+            return { [ani.targetPropertyPath[0]]: Vector3.Zero() }
+          case Animation.ANIMATIONTYPE_VECTOR2:
+            return { [ani.targetPropertyPath[0]]: Vector2.Zero() }
+          case Animation.ANIMATIONTYPE_VECTOR3:
+            return { [ani.targetPropertyPath[0]]: Vector3.Zero() }
           default:
             return {}
           }
@@ -231,9 +259,9 @@ export function Mesh(props: MeshProps = {}): any {
           if (animation?.keyFrames && animation.keyFrames.length > 0) {
             animation.keyFrames.forEach(keyFrame => {
               keyFrame.frames.forEach(frame => {
-                keyFrame.emitter = new BABYLON.Observable<void>()
+                keyFrame.emitter = new Observable<void>()
                 const eventAni = this._animationCreateEvent(animation.animationGroup)
-                const aniEvent = new BABYLON.AnimationEvent(frame, () => keyFrame.emitter.notifyObservers())
+                const aniEvent = new AnimationEvent(frame, () => keyFrame.emitter.notifyObservers())
                 eventAni.addEvent(aniEvent)
               })
             })
@@ -241,7 +269,7 @@ export function Mesh(props: MeshProps = {}): any {
           this._animations.set(animation.id, animation)
         }
 
-        playAnimation(animationId: FlexId, options?: MeshAnimationOptions, completed?: () => void): BABYLON.AnimationGroup {
+        playAnimation(animationId: FlexId, options?: MeshAnimationOptions, completed?: () => void): AnimationGroup {
           this.stopAnimation()
           if (!this._animations.get(animationId)) {
             Logger.error(`Animation '${animationId}' not found in mesh '${this._props.url}':`, this.getClassName())
@@ -282,8 +310,8 @@ export function Mesh(props: MeshProps = {}): any {
           }
         }
 
-        subscribeToKeyframe(keyframeId: FlexId, callback: () => void): BABYLON.Observer<void>[] {
-          const observers: BABYLON.Observer<void>[] = []
+        subscribeToKeyframe(keyframeId: FlexId, callback: () => void): Observer<void>[] {
+          const observers: Observer<void>[] = []
           this._animations.forEach(animation => {
             animation.keyFrames?.filter(keyframe => keyframe.id === keyframeId)
               .forEach(keyframe => observers.push(keyframe.emitter.add(callback)))
@@ -299,8 +327,8 @@ export function Mesh(props: MeshProps = {}): any {
           })
         }
 
-        _getMeshHierarchy(): BABYLON.AbstractMesh[] {
-          let meshes: BABYLON.AbstractMesh[] = []
+        _getMeshHierarchy(): AbstractMesh[] {
+          let meshes: AbstractMesh[] = []
           if (this.babylon.mesh) {
             meshes = [this.babylon.mesh, ...this.babylon.mesh.getChildMeshes()]
           }
@@ -324,7 +352,7 @@ export function Mesh(props: MeshProps = {}): any {
       const _classCore = class implements MeshCore {
         props = props
         Instance: MeshInterface = new _classInterface(null as any, null as any)
-        assetContainers: Map<SceneInterface, BABYLON.AssetContainer> = new Map<SceneInterface, BABYLON.AssetContainer>()
+        assetContainers: Map<SceneInterface, AssetContainer> = new Map<SceneInterface, AssetContainer>()
 
         _load(scene: SceneInterface): LoadingProgress {
           if (this.assetContainers.get(scene)) {
@@ -334,7 +362,7 @@ export function Mesh(props: MeshProps = {}): any {
               const asset = AssetsController.getAsset<AssetDataMesh>(this.props.url)
               if (asset && asset.definition.data) {
                 const progress = new LoadingProgress()
-                BABYLON.LoadAssetContainerAsync(asset.file, scene.babylon.scene)
+                LoadAssetContainerAsync(asset.file, scene.babylon.scene)
                   .then((assetContainer) => {
                     this.assetContainers.set(scene, assetContainer)
                     progress.complete()

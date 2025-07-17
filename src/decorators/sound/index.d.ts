@@ -1,4 +1,4 @@
-import * as BABYLON from '@babylonjs/core'
+import { SpatialAudioAttachmentType } from '@babylonjs/core/AudioV2/spatialAudioAttachmentType'
 
 export declare abstract class SoundInterface {}
 
@@ -36,7 +36,7 @@ export interface SoundProps {
    * Spatial attachment type.
    * Read more: https://doc.babylonjs.com/typedoc/classes/BABYLON.AbstractSpatialAudio#attach
    */
-  attachmentType?: BABYLON.SpatialAudioAttachmentType
+  attachmentType?: SpatialAudioAttachmentType
 }
 
 export declare function Sound(props: SoundProps): any

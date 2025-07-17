@@ -1,4 +1,11 @@
-import * as BABYLON from '@babylonjs/core'
+import { TargetCamera } from '@babylonjs/core/Cameras/targetCamera'
+import { Ray } from '@babylonjs/core/Culling/ray'
+import {
+  Matrix,
+  Vector3
+} from '@babylonjs/core/Maths/math.vector'
+import { Observer } from '@babylonjs/core/Misc/observable'
+import { Scene } from '@babylonjs/core/scene'
 
 import {
   CanvasResizable,
@@ -22,8 +29,8 @@ export abstract class CameraInterface<S = any, C extends SceneInterface = SceneI
   abstract _loopUpdate: boolean
   abstract _metadata: Metadata
   abstract _state: CameraStateInterface | null
-  abstract _loopUpdate$: BABYLON.Observer<number>
-  abstract _canvasResize$: BABYLON.Observer<Rect>
+  abstract _loopUpdate$: Observer<number>
+  abstract _canvasResize$: Observer<Rect>
   abstract _start(): void
   abstract _stop(): void
   abstract _release(): void
@@ -33,7 +40,7 @@ export abstract class CameraInterface<S = any, C extends SceneInterface = SceneI
    */
   abstract scene: C
   abstract setup: S
-  abstract babylon: Pick<BabylonAccessor<BABYLON.TargetCamera>, 'camera' | 'scene'>
+  abstract babylon: Pick<BabylonAccessor<TargetCamera>, 'camera' | 'scene'>
   abstract get loopUpdate(): boolean
   abstract set loopUpdate(value: boolean)
   abstract get state(): CameraStateInterface | null
@@ -50,22 +57,22 @@ export abstract class CameraInterface<S = any, C extends SceneInterface = SceneI
   /**
    * Tranmsform properties and methods
    */
-  abstract position: BABYLON.Vector3
-  abstract globalPosition: BABYLON.Vector3
-  abstract upVector: BABYLON.Vector3
-  abstract getDirection(localAxis: BABYLON.Vector3): BABYLON.Vector3
-  abstract getDirectionToRef(localAxis: BABYLON.Vector3, result: BABYLON.Vector3): void
-  abstract getForwardRay(length?: number, transform?: BABYLON.Matrix, origin?: BABYLON.Vector3): BABYLON.Ray
-  abstract getProjectionMatrix(force?: boolean): BABYLON.Matrix
-  abstract getWorldMatrix(): BABYLON.Matrix
-  abstract rotation: BABYLON.Vector3
+  abstract position: Vector3
+  abstract globalPosition: Vector3
+  abstract upVector: Vector3
+  abstract getDirection(localAxis: Vector3): Vector3
+  abstract getDirectionToRef(localAxis: Vector3, result: Vector3): void
+  abstract getForwardRay(length?: number, transform?: Matrix, origin?: Vector3): Ray
+  abstract getProjectionMatrix(force?: boolean): Matrix
+  abstract getWorldMatrix(): Matrix
+  abstract rotation: Vector3
   abstract speed: number
-  abstract target: BABYLON.Vector3
+  abstract target: Vector3
 
   /**
    * User defined mandatory (abstract on .d.ts)
    */
-  onInitialize?(scene: BABYLON.Scene): BABYLON.TargetCamera
+  onInitialize?(scene: Scene): TargetCamera
 
   /**
    * User defined optional

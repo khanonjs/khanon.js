@@ -1,4 +1,5 @@
-import * as BABYLON from '@babylonjs/core'
+import { Vector3 } from '@babylonjs/core/Maths/math.vector'
+import { Observer } from '@babylonjs/core/Misc/observable'
 
 import {
   CanvasResizable,
@@ -37,8 +38,8 @@ export abstract class ActorInterface<B extends SpriteInterface | MeshInterface =
   abstract _metadata: Metadata
   abstract _props: ActorProps
   abstract _loopUpdate: boolean
-  abstract _loopUpdate$: BABYLON.Observer<number>
-  abstract _canvasResize$: BABYLON.Observer<Rect>
+  abstract _loopUpdate$: Observer<number>
+  abstract _canvasResize$: Observer<Rect>
   abstract _started: boolean
   abstract _updating: boolean
   abstract _enabled: boolean
@@ -101,7 +102,7 @@ export abstract class ActorInterface<B extends SpriteInterface | MeshInterface =
   abstract removeActionGroup(group: FlexId, forceRemove?: boolean): void
   abstract removeActionAll(forceRemove?: boolean): void
   abstract getAction<C extends ActorActionConstructor>(actionConstructor: C): InstanceType<C> | undefined
-  abstract attachParticle(id: FlexId, Particle: ParticleConstructor | ((particle: ParticleInterface, setup: any) => void), setup: any, offset: BABYLON.Vector3, nodeName?: string): ParticleInterface
+  abstract attachParticle(id: FlexId, Particle: ParticleConstructor | ((particle: ParticleInterface, setup: any) => void), setup: any, offset: Vector3, nodeName?: string): ParticleInterface
   abstract startParticle(id: FlexId): void
   abstract stopParticle(id: FlexId): void
   abstract removeParticle(id: FlexId): void

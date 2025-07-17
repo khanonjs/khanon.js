@@ -1,4 +1,4 @@
-import * as BABYLON from '@babylonjs/core'
+import { Observer } from '@babylonjs/core/Misc/observable'
 
 import { SceneInterface } from '../../../decorators/scene/scene-interface'
 import { BabylonAccessor } from '../../../models/babylon-accessor'
@@ -13,8 +13,8 @@ import { TimersByContext } from '../timers-by-context'
 export abstract class ActionInterface<S = any> implements LoopUpdatable, CanvasResizable, TimersByContext, Configurable<S> {
   abstract _metadata: Metadata
   abstract _loopUpdate: boolean
-  abstract _loopUpdate$: BABYLON.Observer<number>
-  abstract _canvasResize$: BABYLON.Observer<Rect>
+  abstract _loopUpdate$: Observer<number>
+  abstract _canvasResize$: Observer<Rect>
   abstract _start(setup: S): void
 
   /**

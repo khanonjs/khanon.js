@@ -1,6 +1,11 @@
-// KJS-39 on bundle optiomization. eliminar todos los .d de los archivos compilados que no se quieren al hacer build, mover los tipos e interfaces de ./models a KJS namespace
-
-import * as BABYLON from '@babylonjs/core'
+import { AudioEngineV2 } from '@babylonjs/core/AudioV2/abstractAudio/audioEngineV2'
+import { CreateAudioEngineAsync } from '@babylonjs/core/AudioV2/webAudio/webAudioEngine'
+import { Engine } from '@babylonjs/core/Engines/engine'
+import { SceneLoaderFlags } from '@babylonjs/core/Loading/sceneLoaderFlags'
+import {
+  Observable,
+  Observer
+} from '@babylonjs/core/Misc/observable'
 
 import { AppInterface } from '../../decorators/app/app-interface'
 import { AppStateConstructor } from '../../decorators/app/app-state/app-state-constructor'
@@ -27,14 +32,14 @@ export class Core {
   private static babylon: Pick<BabylonAccessor, 'engine' | 'audioEngine'> = { engine: null as any, audioEngine: null as any }
 
   // Canvas
-  private static onCanvasResize: BABYLON.Observable<Rect> = new BABYLON.Observable<Rect>(undefined, true)
+  private static onCanvasResize: Observable<Rect> = new Observable<Rect>(undefined, true)
 
   // Loop update
   private static loopUpdateLastMs: number
   private static loopUpdateMps: number // Number of logical steps per frame
   private static loopUpdateLag: number
   private static loopUpdateDeltaTime: number = 1.0 // Time velocity factor
-  private static onLoopUpdate: BABYLON.Observable<number> = new BABYLON.Observable<number>()
+  private static onLoopUpdate: Observable<number> = new Observable<number>()
 
   // Render scenes
   private static readonly renderScenes: Set<SceneInterface> = new Set<SceneInterface>()
@@ -61,8 +66,8 @@ export class Core {
   // private static loadSceneQueue: Misc.KeyValue<Scene, (scene: Scene) => void> = new Misc.KeyValue<Scene, SceneFunctionArg>()
 
   static get canvas(): HTMLCanvasElement { return Core.htmlCanvas }
-  static get engine(): BABYLON.Engine { return Core.babylon.engine }
-  static get audioEngine(): BABYLON.AudioEngineV2 { return Core.babylon.audioEngine }
+  static get engine(): Engine { return Core.babylon.engine }
+  static get audioEngine(): AudioEngineV2 { return Core.babylon.audioEngine }
 
   /**
    * Called once, on app decorator
@@ -124,8 +129,8 @@ export class Core {
 
   private static initializeBabylon(): Promise<void> {
     return new Promise((resolve, reject) => {
-      BABYLON.SceneLoaderFlags.ShowLoadingScreen = false
-      Core.babylon.engine = new BABYLON.Engine(
+      SceneLoaderFlags.ShowLoadingScreen = false
+      Core.babylon.engine = new Engine(
         Core.htmlCanvas,
         Core.app._props.engineConfiguration.antialias,
         Core.app._props.engineConfiguration.options,
@@ -137,7 +142,7 @@ export class Core {
       if (Core.needAudioEngine) {
         Core.needAudioEngine = true
         Logger.debug('Creating audio engine...')
-        BABYLON.CreateAudioEngineAsync({
+        CreateAudioEngineAsync({
           disableDefaultUI: Core.app._props.audioEngine.disableDefaultUI,
           resumeOnInteraction: Core.app._props.audioEngine.resumeOnInteraction,
           resumeOnPause: Core.app._props.audioEngine.resumeOnPause,
@@ -216,19 +221,19 @@ export class Core {
     Core.renderScenes.delete(scene)
   }
 
-  static loopUpdateAddObserver(func: (delta: number) => void): BABYLON.Observer<number> {
+  static loopUpdateAddObserver(func: (delta: number) => void): Observer<number> {
     return Core.onLoopUpdate.add(func)
   }
 
-  static loopUpdateRemoveObserver(observer: BABYLON.Observer<number>): void {
+  static loopUpdateRemoveObserver(observer: Observer<number>): void {
     Core.onLoopUpdate.remove(observer)
   }
 
-  static canvasResizeAddObserver(func: (size: Rect) => void): BABYLON.Observer<Rect> {
+  static canvasResizeAddObserver(func: (size: Rect) => void): Observer<Rect> {
     return Core.onCanvasResize.add(func)
   }
 
-  static canvasResizeRemoveObserver(observer: BABYLON.Observer<Rect>): void {
+  static canvasResizeRemoveObserver(observer: Observer<Rect>): void {
     Core.onCanvasResize.remove(observer)
   }
 

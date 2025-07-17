@@ -5,7 +5,6 @@ import {
   AppStatesController,
   AssetsController
 } from '../../controllers'
-import { Logger } from '../../modules/logger'
 import { FlexId } from '../../types/flex-id'
 import { applyDefaults } from '../../utils/utils'
 import { AppInterface } from './app-interface'

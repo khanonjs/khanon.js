@@ -1,4 +1,10 @@
-import * as BABYLON from '@babylonjs/core'
+import { Space } from '@babylonjs/core/Maths/math.axis'
+import {
+  Matrix,
+  Vector3
+} from '@babylonjs/core/Maths/math.vector'
+import { TransformNode } from '@babylonjs/core/Meshes/transformNode'
+import { DeepImmutable } from '@babylonjs/core/types'
 
 import {
   AnimationBase,
@@ -68,22 +74,22 @@ export declare abstract class SpriteInterface {
   /**
    * Sprite transform properties.
    */
-  get absolutePosition(): BABYLON.Vector3
-  set position(value: BABYLON.Vector3)
-  get position(): BABYLON.Vector3
-  getAbsolutePivotPoint(): BABYLON.Vector3
-  getAbsolutePivotPointToRef(result: BABYLON.Vector3): BABYLON.TransformNode
-  getAbsolutePosition(): BABYLON.Vector3
-  getPivotPoint(): BABYLON.Vector3
-  getPivotPointToRef(result: BABYLON.Vector3): BABYLON.TransformNode
-  locallyTranslate(vector3: BABYLON.Vector3): BABYLON.TransformNode
-  rotateAround(point: BABYLON.Vector3, axis: BABYLON.Vector3, amount: number): BABYLON.TransformNode
-  setAbsolutePosition(absolutePosition: BABYLON.Vector3): BABYLON.TransformNode
-  setDirection(localAxis: BABYLON.Vector3, yawCor?: number, pitchCor?: number, rollCor?: number): BABYLON.TransformNode
-  setPivotMatrix(matrix: BABYLON.DeepImmutable<BABYLON.Matrix>, postMultiplyPivotMatrix?: boolean): BABYLON.TransformNode
-  setPivotPoint(point: BABYLON.Vector3, space?: BABYLON.Space): BABYLON.TransformNode
-  setPositionWithLocalVector(vector3: BABYLON.Vector3): BABYLON.TransformNode
-  translate(axis: BABYLON.Vector3, distance: number, space?: BABYLON.Space): BABYLON.TransformNode
+  get absolutePosition(): Vector3
+  set position(value: Vector3)
+  get position(): Vector3
+  getAbsolutePivotPoint(): Vector3
+  getAbsolutePivotPointToRef(result: Vector3): TransformNode
+  getAbsolutePosition(): Vector3
+  getPivotPoint(): Vector3
+  getPivotPointToRef(result: Vector3): TransformNode
+  locallyTranslate(vector3: Vector3): TransformNode
+  rotateAround(point: Vector3, axis: Vector3, amount: number): TransformNode
+  setAbsolutePosition(absolutePosition: Vector3): TransformNode
+  setDirection(localAxis: Vector3, yawCor?: number, pitchCor?: number, rollCor?: number): TransformNode
+  setPivotMatrix(matrix: DeepImmutable<Matrix>, postMultiplyPivotMatrix?: boolean): TransformNode
+  setPivotPoint(point: Vector3, space?: Space): TransformNode
+  setPositionWithLocalVector(vector3: Vector3): TransformNode
+  translate(axis: Vector3, distance: number, space?: Space): TransformNode
   set rotation(value: number)
   get rotation(): number
   set scale(value: number)

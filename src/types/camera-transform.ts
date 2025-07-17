@@ -1,10 +1,10 @@
-import * as BABYLON from '@babylonjs/core'
+import { TargetCamera } from '@babylonjs/core/Cameras/targetCamera'
 
 /**
  * Shortcut to basic babylon transform methods and variables
  */
 /** @interface */
-export type CameraTransform = Pick<BABYLON.TargetCamera,
+export type CameraTransform = Pick<TargetCamera,
 'position'
 | 'globalPosition'
 | 'upVector'

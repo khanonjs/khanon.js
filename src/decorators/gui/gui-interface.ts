@@ -1,5 +1,5 @@
-import * as BABYLON from '@babylonjs/core'
-import * as BABYLONGUI from '@babylonjs/gui'
+import { Observer } from '@babylonjs/core/Misc/observable'
+import { AdvancedDynamicTexture } from '@babylonjs/gui/2D/advancedDynamicTexture'
 
 import {
   CanvasResizable,
@@ -14,15 +14,13 @@ import { Rect } from '../../models/rect'
 import { Timeout } from '../../models/timeout'
 import { FlexId } from '../../types/flex-id'
 import { SceneInterface } from '../scene/scene-interface'
-import { GUIStateConstructor } from './gui-state/gui-state-constructor'
-import { GUIStateInterface } from './gui-state/gui-state-interface'
 
 export abstract class GUIInterface<S = any> implements LoopUpdatable, CanvasResizable, Notificable, TimersByContext, Configurable<S> {
   abstract _loopUpdate: boolean
   // abstract _state: GUIStateInterface | null
   abstract _metadata: Metadata
-  abstract _loopUpdate$: BABYLON.Observer<number>
-  abstract _canvasResize$: BABYLON.Observer<Rect>
+  abstract _loopUpdate$: Observer<number>
+  abstract _canvasResize$: Observer<Rect>
   abstract _initialize(setup: S): void
   abstract _release(): void
 
@@ -49,7 +47,7 @@ export abstract class GUIInterface<S = any> implements LoopUpdatable, CanvasResi
   /**
    * User defined mandatory (abstract on .d.ts)
    */
-  onInitialize?(container: BABYLONGUI.AdvancedDynamicTexture): void
+  onInitialize?(container: AdvancedDynamicTexture): void
 
   /**
    * User defined optional

@@ -1,4 +1,3 @@
-import { Logger } from '../../modules/logger'
 import { Loadable } from '../interfaces/loadable'
 import { LoadingProgress } from '../loading-progress/loading-progress'
 import { Controller } from './controller'

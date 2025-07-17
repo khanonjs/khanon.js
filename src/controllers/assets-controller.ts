@@ -1,4 +1,5 @@
-import * as BABYLON from '@babylonjs/core'
+import { CreateSoundBufferAsync } from '@babylonjs/core/AudioV2/abstractAudio/audioEngineV2'
+import { LoadFile } from '@babylonjs/core/Misc/fileTools'
 
 import {
   Asset,
@@ -195,7 +196,7 @@ export class AssetsController {
       asset.progress.error(errorMsg)
       asset.progress.onError.notifyObservers(errorMsg)
     }
-    BABYLON.LoadFile(definition.url,
+    LoadFile(definition.url,
       (data) => {
         Logger.debug(`LoadFileFromUrl: Loaded '${definition.url}'`)
         const buffer = data as ArrayBuffer
@@ -231,7 +232,7 @@ export class AssetsController {
       asset.progress.error(errorMsg)
       asset.progress.onError.notifyObservers(errorMsg)
     }
-    BABYLON.CreateSoundBufferAsync(definition.url)
+    CreateSoundBufferAsync(definition.url)
       .then((audioBuffer) => {
         Logger.debug(`LoadAudioFromUrl: Loaded '${definition.url}'`)
         asset.setAudioBuffer(audioBuffer)
@@ -239,8 +240,7 @@ export class AssetsController {
       })
       .catch((error) => {
         throwError(`LoadAudioFromUrl: Error loading file '${definition.url}': ${error}`)
-      }
-      )
+      })
     return asset.progress
   }
 }
