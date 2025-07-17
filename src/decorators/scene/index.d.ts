@@ -1,7 +1,7 @@
 import { Vector3 } from '@babylonjs/core/Maths/math.vector'
 import { SceneOptions } from '@babylonjs/core/scene'
 
-import { LoadingProgress } from '../../base'
+import { LoadingProgress } from '../../base/loading-progress'
 import {
   BabylonAccessor,
   Rect,
