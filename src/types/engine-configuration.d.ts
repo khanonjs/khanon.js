@@ -16,8 +16,8 @@ export type EngineConfiguration = {
 
   /**
    * Refers to:
-   * - Mode WebGL:  https://doc.babylonjs.com/typedoc/interfaces/BABYLON.EngineOptions
-   * - Mode WebGPU: https://doc.babylonjs.com/typedoc/interfaces/BABYLON.WebGPUEngineOptions
+   * - Options WebGL:  https://doc.babylonjs.com/typedoc/interfaces/BABYLON.EngineOptions
+   * - Options WebGPU: https://doc.babylonjs.com/typedoc/interfaces/BABYLON.WebGPUEngineOptions
    */
   options?: EngineOptions | WebGPUEngineOptions
 
