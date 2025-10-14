@@ -1,6 +1,10 @@
 import { AudioEngineV2 } from '@babylonjs/core/AudioV2/abstractAudio/audioEngineV2'
 import { CreateAudioEngineAsync } from '@babylonjs/core/AudioV2/webAudio/webAudioEngine'
 import { Engine } from '@babylonjs/core/Engines/engine'
+import {
+  WebGPUEngine,
+  WebGPUEngineOptions
+} from '@babylonjs/core/Engines/webgpuEngine'
 import { SceneLoaderFlags } from '@babylonjs/core/Loading/sceneLoaderFlags'
 import {
   Observable,
@@ -66,7 +70,7 @@ export class Core {
   // private static loadSceneQueue: Misc.KeyValue<Scene, (scene: Scene) => void> = new Misc.KeyValue<Scene, SceneFunctionArg>()
 
   static get canvas(): HTMLCanvasElement { return Core.htmlCanvas }
-  static get engine(): Engine { return Core.babylon.engine }
+  static get engine(): Engine | WebGPUEngine { return Core.babylon.engine }
   static get audioEngine(): AudioEngineV2 { return Core.babylon.audioEngine }
 
   /**
@@ -127,47 +131,70 @@ export class Core {
     }
   }
 
-  private static initializeBabylon(): Promise<void> {
-    return new Promise((resolve, reject) => {
-      SceneLoaderFlags.ShowLoadingScreen = false
-      Core.babylon.engine = new Engine(
+  private static async initializeEngine(): Promise<Engine | WebGPUEngine> {
+    let engine: Engine | WebGPUEngine
+    let useWebGPU = false
+    if (Core.app._props.engineConfiguration.mode && Core.app._props.engineConfiguration.mode === 'WebGPU') {
+      useWebGPU = await WebGPUEngine.IsSupportedAsync
+      if (!useWebGPU) {
+        Logger.warn('WebGPU not supported in this browser.')
+      }
+    }
+    if (useWebGPU) {
+      Logger.debug('Engine mode:', 'WebGPU')
+      engine = new WebGPUEngine(Core.htmlCanvas, Core.app._props.engineConfiguration.options as WebGPUEngineOptions)
+      await engine.initAsync()
+    } else {
+      Logger.debug('Engine mode:', 'WebGL')
+      engine = new Engine(
         Core.htmlCanvas,
         Core.app._props.engineConfiguration.antialias,
         Core.app._props.engineConfiguration.options,
         Core.app._props.engineConfiguration.adaptToDeviceRatio
       )
-      Core.babylon.engine.runRenderLoop(() => {
-        Core.renderScenes.forEach((scene) => scene.babylon.scene.render())
-      })
-      if (Core.needAudioEngine) {
-        Core.needAudioEngine = true
-        Logger.debug('Creating audio engine...')
-        CreateAudioEngineAsync({
-          disableDefaultUI: Core.app._props.audioEngine.disableDefaultUI,
-          resumeOnInteraction: Core.app._props.audioEngine.resumeOnInteraction,
-          resumeOnPause: Core.app._props.audioEngine.resumeOnPause,
-          resumeOnPauseRetryInterval: Core.app._props.audioEngine.resumeOnPauseRetryInterval
-        })
-          .then((audioEngine) => {
-            this.babylon.audioEngine = audioEngine
-            Logger.debug('Audio engine created. Tap the screen to start the scene!')
-            this.babylon.audioEngine.unlockAsync()
-              .then(() => {
-                Logger.debug('Audio engine unlocked.')
-                resolve()
+    }
+    return Promise.resolve(engine)
+  }
+
+  private static initializeBabylon(): Promise<void> {
+    return new Promise((resolve, reject) => {
+      SceneLoaderFlags.ShowLoadingScreen = false
+      Core.initializeEngine()
+        .then((engine: Engine | WebGPUEngine) => {
+          Core.babylon.engine = engine
+          Core.babylon.engine.runRenderLoop(() => {
+            Core.renderScenes.forEach((scene) => scene.babylon.scene.render())
+          })
+          if (Core.needAudioEngine) {
+            Core.needAudioEngine = true
+            Logger.debug('Creating audio engine...')
+            CreateAudioEngineAsync({
+              disableDefaultUI: Core.app._props.audioEngine.disableDefaultUI,
+              resumeOnInteraction: Core.app._props.audioEngine.resumeOnInteraction,
+              resumeOnPause: Core.app._props.audioEngine.resumeOnPause,
+              resumeOnPauseRetryInterval: Core.app._props.audioEngine.resumeOnPauseRetryInterval
+            })
+              .then((audioEngine) => {
+                this.babylon.audioEngine = audioEngine
+                Logger.debug('Audio engine created. Tap the screen to start the scene!')
+                this.babylon.audioEngine.unlockAsync()
+                  .then(() => {
+                    Logger.debug('Audio engine unlocked.')
+                    resolve()
+                  })
+                  .catch((error) => {
+                    Logger.error('Unlocking audio engine error.')
+                    reject(error)
+                  })
               })
               .catch((error) => {
-                Logger.error('Unlocking audio engine error.')
+                Logger.error('Creating audio engine error.')
                 reject(error)
               })
-          })
-          .catch((error) => {
-            Logger.error('Creating audio engine error.')
-            reject(error)
-          })
-      } else {
-        resolve()
-      }
+          } else {
+            resolve()
+          }
+        })
     })
   }
 
