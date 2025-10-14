@@ -3,6 +3,7 @@ import { StaticSound } from '@babylonjs/core/AudioV2/abstractAudio/staticSound'
 import { StreamingSound } from '@babylonjs/core/AudioV2/abstractAudio/streamingSound'
 import { TargetCamera } from '@babylonjs/core/Cameras/targetCamera'
 import { Engine } from '@babylonjs/core/Engines/engine'
+import { WebGPUEngine } from '@babylonjs/core/Engines/webgpuEngine'
 import { Material } from '@babylonjs/core/Materials/material'
 import { DynamicTexture } from '@babylonjs/core/Materials/Textures/dynamicTexture'
 import { Texture } from '@babylonjs/core/Materials/Textures/texture'
@@ -19,7 +20,7 @@ export interface BabylonAccessor<
     N extends Material = Material
   > {
   camera: C
-  engine: Engine
+  engine: Engine | WebGPUEngine
   audioEngine: AudioEngineV2
   scene: Scene
   sprite: Sprite
