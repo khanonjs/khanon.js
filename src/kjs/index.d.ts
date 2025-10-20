@@ -1,7 +1,7 @@
 import { Vector3 } from '@babylonjs/core/Maths/math.vector'
 import { Observer } from '@babylonjs/core/Misc/observable'
 
-import { LoadingProgress } from '../base'
+import { LoadingProgress } from '../base/loading-progress'
 import { AppInterface } from '../decorators/app'
 import { AppStateConstructor } from '../decorators/app/app-state'
 import { SceneConstructor } from '../decorators/scene'
