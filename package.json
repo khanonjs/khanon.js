@@ -1,6 +1,6 @@
 {
   "name": "@khanonjs/engine",
-  "version": "0.2.18",
+  "version": "0.2.19",
   "description": "A typescript games framework extending Babylon.js",
   "private": false,
   "author": {
@@ -44,13 +44,13 @@
     "lint:fix": "eslint ./src/**/*.* --fix"
   },
   "devDependencies": {
-    "@babylonjs/core": "~8.0.0",
-    "@babylonjs/gui": "~8.0.0",
-    "@babylonjs/gui-editor": "~8.0.0",
-    "@babylonjs/inspector": "~8.0.0",
-    "@babylonjs/loaders": "~8.0.0",
-    "@babylonjs/materials": "~8.0.0",
-    "@babylonjs/serializers": "~8.0.0",
+    "@babylonjs/core": "^8.0.0",
+    "@babylonjs/gui": "^8.0.0",
+    "@babylonjs/gui-editor": "^8.0.0",
+    "@babylonjs/inspector": "^8.0.0",
+    "@babylonjs/loaders": "^8.0.0",
+    "@babylonjs/materials": "^8.0.0",
+    "@babylonjs/serializers": "^8.0.0",
     "@jest/globals": "^29.7.0",
     "@mxssfd/typedoc-theme": "file:mxssfd-typedoc-theme",
     "@types/chai": "^4.3.11",

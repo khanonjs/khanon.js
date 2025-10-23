@@ -8,6 +8,7 @@ import { SceneInterface } from '../scene/scene-interface'
 import { SceneStateInterface } from '../scene/scene-state/scene-state-interface'
 import { InputEventProps } from './input-event-props'
 
+// TODO transform this to InputKey / InputMouse / InputGamepad? Why not the input source (ascci code, mouse button, etc) in the props?
 export function InputEvent(props: InputEventProps): any {
   return function(target: any, propertyKey: string, descriptor: PropertyDescriptor) {
     if (!target.prototype && (
